@@ -1,0 +1,115 @@
+.contact-page h1 {
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  margin: 0 0 16px;
+}
+
+.contact-lead {
+  max-width: 40rem;
+  margin: 0 0 36px;
+  color: var(--muted);
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.contact-facts h2,
+.contact-form h2 {
+  font-size: 1.6rem;
+  margin: 0 0 8px;
+}
+
+.contact-facts p {
+  margin: 0 0 22px;
+}
+
+.contact-facts a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.contact-form {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+
+.contact-field {
+  display: grid;
+  gap: 6px;
+}
+
+.contact-form label {
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--cream);
+  color: var(--ink);
+  font: inherit;
+}
+
+.contact-form textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.contact-form input:focus-visible,
+.contact-form textarea:focus-visible,
+.contact-form button:focus-visible {
+  outline: 2px solid var(--brown);
+  outline-offset: 2px;
+}
+
+.contact-form .g-recaptcha {
+  max-width: 100%;
+  overflow: auto;
+}
+
+.contact-form button.button {
+  justify-self: start;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.contact-error {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f8e6e1;
+  color: #6d2b22;
+}
+
+.contact-map iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+}
+
+@media (max-width: 800px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .contact-form {
+    padding: 18px;
+  }
+
+  .contact-form button.button {
+    width: 100%;
+  }
+}

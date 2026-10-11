@@ -1,0 +1,279 @@
+/* Arrival guide page. Shared chrome stays in garh-v2.css. */
+
+.arrival-page{
+  background:var(--cream);
+}
+
+.arrival-page .page-hero p{
+  max-width:680px;
+  color:#d9d1c9;
+  font-size:1.05rem;
+}
+
+.arrival-page .page-hero .actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:28px;
+}
+
+.arrival-overview{
+  background:var(--sand-light);
+}
+
+.arrival-facts,
+.travel-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.arrival-fact,
+.travel-card{
+  padding:26px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.5);
+}
+
+.arrival-fact span,
+.arrival-address .eyebrow{
+  display:block;
+}
+
+.arrival-fact strong{
+  display:block;
+  margin:8px 0;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.7rem;
+  font-weight:400;
+}
+
+.arrival-fact p,
+.travel-card p,
+.arrival-split > div > p,
+.access-list span,
+.faq-list p,
+.arrival-address p{
+  margin:0;
+  color:var(--muted);
+}
+
+.travel-card h3,
+.arrival-notice h3,
+.arrival-address h3{
+  margin:0 0 10px;
+  font-size:1.55rem;
+}
+
+.arrival-travel{
+  background:#fff;
+}
+
+.arrival-notice{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:28px;
+  margin-top:28px;
+  padding:28px;
+  background:#eee4d7;
+  border:1px solid #d9c9b6;
+}
+
+.arrival-notice p:not(.eyebrow){
+  max-width:720px;
+  margin:0;
+  color:#65594f;
+}
+
+.arrival-notice .button{
+  flex:0 0 auto;
+}
+
+.arrival-access{
+  background:#f7f2eb;
+}
+
+.arrival-split{
+  display:grid;
+  grid-template-columns:.9fr 1.1fr;
+  gap:56px;
+  align-items:start;
+}
+
+.arrival-split h2{
+  margin:0 0 16px;
+  font-size:clamp(2.2rem,4.4vw,3.6rem);
+}
+
+.arrival-contact h2 span{
+  display:block;
+}
+
+.access-list{
+  margin:0;
+  padding:0;
+  list-style:none;
+  border-top:1px solid var(--line);
+}
+
+.access-list li{
+  display:grid;
+  grid-template-columns:180px 1fr;
+  gap:18px;
+  padding:18px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.access-list strong{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.15rem;
+  font-weight:400;
+}
+
+.arrival-contact{
+  background:#2a211b;
+  color:#fff;
+}
+
+.arrival-contact .eyebrow{
+  color:#d9b27a;
+}
+
+.arrival-contact .arrival-split > div > p,
+.arrival-address p{
+  color:#d7cdc4;
+}
+
+.arrival-contact .actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:24px;
+}
+
+.arrival-address{
+  font-style:normal;
+  padding:28px;
+  border:1px solid rgba(255,255,255,.16);
+}
+
+.arrival-address p + p{
+  margin-top:14px;
+}
+
+.arrival-page a:not(.button){
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+.arrival-page a:not(.button):hover,
+.arrival-page a:not(.button):focus-visible{
+  color:var(--sand);
+}
+
+.arrival-faq{
+  background:var(--sand-light);
+}
+
+.faq-list details{
+  border-bottom:1px solid var(--line);
+}
+
+.faq-list details:first-child{
+  border-top:1px solid var(--line);
+}
+
+.faq-list summary{
+  position:relative;
+  padding:18px 36px 18px 0;
+  cursor:pointer;
+  list-style:none;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:1.15rem;
+}
+
+.faq-list summary::marker{
+  content:"";
+}
+
+.faq-list summary::-webkit-details-marker{
+  display:none;
+}
+
+.faq-list summary::after{
+  content:"+";
+  position:absolute;
+  right:0;
+  top:16px;
+  color:var(--brown);
+  font-family:system-ui,sans-serif;
+}
+
+.faq-list details[open] summary::after{
+  content:"\2212";
+}
+
+.faq-list details p{
+  padding:0 36px 18px 0;
+}
+
+.arrival-more .text-link{
+  display:inline-block;
+  margin-top:12px;
+}
+
+.arrival-more .section-head p{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+
+@media (max-width:1000px){
+  .arrival-facts,
+  .travel-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .arrival-split{
+    grid-template-columns:1fr;
+    gap:32px;
+  }
+}
+
+@media (max-width:760px){
+  .arrival-facts,
+  .travel-grid{
+    grid-template-columns:1fr;
+  }
+
+  .arrival-page .page-hero .actions{
+    flex-direction:column;
+  }
+
+  .arrival-page .page-hero .actions .button{
+    width:100%;
+  }
+
+  .arrival-notice{
+    display:block;
+  }
+
+  .arrival-notice .button{
+    width:100%;
+    margin-top:18px;
+  }
+
+  .access-list li{
+    grid-template-columns:1fr;
+    gap:4px;
+  }
+
+  .arrival-contact .actions{
+    flex-direction:column;
+  }
+
+  .arrival-contact .actions .button{
+    width:100%;
+  }
+}

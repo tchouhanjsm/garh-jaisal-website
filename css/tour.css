@@ -1,0 +1,26 @@
+.tour-itinerary{
+  margin:0 0 8px;
+  padding-left:1.25rem;
+}
+
+.tour-itinerary li+li{
+  margin-top:.7rem;
+}
+
+.tour-gallery{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  margin:28px 0;
+}
+
+.tour-gallery img{
+  width:100%;
+  height:auto;
+}
+
+@media (max-width:700px){
+  .tour-gallery{
+    grid-template-columns:1fr;
+  }
+}

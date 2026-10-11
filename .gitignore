@@ -1,0 +1,5 @@
+Thumbs.db
+*.backup
+sync-local.sh
+include/site-config.local.php
+error_log

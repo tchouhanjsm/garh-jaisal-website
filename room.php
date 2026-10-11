@@ -1,0 +1,305 @@
+<?php
+$activePage = 'rooms';
+$bookingUrl = 'https://asiatech.in/booking_engine/index3?token=NjA2Ng==';
+$rooms = require __DIR__ . '/include/rooms-data.php';
+
+$roomsByFloor = [];
+foreach ($rooms as $room) {
+  $roomsByFloor[$room['kicker']][] = $room;
+}
+?>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Rooms at Garh Jaisal Haveli | Jaisalmer Fort</title>
+
+  <meta
+    name="description"
+    content="Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort, including Sweet Purple, Rising Sun, Scarlet, Opium, Red Maharani, Green and BlueSky."
+  >
+
+  <meta name="robots" content="index,follow">
+
+  <link
+    rel="canonical"
+    href="https://www.hotelgarhjaisal.com/room.php"
+  >
+
+  <meta property="og:type" content="website">
+  <meta
+    property="og:title"
+    content="Rooms at Garh Jaisal Haveli | Jaisalmer Fort"
+  >
+  <meta
+    property="og:description"
+    content="Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort."
+  >
+  <meta
+    property="og:url"
+    content="https://www.hotelgarhjaisal.com/room.php"
+  >
+  <meta
+    property="og:image"
+    content="https://www.hotelgarhjaisal.com/img/purple-room.jpg"
+  >
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta
+    name="twitter:title"
+    content="Rooms at Garh Jaisal Haveli | Jaisalmer Fort"
+  >
+  <meta
+    name="twitter:description"
+    content="Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort."
+  >
+  <meta
+    name="twitter:image"
+    content="https://www.hotelgarhjaisal.com/img/purple-room.jpg"
+  >
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="img/jaisalmerlogo.png"
+  >
+
+  <link rel="stylesheet" href="css/garh-v2.css">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0C646S1FQ0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag(){
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'G-0C646S1FQ0');
+    gtag('config', 'G-6S5PCEVXH4');
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@graph":[
+      {
+        "@type":"WebPage",
+        "@id":"https://www.hotelgarhjaisal.com/room.php#webpage",
+        "url":"https://www.hotelgarhjaisal.com/room.php",
+        "name":"Rooms at Garh Jaisal Haveli | Jaisalmer Fort",
+        "isPartOf":{"@id":"https://www.hotelgarhjaisal.com/#website"},
+        "about":{"@id":"https://www.hotelgarhjaisal.com/#hotel"},
+        "breadcrumb":{"@id":"https://www.hotelgarhjaisal.com/room.php#breadcrumb"}
+      },
+      {
+        "@type":"BreadcrumbList",
+        "@id":"https://www.hotelgarhjaisal.com/room.php#breadcrumb",
+        "itemListElement":[
+          {"@type":"ListItem","position":1,"name":"Home","item":"https://www.hotelgarhjaisal.com/"},
+          {"@type":"ListItem","position":2,"name":"Rooms","item":"https://www.hotelgarhjaisal.com/room.php"}
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+
+<?php include __DIR__ . '/include/header-v2.php'; ?>
+
+<main class="rooms-page">
+
+  <!-- =====================================================
+       PAGE HERO
+       ===================================================== -->
+
+  <section class="page-hero">
+    <div class="site-shell page-hero-inner">
+
+      <p class="eyebrow">Rooms</p>
+
+      <h1>Rooms at Garh Jaisal Haveli.</h1>
+
+      <p>
+        Heritage rooms inside Jaisalmer Fort, each with its own colours,
+        details and character.
+      </p>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       INTRO
+       ===================================================== -->
+
+  <section class="section rooms-intro">
+    <div class="site-shell rooms-intro-grid">
+
+      <div>
+        <p class="eyebrow">Your stay</p>
+
+        <h2>Rooms inside the fort.</h2>
+      </div>
+
+      <div class="rooms-intro-copy">
+
+        <p>
+          Our rooms are individually styled with traditional colours,
+          carved details and views across Jaisalmer.
+        </p>
+
+        <p>
+          Rooms are located on the ground and first floors of the haveli.
+          Facilities vary by room.
+        </p>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <?php $floorIndex = 0; ?>
+  <?php foreach ($roomsByFloor as $floorKicker => $floorRooms): ?>
+  <?php
+    $floorClass = 'section rooms-floor';
+    if ($floorIndex % 2 === 1) {
+      $floorClass .= ' rooms-floor-alt';
+    }
+    $floorIndex++;
+  ?>
+  <section class="<?= htmlspecialchars($floorClass, ENT_QUOTES, 'UTF-8') ?>">
+    <div class="site-shell">
+
+      <div class="room-floor-heading">
+        <p class="eyebrow"><?= htmlspecialchars($floorKicker, ENT_QUOTES, 'UTF-8') ?></p>
+        <h2><?= htmlspecialchars(ucwords($floorKicker) . ' Rooms', ENT_QUOTES, 'UTF-8') ?></h2>
+      </div>
+
+      <div class="room-grid">
+
+        <?php foreach ($floorRooms as $room): ?>
+        <article class="room-card">
+
+          <div class="room-card-media">
+            <img
+              src="<?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>"
+              alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>"
+              loading="lazy"
+            >
+          </div>
+
+          <div class="room-card-body">
+
+            <p class="room-kicker"><?= htmlspecialchars($room['kicker'], ENT_QUOTES, 'UTF-8') ?></p>
+
+            <h3><?= htmlspecialchars($room['name'], ENT_QUOTES, 'UTF-8') ?></h3>
+
+            <p class="room-description">
+              <?= htmlspecialchars($room['description'], ENT_QUOTES, 'UTF-8') ?>
+            </p>
+
+            <ul class="room-features">
+              <?php foreach ($room['features'] as $feature): ?>
+              <li><?= htmlspecialchars($feature, ENT_QUOTES, 'UTF-8') ?></li>
+              <?php endforeach; ?>
+            </ul>
+
+            <a
+              class="button button-primary room-book"
+              href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
+              target="_blank"
+              rel="noopener"
+            >
+              Check availability
+            </a>
+
+          </div>
+        </article>
+        <?php endforeach; ?>
+
+      </div>
+    </div>
+  </section>
+  <?php endforeach; ?>
+
+
+  <!-- =====================================================
+       STAY INFORMATION
+       ===================================================== -->
+
+  <section class="section rooms-info">
+    <div class="site-shell">
+
+      <div class="rooms-info-box">
+
+        <div>
+          <p class="eyebrow">Before you book</p>
+
+          <h2>A few things to know.</h2>
+        </div>
+
+        <div class="rooms-info-copy">
+
+          <p>
+            Garh Jaisal Haveli is inside Jaisalmer Fort. Vehicles cannot
+            enter the fort lanes, so guests should expect a short walk
+            from Fort Parking.
+          </p>
+
+          <p>
+            Room facilities vary by room. Check the current availability
+            and rate when selecting your room.
+          </p>
+
+          <a class="text-link" href="direction.php">
+            Plan your arrival →
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       BOOKING CTA
+       ===================================================== -->
+
+  <section class="section rooms-cta">
+    <div class="site-shell rooms-cta-inner">
+
+      <p class="eyebrow">Plan your stay</p>
+
+      <h2>Choose your room.</h2>
+
+      <p>
+        Check current availability and rates through our booking system.
+      </p>
+
+      <a
+        class="button button-primary"
+        href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
+        target="_blank"
+        rel="noopener"
+      >
+        Book your stay
+      </a>
+
+    </div>
+  </section>
+
+</main>
+
+<?php include __DIR__ . '/include/footer-v2.php'; ?>
+
+<script src="js/garh-v2.js"></script>
+
+</body>
+</html>

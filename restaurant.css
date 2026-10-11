@@ -1,0 +1,515 @@
+/* Restaurant page: shared V2 design system + restaurant-specific layout. */
+.restaurant-page{
+  overflow-x:hidden;
+}
+
+.restaurant-hero{
+  background:var(--dark);
+  color:#f7eee6;
+  padding:0 0 22px;
+}
+
+.restaurant-hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(360px,.95fr);
+  gap:clamp(28px,5vw,72px);
+  align-items:center;
+  padding-top:clamp(48px,7vw,92px);
+}
+
+.restaurant-hero-copy h1{
+  max-width:700px;
+  font-size:clamp(2.5rem,6vw,4.6rem);
+  color:#f4d19a;
+  margin:0 0 22px;
+}
+
+.restaurant-hero-copy > p:not(.eyebrow){
+  max-width:560px;
+  color:#eadfD4;
+  font-size:clamp(1rem,1.5vw,1.12rem);
+}
+
+.restaurant-hero .button-light{
+  border-color:rgba(255,255,255,.6);
+  color:#fff;
+}
+
+.restaurant-hero-media{
+  overflow:hidden;
+  border-radius:50% 50% 0 0 / 14% 14% 0 0;
+  border:6px solid var(--sand);
+  border-bottom:0;
+  background:#3a2a21;
+}
+
+.restaurant-hero-media img{
+  width:100%;
+  aspect-ratio:4 / 3;
+  object-fit:cover;
+}
+
+.restaurant-hours{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border-top:1px solid rgba(255,255,255,.14);
+  padding-top:18px;
+  gap:18px;
+}
+
+.restaurant-hours div{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  color:#e6d8c8;
+  font-size:.9rem;
+}
+
+.restaurant-hours strong{
+  color:#f4d19a;
+  font-weight:500;
+}
+
+.restaurant-intro-grid,
+.restaurant-info-grid{
+  display:grid;
+  grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
+  gap:clamp(28px,6vw,90px);
+  align-items:start;
+}
+
+.restaurant-intro-grid > p,
+.restaurant-info-grid > div:last-child{
+  color:#62584f;
+}
+
+.restaurant-intro-grid h2,
+.restaurant-featured h2,
+.restaurant-menu h2,
+.restaurant-info-section h2,
+.restaurant-reserve h2{
+  font-size:clamp(2rem,4vw,3rem);
+  margin:0;
+}
+
+.restaurant-gallery{
+  display:grid;
+  grid-template-columns:1.15fr .9fr .9fr;
+  gap:16px;
+  margin-top:38px;
+}
+
+.restaurant-gallery figure{
+  margin:0;
+  overflow:hidden;
+  background:var(--sand-light);
+}
+
+.restaurant-gallery img{
+  width:100%;
+  aspect-ratio:4 / 3;
+  object-fit:cover;
+  transition:transform .35s ease;
+}
+
+.restaurant-gallery figure:first-child img{
+  aspect-ratio:16 / 11;
+}
+
+.restaurant-gallery figure:hover img{
+  transform:scale(1.02);
+}
+
+.restaurant-feature-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+  margin-top:28px;
+}
+
+.restaurant-feature-card{
+  position:relative;
+  padding:28px;
+  border:1px solid var(--line);
+  background:#fffdf9;
+}
+
+.restaurant-feature-card h3{
+  font-size:1.5rem;
+  margin:26px 0 8px;
+}
+
+.restaurant-feature-card p{
+  margin:0 0 18px;
+  color:var(--muted);
+}
+
+.restaurant-diet{
+  display:inline-flex;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:.72rem;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+.restaurant-diet.is-veg{ background:#e6f2e4; color:#28652b; }
+.restaurant-diet.is-nonveg{ background:#f8e6e0; color:#8a382c; }
+
+.restaurant-menu{
+  border-top:1px solid var(--line);
+}
+
+.restaurant-menu-head{
+  align-items:end;
+}
+
+.restaurant-vegtoggle{
+  border:1px solid #397340;
+  background:transparent;
+  color:#28652b;
+  border-radius:999px;
+  padding:9px 14px;
+  font:600 .88rem Inter,ui-sans-serif,system-ui,sans-serif;
+  cursor:pointer;
+}
+
+.restaurant-vegtoggle[aria-pressed="true"]{
+  background:#28652b;
+  color:#fff;
+}
+
+.restaurant-tabs{
+  position:sticky;
+  top:64px;
+  z-index:20;
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:14px 0;
+  margin:24px 0 10px;
+  background:rgba(251,248,241,.96);
+  scrollbar-width:thin;
+}
+
+.restaurant-tabs a{
+  white-space:nowrap;
+  border:1px solid var(--line);
+  padding:8px 13px;
+  border-radius:999px;
+  font-size:.86rem;
+  color:#51483f;
+}
+
+.restaurant-tabs a:hover,
+.restaurant-tabs a.is-active{
+  background:var(--brown);
+  border-color:var(--brown);
+  color:#fff;
+}
+
+.restaurant-category{
+  scroll-margin-top:140px;
+  padding-top:28px;
+}
+
+.restaurant-category h3{
+  margin:0;
+  padding-bottom:10px;
+  border-bottom:2px solid var(--sand);
+  font-size:1.65rem;
+}
+
+.restaurant-category ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+.restaurant-dish{
+  display:grid;
+  grid-template-columns:16px minmax(0,1fr) auto;
+  gap:14px;
+  align-items:start;
+  padding:18px 0;
+  border-bottom:1px dotted var(--line);
+}
+
+.restaurant-dish[hidden],
+.restaurant-category[hidden]{
+  display:none;
+}
+
+.restaurant-mark{
+  width:13px;
+  height:13px;
+  border:2px solid #28652b;
+  border-radius:3px;
+  margin-top:7px;
+  position:relative;
+}
+
+.restaurant-mark::after{
+  content:"";
+  position:absolute;
+  width:5px;
+  height:5px;
+  left:2px;
+  top:2px;
+  border-radius:50%;
+  background:currentColor;
+}
+
+.restaurant-mark.is-veg{ color:#28652b; }
+.restaurant-mark.is-nonveg{ border-color:#8a382c; color:#8a382c; }
+
+.restaurant-dish h4{
+  margin:0 0 4px;
+  font-size:1.05rem;
+  font-weight:600;
+}
+
+.restaurant-dish p{
+  margin:0;
+  color:var(--muted);
+  font-size:.93rem;
+}
+
+.restaurant-price{
+  white-space:nowrap;
+  font-weight:600;
+  font-variant-numeric:tabular-nums;
+}
+
+.restaurant-note{
+  margin:26px 0 0;
+  color:var(--muted);
+  font-size:.85rem;
+}
+
+.restaurant-info-section{
+  background:var(--sand-light);
+}
+
+.restaurant-info-list{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:20px;
+}
+
+.restaurant-info-list article{
+  padding-left:16px;
+  border-left:2px solid var(--sand);
+}
+
+.restaurant-info-list h3{
+  margin:0 0 6px;
+  font-size:1.2rem;
+}
+
+.restaurant-info-list p{
+  margin:0;
+  color:var(--muted);
+}
+
+.restaurant-reserve{
+  background:var(--dark);
+  color:#f7eee6;
+}
+
+.restaurant-reserve-grid{
+  display:grid;
+  grid-template-columns:minmax(0,.8fr) minmax(320px,1.2fr);
+  gap:clamp(28px,6vw,90px);
+  align-items:start;
+}
+
+.restaurant-reserve h2{
+  color:#f4d19a;
+  margin-bottom:14px;
+}
+
+.restaurant-reserve p{
+  color:#dfd2c6;
+  max-width:46ch;
+}
+
+.restaurant-reserve a:not(.button){
+  color:#f4d19a;
+}
+
+.restaurant-form-card{
+  background:#fffdf9;
+  color:var(--ink);
+  padding:clamp(22px,4vw,34px);
+}
+
+.restaurant-form{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.restaurant-field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.restaurant-field label{
+  font-size:.86rem;
+  font-weight:600;
+}
+
+.restaurant-field input{
+  width:100%;
+  min-height:46px;
+  border:1px solid var(--line);
+  background:#fff;
+  padding:10px 12px;
+  font:inherit;
+  color:var(--ink);
+}
+
+.restaurant-field input:focus{
+  outline:2px solid rgba(107,68,45,.24);
+  border-color:var(--brown);
+}
+
+.restaurant-field.has-error input{
+  border-color:#a43f32;
+}
+
+.restaurant-field small,
+.restaurant-error{
+  color:#8b352b;
+  font-size:.8rem;
+}
+
+.restaurant-policy,
+.restaurant-form .button,
+.restaurant-error{
+  grid-column:1 / -1;
+}
+
+.restaurant-policy{
+  margin:0;
+  padding:12px;
+  background:var(--sand-light);
+  color:var(--muted);
+  font-size:.83rem;
+}
+
+.restaurant-form .button{
+  justify-self:start;
+}
+
+.restaurant-hp{
+  position:absolute;
+  left:-9999px;
+}
+
+.restaurant-notice{
+  padding:20px;
+  border-left:3px solid var(--sand);
+  background:var(--sand-light);
+}
+
+.restaurant-notice h3{
+  margin:0 0 6px;
+  font-size:1.45rem;
+}
+
+.restaurant-notice p{ margin:0; color:var(--muted); }
+
+.restaurant-page .button:focus-visible,
+.restaurant-vegtoggle:focus-visible,
+.restaurant-tabs a:focus-visible,
+.restaurant-field input:focus-visible{
+  outline:2px solid var(--sand);
+  outline-offset:3px;
+}
+
+@media (max-width:900px){
+  .restaurant-hero-grid,
+  .restaurant-reserve-grid,
+  .restaurant-intro-grid,
+  .restaurant-info-grid{
+    grid-template-columns:1fr;
+  }
+
+  .restaurant-hours{
+    grid-template-columns:1fr;
+  }
+
+  .restaurant-feature-grid,
+  .restaurant-info-list{
+    grid-template-columns:1fr;
+  }
+
+  .restaurant-gallery{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .restaurant-gallery figure:first-child{
+    grid-column:1 / -1;
+  }
+}
+
+@media (max-width:760px){
+  .restaurant-tabs{ top:0; }
+
+  .restaurant-gallery{
+    grid-template-columns:1fr;
+  }
+
+  .restaurant-gallery figure:first-child{
+    grid-column:auto;
+  }
+
+  .restaurant-form{
+    grid-template-columns:1fr;
+  }
+
+  .restaurant-form .button,
+  .restaurant-policy,
+  .restaurant-error{
+    grid-column:auto;
+  }
+}
+
+@media (max-width:560px){
+  .restaurant-hero-grid{
+    padding-top:34px;
+  }
+
+  .restaurant-hero-media{
+    border-width:4px;
+  }
+
+  .restaurant-hero-copy h1{
+    font-size:clamp(2.25rem,12vw,3.3rem);
+  }
+
+  .restaurant-hours div{
+    display:block;
+  }
+
+  .restaurant-hours strong{
+    display:block;
+    margin-top:2px;
+  }
+
+  .restaurant-dish{
+    grid-template-columns:14px minmax(0,1fr);
+  }
+
+  .restaurant-price{
+    grid-column:2;
+    margin-top:2px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .restaurant-gallery img{ transition:none; }
+}

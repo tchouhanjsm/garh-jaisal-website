@@ -1,0 +1,129 @@
+/* Booking guide: book-rooms-in-jaisalmer.php */
+
+.guide-page{
+  background:var(--cream);
+  color:var(--ink);
+}
+
+.guide-page p,
+.guide-page li{
+  color:#62584f;
+  line-height:1.7;
+}
+
+.page-hero .guide-lede{
+  max-width:38rem;
+  margin:0 0 28px;
+  color:#d9d1c9;
+  font-size:1.05rem;
+}
+
+.guide-page .actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
+}
+
+.page-hero .actions{
+  justify-content:flex-start;
+}
+
+.guide-layout{
+  display:grid;
+  grid-template-columns:200px minmax(0,1fr);
+  gap:48px;
+  align-items:start;
+}
+
+.guide-jump{
+  position:sticky;
+  top:96px;
+}
+
+.guide-jump a{
+  display:block;
+  padding:10px 0;
+  border-bottom:1px solid var(--line);
+  color:var(--brown);
+  font-size:.82rem;
+  font-weight:700;
+  letter-spacing:.02em;
+  text-decoration:none;
+}
+
+.guide-jump a:hover,
+.guide-jump a:focus-visible{
+  color:var(--ink);
+}
+
+.guide-copy h2{
+  margin:0 0 14px;
+  font-size:clamp(1.8rem,3vw,2.6rem);
+}
+
+.guide-copy h3{
+  margin:22px 0 8px;
+  font-size:1.2rem;
+}
+
+.guide-copy p{
+  margin:0 0 14px;
+  max-width:42rem;
+}
+
+.guide-copy ul{
+  margin:0 0 16px;
+  padding-left:1.2rem;
+  max-width:42rem;
+}
+
+.guide-copy a{
+  color:var(--brown);
+  font-weight:700;
+}
+
+.guide-copy a:hover,
+.guide-copy a:focus-visible{
+  color:var(--ink);
+}
+
+.guide-block + .guide-block{
+  margin-top:48px;
+  padding-top:48px;
+  border-top:1px solid var(--line);
+}
+
+.rooms-cta .button-light{
+  background:transparent;
+  border-color:var(--brown);
+  color:var(--ink);
+}
+
+.rooms-cta .button-light:hover{
+  background:var(--sand-light);
+}
+
+@media (max-width:800px){
+  .guide-layout{
+    grid-template-columns:1fr;
+    gap:28px;
+  }
+
+  .guide-jump{
+    position:static;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 14px;
+  }
+
+  .guide-jump a{
+    border:0;
+    padding:0;
+  }
+
+  .guide-block + .guide-block{
+    margin-top:36px;
+    padding-top:36px;
+  }
+}

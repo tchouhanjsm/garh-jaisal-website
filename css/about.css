@@ -1,0 +1,150 @@
+/* About page. Shared chrome stays in garh-v2.css. */
+
+.about-page{
+  background:var(--cream);
+  color:var(--ink);
+}
+
+.about-hero .page-hero-inner > p{
+  max-width:640px;
+  margin:0 0 28px;
+  color:#d9d1c9;
+  font-size:1.05rem;
+}
+
+.about-page .actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.about-story{
+  background:var(--sand-light);
+}
+
+.about-page .image-panel{
+  display:grid;
+  min-height:0;
+  background:#dfd2c1;
+}
+
+.about-page .image-panel img{
+  width:100%;
+  height:100%;
+  min-height:520px;
+  object-fit:cover;
+}
+
+.about-points{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+
+.about-point{
+  background:#fff;
+  border:1px solid var(--line);
+  padding:24px 22px 26px;
+}
+
+.about-point h3{
+  margin:0 0 10px;
+  font-size:1.55rem;
+}
+
+.about-point p{
+  margin:0;
+  color:var(--muted);
+}
+
+.about-button-ink{
+  border-color:var(--line);
+  background:#fff;
+  color:var(--ink);
+}
+
+.about-button-ink:hover,
+.about-button-ink:focus-visible{
+  border-color:var(--brown);
+  color:var(--brown);
+}
+
+.about-explore{
+  background:#fff;
+}
+
+.about-links{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+
+.about-links a{
+  display:flex;
+  align-items:center;
+  min-height:72px;
+  padding:16px 18px;
+  border:1px solid var(--line);
+  background:var(--cream);
+  font-size:.95rem;
+  font-weight:700;
+}
+
+.about-links a:hover,
+.about-links a:focus-visible{
+  border-color:var(--brown);
+  color:var(--brown);
+  outline:none;
+}
+
+.about-cta{
+  background:var(--dark);
+  color:#fff;
+  text-align:center;
+}
+
+.about-cta .eyebrow{
+  color:#e7c79d;
+}
+
+.about-cta h2{
+  max-width:760px;
+  margin:0 auto 16px;
+  font-size:clamp(2.4rem,5vw,4.2rem);
+}
+
+.about-cta > .site-shell > p:not(.eyebrow){
+  max-width:560px;
+  margin:0 auto 26px;
+  color:#d9d1c9;
+}
+
+.about-cta .actions{
+  justify-content:center;
+}
+
+@media (max-width:900px){
+  .about-points,
+  .about-links{
+    grid-template-columns:1fr;
+  }
+
+  .about-page .image-panel img{
+    min-height:360px;
+  }
+}
+
+@media (max-width:500px){
+  .about-page .actions{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .about-page .actions .button{
+    width:100%;
+  }
+
+  .about-page .image-panel img{
+    min-height:280px;
+  }
+}
