@@ -1,5 +1,7 @@
+.DS_Store
 Thumbs.db
 *.backup
+*.bak
 sync-local.sh
 include/site-config.local.php
 error_log
