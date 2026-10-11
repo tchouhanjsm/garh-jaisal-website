@@ -52,6 +52,7 @@ jobs:
           name: browser-e2e-evidence-${{ github.run_number }}
           path: |
             artifacts/screenshots/
+            artifacts/seo-inventory/
             test-results/
             playwright-report/
           if-no-files-found: warn

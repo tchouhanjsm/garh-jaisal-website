@@ -10,11 +10,11 @@
 | Current phase | Phase 4 — local SEO content audit and page relevance |
 | Base branch | `main` |
 | Baseline commit | `eadfb07ed6162f26461060b4c38c83adda302e04` |
-| Last merged PR | [#9 — Phase 4 audit and Claude skill entrypoint](https://github.com/tchouhanjsm/garh-jaisal-website/pull/9) |
+| Last merged PR | [#10 — rendered internal-link regression](https://github.com/tchouhanjsm/garh-jaisal-website/pull/10) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-4-internal-link-audit` — validate rendered same-site anchor targets across all sitemap routes |
-| Next action | Validate the internal-link audit against real CI results, fix only confirmed broken targets, then continue evidence-backed local SEO improvements |
+| Active batch | `feature/phase-4-rendered-seo-inventory` — produce a rendered per-route metadata and internal-link inventory in CI artifacts |
+| Next action | Validate the rendered SEO inventory on the exact PR head, inspect real findings and retries, then fix confirmed defects in focused batches |
 
 ## Phase roadmap
 
@@ -141,11 +141,20 @@
 - No production site or live enquiries are touched. Browser/PHP checks are to be validated by CI at the exact PR head; public content remains unchanged in this initial batch.
 
 
-## Phase 4 follow-up — rendered internal-link regression (PR #10 in progress)
+## Phase 4 follow-up — rendered internal-link regression (PR #10 merged)
 
 - Added `tests/e2e/internal-links.spec.js` to inspect same-site anchor links from each of the 26 sitemap routes using the local PHP test server.
 - Runs only in the `desktop-1280` Playwright project to avoid duplicating the same link crawl at every viewport.
 - Skips fragments, non-navigation protocols, downloads and external origins; checks each unique same-origin target without following redirects.
 - This test is intended to identify broken local destinations. Any failure must be inspected for legitimate endpoint behavior or URL normalization before changing production links.
 - No public content, URLs, assets, analytics IDs, hotel facts, prices, secrets or production configuration changed.
-- Validation is pending CI on the latest PR head; this tool session cannot run PHP/Playwright locally.
+- PR #10 was merged by the owner. The test and local-PHP limitation remain documented; review its CI run for retries/warnings before treating the audit as fully clean.
+
+
+## Phase 4 follow-up — rendered SEO inventory (active PR batch)
+
+- Added `tests/e2e/seo-inventory.spec.js` to render each sitemap route at 1280px and record HTTP status, title, meta descriptions, canonical URLs/path alignment, primary H1 values, robots meta, unique internal/external link destinations and JSON-LD validity/types.
+- The inventory is evidence for review, not an assertion that the production site was crawled or that metadata is high quality. The existing SEO and internal-link regression tests remain the enforcement gates.
+- The browser workflow uploads `artifacts/seo-inventory/rendered-seo-inventory.json` with existing screenshot/trace/report evidence, retaining artifacts for 14 days.
+- No public templates, metadata values, routes, hotel facts, room-image mappings, prices, analytics IDs, secrets or production configuration changed.
+- PHP/Playwright cannot be run from this tool session; CI on the exact PR head is required, and any retry or failure must be inspected before merge.
