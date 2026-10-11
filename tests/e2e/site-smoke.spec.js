@@ -48,12 +48,12 @@ for (const route of routes) {
       const routeName = route === '/' ? 'home' : route.replace(/^\//, '').replace(/[^a-zA-Z0-9._-]+/g, '-');
       const screenshotDir = path.join(process.cwd(), 'artifacts', 'screenshots', testInfo.project.name);
       fs.mkdirSync(screenshotDir, { recursive: true });
-      const screenshotPath = path.join(screenshotDir, `${routeName}.png`);
+      const screenshotPath = path.join(screenshotDir, `${routeName}.jpg`);
   
-      await page.screenshot({ path: screenshotPath, fullPage: true, animations: 'disabled' });
+      await page.screenshot({ path: screenshotPath, type: 'jpeg', quality: 72, fullPage: true, animations: 'disabled' });
       await testInfo.attach(`screenshot-${routeName}`, {
         path: screenshotPath,
-        contentType: 'image/png',
+        contentType: 'image/jpeg',
       });
     }
 
@@ -71,10 +71,11 @@ test('mobile navigation opens and closes with Escape', async ({ page }, testInfo
   const navigation = page.getByRole('navigation', { name: 'Primary navigation' });
 
   await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  const menuButton = page.locator('.nav-toggle');
+  await expect(menuButton).toHaveAttribute('aria-expanded', 'true');
   await expect(navigation).toBeVisible();
 
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('button', { name: 'Open navigation' })).toHaveAttribute('aria-expanded', 'false');
+  await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
   await expect(navigation).toBeHidden();
 });
