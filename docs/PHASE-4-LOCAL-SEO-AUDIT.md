@@ -55,10 +55,11 @@ Inventory the 26 current sitemap routes and identify evidence-backed improvement
 ## Recommended sequence
 
 1. Run CI's rendered SEO check over all sitemap routes and inspect exact logs/warnings/retries.
-2. Build a per-route rendered inventory of title, meta description, canonical, H1, indexability and internal-link destinations.
-3. Resolve only verified issues. Prioritize genuine missing/duplicate metadata, broken internal links, unsupported content claims, and route mismatches.
-4. After owner confirms facts, improve one focused group at a time (hotel/rooms, dining, arrival, desert experiences, guides).
-5. Run the Smart Check roles and full relevant regression after each batch.
+2. Run the rendered internal-link regression across the sitemap routes and triage each reported target before changing links.
+3. Build a per-route rendered inventory of title, meta description, canonical, H1, indexability and internal-link destinations.
+4. Resolve only verified issues. Prioritize genuine missing/duplicate metadata, broken internal links, unsupported content claims, and route mismatches.
+5. After owner confirms facts, improve one focused group at a time (hotel/rooms, dining, arrival, desert experiences, guides).
+6. Run the Smart Check roles and full relevant regression after each batch.
 
 ## Explicitly not changed by this audit
 
@@ -67,3 +68,8 @@ Inventory the 26 current sitemap routes and identify evidence-backed improvement
 - No room-image mappings or assets.
 - No prices, amenities, package inclusions, timings or local factual claims.
 - No analytics IDs, form destinations, secrets, or cPanel settings.
+
+
+## Internal-link regression follow-up
+
+PR #10 adds a Playwright audit of same-origin anchor destinations for every sitemap route. It runs once at the desktop viewport and does not follow redirects. A reported status or request failure is a lead to investigate, not permission to rewrite a URL without checking whether the destination is an intentional endpoint.
