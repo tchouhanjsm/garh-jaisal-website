@@ -143,7 +143,43 @@ foreach ($scanFiles as $file) {
     }
 }
 
-// 4. Configuration and junk checks. site-config.example.php may contain
+// 4. Confirm shared experience pages use the renderer and data model.
+$experiencePages = [
+    'sunset-camel-safari.php',
+    'sleep-under-the-stars.php',
+    'cultural-safari.php',
+    'swiss-tent-safari.php',
+    'explore-the-desert.php',
+    'camping.php',
+    'city-tour.php',
+];
+foreach ($experiencePages as $relative) {
+    $path = $root . '/' . $relative;
+    if (!is_file($path)) {
+        $errors[] = 'required experience page missing: ' . $relative;
+        continue;
+    }
+    $source = $readFile($path);
+    if (strpos($source, 'experience-page.php') === false) {
+        $errors[] = $relative . ': does not use include/experience-page.php';
+    }
+    if (strpos($source, '$experienceSlug') === false) {
+        $errors[] = $relative . ': experience slug assignment not found';
+    }
+}
+$rendererPath = $root . '/include/experience-page.php';
+if (!is_file($rendererPath)) {
+    $errors[] = 'include/experience-page.php is missing';
+} else {
+    $renderer = $readFile($rendererPath);
+    foreach (['<title', 'name="description"', 'rel="canonical"'] as $needle) {
+        if (strpos($renderer, $needle) === false) {
+            $errors[] = 'experience renderer missing expected metadata marker: ' . $needle;
+        }
+    }
+}
+
+// 5. Configuration and junk checks. site-config.example.php may contain
 // clearly labelled placeholders; the local secrets file must never be tracked.
 $forbiddenFiles = [
     'include/site-config.local.php',
