@@ -1,31 +1,51 @@
 # Smart Check Matrix
 
-This matrix routes changes to the appropriate deterministic checks. It is a selection guide, not a claim that every check is currently implemented.
+This matrix tells the Smart Check skill (`.agents/skills/smart-check/SKILL.md`) which role is **primary** for a change and which checks that role runs. It is a selection guide, not a claim that every check is currently implemented.
 
-| Check type | Triggering change surface | Minimum checks | Broader regression / evidence |
-|---|---|---|---|
-| PHP / backend | `*.php`, `include/**`, request handling, routing | PHP lint on supported CI versions; `php scripts/check-site.php --strict-images` | Route smoke tests; relevant form or page behavior |
-| Frontend / responsive | CSS, navigation, shared header/footer, layout, room cards | Playwright smoke; no horizontal overflow | 320×700, 390×844, 1280×800, 1440×900 projects; inspect screenshot artifacts |
-| Technical SEO | titles, descriptions, canonicals, H1, sitemap, JSON-LD, redirects | Rendered SEO E2E checks over sitemap routes | Validate actual HTTP response and rendered HTML; do not rely on source heuristics alone |
-| Content / local SEO | landing pages, area guides, headings, internal links, location intent | Fact-check against approved project content; heading/link/metadata checks | Confirm existing URLs and canonical targets; never fabricate hotel facts or location claims |
-| Accessibility | forms, controls, icons, images, keyboard behavior, semantic HTML | Static audit plus rendered checks where available | Keyboard/focus checks, labels/alt text, mobile layouts; manual review for contrast and screen-reader behavior |
-| Security / privacy | forms, mail, redirects, escaping, configuration, scripts | PHP lint; inspect validation/escaping and secret boundaries | Safe negative tests; no real emails, live enquiries, or secret output |
-| Booking / conversion | booking URLs, call/WhatsApp links, thank-you page, analytics | Assert expected destination and event wiring without sending a live enquiry | Owner-confirmed GA4 property/event plan; test consent/privacy behavior if applicable |
-| Images / assets | image paths, formats, dimensions, mapping | Strict image-reference check; verify file exists | Visual room-to-image matching; compare file size/dimensions and responsive rendering |
-| Performance | CSS/JS/image payload, third-party scripts, font loading | Static payload and image-size inventory where available | Lighthouse/Core Web Vitals on a controlled environment; distinguish lab estimates from field data |
-| Release / cPanel | deployment config, PHP compatibility, secrets, routing | Full CI and full browser regression on exact PR head | Staging smoke, config checklist, owner-approved release; never deploy from this skill |
+All four roles (Full-Stack Developer, SEO Content Writer, Debugger, UI/UX Lead) review every change. A role that is not primary still reports **N/A-GREEN** and must name what it looked at. See the skill for the double-check rule.
 
-## Status vocabulary
+## Role ownership
 
-- **PASS** — output or CI evidence confirms the check succeeded on the stated revision.
-- **FAIL** — the check ran and reported a failure that requires diagnosis.
-- **BLOCKED** — the check could not run because of a concrete environment or access limitation.
-- **NOT RUN** — the check was not selected or was deliberately deferred; give the reason.
+| Change surface | Primary role | Also double-checked by | Minimum checks | Broader regression / evidence |
+|---|---|---|---|---|
+| `*.php`, `include/**`, request handling, routing | Full-Stack Developer | Debugger, UI/UX Lead | PHP lint on CI versions; `php scripts/check-site.php --strict-images` | Route smoke tests; relevant form or page behavior |
+| Forms, `mail.php`, redirects, escaping, config, scripts | Full-Stack Developer | Debugger | Inspect validation, escaping and secret boundaries | Safe negative tests; no real emails, live enquiries or secret output |
+| CSS, navigation, shared header/footer, layout, room cards | UI/UX Lead | Full-Stack Developer, Debugger | Playwright smoke; no horizontal overflow | 320×700, 390×844, 1280×800, 1440×900 projects; inspect screenshot artifacts |
+| Forms, controls, icons, images, keyboard behavior | UI/UX Lead | SEO Content Writer | Static audit plus rendered checks where available | Keyboard and focus checks, labels and alt text; manual review for contrast and screen readers |
+| Image paths, formats, dimensions, mapping | UI/UX Lead | Full-Stack Developer | Strict image-reference check; verify file exists | Visual room-to-image matching; file size and dimensions; responsive rendering |
+| Booking URLs, call/WhatsApp links, thank-you page, analytics | UI/UX Lead | Full-Stack Developer | Assert expected destination and event wiring without sending a live enquiry | Owner-confirmed GA4 property and event plan; consent and privacy behavior if applicable |
+| Titles, descriptions, canonicals, H1, sitemap, JSON-LD, redirects | SEO Content Writer | Debugger, Full-Stack Developer | Rendered SEO E2E checks over sitemap routes | Actual HTTP response and rendered HTML; do not rely on source heuristics alone |
+| Landing pages, area guides, headings, internal links, location intent | SEO Content Writer | UI/UX Lead | Fact-check against approved project content; heading, link and metadata checks | Existing URLs and canonical targets confirmed; never fabricate hotel facts or location claims |
+| CSS/JS/image payload, third-party scripts, font loading | UI/UX Lead | Full-Stack Developer | Static payload and image-size inventory where available | Lighthouse / Core Web Vitals in a controlled environment; separate lab estimates from field data |
+| CI failures, flaky tests, console or runtime errors | Debugger | All roles | Read CI on the exact PR head SHA; classify each failure | Re-run the failed check and its regression group after the fix |
+| Deployment config, PHP compatibility, secrets, routing | Full-Stack Developer | Debugger | Full CI and full browser regression on exact PR head | Staging smoke, config checklist, owner-approved release; never deploy from this skill |
+
+## Verdict vocabulary
+
+Role verdicts: **GREEN**, **N/A-GREEN**, **YELLOW**, **RED**. Definitions are in the skill.
+
+Check status, used for each command or CI run:
+
+- **PASS**: output or CI evidence confirms the check succeeded on the stated revision.
+- **FAIL**: the check ran and reported a failure that requires diagnosis.
+- **BLOCKED**: the check could not run because of a concrete environment or access limitation.
+- **NOT RUN**: the check was not selected or was deliberately deferred; give the reason.
 
 ## Current automated coverage
 
 - PHP syntax lint and strict image-reference checks run in CI on PHP 7.4 and 8.2. PHP 7.4 is a compatibility signal, not proof of the production host version.
-- Playwright route smoke, responsive overflow checks and selected screenshot evidence run through the browser workflow.
+- Playwright route smoke, responsive overflow checks and the mobile navigation test run through the browser workflow on four viewport projects. Failures keep screenshots and traces as CI artifacts.
 - Rendered technical SEO regression checks cover sitemap routes in the desktop-1280 project.
-- Accessibility diagnostics include source-level warnings; confirm warnings against rendered output before changing templates.
-- Manual review is still needed for visual correctness, physical-device coverage, contrast/screen-reader quality, current hotel facts, and cPanel-specific configuration.
+- Accessibility diagnostics are source-level warnings from `scripts/check-site.php`; confirm them against rendered output before changing templates.
+- CI retries failed Playwright tests once, so a retried pass can hide a flaky test. The Debugger checks for this.
+
+## Not automated yet
+
+These rely on role judgment and manual review until tests exist:
+
+- SEO copy quality: uniqueness, intent and usefulness of titles and descriptions.
+- Form, mail and security behavior (no automated tests yet).
+- Booking and analytics event wiring.
+- Performance and Core Web Vitals.
+- Visual correctness, physical-device coverage, contrast and screen-reader quality.
+- Current hotel facts, and cPanel-specific configuration and PHP version.
