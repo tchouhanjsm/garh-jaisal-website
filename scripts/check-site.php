@@ -1,54 +1,197 @@
 <?php
-// Local + CI site checks. Usage: php scripts/check-site.php [--strict-images]
-// Exit 1 on any ERROR. WARN never fails the build.
+/**
+ * Local + CI checks for the plain-PHP website.
+ *
+ * Usage:
+ *   php scripts/check-site.php
+ *   php scripts/check-site.php --strict-images
+ *
+ * Errors fail the build. Warnings are reported separately and do not fail it.
+ */
 $root = dirname(__DIR__);
 $strictImages = in_array('--strict-images', $argv, true);
-$errors = []; $warns = [];
-$public = array_values(array_filter(glob("$root/*.php"), fn($f) => !in_array(basename($f), ['mail.php','thank-you.php','tariff.php'])));
+$errors = [];
+$warnings = [];
 
-// 1. Per-page SEO basics (pages that pull meta from a shared include are accepted)
-foreach ($public as $f) {
-  $n = basename($f); $s = file_get_contents($f);
-  $uses = preg_match('/include|require/', $s);
-  $miss = [];
-  foreach (['<title>' => 'title', 'name="description"' => 'meta description', 'rel="canonical"' => 'canonical'] as $needle => $label)
-    if (strpos($s, $needle) === false) $miss[] = $label;
-  if ($miss && !$uses) $errors[] = "$n: missing " . implode(', ', $miss);
-  elseif ($miss) $warns[] = "$n: " . implode(', ', $miss) . " not literal (confirm the shared include renders them)";
-  if (substr_count($s, '<h1') !== 1 && strpos($s,'<h1')!==false) $warns[] = "$n: expected exactly one <h1>";
-}
-
-// 2. Sitemap <-> files
-$sm = file_get_contents("$root/sitemap.xml");
-preg_match_all('#<loc>https?://[^/]+/([^<]*)</loc>#', $sm, $m);
-foreach ($m[1] as $p) if ($p !== '' && !is_file("$root/$p")) $errors[] = "sitemap.xml lists missing file: $p";
-foreach ($public as $f) if (!in_array(basename($f), $m[1], true) && basename($f) !== 'index.php') $warns[] = basename($f) . ": public page not in sitemap.xml";
-if (strpos($sm, '<lastmod>') === false) $warns[] = "sitemap.xml has no <lastmod>";
-
-// 3. Local href/src targets exist (php, css, js, img)
-foreach (array_merge(glob("$root/*.php"), glob("$root/include/*.php")) as $f) {
-  $s = file_get_contents($f);
-  preg_match_all('/(?:href|src)="([^"#?:]+\.(?:php|css|js|png|jpe?g|webp|svg|ico))"/i', $s, $mm);
-  foreach (array_unique($mm[1]) as $u) {
-    if (strpos($u, '<?') !== false || strpos($u, '//') === 0) continue;
-    if (!is_file("$root/" . ltrim($u, '/'))) {
-      $msg = basename($f) . ": broken local ref $u";
-      if ($strictImages || !preg_match('/\.(png|jpe?g|webp)$/i', $u)) $errors[] = $msg; else $warns[] = $msg;
+$public = array_values(array_filter(
+    glob($root . '/*.php') ?: [],
+    static function ($file) {
+        return !in_array(basename($file), ['mail.php', 'thank-you.php', 'tariff.php'], true);
     }
-  }
+));
+
+$readFile = static function ($path) {
+    $content = file_get_contents($path);
+    return is_string($content) ? $content : '';
+};
+
+$addUnique = static function (&$list, $message) {
+    if (!in_array($message, $list, true)) {
+        $list[] = $message;
+    }
+};
+
+// 1. Basic SEO tags. Shared includes are not considered proof on their own;
+// pages that build metadata dynamically are reported for manual verification.
+foreach ($public as $file) {
+    $name = basename($file);
+    $source = $readFile($file);
+    $missing = [];
+
+    foreach ([
+        '/<title\b/i' => 'title',
+        '/<meta\s+name=["\']description["\']/i' => 'meta description',
+        '/<link\s+rel=["\']canonical["\']/i' => 'canonical',
+    ] as $pattern => $label) {
+        if (!preg_match($pattern, $source)) {
+            $missing[] = $label;
+        }
+    }
+
+    if ($missing) {
+        $message = $name . ': ' . implode(', ', $missing) . ' not found literally; verify rendered head output';
+        $addUnique($warnings, $message);
+    }
+
+    $h1Count = preg_match_all('/<h1\b/i', $source);
+    if ($h1Count !== false && $h1Count > 1) {
+        $addUnique($warnings, $name . ': multiple literal H1 elements found');
+    } elseif ($h1Count === 0) {
+        $addUnique($warnings, $name . ': no literal H1 found; verify rendered page');
+    }
 }
 
-// 4. Secrets / junk that must not ship
-foreach (['include/site-config.local.php','error_log'] as $x) if (is_file("$root/$x") && getenv('CI')) $errors[] = "$x must not be committed";
-$rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS));
-foreach ($rii as $file) {
-  $p = $file->getPathname(); if (strpos($p, '/.git/') !== false) continue;
-  if (preg_match('/\.(php|js|txt|md)$/', $p) && preg_match('/(?:secret|password|passwd)\s*[\'"]?\s*[:=>]+\s*[\'"][^\'"\s]{8,}/i', file_get_contents($p)) && basename($p) !== 'check-site.php' && !preg_match('/example/', $p))
-    $errors[] = "possible hard-coded secret in " . substr($p, strlen($root) + 1);
-  if (preg_match('/(\.backup|\.bak|\.DS_Store|Thumbs\.db)$/', $p)) $warns[] = "junk file: " . substr($p, strlen($root) + 1);
+// 2. Sitemap references must point to local files when a URL is a site path.
+$sitemapPath = $root . '/sitemap.xml';
+$sitemap = is_file($sitemapPath) ? $readFile($sitemapPath) : '';
+if ($sitemap === '') {
+    $errors[] = 'sitemap.xml is missing or empty';
+} else {
+    preg_match_all('#<loc>https?://[^/]+/([^<]*)</loc>#i', $sitemap, $matches);
+    $sitemapPaths = $matches[1] ?? [];
+
+    foreach ($sitemapPaths as $path) {
+        $path = trim($path);
+        if ($path === '') {
+            continue;
+        }
+        $decoded = rawurldecode($path);
+        if (strpos($decoded, '..') !== false || strpos($decoded, '\\') !== false) {
+            $errors[] = 'sitemap.xml contains an unsafe local path: ' . $path;
+            continue;
+        }
+        if (!is_file($root . '/' . ltrim($decoded, '/'))) {
+            $errors[] = 'sitemap.xml lists missing file: ' . $path;
+        }
+    }
+
+    foreach ($public as $file) {
+        $name = basename($file);
+        if ($name !== 'index.php' && !in_array($name, $sitemapPaths, true)) {
+            $addUnique($warnings, $name . ': public page not listed in sitemap.xml');
+        }
+    }
+
+    if (strpos($sitemap, '<lastmod>') === false) {
+        $addUnique($warnings, 'sitemap.xml has no <lastmod>; add only dates supported by repository history');
+    }
 }
 
-foreach ($warns as $w) echo "WARN  $w\n";
-foreach ($errors as $e) echo "ERROR $e\n";
-printf("\n%d error(s), %d warning(s)\n", count($errors), count($warns));
+// 3. Literal local href/src references. External URLs, fragments, query values,
+// and PHP-generated dynamic URLs need browser smoke tests rather than guessing.
+$scanFiles = array_merge(
+    glob($root . '/*.php') ?: [],
+    glob($root . '/include/*.php') ?: []
+);
+$referencePattern = '/(?:href|src)\s*=\s*["\']([^"\']+)["\']/i';
+$localExtensions = '/\.(?:php|css|js|png|jpe?g|webp|svg|ico|gif|woff2?|ttf|xml)(?:[?#].*)?$/i';
+
+foreach ($scanFiles as $file) {
+    $source = $readFile($file);
+    if (!preg_match_all($referencePattern, $source, $refs)) {
+        continue;
+    }
+
+    foreach (array_unique($refs[1]) as $reference) {
+        $reference = trim($reference);
+        if ($reference === '' || $reference[0] === '#' || $reference[0] === '?' ||
+            preg_match('#^(?:[a-z][a-z0-9+.-]*:|//)#i', $reference) ||
+            strpos($reference, '<?') !== false ||
+            !preg_match($localExtensions, $reference)) {
+            continue;
+        }
+
+        $path = preg_replace('/[?#].*$/', '', $reference);
+        if (!is_string($path) || $path === '') {
+            continue;
+        }
+        $decoded = rawurldecode($path);
+        if (strpos($decoded, '..') !== false || strpos($decoded, '\\') !== false) {
+            $errors[] = basename($file) . ': unsafe local reference ' . $reference;
+            continue;
+        }
+
+        $target = $root . '/' . ltrim($decoded, '/');
+        if (!is_file($target)) {
+            $message = basename($file) . ': broken local ref ' . $reference;
+            if ($strictImages || !preg_match('/\.(?:png|jpe?g|webp|gif|svg|ico)$/i', $decoded)) {
+                $addUnique($errors, $message);
+            } else {
+                $addUnique($warnings, $message);
+            }
+        }
+    }
+}
+
+// 4. Configuration and junk checks. site-config.example.php may contain
+// clearly labelled placeholders; the local secrets file must never be tracked.
+$forbiddenFiles = [
+    'include/site-config.local.php',
+    'error_log',
+];
+foreach ($forbiddenFiles as $relative) {
+    if (is_file($root . '/' . $relative) && getenv('CI')) {
+        $errors[] = $relative . ' exists in CI workspace; ensure local configuration is not committed';
+    }
+}
+
+$iterator = new RecursiveIteratorIterator(
+    new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS)
+);
+foreach ($iterator as $entry) {
+    if (!$entry->isFile()) {
+        continue;
+    }
+    $path = $entry->getPathname();
+    $relative = ltrim(substr($path, strlen($root)), DIRECTORY_SEPARATOR);
+    if (strpos($relative, '.git' . DIRECTORY_SEPARATOR) === 0) {
+        continue;
+    }
+
+    if (preg_match('/(?:^|\/)(?:\.DS_Store|Thumbs\.db|error_log)$/i', $relative) ||
+        preg_match('/\.(?:backup|bak)$/i', $relative) ||
+        preg_match('/(?:^|\/)loader\.html$/i', $relative)) {
+        $addUnique($warnings, 'repository hygiene candidate: ' . $relative);
+    }
+
+    if (preg_match('/\.(?:php|js|txt|md|yml|yaml|json)$/i', $relative)) {
+        $contents = $readFile($path);
+        $looksLikeSecret = preg_match(
+            '/(?:secret|password|passwd|api[_-]?key|access[_-]?token)\s*[\'"]?\s*[:=>]+\s*[\'"][^\'"\s]{12,}/i',
+            $contents
+        );
+        if ($looksLikeSecret && basename($path) !== 'check-site.php' &&
+            strpos($relative, 'example') === false && strpos($relative, 'template') === false) {
+            $addUnique($errors, 'possible hard-coded secret pattern in ' . $relative . '; inspect manually');
+        }
+    }
+}
+
+foreach ($warnings as $warning) {
+    echo 'WARN  ' . $warning . PHP_EOL;
+}
+foreach ($errors as $error) {
+    echo 'ERROR ' . $error . PHP_EOL;
+}
+printf("\n%d error(s), %d warning(s)\n", count($errors), count($warnings));
 exit($errors ? 1 : 0);
