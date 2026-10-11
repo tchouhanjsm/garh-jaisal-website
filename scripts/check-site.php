@@ -243,6 +243,36 @@ foreach ($iterator as $entry) {
     }
 }
 
+// 6. Accessibility and safe external-link diagnostics. These are warnings
+// because PHP templates may construct attributes dynamically; verify rendered HTML.
+$markupFiles = array_values(array_filter(
+    array_merge(glob($root . '/*.php') ?: [], glob($root . '/include/*.php') ?: []),
+    static function ($file) {
+        return !in_array(basename($file), ['header.php', 'footer.php', 'header-v2.backup.php'], true);
+    }
+));
+foreach ($markupFiles as $file) {
+    $source = $readFile($file);
+    $name = basename($file);
+    if (preg_match_all('/<img\\b([^>]*)>/i', $source, $images, PREG_SET_ORDER)) {
+        foreach ($images as $image) {
+            if (!preg_match('/\\balt\\s*=/i', $image[1])) {
+                $addUnique($warnings, $name . ': image without a literal alt attribute; verify rendered markup');
+                break;
+            }
+        }
+    }
+    if (preg_match_all('/<a\\b([^>]*)>/i', $source, $anchors, PREG_SET_ORDER)) {
+        foreach ($anchors as $anchor) {
+            if (preg_match('/\\btarget\\s*=\\s*[\\'\\"]_blank[\\'\\"]/i', $anchor[1]) &&
+                !preg_match('/\\brel\\s*=/i', $anchor[1])) {
+                $addUnique($warnings, $name . ': target="_blank" link without literal rel attribute; verify rendered markup');
+                break;
+            }
+        }
+    }
+}
+
 foreach ($warnings as $warning) {
     echo 'WARN  ' . $warning . PHP_EOL;
 }
