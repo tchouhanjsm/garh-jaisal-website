@@ -1,112 +1,72 @@
-# PROJECT LOG: Garh Jaisal Haveli website
+# Garh Jaisal Haveli — Project Log
 
-> **Single source of truth.** ChatGPT chats are disposable; this file is not.
-> Update it in EVERY PR (ChatGPT drafts the entry, you approve it).
-> Starting a new ChatGPT chat? Paste the "RESUME PROMPT" at the bottom, then attach this file.
+> Repository state is authoritative for tracked code. Update this file in each PR after the owner confirms the merged state.
 
-## 1. Snapshot (update at every merge)
+## Snapshot
 
 | Item | Value |
 |---|---|
-| Last updated | YYYY-MM-DD |
-| Current phase | Phase 0, Repo hygiene |
-| Last merged PR | none yet (baseline commit only) |
-| Open PR | none |
-| Latest tag / release | none |
-| Production URL | https://www.hotelgarhjaisal.com (untouched; staging is the working copy) |
-| Staging URL | <fill in> |
-| CI status on main | <green / red> |
-| Next action | Phase 0 batch: clean up repo, make CI green |
+| Last updated | 2026-10-11 |
+| Current phase | Phase 0 — repository CI and hygiene |
+| Base branch | `main` |
+| Baseline commit | `f03dbfde09144a23614b4f96c3a2c58f94d1f553` |
+| Last merged PR | None found in GitHub at initial inspection |
+| Open PR | None at initial inspection |
+| CI on main | No `.github/workflows/` found at initial inspection |
+| Production URL | https://www.hotelgarhjaisal.com |
+| Next action | Review branch `feature/repo-ci-baseline`; run local PHP lint and site checks; push and open PR |
 
-## 2. Roadmap and progress
+## Phase roadmap
 
-Status key: ☐ not started · ◐ in progress · ☑ merged
-
-| Phase | Goal | Status | PRs |
-|---|---|---|---|
-| 0 | Repo hygiene, CI green, sitemap lastmod | ☐ | |
-| 1 | Full audit → `docs/AUDIT-001.md` and prioritised backlog | ☐ | |
-| 2 | Visual polish and booking conversion (look and feel, CTAs, mobile) | ☐ | |
-| 3 | Technical SEO (head include, schema, .htaccess, 404) | ☐ | |
-| 4 | Local SEO and content (page rewrites, blog posts) | ☐ | |
-| 5 | Performance and Core Web Vitals | ☐ | |
-| 6 | Accessibility | ☐ | |
-| 7 | Forms, email and security | ☐ | |
-| 8 | Analytics and measurement | ☐ | |
-| 9 | Staging QA, cPanel handoff, tag v1.0.0 | ☐ | |
-| 10 | Monthly improvement loop | ☐ | |
-
-## 3. Approved PR register (newest first)
-
-<!-- Copy the block below for each merged PR. -->
-
-### PR #__: <title>  ·  merged YYYY-MM-DD  ·  branch `feature/...`  ·  Phase __
-- **Why (owner language):**
-- **What changed:** (pages / files)
-- **Not touched:**
-- **Evidence:** CI green · `check-site.php` 0 errors · tested at 390px and 1280px
-- **Residual risks:**
-- **Owner decisions made:**
-- **Follow-ups created:** (link to backlog IDs)
-
-## 4. Backlog (from audit; keep IDs stable)
-
-| ID | Priority | Page / area | Issue | Phase | Status |
-|---|---|---|---|---|---|
-| B-001 | P0 | include/header.php | Legacy header has 4 dead links | 0 | ☐ |
-| B-002 | P1 | sitemap.xml | No `<lastmod>` | 0 | ☐ |
-| B-003 | P1 | 7 experience pages | Confirm title/description/canonical render via shared include | 0 | ☐ |
-| B-004 | P1 | all pages | Two GA4 IDs loaded; decide the correct setup | 8 | ☐ |
-| B-005 | P2 | repo | `.backup`, `.DS_Store`, `Thumbs.db` files | 0 | ☐ |
-
-## 5. Owner decisions and confirmed facts (ChatGPT must not contradict these)
-
-| Date | Decision / fact | Where it applies |
+| Phase | Goal | Status |
 |---|---|---|
-| | e.g. "Check-in 12:00, check-out 11:00" | rooms, schema |
-| | e.g. "Fort Parking → hotel ≈ 300 m / 5–6 min on foot" | arrival, direction.php |
+| 0 | Repository hygiene and a safe CI baseline | ◐ in progress |
+| 1 | Site-wide audit with a prioritised backlog | ☐ |
+| 2 | Booking conversion and mobile UX | ☐ |
+| 3 | Technical SEO foundation | ☐ |
+| 4 | Local SEO and content depth | ☐ |
+| 5 | Performance and Core Web Vitals | ☐ |
+| 6 | Accessibility | ☐ |
+| 7 | Form, email and security hardening | ☐ |
+| 8 | Analytics measurement | ☐ |
+| 9 | Staging QA and cPanel handoff | ☐ |
+| 10 | Monthly improvement loop | ☐ |
 
-## 6. Open questions for the owner
+## Current batch — `feature/repo-ci-baseline`
 
-- [ ] 
-- [ ] 
+- **Goal:** Introduce pull-request PHP/site validation and make local review standards explicit.
+- **Changes authored on branch:** GitHub Actions workflow, pull-request template, stricter site checker diagnostics, ignore rules for local and backup artifacts, and clearer server-side enquiry recipient configuration.
+- **Not changed:** Public page copy, page URLs, imagery, CSS presentation, production hosting, and DNS.
+- **Validation still required:** Run `php -l` over every PHP file; run `php scripts/check-site.php --strict-images`; inspect actual failures; confirm CI result; manually smoke-test homepage, rooms, packages, arrival, contact, and article pages at 390px and 1280px.
+- **Important limitation:** GitHub API write access can create/update tracked text files, but cannot run PHP or a browser in this environment. No test has been claimed as passed.
+- **Owner action:** Review the branch diff and workflow PHP version. Do not merge until local checks and CI are green.
 
-## 7. Conventions
+## Findings and backlog
 
-- Branches: `feature/<short-name>`, one theme per branch. Squash-merge to `main`.
-- Commits: conventional (`feat:`, `fix:`, `chore:`, `docs:`, `content:`).
-- Never commit `include/site-config.local.php` or any secret.
-- Images are final and live in `img/`; ChatGPT never renames or deletes them.
-- Only the owner merges.
+| ID | Priority | Finding | Next step |
+|---|---|---|---|
+| B-001 | P0 | CI workflow was not present on initial `main` tree | Add CI for PHP lint and site checks |
+| B-002 | P1 | Site checker relied on source heuristics for metadata | Improve diagnostics; preserve manual review for dynamic pages |
+| B-003 | P1 | Sitemap contains no `<lastmod>` values | Add dates only when justified by Git history |
+| B-004 | P1 | Two GA4 IDs are loaded in page scripts | Confirm property ownership/use before selecting one |
+| B-005 | P1 | Enquiry recipients must be configured outside public source | Owner/developer confirms actual recipients privately on server |
+| B-006 | P2 | Tracked `.DS_Store` and `img/loader.html` appear in repo | Confirm candidates and remove via a dedicated hygiene diff |
+| B-007 | P2 | Legacy header/footer and a backup header remain | Prove no pages use them before removing them |
+| B-008 | P1 | Experience content and prices are operationally sensitive | Confirm prices, timings, inclusions and language availability before publishing |
 
----
+## Non-negotiable conventions
 
-## RESUME PROMPT (copy into a NEW ChatGPT chat, then attach this file)
+- Branches use `feature/<short-name>`; one theme per branch.
+- Conventional commits: `feat:`, `fix:`, `test:`, `chore:`, `docs:`, `content:`.
+- Keep existing public URLs. URL retirement requires an owner-reviewed 301.
+- Never commit `include/site-config.local.php`, mail credentials, server-only keys or passwords.
+- Do not invent hotel facts, prices, inclusions, distances, schedules, testimonials, ratings or awards.
+- Images are owner-supplied assets; do not rename or delete them without explicit need and proof.
+- The owner is the merge authority. Do not call a branch merged or deployed until the owner does so.
 
-```text
-We are continuing work on the Hotel Garh Jaisal Haveli PHP website. Your standing
-instructions (Master Prompt and Role Prompt) are in this Project. I have attached
-docs/PROJECT-LOG.md, which is the single source of truth for where we are.
+## Owner decisions still needed
 
-Do this, in order:
-1. Read the log. In 6 lines or fewer tell me: current phase, last merged PR, open
-   PR (if any), CI state, the next action, and the open questions waiting on me.
-2. List which files you will need me to upload for the next action.
-3. Do NOT start any work until I reply "go". If anything in the log looks
-   inconsistent (for example a PR marked merged but its phase still open), flag it.
-```
-
-## END-OF-BATCH PROMPT (use when the PR is green and you are about to approve it)
-
-The log update ships INSIDE the same PR, so `main` always matches the log.
-
-```text
-PR for branch feature/<name> is green and I am about to merge it. Produce the updated
-docs/PROJECT-LOG.md changes as a diff against the current version: Snapshot table,
-Roadmap row, a new Approved PR register entry (use "PR #__" and "merged YYYY-MM-DD"
-as placeholders for me to fill), backlog status changes, and any new owner
-decisions. Keep every older entry unchanged. Then state the next action.
-```
-
-Then: apply the diff on the branch, fill in the PR number and date, commit
-`docs: update project log`, push, merge.
+- Confirm whether both GA4 measurement IDs are intentional and which property should receive conversions.
+- Confirm actual enquiry-recipient email addresses for private staging/production configuration.
+- Confirm the cPanel PHP version before treating CI's selected version as a compatibility guarantee.
+- Confirm current experience inclusions, prices and operational descriptions before public release.
