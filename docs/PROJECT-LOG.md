@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-11 |
-| Current phase | Phase C — technical SEO regression coverage |
+| Current phase | Smart Check skill foundation; Phase 4 local SEO/content depth next |
 | Base branch | `main` |
 | Baseline commit | `eadfb07ed6162f26461060b4c38c83adda302e04` |
-| Last merged PR | [#5 — Tablet navigation and lean browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/pull/5) |
+| Last merged PR | [#6 — Rendered technical SEO regression checks](https://github.com/tchouhanjsm/garh-jaisal-website/pull/6) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-c-technical-seo-audit` — rendered metadata, canonical URL and JSON-LD regression checks |
-| Next action | Verify Phase C CI on the exact PR head, fix real rendered-page failures, and inspect test evidence before owner review |
+| Active batch | `feature/smart-check-skill` — reusable check selection and evidence-reporting skill |
+| Next action | Review and merge the Smart Check skill if accepted; then start Phase 4 with evidence-led local SEO/content improvements, using verified facts only |
 
 ## Phase roadmap
 
@@ -23,8 +23,8 @@
 | 0 | Repository hygiene and a safe CI baseline | ✓ CI baseline merged; local cleanup and WebP verification remain |
 | 1 | Site-wide audit with a prioritised backlog | ◐ in progress |
 | 2 | Booking conversion and mobile UX | ◐ responsive navigation and shared booking URL merged; conversion measurement remains open |
-| 3 | Technical SEO foundation | ◐ rendered metadata and JSON-LD regression checks in PR #6 |
-| 4 | Local SEO and content depth | ☐ |
+| 3 | Technical SEO foundation | ✓ rendered metadata and JSON-LD regression checks merged in PR #6 |
+| 4 | Local SEO and content depth | ☐ next implementation phase after Smart Check skill |
 | 5 | Performance and Core Web Vitals | ☐ |
 | 6 | Accessibility | ☐ |
 | 7 | Form, email and security hardening | ☐ |
@@ -58,7 +58,7 @@
 - Read the room-page booking URL from the shared public site configuration rather than duplicating it in the template.
 - No public URLs, room-image mappings, hotel facts, prices, analytics IDs, secrets or production deployment settings changed.
 
-## Phase C — technical SEO regression coverage
+## Phase C — technical SEO regression coverage (merged in PR #6)
 
 - Add rendered-browser checks for every route listed in `sitemap.xml`, using one desktop viewport to avoid multiplying metadata tests across all responsive projects.
 - Verify exactly one non-empty meta description and canonical link, an absolute HTTPS canonical whose path matches the sitemap route, one primary `main h1`, and parseable JSON-LD blocks where present.
@@ -115,3 +115,11 @@
 - Confirm actual enquiry-recipient email addresses privately on the server.
 - Confirm the cPanel PHP version before treating CI's PHP version as a compatibility guarantee.
 - Confirm current experience inclusions, prices and operational descriptions before public release.
+
+
+## Smart Check skill — active PR
+
+- Add a reusable agent skill at `.agents/skills/smart-check/SKILL.md` to select checks based on changed paths and risk, use two-pass review, classify results as PASS/FAIL/BLOCKED/NOT RUN, and require exact-head CI evidence before a merge recommendation.
+- Add `docs/SMART-CHECK-MATRIX.md` to map PHP/backend, frontend/responsive, technical SEO, content/local SEO, accessibility, security, booking/conversion, images, performance, and release checks to triggers and minimum regression coverage.
+- This skill coordinates existing checks; it does not claim every matrix item is automated. Manual reviews and unavailable local/browser/cPanel execution must remain explicit.
+- After this skill is accepted, Phase 4 should implement real local SEO/content improvements, prioritizing a content inventory and evidence-backed gaps before editing public copy. Do not invent operational facts or alter existing public URLs.
