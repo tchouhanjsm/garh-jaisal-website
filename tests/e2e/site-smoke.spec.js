@@ -61,3 +61,20 @@ for (const route of routes) {
     expect(pageErrors, `Uncaught browser errors on ${route}`).toEqual([]);
   });
 }
+
+
+test('mobile navigation opens and closes with Escape', async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith('mobile-'), 'Mobile navigation is only shown at mobile/tablet widths');
+
+  await page.goto('/');
+  const toggle = page.getByRole('button', { name: 'Open navigation' });
+  const navigation = page.getByRole('navigation', { name: 'Primary navigation' });
+
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  await expect(navigation).toBeVisible();
+
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('button', { name: 'Open navigation' })).toHaveAttribute('aria-expanded', 'false');
+  await expect(navigation).toBeHidden();
+});
