@@ -150,45 +150,40 @@ foreach ($scanFiles as $file) {
     }
 }
 
-// 4. Confirm shared experience pages use the renderer and data model.
-$experiencePages = [
-    'sunset-camel-safari.php',
-    'sleep-under-the-stars.php',
-    'cultural-safari.php',
-    'swiss-tent-safari.php',
-    'explore-the-desert.php',
-    'camping.php',
-    'city-tour.php',
+// 4. Confirm the pages expected to use the shared renderer actually do so.
+// The other two experience-related landing pages are intentionally standalone.
+$sharedExperiencePages = [
+    'sunset-camel-safari.php' => 'sunset-camel-safari',
+    'sleep-under-the-stars.php' => 'sleep-under-the-stars',
+    'cultural-safari.php' => 'cultural-safari',
+    'swiss-tent-safari.php' => 'swiss-tent-safari',
+    'explore-the-desert.php' => 'explore-the-desert',
 ];
-foreach ($experiencePages as $relative) {
+foreach ($sharedExperiencePages as $relative => $expectedSlug) {
     $path = $root . '/' . $relative;
     if (!is_file($path)) {
         $errors[] = 'required experience page missing: ' . $relative;
         continue;
     }
     $source = $readFile($path);
-    // The shared experience renderer is the approved implementation for
-    // five detail pages. The two hub pages (camping/city-tour) intentionally
-    // remain standalone landing pages, so validate their visible metadata.
-    $sharedRendererPages = [
-        'sunset-camel-safari.php',
-        'sleep-under-the-stars.php',
-        'cultural-safari.php',
-        'swiss-tent-safari.php',
-        'explore-the-desert.php',
-    ];
-    if (in_array($relative, $sharedRendererPages, true)) {
-        if (strpos($source, 'experience-page.php') === false) {
-            $errors[] = $relative . ': expected include/experience-page.php';
-        }
-        if (strpos($source, '$experienceSlug') === false) {
-            $errors[] = $relative . ': experience slug assignment not found';
-        }
-    } else {
-        foreach (['<title', 'name="description"', 'rel="canonical"'] as $marker) {
-            if (stripos($source, $marker) === false) {
-                $warnings[] = $relative . ': standalone landing page missing literal metadata marker ' . $marker;
-            }
+    if (strpos($source, 'experience-page.php') === false) {
+        $errors[] = $relative . ': expected shared experience renderer';
+    }
+    if (!preg_match('/\$experienceSlug\s*=\s*[\'"]' . preg_quote($expectedSlug, '/') . '[\'"]/', $source)) {
+        $errors[] = $relative . ': expected experience slug ' . $expectedSlug;
+    }
+}
+$standaloneExperiencePages = ['camping.php', 'city-tour.php'];
+foreach ($standaloneExperiencePages as $relative) {
+    $path = $root . '/' . $relative;
+    if (!is_file($path)) {
+        $errors[] = 'required experience landing page missing: ' . $relative;
+        continue;
+    }
+    $source = $readFile($path);
+    foreach (['<title', 'name="description"', 'rel="canonical"'] as $marker) {
+        if (stripos($source, $marker) === false) {
+            $addUnique($warnings, $relative . ': standalone landing page missing literal metadata marker ' . $marker);
         }
     }
 }
@@ -197,9 +192,9 @@ if (!is_file($rendererPath)) {
     $errors[] = 'include/experience-page.php is missing';
 } else {
     $renderer = $readFile($rendererPath);
-    foreach (['<title', 'name="description"', 'rel="canonical"'] as $needle) {
-        if (strpos($renderer, $needle) === false) {
-            $errors[] = 'experience renderer missing expected metadata marker: ' . $needle;
+    foreach (['<title', 'name="description"', 'rel="canonical"'] as $marker) {
+        if (stripos($renderer, $marker) === false) {
+            $errors[] = 'experience renderer missing expected metadata marker: ' . $marker;
         }
     }
 }
