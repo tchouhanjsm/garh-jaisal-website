@@ -94,7 +94,7 @@ test('write rendered SEO inventory for sitemap routes', async ({ browser }, test
     await context.close();
   }
 
-  const normalize = value => value.trim().replace(/\\s+/g, ' ').toLocaleLowerCase();
+  const normalize = value => value.trim().replace(/\s+/g, ' ').toLocaleLowerCase();
   const findings = [];
 
   const titlesByValue = new Map();
@@ -122,7 +122,7 @@ test('write rendered SEO inventory for sitemap routes', async ({ browser }, test
     if (route.jsonLd.some(block => !block.validJson)) {
       findings.push({ type: 'invalid-json-ld', routes: [route.route], severity: 'review' });
     }
-    if (route.robotsMeta && /(?:^|,)\\s*noindex\\b/i.test(route.robotsMeta)) {
+    if (route.robotsMeta && /(?:^|,)\s*noindex\\b/i.test(route.robotsMeta)) {
       findings.push({ type: 'noindex-directive', routes: [route.route], severity: 'review' });
     }
   }
