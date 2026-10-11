@@ -5,7 +5,7 @@ const { test, expect } = require('@playwright/test');
 function getSitemapRoutes() {
   const sitemap = fs.readFileSync(path.join(__dirname, '../../sitemap.xml'), 'utf8');
   return [...new Set(
-    [...sitemap.matchAll(/<loc>\\s*(https?:\\/\\/[^<]+)\\s*<\\/loc>/gi)]
+    [...sitemap.matchAll(/<loc>\s*(https?:\/\/[^<]+)\s*<\/loc>/gi)]
       .map(([, value]) => new URL(value.trim()))
       .filter(url => url.hostname === 'www.hotelgarhjaisal.com')
       .map(url => url.pathname || '/')
@@ -46,7 +46,7 @@ test('write rendered SEO inventory for sitemap routes', async ({ browser }, test
             target.hash = '';
             (target.origin === origin ? internal : external).add(target.href);
           } catch {
-            // Invalid and non-URL anchors are recorded separately by the link regression test.
+            // Invalid and non-URL anchors are reported separately by the link regression test.
           }
         }
         return { internal: [...internal], external: [...external] };
@@ -100,7 +100,7 @@ test('write rendered SEO inventory for sitemap routes', async ({ browser }, test
     source: 'local PHP site rendered by Playwright; not a production crawl',
     routeCount: inventory.length,
     routes: inventory,
-  }, null, 2) + '\\n');
+  }, null, 2) + '\n');
 
   await testInfo.attach('rendered-seo-inventory', {
     path: reportPath,
