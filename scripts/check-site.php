@@ -264,7 +264,7 @@ foreach ($markupFiles as $file) {
     }
     if (preg_match_all('/<a\\b([^>]*)>/i', $source, $anchors, PREG_SET_ORDER)) {
         foreach ($anchors as $anchor) {
-            if (preg_match('/\\btarget\\s*=\\s*[\\'\\"]_blank[\\'\\"]/i', $anchor[1]) &&
+            if (preg_match('/\\btarget\\s*=\\s*["\\']_blank["\\']/i', $anchor[1]) &&
                 !preg_match('/\\brel\\s*=/i', $anchor[1])) {
                 $addUnique($warnings, $name . ': target="_blank" link without literal rel attribute; verify rendered markup');
                 break;
