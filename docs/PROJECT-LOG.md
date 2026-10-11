@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-11 |
-| Current phase | Smart Check skill (role-based review); Phase 4 local SEO/content depth next |
+| Current phase | Phase 4 — local SEO content audit and page relevance |
 | Base branch | `main` |
 | Baseline commit | `eadfb07ed6162f26461060b4c38c83adda302e04` |
-| Last merged PR | [#7 — Smart Check skill](https://github.com/tchouhanjsm/garh-jaisal-website/pull/7) |
+| Last merged PR | [#8 — Role-based Smart Check](https://github.com/tchouhanjsm/garh-jaisal-website/pull/8) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/smart-check-roles` — rework the Smart Check skill into four reviewer roles |
-| Next action | Review and merge the role-based Smart Check skill if accepted; then start Phase 4 with evidence-led local SEO/content improvements, using verified facts only |
+| Active batch | `feature/phase-4-local-seo-audit` — add Claude Code entrypoint for Smart Check and audit sitemap-linked pages for evidence-backed local SEO improvements |
+| Next action | Review Phase 4 audit findings and implement content only where facts and existing page purpose are verifiable; run selected Smart Check roles and all relevant CI |
 
 ## Phase roadmap
 
@@ -24,7 +24,7 @@
 | 1 | Site-wide audit with a prioritised backlog | ◐ in progress |
 | 2 | Booking conversion and mobile UX | ◐ responsive navigation and shared booking URL merged; conversion measurement remains open |
 | 3 | Technical SEO foundation | ✓ rendered metadata and JSON-LD regression checks merged in PR #6 |
-| 4 | Local SEO and content depth | ☐ next implementation phase after Smart Check skill |
+| 4 | Local SEO and content depth | ◐ content/relevance audit in progress; no public copy changed yet |
 | 5 | Performance and Core Web Vitals | ☐ |
 | 6 | Accessibility | ☐ |
 | 7 | Form, email and security hardening | ☐ |
@@ -123,10 +123,19 @@
 - Added `docs/SMART-CHECK-MATRIX.md` to map PHP/backend, frontend/responsive, technical SEO, content/local SEO, accessibility, security, booking/conversion, images, performance, and release checks to triggers and minimum regression coverage.
 - This skill coordinates existing checks; it does not claim every matrix item is automated. Manual reviews and unavailable local/browser/cPanel execution must remain explicit.
 
-## Smart Check roles — active PR
+## Smart Check roles (merged in PR #8)
 
-- Rework the skill so four reviewer roles (Full-Stack Developer, SEO Content Writer, Debugger, UI/UX Lead) each review every change. A role the change does not touch reports **N/A-GREEN**, and must still name what it looked at (the double-check rule).
+- Reworked the skill so four reviewer roles (Full-Stack Developer, SEO Content Writer, Debugger, UI/UX Lead) each review every change. A role the change does not touch reports **N/A-GREEN**, and must still name what it looked at (the double-check rule).
 - Role verdicts are GREEN, N/A-GREEN, YELLOW or RED. PASS/FAIL/BLOCKED/NOT RUN stays as the vocabulary for individual checks and CI runs.
-- Rewrite `docs/SMART-CHECK-MATRIX.md` as a role-ownership table and list what is not automated yet: SEO copy quality, forms/mail/security tests, booking and analytics wiring, performance.
-- Stop tracking the committed `.DS_Store` files (already listed in `.gitignore`).
-- After this is accepted, Phase 4 should implement real local SEO/content improvements, prioritizing a content inventory and evidence-backed gaps before editing public copy. Do not invent operational facts or alter existing public URLs.
+- Rewrote `docs/SMART-CHECK-MATRIX.md` as a role-ownership table and documented current unautomated areas: SEO copy quality, forms/mail/security tests, booking and analytics wiring, and performance.
+- Stop tracking the three committed `.DS_Store` files (already listed in `.gitignore`).
+- Phase 4 is active in PR #9: audit existing pages and rendered metadata before changing public copy. Do not invent operational facts or alter existing public URLs.
+
+
+## Phase 4 — local SEO and content depth (audit first)
+
+- Audit current sitemap entries and their intent before rewriting copy. The present sitemap includes 26 URLs spanning core hotel pages, room booking, experiences, and guides.
+- Keep the audit evidence-led: record each URL's purpose, existing title/H1/description, internal-link role, overlap risks, and whether any fact needs owner confirmation before suggesting content edits.
+- Do not change public URLs, canonical targets, sitemap membership, prices, operational timings or room/image mappings as part of an audit-only step.
+- This phase's initial PR also adds a Claude Code-discoverable entrypoint at `.claude/skills/smart-check/SKILL.md`, pointing to the canonical `.agents/skills/smart-check/SKILL.md`. This addresses the path compatibility noted in PR #8.
+- No production site or live enquiries are touched. Browser/PHP checks are to be validated by CI at the exact PR head; public content remains unchanged in this initial batch.
