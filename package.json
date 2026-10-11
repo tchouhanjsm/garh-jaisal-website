@@ -1,0 +1,8 @@
+{
+  "name": "garh-jaisal-website-browser-tests",
+  "private": true,
+  "description": "Browser smoke tests for the Garh Jaisal Haveli PHP website",
+  "scripts": {
+    "test:e2e": "playwright test"
+  }
+}

@@ -5,3 +5,8 @@ Thumbs.db
 sync-local.sh
 include/site-config.local.php
 error_log
+
+# Browser automation output (generated locally and in CI)
+artifacts/
+test-results/
+playwright-report/
