@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-11 |
-| Current phase | Phase A — browser automation foundation |
+| Current phase | Phase B — mobile booking UX and browser evidence efficiency |
 | Base branch | `main` |
 | Baseline commit | `eadfb07ed6162f26461060b4c38c83adda302e04` |
-| Last merged PR | [#2 — Verify PHP 7.4 and 8.2 compatibility](https://github.com/tchouhanjsm/garh-jaisal-website/pull/2) |
+| Last merged PR | [#4 — Responsive browser E2E and screenshot artifacts](https://github.com/tchouhanjsm/garh-jaisal-website/pull/4) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-a-browser-automation` — responsive Playwright smoke tests and screenshot artifacts |
-| Next action | Verify browser E2E CI and screenshot artifacts on the exact PR head; owner reviews and merges |
+| Active batch | `feature/phase-b-mobile-booking-ux` — responsive tablet navigation, shared booking config, and lean CI screenshots |
+| Next action | Verify Phase B CI on the exact PR head; inspect responsive checks and screenshot artifacts; owner reviews and merges |
 
 ## Phase roadmap
 
@@ -33,7 +33,7 @@
 | 10 | Monthly improvement loop | ☐ |
 
 
-## Phase A — browser automation foundation
+## Phase A — browser automation foundation (merged in PR #4)
 
 - Added Playwright browser smoke tests driven by the routes in `sitemap.xml`.
 - Configured four Chromium viewport projects: 320×700, 390×844, 1280×800 and 1440×900.
@@ -41,14 +41,22 @@
 - Full-page screenshots are captured per route and viewport and attached to test results; CI uploads screenshots, traces, and the HTML report as a 14-day artifact.
 - CI starts the plain-PHP site with PHP's built-in server. It does not contact production or submit live enquiries.
 - Playwright is currently pinned to 1.55.0 in the workflow installation command; no lockfile is introduced in this initial foundation batch.
-- Browser coverage and screenshot output must be confirmed from CI on the exact PR head before merge. This automation does not yet assert visual baselines or prove every physical device is supported.
+- Browser coverage and screenshot output passed in CI on the exact PR head before merge. This automation does not yet assert visual baselines or prove every physical device is supported.
 
-## Phase 1 — current batch
+## Phase 1 — accessibility and external-link audit (merged in PR #3)
 
 - Added static diagnostics for image tags without a literal `alt` attribute and links using `target="_blank"` without a literal `rel` attribute.
 - These are warnings, not build failures, because PHP templates can construct attributes dynamically. Confirm findings against rendered HTML before editing page templates.
 - No user-facing page, content, asset, URL, analytics or production configuration changed in this batch.
 - CI and local browser testing must be checked before merge; the repository connector cannot execute PHP or a browser locally.
+
+## Phase B — current batch
+
+- Move the responsive navigation breakpoint to 1080px so the eight-link desktop navigation does not compete for space at tablet widths.
+- Keep sitemap-wide browser smoke checks, but capture full-page visual evidence only for home, rooms, contact and directions at each viewport. This keeps screenshots in GitHub Actions artifacts and out of the deployable site tree while reducing artifact volume.
+- Assert that tested routes do not create horizontal document overflow at the configured viewports.
+- Read the room-page booking URL from the shared public site configuration rather than duplicating it in the template.
+- No public URLs, room-image mappings, hotel facts, prices, analytics IDs, secrets or production deployment settings changed.
 
 ## Phase 0 — status and remaining work
 
