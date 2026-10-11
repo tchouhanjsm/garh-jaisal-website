@@ -22,8 +22,8 @@
 |---|---|---|
 | 0 | Repository hygiene and a safe CI baseline | ✓ CI baseline merged; local cleanup and WebP verification remain |
 | 1 | Site-wide audit with a prioritised backlog | ◐ in progress |
-| 2 | Booking conversion and mobile UX | ☐ |
-| 3 | Technical SEO foundation | ☐ |
+| 2 | Booking conversion and mobile UX | ◐ responsive navigation and shared booking URL merged; conversion measurement remains open |
+| 3 | Technical SEO foundation | ◐ rendered metadata and JSON-LD regression checks in PR #6 |
 | 4 | Local SEO and content depth | ☐ |
 | 5 | Performance and Core Web Vitals | ☐ |
 | 6 | Accessibility | ☐ |
