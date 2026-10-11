@@ -10,9 +10,9 @@
 | Current phase | Phase 0 — repository CI and hygiene |
 | Base branch | `main` |
 | Baseline commit | `f03dbfde09144a23614b4f96c3a2c58f94d1f553` |
-| Last merged PR | None found in GitHub at initial inspection |
-| Open PR | None at initial inspection |
-| CI on main | No `.github/workflows/` found at initial inspection |
+| Last merged PR | None yet; PR #1 is open and not merged |
+| Open PR | [#1 — Establish PHP CI and repository checks](https://github.com/tchouhanjsm/garh-jaisal-website/pull/1) |
+| CI on main | No workflow on `main` yet; branch CI passed on run [#3](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38115235778) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Next action | Review branch `feature/repo-ci-baseline`; run local PHP lint and site checks; push and open PR |
 
@@ -37,7 +37,7 @@
 - **Goal:** Introduce pull-request PHP/site validation and make local review standards explicit.
 - **Changes authored on branch:** GitHub Actions workflow, pull-request template, stricter site checker diagnostics, ignore rules for local and backup artifacts, and clearer server-side enquiry recipient configuration.
 - **Not changed:** Public page copy, page URLs, imagery, CSS presentation, production hosting, and DNS.
-- **Validation still required:** Run `php -l` over every PHP file; run `php scripts/check-site.php --strict-images`; inspect actual failures; confirm CI result; manually smoke-test homepage, rooms, packages, arrival, contact, and article pages at 390px and 1280px.
+- **Validation:** GitHub Actions run #3 passed PHP lint and `php scripts/check-site.php --strict-images`. Local run and browser smoke tests at 390px and 1280px remain pending.
 - **Important limitation:** GitHub API write access can create/update tracked text files, but cannot run PHP or a browser in this environment. No test has been claimed as passed.
 - **Owner action:** Review the branch diff and workflow PHP version. Do not merge until local checks and CI are green.
 
@@ -45,7 +45,7 @@
 
 | ID | Priority | Finding | Next step |
 |---|---|---|---|
-| B-001 | P0 | CI workflow was not present on initial `main` tree | Add CI for PHP lint and site checks |
+| B-001 | P0 | CI workflow was not present on initial `main` tree | Workflow added on PR #1; CI green on branch; merge after owner review |
 | B-002 | P1 | Site checker relied on source heuristics for metadata | Improve diagnostics; preserve manual review for dynamic pages |
 | B-003 | P1 | Sitemap contains no `<lastmod>` values | Add dates only when justified by Git history |
 | B-004 | P1 | Two GA4 IDs are loaded in page scripts | Confirm property ownership/use before selecting one |
