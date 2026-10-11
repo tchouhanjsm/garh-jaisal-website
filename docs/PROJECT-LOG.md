@@ -10,11 +10,11 @@
 | Current phase | Phase 4 — local SEO content audit and page relevance |
 | Base branch | `main` |
 | Baseline commit | `eadfb07ed6162f26461060b4c38c83adda302e04` |
-| Last merged PR | [#10 — rendered internal-link regression](https://github.com/tchouhanjsm/garh-jaisal-website/pull/10) |
+| Last merged PR | [#11 — rendered SEO inventory artifact](https://github.com/tchouhanjsm/garh-jaisal-website/pull/11) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-4-rendered-seo-inventory` — produce a rendered per-route metadata and internal-link inventory in CI artifacts |
-| Next action | Validate the rendered SEO inventory on the exact PR head, inspect real findings and retries, then fix confirmed defects in focused batches |
+| Active batch | `feature/phase-4-seo-inventory-findings` — summarize route-level SEO audit findings in the CI log and JSON artifact |
+| Next action | Review the machine-generated finding summary on the exact PR head, then remediate only verified defects with owner-approved facts |
 
 ## Phase roadmap
 
@@ -151,10 +151,17 @@
 - PR #10 was merged by the owner. The test and local-PHP limitation remain documented; review its CI run for retries/warnings before treating the audit as fully clean.
 
 
-## Phase 4 follow-up — rendered SEO inventory (active PR batch)
+## Phase 4 follow-up — rendered SEO inventory (PR #11 merged)
 
 - Added `tests/e2e/seo-inventory.spec.js` to render each sitemap route at 1280px and record HTTP status, title, meta descriptions, canonical URLs/path alignment, primary H1 values, robots meta, unique internal/external link destinations and JSON-LD validity/types.
 - The inventory is evidence for review, not an assertion that the production site was crawled or that metadata is high quality. The existing SEO and internal-link regression tests remain the enforcement gates.
 - The browser workflow uploads `artifacts/seo-inventory/rendered-seo-inventory.json` with existing screenshot/trace/report evidence, retaining artifacts for 14 days.
 - No public templates, metadata values, routes, hotel facts, room-image mappings, prices, analytics IDs, secrets or production configuration changed.
-- PHP/Playwright cannot be run from this tool session; CI on the exact PR head is required, and any retry or failure must be inspected before merge.
+- PR #11 was merged by the owner. Browser E2E passed on PR head `8957d4ce36778d9f3901e689a0afbb4db6012e58` with 163 passed and 161 skipped tests; the skipped cases are project/viewport-specific by design. The JSON inventory was included in the 14-day artifact. The log showed Node deprecation warnings from the runner/actions; they did not fail this run.
+
+
+## Phase 4 follow-up — actionable SEO finding summary (active PR batch)
+
+- Extend the rendered inventory to emit candidate findings in both the JSON artifact and Playwright log: missing title, missing/multiple description tags, H1 count not equal to one, canonical mismatch, invalid JSON-LD, explicit noindex, duplicate titles and duplicate meta descriptions.
+- These are review candidates, not automatic SEO quality judgments. Duplicate metadata or noindex directives must be checked against page intent before changing content.
+- Existing strict SEO checks and route smoke tests remain unchanged. No public content or production files are changed.

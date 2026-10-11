@@ -35,7 +35,7 @@ Check status, used for each command or CI run:
 
 - PHP syntax lint and strict image-reference checks run in CI on PHP 7.4 and 8.2. PHP 7.4 is a compatibility signal, not proof of the production host version.
 - Playwright route smoke, responsive overflow checks and the mobile navigation test run through the browser workflow on four viewport projects. Failures keep screenshots and traces as CI artifacts.
-- Rendered technical SEO regression checks cover sitemap routes in the desktop-1280 project. A separate rendered inventory records metadata, robots meta, internal/external link destinations and JSON-LD types for review; the JSON report is uploaded as a CI artifact.
+- Rendered technical SEO regression checks cover sitemap routes in the desktop-1280 project. A separate rendered inventory records metadata, robots meta, internal/external link destinations and JSON-LD types. It reports candidate findings (including duplicate titles/descriptions and noindex) in both CI logs and the JSON artifact; these require human review, not blind auto-fixes.
 - Accessibility diagnostics are source-level warnings from `scripts/check-site.php`; confirm them against rendered output before changing templates.
 - CI retries failed Playwright tests once, so a retried pass can hide a flaky test. The Debugger checks for this.
 
