@@ -1,6 +1,6 @@
 # Smart Check Matrix
 
-This matrix tells the Smart Check skill (`.agents/skills/smart-check/SKILL.md`) which role is **primary** for a change and which checks that role runs. It is a selection guide, not a claim that every check is currently implemented.
+This matrix tells the canonical Smart Check skill (`.agents/skills/smart-check/SKILL.md`) and its Claude Code entrypoint (`.claude/skills/smart-check/SKILL.md`) which role is **primary** for a change and which checks that role runs. It is a selection guide, not a claim that every check is currently implemented.
 
 All four roles (Full-Stack Developer, SEO Content Writer, Debugger, UI/UX Lead) review every change. A role that is not primary still reports **N/A-GREEN** and must name what it looked at. See the skill for the double-check rule.
 
