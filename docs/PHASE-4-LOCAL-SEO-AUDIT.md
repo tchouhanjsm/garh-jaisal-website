@@ -56,7 +56,7 @@ Inventory the 26 current sitemap routes and identify evidence-backed improvement
 
 1. Run CI's rendered SEO check over all sitemap routes and inspect exact logs/warnings/retries.
 2. Run the rendered internal-link regression across the sitemap routes and triage each reported target before changing links.
-3. Build a per-route rendered inventory of title, meta description, canonical, H1, indexability and internal-link destinations.
+3. Generate the rendered inventory with `tests/e2e/seo-inventory.spec.js`; review the CI artifact for title, meta description, canonical, H1, robots meta, internal-link destinations and JSON-LD.
 4. Resolve only verified issues. Prioritize genuine missing/duplicate metadata, broken internal links, unsupported content claims, and route mismatches.
 5. After owner confirms facts, improve one focused group at a time (hotel/rooms, dining, arrival, desert experiences, guides).
 6. Run the Smart Check roles and full relevant regression after each batch.
@@ -73,3 +73,8 @@ Inventory the 26 current sitemap routes and identify evidence-backed improvement
 ## Internal-link regression follow-up
 
 PR #10 adds a Playwright audit of same-origin anchor destinations for every sitemap route. It runs once at the desktop viewport and does not follow redirects. A reported status or request failure is a lead to investigate, not permission to rewrite a URL without checking whether the destination is an intentional endpoint.
+
+
+## Rendered inventory implementation (active PR batch)
+
+The new Playwright inventory records rendered output from the local PHP server for each sitemap route and is uploaded as a CI artifact. It is explicitly not a production crawl. Use it to identify candidates for manual review; do not treat raw counts as a quality score or change public content without confirming the underlying issue.
