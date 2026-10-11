@@ -160,11 +160,11 @@
 - PR #11 was merged by the owner. Browser E2E passed on PR head `8957d4ce36778d9f3901e689a0afbb4db6012e58` with 163 passed and 161 skipped tests; the skipped cases are project/viewport-specific by design. The JSON inventory was included in the 14-day artifact. The log showed Node deprecation warnings from the runner/actions; they did not fail this run.
 
 
-## Phase 4 follow-up — actionable SEO finding summary (active PR batch)
+## Phase 4 follow-up — actionable SEO finding summary (PR #12 merged)
 
-- Extend the rendered inventory to emit candidate findings in both the JSON artifact and Playwright log: missing title, missing/multiple description tags, H1 count not equal to one, canonical mismatch, invalid JSON-LD, explicit noindex, duplicate titles and duplicate meta descriptions.
+- PR #12 extends the rendered inventory to emit candidate findings in both the JSON artifact and Playwright log: missing title, missing/multiple description tags, H1 count not equal to one, canonical mismatch, invalid JSON-LD, explicit noindex, duplicate titles and duplicate meta descriptions.
 - These are review candidates, not automatic SEO quality judgments. Duplicate metadata or noindex directives must be checked against page intent before changing content.
-- Existing strict SEO checks and route smoke tests remain unchanged. No public content or production files are changed.
+- Existing strict SEO checks and route smoke tests remain unchanged. No public content or production files were changed in this batch.
 
 ## Phase 5 batch — rendered performance baseline (active)
 
