@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-11 |
-| Current phase | Smart Check skill foundation; Phase 4 local SEO/content depth next |
+| Current phase | Smart Check skill (role-based review); Phase 4 local SEO/content depth next |
 | Base branch | `main` |
 | Baseline commit | `eadfb07ed6162f26461060b4c38c83adda302e04` |
-| Last merged PR | [#6 — Rendered technical SEO regression checks](https://github.com/tchouhanjsm/garh-jaisal-website/pull/6) |
+| Last merged PR | [#7 — Smart Check skill](https://github.com/tchouhanjsm/garh-jaisal-website/pull/7) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/smart-check-skill` — reusable check selection and evidence-reporting skill |
-| Next action | Review and merge the Smart Check skill if accepted; then start Phase 4 with evidence-led local SEO/content improvements, using verified facts only |
+| Active batch | `feature/smart-check-roles` — rework the Smart Check skill into four reviewer roles |
+| Next action | Review and merge the role-based Smart Check skill if accepted; then start Phase 4 with evidence-led local SEO/content improvements, using verified facts only |
 
 ## Phase roadmap
 
@@ -117,9 +117,16 @@
 - Confirm current experience inclusions, prices and operational descriptions before public release.
 
 
-## Smart Check skill — active PR
+## Smart Check skill (merged in PR #7)
 
-- Add a reusable agent skill at `.agents/skills/smart-check/SKILL.md` to select checks based on changed paths and risk, use two-pass review, classify results as PASS/FAIL/BLOCKED/NOT RUN, and require exact-head CI evidence before a merge recommendation.
-- Add `docs/SMART-CHECK-MATRIX.md` to map PHP/backend, frontend/responsive, technical SEO, content/local SEO, accessibility, security, booking/conversion, images, performance, and release checks to triggers and minimum regression coverage.
+- Added a reusable agent skill at `.agents/skills/smart-check/SKILL.md` to select checks based on changed paths and risk, use two-pass review, classify results as PASS/FAIL/BLOCKED/NOT RUN, and require exact-head CI evidence before a merge recommendation.
+- Added `docs/SMART-CHECK-MATRIX.md` to map PHP/backend, frontend/responsive, technical SEO, content/local SEO, accessibility, security, booking/conversion, images, performance, and release checks to triggers and minimum regression coverage.
 - This skill coordinates existing checks; it does not claim every matrix item is automated. Manual reviews and unavailable local/browser/cPanel execution must remain explicit.
-- After this skill is accepted, Phase 4 should implement real local SEO/content improvements, prioritizing a content inventory and evidence-backed gaps before editing public copy. Do not invent operational facts or alter existing public URLs.
+
+## Smart Check roles — active PR
+
+- Rework the skill so four reviewer roles (Full-Stack Developer, SEO Content Writer, Debugger, UI/UX Lead) each review every change. A role the change does not touch reports **N/A-GREEN**, and must still name what it looked at (the double-check rule).
+- Role verdicts are GREEN, N/A-GREEN, YELLOW or RED. PASS/FAIL/BLOCKED/NOT RUN stays as the vocabulary for individual checks and CI runs.
+- Rewrite `docs/SMART-CHECK-MATRIX.md` as a role-ownership table and list what is not automated yet: SEO copy quality, forms/mail/security tests, booking and analytics wiring, performance.
+- Stop tracking the committed `.DS_Store` files (already listed in `.gitignore`).
+- After this is accepted, Phase 4 should implement real local SEO/content improvements, prioritizing a content inventory and evidence-backed gaps before editing public copy. Do not invent operational facts or alter existing public URLs.
