@@ -18,13 +18,15 @@ test('write rendered SEO inventory for sitemap routes', async ({ browser }, test
   test.skip(testInfo.project.name !== 'desktop-1280', 'Inventory runs once at desktop width');
   test.setTimeout(120_000);
 
-  const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  const context = await browser.newContext({ baseURL: 'http://127.0.0.1:8080', viewport: { width: 1280, height: 800 } });
   const page = await context.newPage();
   const inventory = [];
 
   try {
     for (const route of routes) {
       const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+      expect(response, `No HTTP response for ${route}`).not.toBeNull();
+      expect(response.status(), `Unexpected HTTP status for ${route}`).toBeLessThan(400);
       const pageUrl = new URL(page.url());
       const descriptions = await page.locator('head meta[name="description"]').evaluateAll(nodes =>
         nodes.map(node => node.getAttribute('content') || '')
