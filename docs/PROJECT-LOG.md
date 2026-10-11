@@ -10,11 +10,11 @@
 | Current phase | Phase 4 — local SEO content audit and page relevance |
 | Base branch | `main` |
 | Baseline commit | `eadfb07ed6162f26461060b4c38c83adda302e04` |
-| Last merged PR | [#8 — Role-based Smart Check](https://github.com/tchouhanjsm/garh-jaisal-website/pull/8) |
+| Last merged PR | [#9 — Phase 4 audit and Claude skill entrypoint](https://github.com/tchouhanjsm/garh-jaisal-website/pull/9) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-4-local-seo-audit` — add Claude Code entrypoint for Smart Check and audit sitemap-linked pages for evidence-backed local SEO improvements |
-| Next action | Review Phase 4 audit findings and implement content only where facts and existing page purpose are verifiable; run selected Smart Check roles and all relevant CI |
+| Active batch | `feature/phase-4-internal-link-audit` — validate rendered same-site anchor targets across all sitemap routes |
+| Next action | Validate the internal-link audit against real CI results, fix only confirmed broken targets, then continue evidence-backed local SEO improvements |
 
 ## Phase roadmap
 
@@ -139,3 +139,13 @@
 - Do not change public URLs, canonical targets, sitemap membership, prices, operational timings or room/image mappings as part of an audit-only step.
 - This phase's initial PR also adds a Claude Code-discoverable entrypoint at `.claude/skills/smart-check/SKILL.md`, pointing to the canonical `.agents/skills/smart-check/SKILL.md`. This addresses the path compatibility noted in PR #8.
 - No production site or live enquiries are touched. Browser/PHP checks are to be validated by CI at the exact PR head; public content remains unchanged in this initial batch.
+
+
+## Phase 4 follow-up — rendered internal-link regression (PR #10 in progress)
+
+- Added `tests/e2e/internal-links.spec.js` to inspect same-site anchor links from each of the 26 sitemap routes using the local PHP test server.
+- Runs only in the `desktop-1280` Playwright project to avoid duplicating the same link crawl at every viewport.
+- Skips fragments, non-navigation protocols, downloads and external origins; checks each unique same-origin target without following redirects.
+- This test is intended to identify broken local destinations. Any failure must be inspected for legitimate endpoint behavior or URL normalization before changing production links.
+- No public content, URLs, assets, analytics IDs, hotel facts, prices, secrets or production configuration changed.
+- Validation is pending CI on the latest PR head; this tool session cannot run PHP/Playwright locally.
