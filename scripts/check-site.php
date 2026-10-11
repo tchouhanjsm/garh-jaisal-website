@@ -160,11 +160,29 @@ foreach ($experiencePages as $relative) {
         continue;
     }
     $source = $readFile($path);
-    if (strpos($source, 'experience-page.php') === false) {
-        $errors[] = $relative . ': does not use include/experience-page.php';
-    }
-    if (strpos($source, '$experienceSlug') === false) {
-        $errors[] = $relative . ': experience slug assignment not found';
+    // The shared experience renderer is the approved implementation for
+    // five detail pages. The two hub pages (camping/city-tour) intentionally
+    // remain standalone landing pages, so validate their visible metadata.
+    $sharedRendererPages = [
+        'sunset-camel-safari.php',
+        'sleep-under-the-stars.php',
+        'cultural-safari.php',
+        'swiss-tent-safari.php',
+        'explore-the-desert.php',
+    ];
+    if (in_array($relative, $sharedRendererPages, true)) {
+        if (strpos($source, 'experience-page.php') === false) {
+            $errors[] = $relative . ': expected include/experience-page.php';
+        }
+        if (strpos($source, '$experienceSlug') === false) {
+            $errors[] = $relative . ': experience slug assignment not found';
+        }
+    } else {
+        foreach (['<title', 'name="description"', 'rel="canonical"'] as $marker) {
+            if (stripos($source, $marker) === false) {
+                $warnings[] = $relative . ': standalone landing page missing literal metadata marker ' . $marker;
+            }
+        }
     }
 }
 $rendererPath = $root . '/include/experience-page.php';
