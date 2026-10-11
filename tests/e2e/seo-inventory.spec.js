@@ -94,6 +94,61 @@ test('write rendered SEO inventory for sitemap routes', async ({ browser }, test
     await context.close();
   }
 
+  const normalize = value => value.trim().replace(/\\s+/g, ' ').toLocaleLowerCase();
+  const findings = [];
+
+  const titlesByValue = new Map();
+  const descriptionsByValue = new Map();
+  for (const route of inventory) {
+    const title = normalize(route.title || '');
+    if (title) titlesByValue.set(title, [...(titlesByValue.get(title) || []), route.route]);
+
+    for (const description of route.metaDescriptions) {
+      const normalizedDescription = normalize(description);
+      if (normalizedDescription) {
+        descriptionsByValue.set(normalizedDescription, [
+          ...(descriptionsByValue.get(normalizedDescription) || []),
+          route.route,
+        ]);
+      }
+    }
+
+    if (!route.title.trim()) findings.push({ type: 'missing-title', routes: [route.route], severity: 'review' });
+    if (route.metaDescriptions.length !== 1 || !route.metaDescriptions[0]?.trim()) {
+      findings.push({ type: 'description-missing-or-duplicate-tag', routes: [route.route], severity: 'review' });
+    }
+    if (route.mainH1.length !== 1) findings.push({ type: 'main-h1-count-not-one', routes: [route.route], severity: 'review' });
+    if (!route.canonicalPathMatchesRoute) findings.push({ type: 'canonical-mismatch', routes: [route.route], severity: 'review' });
+    if (route.jsonLd.some(block => !block.validJson)) {
+      findings.push({ type: 'invalid-json-ld', routes: [route.route], severity: 'review' });
+    }
+    if (route.robotsMeta && /(?:^|,)\\s*noindex\\b/i.test(route.robotsMeta)) {
+      findings.push({ type: 'noindex-directive', routes: [route.route], severity: 'review' });
+    }
+  }
+
+  for (const [title, matchingRoutes] of titlesByValue) {
+    if (matchingRoutes.length > 1) {
+      findings.push({ type: 'duplicate-title', value: title, routes: matchingRoutes, severity: 'review' });
+    }
+  }
+  for (const [description, matchingRoutes] of descriptionsByValue) {
+    if (matchingRoutes.length > 1) {
+      findings.push({ type: 'duplicate-meta-description', value: description, routes: matchingRoutes, severity: 'review' });
+    }
+  }
+
+  const findingCounts = findings.reduce((counts, finding) => {
+    counts[finding.type] = (counts[finding.type] || 0) + 1;
+    return counts;
+  }, {});
+  console.log('Rendered SEO inventory summary:', JSON.stringify({
+    routesChecked: inventory.length,
+    findingCount: findings.length,
+    findingCounts,
+    findings,
+  }, null, 2));
+
   const reportDir = path.join(process.cwd(), 'artifacts', 'seo-inventory');
   fs.mkdirSync(reportDir, { recursive: true });
   const reportPath = path.join(reportDir, 'rendered-seo-inventory.json');
@@ -101,6 +156,9 @@ test('write rendered SEO inventory for sitemap routes', async ({ browser }, test
     generatedAt: new Date().toISOString(),
     source: 'local PHP site rendered by Playwright; not a production crawl',
     routeCount: inventory.length,
+    findingCount: findings.length,
+    findingCounts,
+    findings,
     routes: inventory,
   }, null, 2) + '\n');
 
