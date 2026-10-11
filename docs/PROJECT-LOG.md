@@ -7,21 +7,21 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-11 |
-| Current phase | Phase 0 — repository hygiene and safety net |
+| Current phase | Phase 1 — site-wide audit and prioritised fixes |
 | Base branch | `main` |
-| Baseline commit | `b2c34cdb21a41a78c8b44332c02bbe481bd2d8c1` |
-| Last merged PR | [#1 — Establish PHP CI and repository checks](https://github.com/tchouhanjsm/garh-jaisal-website/pull/1) |
-| CI on main | [Actions run #4](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38115322127) previously reported successful |
+| Baseline commit | `eadfb07ed6162f26461060b4c38c83adda302e04` |
+| Last merged PR | [#2 — Verify PHP 7.4 and 8.2 compatibility](https://github.com/tchouhanjsm/garh-jaisal-website/pull/2) |
+| CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-0b-hygiene` — open for owner review only after CI and final diff verification |
-| Next action | Complete Phase 0 residual warnings and verify the owner-supplied WebP asset inventory before Phase 1 |
+| Active batch | `feature/phase-1-audit-checks` — adds static accessibility/security diagnostics |
+| Next action | Review the new audit warnings and proceed to page-by-page fixes; verify the owner's WebP assets locally before image remapping |
 
 ## Phase roadmap
 
 | Phase | Goal | Status |
 |---|---|---|
-| 0 | Repository hygiene and a safe CI baseline | ◐ in progress |
-| 1 | Site-wide audit with a prioritised backlog | ☐ |
+| 0 | Repository hygiene and a safe CI baseline | ✓ CI baseline merged; local cleanup and WebP verification remain |
+| 1 | Site-wide audit with a prioritised backlog | ◐ in progress |
 | 2 | Booking conversion and mobile UX | ☐ |
 | 3 | Technical SEO foundation | ☐ |
 | 4 | Local SEO and content depth | ☐ |
@@ -31,6 +31,14 @@
 | 8 | Analytics measurement | ☐ |
 | 9 | Staging QA and cPanel handoff | ☐ |
 | 10 | Monthly improvement loop | ☐ |
+
+
+## Phase 1 — current batch
+
+- Added static diagnostics for image tags without a literal `alt` attribute and links using `target="_blank"` without a literal `rel` attribute.
+- These are warnings, not build failures, because PHP templates can construct attributes dynamically. Confirm findings against rendered HTML before editing page templates.
+- No user-facing page, content, asset, URL, analytics or production configuration changed in this batch.
+- CI and local browser testing must be checked before merge; the repository connector cannot execute PHP or a browser locally.
 
 ## Phase 0 — status and remaining work
 
