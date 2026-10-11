@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-11 |
-| Current phase | Phase 1 — site-wide audit and prioritised fixes |
+| Current phase | Phase A — browser automation foundation |
 | Base branch | `main` |
 | Baseline commit | `eadfb07ed6162f26461060b4c38c83adda302e04` |
 | Last merged PR | [#2 — Verify PHP 7.4 and 8.2 compatibility](https://github.com/tchouhanjsm/garh-jaisal-website/pull/2) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-1-audit-checks` — adds static accessibility/security diagnostics |
-| Next action | Review the new audit warnings and proceed to page-by-page fixes; verify the owner's WebP assets locally before image remapping |
+| Active batch | `feature/phase-a-browser-automation` — responsive Playwright smoke tests and screenshot artifacts |
+| Next action | Verify browser E2E CI and screenshot artifacts on the exact PR head; owner reviews and merges |
 
 ## Phase roadmap
 
@@ -32,6 +32,16 @@
 | 9 | Staging QA and cPanel handoff | ☐ |
 | 10 | Monthly improvement loop | ☐ |
 
+
+## Phase A — browser automation foundation
+
+- Added Playwright browser smoke tests driven by the routes in `sitemap.xml`.
+- Configured four Chromium viewport projects: 320×700, 390×844, 1280×800 and 1440×900.
+- Each route is checked for a successful HTTP response, a document language, a non-empty title and uncaught browser page errors.
+- Full-page screenshots are captured per route and viewport and attached to test results; CI uploads screenshots, traces, and the HTML report as a 14-day artifact.
+- CI starts the plain-PHP site with PHP's built-in server. It does not contact production or submit live enquiries.
+- Playwright is currently pinned to 1.55.0 in the workflow installation command; no lockfile is introduced in this initial foundation batch.
+- Browser coverage and screenshot output must be confirmed from CI on the exact PR head before merge. This automation does not yet assert visual baselines or prove every physical device is supported.
 
 ## Phase 1 — current batch
 
