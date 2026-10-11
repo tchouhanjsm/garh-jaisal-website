@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-11 |
-| Current phase | Phase B — mobile booking UX and browser evidence efficiency |
+| Current phase | Phase C — technical SEO regression coverage |
 | Base branch | `main` |
 | Baseline commit | `eadfb07ed6162f26461060b4c38c83adda302e04` |
-| Last merged PR | [#4 — Responsive browser E2E and screenshot artifacts](https://github.com/tchouhanjsm/garh-jaisal-website/pull/4) |
+| Last merged PR | [#5 — Tablet navigation and lean browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/pull/5) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-b-mobile-booking-ux` — responsive tablet navigation, shared booking config, and lean CI screenshots |
-| Next action | Verify Phase B CI on the exact PR head; inspect responsive checks and screenshot artifacts; owner reviews and merges |
+| Active batch | `feature/phase-c-technical-seo-audit` — rendered metadata, canonical URL and JSON-LD regression checks |
+| Next action | Verify Phase C CI on the exact PR head, fix real rendered-page failures, and inspect test evidence before owner review |
 
 ## Phase roadmap
 
@@ -22,8 +22,8 @@
 |---|---|---|
 | 0 | Repository hygiene and a safe CI baseline | ✓ CI baseline merged; local cleanup and WebP verification remain |
 | 1 | Site-wide audit with a prioritised backlog | ◐ in progress |
-| 2 | Booking conversion and mobile UX | ☐ |
-| 3 | Technical SEO foundation | ☐ |
+| 2 | Booking conversion and mobile UX | ◐ responsive navigation and shared booking URL merged; conversion measurement remains open |
+| 3 | Technical SEO foundation | ◐ rendered metadata and JSON-LD regression checks in PR #6 |
 | 4 | Local SEO and content depth | ☐ |
 | 5 | Performance and Core Web Vitals | ☐ |
 | 6 | Accessibility | ☐ |
@@ -50,13 +50,20 @@
 - No user-facing page, content, asset, URL, analytics or production configuration changed in this batch.
 - CI and local browser testing must be checked before merge; the repository connector cannot execute PHP or a browser locally.
 
-## Phase B — current batch
+## Phase B — mobile booking UX and efficient browser evidence (merged in PR #5)
 
 - Move the responsive navigation breakpoint to 1080px so the eight-link desktop navigation does not compete for space at tablet widths.
 - Keep sitemap-wide browser smoke checks, but capture full-page visual evidence only for home, rooms, contact and directions at each viewport. This keeps screenshots in GitHub Actions artifacts and out of the deployable site tree while reducing artifact volume.
 - Assert that tested routes do not create horizontal document overflow at the configured viewports.
 - Read the room-page booking URL from the shared public site configuration rather than duplicating it in the template.
 - No public URLs, room-image mappings, hotel facts, prices, analytics IDs, secrets or production deployment settings changed.
+
+## Phase C — technical SEO regression coverage
+
+- Add rendered-browser checks for every route listed in `sitemap.xml`, using one desktop viewport to avoid multiplying metadata tests across all responsive projects.
+- Verify exactly one non-empty meta description and canonical link, an absolute HTTPS canonical whose path matches the sitemap route, one primary `main h1`, and parseable JSON-LD blocks where present.
+- Keep this as regression detection: the test must expose real rendered-page issues rather than infer them from PHP source strings. Any failure must be investigated and fixed at the source, not weakened just to get green.
+- No public URLs, content, image mappings, analytics IDs, secrets, or production deployment settings are intentionally changed in this batch.
 
 ## Phase 0 — status and remaining work
 
