@@ -99,10 +99,17 @@ if ($sitemap === '') {
 
 // 3. Literal local href/src references. External URLs, fragments, query values,
 // and PHP-generated dynamic URLs need browser smoke tests rather than guessing.
-$scanFiles = array_merge(
-    glob($root . '/*.php') ?: [],
-    glob($root . '/include/*.php') ?: []
-);
+$scanFiles = array_values(array_filter(
+    array_merge(
+        glob($root . '/*.php') ?: [],
+        glob($root . '/include/*.php') ?: []
+    ),
+    static function ($file) use ($root) {
+        // Legacy files are retained for reference during Phase 0. They are not
+        // used by the V2 page templates and are audited before removal.
+        return !in_array(basename($file), ['header.php', 'footer.php', 'header-v2.backup.php'], true);
+    }
+));
 $referencePattern = '/(?:href|src)\s*=\s*["\']([^"\']+)["\']/i';
 $localExtensions = '/\.(?:php|css|js|png|jpe?g|webp|svg|ico|gif|woff2?|ttf|xml)(?:[?#].*)?$/i';
 
