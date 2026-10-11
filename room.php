@@ -1,6 +1,7 @@
 <?php
 $activePage = 'rooms';
-$bookingUrl = 'https://asiatech.in/booking_engine/index3?token=NjA2Ng==';
+$siteConfig = require __DIR__ . '/include/site-config.php';
+$bookingUrl = $siteConfig['booking_url'];
 $rooms = require __DIR__ . '/include/rooms-data.php';
 
 $roomsByFloor = [];
