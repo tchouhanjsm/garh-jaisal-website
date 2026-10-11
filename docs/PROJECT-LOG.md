@@ -125,11 +125,11 @@
 
 ## Smart Check roles (merged in PR #8)
 
-- Rework the skill so four reviewer roles (Full-Stack Developer, SEO Content Writer, Debugger, UI/UX Lead) each review every change. A role the change does not touch reports **N/A-GREEN**, and must still name what it looked at (the double-check rule).
+- Reworked the skill so four reviewer roles (Full-Stack Developer, SEO Content Writer, Debugger, UI/UX Lead) each review every change. A role the change does not touch reports **N/A-GREEN**, and must still name what it looked at (the double-check rule).
 - Role verdicts are GREEN, N/A-GREEN, YELLOW or RED. PASS/FAIL/BLOCKED/NOT RUN stays as the vocabulary for individual checks and CI runs.
-- Rewrite `docs/SMART-CHECK-MATRIX.md` as a role-ownership table and list what is not automated yet: SEO copy quality, forms/mail/security tests, booking and analytics wiring, performance.
+- Rewrote `docs/SMART-CHECK-MATRIX.md` as a role-ownership table and documented current unautomated areas: SEO copy quality, forms/mail/security tests, booking and analytics wiring, and performance.
 - Stop tracking the three committed `.DS_Store` files (already listed in `.gitignore`).
-- After this is accepted, Phase 4 should implement real local SEO/content improvements, prioritizing a content inventory and evidence-backed gaps before editing public copy. Do not invent operational facts or alter existing public URLs.
+- Phase 4 is active in PR #9: audit existing pages and rendered metadata before changing public copy. Do not invent operational facts or alter existing public URLs.
 
 
 ## Phase 4 — local SEO and content depth (audit first)
