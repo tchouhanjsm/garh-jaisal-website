@@ -55,10 +55,18 @@ foreach ($experiences as $slug => $experience) {
         fwrite(STDERR, "ERROR invalid experience slug in experience-data.php\n");
         exit(1);
     }
-    $priority = ($experience['duration_type'] ?? '') === 'hub' ? '0.9' : '0.8';
-    if (($experience['duration_type'] ?? '') === 'half-day' && ($experience['order'] ?? 0) >= 40) {
-        $priority = '0.7';
-    }
+    $existingPriorities = [
+        'desert-safari' => '0.9',
+        'guided-jaisalmer-tour' => '0.9',
+        'half-day-jaisalmer-tour' => '0.8',
+        'full-day-jaisalmer-tour' => '0.8',
+        'sunset-camel-safari' => '0.8',
+        'sleep-under-the-stars' => '0.8',
+        'cultural-safari' => '0.7',
+        'swiss-tent-safari' => '0.8',
+        'explore-the-desert' => '0.7',
+    ];
+    $priority = $existingPriorities[$slug] ?? '0.7';
     $urls['/' . $slug . '.php'] = $priority;
 }
 
