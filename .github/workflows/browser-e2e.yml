@@ -55,6 +55,7 @@ jobs:
             artifacts/seo-inventory/
             artifacts/performance-baseline/
             artifacts/image-payload-audit/
+            artifacts/page-layout-inventory/
             test-results/
             playwright-report/
           if-no-files-found: warn
