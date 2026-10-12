@@ -246,3 +246,12 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 **Next implementation phase**
 - Batch B: shared design tokens/components and responsive/contrast checks. Preserve current rendered content and real image mappings; no invented copy or hotel facts.
 - Keep CI artifacts out of the deployable website. Do not claim production performance or local execution from CI-only evidence.
+
+## Batch B — shared design system and responsive guardrails (PR in progress)
+
+- Add the approved type, spacing, radius, shadow and accent tokens while retaining the existing heritage palette and Inter / Source Serif pairing.
+- Add opt-in shared primitives for cards, at-a-glance facts and CTA bands; existing templates are only progressively migrated in later page batches to reduce visual regression risk.
+- Standardise visible keyboard focus, solid-brown primary buttons, reduced-motion behavior and small-screen section rhythm. No global markup rewrite in this batch.
+- Preserve page copy, public URLs, canonical/SEO metadata, booking destinations, real image selections and room-image mappings.
+- Validation gate: PHP 7.4/8.2 lint and strict site checks; full sitemap Playwright E2E across 320, 390, 1280 and 1440 widths; rendered contrast checks for the core text/button palette; verify screenshot artifacts for home, rooms, contact and directions.
+- Connector limitation: local PHP/browser screenshot review is not available in this session; use CI evidence and keep any visual judgment not supported by screenshots marked NOT RUN. Review must be on the exact final PR head SHA.
