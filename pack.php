@@ -143,7 +143,7 @@ $sortExperienceSlugs($guideItems);
         <p>Open a category to compare the available options, then contact us to confirm current details for your dates.</p>
       </div>
 
-      <div class="package-category-grid" aria-label="Tour categories">
+      <div class="package-category-grid" role="group" aria-label="Tour categories">
         <article class="package-category-card package-category-card--desert">
           <p class="package-category-kicker">01 / Desert experiences</p>
           <h3>Explore the Thar Desert</h3>
@@ -188,12 +188,12 @@ $sortExperienceSlugs($guideItems);
     </div>
   </section>
 
-  <section class="section route-planner" id="city-options">
+  <section class="section route-planner" id="city-options" aria-labelledby="city-options-title">
     <div class="site-shell">
       <div class="section-head">
         <div>
           <p class="eyebrow">Car &amp; City Tours</p>
-          <h2>Choose a guided walk or ask about car arrangements.</h2>
+          <h2 id="city-options-title">Choose a guided walk or ask about car arrangements.</h2>
         </div>
         <a class="text-link" href="car-tours.php">View Car &amp; City Tours →</a>
       </div>
