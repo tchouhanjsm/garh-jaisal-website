@@ -71,6 +71,7 @@ $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] 
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 <main>
+  <nav class="site-shell breadcrumb-nav" aria-label="Breadcrumb"><ol><li><a href="index.php">Home</a></li><li><a href="pack.php">Packages</a></li><li aria-current="page">Car &amp; City Tours</li></ol></nav>
   <section class="package-hero">
     <div class="package-hero-media">
       <img src="img/v2/facade.jpg" alt="Historic architecture inside Jaisalmer Fort" width="1333" height="2000" fetchpriority="high">
