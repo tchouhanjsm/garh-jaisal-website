@@ -50,7 +50,7 @@ test.describe('technical SEO metadata', () => {
 
 test('experience hubs render valid structured data and tour breadcrumbs', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Experience architecture checks run once');
-  for (const route of ['/pack.php', '/desert-safari.php', '/guided-jaisalmer-tour.php']) {
+  for (const route of ['/pack.php', '/desert-safari.php', '/guided-jaisalmer-tour.php', '/car-tours.php']) {
     const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
     expect(response).not.toBeNull();
     expect(response.status()).toBeLessThan(400);
@@ -71,5 +71,18 @@ test('experience hubs render valid structured data and tour breadcrumbs', async 
         expect(breadcrumb.itemListElement[breadcrumb.itemListElement.length - 1].name).toBeTruthy();
       }
     }
+  }
+});
+
+test('draft tour pages are noindex and excluded from the sitemap', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Publication status checks run once');
+  const sitemapRoutes = getSitemapEntries();
+  for (const route of ['/longewala-tour.php', '/rajasthan-tours.php']) {
+    expect(sitemapRoutes, `${route} must stay out of sitemap.xml until approved`).not.toContain(route);
+    const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+    expect(response, `No HTTP response for draft ${route}`).not.toBeNull();
+    expect(response.status(), `Draft route ${route} should render for owner review`).toBeLessThan(400);
+    await expect(page.locator('head meta[name="robots"]')).toHaveAttribute('content', /noindex\\s*,\\s*follow/i);
+    await expect(page.locator('main h1')).toContainText(/draft|confirm/i);
   }
 });
