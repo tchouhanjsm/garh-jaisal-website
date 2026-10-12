@@ -105,11 +105,17 @@ test('Car & City discovery paths remain connected without retiring legacy URLs',
     expect(response.status(), `Unexpected HTTP status for ${item.route}`).toBeLessThan(400);
 
     for (const [label, href] of item.links) {
-      await expect(
-        page.locator('main a[href="' + href + '"], body > nav a[href="' + href + '"], main ~ footer a[href="' + href + '"]')
-          .filter({ hasText: label }).first(),
+      const matchingLinks = await page.locator('main a[href]').evaluateAll((anchors, expected) =>
+        anchors.filter(anchor => {
+          const target = new URL(anchor.getAttribute('href'), document.baseURI);
+          return target.pathname === expected.href && anchor.textContent.includes(expected.label);
+        }).length,
+        { href, label }
+      );
+      expect(
+        matchingLinks,
         `Expected ${item.route} to link to ${label} (${href})`
-      ).toBeAttached();
+      ).toBeGreaterThan(0);
     }
   }
 });
