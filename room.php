@@ -163,6 +163,19 @@ foreach ($rooms as $room) {
     </div>
   </section>
 
+  <nav class="rooms-floor-nav" aria-label="Jump to room floor">
+    <div class="site-shell rooms-floor-nav-inner">
+      <span class="rooms-floor-nav-label">Browse by floor</span>
+      <div class="rooms-floor-nav-links">
+        <?php foreach ($roomsByFloor as $floorKicker => $floorRooms): ?>
+          <?php $floorId = 'rooms-' . trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($floorKicker)), '-'); ?>
+          <a href="#<?= htmlspecialchars($floorId, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars(ucwords($floorKicker), ENT_QUOTES, 'UTF-8') ?></a>
+        <?php endforeach; ?>
+      </div>
+      <a class="rooms-floor-nav-book" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check availability</a>
+    </div>
+  </nav>
+
 
   <?php $floorIndex = 0; ?>
   <?php foreach ($roomsByFloor as $floorKicker => $floorRooms): ?>
@@ -173,7 +186,8 @@ foreach ($rooms as $room) {
     }
     $floorIndex++;
   ?>
-  <section class="<?= htmlspecialchars($floorClass, ENT_QUOTES, 'UTF-8') ?>">
+  <?php $floorId = 'rooms-' . trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($floorKicker)), '-'); ?>
+  <section id="<?= htmlspecialchars($floorId, ENT_QUOTES, 'UTF-8') ?>" class="<?= htmlspecialchars($floorClass, ENT_QUOTES, 'UTF-8') ?>">
     <div class="site-shell">
 
       <div class="room-floor-heading">
