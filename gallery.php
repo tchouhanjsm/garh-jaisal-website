@@ -90,7 +90,7 @@ $bookingUrl = $siteConfig['booking_url'];
 <main class="gallery-page">
   <section class="page-hero page-hero--photo gallery-hero">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/v2/fort-from-roof.jpg" alt="" width="1600" height="1067" fetchpriority="high" decoding="async">
+      <img src="img/v2/rooftop-dusk.jpg" alt="" width="1600" height="1067" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Gallery</p>
