@@ -124,7 +124,7 @@ test('primary booking button contrast meets WCAG AA for normal text', async ({ p
     return { foreground: style.color, background: style.backgroundColor };
   });
   const rgb = value => {
-    const match = value.match(/rgba?\\(([^)]+)\\)/);
+    const match = value.match(/^rgba?\(([^)]+)\)$/);
     if (!match) throw new Error(`Unsupported computed color: ${value}`);
     return match[1].split(',').slice(0, 3).map(part => Number(part.trim()) / 255);
   };
