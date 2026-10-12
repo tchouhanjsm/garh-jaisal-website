@@ -43,3 +43,6 @@ jobs:
 
       - name: Run site checks
         run: php scripts/check-site.php --strict-images
+
+      - name: Verify sitemap matches publication status
+        run: php scripts/generate-sitemap.php --check
