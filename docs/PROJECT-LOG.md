@@ -175,3 +175,12 @@
 - The 250 KiB resource and 500 KiB document thresholds are triage thresholds only, not quality budgets or build failures. No thresholds are enforced as release gates before a baseline is reviewed.
 - This is a local PHP + Chromium lab inventory, not a production crawl, Lighthouse score, or field Core Web Vitals measurement. Do not report the browser navigation values as production user experience.
 - No public templates, content, URLs, hotel facts, prices, room-image mappings, analytics IDs, secrets or cPanel settings are changed.
+
+
+## Phase 5 follow-up — reserve image geometry for priority hero assets
+
+- The PR #13 rendered baseline artifact (run [38194646100](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38194646100), artifact ID 11722384880) checked 26 sitemap routes. It recorded 117 missing-explicit-dimension candidates and 48 large-resource route occurrences; these are local Chromium observations, not production performance metrics.
+- Review of the route inventory showed the highest-priority shared experience hero images lacked width/height attributes, while the homepage facade attributes described the opposite aspect ratio from the observed intrinsic image (1333×2000).
+- Add observed intrinsic dimensions to the shared experience hero data and correct the homepage facade dimensions. This reserves the correct geometry before image load and reduces layout-shift risk without changing the selected images, public content, URLs or room mappings.
+- Add a browser regression check for high-priority images on sitemap routes. Do not treat this as image compression: the large image payloads remain a separate task requiring an approved/visually verified optimized asset set.
+- Baseline run artifact is CI evidence and stays out of cPanel. Production field Core Web Vitals and Lighthouse remain unmeasured.
