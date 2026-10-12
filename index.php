@@ -119,6 +119,29 @@ $bookingUrl = $siteConfig['booking_url'];
   </div>
 </section>
 
+<section class="home-facts-section" aria-label="Garh Jaisal at a glance">
+  <div class="site-shell">
+    <div class="at-a-glance home-facts">
+      <div class="at-a-glance__item">
+        <span class="at-a-glance__label">Location</span>
+        <span class="at-a-glance__value">Inside Jaisalmer Fort</span>
+      </div>
+      <div class="at-a-glance__item">
+        <span class="at-a-glance__label">Stay</span>
+        <span class="at-a-glance__value">Individually styled heritage rooms</span>
+      </div>
+      <div class="at-a-glance__item">
+        <span class="at-a-glance__label">Dining</span>
+        <span class="at-a-glance__value">Rooftop dining with city views</span>
+      </div>
+      <div class="at-a-glance__item">
+        <span class="at-a-glance__label">Experiences</span>
+        <span class="at-a-glance__value">Desert experiences arranged from the hotel</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section intro">
   <div class="site-shell intro-grid">
 
@@ -181,7 +204,7 @@ $bookingUrl = $siteConfig['booking_url'];
   </div>
 </section>
 
-  <section class="section">
+  <section class="section home-room-section" id="home-rooms">
     <?php
     $rooms = require __DIR__ . '/include/rooms-data.php';
     $roomLabels = [];
@@ -197,8 +220,14 @@ $bookingUrl = $siteConfig['booking_url'];
     ?>
     <div class="site-shell">
       <div class="section-head">
-        <div><p class="eyebrow">Stay</p><h2>Rooms shaped by Jaisalmer.</h2></div>
-        <p>From colourful rooms to carved interiors, each room has its own character. Explore the current room collection and choose the space that suits your stay.</p>
+        <div>
+          <p class="eyebrow">Stay</p>
+          <h2>Rooms shaped by Jaisalmer.</h2>
+        </div>
+        <div class="home-room-summary">
+          <p>From colourful rooms to carved interiors, each room has its own character. Explore the current room collection and choose the space that suits your stay.</p>
+          <a class="button button-secondary home-room-cta" href="room.php">Explore all rooms</a>
+        </div>
       </div>
       <div class="cards">
         <article class="card">
