@@ -230,7 +230,7 @@ $whatsappUrl = $siteConfig['whatsapp_url'];
         <h2>Reception is open <span>7:00 AM–10:30 PM.</span></h2>
         <p><strong>Check-in is at 13:00.</strong> If you arrive earlier, you can use the rooftop terrace while the room is prepared. For arrivals between 10:30 PM and 6:30 AM, tell the hotel at least one day ahead so someone can meet you. If a late train is unexpected, call.</p>
         <div class="actions">
-          <a class="button button-primary" href="contact.php">Contact the hotel</a>
+          <a class="button button-primary" href="contact.php?topic=arrival">Contact the hotel</a>
           <a class="button button-light" href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">WhatsApp</a>
           <a class="button button-light" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>">Call</a>
         </div>
@@ -259,7 +259,7 @@ $whatsappUrl = $siteConfig['whatsapp_url'];
       <div>
         <p class="eyebrow">Questions</p>
         <h2>Before you set out.</h2>
-        <p>If your train or flight changes, call, WhatsApp, or send a note through the contact page.</p>
+        <p>If your train or flight changes, call, WhatsApp, or send a note through the <a href="contact.php?topic=arrival">arrival enquiry form</a>.</p>
       </div>
       <div class="faq-list">
         <details>
@@ -322,7 +322,7 @@ $whatsappUrl = $siteConfig['whatsapp_url'];
       <p>Check availability, or ask the team about your arrival time.</p>
       <div class="actions">
         <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Book your stay</a>
-        <a class="button final-contact-button" href="contact.php">Contact us</a>
+        <a class="button final-contact-button" href="contact.php?topic=arrival">Contact us</a>
       </div>
     </div>
   </section>

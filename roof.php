@@ -122,7 +122,7 @@ $bookingUrl = $siteConfig['booking_url'];
       </p>
       <div class="actions">
         <a class="button button-primary" href="restaurant.php#menu">View the menu</a>
-        <a class="button button-light" href="contact.php">Contact the hotel</a>
+        <a class="button button-light" href="contact.php?topic=dining">Contact the hotel</a>
         <a
           class="button button-light"
           href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
@@ -167,7 +167,7 @@ $bookingUrl = $siteConfig['booking_url'];
           them with the hotel before you visit.
         </p>
         <p>
-          <a class="text-link" href="contact.php">Contact the hotel</a>
+          <a class="text-link" href="contact.php?topic=dining">Contact the hotel</a>
           or call <a href="tel:+917727047567">+91 77270 47567</a>.
           For how to reach the fort, see <a href="direction.php">directions</a>.
         </p>
