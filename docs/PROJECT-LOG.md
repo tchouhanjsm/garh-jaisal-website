@@ -184,3 +184,10 @@
 - Add observed intrinsic dimensions to the shared experience hero data and correct the homepage facade dimensions. This reserves the correct geometry before image load and reduces layout-shift risk without changing the selected images, public content, URLs or room mappings.
 - Add a browser regression check for high-priority images on sitemap routes. Do not treat this as image compression: the large image payloads remain a separate task requiring an approved/visually verified optimized asset set.
 - Baseline run artifact is CI evidence and stays out of cPanel. Production field Core Web Vitals and Lighthouse remain unmeasured.
+
+
+### CI follow-up — priority-image coverage gap
+
+- Browser E2E on PR #14 initially failed because the new regression test found three remaining high-priority images without explicit dimensions: the desert-safari hub hero, guided-Jaisalmer-tour hub hero, and two-day-itinerary hero (the facade asset appears on two routes). This is a real coverage gap in the implementation, not a reason to weaken the assertion.
+- Added the intrinsic 1366×768 dimensions to the desert image and 1333×2000 dimensions to facade images on those routes. Re-run PHP 7.4/8.2 and full Browser E2E on the updated exact head.
+- The run reviewed so far reports the image-dimension assertion failure; it does not expose a row-selector cleanup failure or a formatter check. If those are present in a newer run, inspect that run's job logs before declaring readiness.
