@@ -80,9 +80,9 @@ test('Car & City discovery paths remain connected without retiring legacy URLs',
     {
       route: '/car-tours.php',
       links: [
-        ['Guided Jaisalmer Tours', '/guided-jaisalmer-tour.php'],
-        ['A Walk inside Jaisalmer Fort', '/city-tour.php'],
-        ['Car for Arrival or a Desert Day', '/car-rental.php'],
+        ['View guided city tours', '/guided-jaisalmer-tour.php'],
+        ['Explore the Fort walk', '/city-tour.php'],
+        ['Ask about car arrangements', '/car-rental.php'],
       ],
     },
     {
