@@ -17,16 +17,24 @@ test('priority images reserve their intrinsic aspect ratio on sitemap routes', a
 
   const problems = [];
   for (const route of getSitemapRoutes()) {
-    await page.goto(route, { waitUntil: 'load', timeout: 20_000 });
-    const images = await page.locator('img[fetchpriority="high"]').evaluateAll(nodes => nodes.map(img => ({
+    await page.goto(route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
+    const images = await page.locator('img[fetchpriority="high"]').evaluateAll(async nodes => {
+      await Promise.all(nodes.map(img => img.decode ? img.decode().catch(() => undefined) : Promise.resolve()));
+      return nodes.map(img => ({
       src: img.currentSrc || img.src,
       width: Number(img.getAttribute('width')),
       height: Number(img.getAttribute('height')),
       naturalWidth: img.naturalWidth,
       naturalHeight: img.naturalHeight,
-    })));
+      loaded: img.complete && img.naturalWidth > 0 && img.naturalHeight > 0,
+    }));
+    });
 
     for (const image of images) {
+      if (!image.loaded) {
+        problems.push({ route, ...image, issue: 'priority-image-failed-to-load' });
+        continue;
+      }
       if (!(image.width > 0 && image.height > 0)) {
         problems.push({ route, ...image, issue: 'missing-positive-dimensions' });
         continue;

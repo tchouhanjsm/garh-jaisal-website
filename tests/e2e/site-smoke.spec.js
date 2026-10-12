@@ -228,7 +228,7 @@ test('homepage room previews use registered room content and stable detail ancho
 
 test('contact page presents direct booking and arrival paths beside the enquiry form', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Contact conversion path is checked once');
-  await page.goto('/contact.php');
+  await page.goto('/contact.php', { waitUntil: 'domcontentloaded' });
   const booking = page.locator('.contact-booking-button');
   await expect(booking).toHaveAttribute('href', await page.locator('.nav-book').getAttribute('href'));
   await expect(booking).toHaveAttribute('target', '_blank');
