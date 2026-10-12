@@ -158,10 +158,12 @@ $sortExperienceSlugs($guideItems);
         </div>
 
         <div class="experience-map-branch experience-map-branch--guide">
-          <a class="experience-map-category" href="guided-jaisalmer-tour.php">Guided Jaisalmer Tours</a>
+          <a class="experience-map-category" href="car-tours.php">Car &amp; City Tours</a>
           <div class="experience-map-leaves">
             <a href="half-day-jaisalmer-tour.php">Half-Day Guided Tour</a>
             <a href="full-day-jaisalmer-tour.php">Full-Day Guided Tour</a>
+            <a href="city-tour.php">Walk inside Jaisalmer Fort</a>
+            <a href="car-rental.php">Car for arrival or a desert day</a>
           </div>
         </div>
       </div>
@@ -195,13 +197,13 @@ $sortExperienceSlugs($guideItems);
         </article>
 
         <article class="experience-card">
-          <a href="guided-jaisalmer-tour.php">
+          <a href="car-tours.php">
             <img src="img/v2/facade.jpg" alt="Historic architecture inside Jaisalmer Fort" loading="lazy">
             <div>
-              <p class="experience-card-kicker">Guided Jaisalmer tours</p>
-              <h2>Explore Jaisalmer with a Guide</h2>
-              <p>Choose a half-day or full-day route covering the fort, havelis, markets and heritage areas.</p>
-              <span>Explore guided tours →</span>
+              <p class="experience-card-kicker">Car &amp; City Tours</p>
+              <h2>Explore Jaisalmer and plan your route</h2>
+              <p>Compare guided city tours and enquire about car arrangements for your arrival or a desert day.</p>
+              <span>Explore Car &amp; City Tours →</span>
             </div>
           </a>
         </article>
@@ -241,10 +243,10 @@ $sortExperienceSlugs($guideItems);
     <div class="site-shell">
       <div class="section-head">
         <div>
-          <p class="eyebrow">Guided Jaisalmer tours</p>
-          <h2>Explore the city at your pace.</h2>
+          <p class="eyebrow">Car &amp; City Tours</p>
+          <h2>Choose a guided walk or ask about car arrangements.</h2>
         </div>
-        <a class="text-link" href="guided-jaisalmer-tour.php">View guided tour options →</a>
+        <a class="text-link" href="car-tours.php">View Car &amp; City Tours →</a>
       </div>
 
       <div class="experience-card-grid experience-card-grid--two">

@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-12 |
-| Current phase | Batch D — publication-aware sitemap and orphan/overlap hardening |
+| Current phase | Batch E — Car & City Tours hub and draft-only tour scaffolding |
 | Base branch | `main` |
-| Baseline commit | `956f30b13dd3d12e3adb442058cb698cb6bd32d3` (PR #21 merge) |
-| Last merged PR | [#21 — data-driven experiences and breadcrumbs](https://github.com/tchouhanjsm/garh-jaisal-website/pull/21) |
+| Baseline commit | Current `main` after PR #22; confirm exact merge SHA from GitHub before release |
+| Last merged PR | [#22 — publication-aware sitemap](https://github.com/tchouhanjsm/garh-jaisal-website/pull/22) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/status-aware-sitemap-orphan-audit` — generate sitemap membership from the reviewed page allowlist and live experience registry |
-| Next action | Verify sitemap generator and publication-status assertions in CI; then finish evidence-led orphan/duplicate handling before the next hub/page batch |
+| Active batch | `feature/car-city-tours-hub-drafts` — create a live Car & City Tours hub and noindex draft tour scaffolding |
+| Next action | Verify the Car & City hub, sitemap membership, draft noindex and responsive/browser checks on the exact PR head; owner confirms tour facts before publication |
 
 ## Phase roadmap
 
@@ -276,3 +276,13 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 - Duplicate/orphan review is still evidence-led: `explore-the-desert.php` claims a full-day experience while `sunset-camel-safari.php` is presented as a half-day/evening product, so a 301 must not be applied until the operational distinction is confirmed. `camping.php`, `city-tour.php` and `car-rental.php` remain on their existing URLs and are not deleted in this batch. The car-rental page needs the Car & City hub planned for Batch E.
 - No verified hotel facts, rates, timings, image mappings, booking targets, analytics IDs, or server settings changed.
 - Validation gate: PHP 7.4/8.2 lint and strict site checks, sitemap generator `--check`, rendered SEO/internal-link checks, responsive Browser E2E and exact-final-head CI evidence. Connector limitations mean local PHP/browser execution is not claimed.
+
+
+## Batch E — Car & City Tours hub and draft-only tour scaffolding (PR in progress)
+
+- Adds the live `car-tours.php` hub as the Packages > Car & City Tours destination and includes the existing guided-tour hub, Fort walk (`city-tour.php`) and car-arrangement page (`car-rental.php`) so those existing URLs have an intentional discovery path.
+- Adds Longewala and Rajasthan tour entries to `include/experience-data.php` with `status: draft`, unique draft titles/descriptions, explicit NEEDS OWNER INPUT text and minimal placeholder content. Draft wrappers use the shared renderer, which emits `noindex,follow`; they are not linked from public navigation/hubs and are excluded from sitemap generation.
+- Adds `car-tours.php` to the reviewed static sitemap allowlist and tracked sitemap; updates SEO/browser checks to verify the hub and draft publication rules.
+- No prices, routes, distances, durations, vehicle capacities, pickup details, languages, fees, inclusions or availability are invented. Existing page URLs, analytics IDs, booking destination and image mappings are preserved.
+- Existing `camping.php` and the overlap between `explore-the-desert.php` and `sunset-camel-safari.php` remain unresolved; no speculative redirects or page deletions are included in this batch.
+- Validation gate: PHP 7.4/8.2 lint, strict site checks, deterministic sitemap check, Browser E2E, internal links, SEO metadata, draft noindex/sitemap exclusion and screenshot artifacts on exact final head. Connector cannot execute local PHP/Chromium, so local tests are not claimed.

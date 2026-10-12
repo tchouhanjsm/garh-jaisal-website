@@ -40,6 +40,7 @@ $staticPages = [
     ['path' => '/camping.php', 'priority' => '0.5'],
     ['path' => '/car-rental.php', 'priority' => '0.5'],
     ['path' => '/city-tour.php', 'priority' => '0.5'],
+    ['path' => '/car-tours.php', 'priority' => '0.8'],
 ];
 
 $urls = [];
