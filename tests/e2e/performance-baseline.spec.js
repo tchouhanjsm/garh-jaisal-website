@@ -29,15 +29,25 @@ test('write rendered performance and asset baseline for sitemap routes', async (
 
   try {
     for (const route of routes) {
-      const response = await page.goto(route, { waitUntil: 'load', timeout: 20_000 });
+      const response = await page.goto(route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
       expect(response, `No HTTP response for ${route}`).not.toBeNull();
       expect(response.status(), `Unexpected HTTP status for ${route}`).toBeLessThan(400);
+
+      // Sample the rendered local page and visible/eager images, not external embed readiness.
+      await page.locator('img').evaluateAll(async images => {
+        const candidates = images.filter(img => {
+          const rect = img.getBoundingClientRect();
+          return img.loading !== 'lazy' || (rect.bottom > 0 && rect.top < window.innerHeight);
+        });
+        await Promise.all(candidates.map(img => img.decode ? img.decode().catch(() => undefined) : Promise.resolve()));
+      });
 
       const documentMetrics = await page.evaluate(() => {
         const entry = performance.getEntriesByType('navigation')[0];
         return entry ? {
           domContentLoadedMs: Math.round(entry.domContentLoadedEventEnd),
-          loadEventMs: Math.round(entry.loadEventEnd),
+          // A third-party iframe/script can keep the full load event open. Treat that as unavailable rather than 0 ms.
+          loadEventMs: entry.loadEventEnd > 0 ? Math.round(entry.loadEventEnd) : null,
           responseStartMs: Math.round(entry.responseStart),
           documentTransferBytes: entry.transferSize || 0,
           documentEncodedBytes: entry.encodedBodySize || 0,
