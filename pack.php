@@ -156,7 +156,8 @@ $sortExperienceSlugs($guideItems);
           <p>Explore guided half-day or full-day city tours, walk inside the Fort, and ask about car arrangements.</p>
           <a class="package-category-link" href="car-tours.php">Explore Car &amp; City Tours <span aria-hidden="true">→</span></a>
         </article>
-      </div>   </div>
+      </div>
+    </div>
   </section>
 
   <section class="section packages-intro">
