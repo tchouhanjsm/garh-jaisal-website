@@ -5,6 +5,12 @@ $hotelPhone = $hotelPhone ?? $siteConfig['hotel_phone'];
 $hotelPhoneDisplay = $hotelPhoneDisplay ?? $siteConfig['hotel_phone_display'];
 $whatsappUrl = $whatsappUrl ?? $siteConfig['whatsapp_url'];
 $activePage = $activePage ?? '';
+$navData = require __DIR__ . '/nav-data.php';
+$navMain = $navData['main'];
+$currentFile = basename((string) parse_url((string) ($_SERVER['SCRIPT_NAME'] ?? ''), PHP_URL_PATH));
+$e = static function ($value) {
+    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+};
 ?>
 
 <header class="site-header">
@@ -37,17 +43,51 @@ $activePage = $activePage ?? '';
       </button>
 
       <nav id="main-nav" class="main-nav" aria-label="Primary navigation">
-        <a class="<?= $activePage === 'home' ? 'is-active' : '' ?>" href="index.php">Home</a>
-        <a class="<?= $activePage === 'about' ? 'is-active' : '' ?>" href="about.php">About Us</a>
-        <a class="<?= $activePage === 'rooms' ? 'is-active' : '' ?>" href="room.php">Rooms</a>
-        <a class="<?= $activePage === 'packages' ? 'is-active' : '' ?>" href="pack.php">Packages</a>
-        <a class="<?= $activePage === 'directions' ? 'is-active' : '' ?>" href="direction.php">Directions</a>
-        <a class="<?= $activePage === 'gallery' ? 'is-active' : '' ?>" href="gallery.php">Gallery</a>
-        <a class="<?= $activePage === 'contact' ? 'is-active' : '' ?>" href="contact.php">Contact Us</a>
-        <a class="<?= $activePage === 'blog' ? 'is-active' : '' ?>" href="blog.php">Blog</a>
+        <a class="nav-link nav-home-mobile<?= $activePage === 'home' ? ' is-active' : '' ?>" href="index.php"<?= $currentFile === 'index.php' ? ' aria-current="page"' : '' ?>>Home</a>
+<?php foreach ($navMain as $navItem):
+    $hasGroups = !empty($navItem['groups']);
+    $hasChildren = !empty($navItem['children']);
+    $hasSub = $hasGroups || $hasChildren;
+    $isActive = in_array($activePage, $navItem['active'] ?? [], true);
+    $itemClass = 'nav-item' . ($hasSub ? ' has-sub' : '') . ($hasGroups ? ' has-mega' : '') . ($isActive ? ' is-active' : '');
+    $subId = 'nav-sub-' . $navItem['key'];
+?>
+<?php if (!$hasSub): ?>
+        <a class="nav-link<?= $isActive ? ' is-active' : '' ?>" href="<?= $e($navItem['url']) ?>"<?= $currentFile === $navItem['url'] ? ' aria-current="page"' : '' ?>><?= $e($navItem['label']) ?></a>
+<?php else: ?>
+        <div class="<?= $e($itemClass) ?>" data-nav-item>
+          <a class="nav-link<?= $isActive ? ' is-active' : '' ?>" href="<?= $e($navItem['url']) ?>"<?= $currentFile === $navItem['url'] ? ' aria-current="page"' : '' ?>><?= $e($navItem['label']) ?></a>
+          <button class="nav-sub-toggle" type="button" aria-expanded="false" aria-controls="<?= $e($subId) ?>" aria-label="Show <?= $e($navItem['label']) ?> submenu" data-label="<?= $e($navItem['label']) ?>"><span aria-hidden="true"></span></button>
+          <div class="nav-sub<?= $hasGroups ? ' nav-mega' : '' ?>" id="<?= $e($subId) ?>">
+<?php if ($hasGroups): ?>
+            <div class="nav-mega-grid">
+<?php foreach ($navItem['groups'] as $group): ?>
+              <div class="nav-group">
+                <a class="nav-group-title" href="<?= $e($group['url']) ?>"<?= $currentFile === $group['url'] ? ' aria-current="page"' : '' ?>><?= $e($group['label']) ?></a>
+<?php foreach ($group['children'] as $child): ?>
+                <a href="<?= $e($child['url']) ?>"<?= $currentFile === $child['url'] ? ' aria-current="page"' : '' ?>><?= $e($child['label']) ?></a>
+<?php endforeach; ?>
+              </div>
+<?php endforeach; ?>
+            </div>
+<?php if (!empty($navItem['footer_link'])): ?>
+            <div class="nav-mega-foot">
+              <a href="<?= $e($navItem['footer_link']['url']) ?>"><?= $e($navItem['footer_link']['label']) ?> &rarr;</a>
+              <a href="<?= $e($whatsappUrl) ?>" target="_blank" rel="noopener">Not sure? Ask us on WhatsApp</a>
+            </div>
+<?php endif; ?>
+<?php else: ?>
+<?php foreach ($navItem['children'] as $child): ?>
+            <a href="<?= $e($child['url']) ?>"<?= $currentFile === $child['url'] ? ' aria-current="page"' : '' ?>><?= $e($child['label']) ?></a>
+<?php endforeach; ?>
+<?php endif; ?>
+          </div>
+        </div>
+<?php endif; ?>
+<?php endforeach; ?>
         <a
           class="nav-book"
-          href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
+          href="<?= $e($bookingUrl) ?>"
           target="_blank"
           rel="noopener"
         >

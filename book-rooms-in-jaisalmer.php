@@ -1,5 +1,5 @@
 <?php
-$activePage = 'blog';
+$activePage = 'rooms';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $bookingUrl = $siteConfig['booking_url'];
 $pageTitle = 'Staying inside Jaisalmer Fort | Garh Jaisal Haveli';

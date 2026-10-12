@@ -1,5 +1,5 @@
 <?php
-$activePage = 'roof';
+$activePage = 'dining';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $bookingUrl = $siteConfig['booking_url'];
 ?>
