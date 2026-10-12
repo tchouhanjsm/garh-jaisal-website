@@ -18,6 +18,9 @@ $read = static function ($path) {
 $publicNavUrls = [];
 $collectNavUrls = static function ($items) use (&$collectNavUrls, &$publicNavUrls) {
     foreach ($items as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
         if (isset($item['url']) && is_string($item['url'])) {
             $publicNavUrls[] = $item['url'];
         }
@@ -26,11 +29,16 @@ $collectNavUrls = static function ($items) use (&$collectNavUrls, &$publicNavUrl
                 continue;
             }
             foreach ($item[$key] as $child) {
+                if (!is_array($child)) {
+                    continue;
+                }
                 if (isset($child['url']) && is_string($child['url'])) {
                     $publicNavUrls[] = $child['url'];
                 }
-                if (isset($child['children']) && is_array($child['children'])) {
-                    $collectNavUrls($child['children']);
+                foreach (['children', 'groups'] as $nestedKey) {
+                    if (isset($child[$nestedKey]) && is_array($child[$nestedKey])) {
+                        $collectNavUrls($child[$nestedKey]);
+                    }
                 }
             }
         }
