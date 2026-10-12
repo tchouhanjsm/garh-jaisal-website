@@ -2455,3 +2455,10 @@ p{
     scroll-margin-top:210px;
   }
 }
+
+
+/* Phase F10 — keep room booking distinct from experience enquiries site-wide. */
+.site-footer .footer-booking-button{
+  white-space:normal;
+  text-align:center;
+}

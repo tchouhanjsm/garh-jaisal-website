@@ -53,6 +53,10 @@ if ($parentSlug !== 'pack' && isset($experiences[$parentSlug]) && ($experiences[
 }
 $breadcrumbs[] = ['name' => $experience['h1'], 'url' => $canonical];
 $isIndexableExperience = ($experience['status'] ?? 'live') === 'live';
+$experienceContactUrl = 'contact.php';
+if ($isIndexableExperience && ($experience['duration_type'] ?? 'hub') !== 'hub' && !empty($experience['slug'])) {
+    $experienceContactUrl .= '?experience=' . rawurlencode((string) $experience['slug']);
+}
 
 $schemaGraph = [
     [
@@ -163,7 +167,7 @@ foreach ($breadcrumbs as $index => $crumb) {
       <h1><?= htmlspecialchars($experience['h1'], ENT_QUOTES, 'UTF-8') ?></h1>
       <p><?= htmlspecialchars($experience['summary'], ENT_QUOTES, 'UTF-8') ?></p>
       <div class="actions">
-        <a class="button button-primary" href="contact.php">Ask about availability</a>
+        <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>">Ask about availability</a>
         <a class="button button-light" href="pack.php">View all experiences</a>
       </div>
     </div>
@@ -306,7 +310,7 @@ foreach ($breadcrumbs as $index => $crumb) {
       <h2>Stay inside Jaisalmer Fort, then explore beyond it.</h2>
       <p>Ask the hotel about the latest experience details, availability and arrangements for your travel date.</p>
       <div class="actions">
-        <a class="button button-primary" href="contact.php">Contact us</a>
+        <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>">Contact us</a>
         <a class="button button-secondary" href="room.php">View rooms</a>
       </div>
     </div>

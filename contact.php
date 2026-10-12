@@ -7,6 +7,26 @@ $activePage = 'contact';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $bookingUrl = $siteConfig['booking_url'];
 
+$contactExperience = null;
+$requestedExperience = $_GET['experience'] ?? '';
+if (is_string($requestedExperience) && preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $requestedExperience)) {
+    $experienceRegistry = require __DIR__ . '/include/experience-data.php';
+    $candidateExperience = $experienceRegistry[$requestedExperience] ?? null;
+    if (
+        is_array($candidateExperience)
+        && ($candidateExperience['status'] ?? '') === 'live'
+        && ($candidateExperience['duration_type'] ?? 'hub') !== 'hub'
+    ) {
+        $contactExperience = $candidateExperience;
+    }
+}
+
+$prefilledMessage = '';
+if ($contactExperience !== null) {
+    $prefilledMessage = 'Hello, I would like to enquire about ' . $contactExperience['h1']
+        . '. Please confirm the current price, availability, timings, arrangements and exact inclusions for my travel date.';
+}
+
 if (empty($_SESSION['contact_csrf'])) {
     $_SESSION['contact_csrf'] = bin2hex(random_bytes(32));
 }
@@ -26,7 +46,7 @@ $errorMessages = [
 $errorMessage = $errorMessages[$errorKey] ?? '';
 
 $pageTitle = 'Contact Hotel Garh Jaisal Haveli in Jaisalmer Fort';
-$pageDescription = 'Write to Hotel Garh Jaisal Haveli inside Jaisalmer Fort. Call, email, or send an enquiry about rooms, arrival, and your stay in the living fort.';
+$pageDescription = 'Contact Garh Jaisal Haveli about rooms, arrival, dining and desert or city experiences. Call, email, or send an enquiry to plan your stay inside Jaisalmer Fort.';
 $canonical = 'https://www.hotelgarhjaisal.com/contact.php';
 ?>
 <!doctype html>
@@ -92,7 +112,7 @@ $canonical = 'https://www.hotelgarhjaisal.com/contact.php';
     <div class="site-shell">
       <p class="eyebrow">Jaisalmer Fort</p>
       <h1>Contact Garh Jaisal Haveli in Jaisalmer Fort.</h1>
-      <p class="contact-lead">Write or call Hotel Garh Jaisal Haveli. Ask about rooms, arrival, or your stay inside the fort.</p>
+      <p class="contact-lead">Write or call Hotel Garh Jaisal Haveli. Ask about rooms, arrival, rooftop dining, or desert and city experiences arranged by the hotel.</p>
 
       <div class="actions contact-booking-actions">
         <a class="button button-primary contact-booking-button" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check room availability</a>
@@ -117,6 +137,9 @@ $canonical = 'https://www.hotelgarhjaisal.com/contact.php';
 
         <form class="contact-form" action="mail.php" method="post">
           <h2>Send an enquiry</h2>
+          <?php if ($contactExperience !== null): ?>
+            <p class="contact-experience-context">Experience enquiry: <strong><?= htmlspecialchars($contactExperience['h1'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your travel date or any specific questions.</p>
+          <?php endif; ?>
           <?php if ($errorMessage !== ''): ?>
             <p class="contact-error" role="alert"><?= htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8') ?></p>
           <?php endif; ?>
@@ -135,7 +158,7 @@ $canonical = 'https://www.hotelgarhjaisal.com/contact.php';
           </div>
           <div class="contact-field">
             <label for="message">Message</label>
-            <textarea id="message" name="message" maxlength="2000" rows="6" required></textarea>
+            <textarea id="message" name="message" maxlength="2000" rows="6" required><?= htmlspecialchars($prefilledMessage, ENT_QUOTES, 'UTF-8') ?></textarea>
           </div>
           <div class="hp-field" aria-hidden="true">
             <label for="website">Leave this field empty</label>
