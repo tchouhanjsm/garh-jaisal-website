@@ -215,35 +215,31 @@ $bookingUrl = $siteConfig['booking_url'];
   <section class="section home-rooms" id="rooms-preview" aria-labelledby="rooms-preview-title">
     <?php
     $rooms = require __DIR__ . '/include/rooms-data.php';
-    $roomLabels = [];
-    foreach ($rooms as $room) {
-      $label = $room['name'];
-      if (substr($label, -5) === ' Room') {
-        $label = substr($label, 0, -5);
-      }
-      $roomLabels[] = $label;
-    }
-    $lastRoomLabel = array_pop($roomLabels);
-    $roomsSentence = 'Discover the ' . implode(', ', $roomLabels) . ' and ' . $lastRoomLabel . ' rooms.';
+    $featuredRooms = array_slice($rooms, 0, 3);
     ?>
     <div class="site-shell">
       <div class="section-head">
         <div><p class="eyebrow">Stay</p><h2 id="rooms-preview-title">Rooms shaped by Jaisalmer.</h2></div>
         <p>From colourful rooms to carved interiors, each room has its own character. Explore the current room collection and choose the space that suits your stay.</p>
       </div>
-      <div class="cards">
-        <article class="card">
-          <div class="card-image"><img src="img/opium2.jpg" alt="Opium Room at Garh Jaisal Haveli" loading="lazy"></div>
-          <div class="card-body"><div class="card-kicker">First floor</div><h3>Opium Room</h3><p>Warm sandstone detailing, traditional character and an intimate atmosphere.</p><a class="text-link" href="room.php">Explore rooms →</a></div>
-        </article>
-        <article class="card">
-          <div class="card-image"><img src="img/s5.jpg" alt="Colourful heritage room at Garh Jaisal Haveli" loading="lazy"></div>
-          <div class="card-body"><div class="card-kicker">Heritage stay</div><h3>Rooms with character</h3><p><?= htmlspecialchars($roomsSentence, ENT_QUOTES, 'UTF-8') ?></p><a class="text-link" href="room.php">See all rooms →</a></div>
-        </article>
-        <article class="card">
-          <div class="card-image"><img src="img/sun1.jpg" alt="Traditional bedroom at Garh Jaisal Haveli" loading="lazy"></div>
-          <div class="card-body"><div class="card-kicker">Made for slow mornings</div><h3>Wake up in the fort</h3><p>Keep the day simple: a quiet room, a walk through the fort and breakfast upstairs.</p><a class="text-link" href="room.php">View stay options →</a></div>
-        </article>
+      <div class="cards home-room-cards">
+        <?php foreach ($featuredRooms as $room): ?>
+          <?php $roomAnchor = 'room-' . trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($room['name'])), '-'); ?>
+          <?php $roomDetailsUrl = 'room.php#' . $roomAnchor; ?>
+          <article class="card home-room-card">
+            <div class="card-image">
+              <a class="home-room-card-image-link" href="<?= htmlspecialchars($roomDetailsUrl, ENT_QUOTES, 'UTF-8') ?>">
+                <img src="<?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
+              </a>
+            </div>
+            <div class="card-body">
+              <div class="card-kicker"><?= htmlspecialchars($room['kicker'], ENT_QUOTES, 'UTF-8') ?></div>
+              <h3><?= htmlspecialchars($room['name'], ENT_QUOTES, 'UTF-8') ?></h3>
+              <p><?= htmlspecialchars($room['description'], ENT_QUOTES, 'UTF-8') ?></p>
+              <a class="text-link home-room-detail-link" href="<?= htmlspecialchars($roomDetailsUrl, ENT_QUOTES, 'UTF-8') ?>">View room details →</a>
+            </div>
+          </article>
+        <?php endforeach; ?>
       </div>
     </div>
   </section>

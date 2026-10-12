@@ -2405,3 +2405,53 @@ p{
   border-color:#fff;
   color:#fff;
 }
+
+
+/* Phase F9 — persistent availability action and direct room-preview links. */
+.footer-booking-cta{
+  max-width:18rem;
+  margin:20px 0 4px;
+}
+.site-footer .footer-booking-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:44px;
+  padding:10px 16px;
+  border:1px solid var(--sand);
+  border-radius:var(--radius-sm);
+  background:var(--sand);
+  color:#241d18;
+  font-weight:700;
+  line-height:1.35;
+  text-decoration:none;
+}
+.site-footer .footer-booking-button:hover,
+.site-footer .footer-booking-button:focus-visible{
+  border-color:#e9c996;
+  background:#e9c996;
+  color:#241d18;
+}
+.footer-booking-cta p{
+  margin:9px 0 0;
+  color:#cfc3b9;
+  font-size:.78rem;
+  line-height:1.55;
+}
+.home-room-card-image-link{
+  display:block;
+  width:100%;
+  height:100%;
+}
+.home-room-card-image-link:focus-visible{
+  outline:3px solid var(--focus);
+  outline-offset:-4px;
+}
+.rooms-page .room-card{
+  scroll-margin-top:180px;
+}
+@media(max-width:760px){
+  .rooms-page .room-card{
+    scroll-margin-top:210px;
+  }
+}

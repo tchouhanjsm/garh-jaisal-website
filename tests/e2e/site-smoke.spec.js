@@ -37,6 +37,12 @@ for (const route of routes) {
     await expect(page.locator('main#main-content[tabindex="-1"]')).toHaveCount(1);
     await expect(page.getByRole('main')).toHaveCount(1);
 
+    const footerBooking = page.locator('.footer-booking-button');
+    await expect(footerBooking).toHaveCount(1);
+    await expect(footerBooking).toHaveAttribute('href', await page.locator('.nav-book').getAttribute('href'));
+    await expect(footerBooking).toHaveAttribute('target', '_blank');
+    await expect(footerBooking).toHaveAttribute('rel', /noopener/);
+
     const dimensions = await page.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       document: document.documentElement.scrollWidth,
@@ -192,4 +198,29 @@ test('dark-surface secondary actions expose the intended white text and outline 
     item.color !== 'rgb(255, 255, 255)' || Number.parseFloat(item.borderWidth) <= 0 || item.borderColor === 'rgba(0, 0, 0, 0)'
   );
   expect(failures, `Dark-surface secondary button style failures: ${JSON.stringify(failures, null, 2)}`).toEqual([]);
+});
+
+
+test('homepage room previews use registered room content and stable detail anchors', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Homepage room-preview consistency is checked once');
+  await page.goto('/');
+  const cards = page.locator('.home-room-card');
+  await expect(cards).toHaveCount(3);
+
+  const preview = await cards.evaluateAll(elements => elements.map(card => ({
+    name: (card.querySelector('h3')?.textContent || '').trim(),
+    alt: card.querySelector('img')?.getAttribute('alt') || '',
+    href: card.querySelector('.home-room-detail-link')?.getAttribute('href') || '',
+  })));
+  for (const room of preview) {
+    expect(room.name).not.toBe('');
+    expect(room.alt).not.toBe('');
+    expect(room.href).toMatch(/^room\.php#room-[a-z0-9-]+$/);
+  }
+
+  await page.goto('/room.php');
+  for (const room of preview) {
+    const anchor = room.href.split('#')[1];
+    await expect(page.locator('#' + anchor)).toHaveCount(1);
+  }
 });
