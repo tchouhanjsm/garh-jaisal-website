@@ -339,3 +339,11 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 - Preserve the existing booking URL/configuration, public routes, canonical/OG/Twitter metadata, JSON-LD, GA4 IDs, approved images and room/tour details. Do not invent facilities, pricing, transport arrangements or availability.
 - Validation gate: PHP 7.4/8.2 lint, strict site checks, sitemap/publication boundaries and Browser E2E/screenshots on the exact final PR head. The connector cannot execute local PHP/Chromium; no local run is claimed.
 - Next milestone: Phase F6 — full Rooms page UX redesign after this homepage flow has passed responsive review.
+
+
+## Hygiene — ignore node_modules, remove saved 404 file (PR in progress)
+
+- `.gitignore` now ignores `node_modules/`, so a local `npm install` for the browser tests can never be committed or end up in the cPanel deployable tree.
+- Removed `img/loader.html`: a saved "404 Not Found" HTML page, not an image. Its only reference is `css/style.css`, a legacy stylesheet that no PHP page or include loads. `css/style.css` itself is left for the end-of-project legacy CSS review.
+- No public URL, page content, image mapping, booking link, GA4 ID or secret changed.
+
