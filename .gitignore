@@ -6,6 +6,9 @@ sync-local.sh
 include/site-config.local.php
 error_log
 
+# Node dependencies installed for local browser tests
+node_modules/
+
 # Browser automation output (generated locally and in CI)
 artifacts/
 test-results/

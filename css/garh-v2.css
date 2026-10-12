@@ -598,6 +598,11 @@ p{
   color:var(--brown);
 }
 
+.experience-hub-note{
+  margin:var(--sp-3,1.5rem) 0 0;
+}
+
+
 
 /* =========================================================
    WIDE FEATURE / ROOFTOP / DESERT

@@ -306,7 +306,7 @@ return [
         'menu_label' => 'Explore the desert',
         'duration_type' => 'full-day',
         'order' => 50,
-        'status' => 'live',
+        'status' => 'hidden',
         'title' => 'Explore the Desert near Jaisalmer | Garh Jaisal Haveli',
         'description' => 'Explore the desert near Jaisalmer with jeep transport, Khuldhara, local route stops, a camel ride, sunset in the dunes and return to town.',
         'h1' => 'Explore the Desert near Jaisalmer',
