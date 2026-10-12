@@ -201,3 +201,31 @@
 - Save `artifacts/image-payload-audit/image-payload-audit.json` in the existing 14-day GitHub Actions evidence artifact. No report is written into the deployable website tree.
 - Do not replace or recompress room, facade, courtyard, or experience imagery without visually comparing the proposed asset against the current image and confirming the exact page/room mapping. The previously noted local `img/toWEBP/` collection is not available through the repository unless uploaded/committed by the owner.
 - This batch improves prioritization and evidence quality; it does not claim image payloads have already been reduced or production Core Web Vitals measured.
+
+
+## Site architecture blueprint (approved by the owner 2026-10-12)
+
+Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) (target structure, menu, data-driven design, batches) and [`docs/LAYOUT-REVIEW.md`](LAYOUT-REVIEW.md) (verified findings L1–L14 on `main`).
+
+**Owner decisions**
+- Menu approved: About ▾, Stay ▾, Dining, Packages ▾ (Desert Tours, Car & City Tours), Directions, Blog, Contact, Book Now. Gallery sits under About.
+- Duplicate pages are merged with owner-reviewed 301s. Irrelevant pages are temporarily *hidden* (200, `noindex,follow`, out of menu, hubs and sitemap) and reviewed at the end.
+- Tour facts (Car & City hub, Longewala, Rajasthan) are supplied after the page structure exists; those pages stay `draft` until approved.
+- One PR per batch, built from current `main`; CI only runs for PRs targeting `main`, so batches are not stacked.
+
+**Batches** (status is updated in the PR that changes it)
+
+| Batch | Branch | Contents | Status |
+|---|---|---|---|
+| Docs | `docs/site-architecture-blueprint` | Blueprint and layout review documents, this log section | PR open |
+| A | `feature/nav-data-and-menu` | `include/nav-data.php`; dropdown and mobile accordion menu; footer links; `activePage` | ☐ |
+| B | `feature/design-tokens-components` | Tokens and shared components | ☐ |
+| C | `feature/experience-data-v2` | New data fields; hubs render from data | ☐ |
+| D | `feature/resolve-overlaps` | Merge duplicates, hide irrelevant pages, link or hide orphans | ☐ |
+| E | `feature/car-tours` | Car & City hub, Longewala, Rajasthan as drafts | ☐ |
+| F | `feature/page-redesigns-1` | Home, Rooms, Packages hub | ☐ |
+| G | `feature/page-redesigns-2` | Tour pages, Directions, Dining, Gallery, Contact | ☐ |
+| H | `feature/policies-and-sitemap` | Policy pages (owner wording), sitemap generator, CI freshness check | ☐ |
+
+**Observation for the owner:** the Snapshot table above still names PR #14 as last merged and PR #15 as active; `main` already contains the PR #15 merge. Update the Snapshot when you confirm the current state; this PR does not change it.
+
