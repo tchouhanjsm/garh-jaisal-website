@@ -133,14 +133,14 @@ $sortExperienceSlugs($guideItems);
     </div>
   </section>
 
-  <section class="section experience-map-section" id="experience-categories">
+  <section class="section experience-map-section" id="experience-categories" aria-labelledby="experience-categories-title">
     <div class="site-shell">
       <div class="section-head">
         <div>
-          <p class="eyebrow">Experience map</p>
-          <h2>Start with a category, then choose the route.</h2>
+          <p class="eyebrow">Choose your experience</p>
+          <h2 id="experience-categories-title">Start with desert or city experiences.</h2>
         </div>
-        <p>The structure keeps the choices simple: desert experiences on one side, guided Jaisalmer tours on the other.</p>
+        <p>Open a category to compare the available options, then contact us to confirm current details for your dates.</p>
       </div>
 
       <div class="package-category-grid" aria-label="Tour categories">
@@ -160,53 +160,12 @@ $sortExperienceSlugs($guideItems);
     </div>
   </section>
 
-  <section class="section packages-intro">
-    <div class="site-shell">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Choose your route</p>
-          <h2>One place to plan the desert and the city.</h2>
-        </div>
-        <p>
-          Garh Jaisal Haveli is inside Jaisalmer Fort. From here, you can arrange
-          a desert experience or spend time understanding Jaisalmer with a local guide.
-        </p>
-      </div>
-
-      <div class="experience-card-grid experience-card-grid--two">
-        <article class="experience-card">
-          <a href="desert-safari.php">
-            <img src="img/desert6.jpg" alt="Camel riders in the Jaisalmer desert" loading="lazy">
-            <div>
-              <p class="experience-card-kicker">Desert safari</p>
-              <h2>Desert Safari in Jaisalmer</h2>
-              <p>Choose a sunset safari, cultural evening, open-sky overnight or Swiss tent stay.</p>
-              <span>Explore desert safaris →</span>
-            </div>
-          </a>
-        </article>
-
-        <article class="experience-card">
-          <a href="car-tours.php">
-            <img src="img/v2/facade.jpg" alt="Historic architecture inside Jaisalmer Fort" loading="lazy">
-            <div>
-              <p class="experience-card-kicker">Car &amp; City Tours</p>
-              <h2>Explore Jaisalmer and plan your route</h2>
-              <p>Compare guided city tours and enquire about car arrangements for your arrival or a desert day.</p>
-              <span>Explore Car &amp; City Tours →</span>
-            </div>
-          </a>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
+  <section class="section" id="desert-options" aria-labelledby="desert-options-title">
     <div class="site-shell">
       <div class="section-head">
         <div>
           <p class="eyebrow">Desert safari</p>
-          <h2>Choose how you want to spend your evening.</h2>
+          <h2 id="desert-options-title">Explore the desert options.</h2>
         </div>
         <a class="text-link" href="desert-safari.php">View all desert options →</a>
       </div>
@@ -229,7 +188,7 @@ $sortExperienceSlugs($guideItems);
     </div>
   </section>
 
-  <section class="section route-planner">
+  <section class="section route-planner" id="city-options">
     <div class="site-shell">
       <div class="section-head">
         <div>
@@ -257,7 +216,7 @@ $sortExperienceSlugs($guideItems);
     </div>
   </section>
 
-  <section class="section packages-planning">
+  <section class="section packages-planning" id="plan-by-time">
     <div class="site-shell">
       <div class="section-head">
         <div>
