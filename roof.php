@@ -162,9 +162,9 @@ $bookingUrl = $siteConfig['booking_url'];
           havelis, the royal palace, the lake, and the sunrise and sunset.
         </p>
         <p>
-          The menu includes vegetarian, vegan, and non-vegetarian dishes.
-          Dining hours and menu prices are not listed on this page. Confirm
-          them with the hotel before you visit.
+          The menu includes vegetarian, vegan, and non-vegetarian dishes. Visit
+          <a href="restaurant.php#menu">Garh Jaisal's Kitchen menu</a> for the menu details.
+          Confirm current menu options and prices with the hotel before you visit.
         </p>
         <p>
           <a class="text-link" href="contact.php?topic=dining">Contact the hotel</a>

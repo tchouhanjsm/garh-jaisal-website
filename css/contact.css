@@ -138,20 +138,6 @@
 }
 
 
-/* Phase F10 — make contextual experience enquiries clear before the editable message. */
-.contact-experience-context{
-  margin:0;
-  padding:12px 14px;
-  border-inline-start:3px solid var(--sand);
-  border-radius:0 8px 8px 0;
-  background:var(--sand-light);
-  color:var(--ink);
-  font-size:.9rem;
-  line-height:1.6;
-}
-.contact-experience-context strong{
-  color:var(--brown);
-}
 
 
 /* Phase F11 — keep contextual enquiries visible without overpowering the form. */
