@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-12 |
-| Current phase | Phase 5 — evidence-led image performance remediation |
+| Current phase | Phase 6 — page layout inventory and information architecture review |
 | Base branch | `main` |
-| Baseline commit | `b8b81b74fc1a7695a6fe8dcbe19b742f0337cde6` (PR #14 merge) |
-| Last merged PR | [#14 — priority image dimensions](https://github.com/tchouhanjsm/garh-jaisal-website/pull/14) |
+| Baseline commit | `fcf50dac2524bc5dd6a1f77576220ad68efac8fc` (PR #15 merge) |
+| Last merged PR | [#15 — image payload audit](https://github.com/tchouhanjsm/garh-jaisal-website/pull/15) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-5-image-payload-audit` — deduplicated payload evidence to target safe image optimization |
-| Next action | Review image payload audit evidence; optimize only assets with verified visual mapping and measured savings |
+| Active batch | `feature/phase-6-page-layout-inventory` — capture rendered page structures before agreeing new pages or redesigns |
+| Next action | Review the layout inventory and screenshots; discuss page additions and their purpose before implementation |
 
 ## Phase roadmap
 
@@ -201,3 +201,12 @@
 - Save `artifacts/image-payload-audit/image-payload-audit.json` in the existing 14-day GitHub Actions evidence artifact. No report is written into the deployable website tree.
 - Do not replace or recompress room, facade, courtyard, or experience imagery without visually comparing the proposed asset against the current image and confirming the exact page/room mapping. The previously noted local `img/toWEBP/` collection is not available through the repository unless uploaded/committed by the owner.
 - This batch improves prioritization and evidence quality; it does not claim image payloads have already been reduced or production Core Web Vitals measured.
+
+
+## Phase 6 — rendered page layout and information architecture inventory (PR in progress)
+
+- Add a rendered inventory for all 26 sitemap routes at 1280×800, capturing title/headings, main structure, section counts, hero/card/gallery/form/table/accordion/breadcrumb/CTA signals, image attributes, navigation links and visible CTA destinations.
+- Store JSON under `artifacts/page-layout-inventory/page-layout-inventory.json` in the existing 14-day CI artifact. This is a structural inventory, not an automated judgement of visual quality or a substitute for reviewing screenshots at mobile/tablet/desktop widths.
+- No public pages, content, URLs, SEO metadata, assets, booking links, prices, analytics IDs, secrets or production settings change in this batch.
+- Use the inventory with existing responsive screenshots and SEO inventory to create a page-by-page review list. Discuss proposed new pages before implementation: search intent, audience, unique value, required verified facts, links to existing pages, CTA and URL/canonical plan. Do not add new public pages or sitemap URLs without that discussion and owner approval.
+- PR #15 was merged by the owner; the image payload audit provides a separate route-aware asset report. Actual image optimization remains gated on verified file sizes and visual mapping.
