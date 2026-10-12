@@ -52,8 +52,8 @@ return [
                     ],
                 ],
                 [
-                    'label' => 'City Tours',
-                    'url' => 'guided-jaisalmer-tour.php',
+                    'label' => 'Car & City Tours',
+                    'url' => 'car-tours.php',
                     'children' => [
                         ['label' => 'Guided Jaisalmer tours', 'url' => 'guided-jaisalmer-tour.php'],
                         ['label' => 'Half-day Jaisalmer tour', 'url' => 'half-day-jaisalmer-tour.php'],
