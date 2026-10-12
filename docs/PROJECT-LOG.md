@@ -9,12 +9,12 @@
 | Last updated | 2026-10-12 |
 | Current phase | Phase 5 — evidence-led image performance remediation |
 | Base branch | `main` |
-| Baseline commit | `5168bf7a5c3f4ad2d93fc9b38efd62ad92cbc379` (PR #13 merge) |
-| Last merged PR | [#13 — rendered performance and asset baseline](https://github.com/tchouhanjsm/garh-jaisal-website/pull/13) |
+| Baseline commit | `b8b81b74fc1a7695a6fe8dcbe19b742f0337cde6` (PR #14 merge) |
+| Last merged PR | [#14 — priority image dimensions](https://github.com/tchouhanjsm/garh-jaisal-website/pull/14) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-5-image-dimension-remediation` — reserve layout space for priority hero images and add regression coverage |
-| Next action | Verify the image-dimension remediation on the exact PR head; then plan optimized image variants from owner-approved assets and visual mapping |
+| Active batch | `feature/phase-5-image-payload-audit` — deduplicated payload evidence to target safe image optimization |
+| Next action | Review image payload audit evidence; optimize only assets with verified visual mapping and measured savings |
 
 ## Phase roadmap
 
@@ -191,3 +191,13 @@
 - Browser E2E on PR #14 initially failed because the new regression test found three remaining high-priority images without explicit dimensions: the desert-safari hub hero, guided-Jaisalmer-tour hub hero, and two-day-itinerary hero (the facade asset appears on two routes). This is a real coverage gap in the implementation, not a reason to weaken the assertion.
 - Added the intrinsic 1366×768 dimensions to the desert image and 1333×2000 dimensions to facade images on those routes. Re-run PHP 7.4/8.2 and full Browser E2E on the updated exact head.
 - The run reviewed so far reports the image-dimension assertion failure; it does not expose a row-selector cleanup failure or a formatter check. If those are present in a newer run, inspect that run's job logs before declaring readiness.
+
+
+## Phase 5 follow-up — deduplicated image payload audit (PR in progress)
+
+- PR #14 was merged by the owner. The high-priority image dimension regression check now covers the missing hero dimensions identified in CI; image geometry is addressed separately from file-size optimization.
+- Add a sitemap-wide Playwright inventory that deduplicates image URLs and links each asset to every route and rendered usage, including observed format, natural dimensions, width/height attributes, loading mode, fetch priority, viewport visibility, and available Chromium transfer/encoded/decoded sizes.
+- Sort the report by observed transfer size and flag resources above 250 KiB as review candidates. This is triage evidence, not an enforced performance budget; browser resource timing can return zero/unavailable sizes and must not be mistaken for actual file bytes.
+- Save `artifacts/image-payload-audit/image-payload-audit.json` in the existing 14-day GitHub Actions evidence artifact. No report is written into the deployable website tree.
+- Do not replace or recompress room, facade, courtyard, or experience imagery without visually comparing the proposed asset against the current image and confirming the exact page/room mapping. The previously noted local `img/toWEBP/` collection is not available through the repository unless uploaded/committed by the owner.
+- This batch improves prioritization and evidence quality; it does not claim image payloads have already been reduced or production Core Web Vitals measured.
