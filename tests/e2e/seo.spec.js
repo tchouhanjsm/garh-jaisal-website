@@ -94,6 +94,35 @@ test('Packages hub presents two clear, responsive experience categories', async 
 });
 
 
+test('Packages hub keeps a concise category-first discovery sequence', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Packages layout sequence checks run once');
+  const response = await page.goto('/pack.php', { waitUntil: 'domcontentloaded' });
+  expect(response).not.toBeNull();
+  expect(response.status()).toBeLessThan(400);
+
+  await expect(page.locator('.packages-intro')).toHaveCount(0);
+  await expect(page.locator('#experience-categories')).toBeVisible();
+  await expect(page.locator('#desert-options')).toBeVisible();
+  await expect(page.locator('#city-options')).toBeVisible();
+  await expect(page.locator('#plan-by-time')).toBeVisible();
+  await expect(page.locator('.packages-cta')).toBeVisible();
+
+  const sequence = await page.locator('main > section').evaluateAll(sections =>
+    sections.map(section => section.id || section.classList[0])
+  );
+  const positions = ['experience-categories', 'desert-options', 'city-options', 'plan-by-time']
+    .map(id => sequence.indexOf(id));
+  expect(positions.every(position => position >= 0)).toBeTruthy();
+  expect(positions).toEqual([...positions].sort((a, b) => a - b));
+
+  const categoryLinks = page.locator('#experience-categories .package-category-link');
+  await expect(categoryLinks).toHaveCount(2);
+  await expect(categoryLinks.nth(0)).toHaveAttribute('href', 'desert-safari.php');
+  await expect(categoryLinks.nth(1)).toHaveAttribute('href', 'car-tours.php');
+  await expect(page.locator('#desert-options .experience-card').first()).toBeVisible();
+  await expect(page.locator('#city-options .experience-card').first()).toBeVisible();
+});
+
 test('home page exposes clear primary discovery paths', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Home discovery checks run once');
   const response = await page.goto('/', { waitUntil: 'domcontentloaded' });

@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-12 |
-| Current phase | Batch E — Car & City Tours hub and draft-only tour scaffolding |
+| Current phase | Phase F — Packages hub redesign |
 | Base branch | `main` |
-| Baseline commit | Current `main` after PR #22; confirm exact merge SHA from GitHub before release |
-| Last merged PR | [#22 — publication-aware sitemap](https://github.com/tchouhanjsm/garh-jaisal-website/pull/22) |
+| Baseline commit | `3a9102e89e6f951542d71f7807f8575786b080f2` (main after PR #25) |
+| Last merged PR | [#25 — home and rooms discovery UX](https://github.com/tchouhanjsm/garh-jaisal-website/pull/25) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/car-city-tours-hub-drafts` — create a live Car & City Tours hub and noindex draft tour scaffolding |
-| Next action | Verify the Car & City hub, sitemap membership, draft noindex and responsive/browser checks on the exact PR head; owner confirms tour facts before publication |
+| Active batch | `feature/phase-f4-packages-hub-redesign` — streamline the Packages hub after category-first discovery |
+| Next action | Verify the Packages hub redesign, PHP/site checks and responsive/browser evidence on the exact PR head; owner retains merge authority |
 
 ## Phase roadmap
 
@@ -317,3 +317,14 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 - Add rendered Browser E2E coverage for the three home discovery paths and room-floor anchor integrity/booking target attributes. Existing viewport projects continue to check 320, 390, 1280 and 1440 widths and horizontal overflow.
 - Do not invent room facts or change canonical URLs, metadata, JSON-LD, GA4 IDs, images, booking configuration or deployment settings.
 - Validation gate: both Site Checks (PHP 7.4/8.2, strict checks, sitemap and publication boundary) and Browser E2E must pass on the exact final PR head. CI screenshot artifacts are the visual review evidence; no local execution is claimed by this connector.
+
+
+## Batch F4 — Packages hub redesign (PR #26 in progress)
+
+- Continue Phase F from the merged F3 discovery work. Make the Packages hub a clearer route from the hero to the two category hubs, then to live experience cards and planning guidance.
+- Remove the repeated introductory category-card section that duplicated the primary category chooser and lengthened the page without adding a distinct decision.
+- Tighten the category chooser heading/copy, retain the existing Desert Tours and Car & City Tours destinations, and add stable section IDs for desert options, city options and time-based planning.
+- Add Browser E2E assertions for the concise section sequence, category destinations, and presence of live desert/city cards. Existing SEO, sitemap, publication-boundary and four-viewport checks remain unchanged.
+- Preserve existing public URLs, canonical/OG/Twitter metadata, JSON-LD, GA4 IDs, approved experience descriptions, image mappings, contact/arrival paths and operating facts. Do not publish draft tours or add unverified prices/timings.
+- Validation gate: PHP 7.4/8.2 lint and strict site checks, sitemap freshness/publication checks, and Browser E2E with screenshots on the exact final PR head. GitHub connector cannot run local PHP/Chromium, so local execution is not claimed.
+- Next milestone after F4: redesign the Home page beyond the discovery strip, then the Rooms page, using exact-head responsive screenshot evidence before proceeding to the wider Phase G pages.
