@@ -21,6 +21,8 @@ return [
         'eyebrow' => 'Desert safari',
         'intro' => 'Choose a desert experience based on how much time you have, whether you want to return the same evening, and how you would like to spend the night.',
         'hero_image' => 'img/desert3.jpg',
+        'hero_width' => 1366,
+        'hero_height' => 768,
         'hero_alt' => 'Sand dunes in the Thar Desert near Jaisalmer',
     ],
 
@@ -32,6 +34,8 @@ return [
         'eyebrow' => 'Jaisalmer tours',
         'intro' => 'See more of Jaisalmer with a locally arranged guided tour. Choose a shorter heritage walk when time is limited or a fuller day when you want more of the city.',
         'hero_image' => 'img/v2/facade.jpg',
+        'hero_width' => 1333,
+        'hero_height' => 2000,
         'hero_alt' => 'Historic facade inside Jaisalmer Fort',
     ],
 
@@ -42,6 +46,8 @@ return [
         'h1' => 'Sunset Camel Safari in Jaisalmer',
         'eyebrow' => 'Sunset and evening',
         'hero_image' => 'img/desert6.jpg',
+        'hero_width' => 1101,
+        'hero_height' => 619,
         'hero_alt' => 'Camel riders travelling across the dunes near Jaisalmer',
         'summary' => 'Travel into the desert for a camel ride, sunset and an evening meal before returning to Jaisalmer.',
         'at_a_glance' => [
@@ -93,6 +99,8 @@ return [
         'h1' => 'Sleep Under the Stars in the Jaisalmer Desert',
         'eyebrow' => 'Overnight desert experience',
         'hero_image' => 'img/desert4.jpg',
+        'hero_width' => 1366,
+        'hero_height' => 768,
         'hero_alt' => 'Sleeping under the stars in the desert near Jaisalmer',
         'summary' => 'Spend the evening in the desert and stay overnight beneath the open sky with a mattress and blankets.',
         'at_a_glance' => [
@@ -147,6 +155,8 @@ return [
         'h1' => 'Overnight Safari in a Swiss Tent',
         'eyebrow' => 'Overnight Swiss tent',
         'hero_image' => 'img/tent.jpg',
+        'hero_width' => 750,
+        'hero_height' => 750,
         'hero_alt' => 'Swiss tent accommodation in the Jaisalmer desert',
         'summary' => 'Combine a desert safari, camel ride and evening cultural programme with an overnight stay in a Swiss Deluxe Tent.',
         'at_a_glance' => [
@@ -203,6 +213,8 @@ return [
         'h1' => 'Cultural Desert Safari in Jaisalmer',
         'eyebrow' => 'Desert and cultural evening',
         'hero_image' => 'img/desert7.jpg',
+        'hero_width' => 1366,
+        'hero_height' => 768,
         'hero_alt' => 'Camel riders and cultural evening in the Jaisalmer desert',
         'summary' => 'A desert evening that combines the route and camel experience with music, cultural programme and dinner at camp.',
         'at_a_glance' => [
@@ -258,6 +270,8 @@ return [
         'h1' => 'Explore the Desert near Jaisalmer',
         'eyebrow' => 'Day desert experience',
         'hero_image' => 'img/desert3.jpg',
+        'hero_width' => 1366,
+        'hero_height' => 768,
         'hero_alt' => 'Jeep and camels in the desert near Jaisalmer',
         'summary' => 'A longer desert outing covering local route stops, a camel ride and sunset before returning to Jaisalmer.',
         'at_a_glance' => [
@@ -309,6 +323,8 @@ return [
         'h1' => 'Half-Day Guided Jaisalmer Tour',
         'eyebrow' => 'Half-day city tour',
         'hero_image' => 'img/v2/facade.jpg',
+        'hero_width' => 1333,
+        'hero_height' => 2000,
         'hero_alt' => 'Historic architecture inside Jaisalmer Fort',
         'summary' => 'A shorter guided introduction to Jaisalmer for guests who have limited time but want more context than a self-guided walk.',
         'at_a_glance' => [
@@ -356,6 +372,8 @@ return [
         'h1' => 'Full-Day Guided Jaisalmer Tour',
         'eyebrow' => 'Full-day city tour',
         'hero_image' => 'img/v2/courtyard.jpg',
+        'hero_width' => 1333,
+        'hero_height' => 2000,
         'hero_alt' => 'Historic courtyard architecture in Jaisalmer',
         'summary' => 'A fuller day to explore Jaisalmer with a guide, giving you more time for the fort, havelis, markets and heritage areas.',
         'at_a_glance' => [
