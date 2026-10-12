@@ -6,15 +6,15 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-11 |
-| Current phase | Phase 5 — performance and Core Web Vitals baseline instrumentation |
+| Last updated | 2026-10-12 |
+| Current phase | Phase 5 — evidence-led image performance remediation |
 | Base branch | `main` |
-| Baseline commit | `9ea206ab697ba3095421947ab2447126fb95131b` |
-| Last merged PR | [#12 — actionable rendered SEO finding summary](https://github.com/tchouhanjsm/garh-jaisal-website/pull/12) |
+| Baseline commit | `5168bf7a5c3f4ad2d93fc9b38efd62ad92cbc379` (PR #13 merge) |
+| Last merged PR | [#13 — rendered performance and asset baseline](https://github.com/tchouhanjsm/garh-jaisal-website/pull/13) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-5-performance-baseline` — collect a repeatable rendered route/resource/image baseline in CI |
-| Next action | Review the Phase 5 baseline artifact and retries on the exact PR head; triage confirmed SEO findings separately before public metadata/content changes |
+| Active batch | `feature/phase-5-image-dimension-remediation` — reserve layout space for priority hero images and add regression coverage |
+| Next action | Verify the image-dimension remediation on the exact PR head; then plan optimized image variants from owner-approved assets and visual mapping |
 
 ## Phase roadmap
 
@@ -25,7 +25,7 @@
 | 2 | Booking conversion and mobile UX | ◐ responsive navigation and shared booking URL merged; conversion measurement remains open |
 | 3 | Technical SEO foundation | ✓ rendered metadata and JSON-LD regression checks merged in PR #6 |
 | 4 | Local SEO and content depth | ◐ inventory and candidate finding reports exist; candidate findings still require review and verified remediation |
-| 5 | Performance and Core Web Vitals | ◐ baseline instrumentation in this batch; optimisation and controlled Lighthouse/field measurement remain |
+| 5 | Performance and Core Web Vitals | ◐ baseline captured; priority hero dimensions in remediation; image payload optimisation and controlled Lighthouse/field measurement remain |
 | 6 | Accessibility | ☐ |
 | 7 | Form, email and security hardening | ☐ |
 | 8 | Analytics measurement | ☐ |
