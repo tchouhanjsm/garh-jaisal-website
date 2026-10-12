@@ -217,7 +217,7 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) (target stru
 
 | Batch | Branch | Contents | Status |
 |---|---|---|---|
-| Docs | `docs/site-architecture-blueprint` | Blueprint and layout review documents, this log section | PR open |
+| Docs | `feature/site-architecture-docs` | Blueprint and layout review documents, this log section | PR open |
 | A | `feature/nav-data-and-menu` | `include/nav-data.php`; dropdown and mobile accordion menu; footer links; `activePage` | ☐ |
 | B | `feature/design-tokens-components` | Tokens and shared components | ☐ |
 | C | `feature/experience-data-v2` | New data fields; hubs render from data | ☐ |
