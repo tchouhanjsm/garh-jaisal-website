@@ -120,14 +120,31 @@ foreach ($rooms as $room) {
   <section class="page-hero">
     <div class="site-shell page-hero-inner">
 
-      <p class="eyebrow">Rooms</p>
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="index.php">Home</a></li>
+          <li aria-current="page">Rooms</li>
+        </ol>
+      </nav>
+
+      <p class="eyebrow">Your stay</p>
 
       <h1>Rooms at Garh Jaisal Haveli.</h1>
 
-      <p>
+      <p class="room-hero-description">
         Heritage rooms inside Jaisalmer Fort, each with its own colours,
         details and character.
       </p>
+
+      <div class="actions page-hero-actions">
+        <a
+          class="button button-primary"
+          href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
+          target="_blank"
+          rel="noopener"
+        >Check availability</a>
+        <a class="button button-light" href="direction.php">Plan your arrival</a>
+      </div>
 
     </div>
   </section>
@@ -160,6 +177,21 @@ foreach ($rooms as $room) {
 
       </div>
 
+    </div>
+
+    <div class="site-shell at-a-glance rooms-at-a-glance" aria-label="Room selection facts">
+      <div class="at-a-glance__item">
+        <span class="at-a-glance__label">Location</span>
+        <span class="at-a-glance__value">Inside Jaisalmer Fort</span>
+      </div>
+      <div class="at-a-glance__item">
+        <span class="at-a-glance__label">Room floors</span>
+        <span class="at-a-glance__value">Ground and first floors</span>
+      </div>
+      <div class="at-a-glance__item">
+        <span class="at-a-glance__label">Room details</span>
+        <span class="at-a-glance__value">Facilities vary by room</span>
+      </div>
     </div>
   </section>
 
@@ -205,10 +237,20 @@ foreach ($rooms as $room) {
             </p>
 
             <ul class="room-features">
-              <?php foreach ($room['features'] as $feature): ?>
+              <?php foreach (array_slice($room['features'], 0, 3) as $feature): ?>
               <li><?= htmlspecialchars($feature, ENT_QUOTES, 'UTF-8') ?></li>
               <?php endforeach; ?>
             </ul>
+            <?php if (count($room['features']) > 3): ?>
+            <details class="room-feature-details">
+              <summary>More room features</summary>
+              <ul class="room-features room-features-extra">
+                <?php foreach (array_slice($room['features'], 3) as $feature): ?>
+                <li><?= htmlspecialchars($feature, ENT_QUOTES, 'UTF-8') ?></li>
+                <?php endforeach; ?>
+              </ul>
+            </details>
+            <?php endif; ?>
 
             <a
               class="button button-primary room-book"
@@ -265,6 +307,36 @@ foreach ($rooms as $room) {
 
       </div>
 
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       ROOM FAQ
+       ===================================================== -->
+  <section class="section rooms-faq" aria-labelledby="rooms-faq-heading">
+    <div class="site-shell rooms-faq-inner">
+      <p class="eyebrow">Good to know</p>
+      <h2 id="rooms-faq-heading">Questions before you book.</h2>
+
+      <div class="rooms-faq-list">
+        <details>
+          <summary>Are all rooms the same?</summary>
+          <p>No. The rooms have individual styles and facilities vary by room. Review the features listed on each room card before booking.</p>
+        </details>
+        <details>
+          <summary>Is Garh Jaisal Haveli inside Jaisalmer Fort?</summary>
+          <p>Yes. The haveli is inside Jaisalmer Fort, among its sandstone architecture and everyday fort life.</p>
+        </details>
+        <details>
+          <summary>Can a vehicle reach the haveli entrance?</summary>
+          <p>Vehicles cannot enter the fort lanes, so guests should expect a short walk from Fort Parking. Read the arrival guide to plan the final stretch.</p>
+        </details>
+        <details>
+          <summary>How do I check current availability and rates?</summary>
+          <p>Use the Check availability or Book your stay link to see current availability and rates in the booking system.</p>
+        </details>
+      </div>
     </div>
   </section>
 
