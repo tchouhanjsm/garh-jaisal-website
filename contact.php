@@ -94,6 +94,11 @@ $canonical = 'https://www.hotelgarhjaisal.com/contact.php';
       <h1>Contact Garh Jaisal Haveli in Jaisalmer Fort.</h1>
       <p class="contact-lead">Write or call Hotel Garh Jaisal Haveli. Ask about rooms, arrival, or your stay inside the fort.</p>
 
+      <div class="actions contact-booking-actions">
+        <a class="button button-primary contact-booking-button" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check room availability</a>
+        <a class="button button-secondary contact-arrival-link" href="direction.php">Plan your arrival</a>
+      </div>
+
       <div class="contact-layout">
         <div class="contact-facts">
           <h2>Phone</h2>

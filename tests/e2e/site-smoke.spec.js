@@ -224,3 +224,25 @@ test('homepage room previews use registered room content and stable detail ancho
     await expect(page.locator('#' + anchor)).toHaveCount(1);
   }
 });
+
+
+test('contact page presents direct booking and arrival paths beside the enquiry form', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Contact conversion path is checked once');
+  await page.goto('/contact.php');
+  const booking = page.locator('.contact-booking-button');
+  await expect(booking).toHaveAttribute('href', await page.locator('.nav-book').getAttribute('href'));
+  await expect(booking).toHaveAttribute('target', '_blank');
+  await expect(booking).toHaveAttribute('rel', /noopener/);
+  await expect(page.locator('.contact-arrival-link')).toHaveAttribute('href', 'direction.php');
+  await expect(page.getByRole('heading', { name: 'Send an enquiry' })).toBeVisible();
+});
+
+test('rooftop menu CTA opens the restaurant menu section directly', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Rooftop-to-menu journey is checked once');
+  await page.goto('/roof.php');
+  const menuLink = page.getByRole('link', { name: 'View the menu' });
+  await expect(menuLink).toHaveAttribute('href', 'restaurant.php#menu');
+  await page.goto('restaurant.php#menu');
+  await expect(page.locator('#menu')).toBeVisible();
+  await expect(page.locator('#menu').getByRole('heading', { name: 'What is on the menu.' })).toBeVisible();
+});

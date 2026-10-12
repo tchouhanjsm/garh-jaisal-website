@@ -121,7 +121,7 @@ $bookingUrl = $siteConfig['booking_url'];
         the royal palace, the lake, and the sunrise and sunset.
       </p>
       <div class="actions">
-        <a class="button button-primary" href="restaurant.php">View the menu</a>
+        <a class="button button-primary" href="restaurant.php#menu">View the menu</a>
         <a class="button button-light" href="contact.php">Contact the hotel</a>
         <a
           class="button button-light"
