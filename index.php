@@ -119,6 +119,26 @@ $bookingUrl = $siteConfig['booking_url'];
   </div>
 </section>
 
+<section class="home-discovery" aria-label="Explore Garh Jaisal Haveli">
+  <div class="site-shell home-discovery-grid">
+    <a class="home-discovery-link" href="room.php">
+      <span class="home-discovery-number" aria-hidden="true">01</span>
+      <span><strong>Stay inside the Fort</strong><small>Explore heritage rooms</small></span>
+      <span class="home-discovery-arrow" aria-hidden="true">↗</span>
+    </a>
+    <a class="home-discovery-link" href="pack.php">
+      <span class="home-discovery-number" aria-hidden="true">02</span>
+      <span><strong>Plan an experience</strong><small>Desert and city tours</small></span>
+      <span class="home-discovery-arrow" aria-hidden="true">↗</span>
+    </a>
+    <a class="home-discovery-link" href="roof.php">
+      <span class="home-discovery-number" aria-hidden="true">03</span>
+      <span><strong>Dine on the rooftop</strong><small>Explore rooftop dining</small></span>
+      <span class="home-discovery-arrow" aria-hidden="true">↗</span>
+    </a>
+  </div>
+</section>
+
 <section class="section intro">
   <div class="site-shell intro-grid">
 
