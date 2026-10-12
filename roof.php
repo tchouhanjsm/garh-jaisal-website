@@ -109,7 +109,10 @@ $bookingUrl = $siteConfig['booking_url'];
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
 <main class="roof-page">
-  <section class="page-hero">
+  <section class="page-hero page-hero--photo">
+    <div class="page-hero-media" aria-hidden="true">
+      <img src="img/v2/hero-dining.webp" alt="" width="1600" height="1066" fetchpriority="high" decoding="async">
+    </div>
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Rooftop dining</p>
       <h1>Rooftop dining at Garh Jaisal's Kitchen.</h1>
