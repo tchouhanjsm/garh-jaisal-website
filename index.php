@@ -139,6 +139,17 @@ $bookingUrl = $siteConfig['booking_url'];
   </div>
 </section>
 
+<section class="home-arrival-note" aria-labelledby="home-arrival-title">
+  <div class="site-shell home-arrival-note-inner">
+    <div class="home-arrival-note-copy">
+      <p class="eyebrow">Before you arrive</p>
+      <h2 id="home-arrival-title">Arriving inside the fort</h2>
+      <p><strong>Vehicles cannot enter Jaisalmer Fort.</strong> The final stretch to Garh Jaisal Haveli is on foot through the fort lanes. Reception is open 7:00 AM–10:30 PM; please contact us in advance for late arrivals.</p>
+    </div>
+    <a class="button button-primary" href="direction.php">Read the arrival guide</a>
+  </div>
+</section>
+
 <section class="section intro">
   <div class="site-shell intro-grid">
 
@@ -201,7 +212,7 @@ $bookingUrl = $siteConfig['booking_url'];
   </div>
 </section>
 
-  <section class="section">
+  <section class="section home-rooms" id="rooms-preview" aria-labelledby="rooms-preview-title">
     <?php
     $rooms = require __DIR__ . '/include/rooms-data.php';
     $roomLabels = [];
@@ -217,7 +228,7 @@ $bookingUrl = $siteConfig['booking_url'];
     ?>
     <div class="site-shell">
       <div class="section-head">
-        <div><p class="eyebrow">Stay</p><h2>Rooms shaped by Jaisalmer.</h2></div>
+        <div><p class="eyebrow">Stay</p><h2 id="rooms-preview-title">Rooms shaped by Jaisalmer.</h2></div>
         <p>From colourful rooms to carved interiors, each room has its own character. Explore the current room collection and choose the space that suits your stay.</p>
       </div>
       <div class="cards">
@@ -237,13 +248,13 @@ $bookingUrl = $siteConfig['booking_url'];
     </div>
   </section>
 
-<section class="section section-feature">
+<section class="section section-feature home-rooftop" id="rooftop-dining" aria-labelledby="rooftop-dining-title">
   <div class="site-shell wide-feature">
 
     <div class="copy">
       <p class="eyebrow eyebrow-light">Rooftop dining</p>
 
-      <h2>Meals with the fort around you.</h2>
+      <h2 id="rooftop-dining-title">Meals with the fort around you.</h2>
 
       <p>
         Come up to the rooftop for breakfast, dinner or a quiet drink while
@@ -273,13 +284,13 @@ $bookingUrl = $siteConfig['booking_url'];
   </div>
 </section>
 
-<section class="section">
+<section class="section home-experiences" id="desert-experiences" aria-labelledby="desert-experiences-title">
   <div class="site-shell">
 
     <div class="section-head">
       <div>
         <p class="eyebrow">Desert experiences</p>
-        <h2>From the fort to the Thar.</h2>
+        <h2 id="desert-experiences-title">From the fort to the Thar.</h2>
       </div>
 
       <p>
@@ -368,13 +379,13 @@ $bookingUrl = $siteConfig['booking_url'];
   </div>
 </section>
 
-<section class="section arrival">
+<section class="section arrival" id="arrival-guide" aria-labelledby="arrival-guide-title">
   <div class="site-shell">
 
     <div class="section-head">
       <div>
         <p class="eyebrow">Getting here</p>
-        <h2>Arriving at the fort is part of the experience.</h2>
+        <h2 id="arrival-guide-title">Arriving at the fort is part of the experience.</h2>
       </div>
 
       <p>
@@ -424,13 +435,13 @@ $bookingUrl = $siteConfig['booking_url'];
 
   </div>
 </section>
-<section class="section">
+<section class="section home-gallery" id="property-gallery" aria-labelledby="property-gallery-title">
   <div class="site-shell">
 
     <div class="section-head">
       <div>
         <p class="eyebrow">The place</p>
-        <h2>A glimpse of Garh Jaisal and its surroundings.</h2>
+        <h2 id="property-gallery-title">A glimpse of Garh Jaisal and its surroundings.</h2>
       </div>
 
       <a class="text-link" href="gallery.php">

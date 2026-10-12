@@ -136,6 +136,38 @@ test('home page exposes clear primary discovery paths', async ({ page }, testInf
   await expect(discovery.locator('a[href="roof.php"]')).toContainText('Dine on the rooftop');
 });
 
+test('home page surfaces fort arrival constraints and keeps key discovery sections addressable', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Homepage content architecture checks run once');
+  const response = await page.goto('/', { waitUntil: 'domcontentloaded' });
+  expect(response).not.toBeNull();
+  expect(response.status()).toBeLessThan(400);
+
+  const arrivalNote = page.locator('.home-arrival-note');
+  await expect(arrivalNote).toBeVisible();
+  await expect(arrivalNote.getByRole('heading', { name: 'Arriving inside the fort' })).toBeVisible();
+  await expect(arrivalNote).toContainText('Vehicles cannot enter Jaisalmer Fort');
+  await expect(arrivalNote).toContainText('7:00 AM–10:30 PM');
+  await expect(arrivalNote.getByRole('link', { name: 'Read the arrival guide' })).toHaveAttribute('href', 'direction.php');
+
+  for (const [id, heading] of [
+    ['rooms-preview', 'Rooms shaped by Jaisalmer.'],
+    ['rooftop-dining', 'Meals with the fort around you.'],
+    ['desert-experiences', 'From the fort to the Thar.'],
+    ['arrival-guide', 'Arriving at the fort is part of the experience.'],
+    ['property-gallery', 'A glimpse of Garh Jaisal and its surroundings.'],
+  ]) {
+    const section = page.locator(`#${id}`);
+    await expect(section, `Expected homepage section #${id}`).toHaveCount(1);
+    await expect(section.getByRole('heading', { name: heading })).toBeVisible();
+  }
+
+  const bookingLink = page.locator('.hero-content a.button-primary');
+  await expect(bookingLink).toBeVisible();
+  await expect(bookingLink).toHaveAttribute('href', /\S/);
+  await expect(bookingLink).toHaveAttribute('target', '_blank');
+  await expect(bookingLink).toHaveAttribute('rel', /noopener/);
+});
+
 test('rooms page floor navigation targets each rendered room section', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Room floor navigation checks run once');
   const response = await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
