@@ -89,6 +89,7 @@ $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] 
   </section>
   <section class="section">
     <div class="site-shell">
+      <nav class="breadcrumb-nav" aria-label="Tour categories"><ol><li><a href="pack.php">All packages</a></li><li aria-current="page">Car &amp; City Tours</li></ol></nav>
       <div class="section-head">
         <div><p class="eyebrow">Guided tours</p><h2>Explore the city with a guide.</h2></div>
         <p>Choose a half-day or full-day guided tour, or ask about a walk through the lanes of Jaisalmer Fort.</p>
