@@ -85,6 +85,7 @@ $bookingUrl = $siteConfig['booking_url'];
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
 <main>
+  <nav class="section" aria-label="Breadcrumb"><div class="site-shell"><a href="car-tours.php">← Car &amp; City Tours</a></div></nav>
   <section class="page-hero">
     <div class="site-shell page-hero-inner">
       <h1>A walk inside Jaisalmer Fort</h1>
