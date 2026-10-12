@@ -163,7 +163,7 @@ test('home page surfaces fort arrival constraints and keeps key discovery sectio
 
   const bookingLink = page.locator('.hero-content a.button-primary');
   await expect(bookingLink).toBeVisible();
-  await expect(bookingLink).toHaveAttribute('href', /\\S/);
+  await expect(bookingLink).toHaveAttribute('href', /\S/);
   await expect(bookingLink).toHaveAttribute('target', '_blank');
   await expect(bookingLink).toHaveAttribute('rel', /noopener/);
 });
