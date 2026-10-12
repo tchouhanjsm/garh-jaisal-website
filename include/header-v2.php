@@ -13,6 +13,8 @@ $e = static function ($value) {
 };
 ?>
 
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
 <header class="site-header">
   <div class="nav-wrap">
     <div class="site-shell nav-inner">

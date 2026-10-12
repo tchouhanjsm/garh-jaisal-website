@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-12 |
-| Current phase | Phase F5 — Homepage conversion and arrival UX |
+| Current phase | Phase F8 — Accessibility hardening |
 | Base branch | `main` |
-| Baseline commit | `1cf8b884ffed8dcdbd9a9e9f3734a7b8b7db4494` (main after PR #26) |
-| Last merged PR | [#26 — streamline Packages hub discovery](https://github.com/tchouhanjsm/garh-jaisal-website/pull/26) |
-| CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
+| Baseline commit | `f108a407fa2097bcb1fe31dd95012bf2661e33ff` (main after PR #31) |
+| Last merged PR | [#31 — photo heroes and dark-surface action visibility](https://github.com/tchouhanjsm/garh-jaisal-website/pull/31) |
+| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38237225307) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38237225308) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-f5-homepage-conversion-ux` — make arrival constraints and primary homepage destinations clearer |
-| Next action | Verify homepage arrival guidance, stable discovery anchors, PHP/site checks and responsive/browser evidence on the exact PR head; owner retains merge authority |
+| Active batch | `feature/phase-f8-accessibility-hardening` — keyboard navigation, skip link, focus recovery, and rendered accessibility regression checks |
+| Next action | Validate Phase F8 on the exact PR head; inspect browser evidence and fix any confirmed accessibility regression before owner review |
 
 ## Phase roadmap
 
@@ -387,3 +387,13 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Browser E2E initially found the Directions hero declared as 1600×1066 while its checked-in courtyard image is 1333×2000. Corrected the HTML width/height attributes to the image's intrinsic dimensions so the browser reserves the right aspect ratio; the hero's CSS still uses `object-fit: cover`. Re-run the full browser suite on the exact final PR head.
 - Validation gate: PHP 7.4/8.2 lint, strict site checks, sitemap/publication rules, Browser E2E at 320/390/1280/1440, and screenshot evidence against the exact final PR head. Connector cannot run local PHP/Chromium; local runs are not claimed.
 - Next milestone: Phase F8 — accessibility hardening from rendered browser evidence: audit focus order, visible focus, keyboard access, heading/landmark structure, and accessible names at mobile and desktop widths; fix only confirmed issues and preserve operational content.
+
+
+## Phase F8 — accessibility hardening (PR in progress)
+
+- Add a visible-on-focus “Skip to main content” link in the shared header and give the rendered main landmark a stable, focusable destination. This is wired in the shared navigation script because the header include is emitted before page-specific main markup.
+- Correct Escape behavior: closing the mobile navigation returns keyboard focus to its trigger; closing a desktop submenu returns focus to that submenu's toggle instead of leaving focus in a hidden panel.
+- Add responsive browser regression assertions across sitemap routes for the skip-link target and single main landmark, plus keyboard tests for skip-link activation and Escape focus recovery on mobile and desktop.
+- Preserve page copy, public routes, canonical/SEO metadata, booking destinations, analytics IDs, room/experience data and image mappings.
+- Validation gate: PHP 7.4/8.2 Site Checks and full Browser E2E/screenshots at 320/390/1280/1440 on the exact final PR head. The connector cannot run local PHP/Chromium; local execution is not claimed.
+- Follow-up within Phase F8: review the CI screenshot/artifact evidence and expand checks only where rendered evidence confirms an accessibility issue; do not infer visual contrast compliance from CSS token values alone.

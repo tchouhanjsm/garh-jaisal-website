@@ -31,6 +31,12 @@ for (const route of routes) {
     await expect(page.locator('html')).toHaveAttribute('lang', /.+/);
     await expect(page).toHaveTitle(/\S/);
 
+    // Every public route shares a keyboard skip link and one focusable main landmark.
+    await expect(page.locator('.skip-link')).toHaveCount(1);
+    await expect(page.locator('.skip-link')).toHaveAttribute('href', '#main-content');
+    await expect(page.locator('main#main-content[tabindex="-1"]')).toHaveCount(1);
+    await expect(page.getByRole('main')).toHaveCount(1);
+
     const dimensions = await page.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       document: document.documentElement.scrollWidth,
@@ -78,6 +84,29 @@ test('mobile navigation opens and closes with Escape', async ({ page }, testInfo
   await page.keyboard.press('Escape');
   await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
   await expect(navigation).toBeHidden();
+  await expect(menuButton).toBeFocused();
+});
+
+test('skip link is the first tab stop and transfers focus to main content', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Skip-link keyboard behavior is checked once');
+  await page.goto('/');
+  await page.keyboard.press('Tab');
+  await expect(page.locator('.skip-link')).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('main#main-content')).toBeFocused();
+});
+
+test('desktop submenu Escape closes the panel and restores focus to its toggle', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Desktop submenu keyboard behavior is checked once');
+  await page.goto('/');
+  const item = page.locator('[data-nav-item]').first();
+  const toggle = item.locator('.nav-sub-toggle');
+  await toggle.focus();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  await page.keyboard.press('Escape');
+  await expect(toggle).toBeFocused();
+  await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(item.locator('.nav-sub')).toBeHidden();
 });
 
 test('shared design tokens and primitives are defined with responsive and reduced-motion guards', async ({ page }, testInfo) => {
