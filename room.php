@@ -243,6 +243,7 @@ $floorCount = count($roomsByFloor);
           <div class="room-card-media">
             <img
               src="<?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>"
+              <?= gj_image_dimension_attributes($room['image']) ?>
               alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>"
               loading="lazy"
             >

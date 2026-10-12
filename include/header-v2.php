@@ -1,4 +1,40 @@
 <?php
+if (!function_exists('gj_image_dimension_attributes')) {
+    /**
+     * Return intrinsic dimensions for a trusted local image under img/.
+     * Reading the actual file header avoids guessing ratios or changing photo mappings.
+     */
+    function gj_image_dimension_attributes($source)
+    {
+        static $dimensionCache = [];
+
+        if (
+            !is_string($source)
+            || !preg_match('~^img/[A-Za-z0-9._/-]+$~D', $source)
+            || strpos($source, '..') !== false
+        ) {
+            return '';
+        }
+
+        if (!array_key_exists($source, $dimensionCache)) {
+            $imagePath = __DIR__ . '/../' . $source;
+            $size = is_file($imagePath) ? @getimagesize($imagePath) : false;
+            $dimensionCache[$source] = (
+                is_array($size)
+                && isset($size[0], $size[1])
+                && $size[0] > 0
+                && $size[1] > 0
+            ) ? [(int) $size[0], (int) $size[1]] : null;
+        }
+
+        if ($dimensionCache[$source] === null) {
+            return '';
+        }
+
+        return 'width="' . $dimensionCache[$source][0] . '" height="' . $dimensionCache[$source][1] . '"';
+    }
+}
+
 $siteConfig = require __DIR__ . '/site-config.php';
 $bookingUrl = $bookingUrl ?? $siteConfig['booking_url'];
 $hotelPhone = $hotelPhone ?? $siteConfig['hotel_phone'];

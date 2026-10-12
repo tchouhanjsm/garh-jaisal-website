@@ -141,6 +141,7 @@ foreach ($breadcrumbs as $index => $crumb) {
     <div class="experience-hero-media">
       <img
         src="<?= htmlspecialchars($experience['hero_image'], ENT_QUOTES, 'UTF-8') ?>"
+        <?= gj_image_dimension_attributes($experience['hero_image']) ?>
         alt="<?= htmlspecialchars($experience['hero_alt'], ENT_QUOTES, 'UTF-8') ?>"
         width="<?= (int) ($experience['hero_width'] ?? 0) ?>"
         height="<?= (int) ($experience['hero_height'] ?? 0) ?>"
@@ -289,7 +290,7 @@ foreach ($breadcrumbs as $index => $crumb) {
             <article class="related-card">
               <a href="<?= htmlspecialchars($related['slug'], ENT_QUOTES, 'UTF-8') ?>.php">
                 <span class="related-card-image">
-                  <img src="<?= htmlspecialchars($related['hero_image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($related['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy">
+                  <img src="<?= htmlspecialchars($related['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($related['hero_image']) ?> alt="<?= htmlspecialchars($related['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy">
                 </span>
                 <span class="related-card-body">
                   <span class="related-card-kicker"><?= htmlspecialchars($related['eyebrow'], ENT_QUOTES, 'UTF-8') ?></span>

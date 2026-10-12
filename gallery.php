@@ -227,6 +227,7 @@ $bookingUrl = $siteConfig['booking_url'];
               <a href="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" aria-label="Open full-size image: <?= htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') ?>">
                 <img
                   src="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>"
+                  <?= gj_image_dimension_attributes($src) ?>
                   alt="<?= htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') ?>"
                   loading="lazy"
                   decoding="async"

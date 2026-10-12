@@ -204,7 +204,7 @@ $bookingUrl = $siteConfig['booking_url'];
 
     <div class="image-panel">
       <img
-        src="img/5.webp"
+        src="img/5.webp" <?= gj_image_dimension_attributes('img/5.webp') ?>
         alt="Carved sandstone architecture inside Garh Jaisal Haveli"
         loading="lazy">
     </div>
@@ -229,7 +229,7 @@ $bookingUrl = $siteConfig['booking_url'];
           <article class="card home-room-card">
             <div class="card-image">
               <a class="home-room-card-image-link" href="<?= htmlspecialchars($roomDetailsUrl, ENT_QUOTES, 'UTF-8') ?>">
-                <img src="<?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>" alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
+                <img src="<?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($room['image']) ?> alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
               </a>
             </div>
             <div class="card-body">
@@ -300,7 +300,7 @@ $bookingUrl = $siteConfig['booking_url'];
       <article class="card">
         <div class="card-image">
           <img
-            src="img/desert7.jpg"
+            src="img/desert7.jpg" <?= gj_image_dimension_attributes('img/desert7.jpg') ?>
             alt="Camel safari at sunset in the Thar Desert near Jaisalmer"
             loading="lazy">
         </div>
@@ -325,7 +325,7 @@ $bookingUrl = $siteConfig['booking_url'];
       <article class="card">
         <div class="card-image">
           <img
-            src="img/v2/swiss-tent.webp"
+            src="img/v2/swiss-tent.webp" <?= gj_image_dimension_attributes('img/v2/swiss-tent.webp') ?>
             alt="Swiss tent accommodation in the Jaisalmer desert"
             loading="lazy">
         </div>
@@ -350,7 +350,7 @@ $bookingUrl = $siteConfig['booking_url'];
       <article class="card">
         <div class="card-image">
           <img
-            src="img/tent.jpg"
+            src="img/tent.jpg" <?= gj_image_dimension_attributes('img/tent.jpg') ?>
             alt="People sleeping under a starry desert sky in the Jaisalmer desert"
             loading="lazy">
         </div>
@@ -449,35 +449,35 @@ $bookingUrl = $siteConfig['booking_url'];
 
       <figure>
         <img
-          src="img/jcity.jpg"
+          src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg') ?>
           alt="Jaisalmer city seen from the fort"
           loading="lazy">
       </figure>
 
       <figure>
         <img
-          src="img/3.webp"
+          src="img/3.webp" <?= gj_image_dimension_attributes('img/3.webp') ?>
           alt="Sandstone architecture at Garh Jaisal Haveli"
           loading="lazy">
       </figure>
 
       <figure>
         <img
-          src="img/big2.jpg"
+          src="img/big2.jpg" <?= gj_image_dimension_attributes('img/big2.jpg') ?>
           alt="Rooftop view at Garh Jaisal Haveli"
           loading="lazy">
       </figure>
 
       <figure>
         <img
-          src="img/s4.jpg"
+          src="img/s4.jpg" <?= gj_image_dimension_attributes('img/s4.jpg') ?>
           alt="View across Jaisalmer from the rooftop"
           loading="lazy">
       </figure>
 
       <figure>
         <img
-          src="img/j10.jpg"
+          src="img/j10.jpg" <?= gj_image_dimension_attributes('img/j10.jpg') ?>
           alt="Jaisalmer sandstone architecture"
           loading="lazy">
       </figure>
