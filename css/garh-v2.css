@@ -185,7 +185,7 @@ p{
 .nav-toggle:focus-visible,
 .contact-dock a:focus-visible,
 .mobile-cta a:focus-visible{
-  outline:2px solid var(--brown);
+  outline:3px solid var(--focus);
   outline-offset:3px;
 }
 
