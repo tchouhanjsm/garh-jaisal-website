@@ -79,3 +79,64 @@ test('mobile navigation opens and closes with Escape', async ({ page }, testInfo
   await expect(menuButton).toHaveAttribute('aria-expanded', 'false');
   await expect(navigation).toBeHidden();
 });
+
+test('shared design tokens and primitives are defined with responsive and reduced-motion guards', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Design-system invariants are checked once');
+  await page.goto('/');
+  const tokens = await page.evaluate(() => {
+    const root = getComputedStyle(document.documentElement);
+    const names = [
+      '--fs-hero', '--fs-h2', '--fs-h3', '--fs-body', '--fs-small',
+      '--sp-1', '--sp-2', '--sp-3', '--sp-4', '--sp-5', '--sp-6',
+      '--radius', '--radius-sm', '--shadow-sm', '--accent', '--accent-hover', '--focus'
+    ];
+    return Object.fromEntries(names.map(name => [name, root.getPropertyValue(name).trim()]));
+  });
+  for (const [name, value] of Object.entries(tokens)) {
+    expect(value, `Missing design token ${name}`).not.toBe('');
+  }
+
+  const primitives = await page.evaluate(() => {
+    const sheetText = [...document.styleSheets].map(sheet => {
+      try { return [...sheet.cssRules].map(rule => rule.cssText).join('\n'); }
+      catch { return ''; }
+    }).join('\n');
+    return {
+      designCard: sheetText.includes('.design-card'),
+      atAGlance: sheetText.includes('.at-a-glance'),
+      ctaBand: sheetText.includes('.cta-band'),
+      reducedMotion: sheetText.includes('prefers-reduced-motion: reduce') || sheetText.includes('prefers-reduced-motion:reduce'),
+      focusVisible: sheetText.includes(':focus-visible'),
+      smallScreenRules: sheetText.includes('max-width: 600px') || sheetText.includes('max-width:600px'),
+    };
+  });
+  expect(primitives).toEqual({
+    designCard: true, atAGlance: true, ctaBand: true,
+    reducedMotion: true, focusVisible: true, smallScreenRules: true
+  });
+});
+
+test('primary booking button contrast meets WCAG AA for normal text', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Contrast token check runs once');
+  await page.goto('/');
+  const colors = await page.locator('.nav-book').evaluate(element => {
+    const style = getComputedStyle(element);
+    return { foreground: style.color, background: style.backgroundColor };
+  });
+  const rgb = value => {
+    const match = value.match(/^rgba?\(([^)]+)\)$/);
+    if (!match) throw new Error(`Unsupported computed color: ${value}`);
+    return match[1].split(',').slice(0, 3).map(part => Number(part.trim()) / 255);
+  };
+  const luminance = value => {
+    const channels = rgb(value).map(channel => {
+      const linear = channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+      return linear;
+    });
+    return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+  };
+  const [foreground, background] = [luminance(colors.foreground), luminance(colors.background)];
+  const ratio = (Math.max(foreground, background) + 0.05) / (Math.min(foreground, background) + 0.05);
+  expect(ratio, `Book Now foreground/background contrast is ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
+});
+
