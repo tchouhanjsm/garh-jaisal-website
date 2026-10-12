@@ -48,11 +48,24 @@ foreach ($staticPages as $page) {
 }
 
 foreach ($experiences as $slug => $experience) {
-    if (($experience['status'] ?? 'live') !== 'live') {
-        continue;
+    $status = $experience['status'] ?? 'live';
+    if (!in_array($status, ['live', 'draft', 'hidden'], true)) {
+        fwrite(STDERR, 'ERROR invalid publication status for experience: ' . (string) $slug . "\\n");
+        exit(1);
     }
     if (!is_string($slug) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $slug)) {
         fwrite(STDERR, "ERROR invalid experience slug in experience-data.php\n");
+        exit(1);
+    }
+    if (($experience['slug'] ?? null) !== $slug) {
+        fwrite(STDERR, 'ERROR experience key/slug mismatch: ' . $slug . "\\n");
+        exit(1);
+    }
+    if ($status !== 'live') {
+        continue;
+    }
+    if (!is_file($root . '/' . $slug . '.php')) {
+        fwrite(STDERR, 'ERROR live experience has no page file: ' . $slug . '.php' . "\\n");
         exit(1);
     }
     $existingPriorities = [
