@@ -19,6 +19,8 @@ if (!$experience) {
         'h1' => 'Experience not found',
         'eyebrow' => 'Garh Jaisal Haveli',
         'hero_image' => 'img/v2/facade.jpg',
+        'hero_width' => 1333,
+        'hero_height' => 2000,
         'hero_alt' => 'Garh Jaisal Haveli inside Jaisalmer Fort',
         'summary' => 'The experience you requested is not available.',
         'at_a_glance' => [],
@@ -128,6 +130,8 @@ foreach ($breadcrumbs as $index => $crumb) {
       <img
         src="<?= htmlspecialchars($experience['hero_image'], ENT_QUOTES, 'UTF-8') ?>"
         alt="<?= htmlspecialchars($experience['hero_alt'], ENT_QUOTES, 'UTF-8') ?>"
+        width="<?= (int) ($experience['hero_width'] ?? 0) ?>"
+        height="<?= (int) ($experience['hero_height'] ?? 0) ?>"
         fetchpriority="high"
       >
       <div class="experience-hero-overlay"></div>

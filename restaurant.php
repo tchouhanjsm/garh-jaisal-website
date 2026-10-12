@@ -282,8 +282,8 @@ $schema = [
       <div class="restaurant-hero-media">
         <img
           src="img/rest2.jpg"
-          width="1200"
-          height="800"
+          width="900"
+          height="600"
           alt="Rooftop dining area at Garh Jaisal's Kitchen in Jaisalmer"
           fetchpriority="high"
         >

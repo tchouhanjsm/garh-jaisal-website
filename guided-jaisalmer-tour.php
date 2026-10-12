@@ -78,7 +78,7 @@ $items = ['half-day-jaisalmer-tour', 'full-day-jaisalmer-tour'];
 <main>
   <section class="experience-hero">
     <div class="experience-hero-media">
-      <img src="img/v2/facade.jpg" alt="Historic architecture inside Jaisalmer Fort" fetchpriority="high">
+      <img src="img/v2/facade.jpg" width="1333" height="2000" alt="Historic architecture inside Jaisalmer Fort" fetchpriority="high">
       <div class="experience-hero-overlay"></div>
     </div>
     <div class="site-shell experience-hero-content">

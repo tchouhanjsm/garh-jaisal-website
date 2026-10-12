@@ -86,8 +86,8 @@ $bookingUrl = $siteConfig['booking_url'];
   <div class="hero-media">
     <img
       src="img/v2/facade.jpg"
-      width="2000"
-      height="1333"
+      width="1333"
+      height="2000"
       alt="Carved sandstone facade of Garh Jaisal Haveli inside Jaisalmer Fort"
       fetchpriority="high">
     <div class="hero-overlay"></div>

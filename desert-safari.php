@@ -78,7 +78,7 @@ $items = ['sunset-camel-safari', 'sleep-under-the-stars', 'cultural-safari', 'sw
 <main>
   <section class="experience-hero">
     <div class="experience-hero-media">
-      <img src="img/desert3.jpg" alt="Sand dunes in the Thar Desert near Jaisalmer" fetchpriority="high">
+      <img src="img/desert3.jpg" width="1366" height="768" alt="Sand dunes in the Thar Desert near Jaisalmer" fetchpriority="high">
       <div class="experience-hero-overlay"></div>
     </div>
     <div class="site-shell experience-hero-content">

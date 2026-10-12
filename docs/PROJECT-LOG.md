@@ -6,15 +6,15 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-11 |
-| Current phase | Phase 5 — performance and Core Web Vitals baseline instrumentation |
+| Last updated | 2026-10-12 |
+| Current phase | Phase 5 — evidence-led image performance remediation |
 | Base branch | `main` |
-| Baseline commit | `9ea206ab697ba3095421947ab2447126fb95131b` |
-| Last merged PR | [#12 — actionable rendered SEO finding summary](https://github.com/tchouhanjsm/garh-jaisal-website/pull/12) |
+| Baseline commit | `5168bf7a5c3f4ad2d93fc9b38efd62ad92cbc379` (PR #13 merge) |
+| Last merged PR | [#13 — rendered performance and asset baseline](https://github.com/tchouhanjsm/garh-jaisal-website/pull/13) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-5-performance-baseline` — collect a repeatable rendered route/resource/image baseline in CI |
-| Next action | Review the Phase 5 baseline artifact and retries on the exact PR head; triage confirmed SEO findings separately before public metadata/content changes |
+| Active batch | `feature/phase-5-image-dimension-remediation` — reserve layout space for priority hero images and add regression coverage |
+| Next action | Verify the image-dimension remediation on the exact PR head; then plan optimized image variants from owner-approved assets and visual mapping |
 
 ## Phase roadmap
 
@@ -25,7 +25,7 @@
 | 2 | Booking conversion and mobile UX | ◐ responsive navigation and shared booking URL merged; conversion measurement remains open |
 | 3 | Technical SEO foundation | ✓ rendered metadata and JSON-LD regression checks merged in PR #6 |
 | 4 | Local SEO and content depth | ◐ inventory and candidate finding reports exist; candidate findings still require review and verified remediation |
-| 5 | Performance and Core Web Vitals | ◐ baseline instrumentation in this batch; optimisation and controlled Lighthouse/field measurement remain |
+| 5 | Performance and Core Web Vitals | ◐ baseline captured; priority hero dimensions in remediation; image payload optimisation and controlled Lighthouse/field measurement remain |
 | 6 | Accessibility | ☐ |
 | 7 | Form, email and security hardening | ☐ |
 | 8 | Analytics measurement | ☐ |
@@ -175,3 +175,19 @@
 - The 250 KiB resource and 500 KiB document thresholds are triage thresholds only, not quality budgets or build failures. No thresholds are enforced as release gates before a baseline is reviewed.
 - This is a local PHP + Chromium lab inventory, not a production crawl, Lighthouse score, or field Core Web Vitals measurement. Do not report the browser navigation values as production user experience.
 - No public templates, content, URLs, hotel facts, prices, room-image mappings, analytics IDs, secrets or cPanel settings are changed.
+
+
+## Phase 5 follow-up — reserve image geometry for priority hero assets
+
+- The PR #13 rendered baseline artifact (run [38194646100](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38194646100), artifact ID 11722384880) checked 26 sitemap routes. It recorded 117 missing-explicit-dimension candidates and 48 large-resource route occurrences; these are local Chromium observations, not production performance metrics.
+- Review of the route inventory showed the highest-priority shared experience hero images lacked width/height attributes, while the homepage facade attributes described the opposite aspect ratio from the observed intrinsic image (1333×2000).
+- Add observed intrinsic dimensions to the shared experience hero data and correct the homepage facade dimensions. This reserves the correct geometry before image load and reduces layout-shift risk without changing the selected images, public content, URLs or room mappings.
+- Add a browser regression check for high-priority images on sitemap routes. Do not treat this as image compression: the large image payloads remain a separate task requiring an approved/visually verified optimized asset set.
+- Baseline run artifact is CI evidence and stays out of cPanel. Production field Core Web Vitals and Lighthouse remain unmeasured.
+
+
+### CI follow-up — priority-image coverage gap
+
+- Browser E2E on PR #14 initially failed because the new regression test found three remaining high-priority images without explicit dimensions: the desert-safari hub hero, guided-Jaisalmer-tour hub hero, and two-day-itinerary hero (the facade asset appears on two routes). This is a real coverage gap in the implementation, not a reason to weaken the assertion.
+- Added the intrinsic 1366×768 dimensions to the desert image and 1333×2000 dimensions to facade images on those routes. Re-run PHP 7.4/8.2 and full Browser E2E on the updated exact head.
+- The run reviewed so far reports the image-dimension assertion failure; it does not expose a row-selector cleanup failure or a formatter check. If those are present in a newer run, inspect that run's job logs before declaring readiness.
