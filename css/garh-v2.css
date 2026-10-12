@@ -2165,7 +2165,7 @@ p{
   margin-top:26px;
 }
 .rooms-hero-actions .button{min-height:48px}
-.rooms-hero .rooms-hero-note{
+.rooms-hero p.rooms-hero-note{
   margin:18px 0 0;
   color:#cfc0af;
   font-size:.82rem;
