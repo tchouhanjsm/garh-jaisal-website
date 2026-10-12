@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-12 |
-| Current phase | Phase F12 — Guest-journey, visual and content QA |
+| Current phase | Phase F12 — Image delivery and layout-stability QA |
 | Base branch | `main` |
-| Baseline commit | `d230799171f1ada34584fd4c736367ac71967bcd` (main after PR #36) |
-| Last merged PR | [#36 — preserve guest intent across room, arrival and dining journeys](https://github.com/tchouhanjsm/garh-jaisal-website/pull/36) |
-| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38249682416) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38249682423) passed on `d230799171f1ada34584fd4c736367ac71967bcd` |
+| Baseline commit | `624ad37f9e4d7f45677c030115cad5024a2f8ffe` (main after PR #37) |
+| Last merged PR | [#37 — avoid exposing disabled restaurant reservation form](https://github.com/tchouhanjsm/garh-jaisal-website/pull/37) |
+| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38288314518) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38288314696) passed on `624ad37f9e4d7f45677c030115cad5024a2f8ffe` |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-f12-reservation-readiness` — avoid exposing a non-submitting restaurant reservation form; verify call/WhatsApp fallback responsively |
-| Next action | Validate the restaurant reservation readiness change with PHP 7.4/8.2 Site Checks and Browser E2E on all configured viewports; retain menu/hour/transfer fact questions for owner confirmation |
+| Active batch | `feature/phase-f12-image-layout-stability` — reserve intrinsic dimensions across registry-backed images and verify every sitemap route |
+| Next action | Validate the image-dimension regression and performance inventory across 26 sitemap routes; then complete byte-level review of the 15 large-image candidates |
 
 ## Phase roadmap
 
@@ -25,7 +25,7 @@
 | 2 | Booking conversion and mobile UX | ◐ responsive navigation and shared booking URL merged; conversion measurement remains open |
 | 3 | Technical SEO foundation | ✓ rendered metadata and JSON-LD regression checks merged in PR #6 |
 | 4 | Local SEO and content depth | ◐ inventory and candidate finding reports exist; candidate findings still require review and verified remediation |
-| 5 | Performance and Core Web Vitals | ◐ baseline captured; priority hero dimensions in remediation; image payload optimisation and controlled Lighthouse/field measurement remain |
+| 5 | Performance and Core Web Vitals | ◐ baseline captured; intrinsic image geometry is being fixed in Phase F12; 15 payload candidates above 250 KiB still need byte-level optimisation and controlled Lighthouse/field measurement |
 | 6 | Accessibility | ☐ |
 | 7 | Form, email and security hardening | ☐ |
 | 8 | Analytics measurement | ☐ |
@@ -453,7 +453,7 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Next milestone: Phase F12 — continue page-by-page visual and content QA on the remaining high-intent routes, based on rendered screenshot evidence and owner-confirmed operational facts; then review menu/transfer rates and content currently displayed publicly before any factual revisions.
 
 
-## Phase F12 — restaurant reservation readiness (PR #37 in progress)
+## Phase F12 — restaurant reservation readiness (PR #37 merged)
 
 - **Confirmed defect:** `restaurant.php` renders the online table-request form even when `GJ_RESTAURANT_MAIL_ENABLED` is not set to `1`. The POST handler then rejects the request and tells the guest that online table requests are not enabled. This makes guests enter details before discovering the form cannot send.
 - **Implementation:** when the mail gate is disabled, replace the non-submitting form with a clear, visible message and direct Call / WhatsApp actions. Keep the server-side mail gate and validation intact; do not enable mail or change server configuration.
@@ -462,3 +462,19 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - **Owner confirmation still needed:** verify the publicly displayed menu/prices and breakfast/lunch/dinner hours against the current restaurant operation before making factual copy changes. Preserve these current public claims until confirmed.
 - **Validation gate:** PHP 7.4/8.2 Site Checks and full Browser E2E must pass on the exact final PR head. Inspect the reservation fallback screenshots and uploaded artifacts. Connector execution is remote CI; no local PHP/Chromium run is claimed.
 - **Next milestone:** continue Phase F12 against the remaining high-intent pages, using rendered evidence to select the next conversion/accessibility fix. Record unresolved operational facts as owner questions, not guessed updates.
+
+
+## Phase F12.2 — intrinsic image dimensions and layout stability (PR #38 in progress)
+
+- **Evidence baseline (PR #37 Browser E2E, run #98):** the local PHP-rendered test site checked 26 sitemap routes and discovered 68 unique image URLs. Resource timing measured 60 images; 15 exceeded the 250 KiB review threshold. The performance inventory reported 98 occurrences where rendered images lacked explicit `width`/`height` attributes. This is CI-local evidence, not a production or field measurement.
+- **Implementation:** add a shared cached helper in `include/header-v2.php` that reads intrinsic dimensions from trusted local files under `img/`. Use it for the shared experience detail/related cards, Packages grids, Desert Tours and Guided Jaisalmer Tours grids, homepage image cards, gallery images, room registry cards and Blog cards. Existing manually dimensioned priority heroes stay untouched.
+- **Rationale:** provide the browser with intrinsic image geometry during HTML parsing to reduce avoidable layout shifts, without guessing ratios, changing authentic photos, or swapping unverified WebP files.
+- **Regression:** add a Playwright check across every sitemap route that asserts every rendered image has positive explicit width and height attributes, with a declared-to-intrinsic aspect-ratio check for images the browser has loaded. Keep existing priority-image checks and image-payload audit; do not claim payload compression.
+- **Payload follow-up:** all 15 candidates above 250 KiB still require byte-level conversion/quality evaluation and visual equivalence checks. Their binaries have not been recompressed in this PR; preserve current public image mappings until matching derivatives are verified.
+- **Guardrails:** no filenames renamed or deleted; no WebP substitution based only on extension; no changes to public copy, canonical/metadata, structured data, booking configuration, operational facts or production hosting.
+- **Validation on PR head `09456e694643e8022bd6851164ad737891f62ea6`:** Site Checks passed on PHP 7.4 and 8.2 ([run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38290149988)); Browser E2E passed with 201 tests in 2.2 minutes ([run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38290150112)). The new image-layout inventory scanned all 26 sitemap routes and reported `imagesMissingPositiveDimensions: 0`. Evidence artifact: [browser-e2e-evidence-102](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38290150112/artifacts/11765451290). Remote CI only; no local PHP/Chromium execution claimed.
+- **Next milestones after this batch:**
+  1. **F12.3 — image payload reduction:** inspect source bytes and available derivatives; produce visually verified WebP/AVIF/resized assets with byte comparisons, preserve authentic appearance, and map only where meaningful savings are proved.
+  2. **F13 — operational content trust audit:** owner-confirm menu prices, dining hours, transfer costs, reception/arrival wording and experience inclusions; update only confirmed facts.
+  3. **F14 — conversion measurement:** establish one confirmed GA4 property and verify booking/enquiry measurement without triggering live enquiries or real reservations.
+  4. **F15 — policy and release readiness:** obtain owner-approved privacy/cancellation terms, privately review form/mail configuration on staging, confirm cPanel PHP version, and complete production-parity checks. No production deployment without owner permission.
