@@ -210,6 +210,10 @@ test('Car & City discovery paths remain connected without retiring legacy URLs',
       route: '/camping.php',
       links: [['Desert Tours', '/desert-safari.php']],
     },
+    {
+      route: '/desert-safari.php',
+      links: [['camping', '/camping.php']],
+    },
   ];
 
   for (const item of cases) {
@@ -255,4 +259,24 @@ test('draft tour pages are noindex and excluded from the sitemap', async ({ page
     await expect(page.locator('head meta[name="robots"]')).toHaveAttribute('content', /noindex\s*,\s*follow/i);
     await expect(page.locator('main h1')).toContainText(/draft|confirm/i);
   }
+});
+
+test('hidden overlap pages stay out of the sitemap and public discovery until the owner decides', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Publication status checks run once');
+  const hiddenRoute = '/explore-the-desert.php';
+  expect(getSitemapEntries(), `${hiddenRoute} must stay out of sitemap.xml while hidden`).not.toContain(hiddenRoute);
+
+  for (const route of ['/desert-safari.php', '/pack.php', '/sunset-camel-safari.php']) {
+    await page.goto(route, { waitUntil: 'domcontentloaded' });
+    const hiddenLinks = await page.locator('a[href]').evaluateAll((anchors, expected) =>
+      anchors.filter(anchor => new URL(anchor.getAttribute('href'), document.baseURI).pathname === expected).length,
+      hiddenRoute
+    );
+    expect(hiddenLinks, `${route} must not link to the hidden page ${hiddenRoute}`).toBe(0);
+  }
+
+  const response = await page.goto(hiddenRoute, { waitUntil: 'domcontentloaded' });
+  expect(response, `No HTTP response for hidden ${hiddenRoute}`).not.toBeNull();
+  expect(response.status(), 'Hidden page keeps its URL (no 404, no redirect) until reviewed').toBeLessThan(400);
+  await expect(page.locator('head meta[name="robots"]')).toHaveAttribute('content', /noindex\s*,\s*follow/i);
 });

@@ -105,7 +105,7 @@ usort($items, static function ($a, $b) use ($experiences) {
       <div class="section-head">
         <div>
           <p class="eyebrow">Choose by the kind of evening you want</p>
-          <h2>Five ways to experience the desert.</h2>
+          <h2>Choose how you want to experience the desert.</h2>
         </div>
         <p>The route and timing depend on the selected package and season. Confirm the current operating details with the hotel before booking.</p>
       </div>
@@ -125,6 +125,7 @@ usort($items, static function ($a, $b) use ($experiences) {
           </article>
         <?php endforeach; ?>
       </div>
+      <p class="experience-hub-note">Looking for camping? <a class="text-link" href="camping.php">See how camping works at Garh Jaisal Haveli →</a></p>
     </div>
   </section>
 
