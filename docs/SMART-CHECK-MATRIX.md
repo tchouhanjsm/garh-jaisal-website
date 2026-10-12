@@ -1,8 +1,8 @@
 # Smart Check Matrix
 
-This matrix tells the canonical Smart Check skill (`.agents/skills/smart-check/SKILL.md`) and its Claude Code entrypoint (`.claude/skills/smart-check/SKILL.md`) which role is **primary** for a change and which checks that role runs. It is a selection guide, not a claim that every check is currently implemented.
+This matrix tells the canonical Smart Check skill (`.agents/skills/smart-check/SKILL.md`) and its Claude Code entrypoint (`.claude/skills/smart-check/SKILL.md`) which role is **primary** for a change and which checks that role runs. It is a selection guide, not a claim that every matrix item is fully automated.
 
-All four roles (Full-Stack Developer, SEO Content Writer, Debugger, UI/UX Lead) review every change. A role that is not primary still reports **N/A-GREEN** and must name what it looked at. See the skill for the double-check rule.
+All four roles (Full-Stack Developer, SEO Content Writer, Debugger, UI/UX Lead) review every change. A role that is not primary still reports **N/A-GREEN** and names what it checked. See the skill for the double-check rule.
 
 ## Role ownership
 
@@ -16,7 +16,7 @@ All four roles (Full-Stack Developer, SEO Content Writer, Debugger, UI/UX Lead) 
 | Booking URLs, call/WhatsApp links, thank-you page, analytics | UI/UX Lead | Full-Stack Developer | Assert expected destination and event wiring without sending a live enquiry | Owner-confirmed GA4 property and event plan; consent and privacy behavior if applicable |
 | Titles, descriptions, canonicals, H1, sitemap, JSON-LD, redirects | SEO Content Writer | Debugger, Full-Stack Developer | Rendered SEO E2E checks over sitemap routes | Actual HTTP response and rendered HTML; do not rely on source heuristics alone |
 | Landing pages, area guides, headings, internal links, location intent | SEO Content Writer | UI/UX Lead | Fact-check against approved project content; heading, link and metadata checks | Existing URLs and canonical targets confirmed; never fabricate hotel facts or location claims |
-| CSS/JS/image payload, third-party scripts, font loading | UI/UX Lead | Full-Stack Developer | Static payload and image-size inventory where available | Lighthouse / Core Web Vitals in a controlled environment; separate lab estimates from field data |
+| CSS/JS/image payload, third-party scripts, font loading | UI/UX Lead | Full-Stack Developer | Rendered performance/resource inventory on sitemap routes | Review largest resources, document timings, image dimensions, alt attributes and lazy-loading candidates; controlled Lighthouse/Core Web Vitals measurement remains separate |
 | CI failures, flaky tests, console or runtime errors | Debugger | All roles | Read CI on the exact PR head SHA; classify each failure | Re-run the failed check and its regression group after the fix |
 | Deployment config, PHP compatibility, secrets, routing | Full-Stack Developer | Debugger | Full CI and full browser regression on exact PR head | Staging smoke, config checklist, owner-approved release; never deploy from this skill |
 
@@ -35,17 +35,18 @@ Check status, used for each command or CI run:
 
 - PHP syntax lint and strict image-reference checks run in CI on PHP 7.4 and 8.2. PHP 7.4 is a compatibility signal, not proof of the production host version.
 - Playwright route smoke, responsive overflow checks and the mobile navigation test run through the browser workflow on four viewport projects. Failures keep screenshots and traces as CI artifacts.
-- Rendered technical SEO regression checks cover sitemap routes in the desktop-1280 project. A separate rendered inventory records metadata, robots meta, internal/external link destinations and JSON-LD types. It reports candidate findings (including duplicate titles/descriptions and noindex) in both CI logs and the JSON artifact; these require human review, not blind auto-fixes.
+- Rendered technical SEO regression checks cover sitemap routes in the desktop-1280 project. The rendered SEO inventory records metadata, robots meta, internal/external link destinations and JSON-LD types and reports candidate findings in CI logs and JSON; candidates require human review.
+- The Phase 5 performance baseline records local-PHP/Chromium route timing estimates, document/resource transfer-size data when exposed by the browser, and rendered image attributes for sitemap routes. It emits review candidates and a JSON artifact; it is not a production crawl, field Core Web Vitals data, or a pass/fail budget.
 - Accessibility diagnostics are source-level warnings from `scripts/check-site.php`; confirm them against rendered output before changing templates.
 - CI retries failed Playwright tests once, so a retried pass can hide a flaky test. The Debugger checks for this.
 
 ## Not automated yet
 
-These rely on role judgment and manual review until tests exist:
+These rely on role judgment or separate controlled/manual checks:
 
 - SEO copy quality: uniqueness, intent and usefulness of titles and descriptions.
 - Form, mail and security behavior (no automated tests yet).
 - Booking and analytics event wiring.
-- Performance and Core Web Vitals.
+- Production performance, Lighthouse scoring and field Core Web Vitals (LCP, INP and CLS).
 - Visual correctness, physical-device coverage, contrast and screen-reader quality.
 - Current hotel facts, and cPanel-specific configuration and PHP version.

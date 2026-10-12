@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-11 |
-| Current phase | Phase 4 — local SEO content audit and page relevance |
+| Current phase | Phase 5 — performance and Core Web Vitals baseline instrumentation |
 | Base branch | `main` |
-| Baseline commit | `eadfb07ed6162f26461060b4c38c83adda302e04` |
-| Last merged PR | [#11 — rendered SEO inventory artifact](https://github.com/tchouhanjsm/garh-jaisal-website/pull/11) |
+| Baseline commit | `9ea206ab697ba3095421947ab2447126fb95131b` |
+| Last merged PR | [#12 — actionable rendered SEO finding summary](https://github.com/tchouhanjsm/garh-jaisal-website/pull/12) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-4-seo-inventory-findings` — summarize route-level SEO audit findings in the CI log and JSON artifact |
-| Next action | Review the machine-generated finding summary on the exact PR head, then remediate only verified defects with owner-approved facts |
+| Active batch | `feature/phase-5-performance-baseline` — collect a repeatable rendered route/resource/image baseline in CI |
+| Next action | Review the Phase 5 baseline artifact and retries on the exact PR head; triage confirmed SEO findings separately before public metadata/content changes |
 
 ## Phase roadmap
 
@@ -24,8 +24,8 @@
 | 1 | Site-wide audit with a prioritised backlog | ◐ in progress |
 | 2 | Booking conversion and mobile UX | ◐ responsive navigation and shared booking URL merged; conversion measurement remains open |
 | 3 | Technical SEO foundation | ✓ rendered metadata and JSON-LD regression checks merged in PR #6 |
-| 4 | Local SEO and content depth | ◐ content/relevance audit in progress; no public copy changed yet |
-| 5 | Performance and Core Web Vitals | ☐ |
+| 4 | Local SEO and content depth | ◐ inventory and candidate finding reports exist; candidate findings still require review and verified remediation |
+| 5 | Performance and Core Web Vitals | ◐ baseline instrumentation in this batch; optimisation and controlled Lighthouse/field measurement remain |
 | 6 | Accessibility | ☐ |
 | 7 | Form, email and security hardening | ☐ |
 | 8 | Analytics measurement | ☐ |
@@ -160,8 +160,18 @@
 - PR #11 was merged by the owner. Browser E2E passed on PR head `8957d4ce36778d9f3901e689a0afbb4db6012e58` with 163 passed and 161 skipped tests; the skipped cases are project/viewport-specific by design. The JSON inventory was included in the 14-day artifact. The log showed Node deprecation warnings from the runner/actions; they did not fail this run.
 
 
-## Phase 4 follow-up — actionable SEO finding summary (active PR batch)
+## Phase 4 follow-up — actionable SEO finding summary (PR #12 merged)
 
-- Extend the rendered inventory to emit candidate findings in both the JSON artifact and Playwright log: missing title, missing/multiple description tags, H1 count not equal to one, canonical mismatch, invalid JSON-LD, explicit noindex, duplicate titles and duplicate meta descriptions.
+- PR #12 extends the rendered inventory to emit candidate findings in both the JSON artifact and Playwright log: missing title, missing/multiple description tags, H1 count not equal to one, canonical mismatch, invalid JSON-LD, explicit noindex, duplicate titles and duplicate meta descriptions.
 - These are review candidates, not automatic SEO quality judgments. Duplicate metadata or noindex directives must be checked against page intent before changing content.
-- Existing strict SEO checks and route smoke tests remain unchanged. No public content or production files are changed.
+- Existing strict SEO checks and route smoke tests remain unchanged. No public content or production files were changed in this batch.
+
+## Phase 5 batch — rendered performance baseline (active)
+
+- Add `tests/e2e/performance-baseline.spec.js`, running once in the `desktop-1280` Playwright project across sitemap routes.
+- Record browser-exposed navigation timings, document/resource transfer and encoded/decoded sizes where Chromium provides them, same-origin resources, and rendered image attributes including dimensions, alt presence, loading mode and initial viewport visibility.
+- Emit review candidates for large document/resource transfers, images missing explicit dimensions or `alt`, and below-fold images not marked lazy. These are diagnostic leads, not automatic proof of a defect; image visibility, accessibility intent and browser cache effects need review.
+- Attach `artifacts/performance-baseline/rendered-performance-baseline.json` and include the directory in the existing 14-day GitHub Actions evidence artifact. No reports are written into the deployable website tree.
+- The 250 KiB resource and 500 KiB document thresholds are triage thresholds only, not quality budgets or build failures. No thresholds are enforced as release gates before a baseline is reviewed.
+- This is a local PHP + Chromium lab inventory, not a production crawl, Lighthouse score, or field Core Web Vitals measurement. Do not report the browser navigation values as production user experience.
+- No public templates, content, URLs, hotel facts, prices, room-image mappings, analytics IDs, secrets or cPanel settings are changed.
