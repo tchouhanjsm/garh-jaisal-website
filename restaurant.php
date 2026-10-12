@@ -266,7 +266,7 @@ $schema = [
 <body class="restaurant-page">
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main>
+<main id="main-content" tabindex="-1">
   <section class="restaurant-hero">
     <div class="site-shell restaurant-hero-grid">
       <div class="restaurant-hero-copy">
@@ -442,5 +442,6 @@ $schema = [
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
 <script src="js/restaurant.js" defer></script>
+<script src="js/garh-v2.js"></script>
 </body>
 </html>

@@ -81,7 +81,7 @@ $bookingUrl = $siteConfig['booking_url'];
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main>
+<main id="main-content" tabindex="-1">
 <section class="hero">
   <div class="hero-media">
     <img

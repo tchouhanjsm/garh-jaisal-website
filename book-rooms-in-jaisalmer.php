@@ -56,7 +56,7 @@ $headline = 'Staying inside Jaisalmer Fort';
 </head>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
-<main class="guide-page">
+<main class="guide-page" id="main-content" tabindex="-1">
   <section class="page-hero">
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Journal</p>

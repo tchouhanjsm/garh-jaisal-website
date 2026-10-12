@@ -93,7 +93,7 @@ $bookingUrl = $siteConfig['booking_url'];
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main class="about-page">
+<main class="about-page" id="main-content" tabindex="-1">
   <section class="page-hero about-hero">
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">About</p>

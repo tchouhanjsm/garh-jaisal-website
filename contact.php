@@ -87,7 +87,7 @@ $canonical = 'https://www.hotelgarhjaisal.com/contact.php';
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main class="contact-page">
+<main class="contact-page" id="main-content" tabindex="-1">
   <section class="section">
     <div class="site-shell">
       <p class="eyebrow">Jaisalmer Fort</p>

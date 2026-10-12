@@ -106,7 +106,7 @@ $sortExperienceSlugs($guideItems);
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main>
+<main id="main-content" tabindex="-1">
   <section class="package-hero">
     <div class="package-hero-media">
       <img

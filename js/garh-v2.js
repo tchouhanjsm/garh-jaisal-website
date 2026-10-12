@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // The shared header appears before each page's main landmark.
+  // Give the skip link a stable, focusable destination on every rendered route.
+  const main = document.querySelector('main');
+  if (main) {
+    if (!main.id) main.id = 'main-content';
+    if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
+  }
+
   const button = document.querySelector('.nav-toggle');
   const nav = document.querySelector('.main-nav');
   if (!button || !nav) return;
@@ -68,18 +76,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
-    const openItem = items.find((item) => item.classList.contains('is-open') || item.contains(document.activeElement));
-    if (openItem && openItem.querySelector('.nav-sub-toggle')) {
-      const focusInside = openItem.contains(document.activeElement);
+
+    const mobile = window.matchMedia('(max-width:1080px)').matches;
+    if (mobile && nav.classList.contains('is-open')) {
+      setMenu(false);
+      button.focus();
+      event.preventDefault();
+      return;
+    }
+
+    const openItem = items.find((item) =>
+      (item.classList.contains('is-open') || item.contains(document.activeElement)) &&
+      item.querySelector('.nav-sub-toggle')
+    );
+    if (openItem) {
       openItem.classList.remove('is-open');
       openItem.classList.add('is-dismissed');
-      if (focusInside && document.activeElement && document.activeElement.blur) {
-        const toggle = openItem.querySelector('.nav-sub-toggle');
-        if (toggle) toggle.focus();
-      }
+      const toggle = openItem.querySelector('.nav-sub-toggle');
       syncItem(openItem);
+      if (toggle) toggle.focus();
+      event.preventDefault();
+      return;
     }
-    setMenu(false);
+
+    if (nav.classList.contains('is-open')) {
+      setMenu(false);
+      button.focus();
+      event.preventDefault();
+    }
   });
 
   document.addEventListener('click', (event) => {

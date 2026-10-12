@@ -108,7 +108,7 @@ $bookingUrl = $siteConfig['booking_url'];
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main class="roof-page">
+<main class="roof-page" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo">
     <div class="page-hero-media" aria-hidden="true">
       <img src="img/v2/fort-from-roof.jpg" alt="" width="1600" height="1066" fetchpriority="high" decoding="async">

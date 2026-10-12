@@ -76,7 +76,7 @@ $whatsappUrl = $siteConfig['whatsapp_url'];
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main class="arrival-page">
+<main class="arrival-page" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo">
     <div class="page-hero-media" aria-hidden="true">
       <img src="img/v2/courtyard.jpg" alt="" width="1333" height="2000" fetchpriority="high" decoding="async">

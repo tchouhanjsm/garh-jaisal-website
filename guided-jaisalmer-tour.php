@@ -80,7 +80,7 @@ usort($items, static function ($a, $b) use ($experiences) {
 </head>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
-<main>
+<main id="main-content" tabindex="-1">
   <section class="experience-hero">
     <div class="experience-hero-media">
       <img src="img/v2/facade.jpg" width="1333" height="2000" alt="Historic architecture inside Jaisalmer Fort" fetchpriority="high">

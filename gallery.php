@@ -87,7 +87,7 @@ $bookingUrl = $siteConfig['booking_url'];
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main class="gallery-page">
+<main class="gallery-page" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo gallery-hero">
     <div class="page-hero-media" aria-hidden="true">
       <img src="img/v2/rooftop-dusk.jpg" alt="" width="1600" height="1067" fetchpriority="high" decoding="async">

@@ -80,7 +80,7 @@ usort($items, static function ($a, $b) use ($experiences) {
 </head>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
-<main>
+<main id="main-content" tabindex="-1">
   <section class="experience-hero">
     <div class="experience-hero-media">
       <img src="img/desert3.jpg" width="1366" height="768" alt="Sand dunes in the Thar Desert near Jaisalmer" fetchpriority="high">
