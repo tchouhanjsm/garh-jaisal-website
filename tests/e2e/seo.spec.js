@@ -93,6 +93,39 @@ test('Packages hub presents two clear, responsive experience categories', async 
   await expect(page.locator('#experience-categories')).toHaveCSS('scroll-margin-top', '96px');
 });
 
+
+test('home page exposes clear primary discovery paths', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Home discovery checks run once');
+  const response = await page.goto('/', { waitUntil: 'domcontentloaded' });
+  expect(response).not.toBeNull();
+  expect(response.status()).toBeLessThan(400);
+  const discovery = page.locator('.home-discovery');
+  await expect(discovery).toBeVisible();
+  await expect(discovery.locator('a')).toHaveCount(3);
+  await expect(discovery.locator('a[href="room.php"]')).toContainText('Stay inside the Fort');
+  await expect(discovery.locator('a[href="pack.php"]')).toContainText('Plan an experience');
+  await expect(discovery.locator('a[href="roof.php"]')).toContainText('Dine on the rooftop');
+});
+
+test('rooms page floor navigation targets each rendered room section', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Room floor navigation checks run once');
+  const response = await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
+  expect(response).not.toBeNull();
+  expect(response.status()).toBeLessThan(400);
+  const nav = page.locator('.rooms-floor-nav');
+  await expect(nav).toBeVisible();
+  const links = nav.locator('.rooms-floor-nav-links a');
+  const count = await links.count();
+  expect(count).toBeGreaterThan(0);
+  for (let i = 0; i < count; i += 1) {
+    const href = await links.nth(i).getAttribute('href');
+    expect(href).toMatch(/^#rooms-[a-z0-9-]+$/);
+    await expect(page.locator(href)).toHaveCount(1);
+  }
+  await expect(nav.locator('.rooms-floor-nav-book')).toHaveAttribute('target', '_blank');
+  await expect(nav.locator('.rooms-floor-nav-book')).toHaveAttribute('rel', /noopener/);
+});
+
 test('Car & City discovery paths remain connected without retiring legacy URLs', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Information architecture checks run once');
   const cases = [

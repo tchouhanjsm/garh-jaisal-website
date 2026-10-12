@@ -307,3 +307,13 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 - Fix the discovery regression assertion to compare normalized URL pathnames rather than requiring a leading slash in a relative HTML `href`. This keeps destination and visible-label assertions meaningful without coupling the test to relative-vs-absolute markup.
 - Preserve existing package content sections, public URLs, canonical metadata, JSON-LD, analytics, image mappings, contact/booking paths, and operating facts.
 - Validation gate: PHP 7.4/8.2 site checks and Browser E2E on the exact updated PR head; do not treat a successful PHP-only run as complete.
+
+
+## Batch F3 — Home and Rooms discovery redesign (PR in progress)
+
+- Add a compact, three-path discovery strip immediately below the home hero, linking to the existing Rooms, Packages and Rooftop pages. Preserve the current hero booking and arrival CTAs.
+- Add a generated floor-jump navigation on the Rooms page based on the existing room data registry. Each link targets a stable, sanitized ID generated from the floor label; room records, names, descriptions, images and booking destinations remain unchanged.
+- Keep a persistent check-availability action in the floor navigation and offset anchor scrolling for the shared header. Use responsive layouts for narrow screens, visible keyboard focus, and reduced-motion support.
+- Add rendered Browser E2E coverage for the three home discovery paths and room-floor anchor integrity/booking target attributes. Existing viewport projects continue to check 320, 390, 1280 and 1440 widths and horizontal overflow.
+- Do not invent room facts or change canonical URLs, metadata, JSON-LD, GA4 IDs, images, booking configuration or deployment settings.
+- Validation gate: both Site Checks (PHP 7.4/8.2, strict checks, sitemap and publication boundary) and Browser E2E must pass on the exact final PR head. CI screenshot artifacts are the visual review evidence; no local execution is claimed by this connector.
