@@ -422,6 +422,26 @@
 
 .restaurant-notice p{ margin:0; color:var(--muted); }
 
+.restaurant-reservation-unavailable{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:14px;
+}
+
+.restaurant-reservation-unavailable p{
+  margin:0;
+  color:var(--muted);
+}
+
+.restaurant-reservation-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:8px;
+}
+
+
 .restaurant-page .button:focus-visible,
 .restaurant-vegtoggle:focus-visible,
 .restaurant-tabs a:focus-visible,
@@ -479,6 +499,16 @@
 }
 
 @media (max-width:560px){
+  .restaurant-reservation-actions{
+    width:100%;
+    flex-direction:column;
+  }
+
+  .restaurant-reservation-actions .button{
+    width:100%;
+    justify-content:center;
+  }
+
   .restaurant-hero-grid{
     padding-top:34px;
   }

@@ -28,16 +28,16 @@ Landing page: book-rooms-in-jaisalmer.php (not in header or footer)
 
 | # | Priority | Finding | Evidence | Fix |
 |---|---|---|---|---|
-| L1 | P0 | **Dining is missing from the header menu.** It is a core guest draw but is reachable only from the footer, the home page and the about page. | `header-v2.php` has no link to `roof.php` or `restaurant.php`. | Add a "Dining" item. |
-| L2 | P0 | **3 pages are orphans.** `camping.php`, `car-rental.php`, `city-tour.php` are in the sitemap but no page links to them. | Zero inbound links in all PHP files and includes. | Link each from the right hub, or merge or remove it (Phase 1 decision). |
+| L1 | P0 | ~~Dining is missing from the header menu.~~ **Resolved before Phase F12.** | `include/nav-data.php` defines the top-level Dining link to `roof.php`; `roof.php` and `restaurant.php` both set `$activePage = 'dining'`. The Rooftop page links to `restaurant.php#menu`. | No additional navigation change; validate the rendered layout in Browser E2E screenshots. |
+| L2 | P0 | ~~3 pages are orphans.~~ **Resolved in current source; recheck whenever hubs change.** | `camping.php` is linked from `desert-safari.php`; `car-rental.php` and `city-tour.php` are linked from the Car & City Tours group in `include/nav-data.php`. | Keep inbound-link regression checks; no URL deletion or redirects. |
 | L3 | P0 | **No policy pages.** There is no privacy policy and no cancellation or booking-terms page, yet the site has a contact form, GA4 tracking and a third-party booking engine. | No `privacy`, `terms` or `policy` file; no matching text in any page. | Add privacy and booking/cancellation pages, linked in the footer. Needs your real policies. |
-| L4 | P1 | **Menu is flat and crowded:** 8 links plus Book Now, and the desert tours sit two clicks deep behind "Packages". | `header-v2.php` | Group into 6–7 items with an Experiences dropdown (section 3). |
+| L4 | P1 | ~~Menu is flat and crowded.~~ **Navigation is now grouped in the shared data registry.** | `include/nav-data.php` defines About and Stay submenus, Dining, and a Packages mega-menu with Desert Tours and Car & City Tours groups; the shared header renders the registry. | Reassess fit, tap targets and dropdown visibility using current four-viewport screenshots rather than source-only claims. |
 | L5 | P1 | **Overlapping dining pages.** `roof.php` (rooftop) and `restaurant.php` (menu) have near-identical purposes, and `roof.php` has only one H2. | Section outlines. | One clear role each, or merge; cross-link both ways. |
 | L6 | P1 | **Overlapping experience pages:** `pack.php`, `desert-safari.php`, `explore-the-desert.php` and `cultural-safari.php` all introduce desert options. Several have only one inbound link. | Inbound-link count: explore-the-desert 1, half-day 1, full-day 1. | Define one hub per topic; make the others clearly distinct detail pages. |
 | L7 | P1 | **7 different hero patterns:** `page-hero`, `package-hero`, `experience-hero`, `restaurant-hero`, `article-hero`, `about-hero`, `gallery-hero`. | Section class names. | One hero component with variants. |
 | L8 | P1 | **Contact page breaks the pattern:** no hero, H1 sits inside a plain section. | `contact.php` outline. | Use the standard hero. |
 | L9 | P2 | **Label mismatch:** menu says "Blog", footer says "Jaisalmer travel guides", the page H1 says "Practical Jaisalmer travel guides". | Header, footer, `blog.php` | Pick one name ("Journal" or "Guides") and use it everywhere. |
-| L10 | P2 | **Active menu state is inconsistent:** `restaurant.php` sets no `activePage`, and `roof.php` uses its own value. | `$activePage` lines | Set a value on every page. |
+| L10 | P2 | ~~Dining active state is inconsistent.~~ **Resolved.** | Both `restaurant.php` and `roof.php` set `$activePage = 'dining'`, matching `include/nav-data.php`. | No change required unless rendered-browser evidence finds a regression. |
 | L11 | P2 | **`book-rooms-in-jaisalmer.php` is a landing page with no navigation entry**, and its H1 is dynamic or empty in source. | Outline | Decide: keep as a campaign page (linked from home and rooms) or fold it into rooms. Check the H1 renders. |
 | L12 | P2 | **Responsive CSS is thin:** `garh-v2.css` is 1,562 lines with only 4 `@media` rules, and many legacy CSS files remain. | `grep @media` | Audit at 390, 768 and 1280px in Phase 2 and Phase 5. |
 | L13 | P2 | **No visible rates or "from" price** anywhere in the structure; `tariff.php` is blocked in robots. | `robots.txt`, outlines | Owner decision: show "from ₹X" on room cards? |
@@ -131,3 +131,8 @@ the file changes, the sitemap changes and the redirects needed.
 ```
 
 **Batch 3: hero and page templates (blueprint Batches F and G, one page group per PR):** use the visual brief in `docs/SETUP-GUIDE.md`, adding: "Follow the section order for this page type in LAYOUT-REVIEW.md section 3."
+
+
+## Revalidation after PR #36 — 2026-10-12
+
+The original findings above were written before the recent navigation and conversion work. L1, L2, L4 and L10 have been reconciled against current `main` source as marked in the table. They should not be reopened without new rendered/browser evidence. Remaining content/policy questions—especially live menu items, prices and dining hours—are not authorization to publish guesses; verify with the owner before changing public facts.

@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-12 |
-| Current phase | Phase F11 — Page-by-page guest-journey QA |
+| Current phase | Phase F12 — Guest-journey, visual and content QA |
 | Base branch | `main` |
-| Baseline commit | `bdd4f34520939fb499ff6835bda3b5ee978fa307` (main after PR #35) |
-| Last merged PR | [#35 — contextual experience enquiries and booking paths](https://github.com/tchouhanjsm/garh-jaisal-website/pull/35) |
-| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38245719070) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38245719462) passed on current main |
+| Baseline commit | `d230799171f1ada34584fd4c736367ac71967bcd` (main after PR #36) |
+| Last merged PR | [#36 — preserve guest intent across room, arrival and dining journeys](https://github.com/tchouhanjsm/garh-jaisal-website/pull/36) |
+| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38249682416) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38249682423) passed on `d230799171f1ada34584fd4c736367ac71967bcd` |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-f11-guest-journey-qa` — room-specific enquiry fallback, arrival/dining intent preservation, and full journey regression coverage |
-| Next action | Validate the Phase F11 guest-journey changes with PHP 7.4/8.2 Site Checks and full responsive Browser E2E on the exact PR head; owner retains merge and deployment authority |
+| Active batch | `feature/phase-f12-reservation-readiness` — avoid exposing a non-submitting restaurant reservation form; verify call/WhatsApp fallback responsively |
+| Next action | Validate the restaurant reservation readiness change with PHP 7.4/8.2 Site Checks and Browser E2E on all configured viewports; retain menu/hour/transfer fact questions for owner confirmation |
 
 ## Phase roadmap
 
@@ -441,7 +441,7 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Next milestone: Phase F11 — page-by-page guest-journey QA across Room → booking, Packages → experience → contextual enquiry, Rooftop → menu, and Directions → arrival/contact, followed by owner review of any operational facts or public pricing needing confirmation.
 
 
-## Phase F11 — page-by-page guest-journey QA (PR in progress)
+## Phase F11 — page-by-page guest-journey QA (PR #36 merged)
 
 - Room detail: preserve the existing external booking action and configured booking URL, while adding a secondary “Ask about this room” path to the contact form. The room slug and name derive from the existing room registry and stable detail-card IDs; no rate, occupancy or availability is invented.
 - Contact: accept room context only when the slug resolves against `include/rooms-data.php`; prefill an editable request for current availability, rate and room features. Existing live-experience context remains higher priority, then room context, then the finite `arrival`/`dining` topic allowlist. Unknown room/topic values are ignored.
@@ -451,3 +451,14 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Preserve public page URLs, canonical/social metadata, JSON-LD, analytics IDs, the configured booking destination, current room/experience records and image mappings. No live form submission, production deployment or merge.
 - Validation gate: Site Checks on PHP 7.4 and 8.2; strict image/reference and sitemap/publication checks; full Browser E2E at 320/390/1280/1440; review exact-head CI evidence and screenshot artifacts. The connector cannot execute local PHP/Chromium, so local test runs are not claimed.
 - Next milestone: Phase F12 — continue page-by-page visual and content QA on the remaining high-intent routes, based on rendered screenshot evidence and owner-confirmed operational facts; then review menu/transfer rates and content currently displayed publicly before any factual revisions.
+
+
+## Phase F12 — restaurant reservation readiness (PR #37 in progress)
+
+- **Confirmed defect:** `restaurant.php` renders the online table-request form even when `GJ_RESTAURANT_MAIL_ENABLED` is not set to `1`. The POST handler then rejects the request and tells the guest that online table requests are not enabled. This makes guests enter details before discovering the form cannot send.
+- **Implementation:** when the mail gate is disabled, replace the non-submitting form with a clear, visible message and direct Call / WhatsApp actions. Keep the server-side mail gate and validation intact; do not enable mail or change server configuration.
+- **Regression coverage:** exercise the disabled/default route at 320, 390, 1280 and 1440 viewports; prove the unavailable form is absent, the reason is visible, and both contact alternatives have safe destinations/attributes. Attach rendered reservation-section screenshots to the Browser E2E evidence.
+- **Guardrails:** do not send real form submissions, change configured recipients, expose secrets, or change menu items, menu prices, dining hours, room rates, or transfer facts.
+- **Owner confirmation still needed:** verify the publicly displayed menu/prices and breakfast/lunch/dinner hours against the current restaurant operation before making factual copy changes. Preserve these current public claims until confirmed.
+- **Validation gate:** PHP 7.4/8.2 Site Checks and full Browser E2E must pass on the exact final PR head. Inspect the reservation fallback screenshots and uploaded artifacts. Connector execution is remote CI; no local PHP/Chromium run is claimed.
+- **Next milestone:** continue Phase F12 against the remaining high-intent pages, using rendered evidence to select the next conversion/accessibility fix. Record unresolved operational facts as owner questions, not guessed updates.
