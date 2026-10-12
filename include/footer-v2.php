@@ -18,7 +18,7 @@ $footerNav = $footerNavData['footer'];
       <p class="footer-copy">A heritage haveli inside Jaisalmer Fort, with intimate rooms, rooftop views and desert experiences arranged from the hotel.</p>
 <?php if ($footerBookingUrl !== ''): ?>
       <div class="footer-booking-cta">
-        <a class="button button-primary footer-booking-button" href="<?= htmlspecialchars($footerBookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check availability</a>
+        <a class="button button-primary footer-booking-button" href="<?= htmlspecialchars($footerBookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check room availability</a>
         <p>See availability and current rates for your dates.</p>
       </div>
 <?php endif; ?>

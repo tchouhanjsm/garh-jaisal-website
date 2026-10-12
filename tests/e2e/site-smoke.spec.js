@@ -40,6 +40,7 @@ for (const route of routes) {
     const footerBooking = page.locator('.footer-booking-button');
     await expect(footerBooking).toHaveCount(1);
     await expect(footerBooking).toHaveAttribute('href', await page.locator('.nav-book').getAttribute('href'));
+    await expect(footerBooking).toHaveText('Check room availability');
     await expect(footerBooking).toHaveAttribute('target', '_blank');
     await expect(footerBooking).toHaveAttribute('rel', /noopener/);
 
@@ -245,4 +246,50 @@ test('rooftop menu CTA opens the restaurant menu section directly', async ({ pag
   await page.goto('restaurant.php#menu');
   await expect(page.locator('#menu')).toBeVisible();
   await expect(page.locator('#menu').getByRole('heading', { name: 'What is on the menu.' })).toBeVisible();
+});
+
+
+test('experience availability CTAs carry live tour context into the enquiry form', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Contextual enquiry journey is checked once');
+  const scenarios = [
+    {
+      route: '/sunset-camel-safari.php',
+      slug: 'sunset-camel-safari',
+      title: 'Sunset Camel Safari in Jaisalmer',
+    },
+    {
+      route: '/half-day-jaisalmer-tour.php',
+      slug: 'half-day-jaisalmer-tour',
+      title: 'Half-Day Guided Jaisalmer Tour',
+    },
+  ];
+
+  for (const scenario of scenarios) {
+    await page.goto(scenario.route, { waitUntil: 'domcontentloaded' });
+    await expect(page.getByRole('link', { name: 'Ask about availability' }))
+      .toHaveAttribute('href', 'contact.php?experience=' + scenario.slug);
+    await expect(page.getByRole('link', { name: 'Contact us' }))
+      .toHaveAttribute('href', 'contact.php?experience=' + scenario.slug);
+
+    await page.goto('/contact.php?experience=' + scenario.slug, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('.contact-experience-context')).toContainText(scenario.title);
+    await expect(page.locator('#message')).toHaveValue(new RegExp('about ' + scenario.title));
+  }
+});
+
+test('hidden, draft and unknown experiences cannot prefill a public enquiry', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Experience publication boundary is checked once');
+  for (const slug of ['explore-the-desert', 'longewala-tour', 'rajasthan-tours', 'not-a-real-experience']) {
+    await page.goto('/contact.php?experience=' + slug, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('.contact-experience-context')).toHaveCount(0);
+    await expect(page.locator('#message')).toHaveValue('');
+  }
+});
+
+test('Packages tour cards use nested section headings', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Packages heading hierarchy is checked once');
+  await page.goto('/pack.php', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('main h1')).toHaveCount(1);
+  await expect(page.locator('.experience-card h2')).toHaveCount(0);
+  expect(await page.locator('.experience-card h3').count()).toBeGreaterThan(0);
 });

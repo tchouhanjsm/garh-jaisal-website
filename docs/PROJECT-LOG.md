@@ -426,3 +426,16 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - This is a CI reliability fix grounded in rendered evidence. It separates local page readiness and image geometry from external third-party embed/script availability, while keeping the full sitemap route coverage.
 
 - Follow-up flake review: the added Contact conversion E2E used Playwright's default full-load wait and timed out on its first attempt before passing on retry. It now uses `domcontentloaded`, matching the other route smoke assertions, because form destination assertions need the rendered document rather than third-party reCAPTCHA/map completion.
+
+
+## Phase F10 — contextual experience enquiries and page semantics (PR in progress)
+
+- Carry the selected live, individual experience slug from the shared experience-page “Ask about availability” and lower “Contact us” CTAs into `contact.php?experience=<slug>`. Experience hubs continue to use a general enquiry link.
+- In Contact, validate the query against `include/experience-data.php` and accept only records explicitly marked `live` that are not category hubs. Prefill the editable message with a request to confirm current price, availability, timings, arrangements and inclusions. Escape all rendered registry values; hidden, draft and unknown slugs do not reveal their titles or prefill a public enquiry.
+- Clarify the global footer booking action as “Check room availability” so tour guests can distinguish room reservation from experience enquiries.
+- Correct the Packages hub's experience-card headings from peer-level H2s to nested H3s under each section H2; carry the existing visual style over to H3 without rewriting experience copy or facts.
+- Add Playwright checks for both contextual enquiry paths, rejection of hidden/draft/unknown experience slugs, footer booking-action clarity and Packages heading hierarchy.
+- Business rationale: keep guest intent intact between the chosen tour and the enquiry, reduce typing and misrouted messages, help staff receive the experience name and the guest's request for current details, and avoid implying that the global room-booking action confirms tour availability. No prices are published or inferred.
+- Preserve public URLs, canonicals, schema, analytics IDs, booking configuration, experience status boundaries, existing room and experience content, and production settings.
+- Validation gate: PHP 7.4/8.2 Site Checks, sitemap/publication boundaries, Browser E2E at 320/390/1280/1440 and artifact review on the exact final PR head. PR is stacked on the Browser E2E reliability change in PR #34; merge #34 before treating this feature branch's final diff as standalone.
+- Next milestone: Phase F11 — page-by-page guest-journey QA across Room → booking, Packages → experience → contextual enquiry, Rooftop → menu, and Directions → arrival/contact, followed by owner review of any operational facts or public pricing needing confirmation.
