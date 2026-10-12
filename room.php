@@ -8,6 +8,8 @@ $roomsByFloor = [];
 foreach ($rooms as $room) {
   $roomsByFloor[$room['kicker']][] = $room;
 }
+$roomCount = count($rooms);
+$floorCount = count($roomsByFloor);
 ?>
 <!doctype html>
 <html lang="en">
@@ -117,18 +119,37 @@ foreach ($rooms as $room) {
        PAGE HERO
        ===================================================== -->
 
-  <section class="page-hero">
-    <div class="site-shell page-hero-inner">
+  <section class="page-hero rooms-hero" aria-labelledby="rooms-page-title">
+    <div class="site-shell rooms-hero-grid">
+      <div class="rooms-hero-copy">
+        <p class="eyebrow">Stay inside Jaisalmer Fort</p>
+        <h1 id="rooms-page-title">Rooms at Garh Jaisal Haveli.</h1>
+        <p class="rooms-hero-lede">
+          Find an individually styled heritage room, then check current rates
+          and availability through our booking system.
+        </p>
+        <div class="rooms-hero-actions">
+          <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check availability</a>
+          <a class="button button-light" href="#room-directory">Explore the rooms</a>
+        </div>
+        <p class="rooms-hero-note">Inside Jaisalmer Fort · Ground and first-floor rooms</p>
+      </div>
 
-      <p class="eyebrow">Rooms</p>
-
-      <h1>Rooms at Garh Jaisal Haveli.</h1>
-
-      <p>
-        Heritage rooms inside Jaisalmer Fort, each with its own colours,
-        details and character.
-      </p>
-
+      <aside class="rooms-hero-summary" aria-label="Stay at a glance">
+        <p class="eyebrow">Stay at a glance</p>
+        <div class="rooms-summary-stat">
+          <strong><?= (int) $roomCount ?></strong>
+          <span>Individually styled rooms</span>
+        </div>
+        <div class="rooms-summary-stat">
+          <strong><?= (int) $floorCount ?></strong>
+          <span>Floors to explore</span>
+        </div>
+        <div class="rooms-summary-stat">
+          <strong>Online</strong>
+          <span>Check current rates and availability</span>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -163,13 +184,25 @@ foreach ($rooms as $room) {
     </div>
   </section>
 
-  <nav class="rooms-floor-nav" aria-label="Jump to room floor">
+  <section id="room-directory" class="rooms-directory" aria-labelledby="room-directory-title">
+    <div class="site-shell rooms-directory-head">
+      <div>
+        <p class="eyebrow">Explore the rooms</p>
+        <h2 id="room-directory-title">Choose the room that feels right.</h2>
+      </div>
+      <p>Compare the room descriptions and listed features below. Room facilities vary; use the availability link to check the current rate for your stay.</p>
+    </div>
+
+  <nav class="rooms-floor-nav" aria-label="Browse rooms by floor">
     <div class="site-shell rooms-floor-nav-inner">
       <span class="rooms-floor-nav-label">Browse by floor</span>
       <div class="rooms-floor-nav-links">
         <?php foreach ($roomsByFloor as $floorKicker => $floorRooms): ?>
           <?php $floorId = 'rooms-' . trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($floorKicker)), '-'); ?>
-          <a href="#<?= htmlspecialchars($floorId, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars(ucwords($floorKicker), ENT_QUOTES, 'UTF-8') ?></a>
+          <a href="#<?= htmlspecialchars($floorId, ENT_QUOTES, 'UTF-8') ?>" aria-label="Browse <?= htmlspecialchars($floorKicker, ENT_QUOTES, 'UTF-8') ?>, <?= count($floorRooms) ?> rooms">
+            <span><?= htmlspecialchars(ucwords($floorKicker), ENT_QUOTES, 'UTF-8') ?></span>
+            <small><?= count($floorRooms) ?> rooms</small>
+          </a>
         <?php endforeach; ?>
       </div>
       <a class="rooms-floor-nav-book" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check availability</a>
@@ -198,7 +231,8 @@ foreach ($rooms as $room) {
       <div class="room-grid">
 
         <?php foreach ($floorRooms as $room): ?>
-        <article class="room-card">
+        <?php $roomId = 'room-' . trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($room['name'])), '-'); ?>
+        <article class="room-card" id="<?= htmlspecialchars($roomId, ENT_QUOTES, 'UTF-8') ?>" data-room-floor="<?= htmlspecialchars(strtolower(str_replace(' ', '-', $floorKicker)), ENT_QUOTES, 'UTF-8') ?>">
 
           <div class="room-card-media">
             <img
@@ -226,6 +260,7 @@ foreach ($rooms as $room) {
 
             <a
               class="button button-primary room-book"
+              aria-label="Check availability for <?= htmlspecialchars($room['name'], ENT_QUOTES, 'UTF-8') ?>"
               href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
               target="_blank"
               rel="noopener"
@@ -241,6 +276,7 @@ foreach ($rooms as $room) {
     </div>
   </section>
   <?php endforeach; ?>
+  </section><!-- /.rooms-directory -->
 
 
   <!-- =====================================================

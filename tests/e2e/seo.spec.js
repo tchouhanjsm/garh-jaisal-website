@@ -187,6 +187,74 @@ test('rooms page floor navigation targets each rendered room section', async ({ 
   await expect(nav.locator('.rooms-floor-nav-book')).toHaveAttribute('rel', /noopener/);
 });
 
+
+
+test('Rooms page presents all registered rooms with useful comparison and booking paths', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Room directory content checks run once');
+  const response = await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
+  expect(response).not.toBeNull();
+  expect(response.status()).toBeLessThan(400);
+
+  await expect(page.getByRole('heading', { level: 1, name: 'Rooms at Garh Jaisal Haveli.' })).toBeVisible();
+  await expect(page.locator('.rooms-hero-summary .rooms-summary-stat')).toHaveCount(3);
+  await expect(page.locator('.rooms-hero-summary')).toContainText('7');
+  await expect(page.locator('#room-directory')).toHaveCount(1);
+  await expect(page.getByRole('heading', { level: 2, name: 'Choose the room that feels right.' })).toBeVisible();
+
+  const cards = page.locator('.room-card');
+  await expect(cards).toHaveCount(7);
+  const expectedNames = [
+    'Sweet Purple Room',
+    'Rising Sun Room',
+    'Scarlet Room',
+    'Opium Room',
+    'Red Maharani Room',
+    'Green Room',
+    'BlueSky Room',
+  ];
+  for (const name of expectedNames) {
+    const card = cards.filter({ has: page.getByRole('heading', { level: 3, name, exact: true }) });
+    await expect(card, `Expected registered room card: ${name}`).toHaveCount(1);
+    await expect(card.locator('img')).toHaveAttribute('alt', /\S/);
+    await expect(card.locator('.room-features li').first()).toBeVisible();
+    await expect(card.getByRole('link', { name: `Check availability for ${name}` })).toHaveAttribute('href', /\S/);
+  }
+
+  const floorLinks = page.locator('.rooms-floor-nav-links a');
+  await expect(floorLinks).toHaveCount(2);
+  await expect(floorLinks.nth(0)).toContainText('Ground floor');
+  await expect(floorLinks.nth(0)).toContainText('3 rooms');
+  await expect(floorLinks.nth(1)).toContainText('First floor');
+  await expect(floorLinks.nth(1)).toContainText('4 rooms');
+
+  const bookingHref = await page.locator('.rooms-floor-nav-book').getAttribute('href');
+  expect(bookingHref).toMatch(/\S/);
+  await expect(page.locator('.rooms-hero-actions a.button-primary')).toHaveAttribute('href', bookingHref);
+  await expect(page.locator('.rooms-hero-actions a.button-primary')).toHaveAttribute('target', '_blank');
+  await expect(page.locator('.rooms-hero-actions a.button-primary')).toHaveAttribute('rel', /noopener/);
+  for (let index = 0; index < await cards.count(); index += 1) {
+    const bookingLink = cards.nth(index).getByRole('link', { name: /Check availability for/ });
+    await expect(bookingLink).toHaveAttribute('href', bookingHref);
+    await expect(bookingLink).toHaveAttribute('target', '_blank');
+    await expect(bookingLink).toHaveAttribute('rel', /noopener/);
+  }
+});
+
+test('Rooms card grid adapts to the active viewport without clipping', async ({ page }) => {
+  const response = await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
+  expect(response).not.toBeNull();
+  expect(response.status()).toBeLessThan(400);
+  const layout = await page.locator('.room-grid').evaluate(element => ({
+    columns: getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/).length,
+    width: element.getBoundingClientRect().width,
+    scrollWidth: element.scrollWidth,
+    clientWidth: element.clientWidth,
+  }));
+  const viewportWidth = page.viewportSize().width;
+  expect(layout.scrollWidth, 'Room grid should not overflow its own container').toBeLessThanOrEqual(layout.clientWidth + 1);
+  expect(layout.columns, `Unexpected room grid column count at ${viewportWidth}px`).toBe(viewportWidth <= 760 ? 1 : 2);
+});
+
 test('Car & City discovery paths remain connected without retiring legacy URLs', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Information architecture checks run once');
   const cases = [

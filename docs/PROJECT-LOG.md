@@ -330,7 +330,7 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 - Next milestone after F4: redesign the Home page beyond the discovery strip, then the Rooms page, using exact-head responsive screenshot evidence before proceeding to the wider Phase G pages.
 
 
-## Batch F5 — Homepage conversion and arrival UX (PR #27 in progress)
+## Batch F5 — Homepage conversion and arrival UX (PR #27 merged)
 
 - Continue Phase F after PR #26. Improve the homepage's practical decision path by surfacing the fort access constraint immediately after the existing Rooms/Packages/Rooftop discovery links.
 - Add a compact, responsive "Before you arrive" notice explaining that vehicles cannot enter Jaisalmer Fort, the final stretch is on foot, and reception hours are 7:00 AM–10:30 PM. Link directly to the existing arrival guide.
@@ -338,4 +338,15 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 - Add rendered Browser E2E checks for the arrival notice, destination/section anchors, and booking CTA target/rel safety. Existing sitemap, metadata, internal-link and four-viewport checks remain required.
 - Preserve the existing booking URL/configuration, public routes, canonical/OG/Twitter metadata, JSON-LD, GA4 IDs, approved images and room/tour details. Do not invent facilities, pricing, transport arrangements or availability.
 - Validation gate: PHP 7.4/8.2 lint, strict site checks, sitemap/publication boundaries and Browser E2E/screenshots on the exact final PR head. The connector cannot execute local PHP/Chromium; no local run is claimed.
-- Next milestone: Phase F6 — full Rooms page UX redesign after this homepage flow has passed responsive review.
+- Next milestone: Phase F6 — full Rooms page redesign, including room comparison, booking paths and mobile usability.
+
+
+## Batch F6 — Full Rooms page UX redesign (PR #28 in progress)
+
+- Redesign the Rooms page as a clear booking journey: room-led hero, data-derived at-a-glance summary, concise directory intro, floor navigation with room counts, comparison-friendly cards and clear availability actions.
+- Improve the room cards' visual hierarchy and scanability while keeping the existing registry as the source of room names, descriptions, images, alt text and listed features. Each room receives a stable, sanitized in-page anchor ID.
+- Keep the current floor grouping and provide count labels derived from the same registry; room totals are not hard-coded in the rendered page.
+- Add Browser E2E assertions for the seven registered rooms, floor counts, image alt text, listed features, booking URL consistency and new-tab safety. Check the room card layout at all configured viewports; existing site-wide SEO, internal link, page error and screenshot checks remain required.
+- Preserve the public `room.php` route, canonical/social metadata, JSON-LD breadcrumb, analytics IDs, existing image mappings, booking URL/configuration and existing room data. Do not invent prices, occupancy, availability or facilities.
+- Validation gate: PHP 7.4/8.2 lint and strict site checks; sitemap/publication boundary checks; Browser E2E with screenshots at 320/390/1280/1440 on the exact final PR head. The GitHub connector cannot run local PHP/Chromium, so no local run is claimed.
+- Owner retains review/merge and production deployment authority.
