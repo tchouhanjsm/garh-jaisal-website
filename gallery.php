@@ -88,7 +88,10 @@ $bookingUrl = $siteConfig['booking_url'];
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
 <main class="gallery-page">
-  <section class="page-hero gallery-hero">
+  <section class="page-hero page-hero--photo gallery-hero">
+    <div class="page-hero-media" aria-hidden="true">
+      <img src="img/v2/hero-gallery.webp" alt="" width="1600" height="1067" fetchpriority="high" decoding="async">
+    </div>
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Gallery</p>
       <h1>See Garh Jaisal Haveli.</h1>
