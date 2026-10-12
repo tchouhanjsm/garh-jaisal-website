@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-12 |
-| Current phase | Phase 6 — page layout inventory and information architecture review |
+| Current phase | Batch D — publication-aware sitemap and orphan/overlap hardening |
 | Base branch | `main` |
-| Baseline commit | `fcf50dac2524bc5dd6a1f77576220ad68efac8fc` (PR #15 merge) |
-| Last merged PR | [#15 — image payload audit](https://github.com/tchouhanjsm/garh-jaisal-website/pull/15) |
+| Baseline commit | `956f30b13dd3d12e3adb442058cb698cb6bd32d3` (PR #21 merge) |
+| Last merged PR | [#21 — data-driven experiences and breadcrumbs](https://github.com/tchouhanjsm/garh-jaisal-website/pull/21) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-6-page-layout-inventory` — capture rendered page structures before agreeing new pages or redesigns |
-| Next action | Review the layout inventory and screenshots; discuss page additions and their purpose before implementation |
+| Active batch | `feature/status-aware-sitemap-orphan-audit` — generate sitemap membership from the reviewed page allowlist and live experience registry |
+| Next action | Verify sitemap generator and publication-status assertions in CI; then finish evidence-led orphan/duplicate handling before the next hub/page batch |
 
 ## Phase roadmap
 
@@ -231,7 +231,7 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 | A | Data-driven navigation, mobile dropdowns, footer links, active page states | Merged in PR #18 |
 | B | Design tokens, shared visual components, contrast and responsive review | Merged in PR #20 |
 | C | Experience data model, hub rendering, breadcrumbs and structured data | In progress in PR #21 |
-| D | Duplicate/orphan decisions, reviewed redirects, status-aware sitemap | Planned |
+| D | Duplicate/orphan decisions, reviewed redirects, status-aware sitemap | In progress in `feature/status-aware-sitemap-orphan-audit` |
 | E | Car & City hub and new tour pages, draft-only until facts are confirmed | Blocked on owner facts before publishing |
 | F | Home, Rooms and Packages redesign | Planned |
 | G | Tour pages, Directions, Dining, Gallery and Contact redesign | Planned |
@@ -265,3 +265,14 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 - Related experience cards omit non-live entries; the shared renderer emits `noindex,follow` for non-live entries.
 - Sitemap generation/status-aware membership and duplicate/orphan decisions remain Batch D; no sitemap URLs or redirects changed in Batch C.
 - Validation gate: PHP 7.4/8.2 site checks, browser E2E across 320/390/1280/1440, rendered breadcrumb/schema checks, no broken internal links, and exact-head CI evidence before owner review.
+
+
+## Batch D — publication-aware sitemap and orphan/overlap hardening (PR in progress)
+
+- Added `scripts/generate-sitemap.php` with a reviewed explicit allowlist for non-experience pages and experience URLs sourced from `include/experience-data.php`.
+- Sitemap membership now derives from `status === live`; `draft` and `hidden` experiences are excluded automatically. `--check` compares the tracked sitemap byte-for-byte with generated output so CI can detect stale membership.
+- Added the sitemap consistency check to the PHP CI workflow and extended rendered SEO regression coverage to fail when a sitemap-listed route explicitly emits `noindex`.
+- Kept the existing sitemap priorities and all current URLs. No `lastmod` values were added because reliable per-page modification dates have not been established; dates must not be fabricated.
+- Duplicate/orphan review is still evidence-led: `explore-the-desert.php` claims a full-day experience while `sunset-camel-safari.php` is presented as a half-day/evening product, so a 301 must not be applied until the operational distinction is confirmed. `camping.php`, `city-tour.php` and `car-rental.php` remain on their existing URLs and are not deleted in this batch. The car-rental page needs the Car & City hub planned for Batch E.
+- No verified hotel facts, rates, timings, image mappings, booking targets, analytics IDs, or server settings changed.
+- Validation gate: PHP 7.4/8.2 lint and strict site checks, sitemap generator `--check`, rendered SEO/internal-link checks, responsive Browser E2E and exact-final-head CI evidence. Connector limitations mean local PHP/browser execution is not claimed.
