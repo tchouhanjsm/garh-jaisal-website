@@ -37,6 +37,12 @@ for (const route of routes) {
     await expect(page.locator('main#main-content[tabindex="-1"]')).toHaveCount(1);
     await expect(page.getByRole('main')).toHaveCount(1);
 
+    const footerBooking = page.locator('.footer-booking-button');
+    await expect(footerBooking).toHaveCount(1);
+    await expect(footerBooking).toHaveAttribute('href', await page.locator('.nav-book').getAttribute('href'));
+    await expect(footerBooking).toHaveAttribute('target', '_blank');
+    await expect(footerBooking).toHaveAttribute('rel', /noopener/);
+
     const dimensions = await page.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       document: document.documentElement.scrollWidth,
@@ -192,4 +198,51 @@ test('dark-surface secondary actions expose the intended white text and outline 
     item.color !== 'rgb(255, 255, 255)' || Number.parseFloat(item.borderWidth) <= 0 || item.borderColor === 'rgba(0, 0, 0, 0)'
   );
   expect(failures, `Dark-surface secondary button style failures: ${JSON.stringify(failures, null, 2)}`).toEqual([]);
+});
+
+
+test('homepage room previews use registered room content and stable detail anchors', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Homepage room-preview consistency is checked once');
+  await page.goto('/');
+  const cards = page.locator('.home-room-card');
+  await expect(cards).toHaveCount(3);
+
+  const preview = await cards.evaluateAll(elements => elements.map(card => ({
+    name: (card.querySelector('h3')?.textContent || '').trim(),
+    alt: card.querySelector('img')?.getAttribute('alt') || '',
+    href: card.querySelector('.home-room-detail-link')?.getAttribute('href') || '',
+  })));
+  for (const room of preview) {
+    expect(room.name).not.toBe('');
+    expect(room.alt).not.toBe('');
+    expect(room.href).toMatch(/^room\.php#room-[a-z0-9-]+$/);
+  }
+
+  await page.goto('/room.php');
+  for (const room of preview) {
+    const anchor = room.href.split('#')[1];
+    await expect(page.locator('#' + anchor)).toHaveCount(1);
+  }
+});
+
+
+test('contact page presents direct booking and arrival paths beside the enquiry form', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Contact conversion path is checked once');
+  await page.goto('/contact.php');
+  const booking = page.locator('.contact-booking-button');
+  await expect(booking).toHaveAttribute('href', await page.locator('.nav-book').getAttribute('href'));
+  await expect(booking).toHaveAttribute('target', '_blank');
+  await expect(booking).toHaveAttribute('rel', /noopener/);
+  await expect(page.locator('.contact-arrival-link')).toHaveAttribute('href', 'direction.php');
+  await expect(page.getByRole('heading', { name: 'Send an enquiry' })).toBeVisible();
+});
+
+test('rooftop menu CTA opens the restaurant menu section directly', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Rooftop-to-menu journey is checked once');
+  await page.goto('/roof.php');
+  const menuLink = page.getByRole('link', { name: 'View the menu' });
+  await expect(menuLink).toHaveAttribute('href', 'restaurant.php#menu');
+  await page.goto('restaurant.php#menu');
+  await expect(page.locator('#menu')).toBeVisible();
+  await expect(page.locator('#menu').getByRole('heading', { name: 'What is on the menu.' })).toBeVisible();
 });

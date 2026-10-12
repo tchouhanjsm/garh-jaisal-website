@@ -178,7 +178,7 @@ $whatsappUrl = $siteConfig['whatsapp_url'];
         </article>
         <article class="travel-card">
           <h3>Jaisalmer airport</h3>
-          <p>A private sedan to Fort Parking is listed at about ₹1300 and about 20 minutes. A porter can meet you when you reach the parking area.</p>
+          <p>A private sedan to Fort Parking is listed at about ₹1100 and about 20 minutes. A porter can meet you when you reach the parking area.</p>
         </article>
         <article class="travel-card">
           <h3>Inside the fort</h3>
@@ -296,7 +296,7 @@ $whatsappUrl = $siteConfig['whatsapp_url'];
         </details>
         <details>
           <summary>Can I get a ride from the station or airport?</summary>
-          <p>A rickshaw from the railway station is listed at about ₹300. A private sedan from the airport to Fort Parking is listed at about ₹1300. Call or WhatsApp to arrange it.</p>
+          <p>A rickshaw from the railway station is listed at about ₹300. A private sedan from the airport to Fort Parking is listed at about ₹1100. Call or WhatsApp to arrange it.</p>
         </details>
       </div>
     </div>

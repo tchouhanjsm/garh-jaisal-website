@@ -6,6 +6,7 @@ $footerPhoneAlt = $siteConfig['hotel_phone_alt'] ?? '';
 $footerPhoneAltDisplay = $siteConfig['hotel_phone_alt_display'] ?? $footerPhoneAlt;
 $footerEmail = $siteConfig['hotel_email'] ?? '';
 $footerWhatsapp = $siteConfig['whatsapp_url'] ?? '#';
+$footerBookingUrl = (string) ($siteConfig['booking_url'] ?? '');
 $footerNavData = require __DIR__ . '/nav-data.php';
 $footerNav = $footerNavData['footer'];
 ?>
@@ -15,6 +16,12 @@ $footerNav = $footerNavData['footer'];
       <p class="eyebrow">Garh Jaisal Haveli</p>
       <h2>Stay inside the living fort.</h2>
       <p class="footer-copy">A heritage haveli inside Jaisalmer Fort, with intimate rooms, rooftop views and desert experiences arranged from the hotel.</p>
+<?php if ($footerBookingUrl !== ''): ?>
+      <div class="footer-booking-cta">
+        <a class="button button-primary footer-booking-button" href="<?= htmlspecialchars($footerBookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check availability</a>
+        <p>See availability and current rates for your dates.</p>
+      </div>
+<?php endif; ?>
       <div class="social-links" aria-label="Social media">
         <a href="https://www.instagram.com/garhjaisal/" target="_blank" rel="noopener">Instagram</a>
         <a href="https://www.facebook.com/garhjaisal" target="_blank" rel="noopener">Facebook</a>
