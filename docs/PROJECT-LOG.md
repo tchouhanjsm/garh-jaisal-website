@@ -9,8 +9,8 @@
 | Last updated | 2026-10-12 |
 | Current phase | Batch E — Car & City Tours hub and draft-only tour scaffolding |
 | Base branch | `main` |
-| Baseline commit | `956f30b13dd3d12e3adb442058cb698cb6bd32d3` (PR #21 merge) |
-| Last merged PR | [#21 — data-driven experiences and breadcrumbs](https://github.com/tchouhanjsm/garh-jaisal-website/pull/21) |
+| Baseline commit | Current `main` after PR #22; confirm exact merge SHA from GitHub before release |
+| Last merged PR | [#22 — publication-aware sitemap](https://github.com/tchouhanjsm/garh-jaisal-website/pull/22) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Active batch | `feature/car-city-tours-hub-drafts` — create a live Car & City Tours hub and noindex draft tour scaffolding |
