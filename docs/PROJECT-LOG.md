@@ -424,3 +424,5 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Change image-payload and performance inventories to wait for `domcontentloaded` and decode eager/initially-visible images before sampling. Record an unfinished browser load event as unavailable (`null`), not a fabricated zero-ms result.
 - Change the priority-image geometry audit to wait for the priority image decode specifically and report a failed priority-image load as a real finding. Keep its intrinsic ratio assertion; do not weaken or skip the image check.
 - This is a CI reliability fix grounded in rendered evidence. It separates local page readiness and image geometry from external third-party embed/script availability, while keeping the full sitemap route coverage.
+
+- Follow-up flake review: the added Contact conversion E2E used Playwright's default full-load wait and timed out on its first attempt before passing on retry. It now uses `domcontentloaded`, matching the other route smoke assertions, because form destination assertions need the rendered document rather than third-party reCAPTCHA/map completion.
