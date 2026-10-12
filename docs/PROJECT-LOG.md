@@ -286,3 +286,13 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 - No prices, routes, distances, durations, vehicle capacities, pickup details, languages, fees, inclusions or availability are invented. Existing page URLs, analytics IDs, booking destination and image mappings are preserved.
 - Existing `camping.php` and the overlap between `explore-the-desert.php` and `sunset-camel-safari.php` remain unresolved; no speculative redirects or page deletions are included in this batch.
 - Validation gate: PHP 7.4/8.2 lint, strict site checks, deterministic sitemap check, Browser E2E, internal links, SEO metadata, draft noindex/sitemap exclusion and screenshot artifacts on exact final head. Connector cannot execute local PHP/Chromium, so local tests are not claimed.
+
+
+## Batch F1 — car/city discovery and legacy content audit (PR in progress)
+
+- Start the Phase F redesign path with an evidence-led discovery/UX hardening batch following PR #23. Keep existing public URLs and their canonical targets; do not merge or redirect potentially overlapping content without owner confirmation.
+- Add regression coverage that confirms the Car & City hub links to the existing guided-tour hub, Fort walk and car-arrangement pages, and that all three existing destination pages provide a clear return path to the Car & City hub.
+- Strengthen site checks for the experience publication boundary: live experience pages should remain sitemap-aligned, while draft/hidden experiences must not be referenced by public navigation/footer data or included in the sitemap. Keep exceptions explicit where hubs themselves are not individual tour cards.
+- Audit `camping.php` and the `explore-the-desert.php` / `sunset-camel-safari.php` distinction; record facts needed from owner before any content consolidation/redirect decision. Do not invent operating facts or change GA4, booking, images or current public URLs.
+- Next after this batch: Phase F page redesign, starting with the Packages hub as its information architecture now has both Desert Tours and Car & City Tours. Home and Rooms follow after the first redesigned page has responsive evidence.
+- Validation gate: PHP 7.4/8.2 lint and strict site checks, deterministic sitemap check, full Browser E2E at 320/390/1280/1440, internal-link checks and rendered SEO checks on exact final PR head. Local PHP/browser is not available through this connector; use CI evidence and do not claim local execution.
