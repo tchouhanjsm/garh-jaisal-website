@@ -77,7 +77,10 @@ $whatsappUrl = $siteConfig['whatsapp_url'];
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
 <main class="arrival-page">
-  <section class="page-hero">
+  <section class="page-hero page-hero--photo">
+    <div class="page-hero-media" aria-hidden="true">
+      <img src="img/v2/hero-directions.webp" alt="" width="1600" height="1066" fetchpriority="high" decoding="async">
+    </div>
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Getting here</p>
       <h1>Arrive inside Jaisalmer Fort.</h1>
