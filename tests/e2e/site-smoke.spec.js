@@ -308,16 +308,23 @@ test('room enquiry retains the selected room from detail card to contact form', 
   })));
 
   const bookingUrl = await page.locator('.nav-book').getAttribute('href');
+
+  // Verify every room card while the browser is still on the Rooms page.
   for (const room of rooms) {
     expect(room.slug).toMatch(/^[a-z0-9-]+$/);
     expect(room.name).not.toBe('');
     const card = page.locator('#room-' + room.slug);
+    await expect(card).toHaveCount(1);
     await expect(card.locator('.room-book')).toHaveAttribute('href', bookingUrl);
     await expect(card.locator('.room-book')).toHaveAttribute('target', '_blank');
     await expect(card.locator('.room-book')).toHaveAttribute('rel', /noopener/);
     await expect(card.locator('.room-enquiry-link')).toHaveAttribute('href', 'contact.php?room=' + room.slug);
     await expect(card.locator('.room-enquiry-link')).toHaveAttribute('aria-label', 'Ask about ' + room.name);
+  }
 
+  // Then verify every room-specific enquiry independently. These navigations
+  // leave /room.php, so they must not be mixed into the room-card assertion loop.
+  for (const room of rooms) {
     await page.goto('/contact.php?room=' + room.slug, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('.contact-room-context')).toContainText(room.name);
     await expect(page.locator('#message')).toHaveValue(new RegExp('enquire about ' + room.name));
