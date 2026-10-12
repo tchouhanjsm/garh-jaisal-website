@@ -5,7 +5,12 @@ $activePage = 'packages';
 $siteUrl = rtrim($siteConfig['site_url'], '/');
 $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] ?? []), 'is_string'));
 $canonical = $siteUrl . '/guided-jaisalmer-tour.php';
-$items = ['half-day-jaisalmer-tour', 'full-day-jaisalmer-tour'];
+$items = array_keys(array_filter($experiences, static function ($item) {
+    return ($item['status'] ?? 'live') === 'live' && ($item['category'] ?? '') === 'city' && ($item['duration_type'] ?? '') !== 'hub';
+}));
+usort($items, static function ($a, $b) use ($experiences) {
+    return ($experiences[$a]['order'] ?? 999) <=> ($experiences[$b]['order'] ?? 999);
+});
 ?>
 <!doctype html>
 <html lang="en">

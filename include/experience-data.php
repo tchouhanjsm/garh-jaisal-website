@@ -15,6 +15,12 @@
 return [
     'desert-safari' => [
         'slug' => 'desert-safari',
+        'category' => 'desert',
+        'parent' => 'pack',
+        'menu_label' => 'Desert Tours',
+        'duration_type' => 'hub',
+        'order' => 10,
+        'status' => 'live',
         'title' => 'Desert Safari in Jaisalmer | Camel Safari & Overnight Experiences',
         'description' => 'Explore desert safari options arranged from Garh Jaisal Haveli, including sunset camel safari, cultural evening, sleeping under the stars and Swiss tent stays.',
         'h1' => 'Desert Safari in Jaisalmer',
@@ -28,6 +34,12 @@ return [
 
     'guided-jaisalmer-tour' => [
         'slug' => 'guided-jaisalmer-tour',
+        'category' => 'city',
+        'parent' => 'pack',
+        'menu_label' => 'City Tours',
+        'duration_type' => 'hub',
+        'order' => 20,
+        'status' => 'live',
         'title' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
         'description' => 'Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.',
         'h1' => 'Guided Jaisalmer Tours',
@@ -41,6 +53,12 @@ return [
 
     'sunset-camel-safari' => [
         'slug' => 'sunset-camel-safari',
+        'category' => 'desert',
+        'parent' => 'desert-safari',
+        'menu_label' => 'Sunset camel safari',
+        'duration_type' => 'half-day',
+        'order' => 10,
+        'status' => 'live',
         'title' => 'Sunset Camel Safari in Jaisalmer | Garh Jaisal Haveli',
         'description' => 'A sunset camel safari from Jaisalmer with desert transport, a camel ride, sunset in the dunes, tea and snacks, dinner prepared in the desert and return to town.',
         'h1' => 'Sunset Camel Safari in Jaisalmer',
@@ -94,6 +112,12 @@ return [
 
     'sleep-under-the-stars' => [
         'slug' => 'sleep-under-the-stars',
+        'category' => 'desert',
+        'parent' => 'desert-safari',
+        'menu_label' => 'Sleep under the stars',
+        'duration_type' => 'overnight',
+        'order' => 20,
+        'status' => 'live',
         'title' => 'Sleep Under the Stars in the Jaisalmer Desert | Garh Jaisal Haveli',
         'description' => 'Spend a night in the Jaisalmer desert with camel riding, sunset in the dunes, dinner prepared in the desert, sleeping under the stars and breakfast.',
         'h1' => 'Sleep Under the Stars in the Jaisalmer Desert',
@@ -150,6 +174,12 @@ return [
 
     'swiss-tent-safari' => [
         'slug' => 'swiss-tent-safari',
+        'category' => 'desert',
+        'parent' => 'desert-safari',
+        'menu_label' => 'Swiss tent safari',
+        'duration_type' => 'overnight',
+        'order' => 30,
+        'status' => 'live',
         'title' => 'Overnight Swiss Tent Safari in Jaisalmer | Garh Jaisal Haveli',
         'description' => 'Spend a night in the Jaisalmer desert in a Swiss Deluxe Tent with camel riding, sunset, cultural programme, dinner and breakfast.',
         'h1' => 'Overnight Safari in a Swiss Tent',
@@ -208,6 +238,12 @@ return [
 
     'cultural-safari' => [
         'slug' => 'cultural-safari',
+        'category' => 'desert',
+        'parent' => 'desert-safari',
+        'menu_label' => 'Cultural evening',
+        'duration_type' => 'half-day',
+        'order' => 40,
+        'status' => 'live',
         'title' => 'Cultural Desert Safari in Jaisalmer | Garh Jaisal Haveli',
         'description' => 'Combine a desert safari and camel ride with tea, snacks, folk music and a vegetarian dinner before returning to Jaisalmer.',
         'h1' => 'Cultural Desert Safari in Jaisalmer',
@@ -265,6 +301,12 @@ return [
 
     'explore-the-desert' => [
         'slug' => 'explore-the-desert',
+        'category' => 'desert',
+        'parent' => 'desert-safari',
+        'menu_label' => 'Explore the desert',
+        'duration_type' => 'full-day',
+        'order' => 50,
+        'status' => 'live',
         'title' => 'Explore the Desert near Jaisalmer | Garh Jaisal Haveli',
         'description' => 'Explore the desert near Jaisalmer with jeep transport, Khuldhara, local route stops, a camel ride, sunset in the dunes and return to town.',
         'h1' => 'Explore the Desert near Jaisalmer',
@@ -318,6 +360,12 @@ return [
 
     'half-day-jaisalmer-tour' => [
         'slug' => 'half-day-jaisalmer-tour',
+        'category' => 'city',
+        'parent' => 'guided-jaisalmer-tour',
+        'menu_label' => 'Half-day Jaisalmer tour',
+        'duration_type' => 'half-day',
+        'order' => 10,
+        'status' => 'live',
         'title' => 'Half-Day Guided Jaisalmer Tour | Garh Jaisal Haveli',
         'description' => 'A half-day guided tour of Jaisalmer arranged from Garh Jaisal Haveli, focused on the fort, heritage lanes, havelis and local markets.',
         'h1' => 'Half-Day Guided Jaisalmer Tour',
@@ -367,6 +415,12 @@ return [
 
     'full-day-jaisalmer-tour' => [
         'slug' => 'full-day-jaisalmer-tour',
+        'category' => 'city',
+        'parent' => 'guided-jaisalmer-tour',
+        'menu_label' => 'Full-day Jaisalmer tour',
+        'duration_type' => 'full-day',
+        'order' => 20,
+        'status' => 'live',
         'title' => 'Full-Day Guided Jaisalmer Tour | Garh Jaisal Haveli',
         'description' => 'A full-day guided Jaisalmer tour arranged from Garh Jaisal Haveli, combining Jaisalmer Fort, historic havelis, markets and a broader heritage route.',
         'h1' => 'Full-Day Guided Jaisalmer Tour',

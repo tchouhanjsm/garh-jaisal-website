@@ -43,8 +43,16 @@ $canonical = $siteUrl . '/' . $experience['slug'] . '.php';
 $breadcrumbs = [
     ['name' => 'Home', 'url' => $siteUrl . '/'],
     ['name' => 'Packages', 'url' => $siteUrl . '/pack.php'],
-    ['name' => $experience['h1'], 'url' => $canonical],
 ];
+$parentSlug = $experience['parent'] ?? 'pack';
+if ($parentSlug !== 'pack' && isset($experiences[$parentSlug]) && ($experiences[$parentSlug]['status'] ?? 'live') === 'live') {
+    $breadcrumbs[] = [
+        'name' => $experiences[$parentSlug]['h1'],
+        'url' => $siteUrl . '/' . $parentSlug . '.php',
+    ];
+}
+$breadcrumbs[] = ['name' => $experience['h1'], 'url' => $canonical];
+$isIndexableExperience = ($experience['status'] ?? 'live') === 'live';
 
 $schemaGraph = [
     [
@@ -82,7 +90,7 @@ foreach ($breadcrumbs as $index => $crumb) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= htmlspecialchars($experience['title'], ENT_QUOTES, 'UTF-8') ?></title>
   <meta name="description" content="<?= htmlspecialchars($experience['description'], ENT_QUOTES, 'UTF-8') ?>">
-  <meta name="robots" content="index,follow">
+  <meta name="robots" content="<?= $isIndexableExperience ? 'index,follow' : 'noindex,follow' ?>">
   <link rel="canonical" href="<?= htmlspecialchars($canonical, ENT_QUOTES, 'UTF-8') ?>">
 
   <meta property="og:type" content="website">
@@ -272,7 +280,7 @@ foreach ($breadcrumbs as $index => $crumb) {
 
         <div class="related-grid">
           <?php foreach ($experience['related'] as $relatedSlug): ?>
-            <?php if (!isset($experiences[$relatedSlug])) { continue; } ?>
+            <?php if (!isset($experiences[$relatedSlug]) || ($experiences[$relatedSlug]['status'] ?? 'live') !== 'live') { continue; } ?>
             <?php $related = $experiences[$relatedSlug]; ?>
             <article class="related-card">
               <a href="<?= htmlspecialchars($related['slug'], ENT_QUOTES, 'UTF-8') ?>.php">

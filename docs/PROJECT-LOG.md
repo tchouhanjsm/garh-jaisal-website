@@ -229,8 +229,8 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 |---|---|---|
 | Docs | Approved blueprint and layout review | Superseding documentation PR in progress; this log reflects the merged navigation state |
 | A | Data-driven navigation, mobile dropdowns, footer links, active page states | Merged in PR #18 |
-| B | Design tokens, shared visual components, contrast and responsive review | Next |
-| C | Experience data model, hub rendering, breadcrumbs and structured data | Planned |
+| B | Design tokens, shared visual components, contrast and responsive review | Merged in PR #20 |
+| C | Experience data model, hub rendering, breadcrumbs and structured data | In progress in PR #21 |
 | D | Duplicate/orphan decisions, reviewed redirects, status-aware sitemap | Planned |
 | E | Car & City hub and new tour pages, draft-only until facts are confirmed | Blocked on owner facts before publishing |
 | F | Home, Rooms and Packages redesign | Planned |
@@ -255,3 +255,13 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 - Preserve page copy, public URLs, canonical/SEO metadata, booking destinations, real image selections and room-image mappings.
 - Validation gate: PHP 7.4/8.2 lint and strict site checks; full sitemap Playwright E2E across 320, 390, 1280 and 1440 widths; rendered contrast checks for the core text/button palette; verify screenshot artifacts for home, rooms, contact and directions.
 - Connector limitation: local PHP/browser screenshot review is not available in this session; use CI evidence and keep any visual judgment not supported by screenshots marked NOT RUN. Review must be on the exact final PR head SHA.
+
+
+## Batch C — data-driven experiences, breadcrumbs and structured data (PR in progress)
+
+- Added category, parent, menu label, duration type, order and publication status to current experience entries without changing existing operational copy, prices, public URLs or image mappings.
+- Replaced hard-coded package and tour-card slug arrays with filters over shared experience data, ordered by explicit data order.
+- Extended the shared experience renderer to build hierarchical breadcrumbs from each experience parent, matching BreadcrumbList structured data.
+- Related experience cards omit non-live entries; the shared renderer emits `noindex,follow` for non-live entries.
+- Sitemap generation/status-aware membership and duplicate/orphan decisions remain Batch D; no sitemap URLs or redirects changed in Batch C.
+- Validation gate: PHP 7.4/8.2 site checks, browser E2E across 320/390/1280/1440, rendered breadcrumb/schema checks, no broken internal links, and exact-head CI evidence before owner review.
