@@ -19,6 +19,8 @@ if (!$experience) {
         'h1' => 'Experience not found',
         'eyebrow' => 'Garh Jaisal Haveli',
         'hero_image' => 'img/v2/facade.jpg',
+        'hero_width' => 1333,
+        'hero_height' => 2000,
         'hero_alt' => 'Garh Jaisal Haveli inside Jaisalmer Fort',
         'summary' => 'The experience you requested is not available.',
         'at_a_glance' => [],
