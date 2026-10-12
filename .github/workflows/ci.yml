@@ -46,3 +46,6 @@ jobs:
 
       - name: Verify sitemap matches publication status
         run: php scripts/generate-sitemap.php --check
+
+      - name: Verify experience publication boundaries
+        run: php scripts/check-experience-publication.php

@@ -128,12 +128,12 @@ $sortExperienceSlugs($guideItems);
       </p>
       <div class="actions">
         <a class="button button-primary" href="contact.php">Ask about availability</a>
-        <a class="button button-light" href="room.php">View rooms</a>
+        <a class="button button-light" href="#experience-categories">Explore tour categories</a>
       </div>
     </div>
   </section>
 
-  <section class="section experience-map-section">
+  <section class="section experience-map-section" id="experience-categories">
     <div class="site-shell">
       <div class="section-head">
         <div>
@@ -143,29 +143,19 @@ $sortExperienceSlugs($guideItems);
         <p>The structure keeps the choices simple: desert experiences on one side, guided Jaisalmer tours on the other.</p>
       </div>
 
-      <div class="experience-map" aria-label="Garh Jaisal experience map">
-        <div class="experience-map-root">Packages</div>
-
-        <div class="experience-map-branch experience-map-branch--desert">
-          <a class="experience-map-category" href="desert-safari.php">Desert Safari</a>
-          <div class="experience-map-leaves">
-            <a href="sunset-camel-safari.php">Sunset Camel Safari</a>
-            <a href="sleep-under-the-stars.php">Sleep Under the Stars</a>
-            <a href="cultural-safari.php">Cultural Desert Safari</a>
-            <a href="swiss-tent-safari.php">Swiss Tent Safari</a>
-            <a href="explore-the-desert.php">Explore the Desert</a>
-          </div>
-        </div>
-
-        <div class="experience-map-branch experience-map-branch--guide">
-          <a class="experience-map-category" href="car-tours.php">Car &amp; City Tours</a>
-          <div class="experience-map-leaves">
-            <a href="half-day-jaisalmer-tour.php">Half-Day Guided Tour</a>
-            <a href="full-day-jaisalmer-tour.php">Full-Day Guided Tour</a>
-            <a href="city-tour.php">Walk inside Jaisalmer Fort</a>
-            <a href="car-rental.php">Car for arrival or a desert day</a>
-          </div>
-        </div>
+      <div class="package-category-grid" aria-label="Tour categories">
+        <article class="package-category-card package-category-card--desert">
+          <p class="package-category-kicker">01 / Desert experiences</p>
+          <h3>Explore the Thar Desert</h3>
+          <p>Compare sunset camel safaris, cultural desert evenings and overnight stays under the stars or in a Swiss tent.</p>
+          <a class="package-category-link" href="desert-safari.php">Explore Desert Tours <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="package-category-card package-category-card--city">
+          <p class="package-category-kicker">02 / City experiences</p>
+          <h3>Discover Jaisalmer</h3>
+          <p>Explore guided half-day or full-day city tours, walk inside the Fort, and ask about car arrangements.</p>
+          <a class="package-category-link" href="car-tours.php">Explore Car &amp; City Tours <span aria-hidden="true">→</span></a>
+        </article>
       </div>
     </div>
   </section>
