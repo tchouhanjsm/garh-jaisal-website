@@ -37,6 +37,9 @@ test.describe('technical SEO metadata', () => {
 
       await expect(page.locator('main h1'), 'Expected one primary H1 inside main').toHaveCount(1);
 
+      const robots = (await page.locator('head meta[name="robots"]').getAttribute('content')) || '';
+      expect(robots.toLowerCase(), 'Sitemap routes must not be explicitly noindex').not.toContain('noindex');
+
       const structuredData = await page.locator('script[type="application/ld+json"]').allTextContents();
       for (const [index, source] of structuredData.entries()) {
         expect(() => JSON.parse(source), `Invalid JSON-LD block ${index + 1} on ${route}`).not.toThrow();
