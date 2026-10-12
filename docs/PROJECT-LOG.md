@@ -339,3 +339,22 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 - Preserve the existing booking URL/configuration, public routes, canonical/OG/Twitter metadata, JSON-LD, GA4 IDs, approved images and room/tour details. Do not invent facilities, pricing, transport arrangements or availability.
 - Validation gate: PHP 7.4/8.2 lint, strict site checks, sitemap/publication boundaries and Browser E2E/screenshots on the exact final PR head. The connector cannot execute local PHP/Chromium; no local run is claimed.
 - Next milestone: Phase F6 — full Rooms page UX redesign after this homepage flow has passed responsive review.
+
+
+## Batch D2 — resolve desert overlaps (owner decision, PR in progress)
+
+Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is not relevant, hide it temporarily and review at the end. No redirects or deletions yet.
+
+- `explore-the-desert.php` → `status: hidden`. It repeats the sunset-safari route steps and was not confirmed as a distinct product. It keeps its URL (returns 200, `noindex,follow`), is removed from the Desert Tours hub, the sitemap (26 URLs) and related links. Reversible by setting `status` back to `live` and re-running `php scripts/generate-sitemap.php`.
+- `camping.php` kept live and linked. It targets the "camping" search intent and routes to Sleep Under the Stars and Swiss Tent; it was an orphan, now linked from the Desert Tours hub.
+- Desert hub heading no longer hard-codes a count ("Five ways" → "Choose how you want to experience the desert.").
+- New regression test: the hidden page stays out of the sitemap and out of the hub, packages and sunset-safari links, while keeping a non-error response with `noindex,follow`. Existing camping and hub link tests extended.
+- No hotel facts, prices, timings, images, booking links, GA4 IDs or public URLs changed.
+
+### Hidden-page review register (revisit at the end)
+
+| Page | State | Decision needed |
+|---|---|---|
+| `explore-the-desert.php` | hidden (noindex, not in sitemap) | Distinct full-day product (rewrite and restore) or 301 to `sunset-camel-safari.php`? A 301 needs a root `.htaccess`, which the repo does not have yet. |
+| `longewala-tour.php`, `rajasthan-tours.php` | draft | Owner facts needed before publishing. |
+
