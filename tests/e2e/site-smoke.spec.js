@@ -140,3 +140,27 @@ test('primary booking button contrast meets WCAG AA for normal text', async ({ p
   expect(ratio, `Book Now foreground/background contrast is ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
 });
 
+
+test('dark-surface secondary actions expose the intended white text and outline styles', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Dark-surface style contract is checked once');
+  const selectors = [
+    '.experience-hero .button-light', '.package-hero .button-light', '.about-cta .button-light',
+    '.arrival-contact .button-light', '.restaurant-reserve .button-light', '.wide-feature .button-light',
+    '.article-footer-cta .button-secondary', '.experience-cta .button-secondary'
+  ];
+  const candidates = new Set();
+  for (const route of routes) {
+    await page.goto(route, { waitUntil: 'domcontentloaded' });
+    for (const selector of selectors) {
+      const matches = await page.locator(selector).evaluateAll(elements => elements.filter(el => el.offsetParent !== null).map(el => ({
+        selector: el.className, color: getComputedStyle(el).color, borderColor: getComputedStyle(el).borderTopColor,
+        borderWidth: getComputedStyle(el).borderTopWidth, text: (el.textContent || '').trim()
+      })));
+      for (const item of matches) candidates.add(JSON.stringify({ route, ...item }));
+    }
+  }
+  const failures = [...candidates].map(item => JSON.parse(item)).filter(item =>
+    item.color !== 'rgb(255, 255, 255)' || Number.parseFloat(item.borderWidth) <= 0 || item.borderColor === 'rgba(0, 0, 0, 0)'
+  );
+  expect(failures, `Dark-surface secondary button style failures: ${JSON.stringify(failures, null, 2)}`).toEqual([]);
+});
