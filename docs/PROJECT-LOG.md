@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-12 |
-| Current phase | Phase F — Packages hub redesign |
+| Current phase | Phase F5 — Homepage conversion and arrival UX |
 | Base branch | `main` |
-| Baseline commit | `3a9102e89e6f951542d71f7807f8575786b080f2` (main after PR #25) |
-| Last merged PR | [#25 — home and rooms discovery UX](https://github.com/tchouhanjsm/garh-jaisal-website/pull/25) |
+| Baseline commit | `1cf8b884ffed8dcdbd9a9e9f3734a7b8b7db4494` (main after PR #26) |
+| Last merged PR | [#26 — streamline Packages hub discovery](https://github.com/tchouhanjsm/garh-jaisal-website/pull/26) |
 | CI on main | [Actions run #7](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38153905747) passed on merge commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-f4-packages-hub-redesign` — streamline the Packages hub after category-first discovery |
-| Next action | Verify the Packages hub redesign, PHP/site checks and responsive/browser evidence on the exact PR head; owner retains merge authority |
+| Active batch | `feature/phase-f5-homepage-conversion-ux` — make arrival constraints and primary homepage destinations clearer |
+| Next action | Verify homepage arrival guidance, stable discovery anchors, PHP/site checks and responsive/browser evidence on the exact PR head; owner retains merge authority |
 
 ## Phase roadmap
 
@@ -328,3 +328,14 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 - Preserve existing public URLs, canonical/OG/Twitter metadata, JSON-LD, GA4 IDs, approved experience descriptions, image mappings, contact/arrival paths and operating facts. Do not publish draft tours or add unverified prices/timings.
 - Validation gate: PHP 7.4/8.2 lint and strict site checks, sitemap freshness/publication checks, and Browser E2E with screenshots on the exact final PR head. GitHub connector cannot run local PHP/Chromium, so local execution is not claimed.
 - Next milestone after F4: redesign the Home page beyond the discovery strip, then the Rooms page, using exact-head responsive screenshot evidence before proceeding to the wider Phase G pages.
+
+
+## Batch F5 — Homepage conversion and arrival UX (PR #27 in progress)
+
+- Continue Phase F after PR #26. Improve the homepage's practical decision path by surfacing the fort access constraint immediately after the existing Rooms/Packages/Rooftop discovery links.
+- Add a compact, responsive "Before you arrive" notice explaining that vehicles cannot enter Jaisalmer Fort, the final stretch is on foot, and reception hours are 7:00 AM–10:30 PM. Link directly to the existing arrival guide.
+- Add stable, accessible section IDs and heading associations for the homepage Rooms, Rooftop, Desert Experiences, full Arrival Guide and Gallery sections.
+- Add rendered Browser E2E checks for the arrival notice, destination/section anchors, and booking CTA target/rel safety. Existing sitemap, metadata, internal-link and four-viewport checks remain required.
+- Preserve the existing booking URL/configuration, public routes, canonical/OG/Twitter metadata, JSON-LD, GA4 IDs, approved images and room/tour details. Do not invent facilities, pricing, transport arrangements or availability.
+- Validation gate: PHP 7.4/8.2 lint, strict site checks, sitemap/publication boundaries and Browser E2E/screenshots on the exact final PR head. The connector cannot execute local PHP/Chromium; no local run is claimed.
+- Next milestone: Phase F6 — full Rooms page UX redesign after this homepage flow has passed responsive review.
