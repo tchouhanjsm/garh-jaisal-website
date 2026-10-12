@@ -140,3 +140,53 @@ test('primary booking button contrast meets WCAG AA for normal text', async ({ p
   expect(ratio, `Book Now foreground/background contrast is ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
 });
 
+
+
+test('photo heroes reference present assets and retain the page heading', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Hero structure is checked once');
+  const cases = [
+    { route: '/room.php', asset: 'hero-rooms.webp', heading: 'Rooms at Garh Jaisal Haveli.' },
+    { route: '/direction.php', asset: 'hero-directions.webp', heading: 'Arrive inside Jaisalmer Fort.' },
+    { route: '/roof.php', asset: 'hero-dining.webp', heading: "Rooftop dining at Garh Jaisal's Kitchen." },
+    { route: '/gallery.php', asset: 'hero-gallery.webp', heading: 'See Garh Jaisal Haveli.' },
+  ];
+  for (const item of cases) {
+    const response = await page.goto(item.route, { waitUntil: 'domcontentloaded' });
+    expect(response, `No HTTP response for ${item.route}`).not.toBeNull();
+    expect(response.status(), `Unexpected status for ${item.route}`).toBeLessThan(400);
+    const hero = page.locator('.page-hero--photo');
+    await expect(hero).toHaveCount(1);
+    await expect(hero.locator('.page-hero-media img')).toHaveAttribute('src', `img/v2/${item.asset}`);
+    await expect(hero.locator('h1')).toHaveText(item.heading);
+    const image = hero.locator('.page-hero-media img');
+    await expect(image).toHaveAttribute('alt', '');
+    await expect(image).toHaveAttribute('width', /\\d+/);
+    await expect(image).toHaveAttribute('height', /\\d+/);
+    await expect.poll(() => image.evaluate(img => img.naturalWidth)).toBeGreaterThan(0);
+  }
+});
+
+test('secondary actions on specified dark surfaces use white text and a visible outline', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Dark-surface style contract is checked once');
+  const selectors = [
+    '.experience-hero .button-light', '.package-hero .button-light', '.about-cta .button-light',
+    '.arrival-contact .button-light', '.restaurant-reserve .button-light', '.wide-feature .button-light',
+    '.article-footer-cta .button-secondary', '.experience-cta .button-secondary'
+  ];
+  const candidates = new Set();
+  for (const route of routes) {
+    await page.goto(route, { waitUntil: 'domcontentloaded' });
+    for (const selector of selectors) {
+      const matches = await page.locator(selector).evaluateAll(elements => elements.filter(el => el.offsetParent !== null).map(el => ({
+        selector: el.className,
+        color: getComputedStyle(el).color,
+        borderColor: getComputedStyle(el).borderTopColor,
+        borderWidth: getComputedStyle(el).borderTopWidth,
+        text: (el.textContent || '').trim(),
+      })));
+      for (const item of matches) candidates.add(JSON.stringify({ route, ...item }));
+    }
+  }
+  const failures = [...candidates].map(item => JSON.parse(item)).filter(item => item.color !== 'rgb(255, 255, 255)' || Number.parseFloat(item.borderWidth) <= 0 || item.borderColor === 'rgba(0, 0, 0, 0)');
+  expect(failures, `Dark-surface secondary button style failures: ${JSON.stringify(failures, null, 2)}`).toEqual([]);
+});
