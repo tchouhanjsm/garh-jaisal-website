@@ -74,6 +74,25 @@ test('experience hubs render valid structured data and tour breadcrumbs', async 
   }
 });
 
+test('Packages hub presents two clear, responsive experience categories', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Category architecture checks run once');
+  const response = await page.goto('/pack.php', { waitUntil: 'domcontentloaded' });
+  expect(response).not.toBeNull();
+  expect(response.status()).toBeLessThan(400);
+
+  await expect(page.locator('#experience-categories')).toBeVisible();
+  const categories = page.locator('#experience-categories .package-category-card');
+  await expect(categories).toHaveCount(2);
+  await expect(categories.nth(0)).toContainText('Explore the Thar Desert');
+  await expect(categories.nth(0).locator('a')).toHaveAttribute('href', 'desert-safari.php');
+  await expect(categories.nth(1)).toContainText('Discover Jaisalmer');
+  await expect(categories.nth(1).locator('a')).toHaveAttribute('href', 'car-tours.php');
+
+  const heroLink = page.locator('.package-hero-content a[href="#experience-categories"]');
+  await expect(heroLink).toContainText('Explore tour categories');
+  await expect(page.locator('#experience-categories')).toHaveCSS('scroll-margin-top', '96px');
+});
+
 test('Car & City discovery paths remain connected without retiring legacy URLs', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Information architecture checks run once');
   const cases = [
