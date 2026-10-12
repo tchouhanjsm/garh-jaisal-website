@@ -82,7 +82,7 @@ test('draft tour pages are noindex and excluded from the sitemap', async ({ page
     const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
     expect(response, `No HTTP response for draft ${route}`).not.toBeNull();
     expect(response.status(), `Draft route ${route} should render for owner review`).toBeLessThan(400);
-    await expect(page.locator('head meta[name="robots"]')).toHaveAttribute('content', /noindex\\s*,\\s*follow/i);
+    await expect(page.locator('head meta[name="robots"]')).toHaveAttribute('content', /noindex\s*,\s*follow/i);
     await expect(page.locator('main h1')).toContainText(/draft|confirm/i);
   }
 });
