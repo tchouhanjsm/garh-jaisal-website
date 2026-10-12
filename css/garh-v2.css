@@ -2319,3 +2319,66 @@ p{
 @media(prefers-reduced-motion:reduce){
   .room-card,.room-card-media img{transition:none}
 }
+
+
+/* =========================================================
+   Visual polish: photo page heroes and dark-surface button contrast
+   ========================================================= */
+
+.page-hero.page-hero--photo{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  background:var(--dark);
+}
+.page-hero--photo .page-hero-media{
+  position:absolute;
+  inset:0;
+  z-index:-2;
+}
+.page-hero--photo .page-hero-media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center 45%;
+}
+.page-hero.page-hero--photo::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:
+    linear-gradient(90deg,rgba(26,19,14,.82) 0%,rgba(26,19,14,.56) 50%,rgba(26,19,14,.16) 100%),
+    linear-gradient(180deg,rgba(26,19,14,.12) 0%,rgba(26,19,14,.42) 100%);
+}
+@media (max-width:760px){
+  .page-hero.page-hero--photo::after{
+    background:linear-gradient(180deg,rgba(26,19,14,.55) 0%,rgba(26,19,14,.9) 100%);
+  }
+}
+
+/* Keep secondary actions legible when rendered over dark image/CTA regions. */
+.experience-hero .button-light,
+.package-hero .button-light,
+.about-cta .button-light,
+.arrival-contact .button-light,
+.restaurant-reserve .button-light,
+.wide-feature .button-light,
+.article-footer-cta .button-secondary,
+.experience-cta .button-secondary{
+  background:transparent;
+  border-color:rgba(255,255,255,.78);
+  color:#fff;
+}
+.experience-hero .button-light:hover,
+.package-hero .button-light:hover,
+.about-cta .button-light:hover,
+.arrival-contact .button-light:hover,
+.restaurant-reserve .button-light:hover,
+.wide-feature .button-light:hover,
+.article-footer-cta .button-secondary:hover,
+.experience-cta .button-secondary:hover{
+  background:rgba(255,255,255,.16);
+  border-color:#fff;
+  color:#fff;
+}
