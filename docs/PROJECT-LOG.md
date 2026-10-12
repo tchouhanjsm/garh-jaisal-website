@@ -375,3 +375,14 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Removed `img/loader.html`: a saved "404 Not Found" HTML page, not an image. Its only reference is `css/style.css`, a legacy stylesheet that no PHP page or include loads. `css/style.css` itself is left for the end-of-project legacy CSS review.
 - No public URL, page content, image mapping, booking link, GA4 ID or secret changed.
 
+
+
+## Batch F7 — photo heroes and dark-surface accessibility polish (PR in progress)
+
+- Reviewed commit [a2ea296](https://github.com/tchouhanjsm/garh-jaisal-website/commit/a2ea2962ef4be6bed0d8302035896531089a9fa2); retained its four existing-photo WebP hero variants and targeted dark-surface secondary-button styles.
+- Added the shared photo hero variant to Rooms, Directions, Dining and Gallery using the supplied WebP assets. Intrinsic dimensions and decorative alt text are retained; existing copy, routes and metadata remain unchanged.
+- Added browser regression checks that each hero route returns successfully, references the expected asset, exposes its existing heading, provides intrinsic dimensions, and loads its image in Chromium.
+- The supplied contrast test compared text against an ancestor's computed background, which does not prove effective contrast over transparent backgrounds and CSS/image gradients. The replacement assertion explicitly checks the affected components' intended foreground and outline style. True image/gradient contrast still requires screenshot/visual inspection; this suite does not claim to compute pixel-level contrast.
+- Preserved room/experience data, booking links, SEO metadata and tracking. No production action or merge.
+- Validation gate: PHP 7.4/8.2 lint, strict site checks, sitemap/publication rules, Browser E2E at 320/390/1280/1440, and screenshot evidence against the exact final PR head. Connector cannot run local PHP/Chromium; local runs are not claimed.
+- Next milestone: Phase F8 — accessibility hardening from rendered browser evidence: audit focus order, visible focus, keyboard access, heading/landmark structure, and accessible names at mobile and desktop widths; fix only confirmed issues and preserve operational content.
