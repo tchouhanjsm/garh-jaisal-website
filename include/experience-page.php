@@ -128,6 +128,8 @@ foreach ($breadcrumbs as $index => $crumb) {
       <img
         src="<?= htmlspecialchars($experience['hero_image'], ENT_QUOTES, 'UTF-8') ?>"
         alt="<?= htmlspecialchars($experience['hero_alt'], ENT_QUOTES, 'UTF-8') ?>"
+        width="<?= (int) ($experience['hero_width'] ?? 0) ?>"
+        height="<?= (int) ($experience['hero_height'] ?? 0) ?>"
         fetchpriority="high"
       >
       <div class="experience-hero-overlay"></div>
