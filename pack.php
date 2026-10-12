@@ -5,8 +5,22 @@ $activePage = 'packages';
 $siteUrl = rtrim($siteConfig['site_url'], '/');
 $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] ?? []), 'is_string'));
 $canonical = $siteUrl . '/pack.php';
-$desertItems = ['sunset-camel-safari', 'sleep-under-the-stars', 'cultural-safari', 'swiss-tent-safari', 'explore-the-desert'];
-$guideItems = ['half-day-jaisalmer-tour', 'full-day-jaisalmer-tour'];
+$visibleExperiences = array_filter($experiences, static function ($item) {
+    return ($item['status'] ?? 'live') === 'live' && ($item['duration_type'] ?? '') !== 'hub';
+});
+$desertItems = array_keys(array_filter($visibleExperiences, static function ($item) {
+    return ($item['category'] ?? '') === 'desert';
+}));
+$guideItems = array_keys(array_filter($visibleExperiences, static function ($item) {
+    return ($item['category'] ?? '') === 'city';
+}));
+$sortExperienceSlugs = static function (&$slugs) use ($visibleExperiences) {
+    usort($slugs, static function ($a, $b) use ($visibleExperiences) {
+        return ($visibleExperiences[$a]['order'] ?? 999) <=> ($visibleExperiences[$b]['order'] ?? 999);
+    });
+};
+$sortExperienceSlugs($desertItems);
+$sortExperienceSlugs($guideItems);
 ?>
 <!doctype html>
 <html lang="en">
