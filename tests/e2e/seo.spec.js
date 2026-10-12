@@ -222,9 +222,9 @@ test('Rooms page presents all registered rooms with useful comparison and bookin
 
   const floorLinks = page.locator('.rooms-floor-nav-links a');
   await expect(floorLinks).toHaveCount(2);
-  await expect(floorLinks.nth(0)).toContainText('Ground floor');
+  await expect(floorLinks.nth(0)).toContainText('Ground Floor');
   await expect(floorLinks.nth(0)).toContainText('3 rooms');
-  await expect(floorLinks.nth(1)).toContainText('First floor');
+  await expect(floorLinks.nth(1)).toContainText('First Floor');
   await expect(floorLinks.nth(1)).toContainText('4 rooms');
 
   const bookingHref = await page.locator('.rooms-floor-nav-book').getAttribute('href');
@@ -244,15 +244,20 @@ test('Rooms card grid adapts to the active viewport without clipping', async ({ 
   const response = await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
-  const layout = await page.locator('.room-grid').evaluate(element => ({
-    columns: getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/).length,
-    width: element.getBoundingClientRect().width,
-    scrollWidth: element.scrollWidth,
-    clientWidth: element.clientWidth,
-  }));
+  const grids = page.locator('.rooms-floor .room-grid');
+  await expect(grids).toHaveCount(2);
   const viewportWidth = page.viewportSize().width;
-  expect(layout.scrollWidth, 'Room grid should not overflow its own container').toBeLessThanOrEqual(layout.clientWidth + 1);
-  expect(layout.columns, `Unexpected room grid column count at ${viewportWidth}px`).toBe(viewportWidth <= 760 ? 1 : 2);
+  for (let index = 0; index < await grids.count(); index += 1) {
+    const layout = await grids.nth(index).evaluate(element => ({
+      columns: getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/).length,
+      scrollWidth: element.scrollWidth,
+      clientWidth: element.clientWidth,
+    }));
+    expect(layout.scrollWidth, `Room grid ${index + 1} should not overflow its own container`)
+      .toBeLessThanOrEqual(layout.clientWidth + 1);
+    expect(layout.columns, `Unexpected room grid column count at ${viewportWidth}px`)
+      .toBe(viewportWidth <= 760 ? 1 : 2);
+  }
 });
 
 test('Car & City discovery paths remain connected without retiring legacy URLs', async ({ page }, testInfo) => {
