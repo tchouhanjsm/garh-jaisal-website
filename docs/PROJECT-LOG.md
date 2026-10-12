@@ -416,3 +416,11 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Business rationale: turn site-wide footer traffic into a consistent booking action, show real room inventory instead of generic duplicated teasers, and make each teaser lead to the matching detailed room card. The primary guest journey remains Home → Room detail → configured availability engine, with no new hotel claims or booking flow.
 - Validation gate: PHP 7.4/8.2 Site Checks, sitemap/publication boundaries, Browser E2E at 320/390/1280/1440, and artifact evidence on the exact PR head. Public website deployment is not part of this PR; production/repository parity and live operational details remain a release-gate review.
 - Next milestone: Phase F10 — page-by-page conversion QA for Packages/experience and the full restaurant enquiry flow: confirm primary action destinations, review rendered heading/accessible-name and mobile CTA behavior, and separate test-backed findings from facts requiring owner confirmation.
+
+
+### Phase F9 follow-up — third-party load-event reliability
+
+- The post-merge Browser E2E run on `main` (`e62b7480a24b1d0a4740b391974cf138d038fd08`) showed three sitemap inventory tests timing out on `contact.php` while waiting for the full browser `load` event. That route includes external reCAPTCHA and a Google Maps embed; their network readiness is not a valid prerequisite for inspecting the local rendered document.
+- Change image-payload and performance inventories to wait for `domcontentloaded` and decode eager/initially-visible images before sampling. Record an unfinished browser load event as unavailable (`null`), not a fabricated zero-ms result.
+- Change the priority-image geometry audit to wait for the priority image decode specifically and report a failed priority-image load as a real finding. Keep its intrinsic ratio assertion; do not weaken or skip the image check.
+- This is a CI reliability fix grounded in rendered evidence. It separates local page readiness and image geometry from external third-party embed/script availability, while keeping the full sitemap route coverage.
