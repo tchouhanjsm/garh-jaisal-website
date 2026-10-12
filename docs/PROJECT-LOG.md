@@ -210,3 +210,39 @@
 - No public pages, content, URLs, SEO metadata, assets, booking links, prices, analytics IDs, secrets or production settings change in this batch.
 - Use the inventory with existing responsive screenshots and SEO inventory to create a page-by-page review list. Discuss proposed new pages before implementation: search intent, audience, unique value, required verified facts, links to existing pages, CTA and URL/canonical plan. Do not add new public pages or sitemap URLs without that discussion and owner approval.
 - PR #15 was merged by the owner; the image payload audit provides a separate route-aware asset report. Actual image optimization remains gated on verified file sizes and visual mapping.
+
+
+## Site architecture blueprint (approved by the owner 2026-10-12)
+
+Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/LAYOUT-REVIEW.md`](LAYOUT-REVIEW.md).
+
+**Owner decisions**
+- Menu approved: About, Stay, Dining, Packages (Desert Tours and City Tours for now), Directions, Blog, Contact, Book Now. Gallery sits under About.
+- Existing public URLs stay unchanged unless a specific duplicate is owner-approved for 301 redirect.
+- Hidden pages must remain HTTP 200 with `noindex,follow`, and be absent from navigation, hubs and sitemap. Draft tour pages remain unlinked, absent from sitemap and noindex until facts and publication are approved.
+- New tour facts and privacy/cancellation wording must come from the owner. Do not invent operational facts.
+- Owner retains merge/deploy authority. One focused PR at a time, based on current main; read both CI workflows at the exact head SHA and fix failures before review.
+
+**Batch status (reconciled after PR #18 merged)**
+
+| Batch | Scope | Status |
+|---|---|---|
+| Docs | Approved blueprint and layout review | Superseding documentation PR in progress; this log reflects the merged navigation state |
+| A | Data-driven navigation, mobile dropdowns, footer links, active page states | Merged in PR #18 |
+| B | Design tokens, shared visual components, contrast and responsive review | Next |
+| C | Experience data model, hub rendering, breadcrumbs and structured data | Planned |
+| D | Duplicate/orphan decisions, reviewed redirects, status-aware sitemap | Planned |
+| E | Car & City hub and new tour pages, draft-only until facts are confirmed | Blocked on owner facts before publishing |
+| F | Home, Rooms and Packages redesign | Planned |
+| G | Tour pages, Directions, Dining, Gallery and Contact redesign | Planned |
+| H | Owner-approved policies, sitemap generator and freshness checks | Planned |
+
+**PR #18 implementation notes**
+- Navigation source: `include/nav-data.php`; the header and the relevant footer links render from this data.
+- The Packages panel currently lists existing destinations only. The future Car & City hub is not yet implemented; do not link to it until the page exists.
+- PR #18 preserved existing URLs, metadata, sitemap, analytics IDs, booking URL, hotel facts, prices, timings and server configuration.
+- PR #18 reports passing site-check and Browser E2E workflows on head `6d5e49aecfe96a9a575d9a66e675c2ecdfd83e9c`. Keyboard/screen-reader and contrast still need explicit accessibility review.
+
+**Next implementation phase**
+- Batch B: shared design tokens/components and responsive/contrast checks. Preserve current rendered content and real image mappings; no invented copy or hotel facts.
+- Keep CI artifacts out of the deployable website. Do not claim production performance or local execution from CI-only evidence.
