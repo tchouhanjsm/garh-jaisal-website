@@ -1781,3 +1781,182 @@ p{
     transition:none;
   }
 }
+
+/* =========================================================
+   BATCH B — SHARED DESIGN TOKENS AND PRIMITIVES
+   Heritage palette retained; existing page-specific rules remain
+   available while page templates are migrated in later batches.
+   ========================================================= */
+:root{
+  --fs-hero:clamp(2.2rem,5vw,3.6rem);
+  --fs-h2:clamp(1.6rem,3vw,2.3rem);
+  --fs-h3:1.25rem;
+  --fs-body:1rem;
+  --fs-small:.875rem;
+  --sp-1:.5rem;
+  --sp-2:1rem;
+  --sp-3:1.5rem;
+  --sp-4:2.5rem;
+  --sp-5:4rem;
+  --sp-6:6rem;
+  --radius:14px;
+  --radius-sm:8px;
+  --shadow-sm:0 6px 18px rgba(42,28,18,.08);
+  --accent:var(--brown);
+  --accent-hover:#58361f;
+  --focus:#1d4ed8;
+  --text-on-dark:#fff;
+  --text-on-light:var(--ink);
+}
+
+/* Predictable focus indicators; never globally erase outlines. */
+:where(a,button,input,select,textarea,summary,[tabindex]):focus-visible{
+  outline:3px solid var(--focus);
+  outline-offset:3px;
+}
+:where(a,button,input,select,textarea,summary,[tabindex]):focus:not(:focus-visible){
+  outline:none;
+}
+
+/* Shared button hierarchy. Existing page-specific button classes are preserved. */
+.button{
+  border-radius:var(--radius-sm);
+  min-height:44px;
+  gap:var(--sp-1);
+}
+.button-primary{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+}
+.button-primary:hover{
+  background:var(--accent-hover);
+  border-color:var(--accent-hover);
+}
+.button-secondary{
+  background:transparent;
+  border:1px solid var(--accent);
+  color:var(--accent);
+}
+.button-secondary:hover{
+  background:var(--sand-light);
+  color:var(--accent-hover);
+}
+
+/* Shared card primitive for new and progressively migrated templates. */
+.design-card{
+  min-width:0;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:#fff;
+  box-shadow:var(--shadow-sm);
+}
+.design-card__media{
+  aspect-ratio:4 / 3;
+  overflow:hidden;
+  background:var(--sand-light);
+}
+.design-card__media img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.design-card__body{
+  padding:var(--sp-3);
+}
+.design-card__title{
+  margin:0 0 var(--sp-1);
+  font-size:var(--fs-h3);
+}
+.design-card__copy{
+  margin:0;
+  color:#55483d;
+  font-size:var(--fs-body);
+}
+
+/* Consistent content-width hero primitives, opt-in for later page batches. */
+.page-hero-inner{
+  padding-block:clamp(3rem,7vw,5.5rem);
+}
+.page-hero h1{
+  font-size:var(--fs-hero);
+}
+.hero h1{
+  font-size:var(--fs-hero);
+}
+
+/* Opt-in quick-facts strip: only render facts that are verified in page data. */
+.at-a-glance{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));
+  gap:var(--sp-2);
+  padding:var(--sp-3);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:#fff;
+  box-shadow:var(--shadow-sm);
+}
+.at-a-glance__item{
+  min-width:0;
+  padding:var(--sp-1) var(--sp-2);
+  border-inline-start:2px solid var(--sand);
+}
+.at-a-glance__label{
+  display:block;
+  margin-bottom:.25rem;
+  color:#55483d;
+  font-size:var(--fs-small);
+  font-weight:700;
+}
+.at-a-glance__value{
+  display:block;
+  color:var(--ink);
+  font-size:var(--fs-body);
+}
+
+/* Reusable CTA band; existing CTA blocks are not forcibly restyled. */
+.cta-band{
+  padding:var(--sp-5) var(--sp-3);
+  border-radius:var(--radius);
+  background:var(--dark);
+  color:#fff;
+  text-align:center;
+}
+.cta-band h2{
+  margin:0 auto var(--sp-2);
+  color:#fff;
+  font-size:var(--fs-h2);
+  max-width:46rem;
+}
+.cta-band p{
+  max-width:42rem;
+  margin:0 auto var(--sp-3);
+  color:#f2e8d8;
+}
+.cta-band .actions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:var(--sp-2);
+}
+
+/* Avoid animations for visitors who request reduced motion. */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    scroll-behavior:auto!important;
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+  }
+}
+
+@media (max-width:600px){
+  .section{padding-block:clamp(2.75rem,10vw,4rem)}
+  .section-head{align-items:start;flex-direction:column;gap:var(--sp-2)}
+  .design-card__body{padding:var(--sp-2)}
+  .cta-band{padding:var(--sp-4) var(--sp-2)}
+  .cta-band .actions{flex-direction:column;align-items:stretch}
+}
