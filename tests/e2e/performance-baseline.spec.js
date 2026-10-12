@@ -30,8 +30,8 @@ test('write rendered performance and asset baseline for sitemap routes', async (
   try {
     for (const route of routes) {
       const response = await page.goto(route, { waitUntil: 'load', timeout: 20_000 });
-      expect(response, \`No HTTP response for \${route}\`).not.toBeNull();
-      expect(response.status(), \`Unexpected HTTP status for \${route}\`).toBeLessThan(400);
+      expect(response, `No HTTP response for ${route}`).not.toBeNull();
+      expect(response.status(), `Unexpected HTTP status for ${route}`).toBeLessThan(400);
 
       const documentMetrics = await page.evaluate(() => {
         const entry = performance.getEntriesByType('navigation')[0];
