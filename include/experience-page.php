@@ -141,10 +141,8 @@ foreach ($breadcrumbs as $index => $crumb) {
     <div class="experience-hero-media">
       <img
         src="<?= htmlspecialchars($experience['hero_image'], ENT_QUOTES, 'UTF-8') ?>"
-        <?= gj_image_dimension_attributes($experience['hero_image']) ?>
         alt="<?= htmlspecialchars($experience['hero_alt'], ENT_QUOTES, 'UTF-8') ?>"
-        width="<?= (int) ($experience['hero_width'] ?? 0) ?>"
-        height="<?= (int) ($experience['hero_height'] ?? 0) ?>"
+        <?= gj_image_dimension_attributes($experience['hero_image']) ?>
         fetchpriority="high"
       >
       <div class="experience-hero-overlay"></div>
