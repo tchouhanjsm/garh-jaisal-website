@@ -436,3 +436,27 @@
     transition:none;
   }
 }
+
+
+/* Phase F4 — keep the category-first hub concise and anchor-safe */
+#experience-categories,
+#desert-options,
+#city-options,
+#plan-by-time{
+  scroll-margin-top:6rem;
+}
+
+#desert-options,
+#city-options{
+  background:var(--cream);
+}
+
+#city-options{
+  background:#fff;
+}
+
+@media (prefers-reduced-motion:reduce){
+  .package-category-link span{
+    transition:none;
+  }
+}
