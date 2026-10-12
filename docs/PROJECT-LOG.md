@@ -357,4 +357,9 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 |---|---|---|
 | `explore-the-desert.php` | hidden (noindex, not in sitemap) | Distinct full-day product (rewrite and restore) or 301 to `sunset-camel-safari.php`? A 301 needs a root `.htaccess`, which the repo does not have yet. |
 | `longewala-tour.php`, `rajasthan-tours.php` | draft | Owner facts needed before publishing. |
+## Hygiene — ignore node_modules, remove saved 404 file (PR in progress)
+
+- `.gitignore` now ignores `node_modules/`, so a local `npm install` for the browser tests can never be committed or end up in the cPanel deployable tree.
+- Removed `img/loader.html`: a saved "404 Not Found" HTML page, not an image. Its only reference is `css/style.css`, a legacy stylesheet that no PHP page or include loads. `css/style.css` itself is left for the end-of-project legacy CSS review.
+- No public URL, page content, image mapping, booking link, GA4 ID or secret changed.
 
