@@ -234,7 +234,10 @@ $floorCount = count($roomsByFloor);
       <div class="room-grid">
 
         <?php foreach ($floorRooms as $room): ?>
-        <?php $roomId = 'room-' . trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($room['name'])), '-'); ?>
+        <?php
+          $roomSlug = trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($room['name'])), '-');
+          $roomId = 'room-' . $roomSlug;
+        ?>
         <article class="room-card" id="<?= htmlspecialchars($roomId, ENT_QUOTES, 'UTF-8') ?>" data-room-floor="<?= htmlspecialchars(strtolower(str_replace(' ', '-', $floorKicker)), ENT_QUOTES, 'UTF-8') ?>">
 
           <div class="room-card-media">
@@ -270,6 +273,11 @@ $floorCount = count($roomsByFloor);
             >
               Check availability
             </a>
+            <a
+              class="text-link room-enquiry-link"
+              aria-label="Ask about <?= htmlspecialchars($room['name'], ENT_QUOTES, 'UTF-8') ?>"
+              href="contact.php?room=<?= htmlspecialchars($roomSlug, ENT_QUOTES, 'UTF-8') ?>"
+            >Ask about this room →</a>
 
           </div>
         </article>

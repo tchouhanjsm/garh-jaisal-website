@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-12 |
-| Current phase | Phase F8 — Accessibility hardening |
+| Current phase | Phase F11 — Page-by-page guest-journey QA |
 | Base branch | `main` |
-| Baseline commit | `f108a407fa2097bcb1fe31dd95012bf2661e33ff` (main after PR #31) |
-| Last merged PR | [#31 — photo heroes and dark-surface action visibility](https://github.com/tchouhanjsm/garh-jaisal-website/pull/31) |
-| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38237225307) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38237225308) passed on merge commit |
+| Baseline commit | `bdd4f34520939fb499ff6835bda3b5ee978fa307` (main after PR #35) |
+| Last merged PR | [#35 — contextual experience enquiries and booking paths](https://github.com/tchouhanjsm/garh-jaisal-website/pull/35) |
+| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38245719070) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38245719462) passed on current main |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-f8-accessibility-hardening` — keyboard navigation, skip link, focus recovery, and rendered accessibility regression checks |
-| Next action | Validate Phase F8 on the exact PR head; inspect browser evidence and fix any confirmed accessibility regression before owner review |
+| Active batch | `feature/phase-f11-guest-journey-qa` — room-specific enquiry fallback, arrival/dining intent preservation, and full journey regression coverage |
+| Next action | Validate the Phase F11 guest-journey changes with PHP 7.4/8.2 Site Checks and full responsive Browser E2E on the exact PR head; owner retains merge and deployment authority |
 
 ## Phase roadmap
 
@@ -406,7 +406,7 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Keep the browser assertion strict; do not skip the restaurant route or weaken the test. Re-run both Site Checks and Browser E2E on the exact updated PR head.
 
 
-## Phase F9 — founder-led conversion and cross-page consistency (PR in progress)
+## Phase F9 — founder-led conversion and cross-page consistency (PR #33 merged)
 
 - Replace the three hand-written homepage room teaser cards with the first three entries from `include/rooms-data.php`; titles, copy, image paths and alt text now use the same reviewed room registry as the full Rooms page. Each teaser links to its exact room-card anchor, with scroll offset for the sticky navigation.
 - Add a shared “Check availability” CTA to the footer wherever `footer-v2.php` is used. It reuses the configured booking URL, opens safely in a new tab with `rel="noopener"`, and receives rendered regression coverage on every sitemap route. It does not introduce a second booking provider or change booking configuration.
@@ -428,7 +428,7 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Follow-up flake review: the added Contact conversion E2E used Playwright's default full-load wait and timed out on its first attempt before passing on retry. It now uses `domcontentloaded`, matching the other route smoke assertions, because form destination assertions need the rendered document rather than third-party reCAPTCHA/map completion.
 
 
-## Phase F10 — contextual experience enquiries and page semantics (PR in progress)
+## Phase F10 — contextual experience enquiries and page semantics (PR #35 merged)
 
 - Carry the selected live, individual experience slug from the shared experience-page “Ask about availability” and lower “Contact us” CTAs into `contact.php?experience=<slug>`. Experience hubs continue to use a general enquiry link.
 - In Contact, validate the query against `include/experience-data.php` and accept only records explicitly marked `live` that are not category hubs. Prefill the editable message with a request to confirm current price, availability, timings, arrangements and inclusions. Escape all rendered registry values; hidden, draft and unknown slugs do not reveal their titles or prefill a public enquiry.
@@ -437,5 +437,17 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Add Playwright checks for both contextual enquiry paths, rejection of hidden/draft/unknown experience slugs, footer booking-action clarity and Packages heading hierarchy.
 - Business rationale: keep guest intent intact between the chosen tour and the enquiry, reduce typing and misrouted messages, help staff receive the experience name and the guest's request for current details, and avoid implying that the global room-booking action confirms tour availability. No prices are published or inferred.
 - Preserve public URLs, canonicals, schema, analytics IDs, booking configuration, experience status boundaries, existing room and experience content, and production settings.
-- Validation gate: PHP 7.4/8.2 Site Checks, sitemap/publication boundaries, Browser E2E at 320/390/1280/1440 and artifact review on the exact final PR head. PR is stacked on the Browser E2E reliability change in PR #34; merge #34 before treating this feature branch's final diff as standalone.
+- Validation gate: PHP 7.4/8.2 Site Checks, sitemap/publication boundaries, Browser E2E at 320/390/1280/1440 and artifact review on the exact final PR head. PR #35 was validated after the Browser E2E reliability fix in PR #34; both are merged on main.
 - Next milestone: Phase F11 — page-by-page guest-journey QA across Room → booking, Packages → experience → contextual enquiry, Rooftop → menu, and Directions → arrival/contact, followed by owner review of any operational facts or public pricing needing confirmation.
+
+
+## Phase F11 — page-by-page guest-journey QA (PR in progress)
+
+- Room detail: preserve the existing external booking action and configured booking URL, while adding a secondary “Ask about this room” path to the contact form. The room slug and name derive from the existing room registry and stable detail-card IDs; no rate, occupancy or availability is invented.
+- Contact: accept room context only when the slug resolves against `include/rooms-data.php`; prefill an editable request for current availability, rate and room features. Existing live-experience context remains higher priority, then room context, then the finite `arrival`/`dining` topic allowlist. Unknown room/topic values are ignored.
+- Directions: direct contact links preserve arrival intent; the guest-facing FAQ links to the contextual arrival enquiry.
+- Rooftop / Restaurant: dining-related contact links preserve dining intent, Rooftop directs visitors to the existing menu anchor, and the restaurant menu caveat is rewritten as guest-facing guidance rather than an internal publication note. Listed dishes/prices are not changed.
+- Browser E2E: cover all seven room cards, selected-room context and safe booking-link attributes; arrival and dining CTAs; contextual message prefill; unknown query rejection and deterministic context precedence. Existing Packages → experience → enquiry, Rooftop → menu, SEO, sitemap, publication-boundary, responsiveness and accessibility checks remain in force.
+- Preserve public page URLs, canonical/social metadata, JSON-LD, analytics IDs, the configured booking destination, current room/experience records and image mappings. No live form submission, production deployment or merge.
+- Validation gate: Site Checks on PHP 7.4 and 8.2; strict image/reference and sitemap/publication checks; full Browser E2E at 320/390/1280/1440; review exact-head CI evidence and screenshot artifacts. The connector cannot execute local PHP/Chromium, so local test runs are not claimed.
+- Next milestone: Phase F12 — continue page-by-page visual and content QA on the remaining high-intent routes, based on rendered screenshot evidence and owner-confirmed operational facts; then review menu/transfer rates and content currently displayed publicly before any factual revisions.

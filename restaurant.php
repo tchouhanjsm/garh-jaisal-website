@@ -372,7 +372,7 @@ $schema = [
         </section>
       <?php endforeach; ?>
 
-      <p class="restaurant-note">Menu items and prices should be confirmed with the hotel before publication.</p>
+      <p class="restaurant-note">Menu items and listed prices may change. Please confirm the current menu and prices with the hotel.</p>
     </div>
   </section>
 
@@ -386,6 +386,7 @@ $schema = [
         <article><h3>Location</h3><p>Fort Kotari Para, inside Jaisalmer Fort.</p></article>
         <article><h3>Dietary requests</h3><p>Ask the hotel about current vegetarian, vegan, Jain and allergy options.</p></article>
         <article><h3>Walk-ins</h3><p>Availability can vary. Contact the hotel ahead of time, especially for larger groups.</p></article>
+        <p class="restaurant-contact-help">Questions about current menu options or dietary requests? <a class="text-link" href="contact.php?topic=dining">Send a dining enquiry →</a></p>
       </div>
     </div>
   </section>

@@ -21,10 +21,54 @@ if (is_string($requestedExperience) && preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D
     }
 }
 
+$contactRoom = null;
+$requestedRoom = $_GET['room'] ?? '';
+if (
+    $contactExperience === null
+    && is_string($requestedRoom)
+    && preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $requestedRoom)
+) {
+    $roomRegistry = require __DIR__ . '/include/rooms-data.php';
+    foreach ($roomRegistry as $candidateRoom) {
+        $candidateName = (string) ($candidateRoom['name'] ?? '');
+        $candidateSlug = trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($candidateName)), '-');
+        if ($candidateSlug !== '' && $candidateSlug === $requestedRoom) {
+            $contactRoom = $candidateRoom;
+            break;
+        }
+    }
+}
+
+$contactTopics = [
+    'arrival' => [
+        'label' => 'Arrival arrangements',
+        'message' => 'Hello, I would like to confirm arrival arrangements for my stay. Please advise on the route from Fort Parking, meet-and-assist or luggage-help options, and what I should plan for at my arrival time.',
+    ],
+    'dining' => [
+        'label' => 'Rooftop dining',
+        'message' => 'Hello, I would like to enquire about rooftop dining. Please confirm current menu options, dining availability and arrangements for my preferred date.',
+    ],
+];
+$contactTopic = null;
+$requestedTopic = $_GET['topic'] ?? '';
+if (
+    $contactExperience === null
+    && $contactRoom === null
+    && is_string($requestedTopic)
+    && isset($contactTopics[$requestedTopic])
+) {
+    $contactTopic = $contactTopics[$requestedTopic];
+}
+
 $prefilledMessage = '';
 if ($contactExperience !== null) {
     $prefilledMessage = 'Hello, I would like to enquire about ' . $contactExperience['h1']
         . '. Please confirm the current price, availability, timings, arrangements and exact inclusions for my travel date.';
+} elseif ($contactRoom !== null) {
+    $prefilledMessage = 'Hello, I would like to enquire about ' . $contactRoom['name']
+        . '. Please confirm the current availability, rate and room features for my travel dates.';
+} elseif ($contactTopic !== null) {
+    $prefilledMessage = $contactTopic['message'];
 }
 
 if (empty($_SESSION['contact_csrf'])) {
@@ -139,6 +183,10 @@ $canonical = 'https://www.hotelgarhjaisal.com/contact.php';
           <h2>Send an enquiry</h2>
           <?php if ($contactExperience !== null): ?>
             <p class="contact-experience-context">Experience enquiry: <strong><?= htmlspecialchars($contactExperience['h1'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your travel date or any specific questions.</p>
+          <?php elseif ($contactRoom !== null): ?>
+            <p class="contact-room-context">Room enquiry: <strong><?= htmlspecialchars($contactRoom['name'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your travel dates or any specific questions.</p>
+          <?php elseif ($contactTopic !== null): ?>
+            <p class="contact-topic-context">Enquiry topic: <strong><?= htmlspecialchars($contactTopic['label'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your date or any specific questions.</p>
           <?php endif; ?>
           <?php if ($errorMessage !== ''): ?>
             <p class="contact-error" role="alert"><?= htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8') ?></p>
