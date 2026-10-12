@@ -74,6 +74,57 @@ test('experience hubs render valid structured data and tour breadcrumbs', async 
   }
 });
 
+test('Car & City discovery paths remain connected without retiring legacy URLs', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Information architecture checks run once');
+  const cases = [
+    {
+      route: '/car-tours.php',
+      links: [
+        ['Guided Jaisalmer Tours', '/guided-jaisalmer-tour.php'],
+        ['A Walk inside Jaisalmer Fort', '/city-tour.php'],
+        ['Car for Arrival or a Desert Day', '/car-rental.php'],
+      ],
+    },
+    {
+      route: '/car-rental.php',
+      links: [['Car & City Tours', '/car-tours.php']],
+    },
+    {
+      route: '/city-tour.php',
+      links: [['Car & City Tours', '/car-tours.php']],
+    },
+    {
+      route: '/camping.php',
+      links: [['Desert Tours', '/desert-safari.php']],
+    },
+  ];
+
+  for (const item of cases) {
+    const response = await page.goto(item.route, { waitUntil: 'domcontentloaded' });
+    expect(response, `No HTTP response for ${item.route}`).not.toBeNull();
+    expect(response.status(), `Unexpected HTTP status for ${item.route}`).toBeLessThan(400);
+
+    for (const [label, href] of item.links) {
+      await expect(
+        page.locator('main a[href="' + href + '"], body > nav a[href="' + href + '"], main ~ footer a[href="' + href + '"]')
+          .filter({ hasText: label }).first(),
+        `Expected ${item.route} to link to ${label} (${href})`
+      ).toBeAttached();
+    }
+  }
+});
+
+test('draft tour entries remain absent from public navigation and footer', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Publication boundary checks run once');
+  for (const route of ['/', '/pack.php', '/car-tours.php', '/desert-safari.php', '/guided-jaisalmer-tour.php']) {
+    const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+    expect(response).not.toBeNull();
+    expect(response.status()).toBeLessThan(400);
+    await expect(page.locator('header a[href="longewala-tour.php"], footer a[href="longewala-tour.php"]')).toHaveCount(0);
+    await expect(page.locator('header a[href="rajasthan-tours.php"], footer a[href="rajasthan-tours.php"]')).toHaveCount(0);
+  }
+});
+
 test('draft tour pages are noindex and excluded from the sitemap', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Publication status checks run once');
   const sitemapRoutes = getSitemapEntries();
