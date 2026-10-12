@@ -98,9 +98,9 @@ test('shared design tokens and primitives are defined with responsive and reduce
 
   const primitives = await page.evaluate(() => {
     const sheetText = [...document.styleSheets].map(sheet => {
-      try { return [...sheet.cssRules].map(rule => rule.cssText).join('\\n'); }
+      try { return [...sheet.cssRules].map(rule => rule.cssText).join('\n'); }
       catch { return ''; }
-    }).join('\\n');
+    }).join('\n');
     return {
       designCard: sheetText.includes('.design-card'),
       atAGlance: sheetText.includes('.at-a-glance'),
