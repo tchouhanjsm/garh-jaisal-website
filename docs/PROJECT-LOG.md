@@ -296,3 +296,14 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 - Audit `camping.php` and the `explore-the-desert.php` / `sunset-camel-safari.php` distinction; record facts needed from owner before any content consolidation/redirect decision. Do not invent operating facts or change GA4, booking, images or current public URLs.
 - Next after this batch: Phase F page redesign, starting with the Packages hub as its information architecture now has both Desert Tours and Car & City Tours. Home and Rooms follow after the first redesigned page has responsive evidence.
 - Validation gate: PHP 7.4/8.2 lint and strict site checks, deterministic sitemap check, full Browser E2E at 320/390/1280/1440, internal-link checks and rendered SEO checks on exact final PR head. Local PHP/browser is not available through this connector; use CI evidence and do not claim local execution.
+
+
+## Batch F2 — Packages hub category-first redesign (added to PR #24)
+
+- Replace the tree-style experience map with two clear category cards: Desert Tours and Car & City Tours. Each links to the existing live hub and uses existing approved experience descriptions only.
+- Add a hero action that jumps directly to the category chooser; preserve the existing availability/contact CTA.
+- Add responsive card layout, visible keyboard focus, reduced-motion behavior, and section scroll offset for the shared header.
+- Add browser coverage for category count, category destinations, hero jump link, and scroll offset. Existing site-wide viewport smoke tests continue to cover horizontal overflow at 320/390/1280/1440.
+- Fix the discovery regression assertion to compare normalized URL pathnames rather than requiring a leading slash in a relative HTML `href`. This keeps destination and visible-label assertions meaningful without coupling the test to relative-vs-absolute markup.
+- Preserve existing package content sections, public URLs, canonical metadata, JSON-LD, analytics, image mappings, contact/booking paths, and operating facts.
+- Validation gate: PHP 7.4/8.2 site checks and Browser E2E on the exact updated PR head; do not treat a successful PHP-only run as complete.
