@@ -83,7 +83,7 @@ $heroImage = $siteUrl . '/img/v2/facade.jpg';
 </head>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
-<main class="article-page">
+<main class="article-page" id="main-content" tabindex="-1">
   <header class="article-hero">
     <div class="site-shell article-hero-inner">
       <p class="eyebrow">2-day itinerary</p>

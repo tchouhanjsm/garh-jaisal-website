@@ -113,7 +113,7 @@ $floorCount = count($roomsByFloor);
 
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main class="rooms-page">
+<main class="rooms-page" id="main-content" tabindex="-1">
 
   <!-- =====================================================
        PAGE HERO

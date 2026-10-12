@@ -132,7 +132,7 @@ foreach ($breadcrumbs as $index => $crumb) {
 <body>
 <?php include __DIR__ . '/header-v2.php'; ?>
 
-<main>
+<main id="main-content" tabindex="-1">
   <section class="experience-hero">
     <div class="experience-hero-media">
       <img

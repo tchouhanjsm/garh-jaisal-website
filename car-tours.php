@@ -70,7 +70,7 @@ $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] 
 </head>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
-<main>
+<main id="main-content" tabindex="-1">
   <nav class="site-shell breadcrumb-nav" aria-label="Breadcrumb"><ol><li><a href="index.php">Home</a></li><li><a href="pack.php">Packages</a></li><li aria-current="page">Car &amp; City Tours</li></ol></nav>
   <section class="package-hero">
     <div class="package-hero-media">

@@ -397,3 +397,10 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Preserve page copy, public routes, canonical/SEO metadata, booking destinations, analytics IDs, room/experience data and image mappings.
 - Validation gate: PHP 7.4/8.2 Site Checks and full Browser E2E/screenshots at 320/390/1280/1440 on the exact final PR head. The connector cannot run local PHP/Chromium; local execution is not claimed.
 - Follow-up within Phase F8: review the CI screenshot/artifact evidence and expand checks only where rendered evidence confirms an accessibility issue; do not infer visual contrast compliance from CSS token values alone.
+
+
+### Phase F8 follow-up — Browser E2E root-cause fix
+
+- Browser run [#82](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38237888014) exposed a real template inconsistency: `restaurant.php` shared the header/skip link but omitted `js/garh-v2.js`, so the main landmark was never dynamically assigned the skip-link target. The same assertion failed at all four viewport projects; the earlier PR #31 main-branch browser run is green.
+- Make the skip-link target resilient without JavaScript by rendering `id="main-content"` and `tabindex="-1"` directly on the single main landmark throughout sitemap routes, including the shared experience renderer. Add the missing shared navigation script to `restaurant.php` so its mobile navigation uses the same behavior as other v2 pages.
+- Keep the browser assertion strict; do not skip the restaurant route or weaken the test. Re-run both Site Checks and Browser E2E on the exact updated PR head.

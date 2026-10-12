@@ -84,7 +84,7 @@ $bookingUrl = $siteConfig['booking_url'];
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main>
+<main id="main-content" tabindex="-1">
   <nav class="section" aria-label="Breadcrumb"><div class="site-shell"><a href="desert-safari.php">← Desert Tours</a></div></nav>
   <section class="page-hero">
     <div class="site-shell page-hero-inner">
