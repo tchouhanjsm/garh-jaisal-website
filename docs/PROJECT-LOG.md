@@ -339,3 +339,13 @@ Plan documents: [`docs/SITE-ARCHITECTURE.md`](SITE-ARCHITECTURE.md) and [`docs/L
 - Preserve the existing booking URL/configuration, public routes, canonical/OG/Twitter metadata, JSON-LD, GA4 IDs, approved images and room/tour details. Do not invent facilities, pricing, transport arrangements or availability.
 - Validation gate: PHP 7.4/8.2 lint, strict site checks, sitemap/publication boundaries and Browser E2E/screenshots on the exact final PR head. The connector cannot execute local PHP/Chromium; no local run is claimed.
 - Next milestone: Phase F6 — full Rooms page UX redesign after this homepage flow has passed responsive review.
+
+
+## Visual polish 1 — photo page heroes and dark-surface button contrast (PR in progress)
+
+- **Bug fixed:** outline buttons (`button-light`, `button-secondary`) were dark text on dark backgrounds, 1.0:1 to 2.0:1 contrast, on every tour hero, the packages and car-tours heroes, the About, Arrival, Restaurant and article CTA bands. A pixel-based scan of 129 buttons found 31 below 4.5:1; after the fix none are.
+- **Heroes:** Rooms, Directions, Dining and Gallery heroes were flat dark slabs while Packages and tour pages had photos. They now use a shared `page-hero--photo` variant with an overlay gradient. Images are WebP copies (137 to 185 KB at 1600 px) of existing `img/v2` photos and `img/courtyard.jpg`; originals untouched; intrinsic width/height set for layout stability.
+- **Regression test:** every sitemap route's outline buttons must reach 4.5:1 against their nearest opaque background (fails on the old CSS, passes now).
+- Not changed: copy, URLs, prices, booking links, GA4 IDs, room-image mappings. About hero is unchanged because its candidate photo is portrait.
+- Observed, not changed: the Contact page shows `mukeshkila@yahoo.com` next to `info@hotelgarhjaisal.com`; owner to confirm it should be public.
+

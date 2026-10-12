@@ -140,3 +140,38 @@ test('primary booking button contrast meets WCAG AA for normal text', async ({ p
   expect(ratio, `Book Now foreground/background contrast is ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(4.5);
 });
 
+
+test('outline buttons stay legible on dark heroes and call-to-action bands', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Contrast check runs once');
+  const failures = [];
+  for (const route of routes) {
+    await page.goto(route, { waitUntil: 'domcontentloaded' });
+    const found = await page.locator('a.button-light, a.button-secondary, button.button-light, button.button-secondary').evaluateAll(buttons => {
+      const parse = value => {
+        const parts = (value.match(/[\d.]+/g) || []).map(Number);
+        return { rgb: parts.slice(0, 3), alpha: parts.length > 3 ? parts[3] : 1 };
+      };
+      const luminance = ([r, g, b]) => {
+        const lin = channel => { const v = channel / 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+        return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+      };
+      return buttons.filter(el => el.offsetParent !== null).map(el => {
+        const style = getComputedStyle(el);
+        let behind = parse(style.backgroundColor);
+        let node = el.parentElement;
+        while (behind.alpha < 0.5 && node) {
+          behind = parse(getComputedStyle(node).backgroundColor);
+          node = node.parentElement;
+        }
+        if (behind.alpha < 0.5) behind = { rgb: [255, 255, 255], alpha: 1 };
+        const fg = parse(style.color).rgb;
+        const l1 = luminance(fg), l2 = luminance(behind.rgb);
+        return { text: el.textContent.trim(), ratio: (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05) };
+      });
+    });
+    for (const item of found) {
+      if (item.ratio < 4.5) failures.push(`${route} "${item.text}" ${item.ratio.toFixed(2)}:1`);
+    }
+  }
+  expect(failures, `Low-contrast outline buttons:\n${failures.join('\n')}`).toEqual([]);
+});
