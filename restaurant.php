@@ -406,6 +406,15 @@ $schema = [
             <h3>Request sent.</h3>
             <p>We will contact you to confirm the table.</p>
           </div>
+        <?php elseif (!$sendMail): ?>
+          <div class="restaurant-notice restaurant-reservation-unavailable" aria-labelledby="reservation-unavailable-heading">
+            <h3 id="reservation-unavailable-heading">Enquire about a table</h3>
+            <p>Online table requests aren't available on this page right now. Please call or message the hotel to ask about table availability.</p>
+            <div class="restaurant-reservation-actions">
+              <a class="button button-primary" href="tel:<?= e($hotelPhone) ?>">Call the hotel</a>
+              <a class="button button-secondary" href="<?= e($waLink) ?>" target="_blank" rel="noopener">Ask on WhatsApp</a>
+            </div>
+          </div>
         <?php else: ?>
           <?php if (isset($errors['form'])): ?>
             <p class="restaurant-error" role="alert"><?= e($errors['form']) ?></p>
