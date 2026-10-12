@@ -293,3 +293,73 @@ test('Packages tour cards use nested section headings', async ({ page }, testInf
   await expect(page.locator('.experience-card h2')).toHaveCount(0);
   expect(await page.locator('.experience-card h3').count()).toBeGreaterThan(0);
 });
+
+
+test('room enquiry retains the selected room from detail card to contact form', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Room enquiry journey is checked once');
+  await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
+  const cards = page.locator('.room-card');
+  await expect(cards).toHaveCount(7);
+  await expect(page.locator('.room-enquiry-link')).toHaveCount(7);
+
+  const rooms = await cards.evaluateAll(elements => elements.map(card => ({
+    slug: (card.id || '').replace(/^room-/, ''),
+    name: (card.querySelector('h3')?.textContent || '').trim(),
+  })));
+
+  const bookingUrl = await page.locator('.nav-book').getAttribute('href');
+  for (const room of rooms) {
+    expect(room.slug).toMatch(/^[a-z0-9-]+$/);
+    expect(room.name).not.toBe('');
+    const card = page.locator('#room-' + room.slug);
+    await expect(card.locator('.room-book')).toHaveAttribute('href', bookingUrl);
+    await expect(card.locator('.room-book')).toHaveAttribute('target', '_blank');
+    await expect(card.locator('.room-book')).toHaveAttribute('rel', /noopener/);
+    await expect(card.locator('.room-enquiry-link')).toHaveAttribute('href', 'contact.php?room=' + room.slug);
+    await expect(card.locator('.room-enquiry-link')).toHaveAttribute('aria-label', 'Ask about ' + room.name);
+
+    await page.goto('/contact.php?room=' + room.slug, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('.contact-room-context')).toContainText(room.name);
+    await expect(page.locator('#message')).toHaveValue(new RegExp('enquire about ' + room.name));
+  }
+});
+
+test('arrival and dining contact links preserve their topic in the editable enquiry', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Arrival and dining enquiry routes are checked once');
+
+  await page.goto('/direction.php', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.arrival-contact a[href="contact.php?topic=arrival"]')).toContainText('Contact the hotel');
+  await expect(page.locator('.final-cta a[href="contact.php?topic=arrival"]')).toContainText('Contact us');
+  await expect(page.locator('.arrival-faq a[href="contact.php?topic=arrival"]')).toContainText('arrival enquiry form');
+  await page.goto('/contact.php?topic=arrival', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.contact-topic-context')).toContainText('Arrival arrangements');
+  await expect(page.locator('#message')).toHaveValue(/confirm arrival arrangements/);
+
+  await page.goto('/roof.php', { waitUntil: 'domcontentloaded' });
+  await expect(page.getByRole('link', { name: 'Contact the hotel' }).first())
+    .toHaveAttribute('href', 'contact.php?topic=dining');
+  await expect(page.locator('.roof-copy a[href="contact.php?topic=dining"]')).toHaveCount(1);
+
+  await page.goto('/restaurant.php', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.restaurant-contact-help a')).toHaveAttribute('href', 'contact.php?topic=dining');
+  await expect(page.locator('.restaurant-note')).toContainText('confirm the current menu and prices');
+
+  await page.goto('/contact.php?topic=dining', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.contact-topic-context')).toContainText('Rooftop dining');
+  await expect(page.locator('#message')).toHaveValue(/enquire about rooftop dining/);
+});
+
+test('invalid enquiry context is ignored and a selected room takes precedence over a generic topic', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Context validation and precedence are checked once');
+
+  for (const query of ['?room=not-a-room', '?topic=not-a-topic']) {
+    await page.goto('/contact.php' + query, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('.contact-room-context, .contact-topic-context')).toHaveCount(0);
+    await expect(page.locator('#message')).toHaveValue('');
+  }
+
+  await page.goto('/contact.php?room=opium-room&topic=arrival', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('.contact-room-context')).toContainText('Opium Room');
+  await expect(page.locator('.contact-topic-context')).toHaveCount(0);
+  await expect(page.locator('#message')).toHaveValue(/enquire about Opium Room/);
+});

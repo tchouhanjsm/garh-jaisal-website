@@ -2462,3 +2462,37 @@ p{
   white-space:normal;
   text-align:center;
 }
+
+
+/* Phase F11 — secondary room enquiry path, below the primary availability action. */
+.room-enquiry-link{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:44px;
+  margin-top:8px;
+  padding:8px 10px;
+  border-radius:var(--radius-sm);
+  color:var(--brown);
+  font-weight:600;
+  text-align:center;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.room-enquiry-link:hover{
+  background:var(--sand-light);
+  color:var(--accent-hover);
+}
+.room-enquiry-link:focus-visible{
+  outline:3px solid var(--focus);
+  outline-offset:2px;
+}
+.restaurant-contact-help{
+  margin:18px 0 0;
+  color:var(--muted);
+  font-size:.9rem;
+  line-height:1.6;
+}
+.restaurant-contact-help .text-link{
+  font-weight:700;
+}
