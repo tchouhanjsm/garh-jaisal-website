@@ -1,5 +1,5 @@
 <?php
-$activePage = '';
+$activePage = 'dining';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $hotelPhone = $siteConfig['hotel_phone'];
 $hotelPhoneDisplay = $siteConfig['hotel_phone_display'];

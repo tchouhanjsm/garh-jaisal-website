@@ -1561,3 +1561,223 @@ p{
     animation:none!important;
   }
 } 
+
+/* =========================================================
+   NAVIGATION DROPDOWNS (rendered from include/nav-data.php)
+   ========================================================= */
+
+.nav-home-mobile{
+  display:none;
+}
+
+.nav-item{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:2px;
+}
+
+.nav-item.has-mega{
+  position:static;
+}
+
+.nav-sub-toggle{
+  width:22px;
+  height:22px;
+  padding:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:none;
+  border:0;
+  border-radius:4px;
+  color:#51483f;
+  cursor:pointer;
+}
+
+.nav-sub-toggle span{
+  width:6px;
+  height:6px;
+  border-right:1.5px solid currentColor;
+  border-bottom:1.5px solid currentColor;
+  transform:translateY(-2px) rotate(45deg);
+  transition:transform .2s ease;
+}
+
+.nav-sub-toggle:focus-visible{
+  outline:2px solid var(--brown);
+  outline-offset:2px;
+}
+
+.nav-item.is-open > .nav-sub-toggle span,
+.nav-item.has-sub:hover > .nav-sub-toggle span{
+  transform:translateY(1px) rotate(225deg);
+}
+
+.nav-sub{
+  display:none;
+  position:absolute;
+  top:100%;
+  left:-14px;
+  min-width:250px;
+  padding:8px;
+  background:var(--cream);
+  border:1px solid var(--line);
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  z-index:120;
+}
+
+.nav-mega{
+  left:auto;
+  right:0;
+  width:min(580px,100%);
+}
+
+.nav-item.has-sub:hover > .nav-sub,
+.nav-item.has-sub:focus-within > .nav-sub,
+.nav-item.has-sub.is-open > .nav-sub{
+  display:block;
+}
+
+.nav-item.has-sub.is-dismissed:not(.is-open) > .nav-sub{
+  display:none;
+}
+
+.main-nav .nav-sub a{
+  display:block;
+  padding:10px 12px;
+  border-radius:6px;
+  color:var(--ink);
+  white-space:normal;
+  line-height:1.35;
+}
+
+.main-nav .nav-sub a::after{
+  display:none;
+}
+
+.main-nav .nav-sub a:hover,
+.main-nav .nav-sub a:focus-visible,
+.main-nav .nav-sub a[aria-current="page"]{
+  background:var(--sand-light);
+}
+
+.nav-mega-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px 20px;
+  padding:4px;
+}
+
+.nav-group{
+  display:flex;
+  flex-direction:column;
+}
+
+.main-nav .nav-sub a.nav-group-title{
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:1rem;
+  font-weight:600;
+  color:var(--brown);
+}
+
+.nav-mega-foot{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:4px 16px;
+  margin-top:6px;
+  padding-top:6px;
+  border-top:1px solid var(--line);
+  font-size:.8125rem;
+}
+
+.main-nav .nav-mega-foot a{
+  padding:8px 12px;
+  color:var(--brown);
+}
+
+@media (max-width:1080px){
+
+  .nav-home-mobile{
+    display:block;
+  }
+
+  .main-nav{
+    max-height:calc(100vh - 140px);
+    max-height:calc(100dvh - 140px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+  }
+
+  .nav-item,
+  .nav-item.has-mega{
+    position:static;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 44px;
+    align-items:center;
+    gap:0;
+  }
+
+  .nav-sub-toggle{
+    width:44px;
+    height:44px;
+  }
+
+  .nav-sub,
+  .nav-mega{
+    position:static;
+    grid-column:1 / -1;
+    width:auto;
+    min-width:0;
+    padding:0 0 8px 14px;
+    background:transparent;
+    border:0;
+    border-radius:0;
+    box-shadow:none;
+  }
+
+  .nav-item.has-sub:hover > .nav-sub,
+  .nav-item.has-sub:focus-within > .nav-sub{
+    display:none;
+  }
+
+  .nav-item.has-sub.is-open > .nav-sub{
+    display:block;
+  }
+
+  .nav-item.has-sub:hover > .nav-sub-toggle span{
+    transform:translateY(-2px) rotate(45deg);
+  }
+
+  .nav-item.is-open > .nav-sub-toggle span{
+    transform:translateY(1px) rotate(225deg);
+  }
+
+  .nav-mega-grid{
+    grid-template-columns:1fr;
+    gap:4px;
+    padding:0;
+  }
+
+  .main-nav .nav-sub a{
+    padding:10px 8px;
+  }
+
+  .nav-mega-foot{
+    flex-direction:column;
+    border-top:0;
+    padding-top:0;
+  }
+
+  .main-nav .nav-mega-foot a{
+    padding:10px 8px;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .nav-sub-toggle span{
+    transition:none;
+  }
+}
