@@ -1960,3 +1960,204 @@ p{
   .cta-band{padding:var(--sp-4) var(--sp-2)}
   .cta-band .actions{flex-direction:column;align-items:stretch}
 }
+
+/* =========================================================
+   BATCH F3 — HOME AND ROOMS DISCOVERY
+   ========================================================= */
+.home-facts-section{
+  position:relative;
+  z-index:2;
+  margin-top:-30px;
+  padding:0 0 16px;
+}
+.home-facts{
+  gap:0;
+  padding:18px 12px;
+  background:#fff;
+  box-shadow:0 12px 36px rgba(42,28,18,.12);
+}
+.home-facts .at-a-glance__item + .at-a-glance__item{
+  border-inline-start:1px solid var(--line);
+}
+.home-room-section .section-head{
+  align-items:center;
+}
+.home-room-summary{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:14px;
+  max-width:430px;
+}
+.home-room-summary p{
+  margin:0;
+}
+.home-room-summary .home-room-cta{
+  margin-top:0;
+  width:auto;
+}
+.home-room-section .card{
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:#fff;
+  box-shadow:var(--shadow-sm);
+}
+.home-room-section .card-body{
+  display:flex;
+  flex:1;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.home-room-section .card .text-link{
+  display:inline-flex;
+  align-items:center;
+  min-height:44px;
+  margin-top:auto;
+  padding-top:8px;
+}
+.breadcrumbs{
+  margin:0 0 20px;
+  color:#e6d6c5;
+  font-size:.875rem;
+}
+.breadcrumbs ol{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.breadcrumbs li + li::before{
+  content:"/";
+  margin-right:8px;
+  color:#cdbba7;
+}
+.breadcrumbs a{
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.breadcrumbs a:hover{
+  color:#fff;
+}
+.page-hero .room-hero-description{
+  max-width:650px;
+  margin:0;
+  color:#d9d1c9;
+  font-size:1.05rem;
+}
+.page-hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:26px;
+}
+.page-hero-actions .button{
+  width:auto;
+}
+.rooms-at-a-glance{
+  margin-top:28px;
+  margin-bottom:-12px;
+}
+.rooms-at-a-glance .at-a-glance__item{
+  min-width:0;
+}
+.room-feature-details{
+  margin:0 0 20px;
+  border-top:1px solid var(--line);
+}
+.room-feature-details summary{
+  display:flex;
+  align-items:center;
+  min-height:44px;
+  padding:8px 0;
+  cursor:pointer;
+  color:var(--brown);
+  font-size:.82rem;
+  font-weight:700;
+}
+.room-feature-details summary::marker{
+  color:var(--brown);
+}
+.room-features-extra{
+  margin-bottom:10px;
+}
+.rooms-faq{
+  background:#fff;
+}
+.rooms-faq-inner{
+  max-width:900px;
+}
+.rooms-faq h2{
+  margin:0 0 28px;
+  font-size:var(--fs-h2);
+}
+.rooms-faq-list{
+  display:grid;
+  gap:12px;
+}
+.rooms-faq-list details{
+  border:1px solid var(--line);
+  border-radius:var(--radius-sm);
+  background:var(--cream);
+}
+.rooms-faq-list summary{
+  min-height:56px;
+  display:flex;
+  align-items:center;
+  padding:16px 18px;
+  cursor:pointer;
+  font-weight:700;
+}
+.rooms-faq-list p{
+  margin:0;
+  padding:0 18px 18px;
+  color:#55483d;
+}
+@media (max-width:760px){
+  .home-facts-section{
+    margin-top:-18px;
+    padding-bottom:0;
+  }
+  .home-facts{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:0;
+    padding:10px;
+  }
+  .home-facts .at-a-glance__item{
+    padding:12px 10px;
+  }
+  .home-facts .at-a-glance__item:nth-child(odd){
+    border-inline-start:0;
+  }
+  .home-facts .at-a-glance__item:nth-child(n+3){
+    border-top:1px solid var(--line);
+  }
+  .home-room-section .section-head{
+    align-items:stretch;
+  }
+  .home-room-summary{
+    margin-top:16px;
+    max-width:none;
+  }
+  .rooms-at-a-glance{
+    grid-template-columns:1fr;
+    margin-bottom:0;
+  }
+  .rooms-at-a-glance .at-a-glance__item + .at-a-glance__item{
+    border-inline-start:0;
+    border-top:1px solid var(--line);
+  }
+  .page-hero-actions{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .page-hero-actions .button{
+    width:100%;
+  }
+}
