@@ -44,3 +44,24 @@ test.describe('technical SEO metadata', () => {
     });
   }
 });
+
+test('experience hubs render breadcrumb navigation and valid structured data', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Experience architecture checks run once');
+  for (const route of ['/pack.php', '/desert-safari.php', '/guided-jaisalmer-tour.php']) {
+    const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+    expect(response).not.toBeNull();
+    expect(response.status()).toBeLessThan(400);
+    await expect(page.locator('main h1')).toHaveCount(1);
+    await expect(page.locator('nav[aria-label="Breadcrumb"]')).toBeVisible();
+    const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
+    for (const source of blocks) {
+      const parsed = JSON.parse(source);
+      const graph = Array.isArray(parsed['@graph']) ? parsed['@graph'] : [];
+      const breadcrumb = graph.find(node => node['@type'] === 'BreadcrumbList');
+      if (breadcrumb) {
+        expect(breadcrumb.itemListElement.length).toBeGreaterThanOrEqual(2);
+        expect(breadcrumb.itemListElement[breadcrumb.itemListElement.length - 1].name).toBeTruthy();
+      }
+    }
+  }
+});
