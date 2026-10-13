@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const gallery = document.querySelector('.gallery-page');
   if (gallery) {
     const filters = Array.from(gallery.querySelectorAll('[data-gallery-filter]'));
+    const filterGroup = gallery.querySelector('.gallery-filters');
+    if (filterGroup) filterGroup.hidden = false;
     const sections = Array.from(gallery.querySelectorAll('[data-gallery-category]'));
     const sectionLinks = Array.from(gallery.querySelectorAll('.gallery-jump a[href^="#"]'));
     const dialog = gallery.querySelector('.gallery-lightbox');

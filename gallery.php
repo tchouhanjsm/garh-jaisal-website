@@ -99,7 +99,7 @@ require __DIR__ . '/include/page-head.php';
       <a href="#restaurant">Rooftop dining</a>
     </div>
 
-    <div class="site-shell gallery-filters" role="group" aria-label="Filter gallery photos">
+    <div class="site-shell gallery-filters" hidden role="group" aria-label="Filter gallery photos">
       <button type="button" data-gallery-filter="all" aria-pressed="true">All photos</button>
       <button type="button" data-gallery-filter="hotel" aria-pressed="false">Fort &amp; haveli</button>
       <button type="button" data-gallery-filter="rooms" aria-pressed="false">Rooms</button>
