@@ -64,6 +64,7 @@ jobs:
             artifacts/seo-inventory/
             artifacts/performance-baseline/
             artifacts/image-payload-audit/
+            artifacts/image-accessibility/
             artifacts/page-layout-inventory/
             artifacts/head-snapshot/
             test-results/

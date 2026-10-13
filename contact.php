@@ -1,7 +1,5 @@
 <?php
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
+require_once __DIR__ . '/include/session.php';
 
 $activePage = 'contact';
 $siteConfig = require __DIR__ . '/include/site-config.php';
@@ -180,6 +178,7 @@ require __DIR__ . '/include/page-head.php';
           <?php endif; ?>
           <?php if ($errorMessage !== ''): ?>
             <p class="contact-error" role="alert"><?= htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8') ?></p>
+            <p class="contact-error-help">You can also <a href="tel:<?= htmlspecialchars($siteConfig['hotel_phone'], ENT_QUOTES, 'UTF-8') ?>">call the hotel</a> or <a href="<?= htmlspecialchars($siteConfig['whatsapp_url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">message us on WhatsApp</a>.</p>
           <?php endif; ?>
 
           <div class="contact-field">

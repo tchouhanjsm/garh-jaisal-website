@@ -7,10 +7,11 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | Sprint | Slice | Status |
 |---|---|---|
 | 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ✓ merged through PR #48; fonts remain a separate reversible cleanup after a retained-CSS reference scan |
-| 2A | Dining (`roof.php`, `restaurant.php`), Contact, Directions | ◐ Contact/Directions pass merged in PR #49; reciprocal Dining link and responsive menu alignment are included with the next reviewable page-group batch |
-| 2B | Gallery, About, Blog and guides | ◐ combined with Sprint 2C in PR #50: failed image-geometry check fix, Gallery filters/lightbox, shared breadcrumbs and featured guide; exact-head E2E must pass |
-| 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ◐ folded into PR #50: shared experience responsive polish and noindex/off-nav policy draft shells; owner terms still required |
-| 3 | Launch hardening: `.htaccess`, forms, images, alt text, sitemap dates, cPanel handoff, tag v1.0.0 | ☐ |
+| 2A | Dining (`roof.php`, `restaurant.php`), Contact, Directions | ✓ page group and reciprocal Dining/responsive fixes merged through PRs #49–#50 |
+| 2B | Gallery, About, Blog and guides | ✓ merged in PR #50; visual review artifact available |
+| 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ◐ responsive detail protections and draft shells merged in PR #50; policy pages remain noindex/off-nav until owner supplies terms |
+| 3A | Launch hardening: `.htaccess`, form/email resilience, custom 404 | ◐ folded into combined PR #51; first exact-head checks are green |
+| 3B | Image compression, alt text, sitemap dates, cPanel handoff, release tag | ◐ folded into PR #51; image-size variants are review artifacts until visually approved; release tag waits for staging sign-off |
 
 ---
 
@@ -154,3 +155,19 @@ Stop there: the owner merges.
 - Shared experience-detail CSS receives mobile-first overflow and alignment protections; regression checks exercise six live experience routes at 320px, 390px and 1280px.
 - `privacy.php` and `booking-policy.php` exist only as clearly labelled `noindex,follow` drafts, are not linked from navigation/footer, and are not added to the sitemap. They do not assert unapproved terms or privacy practices.
 - Browser E2E previously failed because the closed Gallery lightbox contained an image without a source or intrinsic dimensions. The placeholder now uses an existing image and the dimension helper; rerun full CI on the updated final head.
+
+
+### Sprint 3A launch hardening batch (2026-10-13)
+
+- Canonical HTTPS/host rewrite and cPanel Apache headers/compression/cache rules are guarded by module checks. `.well-known` certificate challenge paths bypass redirects. HSTS is deliberately not enabled until certificate/subdomain coverage is owner-verified.
+- Contact form changes preserve CSRF, honeypot, CAPTCHA, configured recipients and existing destinations; verification secrets move out of query strings, the session throttle runs before remote verification, and session cookies gain HttpOnly/SameSite plus HTTPS Secure.
+- Custom `404.php` returns HTTP 404, stays noindex, and provides Home, Rooms, Contact, WhatsApp and booking recovery actions.
+- Regression tests cover 404 behavior, GET rejection, invalid-CSRF rejection and honeypot rejection without sending a real enquiry. A static gate checks the Apache configuration; CI cannot prove cPanel module availability or production redirects.
+
+
+### Sprint 3B continuation folded into PR #51 (2026-10-13)
+
+- Sitemap `lastmod` dates come from Git commit history for the listed route PHP source files; the generator fails closed without a valid history date and CI uses a full-history checkout. It does not depend on repository timestamps or the current date.
+- A rendered image-accessibility test checks every sitemap route; decorative hero images are explicitly hidden from assistive technology. Existing originals and existing image URLs stay intact.
+- CI builds a responsive WebP review artifact at widths up to 480, 800 and 1200 pixels for the 16 original tracked image files over 400,000 bytes (including the 6,138,540-byte `img/tent1.jpg`). Review outputs are not public references yet.
+- Added cPanel deployment and staging QA guides. The owner must approve image visuals, test Apache rules on staging, and approve release before creating `v1.0.0`.

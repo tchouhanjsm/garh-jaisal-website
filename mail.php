@@ -1,9 +1,6 @@
 <?php
 $siteConfig = require __DIR__ . '/include/site-config.php';
-
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
+require_once __DIR__ . '/include/session.php';
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Location: contact.php');
@@ -48,21 +45,44 @@ if (!$valid) {
     exit;
 }
 
+$now = time();
+$lastSubmission = (int) ($_SESSION['contact_last_submission'] ?? 0);
+if ($lastSubmission > 0 && ($now - $lastSubmission) < 30) {
+    header('Location: contact.php?error=send');
+    exit;
+}
+// Apply the session throttle before making a remote CAPTCHA verification request.
+$_SESSION['contact_last_submission'] = $now;
+
 $secretKey = trim((string) ($siteConfig['recaptcha_secret'] ?? ''));
 if ($secretKey === '') {
     header('Location: contact.php?error=config');
     exit;
 }
 
-$verifyUrl = 'https://www.google.com/recaptcha/api/siteverify?secret='
-    . rawurlencode($secretKey)
-    . '&response='
-    . rawurlencode($captcha);
-$response = @file_get_contents($verifyUrl);
+$verifyUrl = 'https://www.google.com/recaptcha/api/siteverify';
+$verifyPayload = http_build_query([
+    'secret' => $secretKey,
+    'response' => $captcha,
+]);
+$verifyContext = stream_context_create([
+    'http' => [
+        'method' => 'POST',
+        'header' => "Content-Type: application/x-www-form-urlencoded\r\n"
+            . 'Content-Length: ' . strlen($verifyPayload) . "\r\n",
+        'content' => $verifyPayload,
+        'timeout' => 8,
+        'ignore_errors' => true,
+    ],
+]);
+$response = @file_get_contents($verifyUrl, false, $verifyContext);
 if (!is_string($response) && function_exists('curl_init')) {
     $handle = curl_init($verifyUrl);
     curl_setopt_array($handle, [
         CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $verifyPayload,
+        CURLOPT_CONNECTTIMEOUT => 4,
         CURLOPT_TIMEOUT => 8,
     ]);
     $curlResponse = curl_exec($handle);
@@ -70,19 +90,22 @@ if (!is_string($response) && function_exists('curl_init')) {
     $response = is_string($curlResponse) ? $curlResponse : false;
 }
 $captchaData = is_string($response) ? json_decode($response) : null;
+$siteHost = strtolower((string) parse_url((string) ($siteConfig['site_url'] ?? ''), PHP_URL_HOST));
+$captchaHost = is_object($captchaData) ? strtolower((string) ($captchaData->hostname ?? '')) : '';
+$allowedCaptchaHosts = array_values(array_unique([
+    $siteHost,
+    preg_replace('/^www\\./', '', $siteHost),
+]));
 
-if (!is_object($captchaData) || empty($captchaData->success)) {
+if (
+    !is_object($captchaData)
+    || empty($captchaData->success)
+    || $captchaHost === ''
+    || !in_array($captchaHost, $allowedCaptchaHosts, true)
+) {
     header('Location: contact.php?error=captcha');
     exit;
 }
-
-$now = time();
-$lastSubmission = (int) ($_SESSION['contact_last_submission'] ?? 0);
-if ($lastSubmission > 0 && ($now - $lastSubmission) < 30) {
-    header('Location: contact.php?error=send');
-    exit;
-}
-$_SESSION['contact_last_submission'] = $now;
 
 $recipients = array_values(array_filter((array) ($siteConfig['inquiry_recipients'] ?? []), static function ($value) {
     return is_string($value) && filter_var($value, FILTER_VALIDATE_EMAIL);
@@ -108,18 +131,27 @@ $body .= '<tr><td style="padding:5px;">Message</td><td style="padding:5px;">'
     . nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8')) . '</td></tr>';
 $body .= '</table>';
 
-$fromAddress = (string) ($siteConfig['hotel_email'] ?? 'info@hotelgarhjaisal.com');
+$fromAddress = trim((string) ($siteConfig['hotel_email'] ?? 'info@hotelgarhjaisal.com'));
+if (preg_match('/[\r\n]/', $fromAddress) || filter_var($fromAddress, FILTER_VALIDATE_EMAIL) === false) {
+    $fromAddress = 'info@hotelgarhjaisal.com';
+}
 $headers = "MIME-Version: 1.0\r\n";
 $headers .= "Content-type:text/html;charset=UTF-8\r\n";
 $headers .= 'From: ' . str_replace(["\r", "\n"], '', $fromAddress) . "\r\n";
 $headers .= 'Reply-To: ' . $replyTo . "\r\n";
 
-$sent = mail($emailTo, $subject, $body, $headers);
+try {
+    $sent = mail($emailTo, $subject, $body, $headers);
+} catch (Throwable $exception) {
+    error_log('Contact enquiry mail delivery failed.');
+    $sent = false;
+}
 if ($sent !== true) {
     header('Location: contact.php?error=send');
     exit;
 }
 
+session_regenerate_id(true);
 unset($_SESSION['contact_csrf']);
 $_SESSION['enquiry_received'] = true;
 header('Location: thank-you.php');
