@@ -5,91 +5,56 @@ $bookingUrl = $siteConfig['booking_url'];
 ?>
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>About Garh Jaisal Haveli | A Stay in Jaisalmer Fort</title>
-  <meta
-    name="description"
-    content="Read the story of Garh Jaisal Haveli, a heritage stay inside Jaisalmer Fort, with preserved jharokhas, rooftop meals and help planning desert trips."
-  >
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://www.hotelgarhjaisal.com/about.php">
-
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="About Garh Jaisal Haveli | A Stay in Jaisalmer Fort">
-  <meta
-    property="og:description"
-    content="Garh Jaisal Haveli is a heritage stay inside Jaisalmer Fort, with antique character and everyday comfort."
-  >
-  <meta property="og:url" content="https://www.hotelgarhjaisal.com/about.php">
-  <meta property="og:image" content="https://www.hotelgarhjaisal.com/img/courtyard.jpg">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="About Garh Jaisal Haveli | A Stay in Jaisalmer Fort">
-  <meta
-    name="twitter:description"
-    content="A heritage stay inside Jaisalmer Fort, with preserved rooms, rooftop dining and local hospitality."
-  >
-  <meta name="twitter:image" content="https://www.hotelgarhjaisal.com/img/courtyard.jpg">
-
-  <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/garh-v2.css">
-  <link rel="stylesheet" href="css/about.css">
-
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0C646S1FQ0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-0C646S1FQ0');
-    gtag('config', 'G-6S5PCEVXH4');
-  </script>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        "@id": "https://www.hotelgarhjaisal.com/about.php#webpage",
-        "url": "https://www.hotelgarhjaisal.com/about.php",
-        "name": "About Garh Jaisal Haveli | A Stay in Jaisalmer Fort",
-        "description": "Read the story of Garh Jaisal Haveli, a heritage stay inside Jaisalmer Fort, with preserved jharokhas, rooftop meals and help planning desert trips.",
-        "isPartOf": { "@id": "https://www.hotelgarhjaisal.com/#website" },
-        "about": { "@id": "https://www.hotelgarhjaisal.com/#hotel" },
-        "primaryImageOfPage": {
-          "@type": "ImageObject",
-          "url": "https://www.hotelgarhjaisal.com/img/courtyard.jpg"
-        },
-        "breadcrumb": { "@id": "https://www.hotelgarhjaisal.com/about.php#breadcrumb" }
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": "https://www.hotelgarhjaisal.com/about.php#breadcrumb",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://www.hotelgarhjaisal.com/"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "About",
-            "item": "https://www.hotelgarhjaisal.com/about.php"
-          }
-        ]
-      }
-    ]
-  }
-  </script>
-</head>
+<?php
+$schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
+$schemaPageUrl = $schemaSiteUrl . '/about.php';
+$page = [
+    'title' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
+    'description' => 'Read the story of Garh Jaisal Haveli, a heritage stay inside Jaisalmer Fort, with preserved jharokhas, rooftop meals and help planning desert trips.',
+    'path' => '/about.php',
+    'og_title' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
+    'og_description' => 'Garh Jaisal Haveli is a heritage stay inside Jaisalmer Fort, with antique character and everyday comfort.',
+    'og_image' => '/img/courtyard.jpg',
+    'twitter_title' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
+    'twitter_description' => 'A heritage stay inside Jaisalmer Fort, with preserved rooms, rooftop dining and local hospitality.',
+    'twitter_image' => '/img/courtyard.jpg',
+    'css' => ['css/about.css'],
+    'schema' => [
+        [
+            '@type' => 'WebPage',
+            '@id' => $schemaPageUrl . '#webpage',
+            'url' => $schemaPageUrl,
+            'name' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
+            'description' => 'Read the story of Garh Jaisal Haveli, a heritage stay inside Jaisalmer Fort, with preserved jharokhas, rooftop meals and help planning desert trips.',
+            'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
+            'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
+            'primaryImageOfPage' => [
+                '@type' => 'ImageObject',
+                'url' => $schemaSiteUrl . '/img/courtyard.jpg',
+            ],
+            'breadcrumb' => ['@id' => $schemaPageUrl . '#breadcrumb'],
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            '@id' => $schemaPageUrl . '#breadcrumb',
+            'itemListElement' => [
+                [
+                    '@type' => 'ListItem',
+                    'position' => 1,
+                    'name' => 'Home',
+                    'item' => $schemaSiteUrl . '/',
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 2,
+                    'name' => 'About',
+                    'item' => $schemaPageUrl,
+                ],
+            ],
+        ],
+    ],
+];
+require __DIR__ . '/include/page-head.php';
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
