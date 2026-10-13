@@ -543,8 +543,8 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 
 ## Sprint 1 — remaining shared page heads (PR #45)
 
-- Verified base: main \`438946452872dcc8b87fb593eff6869858f9d75d\`; PR #44 is latest merged and no implementation PR was open before this batch.
-- Migrated \`roof.php\`, \`restaurant.php\`, \`blog.php\`, three guides and \`include/experience-page.php\` to the shared head; public URLs and page body sections stay unchanged.
-- Preserved title, description, canonical, robots policy, social metadata, page-specific JSON-LD and both configured GA4 IDs; added shared \`og:image:alt\` support and retained the frozen fixture.
+- Verified base: main `438946452872dcc8b87fb593eff6869858f9d75d`; PR #44 is latest merged and no implementation PR was open before this batch.
+- Migrated `roof.php`, `restaurant.php`, `blog.php`, three guides and `include/experience-page.php` to the shared head; public URLs and page body sections stay unchanged.
+- Preserved title, description, canonical, robots policy, social metadata, page-specific JSON-LD and both configured GA4 IDs; added shared `og:image:alt` support and retained the frozen fixture.
 - Validation gate: exact-head PHP 7.4/8.2 Site Checks, Browser E2E and the 390px/1280px page-sheet artifact; local PHP/Chromium were not run by the connector.
-- Owner questions: none for this technical refactor; existing operational facts remain open in \`docs/OWNER-FACTS.md\`. Next: reusable UI partials, then verified dead assets with fonts as a separate revertible commit.
+- Owner questions: none for this technical refactor; existing operational facts remain open in `docs/OWNER-FACTS.md`. Next: reusable UI partials, then verified dead assets with fonts as a separate revertible commit.
