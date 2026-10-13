@@ -306,6 +306,66 @@ foreach ($markupFiles as $file) {
     }
 }
 
+// 7. Legacy icon-font asset retirement guard. The hosted Google Fonts used by
+// the shared page head are intentionally not part of this local asset inventory.
+$legacyFontAssets = [
+    'fonts/fontawesome-webfont3e6e.eot',
+    'fonts/fontawesome-webfont3e6e.svg',
+    'fonts/fontawesome-webfont3e6e.ttf',
+    'fonts/fontawesome-webfont3e6e.woff',
+    'fonts/fontawesome-webfont3e6e.woff2',
+    'fonts/fontawesome-webfontd41d.eot',
+    'fonts/glyphicons-halflings-regular.eot',
+    'fonts/glyphicons-halflings-regular.svg',
+    'fonts/glyphicons-halflings-regular.ttf',
+    'fonts/glyphicons-halflings-regular.woff',
+    'fonts/glyphicons-halflings-regular.woff2',
+    'fonts/glyphicons-halflings-regulard41d.eot',
+    'fonts/icofont7858.eot',
+    'fonts/icofont7858.svg',
+    'fonts/icofont7858.ttf',
+    'fonts/icofont7858.woff',
+];
+foreach ($legacyFontAssets as $legacyFontAsset) {
+    if (is_file($root . '/' . $legacyFontAsset)) {
+        $errors[] = 'retired icon-font asset still exists: ' . $legacyFontAsset;
+    }
+}
+
+$fontReferenceIterator = new RecursiveIteratorIterator(
+    new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS)
+);
+foreach ($fontReferenceIterator as $entry) {
+    if (!$entry->isFile()) {
+        continue;
+    }
+    $path = $entry->getPathname();
+    $relative = ltrim(substr($path, strlen($root)), DIRECTORY_SEPARATOR);
+    if (
+        strpos($relative, '.git' . DIRECTORY_SEPARATOR) === 0
+        || strpos($relative, 'docs' . DIRECTORY_SEPARATOR) === 0
+        || strpos($relative, 'fonts' . DIRECTORY_SEPARATOR) === 0
+        || strpos($relative, 'artifacts' . DIRECTORY_SEPARATOR) === 0
+        || $relative === 'scripts/check-site.php'
+        || !preg_match('/\.(?:php|css|js|html|xml)$/i', $relative)
+    ) {
+        continue;
+    }
+
+    $contents = $readFile($path);
+    $hasLegacyFontPath = preg_match(
+        "~(?:^|[/\x22'(=\s])(?:\.\.?/)?fonts/(?:fontawesome-webfont|glyphicons-halflings|icofont)[^\x22'()\s?#]*~i",
+        $contents
+    );
+    $hasLegacyFontFace = preg_match(
+        '/font-family\s*:\s*[^;{}]*(?:font[\s-]*awesome|fontawesome|icofont|glyphicons)/i',
+        $contents
+    );
+    if ($hasLegacyFontPath || $hasLegacyFontFace) {
+        $errors[] = $relative . ': references a retired local icon-font asset or font family';
+    }
+}
+
 foreach ($warnings as $warning) {
     echo 'WARN  ' . $warning . PHP_EOL;
 }

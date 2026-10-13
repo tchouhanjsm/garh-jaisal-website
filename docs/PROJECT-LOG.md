@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Post-PR #51 release readiness and retained-font verification |
+| Current phase | Retired icon-font asset cleanup; staging and release readiness remain owner-gated |
 | Base branch | `main` |
-| Baseline commit | `86108fb77c3c9aec58c82f2e9e7f42c1a9727af6` (PR #51 merge commit) |
-| Last merged PR | [#51 — harden launch and prepare release QA](https://github.com/tchouhanjsm/garh-jaisal-website/pull/51) |
-| Exact-main CI evidence | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526); [Browser E2E/screenshots PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513551) |
-| Screenshot evidence | [390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513551/artifacts/11828016923); [browser traces/reports](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513551/artifacts/11827971993) |
+| Baseline commit | `b0de32389378d55654c5e1d97adf54a10095b3ec` (PR #52 merge commit) |
+| Last merged PR | [#52 — reconcile launch status after PR #51](https://github.com/tchouhanjsm/garh-jaisal-website/pull/52) |
+| Exact-main CI evidence | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38426975392); [Browser E2E/screenshots PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38426975468) |
+| Screenshot evidence | [390px/1280px page sheet and browser artifacts](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38426975468) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Open PRs at baseline verification | None |
-| Next action | Verify fonts against all retained asset references, then complete staging checklist before release/tag; never deploy or tag without owner approval |
+| Next action | Remove only legacy icon-font assets proven unused by the static reference gate and browser request test; staging/image approval remain release gates |
 
 ## Phase roadmap
 
@@ -57,7 +57,7 @@
 - Supply approved privacy and booking/cancellation policy wording before draft pages can be linked or indexed.
 
 
-## Current verified state after PR #51 (2026-10-13)
+## State at PR #52 creation (historical — 2026-10-13)
 
 This note supersedes stale entries above that still label PRs #48–#51 as open/in progress.
 
@@ -68,3 +68,11 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Responsive image candidates remain review-only: https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774
 - Owner-side staging, cPanel/Apache behavior, form delivery and full-size image approval remain mandatory before release/tagging. No deployment or release tag was made.
 - Next engineering action: complete retained-font reference verification before any deletion; then use a separate reversible cleanup PR only for assets proven unused.
+
+
+## Next phase — legacy icon-font cleanup (2026-10-13)
+
+- Base verified after PR #52: `main` at `b0de32389378d55654c5e1d97adf54a10095b3ec`; exact-main [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38426975392) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38426975468) passed.
+- This slice removes 16 tracked legacy Font Awesome, Glyphicons and Icofont files (8,217,618 bytes total) only alongside a new static reference gate in `scripts/check-site.php` and a sitemap-wide Playwright check that published routes make no local `/fonts/` requests.
+- Hosted Google Fonts, stylesheets, markup, icon rendering, room/photo mappings, public URLs and GA4 settings are not changed. The static gate fails if any retired asset returns or runtime/test sources reference a retired path/family.
+- Release readiness remains separate: staging `.htaccess`, reCAPTCHA and mail behavior and owner approval of responsive image variants are still required. No deployment or release tag is authorized by this cleanup.
