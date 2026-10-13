@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Sprint 1 — shared page-head/schema foundation and first six-page migration |
+| Current phase | Sprint 1 — shared page-head/schema foundation, page groups 1–2 |
 | Base branch | `main` |
-| Baseline commit | `d5acb7f9c915e87527da70e2eee9154ed3209bd7` (main after PR #42) |
-| Last merged PR | [#42 — commit frozen head snapshot fixture](https://github.com/tchouhanjsm/garh-jaisal-website/pull/42) |
-| CI on baseline | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38354302604) passed on PHP 7.4 and 8.2; [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38354302647) passed on the exact baseline commit |
+| Baseline commit | `1a8b9e43566c9fb01734e97574c0efb667c04a50` (main after PR #43) |
+| Last merged PR | [#43 — centralize page head and migrate first page group](https://github.com/tchouhanjsm/garh-jaisal-website/pull/43) |
+| CI on baseline | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38355597701) and [Browser E2E + screenshot sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38355597763) passed on PR #43's exact head before owner merge |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/sprint-1-page-head-migration` — centralise head markup and shared Hotel/WebSite schema; migrate Home, About, Rooms, Contact, Directions and Gallery without changing page copy or page-specific schema |
-| Next action | Review exact-head CI and the `page-sheet` artifact; after owner-merge, migrate the second page group and then the remaining public pages |
+| Active batch | `feature/sprint-1-page-head-migration-b` — migrate Packages and tour/landing pages to the shared head while preserving existing metadata, page-specific schema and both GA4 IDs |
+| Next action | Review exact-head CI and `page-sheet`; after owner-merge, migrate Dining/Blog/guides, then the experience renderer and draft/noindex pages |
 
 ## Phase roadmap
 
