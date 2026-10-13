@@ -363,13 +363,22 @@ test('hidden overlap pages stay out of the sitemap and public discovery until th
   const hiddenRoute = '/explore-the-desert.php';
   expect(getSitemapEntries(), `${hiddenRoute} must stay out of sitemap.xml while hidden`).not.toContain(hiddenRoute);
 
-  for (const route of ['/desert-safari.php', '/pack.php', '/sunset-camel-safari.php']) {
-    await page.goto(route, { waitUntil: 'domcontentloaded' });
+  for (const route of getSitemapEntries()) {
+    const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+    expect(response, `No HTTP response for sitemap route ${route}`).not.toBeNull();
+    expect(response.status(), `Unexpected status for sitemap route ${route}`).toBeLessThan(400);
+
     const hiddenLinks = await page.locator('a[href]').evaluateAll((anchors, expected) =>
       anchors.filter(anchor => new URL(anchor.getAttribute('href'), document.baseURI).pathname === expected).length,
       hiddenRoute
     );
     expect(hiddenLinks, `${route} must not link to the hidden page ${hiddenRoute}`).toBe(0);
+
+    if (route === '/desert-safari.php') {
+      await expect(page.locator('.route-planner')).not.toContainText(/Explore the Desert is the broader day experience/i);
+      await expect(page.locator('.route-planner').getByRole('link', { name: 'Ask about desert options' }))
+        .toHaveAttribute('href', 'contact.php');
+    }
   }
 
   const response = await page.goto(hiddenRoute, { waitUntil: 'domcontentloaded' });

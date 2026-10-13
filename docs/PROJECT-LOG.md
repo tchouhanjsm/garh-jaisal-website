@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Direct-stay guide discoverability; real staging and release approval remain owner-gated |
+| Current phase | Experience publication boundaries; unresolved product, staging and release decisions remain owner-gated |
 | Base branch | `main` |
-| Baseline commit | `09b60a45adf607052475e69aad4c379e9fd66445` (PR #55 merge commit) |
-| Last merged PR | [#55 — safe staging QA gate and host isolation](https://github.com/tchouhanjsm/garh-jaisal-website/pull/55) |
-| PR #55 final-tree checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38435193551); [cPanel preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38435193394); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38435193466); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38435193463) |
-| Screenshot evidence | [390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38435193463/artifacts/11833211433); [staging QA evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38435193466/artifacts/11831984737) |
+| Baseline commit | `68f1a931b656e5b0d4df8e89f676eeec6bf060ea` (PR #56 merge commit) |
+| Last merged PR | [#56 — link stay guide from Home and Rooms](https://github.com/tchouhanjsm/garh-jaisal-website/pull/56) |
+| PR #56 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562231); [cPanel preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562240); [Staging QA local dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562309); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562317) |
+| Screenshot evidence | [PR #56 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562317/artifacts/11833009704); [PR #56 staging QA evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562309/artifacts/11833078639) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None after PR #55 merge |
-| Next action | Link the existing stay guide from Home and Rooms; owner reviews the page sheet, then runs external Staging QA on a real HTTPS staging host |
+| Open PRs at baseline verification | None after PR #56 merge |
+| Next action | Remove stale public promotion of the hidden Explore-the-Desert overlap page and enforce draft/hidden discovery boundaries; real staging remains owner-gated |
 
 ## Phase roadmap
 
@@ -90,8 +90,17 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Staging remains unverified until the owner provides an HTTPS staging URL, applies the matching local configuration, runs the workflow against the exact staged package commit and completes manual mail/CAPTCHA/Apache checks. CI does not deploy or create a release tag.
 
 
-## Sprint 6 — direct-stay guide discoverability (PR in review)
-- Baseline: PR #55 merged at `09b60a45adf607052475e69aad4c379e9fd66445`; final-tree Site Checks, package preflight, Staging QA dry run and Browser E2E passed.
-- The approved stay guide was in the sitemap but had no inbound links from Home or Rooms, contrary to the approved architecture.
-- Link the existing `book-rooms-in-jaisalmer.php` guide from both pages and add a rendered navigation regression; URLs, booking destinations, photo mappings and both GA4 IDs remain unchanged.
+## Sprint 6 — direct-stay guide discoverability (PR #56 merged)
+
+- Baseline: PR #55 merged at `09b60a45adf607052475e69aad4c379e9fd66445`; PR #56 merged at `68f1a931b656e5b0d4df8e89f676eeec6bf060ea`.
+- Added the existing `book-rooms-in-jaisalmer.php` guide links from Home and Rooms and a Browser E2E navigation regression; no public URL, booking destination, photo mapping or GA4 ID changed.
+- Exact-head [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562231), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562240), [Staging QA dry run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562309) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562317) passed. Evidence artifacts: [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562317/artifacts/11833009704) and [staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562309/artifacts/11833078639).
 - Owner review first: Home, Rooms and the guide at 390px/1280px. Real staging, CAPTCHA/mail, image approval and release remain owner-gated.
+
+## Sprint 7 — experience publication boundaries (PR in review)
+
+- Baseline is PR #56 merge commit `68f1a931b656e5b0d4df8e89f676eeec6bf060ea`. This closes a concrete mismatch in the approved architecture, not a new audit-only slice.
+- `explore-the-desert` remains hidden/noindex and keeps its existing URL while owner fact #3 is unanswered; the live Desert Tours planner must not present it as available.
+- Add a source-level gate that validates experience statuses and ensures non-live registry entries remain available as URLs but stay out of the sitemap and shared navigation/footer data. Live registry entries must remain in the sitemap.
+- Expand the rendered-browser publication-boundary regression to every sitemap route and verify the hidden page remains HTTP-success/noindex without redirects.
+- No tour facts, prices, redirects, photo mappings, booking destinations or GA4 changes. Real staging, CAPTCHA/mail validation and release approval remain owner-gated.
