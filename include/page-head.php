@@ -42,7 +42,7 @@ if (
         || strncmp($pagePath, '//', 2) === 0
         || strpos($pagePath, '?') !== false
         || strpos($pagePath, '#') !== false
-        || strpos($pagePath, '\\\\') !== false
+        || strpos($pagePath, chr(92)) !== false
     )
 ) {
     throw new InvalidArgumentException('The page path must be site-relative and must not contain a query or fragment.');
