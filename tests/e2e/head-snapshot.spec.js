@@ -81,6 +81,45 @@ async function captureHead(page, route) {
   return { route, ...snapshot };
 }
 
+function compactSnapshot(snapshot) {
+  const strings = [];
+  const stringIndexes = new Map();
+  const intern = value => {
+    if (value === null || value === undefined) return null;
+    if (typeof value !== 'string') {
+      throw new TypeError('Head snapshot string table only accepts strings or null.');
+    }
+    if (!stringIndexes.has(value)) {
+      stringIndexes.set(value, strings.length);
+      strings.push(value);
+    }
+    return stringIndexes.get(value);
+  };
+
+  return {
+    schemaVersion: 2,
+    strings,
+    sitemapRoutes: snapshot.sitemapRoutes.map(intern),
+    pageHeads: snapshot.pageHeads.map(head => [
+      intern(head.route),
+      intern(head.title),
+      intern(head.description),
+      intern(head.canonical),
+      intern(head.robots),
+      head.social.map(tag => [intern(tag.key), intern(tag.content)]),
+      head.jsonLdTypes.map(intern),
+      head.invalidJsonLdScripts,
+      head.gtagScriptCount,
+      head.gtagConfigIds.map(intern),
+    ]),
+    draftAndHiddenPages: snapshot.draftAndHiddenPages.map(page => [
+      intern(page.route),
+      intern(page.title),
+      intern(page.robots),
+    ]),
+  };
+}
+
 test('sitemap head output matches the frozen pre-refactor baseline', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'SEO head snapshot is captured once on desktop-1280');
   test.setTimeout(240_000);
@@ -125,25 +164,22 @@ test('sitemap head output matches the frozen pre-refactor baseline', async ({ br
     draftAndHiddenPages,
   };
 
-  if (process.env.UPDATE_HEAD_SNAPSHOT === '1') {
-    fs.mkdirSync(path.dirname(FIXTURE_PATH), { recursive: true });
-    fs.mkdirSync(path.dirname(ARTIFACT_PATH), { recursive: true });
-    const json = JSON.stringify(snapshot, null, 2) + '\n';
-    fs.writeFileSync(FIXTURE_PATH, json);
-    fs.writeFileSync(ARTIFACT_PATH, json);
-    await testInfo.attach('pre-refactor-head-snapshot', {
-      path: ARTIFACT_PATH,
-      contentType: 'application/json',
-    });
-    expect(pageHeads.length).toBe(sitemapRoutes.length);
-    expect(draftAndHiddenPages.length).toBe(DRAFT_AND_HIDDEN_ROUTES.length);
-    return;
-  }
-
   expect(
     fs.existsSync(FIXTURE_PATH),
-    'Missing baseline fixture. Generate it on the unmodified site before refactoring page heads.'
+    'Missing committed pre-refactor fixture; capture it before any shared-head migration.'
   ).toBe(true);
   const expected = JSON.parse(fs.readFileSync(FIXTURE_PATH, 'utf8'));
-  expect(snapshot, 'Titles, metadata, canonicals, social tags, JSON-LD types, analytics and draft visibility changed').toEqual(expected);
+  const comparable = compactSnapshot(snapshot);
+  expect(
+    comparable,
+    'Titles, metadata, canonicals, social tags, JSON-LD types, analytics and draft visibility changed'
+  ).toEqual(expected);
+
+  fs.mkdirSync(path.dirname(ARTIFACT_PATH), { recursive: true });
+  const json = JSON.stringify(comparable, null, 2) + '\n';
+  fs.writeFileSync(ARTIFACT_PATH, json);
+  await testInfo.attach('frozen-head-snapshot', {
+    path: ARTIFACT_PATH,
+    contentType: 'application/json',
+  });
 });

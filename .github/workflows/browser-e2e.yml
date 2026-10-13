@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: browser-e2e-${{ github.event.pull_request.number || github.ref }}
@@ -42,30 +42,8 @@ jobs:
       - name: Install Chromium and system dependencies
         run: npx playwright install --with-deps chromium
 
-      - name: Capture pre-refactor head snapshot (temporary bootstrap)
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'feature/sprint-1-baseline-fixture' && github.event.pull_request.head.repo.full_name == github.repository
-        env:
-          UPDATE_HEAD_SNAPSHOT: '1'
-        run: npx playwright test tests/e2e/head-snapshot.spec.js --project=desktop-1280
-
       - name: Run responsive browser tests
         run: npm run test:e2e
-
-
-      - name: Commit generated baseline fixture (temporary bootstrap)
-        if: success() && github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'feature/sprint-1-baseline-fixture' && github.event.pull_request.head.repo.full_name == github.repository
-        env:
-          GITHUB_HEAD_REF: ${{ github.head_ref }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add tests/fixtures/head-snapshot.json
-          if git diff --cached --quiet; then
-            echo "Fixture already matches the committed baseline."
-            exit 0
-          fi
-          git commit -m "test: commit pre-refactor head snapshot fixture"
-          git push origin "HEAD:${GITHUB_HEAD_REF}"
 
       - name: Upload page screenshot sheet
         if: always()
