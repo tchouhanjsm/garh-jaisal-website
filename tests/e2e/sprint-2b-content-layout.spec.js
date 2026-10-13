@@ -119,4 +119,4 @@ for (const width of [320, 390, 1280]) {
     }
     await context.close();
   });
-});
+}
