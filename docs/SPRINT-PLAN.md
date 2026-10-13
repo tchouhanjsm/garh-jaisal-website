@@ -6,7 +6,7 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 
 | Sprint | Slice | Status |
 |---|---|---|
-| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ◐ in progress — UI partials merged; legacy JS/include cleanup in PR #47, CSS and fonts split into later reviewable slices |
+| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ◐ in progress — JS/includes merged in PR #47; unused CSS and Contact layout fixes in PR #48; fonts remain a separate revertible step |
 | 2A | Dining (`roof.php`, `restaurant.php`), Contact, Directions | ☐ |
 | 2B | Gallery, About, Blog and guides | ☐ |
 | 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ☐ |
@@ -22,7 +22,7 @@ Progress update (2026-10-13): PR [#43](https://github.com/tchouhanjsm/garh-jaisa
 
 Progress update (2026-10-13): PR #45 completes group 3 (`roof.php`, `restaurant.php`, `blog.php` and the three guides) and the shared experience renderer. The fixture remains unchanged; the shared-schema regression now covers all sitemap routes, and the source checker requires all public routes to use `page-head.php` directly or through the renderer.
 
-Progress update (2026-10-13): PR #46 is merged. PR #47 removes only reference-verified, unreferenced legacy JavaScript bundles and retired includes. To honor the 25-file review limit, the 12 legacy CSS files are a separate follow-up; fonts are removed only after confirming no retained CSS references them, in their own revertible commit. The screenshot-sheet workflow remains provided by PR #41.
+Progress update (2026-10-13): PR #47 is merged. PR #48 combines the 12 reference-verified unused CSS files with evidence-led Contact fixes: the visible anti-spam honeypot is moved off-screen, fixed controls no longer cover the Contact facts/form, and the existing configured WhatsApp action remains available inline. The font files are reserved for a separate revertible commit after a final retained-CSS scan. The screenshot-sheet workflow remains provided by PR #41.
 
 Make 5 commits in this order. Each commit must leave CI green. If the connector cannot run PHP or a browser, rely on CI after each push and keep commits small.
 
@@ -69,12 +69,15 @@ Create `include/ui/hero.php`, `section-head.php`, `cta-band.php`, `faq.php`. Eac
 Adopt them only where the rendered HTML is equivalent: the final call-to-action on Home, Rooms, Directions, Gallery, About and Blog, and the FAQ in `direction.php` and `include/experience-page.php`. Compare with the screenshot sheet (Commit 5). Do not redesign pages in this PR.
 
 ### Commit 4: remove dead assets (`chore:`)
-Verified on 2026-10-13: no PHP page, include or test references these. **Re-verify each with `grep -rF "<name>" *.php include tests scripts css js` before deleting; if anything references one, leave it and say why in the PR.**
-- JS: `bootstrap.min.js countdown.js jquery-3.2.0.min.js jquery-ui.js jquery.counterup.min.js jquery.fancybox.min.js jquery.magnific-popup.min.js jquery.meanmenu.js jquery.scrollUp.js jquery.waypoints.min.js owl.carousel.min.js theme.js` (keep `garh-v2.js`, `restaurant.js`).
-- CSS: `animate.css bootstrap.min.css directions.css font-awesome.min.css icofont.css jquery-ui.css jquery.fancybox.min.css magnific-popup.css meanmenu.css owl.carousel.min.css responsive.css style.css`.
-- Includes: `include/header.php`, `include/footer.php`, `include/header-v2.backup.php` if unreferenced.
-- Fonts: delete only font files no remaining CSS references (`grep -rF fonts/ css`). Do the font deletion as its own commit so it can be reverted alone.
-- Gate: all Playwright suites pass; `check-site.php` shows no new broken references.
+
+Progress (2026-10-13): PR #47 removed the 12 unreferenced JavaScript bundles and three retired includes, and removed the stale checker exclusions. PR #48 removes the following 12 legacy CSS files after rechecking source references; this is bundled with the verified Contact layout/anti-spam fixes and viewport regression tests so the PR stays below the 25-file review limit.
+
+- JS (removed in PR #47): `bootstrap.min.js countdown.js jquery-3.2.0.min.js jquery-ui.js jquery.counterup.min.js jquery.fancybox.min.js jquery.magnific-popup.min.js jquery.meanmenu.js jquery.scrollUp.js jquery.waypoints.min.js owl.carousel.min.js theme.js` (keep `garh-v2.js`, `restaurant.js`).
+- CSS (this PR): `animate.css bootstrap.min.css directions.css font-awesome.min.css icofont.css jquery-ui.css jquery.fancybox.min.css magnific-popup.css meanmenu.css owl.carousel.min.css responsive.css style.css`.
+- Includes (removed in PR #47): `include/header.php`, `include/footer.php`, `include/header-v2.backup.php` after reference verification.
+- Fonts: delete only files no retained CSS references (`grep -rF fonts/ css`). Do the font deletion as its own commit so it can be reverted alone.
+- Contact regressions included in the CSS cleanup slice: hide `.hp-field` off-screen without dropping it from the form, keep Call/WhatsApp/Book actions from overlaying Contact content, and test desktop/mobile facts/form alignment. Preserve the configured WhatsApp path inline.
+- Gate: all Playwright suites pass; `check-site.php` shows no new broken references; page-sheet artifact on the exact head.
 
 ### Commit 5: page screenshot sheet (`test:` and `ci:`)
 - Add `tests/e2e/page-sheet.spec.js` (runs once, desktop-1280 project, but opens its own contexts at **390x844** and **1280x800**). For every sitemap route: load, scroll the full height in 300px steps waiting about 120 ms per step, wait 800 ms (**lazy-loaded images stay blank in full-page screenshots otherwise**), then save a full-page JPEG (quality 60) to `artifacts/page-sheet/<route>-<width>.jpg`.

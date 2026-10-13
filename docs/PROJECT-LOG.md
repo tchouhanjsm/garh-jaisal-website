@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Sprint 1 — reusable UI partials merged; reference-verified dead-asset cleanup in progress |
+| Current phase | Sprint 1 — unused legacy JS/includes removed; unused CSS cleanup and Contact layout/anti-spam fixes in progress; font cleanup pending |
 | Base branch | `main` |
-| Baseline commit | `2c92c67e2203d493b8d09990c2492c8fb4e5157f` (main after PR #46) |
-| Last merged PR | [#46 — add reusable UI partials](https://github.com/tchouhanjsm/garh-jaisal-website/pull/46) |
-| CI evidence | PR #46 exact head `8bf7df7226210c12d8a150228bb6c0e0d16cc256`: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38368329160) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38368329166) passed; [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38368329166/artifacts/11798461038) available |
+| Baseline commit | `7da495f546f54bcaf471111fc02a921b54ff1fd6` (main after PR #47) |
+| Last merged PR | [#47 — remove unreferenced legacy scripts and includes](https://github.com/tchouhanjsm/garh-jaisal-website/pull/47) |
+| CI evidence | PR #47 exact head `605e1bde0e1fee9557184c50fbe932ad7fb22260`: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38374961949) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38374961946) passed; [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38374961946/artifacts/11800474664) available |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/sprint-1-dead-js-includes` — remove source-reference-verified legacy JavaScript bundles and retired includes; CSS and fonts remain later cleanup slices |
-| Next action | Review PR #47 exact-head CI and screenshot sheet; after owner-merge, remove unreferenced legacy CSS in a separate slice, then remove only CSS-unreferenced fonts in their own revertible commit |
+| Active batch | `feature/sprint-1-dead-css-contact-fixes` — remove source-reference-verified legacy CSS and fix Contact form overlap/honeypot layout, with browser regressions |
+| Next action | Review PR #48 exact-head CI and screenshot sheet; after owner merge, remove only font files proven unused by retained CSS in their own revertible commit, then begin Sprint 2A page redesign work |
 
 ## Phase roadmap
 
@@ -566,3 +566,12 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Kept `js/garh-v2.js`, `js/restaurant.js`, `css/restaurant.css`, all active page-specific CSS, optimized images and all public routes; no content, URLs, analytics IDs or booking/contact destinations changed.
 - Validation: exact-head Site Checks, Browser E2E, strict-image checks, sitemap checks and the 390px/1280px screenshot sheet are required before owner review; local PHP/Chromium were not run by the connector.
 - Next: after owner merge, remove the 12 verified-unused legacy CSS files in a separate PR; remove fonts only after a retained-CSS reference check and keep font deletion in its own revertible commit.
+
+
+## Sprint 1 — legacy CSS cleanup and Contact layout regressions (PR #48)
+
+- Verified base: main `7da495f546f54bcaf471111fc02a921b54ff1fd6`; PR #47 merged with passing exact-head PHP/site checks and Browser E2E.
+- Remove 12 legacy CSS files only after checking all 32 root PHP files, shared includes, retained CSS, scripts and Playwright tests; no code references were found. The deleted CSS totals 528,767 tracked bytes.
+- Contact fixes: hide the anti-spam honeypot off-screen without removing it from form submission; suppress fixed dock/bottom-bar overlays on Contact and add an inline WhatsApp action using the existing configured URL.
+- Add viewport-level regressions for Contact column alignment, no overflow, off-screen honeypot geometry and retained quick actions on other pages. No URLs, GA4 IDs, message recipient, rates, policies or form submission behavior changed.
+- Next: verify PHP 7.4/8.2, strict site checks, sitemap/publication checks, full Browser E2E and screenshot sheet on the exact PR head; then review remaining fonts in a separate revertible commit. Local PHP/Chromium were not run by the connector.

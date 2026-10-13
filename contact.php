@@ -146,6 +146,7 @@ require __DIR__ . '/include/page-head.php';
       <div class="actions contact-booking-actions">
         <a class="button button-primary contact-booking-button" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check room availability</a>
         <a class="button button-secondary contact-arrival-link" href="direction.php">Plan your arrival</a>
+        <a class="button button-secondary contact-whatsapp-button" href="<?= htmlspecialchars($siteConfig['whatsapp_url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Message on WhatsApp</a>
       </div>
 
       <div class="contact-layout">
