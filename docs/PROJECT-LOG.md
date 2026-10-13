@@ -6,15 +6,15 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-13 |
-| Current phase | Phase F12.3 — Measured image payload reduction |
+| Last updated | 2026-10-12 |
+| Current phase | Fast lane, Sprint 1 — foundation (page shell, UI partials, dead-asset removal, screenshot sheet) |
 | Base branch | `main` |
 | Baseline commit | `077a50b912220b3f3241de38d1504e12433a0202` (main after PR #38) |
 | Last merged PR | [#38 — reserve intrinsic dimensions for rendered site images](https://github.com/tchouhanjsm/garh-jaisal-website/pull/38) |
 | CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38291024108) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38291024180) passed on `077a50b912220b3f3241de38d1504e12433a0202` |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-f12-3-image-payload-reduction` — serve measured WebP derivatives and add F13 contact/enquiry readiness coverage; rates are explicitly deferred to the owner |
-| Next action | Finish final-head PHP and responsive Browser E2E checks; review the image artifact; keep pricing/rate work owner-controlled and out of this batch |
+| Active batch | `feature/sprint-1-foundation` — see `docs/SPRINT-PLAN.md` |
+| Next action | Run the Sprint 1 kickoff prompt in `docs/SPRINT-PLAN.md`; owner answers `docs/OWNER-FACTS.md` in parallel |
 
 ## Phase roadmap
 
@@ -479,6 +479,13 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
   3. **F14 — conversion measurement:** establish one confirmed GA4 property and verify booking/enquiry measurement without triggering live enquiries or real reservations.
   4. **F15 — policy and release readiness:** obtain owner-approved privacy/cancellation terms, privately review form/mail configuration on staging, confirm cPanel PHP version, and complete production-parity checks. No production deployment without owner permission.
 
+
+## Fast-lane reset (docs only)
+
+- Added `docs/BRAIN.md` (operating rules and decisions for any AI), `docs/SPRINT-PLAN.md` (Sprint 1 build spec, Sprint 2 and 3 slices, ChatGPT kickoff prompt) and `docs/OWNER-FACTS.md` (single place for owner answers).
+- Decisions: keep **both** GA4 IDs (single source `analytics_ids`); one PR per vertical slice; build over audit; screenshot sheet for visual review.
+- Evidence: repository review on 2026-10-13: 38 PRs merged in 3 days, 16 of them audits and tests; per-page head blocks duplicated across 22 pages; 12 unreferenced JS files and 12 unreferenced stylesheets; `img/tent1.jpg` is about 6 MB.
+- No page, CSS, JS, URL, image, booking link or GA4 ID changed in this PR.
 
 ## Phase F12.3 — measured image payload reduction (PR #39 pending)
 
