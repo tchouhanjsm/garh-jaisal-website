@@ -6,8 +6,8 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 
 | Sprint | Slice | Status |
 |---|---|---|
-| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ◐ in progress — JS/includes merged in PR #47; unused CSS and Contact layout fixes in PR #48; fonts remain a separate revertible step |
-| 2A | Dining (`roof.php`, `restaurant.php`), Contact, Directions | ☐ |
+| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ✓ merged through PR #48; fonts remain a separate reversible cleanup after a retained-CSS reference scan |
+| 2A | Dining (`roof.php`, `restaurant.php`), Contact, Directions | ◐ in progress — Contact hero, Dining menu cross-link and Directions quick answer with responsive regressions |
 | 2B | Gallery, About, Blog and guides | ☐ |
 | 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ☐ |
 | 3 | Launch hardening: `.htaccess`, forms, images, alt text, sitemap dates, cPanel handoff, tag v1.0.0 | ☐ |
@@ -130,3 +130,11 @@ add copy, pages or redesigns. When finished, fill .github/pull_request_template.
 page-sheet artifact, list the 3 pages to open first, and list every check you could not run.
 Stop there: the owner merges.
 ```
+
+
+### Sprint 2A implementation batch (2026-10-13)
+
+- Contact now follows the site's page-hero hierarchy, with direct booking, arrival and WhatsApp actions kept in the content section above the form.
+- Dining hub links directly to the menu page. Directions surfaces the parking-to-haveli walk before detailed transport cards.
+- Browser regression coverage checks primary Contact actions, the dining link, the Directions quick answer and horizontal overflow at 320px, 390px and 1280px.
+- Exact-head Site Checks, Browser E2E and 390px/1280px screenshot sheet are required before owner merge. Font files are intentionally untouched until a final retained-CSS reference scan confirms candidates are unused.
