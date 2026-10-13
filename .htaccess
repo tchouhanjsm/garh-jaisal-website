@@ -10,20 +10,20 @@ Options -Indexes
   RewriteEngine On
 
   # Keep ACME HTTP-01 challenge files reachable during certificate renewal.
-  RewriteRule ^\\.well-known/ - [L]
+  RewriteRule ^\.well-known/ - [L]
 
   # Canonical public origin is https://www.hotelgarhjaisal.com.
   RewriteCond %{HTTPS} !=on [OR]
-  RewriteCond %{HTTP_HOST} !^www\\.hotelgarhjaisal\\.com$ [NC]
+  RewriteCond %{HTTP_HOST} !^www\.hotelgarhjaisal\.com$ [NC]
   RewriteRule ^ https://www.hotelgarhjaisal.com%{REQUEST_URI} [R=301,L,NE]
 
   # Never expose hidden files or the server-only local configuration.
-  RewriteRule (^|/)\\. - [F,L]
-  RewriteRule ^include/site-config\\.local\\.php$ - [F,L,NC]
+  RewriteRule (^|/)\. - [F,L]
+  RewriteRule ^include/site-config\.local\.php$ - [F,L,NC]
 </IfModule>
 
 <IfModule mod_authz_core.c>
-  <FilesMatch "(^\\.|\\.(?:bak|backup|log)$)">
+  <FilesMatch "(^\.|\.(?:bak|backup|log)$)">
     Require all denied
   </FilesMatch>
 </IfModule>

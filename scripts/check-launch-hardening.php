@@ -14,7 +14,7 @@ if (!is_string($htaccess)) {
     $requiredRules = [
         'Options -Indexes' => 'directory listing must be disabled',
         'RewriteRule ^ https://www.hotelgarhjaisal.com%{REQUEST_URI} [R=301,L,NE]' => 'canonical HTTPS/host redirect is missing',
-        'RewriteRule ^include/site-config\\.local\\.php$ - [F,L,NC]' => 'server-only local configuration must be blocked',
+        'RewriteRule ^include/site-config\.local\.php$ - [F,L,NC]' => 'server-only local configuration must be blocked',
         'Header always set X-Content-Type-Options "nosniff"' => 'nosniff header is missing',
         'Header always set X-Frame-Options "SAMEORIGIN"' => 'frame protection header is missing',
         'Header always set Referrer-Policy "strict-origin-when-cross-origin"' => 'referrer policy is missing',
