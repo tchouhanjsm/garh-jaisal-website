@@ -6,15 +6,15 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-12 |
-| Current phase | Fast lane, Sprint 1 — foundation (page shell, UI partials, dead-asset removal, screenshot sheet) |
+| Last updated | 2026-10-13 |
+| Current phase | Sprint 1 — baseline and screenshot-sheet foundation (PR #41) |
 | Base branch | `main` |
-| Baseline commit | `077a50b912220b3f3241de38d1504e12433a0202` (main after PR #38) |
-| Last merged PR | [#38 — reserve intrinsic dimensions for rendered site images](https://github.com/tchouhanjsm/garh-jaisal-website/pull/38) |
-| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38291024108) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38291024180) passed on `077a50b912220b3f3241de38d1504e12433a0202` |
+| Baseline commit | `93f27ad806a1b2de153b5f613bc82cc0a7125561` (main after PR #40) |
+| Last merged PR | [#40 — fast-lane brain, Sprint 1 build spec and owner facts sheet](https://github.com/tchouhanjsm/garh-jaisal-website/pull/40) |
+| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38346248251) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38346248287) passed on `93f27ad806a1b2de153b5f613bc82cc0a7125561` |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/sprint-1-foundation` — see `docs/SPRINT-PLAN.md` |
-| Next action | Run the Sprint 1 kickoff prompt in `docs/SPRINT-PLAN.md`; owner answers `docs/OWNER-FACTS.md` in parallel |
+| Active batch | `feature/sprint-1-foundation` — freeze rendered head output and publish the page screenshot sheet before refactoring shared head markup |
+| Next action | After PR #41 is owner-merged, introduce `include/page-head.php` and migrate the first page group while the snapshot fixture stays unchanged |
 
 ## Phase roadmap
 
@@ -25,7 +25,7 @@
 | 2 | Booking conversion and mobile UX | ◐ responsive navigation and shared booking URL merged; conversion measurement remains open |
 | 3 | Technical SEO foundation | ✓ rendered metadata and JSON-LD regression checks merged in PR #6 |
 | 4 | Local SEO and content depth | ◐ inventory and candidate finding reports exist; candidate findings still require review and verified remediation |
-| 5 | Performance and Core Web Vitals | ◐ baseline captured; intrinsic image geometry merged in PR #38; 11 of 15 large-image candidates have measured same-dimension derivatives staged in PR #39; controlled Lighthouse/field measurement remains open |
+| 5 | Performance and Core Web Vitals | ◐ baseline captured; intrinsic geometry merged in PR #38; PR #39 merged 11 same-dimension WebP derivatives (2,909,109 B saved across the accepted subset); controlled Lighthouse/field measurement remains open |
 | 6 | Accessibility | ☐ |
 | 7 | Form, email and security hardening | ☐ |
 | 8 | Analytics measurement | ☐ |
@@ -464,7 +464,7 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - **Next milestone:** continue Phase F12 against the remaining high-intent pages, using rendered evidence to select the next conversion/accessibility fix. Record unresolved operational facts as owner questions, not guessed updates.
 
 
-## Phase F12.2 — intrinsic image dimensions and layout stability (PR #38 in progress)
+## Phase F12.2 — intrinsic image dimensions and layout stability (PR #38 merged)
 
 - **Evidence baseline (PR #37 Browser E2E, run #98):** the local PHP-rendered test site checked 26 sitemap routes and discovered 68 unique image URLs. Resource timing measured 60 images; 15 exceeded the 250 KiB review threshold. The performance inventory reported 98 occurrences where rendered images lacked explicit `width`/`height` attributes. This is CI-local evidence, not a production or field measurement.
 - **Implementation:** add a shared cached helper in `include/header-v2.php` that reads intrinsic dimensions from trusted local files under `img/`. Use it for the shared experience detail/related cards, Packages grids, Desert Tours and Guided Jaisalmer Tours grids, homepage image cards, gallery images, room registry cards and Blog cards. Existing manually dimensioned priority heroes stay untouched.
@@ -487,7 +487,7 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Evidence: repository review on 2026-10-13: 38 PRs merged in 3 days, 16 of them audits and tests; per-page head blocks duplicated across 22 pages; 12 unreferenced JS files and 12 unreferenced stylesheets; `img/tent1.jpg` is about 6 MB.
 - No page, CSS, JS, URL, image, booking link or GA4 ID changed in this PR.
 
-## Phase F12.3 — measured image payload reduction (PR #39 pending)
+## Phase F12.3 — measured image payload reduction (PR #39 merged)
 
 - **Baseline:** PR #38 merged as `077a50b912220b3f3241de38d1504e12433a0202`; the sitemap-wide Chromium inventory measured 15 image candidates above 256,000 bytes. Browser Resource Timing was used to find candidates, while this phase uses exact repository file sizes for source/derivative comparison.
 - **Generated derivatives:** 11 of the 15 candidates passed the 10% minimum byte-saving and 35 dB PSNR screening floors. The accepted sources total 5,901,701 bytes; same-dimension WebP derivatives total 2,992,592 bytes; the measured saving is 2,909,109 bytes (49.293% weighted) across that accepted subset.
@@ -510,13 +510,22 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - **Conservative skips:** `img/big6.jpg` and `img/5.webp` did not meet the minimum 10% saving threshold. `img/s5.jpg` (PSNR 34.839 dB) and `img/desert4.jpg` (PSNR 33.702 dB) were rejected by the 35 dB screening floor. No derivatives for those four sources are used.
 - **Runtime behaviour:** the shared helper adds a WebP `srcset` only when a derivative is a valid WebP, has the same intrinsic dimensions, and is smaller than the original. The original `src` remains the fallback. The original image files are never overwritten.
 - **Visual review:** the generated side-by-side contact sheet shows broadly consistent scene framing, room appearance and photo identity at thumbnail scale. That is only a preliminary check; owner review of the full-size source/derivative image quality remains a merge gate.
-- **Validation status:** the optimizer and visual-review artifact succeeded on the generation run. The final PR head still requires fresh PHP and full Browser E2E results before merge. These local-repository measurements are not production field Core Web Vitals.
+- **Validation:** final PR head `bcaf2eb7c30df7819eeae091e26452010776040d` passed [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38345599188) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38345599125) (210 passed, 254 skipped). Post-merge `main` passed [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38346248251) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38346248287) on `93f27ad806a1b2de153b5f613bc82cc0a7125561`. Repository byte sizes are not production field Core Web Vitals.
 
 
-## Phase F13 — contact and operational trust readiness (included in PR #39)
+## Phase F13 — contact and operational trust readiness (included in merged PR #39)
 
 - Add rendered browser coverage for the contact and arrival pages: shared booking destination, safe new-tab attributes, direct phone/email links, accessible form labels, required fields, non-empty CSRF token, CAPTCHA site key, honeypot semantics, and arrival-to-contact/phone/WhatsApp paths.
 - Browser tests confirm wiring and accessibility structure only. They do not submit an enquiry, send mail, click a live booking link, or verify whether any contact detail is externally current.
 - Add docs/OPERATIONAL-CONTENT-TRUST-AUDIT.md as an owner-review queue for non-rate operational statements. No customer-facing factual text is changed in this scope.
 - **Rates/prices are excluded:** the owner will add or update them later. No rate values are added, verified, asserted in tests, or modified by this batch.
-- Merge gate remains final-head Site Checks on PHP 7.4/8.2, full responsive Browser E2E, manual full-size photo quality review, and owner review of generated image choices.
+- Browser wiring checks passed on PR #39; they do not verify externally current contact details or submit a live enquiry. Rates/prices remain owner-controlled and were not changed. Production deployment was not part of PR #39.
+
+
+## Sprint 1 foundation — baseline and screenshot sheet (PR #41)
+
+- Verified base: main `93f27ad806a1b2de153b5f613bc82cc0a7125561`; PR #40 is latest merged and both main workflows pass on this exact head.
+- Added a rendered head snapshot for all sitemap routes plus title/robots baselines for the three draft/hidden routes before any shared-head migration.
+- Added a full-page screenshot sheet for every sitemap route at 390px and 1280px; scrolls through the full document before capture and uploads artifact `page-sheet`.
+- No page-head refactor, page copy, public URL, analytics ID, image mapping, rate, or price is changed in this foundation slice.
+- Next: after owner merge, implement the shared page-head and migrate the first page group with the snapshot fixture unchanged; no owner facts are needed for this slice.
