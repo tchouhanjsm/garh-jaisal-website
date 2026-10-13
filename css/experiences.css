@@ -697,3 +697,89 @@
     font-size:1.18rem;
   }
 }
+
+
+/* Sprint 2C: guard the shared experience renderer against narrow-screen grid overflow. */
+.experience-hero-content,
+.experience-hero-content > *,
+.experience-details-grid > *,
+.experience-timeline li > div,
+.related-card,
+.experience-card,
+.planner-grid > *,
+.glance-item {
+  min-width: 0;
+}
+.experience-hero-content h1 {
+  max-width: 17ch;
+  text-wrap: balance;
+}
+.experience-detail-card h2,
+.experience-detail-card h3,
+.related-card-body strong,
+.experience-card h3 {
+  overflow-wrap: anywhere;
+}
+.experience-cta .actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+@media (max-width: 760px) {
+  .experience-hero-content h1 {
+    font-size: clamp(2.25rem, 9.5vw, 3.7rem);
+  }
+  .experience-hero-content .actions {
+    align-items: stretch;
+  }
+  .experience-hero-content .actions .button {
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
+  .experience-timeline li > div {
+    overflow-wrap: anywhere;
+  }
+  .experience-map {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "root" "desert" "guide";
+    gap: 14px;
+  }
+  .experience-map::before,
+  .experience-map::after {
+    display: none;
+  }
+  .experience-map-root {
+    justify-self: stretch;
+    width: fit-content;
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+@media (max-width: 520px) {
+  .experience-hero-content {
+    padding-top: 76px;
+    padding-bottom: 38px;
+  }
+  .experience-breadcrumbs {
+    gap: 6px;
+    overflow-wrap: anywhere;
+  }
+  .experience-overview .section-head,
+  .experience-itinerary .section-head {
+    display: block;
+  }
+  .experience-overview .section-head > p,
+  .experience-itinerary .section-head > p {
+    margin-top: 14px;
+  }
+  .experience-detail-card {
+    padding: 20px 16px;
+  }
+  .experience-card > a > div,
+  .related-card-body,
+  .planner-grid article {
+    padding: 18px;
+  }
+}

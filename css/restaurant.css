@@ -543,3 +543,20 @@
 @media (prefers-reduced-motion:reduce){
   .restaurant-gallery img{ transition:none; }
 }
+
+
+/* Sprint 2B closeout: reciprocal dining link and responsive alignment. */
+.restaurant-rooftop-link{max-width:42ch;margin:18px 0 0;color:#eadfd4;font-size:.92rem;line-height:1.6}
+.restaurant-rooftop-link a{color:#f4d19a;text-decoration:underline;text-underline-offset:3px}
+.restaurant-hero-copy,.restaurant-hero-grid>*{min-width:0}
+@media(max-width:760px){
+  .restaurant-hero-grid{grid-template-columns:minmax(0,1fr);gap:28px;padding-top:38px}
+  .restaurant-hero-copy h1{font-size:clamp(2.25rem,10vw,3.2rem);text-wrap:balance}
+  .restaurant-hours{grid-template-columns:minmax(0,1fr);gap:10px}
+  .restaurant-hours div{align-items:baseline}
+  .restaurant-gallery,.restaurant-feature-grid,.restaurant-info-list,.restaurant-reserve-grid{grid-template-columns:minmax(0,1fr)}
+  .restaurant-dish{grid-template-columns:14px minmax(0,1fr) auto;gap:10px}
+  .restaurant-price{font-size:.92rem}
+  .restaurant-form{grid-template-columns:minmax(0,1fr)}
+  .restaurant-form .button{width:100%;justify-content:center}
+}

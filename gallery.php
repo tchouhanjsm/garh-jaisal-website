@@ -61,6 +61,13 @@ require __DIR__ . '/include/page-head.php';
       <img src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg') ?> alt="" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
+      <?php
+      $breadcrumbs = [
+          ['label' => 'Home', 'href' => '/'],
+          ['label' => 'Gallery'],
+      ];
+      require __DIR__ . '/include/ui/breadcrumb.php';
+      ?>
       <p class="eyebrow">Gallery</p>
       <h1>See Garh Jaisal Haveli.</h1>
       <p>
@@ -86,10 +93,18 @@ require __DIR__ . '/include/page-head.php';
     </div>
 
     <div class="site-shell gallery-jump" aria-label="Gallery sections">
-      <a href="#hotel">Hotel</a>
+      <a href="#hotel">Fort &amp; haveli</a>
       <a href="#rooms">Rooms</a>
       <a href="#desert">Desert</a>
-      <a href="#restaurant">Restaurant</a>
+      <a href="#restaurant">Rooftop dining</a>
+    </div>
+
+    <div class="site-shell gallery-filters" hidden role="group" aria-label="Filter gallery photos">
+      <button type="button" data-gallery-filter="all" aria-pressed="true">All photos</button>
+      <button type="button" data-gallery-filter="hotel" aria-pressed="false">Fort &amp; haveli</button>
+      <button type="button" data-gallery-filter="rooms" aria-pressed="false">Rooms</button>
+      <button type="button" data-gallery-filter="desert" aria-pressed="false">Desert</button>
+      <button type="button" data-gallery-filter="restaurant" aria-pressed="false">Rooftop dining</button>
     </div>
   </section>
 
@@ -175,7 +190,7 @@ require __DIR__ . '/include/page-head.php';
 
   foreach ($sections as $id => $section):
   ?>
-    <section class="section gallery-section" id="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>">
+    <section class="section gallery-section" id="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>" data-gallery-category="<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>">
       <div class="site-shell">
         <div class="section-head gallery-section-head">
           <div>
@@ -192,7 +207,7 @@ require __DIR__ . '/include/page-head.php';
               $alt = $image[1];
             ?>
             <figure class="gallery-item">
-              <a href="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" aria-label="Open full-size image: <?= htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') ?>">
+              <a href="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>" data-gallery-open aria-label="Open full-size image: <?= htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') ?>">
                 <img
                   src="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>"
                   <?= gj_image_dimension_attributes($src) ?>
@@ -200,7 +215,7 @@ require __DIR__ . '/include/page-head.php';
                   loading="lazy"
                   decoding="async"
                 >
-                <span class="gallery-item-label">Open image</span>
+                <span class="gallery-item-label">View photo</span>
               </a>
             </figure>
           <?php endforeach; ?>
@@ -208,6 +223,23 @@ require __DIR__ . '/include/page-head.php';
       </div>
     </section>
   <?php endforeach; ?>
+
+  <dialog class="gallery-lightbox" aria-label="Gallery photo viewer">
+    <div class="gallery-lightbox-inner">
+      <div class="gallery-lightbox-top">
+        <p class="eyebrow">Photo viewer</p>
+        <button type="button" class="gallery-lightbox-close" data-gallery-close>Close <span aria-hidden="true">×</span></button>
+      </div>
+      <figure class="gallery-lightbox-figure">
+        <img data-gallery-lightbox-image src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg') ?> alt="Rooftop dining at Garh Jaisal Haveli" loading="lazy" decoding="async">
+        <figcaption data-gallery-lightbox-caption></figcaption>
+      </figure>
+      <div class="gallery-lightbox-actions">
+        <button type="button" data-gallery-previous>Previous photo</button>
+        <button type="button" data-gallery-next>Next photo</button>
+      </div>
+    </div>
+  </dialog>
 
   <?php
 $ctaBand = [
