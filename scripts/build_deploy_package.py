@@ -30,6 +30,7 @@ REQUIRED_RUNTIME_FILES = {
 }
 PRIVATE_CONFIG_PATH = "include/site-config.local.php"
 EXAMPLE_CONFIG_PATH = "include/site-config.example.php"
+NON_RUNTIME_ROOT_FILES = {"package.json", "playwright.config.js"}
 CANONICAL_HOST = "www.hotelgarhjaisal.com"
 ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
 
@@ -82,7 +83,7 @@ def is_runtime_path(path: str) -> bool:
         raise PackageError(
             PRIVATE_CONFIG_PATH + " must never be tracked; keep it server-only."
         )
-    if path == EXAMPLE_CONFIG_PATH:
+    if path == EXAMPLE_CONFIG_PATH or path in NON_RUNTIME_ROOT_FILES:
         return False
     if path in ROOT_RUNTIME_FILES:
         return True
