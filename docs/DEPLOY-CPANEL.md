@@ -4,15 +4,15 @@ This site is plain PHP and has no frontend build step. This document is a releas
 
 ## Repeatable deployment package
 
-The **cPanel deployment package** workflow validates file selection on pull requests. It builds a ZIP artifact only from a successful push to \`main\` (or a manual workflow dispatch on \`main\`); it never uploads files to a server.
+The **cPanel deployment package** workflow validates file selection on pull requests. It builds a ZIP artifact only from a successful push to `main` (or a manual workflow dispatch on `main`); it never uploads files to a server.
 
-1. Open the successful [cPanel deployment package workflow](https://github.com/tchouhanjsm/garh-jaisal-website/actions/workflows/deployment-package.yml) for the exact merged \`main\` SHA.
-2. Download the \`cpanel-deployment-package-<commit SHA>\` artifact. It contains the deployment ZIP, a JSON manifest and a \`.sha256\` checksum file.
-3. Confirm the manifest's commit matches the merged SHA approved for staging, then verify the archive checksum with \`sha256sum -c <package-name>.sha256\`.
-4. Inspect the manifest's file list and published-route count. The ZIP contains tracked runtime PHP pages, \`.htaccess\`, sitemap, robots rules, CSS, JavaScript, images and runtime includes. It excludes repository metadata, docs, tests, scripts, workflow files, package/test configuration, \`include/site-config.example.php\` and the server-only \`include/site-config.local.php\`.
-5. Preserve the existing server-only \`include/site-config.local.php\` and uploaded/server-managed files. Extract the reviewed archive into a **staging** document root only after making a restorable backup. Do not overwrite local server configuration with any package or example file.
+1. Open the successful [cPanel deployment package workflow](https://github.com/tchouhanjsm/garh-jaisal-website/actions/workflows/deployment-package.yml) for the exact merged `main` SHA.
+2. Download the `cpanel-deployment-package-<commit SHA>` artifact. It contains the deployment ZIP, a JSON manifest and a `.sha256` checksum file.
+3. Confirm the manifest's commit matches the merged SHA approved for staging, then verify the archive checksum with `sha256sum -c <package-name>.sha256`.
+4. Inspect the manifest's file list and published-route count. The ZIP contains tracked runtime PHP pages, `.htaccess`, sitemap, robots rules, CSS, JavaScript, images and runtime includes. It excludes repository metadata, docs, tests, scripts, workflow files, package/test configuration, `include/site-config.example.php` and the server-only `include/site-config.local.php`.
+5. Preserve the existing server-only `include/site-config.local.php` and uploaded/server-managed files. Extract the reviewed archive into a **staging** document root only after making a restorable backup. Do not overwrite local server configuration with any package or example file.
 
-The package script uses only Python's standard library, selects Git-tracked runtime files, rejects a tracked \`include/site-config.local.php\`, validates sitemap-route coverage and emits a SHA-256 manifest. It refuses to create an archive from a dirty tracked worktree or non-main branch. This is packaging and validation—not a website build step, deployment action or approval to release.
+The package script uses only Python's standard library, selects Git-tracked runtime files, rejects a tracked `include/site-config.local.php`, validates sitemap-route coverage and emits a SHA-256 manifest. It refuses to create an archive from a dirty tracked worktree or non-main branch. This is packaging and validation—not a website build step, deployment action or approval to release.
 
 ## Before staging
 
