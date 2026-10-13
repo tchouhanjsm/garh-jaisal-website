@@ -182,6 +182,21 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
         await page.evaluate(() => window.scrollTo(0, 0));
         await page.waitForTimeout(100);
 
+        // Promote lazy images to eager and wait for decoding before inspecting natural dimensions.
+        await page.locator('img').evaluateAll(async nodes => {
+          await Promise.all(nodes.map(async img => {
+            img.loading = 'eager';
+            try {
+              await Promise.race([
+                img.decode(),
+                new Promise(resolve => setTimeout(resolve, 2500)),
+              ]);
+            } catch {
+              // The audit below records an actual failed image without aborting the route inventory.
+            }
+          }));
+        });
+
         result.horizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
         record(result.horizontalOverflow === false, 'Horizontal overflow at responsive viewport.', { route, viewport: viewport.width });
 
