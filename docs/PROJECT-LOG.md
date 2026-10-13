@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Sprint 1 — baseline and screenshot-sheet foundation (PR #41) |
+| Current phase | Sprint 1 — frozen head fixture follow-up (PR #42) |
 | Base branch | `main` |
-| Baseline commit | `93f27ad806a1b2de153b5f613bc82cc0a7125561` (main after PR #40) |
-| Last merged PR | [#40 — fast-lane brain, Sprint 1 build spec and owner facts sheet](https://github.com/tchouhanjsm/garh-jaisal-website/pull/40) |
-| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38346248251) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38346248287) passed on `93f27ad806a1b2de153b5f613bc82cc0a7125561` |
+| Baseline commit | `f17523727effe40855d3ef2bbeca8e576d7a42d7` (main after PR #41) |
+| Last merged PR | [#41 — freeze page head baseline and add screenshot sheet](https://github.com/tchouhanjsm/garh-jaisal-website/pull/41) |
+| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38349850361) passed on `f17523727effe40855d3ef2bbeca8e576d7a42d7`; [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38349850346) was still running when this snapshot was updated |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/sprint-1-foundation` — freeze rendered head output and publish the page screenshot sheet before refactoring shared head markup |
-| Next action | After PR #41 is owner-merged, introduce `include/page-head.php` and migrate the first page group while the snapshot fixture stays unchanged |
+| Active batch | `feature/sprint-1-baseline-fixture` — commit the pre-refactor head fixture and remove the temporary snapshot bootstrap from CI |
+| Next action | After PR #42 is owner-merged, create the shared `include/page-head.php` / `include/schema.php` foundation and migrate the first page group while the committed snapshot stays unchanged |
 
 ## Phase roadmap
 
@@ -529,3 +529,11 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Added a full-page screenshot sheet for every sitemap route at 390px and 1280px; scrolls through the full document before capture and uploads artifact `page-sheet`.
 - No page-head refactor, page copy, public URL, analytics ID, image mapping, rate, or price is changed in this foundation slice.
 - Next: after owner merge, implement the shared page-head and migrate the first page group with the snapshot fixture unchanged; no owner facts are needed for this slice.
+
+
+## Sprint 1 fixture follow-up — commit the pre-refactor baseline (PR #42)
+
+- PR #41 was owner-merged at `f17523727effe40855d3ef2bbeca8e576d7a42d7` without the generated fixture; the follow-up uses that unchanged rendered page head as its baseline.
+- The guarded CI bootstrap writes only `tests/fixtures/head-snapshot.json` from the pre-refactor capture, then commits only that path to this same-repository feature branch. It is temporary and removed before the PR is ready for owner merge.
+- Final workflow returns to `contents: read`; the test remains strict and fails if the committed fixture is missing or any captured head output changes.
+- No page, public URL, copy, analytics IDs, schema, image, owner fact, rate, or price is changed. This repair is required before the shared-head refactor proceeds.
