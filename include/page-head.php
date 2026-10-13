@@ -52,6 +52,7 @@ $canonical = $siteUrl . ($pagePath === '/' ? '/' : $pagePath);
 $pageTitle = $page['title'];
 $pageDescription = $page['description'];
 $robots = $page['robots'] ?? 'index,follow';
+$ogType = $page['og_type'] ?? 'website';
 $ogTitle = $page['og_title'] ?? $pageTitle;
 $ogDescription = $page['og_description'] ?? $pageDescription;
 $twitterCard = $page['twitter_card'] ?? 'summary_large_image';
@@ -129,7 +130,7 @@ $analyticsIds = array_values(array_unique(array_filter(
   <meta name="robots" content="<?= $htmlEscape($robots) ?>">
   <link rel="canonical" href="<?= $htmlEscape($canonical) ?>">
 
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="<?= $htmlEscape($ogType) ?>">
   <meta property="og:title" content="<?= $htmlEscape($ogTitle) ?>">
   <meta property="og:description" content="<?= $htmlEscape($ogDescription) ?>">
   <meta property="og:url" content="<?= $htmlEscape($canonical) ?>">
