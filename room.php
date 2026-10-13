@@ -57,6 +57,7 @@ $page = [
     ],
 ];
 require __DIR__ . '/include/page-head.php';
+?>
 
 <body>
 
