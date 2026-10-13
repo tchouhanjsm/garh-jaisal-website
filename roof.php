@@ -111,7 +111,7 @@ $bookingUrl = $siteConfig['booking_url'];
 <main class="roof-page" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/v2/fort-from-roof.jpg" alt="" width="1600" height="1066" fetchpriority="high" decoding="async">
+      <img src="img/v2/fort-from-roof.jpg" <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?> alt="" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Rooftop dining</p>
@@ -150,8 +150,7 @@ $bookingUrl = $siteConfig['booking_url'];
         <img
           src="img/v2/fort-from-roof.jpg"
           alt="Rooftop table at dusk overlooking the lights of Jaisalmer"
-          width="2000"
-          height="1333"
+          <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?>
         >
       </div>
 
