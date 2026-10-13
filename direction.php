@@ -49,7 +49,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="arrival-page" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/v2/courtyard.jpg" <?= gj_image_dimension_attributes('img/v2/courtyard.jpg') ?> alt="" fetchpriority="high" decoding="async">
+      <img src="img/v2/courtyard.jpg" <?= gj_image_dimension_attributes('img/v2/courtyard.jpg') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Getting here</p>

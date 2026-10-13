@@ -270,8 +270,9 @@ foreach ($iterator as $entry) {
     }
 }
 
-// 6. Accessibility and safe external-link diagnostics. These are warnings
-// because PHP templates may construct attributes dynamically; verify rendered HTML.
+// 6. Source diagnostics. Remove inline PHP blocks first so attributes that
+// follow a dynamic width/srcset helper are still inspected as one HTML tag.
+// Rendered browser tests separately enforce the full alt/decorative contract.
 $markupFiles = array_merge(
     glob($root . '/*.php') ?: [],
     glob($root . '/include/*.php') ?: []
@@ -279,18 +280,25 @@ $markupFiles = array_merge(
 foreach ($markupFiles as $file) {
     $source = $readFile($file);
     $name = basename($file);
-    if (preg_match_all('/<img\\b([^>]*)>/i', $source, $images, PREG_SET_ORDER)) {
+    $markup = preg_replace('/<\?(?:php|=).*?\?>/si', ' ', $source);
+    if (!is_string($markup)) {
+        $markup = $source;
+    }
+
+    if (preg_match_all('/<img\b([^>]*)>/i', $markup, $images, PREG_SET_ORDER)) {
         foreach ($images as $image) {
-            if (!preg_match('/\\balt\\s*=/i', $image[1])) {
+            if (!preg_match('/\balt\s*=/i', $image[1])) {
                 $addUnique($warnings, $name . ': image without a literal alt attribute; verify rendered markup');
                 break;
             }
         }
     }
-    if (preg_match_all('/<a\\b([^>]*)>/i', $source, $anchors, PREG_SET_ORDER)) {
+    if (preg_match_all('/<a\b([^>]*)>/i', $markup, $anchors, PREG_SET_ORDER)) {
         foreach ($anchors as $anchor) {
-            if (preg_match('/\\btarget\\s*=\\s*(?:"_blank"|\\x27_blank\\x27)/i', $anchor[1]) &&
-                !preg_match('/\\brel\\s*=/i', $anchor[1])) {
+            if (
+                preg_match('/\btarget\s*=\s*(?:"_blank"|\x27_blank\x27)/i', $anchor[1])
+                && !preg_match('/\brel\s*=/i', $anchor[1])
+            ) {
                 $addUnique($warnings, $name . ': target="_blank" link without literal rel attribute; verify rendered markup');
                 break;
             }
