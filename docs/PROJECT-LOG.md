@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Combined Sprint 2B/2C batch — Gallery, About, Blog, responsive tour detail template and unpublished policy drafts |
+| Current phase | Sprint 3A — launch hardening: Apache safeguards, contact form/email resilience, custom 404 |
 | Base branch | `main` |
-| Baseline commit | `ec909e48f908bd0e35ff29e654f5024a14dd76be` (main after PR #49) |
-| Last merged PR | [#49 — align Contact, Dining and Directions pages](https://github.com/tchouhanjsm/garh-jaisal-website/pull/49) |
-| CI evidence | PR #49 merge SHA `ec909e48f908bd0e35ff29e654f5024a14dd76be`: [Site Checks passed](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38395277873), [Browser E2E passed](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38395277888), [390px/1280px page-sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38395277888/artifacts/11812051501) |
+| Baseline commit | `8aa17416a9c9bdfbbb6450e06b0d4b5be0a28008` (main after PR #50) |
+| Last merged PR | [#50 — fix Gallery checks and extend Sprint 2B/2C](https://github.com/tchouhanjsm/garh-jaisal-website/pull/50) |
+| CI evidence | PR #50 merge SHA `8aa17416a9c9bdfbbb6450e06b0d4b5be0a28008`: [Site Checks passed](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38406061398), [Browser E2E passed](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38406061155), [390px/1280px page-sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38406061155/artifacts/11819118159) |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/sprint-2b-gallery-about-guides` — resolve Gallery image-geometry regression, finish Sprint 2B, and fold responsive experience-template/policy draft work from Sprint 2C into PR #50 |
-| Next action | Review PR #50 exact-head Site Checks, Browser E2E and screenshot sheet; owner must supply approved privacy/cancellation terms before policy drafts can be linked or indexed |
+| Active batch | `feature/sprint-3a-launch-hardening` — review Apache/cPanel safeguards, harden contact submission failure paths, and add a navigable noindex 404 page |
+| Next action | Run PHP 7.4/8.2 lint, strict site/publication checks, launch-hardening static gate, full Browser E2E and screenshot sheet on the exact PR head; owner reviews before merge/deploy |
 
 ## Phase roadmap
 
@@ -601,3 +601,12 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Added mobile-first safeguards to the shared tour/experience detail stylesheet and responsive browser checks at 320/390/1280px.
 - Added reusable policy-draft rendering plus `privacy.php` and `booking-policy.php` as explicit `noindex,follow` drafts, off navigation/footer and out of sitemap. No terms or privacy statements are invented.
 - Owner facts already identify the missing inputs. Do not publish, link, or index either policy until the owner approves the data-controller/privacy contact and actual booking/cancellation wording.
+
+
+## Sprint 3A — launch hardening (PR #51 in progress)
+
+- Based on merged main `8aa17416a9c9bdfbbb6450e06b0d4b5be0a28008`; PR #50 post-merge Site Checks and Browser E2E both passed.
+- Added a guarded Apache/cPanel configuration for HTTPS + canonical host, hidden/local-config protection, security headers, gzip, conservative asset caching and custom 404 routing. ACME challenge paths are exempt from the rewrite. HSTS remains deferred until the owner confirms certificate and subdomain coverage.
+- Contact sessions use HttpOnly/SameSite=Lax cookies and Secure when PHP sees HTTPS. CAPTCHA verification sends the secret in a POST body rather than a URL; session throttling now runs before the remote verification call; CAPTCHA hostname must match the configured site host.
+- Added safe phone/WhatsApp recovery actions for form failures, a noindex custom 404 page, a static Apache contract gate and browser tests that never send a real enquiry.
+- cPanel/Apache module behavior and production redirects remain unverified; owner must inspect the diff and test on staging before deployment. No cPanel changes or deployment performed.

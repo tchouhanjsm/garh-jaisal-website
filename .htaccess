@@ -1,0 +1,55 @@
+# Garh Jaisal Haveli — Apache/cPanel launch hardening
+# Rollback: rename this file to .htaccess.disabled if a host-specific rule causes
+# an HTTP 500 or unexpected routing. Confirm the host's PHP/Apache configuration
+# on staging before production use. No HSTS is enabled until certificate coverage
+# and all subdomains have been owner-verified.
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Keep ACME HTTP-01 challenge files reachable during certificate renewal.
+  RewriteRule ^\\.well-known/ - [L]
+
+  # Canonical public origin is https://www.hotelgarhjaisal.com.
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} !^www\\.hotelgarhjaisal\\.com$ [NC]
+  RewriteRule ^ https://www.hotelgarhjaisal.com%{REQUEST_URI} [R=301,L,NE]
+
+  # Never expose hidden files or the server-only local configuration.
+  RewriteRule (^|/)\\. - [F,L]
+  RewriteRule ^include/site-config\\.local\\.php$ - [F,L,NC]
+</IfModule>
+
+<IfModule mod_authz_core.c>
+  <FilesMatch "(^\\.|\\.(?:bak|backup|log)$)">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/plain text/css text/html text/xml application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+</IfModule>
+
+ErrorDocument 404 /404.php
+DirectoryIndex index.php

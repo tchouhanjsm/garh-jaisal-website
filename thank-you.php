@@ -1,7 +1,5 @@
 <?php
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
+require_once __DIR__ . '/include/session.php';
 $enquiryReceived = !empty($_SESSION['enquiry_received']);
 unset($_SESSION['enquiry_received']);
 ?>
