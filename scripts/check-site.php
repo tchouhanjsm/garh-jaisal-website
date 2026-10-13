@@ -222,10 +222,10 @@ if (!is_file($rendererPath)) {
     $renderer = $readFile($rendererPath);
     foreach ([
         'page-head.php',
-        "'title' => $experience['title']",
-        "'description' => $experience['description']",
-        "'path' => '/' . $experience['slug'] . '.php'",
-        "'robots' => $isIndexableExperience ? 'index,follow' : 'noindex,follow'",
+        "'title' => \$experience['title']",
+        "'description' => \$experience['description']",
+        "'path' => '/' . \$experience['slug'] . '.php'",
+        "'robots' => \$isIndexableExperience ? 'index,follow' : 'noindex,follow'",
     ] as $marker) {
         if (strpos($renderer, $marker) === false) {
             $errors[] = 'experience renderer is missing shared-head contract marker: ' . $marker;
