@@ -93,7 +93,7 @@ test('approved WebP derivatives preserve dimensions, map to the same source phot
           continue;
         }
         const hasExpectedSourceSet = image.srcset.split(',').some(item => {
-          const candidateUrl = item.trim().split(/\\s+/)[0];
+          const candidateUrl = item.trim().split(/\s+/)[0];
           return localPath(candidateUrl, 'http://127.0.0.1:8080') === candidate.derivative;
         });
         if (!hasExpectedSourceSet) {
