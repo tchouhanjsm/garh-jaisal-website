@@ -14,7 +14,8 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 3B | Image compression, alt text, sitemap dates, cPanel handoff, release tag | ◐ PR #51 and cleanup PRs #52–#53 merged; image variants remain review-only, owner staging/image approval pending, no tag/deployment |
 | 4 | Repeatable cPanel staging package and safe release preflight | ✓ merged in PR #54; package/checksum artifact generated on main, owner staging sign-off remains required |
 | 5 | Staging isolation, non-production noindex and repeatable staging QA | ✓ merged in PR #55; local QA dry run passes, real staging/cPanel and CAPTCHA/mail checks remain owner-gated |
-| 6 | Direct-stay guide discoverability | ◐ add the existing Jaisalmer Fort stay guide from Home and Rooms; verify both entry points in Browser E2E |
+| 6 | Direct-stay guide discoverability | ✓ merged in PR #56; guide linked from Home and Rooms with exact-head Browser E2E and screenshot evidence |
+| 7 | Experience publication boundaries | ◐ remove stale promotion of a hidden overlap page; enforce draft/hidden exclusion from sitemap and shared navigation; cover every sitemap route in Browser E2E |
 
 ---
 

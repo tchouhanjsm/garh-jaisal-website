@@ -113,7 +113,7 @@ require __DIR__ . '/include/page-head.php';
         <article><strong>One evening</strong><p>Choose a sunset camel safari or cultural safari and return to Jaisalmer the same evening.</p></article>
         <article><strong>One night, open sky</strong><p>Choose Sleep Under the Stars for an overnight desert experience without tent accommodation.</p></article>
         <article><strong>One night, tent</strong><p>Choose the Swiss Tent Safari when you prefer tent accommodation and a cultural evening.</p></article>
-        <article><strong>More time in the desert</strong><p>Explore the Desert is the broader day experience for guests who want more time on the route.</p></article>
+        <article><strong>Need help choosing?</strong><p>Ask us to compare the currently available desert options and confirm the current price, route, pickup arrangement and timing for your travel date.</p><a class="text-link" href="contact.php">Ask about desert options →</a></article>
       </div>
     </div>
   </section>

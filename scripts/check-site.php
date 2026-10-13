@@ -127,6 +127,80 @@ if ($sitemap === '') {
     }
 }
 
+// 2A. Experience publication boundary: only live registry entries may appear in
+// the sitemap and shared navigation. Draft/hidden pages keep their PHP URLs for
+// review, but are not public discovery routes until the owner approves them.
+$experienceDataPath = $root . '/include/experience-data.php';
+$navigationDataPath = $root . '/include/nav-data.php';
+if (!is_file($experienceDataPath)) {
+    $errors[] = 'include/experience-data.php is missing';
+} elseif (!is_file($navigationDataPath)) {
+    $errors[] = 'include/nav-data.php is missing';
+} else {
+    $experienceRegistry = require $experienceDataPath;
+    $navigationRegistry = require $navigationDataPath;
+
+    if (!is_array($experienceRegistry)) {
+        $errors[] = 'include/experience-data.php must return an array';
+    } elseif (!is_array($navigationRegistry)) {
+        $errors[] = 'include/nav-data.php must return an array';
+    } else {
+        $navigationPaths = [];
+        $collectNavigationPaths = null;
+        $collectNavigationPaths = static function ($node) use (&$collectNavigationPaths, &$navigationPaths) {
+            if (!is_array($node)) {
+                return;
+            }
+            if (isset($node['url']) && is_string($node['url'])) {
+                $navigationPaths[] = $node['url'];
+            }
+            foreach ($node as $value) {
+                if (is_array($value)) {
+                    $collectNavigationPaths($value);
+                }
+            }
+        };
+        $collectNavigationPaths($navigationRegistry);
+        $navigationPaths = array_values(array_unique($navigationPaths));
+        $currentSitemapPaths = $sitemapPaths ?? [];
+
+        foreach ($experienceRegistry as $slug => $experience) {
+            if (!is_string($slug) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $slug)) {
+                $errors[] = 'experience registry contains an invalid page slug';
+                continue;
+            }
+            if (!is_array($experience)) {
+                $errors[] = 'experience registry entry is not an array: ' . $slug;
+                continue;
+            }
+
+            $status = $experience['status'] ?? 'live';
+            if (!in_array($status, ['live', 'draft', 'hidden'], true)) {
+                $errors[] = 'experience registry contains an invalid publication status: ' . $slug;
+                continue;
+            }
+
+            $route = $slug . '.php';
+            if (!is_file($root . '/' . $route)) {
+                $errors[] = 'experience registry route is missing; keep published and owner-review URLs available: ' . $route;
+            }
+
+            if ($status === 'live') {
+                if (!in_array($route, $currentSitemapPaths, true)) {
+                    $errors[] = 'live experience is missing from sitemap.xml: ' . $route;
+                }
+            } else {
+                if (in_array($route, $currentSitemapPaths, true)) {
+                    $errors[] = $status . ' experience must not appear in sitemap.xml: ' . $route;
+                }
+                if (in_array($route, $navigationPaths, true)) {
+                    $errors[] = $status . ' experience must not appear in shared navigation/footer data: ' . $route;
+                }
+            }
+        }
+    }
+}
+
 // 3. Literal local href/src references. External URLs, fragments, query values,
 // and PHP-generated dynamic URLs need browser smoke tests rather than guessing.
 $scanFiles = array_merge(
