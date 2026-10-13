@@ -8,7 +8,7 @@
  *   $page['path']        Site-relative path; '/' for the homepage.
  *
  * Optional:
- *   robots, og_type, og_image, og_title, og_description, twitter_card,
+ *   robots, og_type, og_image, og_image_alt, og_title, og_description, twitter_card,
  *   twitter_title, twitter_description, twitter_image, css, schema, preload.
  *
  * The helper emits the complete <head> element. Extra CSS follows
@@ -59,6 +59,7 @@ $twitterCard = $page['twitter_card'] ?? 'summary_large_image';
 $twitterTitle = $page['twitter_title'] ?? $pageTitle;
 $twitterDescription = $page['twitter_description'] ?? $pageDescription;
 $ogImageSource = $page['og_image'] ?? '/img/v2/facade.jpg';
+$ogImageAlt = $page['og_image_alt'] ?? null;
 $twitterImageSource = $page['twitter_image'] ?? $ogImageSource;
 
 $htmlEscape = static function ($value) {
@@ -135,6 +136,9 @@ $analyticsIds = array_values(array_unique(array_filter(
   <meta property="og:description" content="<?= $htmlEscape($ogDescription) ?>">
   <meta property="og:url" content="<?= $htmlEscape($canonical) ?>">
   <meta property="og:image" content="<?= $htmlEscape($absoluteAssetUrl($ogImageSource)) ?>">
+<?php if (is_string($ogImageAlt) && $ogImageAlt !== ''): ?>
+  <meta property="og:image:alt" content="<?= $htmlEscape($ogImageAlt) ?>">
+<?php endif; ?>
 
   <meta name="twitter:card" content="<?= $htmlEscape($twitterCard) ?>">
   <meta name="twitter:title" content="<?= $htmlEscape($twitterTitle) ?>">
