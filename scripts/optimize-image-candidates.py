@@ -162,6 +162,9 @@ def main() -> None:
             "derivative_bytes": derivative_bytes if status == "optimized" else None,
             "saved_bytes": saved_bytes if status == "optimized" else None,
             "saved_percent": round(saved_percent, 3) if status == "optimized" else None,
+            "attempted_derivative_bytes": derivative_bytes,
+            "attempted_saved_bytes": saved_bytes,
+            "attempted_saved_percent": round(saved_percent, 3),
             "psnr_db": round(measured_psnr, 3),
             "width": original_size[0],
             "height": original_size[1],
@@ -202,8 +205,9 @@ def main() -> None:
     (REPORT_DIR / "image-optimization-report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     with (REPORT_DIR / "image-optimization-report.csv").open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=[
-            "source", "derivative", "status", "source_bytes", "derivative_bytes",
-            "saved_bytes", "saved_percent", "psnr_db", "width", "height", "note",
+            "source", "derivative", "status", "source_bytes", "derivative_bytes", "saved_bytes", "saved_percent",
+            "attempted_derivative_bytes", "attempted_saved_bytes", "attempted_saved_percent",
+            "psnr_db", "width", "height", "note",
         ])
         writer.writeheader()
         for row in rows:

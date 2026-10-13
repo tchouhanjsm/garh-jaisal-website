@@ -92,8 +92,11 @@ test('approved WebP derivatives preserve dimensions, map to the same source phot
         if (!candidate.derivativeExists) {
           continue;
         }
-        const expectedSourceSetPath = `/${candidate.derivative}`;
-        if (!image.srcset.split(',').some(item => item.trim().startsWith(expectedSourceSetPath))) {
+        const hasExpectedSourceSet = image.srcset.split(',').some(item => {
+          const candidateUrl = item.trim().split(/\\s+/)[0];
+          return localPath(candidateUrl, 'http://127.0.0.1:8080') === candidate.derivative;
+        });
+        if (!hasExpectedSourceSet) {
           report.findings.push({ route, source: candidate.source, issue: 'optimized-srcset-missing', srcset: image.srcset });
           continue;
         }
