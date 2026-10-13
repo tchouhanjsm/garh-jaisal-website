@@ -11,7 +11,7 @@
 | Base branch | `main` |
 | Baseline commit | `d5acb7f9c915e87527da70e2eee9154ed3209bd7` (main after PR #42) |
 | Last merged PR | [#42 — commit frozen head snapshot fixture](https://github.com/tchouhanjsm/garh-jaisal-website/pull/42) |
-| CI on baseline | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38354302604) passed on PHP 7.4 and 8.2; [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38354302647) was still in progress when this branch was created |
+| CI on baseline | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38354302604) passed on PHP 7.4 and 8.2; [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38354302647) passed on the exact baseline commit |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Active batch | `feature/sprint-1-page-head-migration` — centralise head markup and shared Hotel/WebSite schema; migrate Home, About, Rooms, Contact, Directions and Gallery without changing page copy or page-specific schema |
 | Next action | Review exact-head CI and the `page-sheet` artifact; after owner-merge, migrate the second page group and then the remaining public pages |
