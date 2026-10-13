@@ -10,8 +10,8 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 2A | Dining (`roof.php`, `restaurant.php`), Contact, Directions | ✓ page group and reciprocal Dining/responsive fixes merged through PRs #49–#50 |
 | 2B | Gallery, About, Blog and guides | ✓ merged in PR #50; visual review artifact available |
 | 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ◐ responsive detail protections and draft shells merged in PR #50; policy pages remain noindex/off-nav until owner supplies terms |
-| 3A | Launch hardening: `.htaccess`, form/email resilience, custom 404 | ◐ folded into combined PR #51; first exact-head checks are green |
-| 3B | Image compression, alt text, sitemap dates, cPanel handoff, release tag | ◐ folded into PR #51; image-size variants are review artifacts until visually approved; release tag waits for staging sign-off |
+| 3A | Launch hardening: `.htaccess`, form/email resilience, custom 404 | ✓ PR #51 merged; exact-main Site Checks and Browser E2E passed |
+| 3B | Image compression, alt text, sitemap dates, cPanel handoff, release tag | ◐ PR #51 merged and exact-main CI passed; resized candidates remain review-only, staging and image approval pending, no tag/deployment |
 
 ---
 
