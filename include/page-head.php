@@ -40,7 +40,9 @@ if (
     && (
         $pagePath[0] !== '/'
         || strncmp($pagePath, '//', 2) === 0
-        || preg_match('/[?#\\\\]/', $pagePath)
+        || strpos($pagePath, '?') !== false
+        || strpos($pagePath, '#') !== false
+        || strpos($pagePath, '\\\\') !== false
     )
 ) {
     throw new InvalidArgumentException('The page path must be site-relative and must not contain a query or fragment.');
@@ -152,7 +154,7 @@ $analyticsIds = array_values(array_unique(array_filter(
 <?php endif; ?>
 <?php endforeach; ?>
 <?php if ($analyticsIds): ?>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=<?= rawurlencode($analyticsIds[0]) ?>"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=<?= $htmlEscape(rawurlencode($analyticsIds[0])) ?>"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
