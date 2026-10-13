@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Sprint 1 — baseline and screenshot-sheet foundation (PR #41) |
+| Current phase | Sprint 1 — committed rendered head baseline and screenshot evidence (PR #42) |
 | Base branch | `main` |
-| Baseline commit | `93f27ad806a1b2de153b5f613bc82cc0a7125561` (main after PR #40) |
-| Last merged PR | [#40 — fast-lane brain, Sprint 1 build spec and owner facts sheet](https://github.com/tchouhanjsm/garh-jaisal-website/pull/40) |
-| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38346248251) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38346248287) passed on `93f27ad806a1b2de153b5f613bc82cc0a7125561` |
+| Baseline commit | `f17523727effe40855d3ef2bbeca8e576d7a42d7` (main after PR #41) |
+| Last merged PR | [#41 — freeze page head baseline and add screenshot sheet](https://github.com/tchouhanjsm/garh-jaisal-website/pull/41) |
+| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38349850361) passed on `f17523727effe40855d3ef2bbeca8e576d7a42d7`; [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38349850346) failed because the new required head-snapshot fixture was missing, which PR #42 addresses |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/sprint-1-foundation` — freeze rendered head output and publish the page screenshot sheet before refactoring shared head markup |
-| Next action | After PR #41 is owner-merged, introduce `include/page-head.php` and migrate the first page group while the snapshot fixture stays unchanged |
+| Active batch | `feature/sprint-1-baseline-fixture` — commit the frozen pre-refactor head fixture, remove CI write permissions, and keep snapshot comparisons strict |
+| Next action | After PR #42 is owner-merged and exact-head checks pass, create the shared `include/page-head.php` / `include/schema.php` foundation and migrate the first page group while the fixture stays unchanged |
 
 ## Phase roadmap
 
@@ -529,3 +529,13 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Added a full-page screenshot sheet for every sitemap route at 390px and 1280px; scrolls through the full document before capture and uploads artifact `page-sheet`.
 - No page-head refactor, page copy, public URL, analytics ID, image mapping, rate, or price is changed in this foundation slice.
 - Next: after owner merge, implement the shared page-head and migrate the first page group with the snapshot fixture unchanged; no owner facts are needed for this slice.
+
+
+## Sprint 1 fixture follow-up — commit the pre-refactor baseline (PR #42)
+
+- Base re-verified: main `f17523727effe40855d3ef2bbeca8e576d7a42d7`; PR #41 was the latest merged PR at the start of this follow-up.
+- Captured and validated the pre-refactor baseline from the successful CI run: 26 sitemap routes and three draft/hidden routes. It freezes titles, descriptions, canonicals, robots, OG/Twitter tags, JSON-LD type inventory, and both approved GA4 config IDs.
+- The first PR #42 attempt passed 212 Browser E2E tests, including the full page sheet, but its temporary CI push step failed because GitHub Actions uses a synthetic PR merge checkout; pushing that detached merge commit to the head branch is not a fast-forward. The generated fixture is now committed by the normal feature-branch change instead.
+- Final workflow restores `contents: read` and removes both temporary bootstrap steps. The test fails if the fixture is missing or any frozen output changes; it does not weaken assertions.
+- No public PHP page, URL, content, schema values, GA IDs, image mapping, owner fact, rate, or price changed. Production and cPanel were not touched.
+- Next: after this PR is owner-merged and exact-head checks pass, proceed with the shared page-head foundation and the first page group.
