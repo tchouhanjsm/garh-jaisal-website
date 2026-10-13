@@ -8,7 +8,7 @@
  *   $page['path']        Site-relative path; '/' for the homepage.
  *
  * Optional:
- *   robots, og_image, og_title, og_description, twitter_card,
+ *   robots, og_type, og_image, og_title, og_description, twitter_card,
  *   twitter_title, twitter_description, twitter_image, css, schema, preload.
  *
  * The helper emits the complete <head> element. Extra CSS follows
