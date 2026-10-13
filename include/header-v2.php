@@ -171,6 +171,7 @@ $e = static function ($value) {
   </div>
 </header>
 
+<?php if ($activePage !== 'contact'): ?>
 <div class="contact-dock" aria-label="Contact Garh Jaisal">
   <a
     class="contact-dock-item"
@@ -198,3 +199,4 @@ $e = static function ($value) {
   <a href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mobile-cta-whatsapp">WhatsApp</a>
   <a href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mobile-cta-book">Book Now</a>
 </div>
+<?php endif; ?>
