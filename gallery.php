@@ -209,17 +209,29 @@ require __DIR__ . '/include/page-head.php';
     </section>
   <?php endforeach; ?>
 
-  <section class="section gallery-cta">
-    <div class="site-shell gallery-cta-inner">
-      <p class="eyebrow">Plan your stay</p>
-      <h2>See a room you like?</h2>
-      <p>Explore the room collection or check availability for your dates.</p>
-      <div class="actions">
-        <a class="button button-primary" href="room.php">View rooms</a>
-        <a class="button gallery-cta-light" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Book your stay</a>
-      </div>
-    </div>
-  </section>
+  <?php
+$ctaBand = [
+    'section_class' => 'section gallery-cta',
+    'inner_class' => 'site-shell gallery-cta-inner',
+    'eyebrow' => 'Plan your stay',
+    'title' => 'See a room you like?',
+    'text' => 'Explore the room collection or check availability for your dates.',
+    'actions_class' => 'actions',
+    'primary' => [
+        'label' => 'View rooms',
+        'href' => 'room.php',
+        'class' => 'button button-primary',
+    ],
+    'secondary' => [
+        'label' => 'Book your stay',
+        'href' => $bookingUrl,
+        'class' => 'button gallery-cta-light',
+        'target' => '_blank',
+        'rel' => 'noopener',
+    ],
+];
+require __DIR__ . '/include/ui/cta-band.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>

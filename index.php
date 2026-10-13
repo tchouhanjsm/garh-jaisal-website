@@ -441,33 +441,29 @@ require __DIR__ . '/include/page-head.php';
 
 
 
-<section class="section final-cta">
-  <div class="site-shell final-cta-inner">
-
-    <p class="eyebrow">Plan your stay</p>
-
-    <h2>Stay at Garh Jaisal Haveli.</h2>
-
-    <p>
-      Check availability, ask about arrival, or enquire about our desert experiences.
-    </p>
-
-    <div class="actions">
-      <a
-        class="button button-primary"
-        href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
-        target="_blank"
-        rel="noopener">
-        Book your stay
-      </a>
-
-      <a class="button final-contact-button" href="contact.php">
-        Contact us
-      </a>
-    </div>
-
-  </div>
-</section>
+<?php
+$ctaBand = [
+    'section_class' => 'section final-cta',
+    'inner_class' => 'site-shell final-cta-inner',
+    'eyebrow' => 'Plan your stay',
+    'title' => 'Stay at Garh Jaisal Haveli.',
+    'text' => 'Check availability, ask about arrival, or enquire about our desert experiences.',
+    'actions_class' => 'actions',
+    'primary' => [
+        'label' => 'Book your stay',
+        'href' => $bookingUrl,
+        'class' => 'button button-primary',
+        'target' => '_blank',
+        'rel' => 'noopener',
+    ],
+    'secondary' => [
+        'label' => 'Contact us',
+        'href' => 'contact.php',
+        'class' => 'button final-contact-button',
+    ],
+];
+require __DIR__ . '/include/ui/cta-band.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
