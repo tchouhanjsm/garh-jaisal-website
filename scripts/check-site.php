@@ -354,7 +354,7 @@ foreach ($fontReferenceIterator as $entry) {
 
     $contents = $readFile($path);
     $hasLegacyFontPath = preg_match(
-        '#(?:^|[/"\'\x28=\s])(?:\.\.?/)?fonts/(?:fontawesome-webfont|glyphicons-halflings|icofont)[^"\'\x29\s?#]*#i',
+        "~(?:^|[/\x22'(=\s])(?:\.\.?/)?fonts/(?:fontawesome-webfont|glyphicons-halflings|icofont)[^\x22'()\s?#]*~i",
         $contents
     );
     $hasLegacyFontFace = preg_match(
