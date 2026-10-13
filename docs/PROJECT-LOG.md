@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Sprint 1 — shared page-head/schema foundation; groups 1–3 and experience renderer are being completed; UI partials/dead-asset removal remain |
+| Current phase | Sprint 1 — reusable UI partials are being adopted; reference-verified dead-asset removal remains |
 | Base branch | `main` |
-| Baseline commit | `438946452872dcc8b87fb593eff6869858f9d75d` (main after PR #44) |
-| Last merged PR | [#44 — migrate packages and tour pages to shared head](https://github.com/tchouhanjsm/garh-jaisal-website/pull/44) |
-| CI evidence | PR #44 exact head `8e43f40bfb180c2c32c02dd11e7a6b80dd2aa23c`: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38359596089) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38359595950) passed; [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38359595950/artifacts/11793244750) available |
+| Baseline commit | `d2cf7550c17ef295914ec17925adaeb65053f365` (main after PR #45) |
+| Last merged PR | [#45 — complete shared page-head migration](https://github.com/tchouhanjsm/garh-jaisal-website/pull/45) |
+| CI evidence | PR #45 exact head `9e9d3e8a2acb235871e38660e87d178ec0512058`: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38364622944) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38364622792) passed; [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38364622792/artifacts/11796154062) available |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/sprint-1-page-head-completion` — migrate Dining, Blog, guides and the shared experience renderer while preserving frozen head output and both GA4 IDs |
-| Next action | Review PR #45 on its exact head, including `page-sheet`; after owner-merge, build reusable UI partials, then remove reference-verified dead assets (fonts in a separate revertible commit) |
+| Active batch | `feature/sprint-1-ui-partials` — add reusable escaped UI partials and migrate the planned CTA/FAQ blocks without redesigning pages |
+| Next action | Review PR #46 on its exact head and page-sheet; after owner-merge, re-verify dead-asset references and remove only confirmed-unused assets, with fonts in a separate revertible commit |
 
 ## Phase roadmap
 
@@ -548,3 +548,12 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Preserved title, description, canonical, robots policy, social metadata, page-specific JSON-LD and both configured GA4 IDs; added shared `og:image:alt` support and retained the frozen fixture.
 - Validation gate: exact-head PHP 7.4/8.2 Site Checks, Browser E2E and the 390px/1280px page-sheet artifact; local PHP/Chromium were not run by the connector.
 - Owner questions: none for this technical refactor; existing operational facts remain open in `docs/OWNER-FACTS.md`. Next: reusable UI partials, then verified dead assets with fonts as a separate revertible commit.
+
+
+## Sprint 1 — reusable UI partials (PR #46)
+
+- Verified base: `d2cf7550c17ef295914ec17925adaeb65053f365`; PR #45 is merged; its PHP 7.4/8.2 Site Checks and Browser E2E passed.
+- Added `include/ui/{hero,section-head,cta-band,faq}.php`; each uses one config array and escapes values and attributes.
+- Adopted the CTA partial on Home, Rooms, Directions, Gallery, About and Blog; adopted FAQ on Directions and experience details plus section-head on the experience FAQ. Existing copy, links and CSS class names are retained.
+- Validation gate: exact-head PHP 7.4/8.2 checks, Browser E2E, UI-partial regression tests, strict image check, sitemap check and screenshot sheet. Local PHP/Chromium are not available through the connector.
+- Owner questions: none for this refactor. Next: reference-verify dead assets; keep font removal in its own revertible commit.
