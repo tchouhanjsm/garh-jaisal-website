@@ -8,6 +8,12 @@ $bookingUrl = $siteConfig['booking_url'];
 <?php
 $siteUrl = rtrim($siteConfig['site_url'], '/');
 $canonical = $siteUrl . '/camping.php';
+require_once __DIR__ . '/include/schema.php';
+$faqItems = [
+    ['question' => "What does camping mean at Garh Jaisal Haveli?", 'answer' => "The Camping page describes Sleep Under the Stars and an overnight stay in a Swiss tent in the desert."],
+    ['question' => "What is the difference between the two overnight options?", 'answer' => "Sleep Under the Stars is an open-sky overnight experience, while the Swiss Tent Safari offers overnight tent accommodation."],
+    ['question' => "What should I confirm before booking?", 'answer' => "Ask the hotel to confirm current price, availability, pickup, itinerary, meals and overnight arrangements for your travel date."],
+];
 $page = [
     'title' => 'Desert Camping near Jaisalmer | Garh Jaisal Haveli',
     'description' => 'Camping at Garh Jaisal Haveli means Sleep Under the Stars or an overnight stay in a Swiss tent in the desert. Ask the hotel for the current price.',
@@ -39,6 +45,7 @@ $page = [
         ],
     ],
 ];
+$page['schema'][] = gj_schema_faq($faqItems, $canonical);
 require __DIR__ . '/include/page-head.php';
 ?>
 
@@ -64,6 +71,23 @@ require __DIR__ . '/include/page-head.php';
       <div class="package-note">
         <p>Ask the hotel for the <a href="contact.php">current price</a>.</p>
       </div>
+    </div>
+  </section>
+
+  <section class="section site-faq camping-faq" aria-labelledby="camping-faq-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div><p class="eyebrow">Common questions</p><h2 id="camping-faq-title">Questions about desert camping.</h2></div>
+        <p>Confirm the overnight setup and current inclusions for your chosen date.</p>
+      </div>
+      <?php
+      $faq = [
+          'items' => $faqItems,
+          'item_class' => 'faq-item',
+          'answer_wrapper_class' => 'faq-answer',
+      ];
+      require __DIR__ . '/include/ui/faq.php';
+      ?>
     </div>
   </section>
 </main>

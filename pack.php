@@ -25,6 +25,12 @@ $sortExperienceSlugs($guideItems);
 <!doctype html>
 <html lang="en">
 <?php
+require_once __DIR__ . '/include/schema.php';
+$faqItems = [
+    ['question' => "How should I choose an experience?", 'answer' => "Start with how much time you have and whether you want to return to Jaisalmer the same evening or stay overnight."],
+    ['question' => "How do I confirm current prices and availability?", 'answer' => "Contact the hotel for the current price, availability, route, pickup arrangement, guide availability and exact inclusions for your travel date."],
+    ['question' => "Can I combine a city tour with a desert safari?", 'answer' => "The page lists city and desert options separately. Contact the hotel to check the timing and arrangements for your dates before planning both."],
+];
 $page = [
     'title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
     'description' => 'Explore desert safari and guided Jaisalmer tour options arranged from Garh Jaisal Haveli, including camel safaris, overnight desert stays and half-day or full-day city tours.',
@@ -57,6 +63,7 @@ $page = [
         ],
     ],
 ];
+$page['schema'][] = gj_schema_faq($faqItems, $canonical);
 require __DIR__ . '/include/page-head.php';
 ?>
 
@@ -198,7 +205,24 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section packages-cta">
+  
+  <section class="section site-faq packages-faq" aria-labelledby="packages-faq-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div><p class="eyebrow">Common questions</p><h2 id="packages-faq-title">Questions about Jaisalmer experiences.</h2></div>
+        <p>Use these answers as a starting point; confirm the arrangements for your own travel dates.</p>
+      </div>
+      <?php
+      $faq = [
+          'items' => $faqItems,
+          'item_class' => 'faq-item',
+          'answer_wrapper_class' => 'faq-answer',
+      ];
+      require __DIR__ . '/include/ui/faq.php';
+      ?>
+    </div>
+  </section>
+<section class="section packages-cta">
     <div class="site-shell">
       <div class="packages-cta-inner">
         <p class="eyebrow">Need help choosing?</p>

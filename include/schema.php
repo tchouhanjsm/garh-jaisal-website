@@ -44,3 +44,35 @@ function gj_schema_website($siteUrl)
         ],
     ];
 }
+
+/**
+ * Build FAQPage structured data from the exact Q&A array rendered on the page.
+ * Returns no node when no valid visible questions are supplied.
+ */
+function gj_schema_faq($faqItems, $pageUrl)
+{
+    $questions = [];
+    if (!is_array($faqItems)) {
+        return [];
+    }
+    foreach ($faqItems as $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+        $question = isset($item['question']) && is_string($item['question']) ? trim($item['question']) : '';
+        $answer = isset($item['answer']) && is_string($item['answer']) ? trim($item['answer']) : '';
+        if ($question === '' || $answer === '') {
+            continue;
+        }
+        $questions[] = [
+            '@type' => 'Question',
+            'name' => $question,
+            'acceptedAnswer' => ['@type' => 'Answer', 'text' => $answer],
+        ];
+    }
+    if (!$questions) {
+        return [];
+    }
+    $url = rtrim((string) $pageUrl, '/');
+    return ['@type' => 'FAQPage', '@id' => $url . '#faq', 'url' => $url, 'mainEntity' => $questions];
+}

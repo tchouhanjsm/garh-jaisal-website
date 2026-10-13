@@ -8,6 +8,13 @@ $canonical = $siteUrl . '/roof.php';
 <!doctype html>
 <html lang="en">
 <?php
+require_once __DIR__ . '/include/schema.php';
+$faqItems = [
+    ['question' => "Where is rooftop dining?", 'answer' => "Garh Jaisal’s Kitchen is the rooftop restaurant at Garh Jaisal Haveli, inside Jaisalmer Fort."],
+    ['question' => "Can I check the menu before visiting?", 'answer' => "Yes. Open the restaurant menu page to review the menu; dishes and listed prices may change, so confirm current details with the hotel."],
+    ['question' => "How do I check table availability?", 'answer' => "Contact the hotel to confirm current table availability. For same-day enquiries, calling or WhatsApp is a direct way to reach the team."],
+    ['question' => "Can the kitchen help with dietary requests?", 'answer' => "The menu includes vegetarian, vegan and non-vegetarian dishes. Ask the hotel about current Jain and allergy options before confirming."],
+];
 $page = [
     'title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
     'description' => "Rooftop dining at Garh Jaisal's Kitchen in Jaisalmer: vegetarian, vegan and non-vegetarian meals, candlelight dinners, and views of havelis, palace and lake.",
@@ -40,6 +47,7 @@ $page = [
         ],
     ],
 ];
+$page['schema'][] = gj_schema_faq($faqItems, $canonical);
 require __DIR__ . '/include/page-head.php';
 ?>
 <body>
@@ -162,6 +170,23 @@ require __DIR__ . '/include/page-head.php';
           </div>
         </article>
       </div>
+    </div>
+  </section>
+
+  <section class="section site-faq roof-faq" aria-labelledby="roof-faq-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div><p class="eyebrow">Common questions</p><h2 id="roof-faq-title">Rooftop dining questions.</h2></div>
+        <p>Check the menu and contact the hotel to confirm current availability before you visit.</p>
+      </div>
+      <?php
+      $faq = [
+          'items' => $faqItems,
+          'item_class' => 'faq-item',
+          'answer_wrapper_class' => 'faq-answer',
+      ];
+      require __DIR__ . '/include/ui/faq.php';
+      ?>
     </div>
   </section>
 </main>
