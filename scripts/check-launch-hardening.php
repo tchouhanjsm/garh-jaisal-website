@@ -13,6 +13,7 @@ if (!is_string($htaccess)) {
 } else {
     $requiredRules = [
         'Options -Indexes' => 'directory listing must be disabled',
+        'RewriteCond %{HTTP_HOST} ^(?:www\.)?hotelgarhjaisal\.com$ [NC]' => 'canonical redirect must be limited to production host aliases so staging stays isolated',
         'RewriteRule ^ https://www.hotelgarhjaisal.com%{REQUEST_URI} [R=301,L,NE]' => 'canonical HTTPS/host redirect is missing',
         'RewriteRule ^include/site-config\.local\.php$ - [F,L,NC]' => 'server-only local configuration must be blocked',
         'Header always set X-Content-Type-Options "nosniff"' => 'nosniff header is missing',
@@ -27,6 +28,14 @@ if (!is_string($htaccess)) {
         if (strpos($htaccess, $needle) === false) {
             $errors[] = $message;
         }
+    }
+    $productionHostGuard = strpos($htaccess, 'RewriteCond %{HTTP_HOST} ^(?:www\.)?hotelgarhjaisal\.com$ [NC]');
+    $canonicalRedirect = strpos($htaccess, 'RewriteRule ^ https://www.hotelgarhjaisal.com%{REQUEST_URI} [R=301,L,NE]');
+    if ($productionHostGuard === false || $canonicalRedirect === false || $productionHostGuard > $canonicalRedirect) {
+        $errors[] = 'canonical HTTPS/host redirect must be preceded by the production-host allowlist guard';
+    }
+    if (strpos($htaccess, 'non-production staging hosts must remain on staging') === false) {
+        $errors[] = 'staging host isolation comment is missing';
     }
     if (strpos($htaccess, 'Strict-Transport-Security') !== false) {
         $errors[] = 'HSTS must remain deferred until the owner verifies certificate and subdomain coverage';

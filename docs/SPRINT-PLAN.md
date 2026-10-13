@@ -13,6 +13,7 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 3A | Launch hardening: `.htaccess`, form/email resilience, custom 404 | ✓ PR #51 merged; exact-main Site Checks and Browser E2E passed |
 | 3B | Image compression, alt text, sitemap dates, cPanel handoff, release tag | ◐ PR #51 and cleanup PRs #52–#53 merged; image variants remain review-only, owner staging/image approval pending, no tag/deployment |
 | 4 | Repeatable cPanel staging package and safe release preflight | ◐ package builder, route coverage tests and main-only artifact; owner staging sign-off remains required |
+| 5 | Staging isolation, non-production noindex and repeatable staging QA | ◐ staging target validator, route/security smoke checks and screenshots in review; owner must supply staging URL and validate mail/CAPTCHA |
 
 ---
 
@@ -187,3 +188,12 @@ Stop there: the owner merges.
 - Add `.github/workflows/deployment-package.yml`: pull requests run package preflight/unit checks; only pushes or manual dispatches from main upload the ZIP, SHA-256 checksum and sidecar manifest. The workflow must never deploy to a host.
 - Update the cPanel handoff with package commit/checksum verification and how to preserve server-only config during staging.
 - Acceptance: PHP 7.4/8.2 Site Checks, sitemap/publication gates, Browser E2E/screenshot sheet, Python package unit tests, package preflight and main-only artifact generation all green on the exact PR/merge SHA. Owner validates cPanel/Apache behavior, form delivery and resized image candidates on staging. Only the owner approves deployment/release tagging.
+
+
+## Sprint 5 — staging isolation and automated QA (2026-10-13)
+
+- Restrict canonical host redirects to `hotelgarhjaisal.com` and `www.hotelgarhjaisal.com`; staging hosts must not be redirected to production.
+- Force `noindex,follow` for every page head when the configured site origin is not exactly `https://www.hotelgarhjaisal.com`. Preserve existing production page indexing and explicit noindex policy/utility pages.
+- Add PHP regression coverage for staging noindex and a dependency-free Node validator for HTTPS staging origin, production-host rejection, main-branch workflow, and exact staged-package commit matching.
+- Add a manual, non-deploying Staging QA workflow. On PR/main push it runs a local smoke test; on owner-dispatched `main` runs it against the supplied staging URL, verifies all sitemap routes, canonical paths, robots, JSON-LD, images, mobile overflow, protected config/hidden files, headers and branded 404, and uploads a 390px/1280px visual artifact.
+- Acceptance: PHP 7.4/8.2 Site Checks, package preflight, Browser E2E/page sheet, Staging QA local smoke, staging-target unit tests and PHP noindex regressions pass on the exact PR head. External staging behavior remains unverified until the owner provides a staging URL and runs the manual workflow. No deployment, form submission or release tag is authorized.

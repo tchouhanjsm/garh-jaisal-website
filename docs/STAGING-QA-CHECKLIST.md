@@ -2,6 +2,16 @@
 
 Run this checklist on staging after deploying a reviewed merge. Record the URL, commit SHA, tester, date, results and screenshots before production approval.
 
+## Automated staging pass
+
+1. From merged `main`, download the cPanel ZIP, manifest and `.sha256` artifact produced for the exact commit approved for staging. Verify the checksum and preserve the server-only `include/site-config.local.php` outside the ZIP.
+2. Configure the staging-only `include/site-config.local.php` so `site_url` matches the HTTPS staging origin and the CAPTCHA host configuration is appropriate for that staging hostname. Do not copy secrets into Git.
+3. Upload/extract the package to the staging document root only after taking a restorable backup. This is a manual owner action; the GitHub workflow never deploys files or submits an enquiry.
+4. Open **Actions → Staging QA → Run workflow** on `main`. Enter the exact HTTPS staging origin (host only, no path/query) and the full 40-character commit SHA represented by the staged ZIP. The workflow refuses a production hostname or a SHA that differs from its checked-out `main` commit.
+5. Review the `staging-qa-evidence-*` artifact. It contains a route-by-route JSON report and 390px/1280px screenshots. A successful GitHub run only validates the supplied staging origin and does not approve production release; finish the manual checks below, especially mail/CAPTCHA, redirects/headers and visual image review.
+
+The shared page head forces `noindex,follow` whenever `site_url` is not the exact production HTTPS origin. `.htaccess` canonicalization is limited to the production apex/`www` host aliases, so a staging subdomain is not redirected to production. If the staging configuration is still set to the production origin, stop and correct it before running QA.
+
 ## Routing and server behavior
 
 - [ ] Canonical origin is `https://www.hotelgarhjaisal.com` in production; staging uses its own approved host and configuration.

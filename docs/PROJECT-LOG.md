@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Repeatable cPanel staging package; owner-controlled staging validation remains the release gate |
+| Current phase | Staging isolation and automated QA; owner-controlled staging validation remains the release gate |
 | Base branch | `main` |
-| Baseline commit | `80b40250a4b95ba37aacf73c683892a2678e40f6` (PR #53 merge commit) |
-| Last merged PR | [#53 — remove unused legacy icon-font assets](https://github.com/tchouhanjsm/garh-jaisal-website/pull/53) |
-| Exact-main CI evidence | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38430084277); [Browser E2E/screenshots PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38430084161) |
-| Screenshot evidence | [390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38430084161/artifacts/11830946028); [browser reports/traces](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38430084161/artifacts/11830547266) |
+| Baseline commit | `ff34f6bb4debb9129c2456a918c502b84adad53c` (PR #54 merge commit) |
+| Last merged PR | [#54 — safe cPanel deployment package workflow](https://github.com/tchouhanjsm/garh-jaisal-website/pull/54) |
+| Exact-main CI evidence | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38432500907); [cPanel package PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38432500854); [Browser E2E/screenshot sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38432500866) |
+| Screenshot evidence | [PR #54 page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38431409628/artifacts/11831127680); main post-merge screenshot workflow evidence is tracked above |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None |
-| Next action | Generate a hash-verified runtime-only staging ZIP from merged main; owner must validate staging and approve image variants before release/tagging |
+| Open PRs at baseline verification | None after PR #54 merge |
+| Next action | Owner stages the matching package, runs Staging QA against the real HTTPS staging host, then signs off mail/CAPTCHA, images and release gates |
 
 ## Phase roadmap
 
@@ -80,3 +80,11 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - The next slice adds a standard-library package builder, unit tests for path selection and sitemap coverage, and a GitHub Actions workflow. Pull requests run checks but do not publish a ZIP. Only pushes or manual dispatches from main create the downloadable package, sidecar manifest and SHA-256 checksum.
 - The package contains tracked runtime files and excludes documentation, development tooling, CI, tests and server-local configuration. It does not deploy; it is only a candidate for owner-controlled staging.
 - Release blockers remain: cPanel/PHP/Apache compatibility, redirect/header behavior, staging CAPTCHA/mail behavior, owner approval of resized image candidates, and approved privacy/booking policy text.
+
+
+## Sprint 5 — staging isolation and automated QA (implementation PR in review)
+
+- Baseline: PR #54 merged at `ff34f6bb4debb9129c2456a918c502b84adad53c`; main Site Checks and deployment-package workflow passed. The cPanel ZIP, JSON manifest and SHA-256 file are published for this exact commit; no upload/deployment has occurred.
+- Correct the staging blocker where a blanket non-`www` redirect would send a staging subdomain to production. Canonical redirects are scoped to production apex/`www` aliases; the shared page head forces noindex outside the exact production origin.
+- Add non-production robots regression tests, an exact-main target validator, and a manual staging-browser workflow covering sitemap routes, metadata, JSON-LD, image accessibility/dimensions, overflow, server protection headers, blocked config/hidden files, branded 404 and screenshot evidence.
+- Staging remains unverified until the owner provides an HTTPS staging URL, applies the matching local configuration, runs the workflow against the exact staged package commit and completes manual mail/CAPTCHA/Apache checks. CI does not deploy or create a release tag.

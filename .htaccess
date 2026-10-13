@@ -12,7 +12,8 @@ Options -Indexes
   # Keep ACME HTTP-01 challenge files reachable during certificate renewal.
   RewriteRule ^\.well-known/ - [L]
 
-  # Canonical public origin is https://www.hotelgarhjaisal.com.
+  # Canonicalize only production host aliases; non-production staging hosts must remain on staging.
+  RewriteCond %{HTTP_HOST} ^(?:www\.)?hotelgarhjaisal\.com$ [NC]
   RewriteCond %{HTTPS} !=on [OR]
   RewriteCond %{HTTP_HOST} !^www\.hotelgarhjaisal\.com$ [NC]
   RewriteRule ^ https://www.hotelgarhjaisal.com%{REQUEST_URI} [R=301,L,NE]
