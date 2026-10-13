@@ -6,7 +6,7 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 
 | Sprint | Slice | Status |
 |---|---|---|
-| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ☐ next |
+| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ◐ in progress |
 | 2A | Dining (`roof.php`, `restaurant.php`), Contact, Directions | ☐ |
 | 2B | Gallery, About, Blog and guides | ☐ |
 | 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ☐ |
@@ -14,7 +14,9 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 
 ---
 
-## SPRINT 1: one PR, branch `feature/sprint-1-foundation`
+## SPRINT 1: foundation rollout, branch `feature/sprint-1-page-head-migration`
+
+Progress update (2026-10-13): PR [#42](https://github.com/tchouhanjsm/garh-jaisal-website/pull/42) merged the frozen pre-refactor head fixture and screenshot-sheet CI support. Do not regenerate the fixture during migration. The next page-head change intentionally adds the shared Hotel/WebSite nodes on migrated pages; the snapshot test excludes only those shared graph roots from the page-specific comparison and separately asserts their IDs, types and approved values.
 
 Make 5 commits in this order. Each commit must leave CI green. If the connector cannot run PHP or a browser, rely on CI after each push and keep commits small.
 
