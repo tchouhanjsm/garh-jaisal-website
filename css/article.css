@@ -61,3 +61,53 @@
   .article-facts,.blog-grid{grid-template-columns:1fr;}
   .article-hero{padding:54px 0 44px;}
 }
+
+
+/* Sprint 2B: shared editorial rhythm, visible breadcrumbs and a true featured guide. */
+.article-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 22px;
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.5;
+}
+.article-breadcrumb a {
+  color: var(--brown);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.article-breadcrumb [aria-current="page"] { color: var(--ink); font-weight: 600; }
+.article-hero-inner h1 { max-width: 22ch; text-wrap: balance; }
+.article-layout > *,
+.article-content > * { min-width: 0; }
+.article-toc a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+}
+.article-content section { scroll-margin-top: 92px; }
+.blog-card > a { display: flex; flex: 1; flex-direction: column; }
+.blog-card--featured { grid-column: 1 / -1; }
+.blog-card--featured > a {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr);
+  height: 100%;
+}
+.blog-card--featured .blog-card-image { min-height: 300px; aspect-ratio: auto; }
+.blog-card--featured .blog-card-body { justify-content: center; padding: clamp(24px, 4vw, 48px); }
+.blog-card--featured h2 { font-size: clamp(2rem, 3.8vw, 3.3rem); line-height: 1.12; text-wrap: balance; }
+.blog-card:focus-within { outline: 2px solid var(--brown); outline-offset: 3px; }
+.article-next-card { min-width: 0; }
+.article-hero .page-breadcrumb { color: var(--muted); }
+@media (max-width: 900px) {
+  .blog-card--featured > a { grid-template-columns: minmax(0, 1fr); }
+  .blog-card--featured .blog-card-image { min-height: 0; aspect-ratio: 16 / 9; }
+}
+@media (max-width: 760px) {
+  .article-hero h1 { font-size: clamp(2.25rem, 9vw, 3.5rem); }
+  .article-toc a { min-height: 44px; }
+  .article-table { min-width: 560px; }
+}

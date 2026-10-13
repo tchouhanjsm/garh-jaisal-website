@@ -267,6 +267,7 @@ require __DIR__ . '/include/page-head.php';
           <a class="button button-primary" href="#reserve">Reserve a table</a>
           <a class="button button-light" href="<?= e($waLink) ?>" target="_blank" rel="noopener">WhatsApp</a>
         </div>
+        <p class="restaurant-rooftop-link">Planning a meal or candlelight dinner? <a href="roof.php">Explore the rooftop dining space</a>.</p>
       </div>
 
       <div class="restaurant-hero-media">

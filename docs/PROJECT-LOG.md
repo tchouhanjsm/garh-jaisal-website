@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Sprint 2A — Contact and Directions alignment pass; Dining navigation clarity |
+| Current phase | Sprint 2B — Gallery, About, Blog and guide layouts; close remaining Dining cross-link/responsive work |
 | Base branch | `main` |
-| Baseline commit | `eb551a67d4d027493f4a2d2847c540b156c1b386` (main after PR #48) |
-| Last merged PR | [#48 — remove legacy CSS and repair Contact layout](https://github.com/tchouhanjsm/garh-jaisal-website/pull/48) |
-| CI evidence | PR #47 exact head `605e1bde0e1fee9557184c50fbe932ad7fb22260`: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38374961949) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38374961946) passed; [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38374961946/artifacts/11800474664) available |
+| Baseline commit | `ec909e48f908bd0e35ff29e654f5024a14dd76be` (main after PR #49) |
+| Last merged PR | [#49 — align Contact, Dining and Directions pages](https://github.com/tchouhanjsm/garh-jaisal-website/pull/49) |
+| CI evidence | PR #49 merge SHA `ec909e48f908bd0e35ff29e654f5024a14dd76be`: [Site Checks passed](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38395277873), [Browser E2E passed](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38395277888), [390px/1280px page-sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38395277888/artifacts/11812051501) |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/sprint-2a-dining-contact-directions` — standardise Contact hero, improve Dining discovery and lead with the parking walk on Directions |
-| Next action | Review exact-head CI and screenshot sheet for the Sprint 2A layout batch; keep font deletion separate until a final retained-CSS reference scan confirms unused files |
+| Active batch | `feature/sprint-2b-gallery-about-guides` — gallery filters/lightbox, visible breadcrumbs, featured guide layout, and responsive editorial polish; also closes Dining cross-link/mobile gap |
+| Next action | Review PR #50 exact-head Site Checks, Browser E2E and screenshot sheet; font deletion remains a distinct reversible cleanup after a final retained-CSS reference scan |
 
 ## Phase roadmap
 
@@ -584,3 +584,12 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Dining hub adds a direct menu-page cross-link. Directions surfaces the existing Fort Parking walk estimate before the detailed travel cards.
 - Added browser regressions for hero/action presence, the dining link, the first directions answer and overflow at 320/390/1280px. Exact-head CI and screenshot sheet remain the merge gate.
 - No prices, policies, public URLs, schema, GA4 IDs or owner-controlled facts were changed. Local PHP/browser and production were not tested.
+
+
+## Sprint 2B — Gallery, About and editorial page group (open PR)
+
+- Base: `ec909e48f908bd0e35ff29e654f5024a14dd76be`; PR #49 merged and both merge-head workflows passed, with page-sheet artifact available.
+- Gallery gains progressive-enhancement category filters and a native keyboard-closeable lightbox; the full-size image links still work without JavaScript. Existing image filenames and alt text are retained.
+- About and all three guides receive the shared escaped breadcrumb partial; the Blog hub promotes the Fort guide, unifies the visible label with the approved navigation name, and shares responsive editorial rules.
+- This batch closes Sprint 2A's remaining Dining cross-link/mobile alignment gap. Added Playwright checks for filtering, lightbox, breadcrumbs, reciprocal Dining links and no overflow at 320/390/1280/1440px.
+- Exact-head CI and screenshot sheet are the merge gate; no page URLs, analytics IDs, policies, prices or unverified facts were changed. Local PHP/browser and production were not tested.

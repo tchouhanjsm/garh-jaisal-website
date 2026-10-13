@@ -7,6 +7,75 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
   }
 
+  const gallery = document.querySelector('.gallery-page');
+  if (gallery) {
+    const filters = Array.from(gallery.querySelectorAll('[data-gallery-filter]'));
+    const sections = Array.from(gallery.querySelectorAll('[data-gallery-category]'));
+    const sectionLinks = Array.from(gallery.querySelectorAll('.gallery-jump a[href^="#"]'));
+    const dialog = gallery.querySelector('.gallery-lightbox');
+    const lightboxImage = gallery.querySelector('[data-gallery-lightbox-image]');
+    const caption = gallery.querySelector('[data-gallery-lightbox-caption]');
+    const previous = gallery.querySelector('[data-gallery-previous]');
+    const next = gallery.querySelector('[data-gallery-next]');
+    let activeImages = [];
+    let activeIndex = 0;
+
+    const visibleImages = () => Array.from(gallery.querySelectorAll('[data-gallery-open]'))
+      .filter((link) => !link.closest('[data-gallery-category]')?.hidden);
+
+    const applyFilter = (category) => {
+      sections.forEach((section) => {
+        section.hidden = category !== 'all' && section.dataset.galleryCategory !== category;
+      });
+      sectionLinks.forEach((link) => {
+        const target = link.getAttribute('href').slice(1);
+        link.hidden = category !== 'all' && target !== category;
+      });
+      filters.forEach((filter) => {
+        filter.setAttribute('aria-pressed', String(filter.dataset.galleryFilter === category));
+      });
+    };
+
+    filters.forEach((filter) => {
+      filter.addEventListener('click', () => {
+        applyFilter(filter.dataset.galleryFilter || 'all');
+        if (dialog?.open) dialog.close();
+      });
+    });
+
+    const renderLightboxImage = (index) => {
+      if (!activeImages.length || !lightboxImage || !caption) return;
+      activeIndex = (index + activeImages.length) % activeImages.length;
+      const link = activeImages[activeIndex];
+      const thumbnail = link.querySelector('img');
+      if (!thumbnail) return;
+      lightboxImage.src = thumbnail.currentSrc || thumbnail.src;
+      lightboxImage.alt = thumbnail.alt;
+      caption.textContent = thumbnail.alt;
+      if (previous) previous.disabled = activeImages.length < 2;
+      if (next) next.disabled = activeImages.length < 2;
+    };
+
+    gallery.querySelectorAll('[data-gallery-open]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        if (!dialog || typeof dialog.showModal !== 'function') return;
+        event.preventDefault();
+        activeImages = visibleImages();
+        activeIndex = activeImages.indexOf(link);
+        renderLightboxImage(activeIndex);
+        dialog.showModal();
+      });
+    });
+
+    previous?.addEventListener('click', () => renderLightboxImage(activeIndex - 1));
+    next?.addEventListener('click', () => renderLightboxImage(activeIndex + 1));
+    gallery.querySelector('[data-gallery-close]')?.addEventListener('click', () => dialog?.close());
+    dialog?.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    applyFilter('all');
+  }
+
   const button = document.querySelector('.nav-toggle');
   const nav = document.querySelector('.main-nav');
   if (!button || !nav) return;

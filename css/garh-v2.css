@@ -2496,3 +2496,29 @@ p{
 .restaurant-contact-help .text-link{
   font-weight:700;
 }
+
+
+/* Shared visible breadcrumb component used by editorial and page heroes. */
+.page-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.5;
+}
+.page-breadcrumb a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.page-breadcrumb [aria-current="page"] {
+  font-weight: 600;
+}
+.page-hero .page-breadcrumb {
+  color: #f0dfcc;
+}
+.page-hero .page-breadcrumb a {
+  color: #fff;
+}

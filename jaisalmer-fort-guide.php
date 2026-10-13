@@ -65,7 +65,15 @@ require __DIR__ . '/include/page-head.php';
 <main class="article-page" id="main-content" tabindex="-1">
   <header class="article-hero">
     <div class="site-shell article-hero-inner">
-      <p class="eyebrow">Jaisalmer Fort guide</p>
+      <?php
+      $breadcrumbs = [
+          ['label' => 'Home', 'href' => '/'],
+          ['label' => 'Blog', 'href' => 'blog.php'],
+          ['label' => 'Jaisalmer Fort Guide'],
+      ];
+      require __DIR__ . '/include/ui/breadcrumb.php';
+      ?>
+<p class="eyebrow">Jaisalmer Fort guide</p>
       <div class="article-meta"><span>Published 2026-10-06</span><span>Prepared from Garh Jaisal Haveli's current guest information</span></div>
       <h1>Jaisalmer Fort Guide</h1>
       <p class="lede">A practical Jaisalmer Fort guide from Garh Jaisal Haveli: arrival, walking inside the fort, guided tours, rooms, rooftop dining and combining the Fort with the desert.</p>

@@ -65,7 +65,15 @@ require __DIR__ . '/include/page-head.php';
 <main class="article-page" id="main-content" tabindex="-1">
   <header class="article-hero">
     <div class="site-shell article-hero-inner">
-      <p class="eyebrow">2-day itinerary</p>
+      <?php
+      $breadcrumbs = [
+          ['label' => 'Home', 'href' => '/'],
+          ['label' => 'Blog', 'href' => 'blog.php'],
+          ['label' => '2-Day Itinerary'],
+      ];
+      require __DIR__ . '/include/ui/breadcrumb.php';
+      ?>
+<p class="eyebrow">2-day itinerary</p>
       <div class="article-meta"><span>Published 2026-10-06</span><span>Prepared from Garh Jaisal Haveli's current guest information</span></div>
       <h1>Jaisalmer 2-Day Itinerary</h1>
       <p class="lede">A practical 2-day Jaisalmer itinerary built around staying inside Jaisalmer Fort, with time for heritage sightseeing, rooftop dining and a desert experience.</p>

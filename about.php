@@ -62,6 +62,13 @@ require __DIR__ . '/include/page-head.php';
 <main class="about-page" id="main-content" tabindex="-1">
   <section class="page-hero about-hero">
     <div class="site-shell page-hero-inner">
+      <?php
+      $breadcrumbs = [
+          ['label' => 'Home', 'href' => '/'],
+          ['label' => 'About'],
+      ];
+      require __DIR__ . '/include/ui/breadcrumb.php';
+      ?>
       <p class="eyebrow">About</p>
       <h1>A heritage stay inside Jaisalmer Fort.</h1>
       <p>

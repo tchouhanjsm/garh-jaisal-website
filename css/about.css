@@ -148,3 +148,23 @@
     min-height:280px;
   }
 }
+
+
+/* Sprint 2B: align editorial sections and keep cards balanced across breakpoints. */
+.about-page .page-hero h1 { max-width: 16ch; text-wrap: balance; }
+.about-page .intro-grid,
+.about-page .wide-feature,
+.about-page .about-points > *,
+.about-page .about-links > * { min-width: 0; }
+.about-page .about-points { align-items: stretch; }
+.about-point { height: 100%; display: flex; flex-direction: column; }
+.about-page .image-panel img { min-height: clamp(280px, 38vw, 520px); }
+.about-page .section-head { gap: clamp(20px, 4vw, 42px); }
+@media (max-width: 900px) {
+  .about-page .about-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 500px) {
+  .about-page .about-links { grid-template-columns: minmax(0, 1fr); }
+  .about-page .section { padding-block: 64px; }
+  .about-page .image-panel img { min-height: 260px; }
+}
