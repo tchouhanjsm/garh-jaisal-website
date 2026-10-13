@@ -129,17 +129,10 @@ if ($sitemap === '') {
 
 // 3. Literal local href/src references. External URLs, fragments, query values,
 // and PHP-generated dynamic URLs need browser smoke tests rather than guessing.
-$scanFiles = array_values(array_filter(
-    array_merge(
-        glob($root . '/*.php') ?: [],
-        glob($root . '/include/*.php') ?: []
-    ),
-    static function ($file) use ($root) {
-        // Legacy files are retained for reference during Phase 0. They are not
-        // used by the V2 page templates and are audited before removal.
-        return !in_array(basename($file), ['header.php', 'footer.php', 'header-v2.backup.php'], true);
-    }
-));
+$scanFiles = array_merge(
+    glob($root . '/*.php') ?: [],
+    glob($root . '/include/*.php') ?: []
+);
 $referencePattern = '/(?:href|src)\s*=\s*["\']([^"\']+)["\']/i';
 $localExtensions = '/\.(?:php|css|js|png|jpe?g|webp|svg|ico|gif|woff2?|ttf|xml)(?:[?#].*)?$/i';
 
@@ -279,12 +272,10 @@ foreach ($iterator as $entry) {
 
 // 6. Accessibility and safe external-link diagnostics. These are warnings
 // because PHP templates may construct attributes dynamically; verify rendered HTML.
-$markupFiles = array_values(array_filter(
-    array_merge(glob($root . '/*.php') ?: [], glob($root . '/include/*.php') ?: []),
-    static function ($file) {
-        return !in_array(basename($file), ['header.php', 'footer.php', 'header-v2.backup.php'], true);
-    }
-));
+$markupFiles = array_merge(
+    glob($root . '/*.php') ?: [],
+    glob($root . '/include/*.php') ?: []
+);
 foreach ($markupFiles as $file) {
     $source = $readFile($file);
     $name = basename($file);

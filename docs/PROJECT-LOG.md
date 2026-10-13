@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Sprint 1 — reusable UI partials are being adopted; reference-verified dead-asset removal remains |
+| Current phase | Sprint 1 — reusable UI partials merged; reference-verified dead-asset cleanup in progress |
 | Base branch | `main` |
-| Baseline commit | `d2cf7550c17ef295914ec17925adaeb65053f365` (main after PR #45) |
-| Last merged PR | [#45 — complete shared page-head migration](https://github.com/tchouhanjsm/garh-jaisal-website/pull/45) |
-| CI evidence | PR #45 exact head `9e9d3e8a2acb235871e38660e87d178ec0512058`: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38364622944) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38364622792) passed; [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38364622792/artifacts/11796154062) available |
+| Baseline commit | `2c92c67e2203d493b8d09990c2492c8fb4e5157f` (main after PR #46) |
+| Last merged PR | [#46 — add reusable UI partials](https://github.com/tchouhanjsm/garh-jaisal-website/pull/46) |
+| CI evidence | PR #46 exact head `8bf7df7226210c12d8a150228bb6c0e0d16cc256`: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38368329160) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38368329166) passed; [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38368329166/artifacts/11798461038) available |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/sprint-1-ui-partials` — add reusable escaped UI partials and migrate the planned CTA/FAQ blocks without redesigning pages |
-| Next action | Review PR #46 on its exact head and page-sheet; after owner-merge, re-verify dead-asset references and remove only confirmed-unused assets, with fonts in a separate revertible commit |
+| Active batch | `feature/sprint-1-dead-js-includes` — remove source-reference-verified legacy JavaScript bundles and retired includes; CSS and fonts remain later cleanup slices |
+| Next action | Review PR #47 exact-head CI and screenshot sheet; after owner-merge, remove unreferenced legacy CSS in a separate slice, then remove only CSS-unreferenced fonts in their own revertible commit |
 
 ## Phase roadmap
 
@@ -557,3 +557,12 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Adopted the CTA partial on Home, Rooms, Directions, Gallery, About and Blog; adopted FAQ on Directions and experience details plus section-head on the experience FAQ. Existing copy, links and CSS class names are retained.
 - Validation gate: exact-head PHP 7.4/8.2 checks, Browser E2E, UI-partial regression tests, strict image check, sitemap check and screenshot sheet. Local PHP/Chromium are not available through the connector.
 - Owner questions: none for this refactor. Next: reference-verify dead assets; keep font removal in its own revertible commit.
+
+
+## Sprint 1 — reference-verified legacy JavaScript and includes (PR #47)
+
+- Verified base: main `2c92c67e2203d493b8d09990c2492c8fb4e5157f`; PR #46 merged and its exact-head Site Checks, Browser E2E and 390px/1280px screenshot sheet passed.
+- Removed 12 legacy JS bundles and three retired includes only after reference checks across page templates, shared includes, tests, scripts, retained CSS and active JS entry points; no source references were found. Removed the checker’s now-stale filename exclusions without changing the set of existing files scanned.
+- Kept `js/garh-v2.js`, `js/restaurant.js`, `css/restaurant.css`, all active page-specific CSS, optimized images and all public routes; no content, URLs, analytics IDs or booking/contact destinations changed.
+- Validation: exact-head Site Checks, Browser E2E, strict-image checks, sitemap checks and the 390px/1280px screenshot sheet are required before owner review; local PHP/Chromium were not run by the connector.
+- Next: after owner merge, remove the 12 verified-unused legacy CSS files in a separate PR; remove fonts only after a retained-CSS reference check and keep font deletion in its own revertible commit.
