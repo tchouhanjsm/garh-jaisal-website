@@ -231,45 +231,27 @@ require __DIR__ . '/include/page-head.php';
         <h2>Before you set out.</h2>
         <p>If your train or flight changes, call, WhatsApp, or send a note through the <a href="contact.php?topic=arrival">arrival enquiry form</a>.</p>
       </div>
-      <div class="faq-list">
-        <details>
-          <summary>Can my car enter the fort?</summary>
-          <p>No. Park at Fort Parking. The hotel is about a 4 minute walk from there.</p>
-        </details>
-        <details>
-          <summary>Can you meet me at the parking area?</summary>
-          <p>Yes. Meet-and-assist is available with prior notice, or when you call on arrival.</p>
-        </details>
-        <details>
-          <summary>Are rickshaws allowed inside?</summary>
-          <p>Not during busy hours, about 8:00 AM–8:00 PM. Outside those times, rickshaws often go inside the fort.</p>
-        </details>
-        <details>
-          <summary>Can I check in early if I arrive before 13:00?</summary>
-          <p>Early arrivals are welcome. If the room is ready, you can check in then. If it is not, use the rooftop terrace or leave your luggage until the room is ready.</p>
-        </details>
-        <details>
-          <summary>What if I arrive very early in the morning?</summary>
-          <p>Leave your bags and spend time in the fort. Tell the hotel ahead if you want an early check-in. The team will try to arrange it.</p>
-        </details>
-        <details>
-          <summary>Is there a restaurant on site?</summary>
-          <p>The rooftop restaurant serves light meals, snacks, and drinks until 10:30 PM. Breakfast is available daily. See the <a href="roof.php">rooftop dining page</a> for the dining space.</p>
-        </details>
-        <details>
-          <summary>I am arriving late at night by train. What should I do?</summary>
-          <p>If you expect to arrive between 10:30 PM and 6:30 AM, tell the hotel 24 hours ahead so staff can meet you. For an unexpected late arrival, call.</p>
-        </details>
-        <details>
-          <summary>Do you help with luggage?</summary>
-          <p>Yes. Luggage help is available to and from Fort Parking. Your driver can call a few minutes before you arrive.</p>
-        </details>
-        <details>
-          <summary>Can I get a ride from the station or airport?</summary>
-          <p>A rickshaw from the railway station is listed at about ₹300. A private sedan from the airport to Fort Parking is listed at about ₹1100. Call or WhatsApp to arrange it.</p>
-        </details>
-      </div>
-    </div>
+      <?php
+      $faq = [
+          'items' => [
+              ['question' => 'Can my car enter the fort?', 'answer' => 'No. Park at Fort Parking. The hotel is about a 4 minute walk from there.'],
+              ['question' => 'Can you meet me at the parking area?', 'answer' => 'Yes. Meet-and-assist is available with prior notice, or when you call on arrival.'],
+              ['question' => 'Are rickshaws allowed inside?', 'answer' => 'Not during busy hours, about 8:00 AM–8:00 PM. Outside those times, rickshaws often go inside the fort.'],
+              ['question' => 'Can I check in early if I arrive before 13:00?', 'answer' => 'Early arrivals are welcome. If the room is ready, you can check in then. If it is not, use the rooftop terrace or leave your luggage until the room is ready.'],
+              ['question' => 'What if I arrive very early in the morning?', 'answer' => 'Leave your bags and spend time in the fort. Tell the hotel ahead if you want an early check-in. The team will try to arrange it.'],
+              ['question' => 'Is there a restaurant on site?', 'answer' => [
+                  ['text' => 'The rooftop restaurant serves light meals, snacks, and drinks until 10:30 PM. Breakfast is available daily. See the '],
+                  ['link' => ['label' => 'rooftop dining page', 'href' => 'roof.php']],
+                  ['text' => ' for the dining space.'],
+              ]],
+              ['question' => 'I am arriving late at night by train. What should I do?', 'answer' => 'If you expect to arrive between 10:30 PM and 6:30 AM, tell the hotel 24 hours ahead so staff can meet you. For an unexpected late arrival, call.'],
+              ['question' => 'Do you help with luggage?', 'answer' => 'Yes. Luggage help is available to and from Fort Parking. Your driver can call a few minutes before you arrive.'],
+              ['question' => 'Can I get a ride from the station or airport?', 'answer' => 'A rickshaw from the railway station is listed at about ₹300. A private sedan from the airport to Fort Parking is listed at about ₹1100. Call or WhatsApp to arrange it.'],
+          ],
+          'list_class' => 'faq-list',
+      ];
+      require __DIR__ . '/include/ui/faq.php';
+      ?>   </div>
   </section>
 
   <section class="section arrival-more">
@@ -285,17 +267,29 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section final-cta">
-    <div class="site-shell final-cta-inner">
-      <p class="eyebrow">Plan your stay</p>
-      <h2>Stay at Garh Jaisal Haveli.</h2>
-      <p>Check availability, or ask the team about your arrival time.</p>
-      <div class="actions">
-        <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Book your stay</a>
-        <a class="button final-contact-button" href="contact.php?topic=arrival">Contact us</a>
-      </div>
-    </div>
-  </section>
+  <?php
+$ctaBand = [
+    'section_class' => 'section final-cta',
+    'inner_class' => 'site-shell final-cta-inner',
+    'eyebrow' => 'Plan your stay',
+    'title' => 'Stay at Garh Jaisal Haveli.',
+    'text' => 'Check availability, or ask the team about your arrival time.',
+    'actions_class' => 'actions',
+    'primary' => [
+        'label' => 'Book your stay',
+        'href' => $bookingUrl,
+        'class' => 'button button-primary',
+        'target' => '_blank',
+        'rel' => 'noopener',
+    ],
+    'secondary' => [
+        'label' => 'Contact us',
+        'href' => 'contact.php?topic=arrival',
+        'class' => 'button final-contact-button',
+    ],
+];
+require __DIR__ . '/include/ui/cta-band.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
