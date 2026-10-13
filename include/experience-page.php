@@ -223,24 +223,22 @@ require __DIR__ . '/page-head.php';
   <?php if (!empty($experience['faq'])): ?>
     <section class="section experience-faq">
       <div class="site-shell">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Questions</p>
-            <h2>Questions about this experience.</h2>
-          </div>
-          <p>These answers describe the current experience at a practical level. Confirm final timings, availability and inclusions for your travel date.</p>
-        </div>
+        <?php
+        $sectionHead = [
+            'eyebrow' => 'Questions',
+            'h2' => 'Questions about this experience.',
+            'intro' => 'These answers describe the current experience at a practical level. Confirm final timings, availability and inclusions for your travel date.',
+        ];
+        require __DIR__ . '/ui/section-head.php';
 
-        <div class="faq-list">
-          <?php foreach ($experience['faq'] as $faq): ?>
-            <details class="faq-item">
-              <summary><?= htmlspecialchars($faq['question'], ENT_QUOTES, 'UTF-8') ?></summary>
-              <div class="faq-answer">
-                <p><?= htmlspecialchars($faq['answer'], ENT_QUOTES, 'UTF-8') ?></p>
-              </div>
-            </details>
-          <?php endforeach; ?>
-        </div>
+        $faq = [
+            'items' => $experience['faq'],
+            'list_class' => 'faq-list',
+            'item_class' => 'faq-item',
+            'answer_wrapper_class' => 'faq-answer',
+        ];
+        require __DIR__ . '/ui/faq.php';
+        ?>
       </div>
     </section>
   <?php endif; ?>
