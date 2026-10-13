@@ -37,7 +37,6 @@ if (!$experience) {
 
 $activePage = 'packages';
 $siteUrl = rtrim($siteConfig['site_url'], '/');
-$analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] ?? []), 'is_string'));
 $canonical = $siteUrl . '/' . $experience['slug'] . '.php';
 
 $breadcrumbs = [
@@ -89,49 +88,25 @@ foreach ($breadcrumbs as $index => $crumb) {
 ?>
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><?= htmlspecialchars($experience['title'], ENT_QUOTES, 'UTF-8') ?></title>
-  <meta name="description" content="<?= htmlspecialchars($experience['description'], ENT_QUOTES, 'UTF-8') ?>">
-  <meta name="robots" content="<?= $isIndexableExperience ? 'index,follow' : 'noindex,follow' ?>">
-  <link rel="canonical" href="<?= htmlspecialchars($canonical, ENT_QUOTES, 'UTF-8') ?>">
-
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="<?= htmlspecialchars($experience['title'], ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:description" content="<?= htmlspecialchars($experience['description'], ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:url" content="<?= htmlspecialchars($canonical, ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:image" content="<?= htmlspecialchars($siteUrl . '/' . $experience['hero_image'], ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:image:alt" content="<?= htmlspecialchars($experience['hero_alt'], ENT_QUOTES, 'UTF-8') ?>">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="<?= htmlspecialchars($experience['title'], ENT_QUOTES, 'UTF-8') ?>">
-  <meta name="twitter:description" content="<?= htmlspecialchars($experience['description'], ENT_QUOTES, 'UTF-8') ?>">
-  <meta name="twitter:image" content="<?= htmlspecialchars($siteUrl . '/' . $experience['hero_image'], ENT_QUOTES, 'UTF-8') ?>">
-
-  <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
-  <link rel="stylesheet" href="css/garh-v2.css">
-  <link rel="stylesheet" href="css/experiences.css">
-
-  <?php if ($analyticsIds): ?>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars($analyticsIds[0], ENT_QUOTES, 'UTF-8') ?>"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    <?php foreach ($analyticsIds as $analyticsId): ?>
-    gtag('config', '<?= htmlspecialchars($analyticsId, ENT_QUOTES, 'UTF-8') ?>');
-    <?php endforeach; ?>
-  </script>
-  <?php endif; ?>
-
-  <script type="application/ld+json">
-  <?= json_encode([
-      '@context' => 'https://schema.org',
-      '@graph' => $schemaGraph,
-  ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>
-  </script>
-</head>
+<?php
+$page = [
+    'title' => $experience['title'],
+    'description' => $experience['description'],
+    'path' => '/' . $experience['slug'] . '.php',
+    'robots' => $isIndexableExperience ? 'index,follow' : 'noindex,follow',
+    'og_type' => 'website',
+    'og_title' => $experience['title'],
+    'og_description' => $experience['description'],
+    'og_image' => '/' . ltrim($experience['hero_image'], '/'),
+    'og_image_alt' => $experience['hero_alt'],
+    'twitter_title' => $experience['title'],
+    'twitter_description' => $experience['description'],
+    'twitter_image' => '/' . ltrim($experience['hero_image'], '/'),
+    'css' => ['css/experiences.css'],
+    'schema' => $schemaGraph,
+];
+require __DIR__ . '/page-head.php';
+?>
 
 <body>
 <?php include __DIR__ . '/header-v2.php'; ?>
