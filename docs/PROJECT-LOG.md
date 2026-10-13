@@ -13,8 +13,8 @@
 | Last merged PR | [#38 — reserve intrinsic dimensions for rendered site images](https://github.com/tchouhanjsm/garh-jaisal-website/pull/38) |
 | CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38291024108) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38291024180) passed on `077a50b912220b3f3241de38d1504e12433a0202` |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-f12-3-image-payload-reduction` — serve measured same-dimension WebP derivatives without overwriting source photos |
-| Next action | Review final PR #39 checks and the before/after image artifact; after merge, start F13 operational-content verification with owner-confirmed facts |
+| Active batch | `feature/phase-f12-3-image-payload-reduction` — serve measured WebP derivatives and add F13 contact/enquiry readiness coverage; rates are explicitly deferred to the owner |
+| Next action | Finish final-head PHP and responsive Browser E2E checks; review the image artifact; keep pricing/rate work owner-controlled and out of this batch |
 
 ## Phase roadmap
 
@@ -504,3 +504,12 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - **Runtime behaviour:** the shared helper adds a WebP `srcset` only when a derivative is a valid WebP, has the same intrinsic dimensions, and is smaller than the original. The original `src` remains the fallback. The original image files are never overwritten.
 - **Visual review:** the generated side-by-side contact sheet shows broadly consistent scene framing, room appearance and photo identity at thumbnail scale. That is only a preliminary check; owner review of the full-size source/derivative image quality remains a merge gate.
 - **Validation status:** the optimizer and visual-review artifact succeeded on the generation run. The final PR head still requires fresh PHP and full Browser E2E results before merge. These local-repository measurements are not production field Core Web Vitals.
+
+
+## Phase F13 — contact and operational trust readiness (included in PR #39)
+
+- Add rendered browser coverage for the contact and arrival pages: shared booking destination, safe new-tab attributes, direct phone/email links, accessible form labels, required fields, non-empty CSRF token, CAPTCHA site key, honeypot semantics, and arrival-to-contact/phone/WhatsApp paths.
+- Browser tests confirm wiring and accessibility structure only. They do not submit an enquiry, send mail, click a live booking link, or verify whether any contact detail is externally current.
+- Add docs/OPERATIONAL-CONTENT-TRUST-AUDIT.md as an owner-review queue for non-rate operational statements. No customer-facing factual text is changed in this scope.
+- **Rates/prices are excluded:** the owner will add or update them later. No rate values are added, verified, asserted in tests, or modified by this batch.
+- Merge gate remains final-head Site Checks on PHP 7.4/8.2, full responsive Browser E2E, manual full-size photo quality review, and owner review of generated image choices.
