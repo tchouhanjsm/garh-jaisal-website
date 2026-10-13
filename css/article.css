@@ -111,3 +111,23 @@
   .article-toc a { min-height: 44px; }
   .article-table { min-width: 560px; }
 }
+
+
+/* Unpublished policy drafts must look like work in progress, not approved legal terms. */
+.policy-draft-notice {
+  margin: 0 0 28px;
+  padding: 18px 20px;
+  border: 1px solid #cdbda9;
+  border-inline-start: 4px solid var(--brown);
+  background: var(--sand-light);
+  color: var(--ink);
+  line-height: 1.65;
+}
+.policy-draft-page .article-content section + section {
+  margin-top: 34px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+.policy-draft-page .article-content ul {
+  margin-top: 10px;
+}

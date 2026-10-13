@@ -1,3 +1,5 @@
+const fs = require('node:fs');
+const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 
 test.describe('Sprint 2B content and layout', () => {
@@ -76,4 +78,45 @@ test.describe('Sprint 2B content and layout', () => {
       await context.close();
     });
   }
+});
+
+
+test('Policy pages stay explicit drafts until owner-approved facts are supplied', async ({ page }) => {
+  const sitemap = fs.readFileSync(path.join(__dirname, '../../sitemap.xml'), 'utf8');
+  for (const route of ['/privacy.php', '/booking-policy.php']) {
+    expect(sitemap, `${route} must not be indexed from the sitemap while a draft`).not.toContain(route.slice(1));
+    const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+    expect(response, route).not.toBeNull();
+    expect(response.status(), route).toBeLessThan(400);
+    await expect(page.locator('main h1'), route).toContainText(/draft/i);
+    await expect(page.locator('head meta[name="robots"]')).toHaveAttribute('content', /noindex/i);
+    await expect(page.locator('head link[rel="canonical"]')).toHaveAttribute('href', `https://www.hotelgarhjaisal.com${route}`);
+    await expect(page.locator(`header a[href="${route.slice(1)}"], footer a[href="${route.slice(1)}"]`), `${route} remains off navigation until approved`).toHaveCount(0);
+  }
+});
+
+for (const width of [320, 390, 1280]) {
+  test(`shared experience detail template has no overflow at ${width}px`, async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width, height: 844 } });
+    const page = await context.newPage();
+    for (const route of [
+      '/sunset-camel-safari.php',
+      '/sleep-under-the-stars.php',
+      '/swiss-tent-safari.php',
+      '/cultural-safari.php',
+      '/half-day-jaisalmer-tour.php',
+      '/full-day-jaisalmer-tour.php',
+    ]) {
+      const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+      expect(response, route).not.toBeNull();
+      expect(response.status(), route).toBeLessThan(400);
+      const sizes = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        document: document.documentElement.scrollWidth,
+      }));
+      expect(sizes.document, `${route} at ${width}px`).toBeLessThanOrEqual(sizes.viewport + 1);
+      await expect(page.locator('main h1')).toHaveCount(1);
+    }
+    await context.close();
+  });
 });

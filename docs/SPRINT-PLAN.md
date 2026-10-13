@@ -8,8 +8,8 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 |---|---|---|
 | 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ✓ merged through PR #48; fonts remain a separate reversible cleanup after a retained-CSS reference scan |
 | 2A | Dining (`roof.php`, `restaurant.php`), Contact, Directions | ◐ Contact/Directions pass merged in PR #49; reciprocal Dining link and responsive menu alignment are included with the next reviewable page-group batch |
-| 2B | Gallery, About, Blog and guides | ◐ in progress — filters/lightbox, shared breadcrumbs, featured guide and responsive editorial alignment under review |
-| 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ☐ |
+| 2B | Gallery, About, Blog and guides | ◐ combined with Sprint 2C in PR #50: failed image-geometry check fix, Gallery filters/lightbox, shared breadcrumbs and featured guide; exact-head E2E must pass |
+| 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ◐ folded into PR #50: shared experience responsive polish and noindex/off-nav policy draft shells; owner terms still required |
 | 3 | Launch hardening: `.htaccess`, forms, images, alt text, sitemap dates, cPanel handoff, tag v1.0.0 | ☐ |
 
 ---
@@ -147,3 +147,10 @@ Stop there: the owner merges.
 - Editorial CSS aligns titles, card grids, TOCs, table containers and card spacing at mobile/desktop widths. Dining reciprocal cross-link and narrow-screen layout fixes close the remaining Sprint 2A gap without a separate tweak PR.
 - Tests cover category filtering, modal behavior, breadcrumbs, Dining cross-links and overflow at 320, 390, 1280 and 1440px. Require exact-head PHP 7.4/8.2 checks, sitemap/publication checks, Browser E2E and the 390/1280 screenshot sheet.
 - Owner review first: Gallery, Blog, Jaisalmer Fort Guide. No new facts, rates, policy text, URLs, canonicals or GA IDs added/changed.
+
+
+### Sprint 2C scope folded into PR #50
+
+- Shared experience-detail CSS receives mobile-first overflow and alignment protections; regression checks exercise six live experience routes at 320px, 390px and 1280px.
+- `privacy.php` and `booking-policy.php` exist only as clearly labelled `noindex,follow` drafts, are not linked from navigation/footer, and are not added to the sitemap. They do not assert unapproved terms or privacy practices.
+- Browser E2E previously failed because the closed Gallery lightbox contained an image without a source or intrinsic dimensions. The placeholder now uses an existing image and the dimension helper; rerun full CI on the updated final head.

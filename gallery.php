@@ -231,7 +231,7 @@ require __DIR__ . '/include/page-head.php';
         <button type="button" class="gallery-lightbox-close" data-gallery-close>Close <span aria-hidden="true">×</span></button>
       </div>
       <figure class="gallery-lightbox-figure">
-        <img data-gallery-lightbox-image alt="">
+        <img data-gallery-lightbox-image src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg') ?> alt="Rooftop dining at Garh Jaisal Haveli" loading="lazy" decoding="async">
         <figcaption data-gallery-lightbox-caption></figcaption>
       </figure>
       <div class="gallery-lightbox-actions">
