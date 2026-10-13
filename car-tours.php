@@ -74,7 +74,7 @@ $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] 
   <nav class="site-shell breadcrumb-nav" aria-label="Breadcrumb"><ol><li><a href="index.php">Home</a></li><li><a href="pack.php">Packages</a></li><li aria-current="page">Car &amp; City Tours</li></ol></nav>
   <section class="package-hero">
     <div class="package-hero-media">
-      <img src="img/v2/facade.jpg" alt="Historic architecture inside Jaisalmer Fort" width="1333" height="2000" fetchpriority="high">
+      <img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Historic architecture inside Jaisalmer Fort" fetchpriority="high">
       <div class="package-hero-overlay"></div>
     </div>
     <div class="site-shell package-hero-content">
@@ -95,7 +95,7 @@ $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] 
         <p>Choose a half-day or full-day guided tour, or ask about a walk through the lanes of Jaisalmer Fort.</p>
       </div>
       <div class="experience-card-grid">
-        <article class="experience-card"><a href="guided-jaisalmer-tour.php"><img src="img/v2/facade.jpg" alt="Historic facade inside Jaisalmer Fort" width="1333" height="2000" loading="lazy"><div><p class="experience-card-kicker">Guided city tours</p><h2>Guided Jaisalmer Tours</h2><p>Compare the existing half-day and full-day guided tour options.</p><span>View guided tours →</span></div></a></article>
+        <article class="experience-card"><a href="guided-jaisalmer-tour.php"><img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Historic facade inside Jaisalmer Fort" loading="lazy"><div><p class="experience-card-kicker">Guided city tours</p><h2>Guided Jaisalmer Tours</h2><p>Compare the existing half-day and full-day guided tour options.</p><span>View guided tours →</span></div></a></article>
         <article class="experience-card"><a href="city-tour.php"><img src="img/1.webp" alt="Historic lanes and architecture inside Jaisalmer Fort" width="1200" height="800" loading="lazy"><div><p class="experience-card-kicker">Fort walk</p><h2>A Walk inside Jaisalmer Fort</h2><p>Read about the existing fort walk and ask the hotel to confirm the current arrangements.</p><span>Explore the Fort walk →</span></div></a></article>
         <article class="experience-card"><a href="car-rental.php"><img src="img/desert10.jpg" alt="Desert landscape near Jaisalmer" width="1366" height="768" loading="lazy"><div><p class="experience-card-kicker">Car arrangements</p><h2>Car for Arrival or a Desert Day</h2><p>Contact the hotel to confirm vehicle arrangements, route, availability and current price.</p><span>Ask about car arrangements →</span></div></a></article>
       </div>

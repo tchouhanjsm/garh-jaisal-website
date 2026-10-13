@@ -121,7 +121,7 @@ $floorCount = count($roomsByFloor);
 
   <section class="page-hero page-hero--photo rooms-hero" aria-labelledby="rooms-page-title">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/v2/purple-room.jpg" alt="" width="1600" height="1066" fetchpriority="high" decoding="async">
+      <img src="img/v2/purple-room.jpg" <?= gj_image_dimension_attributes('img/v2/purple-room.jpg') ?> alt="" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell rooms-hero-grid">
       <div class="rooms-hero-copy">

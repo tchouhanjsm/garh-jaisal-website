@@ -127,8 +127,7 @@ $bookingUrl = $siteConfig['booking_url'];
         <img
           src="img/v2/courtyard.jpg"
           alt="Courtyard balconies inside Garh Jaisal Haveli"
-          width="900"
-          height="1200"
+          <?= gj_image_dimension_attributes('img/v2/courtyard.jpg') ?>
           loading="lazy"
           decoding="async"
         >
