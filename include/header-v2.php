@@ -1,12 +1,13 @@
 <?php
 if (!function_exists('gj_image_dimension_attributes')) {
     /**
-     * Return intrinsic dimensions for a trusted local image under img/.
-     * Reading the actual file header avoids guessing ratios or changing photo mappings.
+     * Return dimensions for a trusted local image and advertise a same-dimension WebP derivative when safe.
+     * Original paths remain the fallback; derivatives are used only when valid and smaller.
      */
     function gj_image_dimension_attributes($source)
     {
         static $dimensionCache = [];
+        static $deliveryCache = [];
 
         if (
             !is_string($source)
@@ -31,7 +32,41 @@ if (!function_exists('gj_image_dimension_attributes')) {
             return '';
         }
 
-        return 'width="' . $dimensionCache[$source][0] . '" height="' . $dimensionCache[$source][1] . '"';
+        [$width, $height] = $dimensionCache[$source];
+        $attributes = 'width="' . $width . '" height="' . $height . '"';
+
+        if (!array_key_exists($source, $deliveryCache)) {
+            $imagePath = __DIR__ . '/../' . $source;
+            $relativeSource = substr($source, 4);
+            $sourceInfo = pathinfo($relativeSource);
+            $sourceDirectory = ($sourceInfo['dirname'] ?? '.') === '.'
+                ? ''
+                : $sourceInfo['dirname'] . '/';
+            $optimizedSource = 'img/optimized/' . $sourceDirectory . $sourceInfo['filename'] . '.webp';
+            $optimizedPath = __DIR__ . '/../' . $optimizedSource;
+            $optimizedSize = is_file($optimizedPath) ? @getimagesize($optimizedPath) : false;
+            $sourceBytes = is_file($imagePath) ? @filesize($imagePath) : false;
+            $optimizedBytes = is_file($optimizedPath) ? @filesize($optimizedPath) : false;
+
+            $deliveryCache[$source] = (
+                is_array($optimizedSize)
+                && isset($optimizedSize[0], $optimizedSize[1], $optimizedSize[2])
+                && $optimizedSize[0] === $width
+                && $optimizedSize[1] === $height
+                && defined('IMAGETYPE_WEBP')
+                && $optimizedSize[2] === IMAGETYPE_WEBP
+                && $sourceBytes !== false
+                && $optimizedBytes !== false
+                && $optimizedBytes > 0
+                && $optimizedBytes < $sourceBytes
+            ) ? $optimizedSource : null;
+        }
+
+        if ($deliveryCache[$source] !== null) {
+            $attributes .= ' srcset="' . htmlspecialchars($deliveryCache[$source], ENT_QUOTES, 'UTF-8') . ' 1x"';
+        }
+
+        return $attributes;
     }
 }
 
