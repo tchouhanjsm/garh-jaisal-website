@@ -6,15 +6,15 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-12 |
-| Current phase | Phase F12 — Image delivery and layout-stability QA |
+| Last updated | 2026-10-13 |
+| Current phase | Phase F12.3 — Measured image payload reduction |
 | Base branch | `main` |
-| Baseline commit | `624ad37f9e4d7f45677c030115cad5024a2f8ffe` (main after PR #37) |
-| Last merged PR | [#37 — avoid exposing disabled restaurant reservation form](https://github.com/tchouhanjsm/garh-jaisal-website/pull/37) |
-| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38288314518) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38288314696) passed on `624ad37f9e4d7f45677c030115cad5024a2f8ffe` |
+| Baseline commit | `077a50b912220b3f3241de38d1504e12433a0202` (main after PR #38) |
+| Last merged PR | [#38 — reserve intrinsic dimensions for rendered site images](https://github.com/tchouhanjsm/garh-jaisal-website/pull/38) |
+| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38291024108) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38291024180) passed on `077a50b912220b3f3241de38d1504e12433a0202` |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-f12-image-layout-stability` — reserve intrinsic dimensions across registry-backed images and verify every sitemap route |
-| Next action | Validate the image-dimension regression and performance inventory across 26 sitemap routes; then complete byte-level review of the 15 large-image candidates |
+| Active batch | `feature/phase-f12-3-image-payload-reduction` — serve measured WebP derivatives and add F13 contact/enquiry readiness coverage; rates are explicitly deferred to the owner |
+| Next action | Finish final-head PHP and responsive Browser E2E checks; review the image artifact; keep pricing/rate work owner-controlled and out of this batch |
 
 ## Phase roadmap
 
@@ -25,7 +25,7 @@
 | 2 | Booking conversion and mobile UX | ◐ responsive navigation and shared booking URL merged; conversion measurement remains open |
 | 3 | Technical SEO foundation | ✓ rendered metadata and JSON-LD regression checks merged in PR #6 |
 | 4 | Local SEO and content depth | ◐ inventory and candidate finding reports exist; candidate findings still require review and verified remediation |
-| 5 | Performance and Core Web Vitals | ◐ baseline captured; intrinsic image geometry is being fixed in Phase F12; 15 payload candidates above 250 KiB still need byte-level optimisation and controlled Lighthouse/field measurement |
+| 5 | Performance and Core Web Vitals | ◐ baseline captured; intrinsic image geometry merged in PR #38; 11 of 15 large-image candidates have measured same-dimension derivatives staged in PR #39; controlled Lighthouse/field measurement remains open |
 | 6 | Accessibility | ☐ |
 | 7 | Form, email and security hardening | ☐ |
 | 8 | Analytics measurement | ☐ |
@@ -478,3 +478,38 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
   2. **F13 — operational content trust audit:** owner-confirm menu prices, dining hours, transfer costs, reception/arrival wording and experience inclusions; update only confirmed facts.
   3. **F14 — conversion measurement:** establish one confirmed GA4 property and verify booking/enquiry measurement without triggering live enquiries or real reservations.
   4. **F15 — policy and release readiness:** obtain owner-approved privacy/cancellation terms, privately review form/mail configuration on staging, confirm cPanel PHP version, and complete production-parity checks. No production deployment without owner permission.
+
+
+## Phase F12.3 — measured image payload reduction (PR #39 pending)
+
+- **Baseline:** PR #38 merged as `077a50b912220b3f3241de38d1504e12433a0202`; the sitemap-wide Chromium inventory measured 15 image candidates above 256,000 bytes. Browser Resource Timing was used to find candidates, while this phase uses exact repository file sizes for source/derivative comparison.
+- **Generated derivatives:** 11 of the 15 candidates passed the 10% minimum byte-saving and 35 dB PSNR screening floors. The accepted sources total 5,901,701 bytes; same-dimension WebP derivatives total 2,992,592 bytes; the measured saving is 2,909,109 bytes (49.293% weighted) across that accepted subset.
+- **Per-file evidence:**
+
+| Source | Source bytes | WebP bytes | Saved |
+|---|---:|---:|---:|
+| `img/v2/facade.jpg` | 872,297 | 591,152 | 32.2% |
+| `img/v2/courtyard.jpg` | 871,363 | 578,756 | 33.6% |
+| `img/v2/fort-from-roof.jpg` | 692,713 | 388,404 | 43.9% |
+| `img/v2/rooftop-dusk.jpg` | 615,060 | 342,528 | 44.3% |
+| `img/v2/purple-room.jpg` | 537,837 | 275,778 | 48.7% |
+| `img/v2/sitting-room.jpg` | 519,598 | 307,548 | 40.8% |
+| `img/desert1.jpg` | 454,492 | 119,540 | 73.7% |
+| `img/desert7.jpg` | 386,498 | 34,328 | 91.1% |
+| `img/desert3.jpg` | 336,447 | 255,618 | 24.0% |
+| `img/s2.jpg` | 308,254 | 47,426 | 84.6% |
+| `img/s1.jpg` | 307,142 | 51,514 | 83.2% |
+
+- **Conservative skips:** `img/big6.jpg` and `img/5.webp` did not meet the minimum 10% saving threshold. `img/s5.jpg` (PSNR 34.839 dB) and `img/desert4.jpg` (PSNR 33.702 dB) were rejected by the 35 dB screening floor. No derivatives for those four sources are used.
+- **Runtime behaviour:** the shared helper adds a WebP `srcset` only when a derivative is a valid WebP, has the same intrinsic dimensions, and is smaller than the original. The original `src` remains the fallback. The original image files are never overwritten.
+- **Visual review:** the generated side-by-side contact sheet shows broadly consistent scene framing, room appearance and photo identity at thumbnail scale. That is only a preliminary check; owner review of the full-size source/derivative image quality remains a merge gate.
+- **Validation status:** the optimizer and visual-review artifact succeeded on the generation run. The final PR head still requires fresh PHP and full Browser E2E results before merge. These local-repository measurements are not production field Core Web Vitals.
+
+
+## Phase F13 — contact and operational trust readiness (included in PR #39)
+
+- Add rendered browser coverage for the contact and arrival pages: shared booking destination, safe new-tab attributes, direct phone/email links, accessible form labels, required fields, non-empty CSRF token, CAPTCHA site key, honeypot semantics, and arrival-to-contact/phone/WhatsApp paths.
+- Browser tests confirm wiring and accessibility structure only. They do not submit an enquiry, send mail, click a live booking link, or verify whether any contact detail is externally current.
+- Add docs/OPERATIONAL-CONTENT-TRUST-AUDIT.md as an owner-review queue for non-rate operational statements. No customer-facing factual text is changed in this scope.
+- **Rates/prices are excluded:** the owner will add or update them later. No rate values are added, verified, asserted in tests, or modified by this batch.
+- Merge gate remains final-head Site Checks on PHP 7.4/8.2, full responsive Browser E2E, manual full-size photo quality review, and owner review of generated image choices.

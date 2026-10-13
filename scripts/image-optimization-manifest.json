@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "quality": 84,
+  "method": 6,
+  "minimum_savings_percent": 10,
+  "minimum_psnr_db": 35,
+  "sources": [
+    "img/v2/facade.jpg",
+    "img/v2/courtyard.jpg",
+    "img/v2/fort-from-roof.jpg",
+    "img/big6.jpg",
+    "img/v2/rooftop-dusk.jpg",
+    "img/v2/purple-room.jpg",
+    "img/v2/sitting-room.jpg",
+    "img/5.webp",
+    "img/desert1.jpg",
+    "img/s5.jpg",
+    "img/desert7.jpg",
+    "img/desert4.jpg",
+    "img/desert3.jpg",
+    "img/s2.jpg",
+    "img/s1.jpg"
+  ]
+}

@@ -83,7 +83,7 @@ usort($items, static function ($a, $b) use ($experiences) {
 <main id="main-content" tabindex="-1">
   <section class="experience-hero">
     <div class="experience-hero-media">
-      <img src="img/desert3.jpg" width="1366" height="768" alt="Sand dunes in the Thar Desert near Jaisalmer" fetchpriority="high">
+      <img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg') ?> alt="Sand dunes in the Thar Desert near Jaisalmer" fetchpriority="high">
       <div class="experience-hero-overlay"></div>
     </div>
     <div class="site-shell experience-hero-content">
