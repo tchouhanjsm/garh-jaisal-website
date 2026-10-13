@@ -51,7 +51,17 @@ if (
 $canonical = $siteUrl . ($pagePath === '/' ? '/' : $pagePath);
 $pageTitle = $page['title'];
 $pageDescription = $page['description'];
-$robots = $page['robots'] ?? 'index,follow';
+$siteUrlParts = parse_url($siteUrl);
+$isProductionOrigin = is_array($siteUrlParts)
+    && strtolower((string) ($siteUrlParts['scheme'] ?? '')) === 'https'
+    && strtolower((string) ($siteUrlParts['host'] ?? '')) === 'www.hotelgarhjaisal.com'
+    && !isset($siteUrlParts['port'])
+    && !isset($siteUrlParts['user'])
+    && !isset($siteUrlParts['pass'])
+    && (($siteUrlParts['path'] ?? '') === '');
+$robots = $isProductionOrigin
+    ? ($page['robots'] ?? 'index,follow')
+    : 'noindex,follow';
 $ogType = $page['og_type'] ?? 'website';
 $ogTitle = $page['og_title'] ?? $pageTitle;
 $ogDescription = $page['og_description'] ?? $pageDescription;

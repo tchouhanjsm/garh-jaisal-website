@@ -1,0 +1,88 @@
+name: Staging QA
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      staging_url:
+        description: "HTTPS staging origin only (for example https://staging.example.net)"
+        required: true
+        type: string
+      deployed_commit_sha:
+        description: "Full 40-character SHA from the staged cPanel package manifest"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: staging-qa-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  staging-qa:
+    name: staging QA (non-deploying)
+    if: github.event_name != 'workflow_dispatch' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install pinned Playwright test runner
+        run: npm install --no-save --package-lock=false @playwright/test@1.55.0
+
+      - name: Install Chromium and system dependencies
+        run: npx playwright install --with-deps chromium
+
+      - name: Test staging-target validator
+        run: node --test tests/test-staging-target.js
+
+      - name: Test shared page-head staging noindex guard
+        run: php tests/php/staging-noindex.php
+
+      - name: Validate owner-supplied external staging target and exact main commit
+        id: validate-target
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          STAGING_BASE_URL: ${{ inputs.staging_url }}
+          STAGING_EXPECTED_COMMIT_SHA: ${{ inputs.deployed_commit_sha }}
+          CHECKED_OUT_COMMIT_SHA: ${{ github.sha }}
+          GITHUB_REF: ${{ github.ref }}
+        run: node scripts/validate-staging-target.js
+
+      - name: Run local dry smoke or owner-dispatched external staging QA
+        if: github.event_name != 'workflow_dispatch' || steps.validate-target.outcome == 'success'
+        env:
+          STAGING_BASE_URL: ${{ inputs.staging_url }}
+          STAGING_EXPECTED_COMMIT_SHA: ${{ inputs.deployed_commit_sha }}
+          CHECKED_OUT_COMMIT_SHA: ${{ github.sha }}
+        run: npx playwright test --config=playwright.staging.config.js
+
+      - name: Upload staging QA report and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-qa-evidence-${{ github.run_number }}
+          path: artifacts/staging-qa/
+          if-no-files-found: warn
+          retention-days: 14
