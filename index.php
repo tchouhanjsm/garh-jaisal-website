@@ -461,6 +461,11 @@ $ctaBand = [
         'href' => 'contact.php',
         'class' => 'button final-contact-button',
     ],
+    'tertiary' => [
+        'label' => 'Read our guide to staying inside Jaisalmer Fort →',
+        'href' => 'book-rooms-in-jaisalmer.php',
+        'class' => 'text-link final-cta-guide-link',
+    ],
 ];
 require __DIR__ . '/include/ui/cta-band.php';
 ?>

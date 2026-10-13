@@ -12,8 +12,9 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ◐ responsive detail protections and draft shells merged in PR #50; policy pages remain noindex/off-nav until owner supplies terms |
 | 3A | Launch hardening: `.htaccess`, form/email resilience, custom 404 | ✓ PR #51 merged; exact-main Site Checks and Browser E2E passed |
 | 3B | Image compression, alt text, sitemap dates, cPanel handoff, release tag | ◐ PR #51 and cleanup PRs #52–#53 merged; image variants remain review-only, owner staging/image approval pending, no tag/deployment |
-| 4 | Repeatable cPanel staging package and safe release preflight | ◐ package builder, route coverage tests and main-only artifact; owner staging sign-off remains required |
-| 5 | Staging isolation, non-production noindex and repeatable staging QA | ◐ staging target validator, route/security smoke checks and screenshots in review; owner must supply staging URL and validate mail/CAPTCHA |
+| 4 | Repeatable cPanel staging package and safe release preflight | ✓ merged in PR #54; package/checksum artifact generated on main, owner staging sign-off remains required |
+| 5 | Staging isolation, non-production noindex and repeatable staging QA | ✓ merged in PR #55; local QA dry run passes, real staging/cPanel and CAPTCHA/mail checks remain owner-gated |
+| 6 | Direct-stay guide discoverability | ◐ add the existing Jaisalmer Fort stay guide from Home and Rooms; verify both entry points in Browser E2E |
 
 ---
 

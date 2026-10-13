@@ -2,7 +2,7 @@
 /**
  * Reusable conversion band.
  * Input: $ctaBand = [section_class, inner_class, eyebrow, title, text,
- * actions_class (optional), primary (required), secondary (optional)].
+ * actions_class (optional), primary (required), secondary/tertiary (optional)].
  * Buttons accept label, href, class, target and rel. All output is escaped.
  */
 $uiCta = isset($ctaBand) && is_array($ctaBand) ? $ctaBand : [];
@@ -10,7 +10,7 @@ $uiCtaEscape = static function ($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 };
 $uiCtaLinks = [];
-foreach (['primary', 'secondary'] as $uiCtaKey) {
+foreach (['primary', 'secondary', 'tertiary'] as $uiCtaKey) {
     if (isset($uiCta[$uiCtaKey]) && is_array($uiCta[$uiCtaKey])) {
         $uiCtaLinks[] = $uiCta[$uiCtaKey];
     }
