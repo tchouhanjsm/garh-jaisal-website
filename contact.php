@@ -137,12 +137,16 @@ require __DIR__ . '/include/page-head.php';
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
 <main class="contact-page" id="main-content" tabindex="-1">
-  <section class="section">
-    <div class="site-shell">
-      <p class="eyebrow">Jaisalmer Fort</p>
+  <section class="page-hero contact-hero">
+    <div class="site-shell page-hero-inner">
+      <p class="eyebrow">Plan your stay</p>
       <h1>Contact Garh Jaisal Haveli in Jaisalmer Fort.</h1>
       <p class="contact-lead">Write or call Hotel Garh Jaisal Haveli. Ask about rooms, arrival, rooftop dining, or desert and city experiences arranged by the hotel.</p>
+    </div>
+  </section>
 
+  <section class="section contact-content">
+    <div class="site-shell">
       <div class="actions contact-booking-actions">
         <a class="button button-primary contact-booking-button" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check room availability</a>
         <a class="button button-secondary contact-arrival-link" href="direction.php">Plan your arrival</a>

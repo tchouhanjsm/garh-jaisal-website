@@ -80,6 +80,7 @@ require __DIR__ . '/include/page-head.php';
         <p>
           The restaurant is at the hotel: Fort Kotari Para, inside Jaisalmer Fort,
           Jaisalmer, Rajasthan 345001.
+          <a href="restaurant.php#menu">Explore the menu and dishes</a>.
         </p>
       </div>
 

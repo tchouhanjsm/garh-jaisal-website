@@ -50,3 +50,8 @@
     aspect-ratio: 16 / 9;
   }
 }
+
+
+/* Keep the dining hub and menu page visually connected. */
+.roof-page .section-head a,.roof-page .roof-copy a{text-underline-offset:3px;text-decoration-thickness:1px}
+.roof-page .section-head p{min-width:0}
