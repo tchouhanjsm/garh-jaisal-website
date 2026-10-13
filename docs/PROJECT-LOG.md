@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-12 |
-| Current phase | Phase F12 — Image delivery and layout-stability QA |
+| Current phase | Fast lane, Sprint 1 — foundation (page shell, UI partials, dead-asset removal, screenshot sheet) |
 | Base branch | `main` |
 | Baseline commit | `624ad37f9e4d7f45677c030115cad5024a2f8ffe` (main after PR #37) |
 | Last merged PR | [#37 — avoid exposing disabled restaurant reservation form](https://github.com/tchouhanjsm/garh-jaisal-website/pull/37) |
 | CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38288314518) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38288314696) passed on `624ad37f9e4d7f45677c030115cad5024a2f8ffe` |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/phase-f12-image-layout-stability` — reserve intrinsic dimensions across registry-backed images and verify every sitemap route |
-| Next action | Validate the image-dimension regression and performance inventory across 26 sitemap routes; then complete byte-level review of the 15 large-image candidates |
+| Active batch | `feature/sprint-1-foundation` — see `docs/SPRINT-PLAN.md` |
+| Next action | Run the Sprint 1 kickoff prompt in `docs/SPRINT-PLAN.md`; owner answers `docs/OWNER-FACTS.md` in parallel |
 
 ## Phase roadmap
 
@@ -478,3 +478,12 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
   2. **F13 — operational content trust audit:** owner-confirm menu prices, dining hours, transfer costs, reception/arrival wording and experience inclusions; update only confirmed facts.
   3. **F14 — conversion measurement:** establish one confirmed GA4 property and verify booking/enquiry measurement without triggering live enquiries or real reservations.
   4. **F15 — policy and release readiness:** obtain owner-approved privacy/cancellation terms, privately review form/mail configuration on staging, confirm cPanel PHP version, and complete production-parity checks. No production deployment without owner permission.
+
+
+## Fast-lane reset (docs only)
+
+- Added `docs/BRAIN.md` (operating rules and decisions for any AI), `docs/SPRINT-PLAN.md` (Sprint 1 build spec, Sprint 2 and 3 slices, ChatGPT kickoff prompt) and `docs/OWNER-FACTS.md` (single place for owner answers).
+- Decisions: keep **both** GA4 IDs (single source `analytics_ids`); one PR per vertical slice; build over audit; screenshot sheet for visual review.
+- Evidence: repository review on 2026-10-13: 38 PRs merged in 3 days, 16 of them audits and tests; per-page head blocks duplicated across 22 pages; 12 unreferenced JS files and 12 unreferenced stylesheets; `img/tent1.jpg` is about 6 MB.
+- No page, CSS, JS, URL, image, booking link or GA4 ID changed in this PR.
+

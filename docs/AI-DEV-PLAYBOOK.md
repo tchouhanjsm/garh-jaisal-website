@@ -1,5 +1,7 @@
 # Garh Jaisal Haveli: ChatGPT Development Playbook
 
+> **Read `docs/BRAIN.md` first.** It overrides anything below that conflicts with it (fast lane: build vertical slices, one PR per slice, screenshot sheet for review).
+
 How to use this: you are the **hotel owner and merge authority**. ChatGPT is the **developer**. You paste prompts in order, and ChatGPT returns code and evidence. You run the checks in VS Code, push, and merge.
 
 Files in this pack (drop them into the repo root, keeping paths):

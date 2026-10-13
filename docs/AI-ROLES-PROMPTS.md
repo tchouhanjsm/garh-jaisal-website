@@ -1,5 +1,7 @@
 # Garh Jaisal: ChatGPT Roles (Frontend Dev, SEO Content Writer, Blog Writer)
 
+> **Read `docs/BRAIN.md` first.** Role tags are now [BUILD] [SEO] [BLOG] [REVIEW]; [FRONTEND] below means [BUILD]. BRAIN.md overrides this file.
+
 Use this together with `AI-DEV-PLAYBOOK.md`. The Master Prompt there sets the rules. This file adds three roles that ChatGPT switches between when you tell it to.
 
 ## 0. How ChatGPT "reads" your files
