@@ -562,7 +562,7 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 ## Sprint 1 — reference-verified legacy JavaScript and includes (PR #47)
 
 - Verified base: main `2c92c67e2203d493b8d09990c2492c8fb4e5157f`; PR #46 merged and its exact-head Site Checks, Browser E2E and 390px/1280px screenshot sheet passed.
-- Removed 12 legacy JS bundles and three retired includes only after reference checks across page templates, shared includes, tests, scripts, retained CSS and active JS entry points; no source references were found.
+- Removed 12 legacy JS bundles and three retired includes only after reference checks across page templates, shared includes, tests, scripts, retained CSS and active JS entry points; no source references were found. Removed the checker’s now-stale filename exclusions without changing the set of existing files scanned.
 - Kept `js/garh-v2.js`, `js/restaurant.js`, `css/restaurant.css`, all active page-specific CSS, optimized images and all public routes; no content, URLs, analytics IDs or booking/contact destinations changed.
 - Validation: exact-head Site Checks, Browser E2E, strict-image checks, sitemap checks and the 390px/1280px screenshot sheet are required before owner review; local PHP/Chromium were not run by the connector.
 - Next: after owner merge, remove the 12 verified-unused legacy CSS files in a separate PR; remove fonts only after a retained-CSS reference check and keep font deletion in its own revertible commit.
