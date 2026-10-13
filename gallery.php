@@ -5,84 +5,51 @@ $bookingUrl = $siteConfig['booking_url'];
 ?>
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Gallery | Garh Jaisal Haveli, Jaisalmer Fort</title>
-  <meta
-    name="description"
-    content="Explore rooms, the haveli, desert experiences and dining at Garh Jaisal Haveli inside Jaisalmer Fort."
-  >
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://www.hotelgarhjaisal.com/gallery.php">
-
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Gallery | Garh Jaisal Haveli, Jaisalmer Fort">
-  <meta
-    property="og:description"
-    content="See the rooms, haveli, desert experiences and dining at Garh Jaisal Haveli."
-  >
-  <meta property="og:url" content="https://www.hotelgarhjaisal.com/gallery.php">
-  <meta property="og:image" content="https://www.hotelgarhjaisal.com/img/s1.jpg">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Gallery | Garh Jaisal Haveli, Jaisalmer Fort">
-  <meta name="twitter:description" content="See Garh Jaisal Haveli, its rooms, desert experiences and dining."
-  >
-  <meta name="twitter:image" content="https://www.hotelgarhjaisal.com/img/s1.jpg">
-
-  <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/garh-v2.css">
-  <link rel="stylesheet" href="css/gallery.css">
-
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0C646S1FQ0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-0C646S1FQ0');
-    gtag('config', 'G-6S5PCEVXH4');
-  </script>
-
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@graph":[
-      {
-        "@type":"WebPage",
-        "@id":"https://www.hotelgarhjaisal.com/gallery.php#webpage",
-        "url":"https://www.hotelgarhjaisal.com/gallery.php",
-        "name":"Gallery | Garh Jaisal Haveli, Jaisalmer Fort",
-        "isPartOf":{"@id":"https://www.hotelgarhjaisal.com/#website"},
-        "about":{"@id":"https://www.hotelgarhjaisal.com/#hotel"},
-        "breadcrumb":{"@id":"https://www.hotelgarhjaisal.com/gallery.php#breadcrumb"}
-      },
-      {
-        "@type":"BreadcrumbList",
-        "@id":"https://www.hotelgarhjaisal.com/gallery.php#breadcrumb",
-        "itemListElement":[
-          {
-            "@type":"ListItem",
-            "position":1,
-            "name":"Home",
-            "item":"https://www.hotelgarhjaisal.com/"
-          },
-          {
-            "@type":"ListItem",
-            "position":2,
-            "name":"Gallery",
-            "item":"https://www.hotelgarhjaisal.com/gallery.php"
-          }
-        ]
-      }
-    ]
-  }
-  </script>
-</head>
+<?php
+$schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
+$schemaPageUrl = $schemaSiteUrl . '/gallery.php';
+$page = [
+    'title' => 'Gallery | Garh Jaisal Haveli, Jaisalmer Fort',
+    'description' => 'Explore rooms, the haveli, desert experiences and dining at Garh Jaisal Haveli inside Jaisalmer Fort.',
+    'path' => '/gallery.php',
+    'og_title' => 'Gallery | Garh Jaisal Haveli, Jaisalmer Fort',
+    'og_description' => 'See the rooms, haveli, desert experiences and dining at Garh Jaisal Haveli.',
+    'og_image' => '/img/s1.jpg',
+    'twitter_title' => 'Gallery | Garh Jaisal Haveli, Jaisalmer Fort',
+    'twitter_description' => 'See Garh Jaisal Haveli, its rooms, desert experiences and dining.',
+    'twitter_image' => '/img/s1.jpg',
+    'css' => ['css/gallery.css'],
+    'schema' => [
+        [
+            '@type' => 'WebPage',
+            '@id' => $schemaPageUrl . '#webpage',
+            'url' => $schemaPageUrl,
+            'name' => 'Gallery | Garh Jaisal Haveli, Jaisalmer Fort',
+            'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
+            'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
+            'breadcrumb' => ['@id' => $schemaPageUrl . '#breadcrumb'],
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            '@id' => $schemaPageUrl . '#breadcrumb',
+            'itemListElement' => [
+                [
+                    '@type' => 'ListItem',
+                    'position' => 1,
+                    'name' => 'Home',
+                    'item' => $schemaSiteUrl . '/',
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 2,
+                    'name' => 'Gallery',
+                    'item' => $schemaPageUrl,
+                ],
+            ],
+        ],
+    ],
+];
+require __DIR__ . '/include/page-head.php';
 
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
