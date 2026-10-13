@@ -14,70 +14,42 @@ usort($items, static function ($a, $b) use ($experiences) {
 ?>
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Guided Jaisalmer Tours | Half-Day & Full-Day Tours</title>
-  <meta name="description" content="Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="<?= htmlspecialchars($canonical, ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Guided Jaisalmer Tours | Half-Day & Full-Day Tours">
-  <meta property="og:description" content="Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.">
-  <meta property="og:url" content="<?= htmlspecialchars($canonical, ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:image" content="<?= htmlspecialchars($siteUrl . '/img/v2/facade.jpg', ENT_QUOTES, 'UTF-8') ?>">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Guided Jaisalmer Tours | Half-Day & Full-Day Tours">
-  <meta name="twitter:description" content="Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.">
-  <meta name="twitter:image" content="<?= htmlspecialchars($siteUrl . '/img/v2/facade.jpg', ENT_QUOTES, 'UTF-8') ?>">
-  <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/garh-v2.css">
-  <link rel="stylesheet" href="css/experiences.css">
-
-  <?php if ($analyticsIds): ?>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars($analyticsIds[0], ENT_QUOTES, 'UTF-8') ?>"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    <?php foreach ($analyticsIds as $analyticsId): ?>
-    gtag('config', '<?= htmlspecialchars($analyticsId, ENT_QUOTES, 'UTF-8') ?>');
-    <?php endforeach; ?>
-  </script>
-  <?php endif; ?>
-
-  <script type="application/ld+json">
-  <?php
-  echo json_encode([
-      '@context' => 'https://schema.org',
-      '@graph' => [
-          [
-              '@type' => 'WebPage',
-              '@id' => $canonical . '#webpage',
-              'url' => $canonical,
-              'name' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
-              'description' => 'Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.',
-              'isPartOf' => ['@id' => $siteUrl . '/#website'],
-              'about' => ['@id' => $siteUrl . '/#hotel'],
-              'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
-          ],
-          [
-              '@type' => 'BreadcrumbList',
-              '@id' => $canonical . '#breadcrumb',
-              'itemListElement' => [
-                  ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $siteUrl . '/'],
-                  ['@type' => 'ListItem', 'position' => 2, 'name' => 'Packages', 'item' => $siteUrl . '/pack.php'],
-                  ['@type' => 'ListItem', 'position' => 3, 'name' => 'Guided Jaisalmer Tours', 'item' => $canonical],
-              ],
-          ],
-      ],
-  ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-  ?>
-  </script>
-</head>
+<?php
+$page = [
+    'title' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
+    'description' => 'Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.',
+    'path' => '/guided-jaisalmer-tour.php',
+    'og_title' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
+    'og_description' => 'Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.',
+    'og_image' => '/img/v2/facade.jpg',
+    'twitter_title' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
+    'twitter_description' => 'Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.',
+    'twitter_image' => '/img/v2/facade.jpg',
+    'css' => ['css/experiences.css'],
+    'schema' => [
+        [
+            '@type' => 'WebPage',
+            '@id' => $canonical . '#webpage',
+            'url' => $canonical,
+            'name' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
+            'description' => 'Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.',
+            'isPartOf' => ['@id' => $siteUrl . '/#website'],
+            'about' => ['@id' => $siteUrl . '/#hotel'],
+            'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            '@id' => $canonical . '#breadcrumb',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $siteUrl . '/'],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Packages', 'item' => $siteUrl . '/pack.php'],
+                ['@type' => 'ListItem', 'position' => 3, 'name' => 'Guided Jaisalmer Tours', 'item' => $canonical],
+            ],
+        ],
+    ],
+];
+require __DIR__ . '/include/page-head.php';
+?>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 <main id="main-content" tabindex="-1">

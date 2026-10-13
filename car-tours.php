@@ -7,67 +7,43 @@ $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] 
 ?>
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Car &amp; City Tours from Jaisalmer | Garh Jaisal Haveli</title>
-  <meta name="description" content="Explore guided Jaisalmer city tours and enquire about car arrangements for arrival or a desert day with Garh Jaisal Haveli. Confirm current details directly with the hotel.">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="<?= htmlspecialchars($canonical, ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Car &amp; City Tours from Jaisalmer | Garh Jaisal Haveli">
-  <meta property="og:description" content="Compare existing guided Jaisalmer tour options and enquire about car arrangements. Routes, prices and availability should be confirmed directly.">
-  <meta property="og:url" content="<?= htmlspecialchars($canonical, ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:image" content="<?= htmlspecialchars($siteUrl . '/img/v2/facade.jpg', ENT_QUOTES, 'UTF-8') ?>">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Car &amp; City Tours from Jaisalmer | Garh Jaisal Haveli">
-  <meta name="twitter:description" content="Compare existing guided Jaisalmer tour options and enquire about car arrangements.">
-  <meta name="twitter:image" content="<?= htmlspecialchars($siteUrl . '/img/v2/facade.jpg', ENT_QUOTES, 'UTF-8') ?>">
-  <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
-  <link rel="stylesheet" href="css/garh-v2.css">
-  <link rel="stylesheet" href="css/packages.css">
-  <link rel="stylesheet" href="css/experiences.css">
-  <?php if ($analyticsIds): ?>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars($analyticsIds[0], ENT_QUOTES, 'UTF-8') ?>"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    <?php foreach ($analyticsIds as $analyticsId): ?>
-    gtag('config', '<?= htmlspecialchars($analyticsId, ENT_QUOTES, 'UTF-8') ?>');
-    <?php endforeach; ?>
-  </script>
-  <?php endif; ?>
-  <script type="application/ld+json">
-  <?php
-  echo json_encode([
-      '@context' => 'https://schema.org',
-      '@graph' => [
-          [
-              '@type' => 'WebPage',
-              '@id' => $canonical . '#webpage',
-              'url' => $canonical,
-              'name' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
-              'description' => 'Guided Jaisalmer tour options and enquiries about car arrangements from Garh Jaisal Haveli.',
-              'isPartOf' => ['@id' => $siteUrl . '/#website'],
-              'about' => ['@id' => $siteUrl . '/#hotel'],
-              'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
-              'inLanguage' => 'en',
-          ],
-          [
-              '@type' => 'BreadcrumbList',
-              '@id' => $canonical . '#breadcrumb',
-              'itemListElement' => [
-                  ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $siteUrl . '/'],
-                  ['@type' => 'ListItem', 'position' => 2, 'name' => 'Packages', 'item' => $siteUrl . '/pack.php'],
-                  ['@type' => 'ListItem', 'position' => 3, 'name' => 'Car & City Tours', 'item' => $canonical],
-              ],
-          ],
-      ],
-  ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-  ?>
-  </script>
-</head>
+<?php
+$page = [
+    'title' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
+    'description' => 'Explore guided Jaisalmer city tours and enquire about car arrangements for arrival or a desert day with Garh Jaisal Haveli. Confirm current details directly with the hotel.',
+    'path' => '/car-tours.php',
+    'og_title' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
+    'og_description' => 'Compare existing guided Jaisalmer tour options and enquire about car arrangements. Routes, prices and availability should be confirmed directly.',
+    'og_image' => '/img/v2/facade.jpg',
+    'twitter_title' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
+    'twitter_description' => 'Compare existing guided Jaisalmer tour options and enquire about car arrangements.',
+    'twitter_image' => '/img/v2/facade.jpg',
+    'css' => ['css/packages.css', 'css/experiences.css'],
+    'schema' => [
+        [
+            '@type' => 'WebPage',
+            '@id' => $canonical . '#webpage',
+            'url' => $canonical,
+            'name' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
+            'description' => 'Guided Jaisalmer tour options and enquiries about car arrangements from Garh Jaisal Haveli.',
+            'isPartOf' => ['@id' => $siteUrl . '/#website'],
+            'about' => ['@id' => $siteUrl . '/#hotel'],
+            'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
+            'inLanguage' => 'en',
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            '@id' => $canonical . '#breadcrumb',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $siteUrl . '/'],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Packages', 'item' => $siteUrl . '/pack.php'],
+                ['@type' => 'ListItem', 'position' => 3, 'name' => 'Car & City Tours', 'item' => $canonical],
+            ],
+        ],
+    ],
+];
+require __DIR__ . '/include/page-head.php';
+?>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 <main id="main-content" tabindex="-1">

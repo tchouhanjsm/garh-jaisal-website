@@ -41,6 +41,14 @@ async function captureHead(page, route) {
       '/contact.php',
       '/direction.php',
       '/gallery.php',
+      '/pack.php',
+      '/desert-safari.php',
+      '/car-tours.php',
+      '/guided-jaisalmer-tour.php',
+      '/camping.php',
+      '/car-rental.php',
+      '/city-tour.php',
+      '/book-rooms-in-jaisalmer.php',
     ].includes(route);
     const sharedRootIds = new Set([siteBase + '#hotel', siteBase + '#website']);
     let invalidJsonLdScripts = 0;
@@ -210,6 +218,14 @@ test('migrated page heads contain one shared Hotel and WebSite schema node', asy
     '/contact.php',
     '/direction.php',
     '/gallery.php',
+    '/pack.php',
+    '/desert-safari.php',
+    '/car-tours.php',
+    '/guided-jaisalmer-tour.php',
+    '/camping.php',
+    '/car-rental.php',
+    '/city-tour.php',
+    '/book-rooms-in-jaisalmer.php',
   ];
   const context = await browser.newContext({
     baseURL: BASE_URL,

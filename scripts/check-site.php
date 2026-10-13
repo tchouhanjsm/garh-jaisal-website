@@ -61,9 +61,9 @@ foreach ($public as $file) {
     }
 }
 
-// Shared page-head migration is staged. Keep this as a warning until every
-// public page (including the experience renderer) uses include/page-head.php;
-// then promote the diagnostic to an error.
+// Shared page-head migration is staged across page groups. Keep this as a warning
+// until group 3 and the shared experience renderer are migrated; then promote
+// the diagnostic to an error.
 $requireSharedPageHead = false;
 $experienceRendererSource = $readFile($root . '/include/experience-page.php');
 foreach ($public as $file) {

@@ -6,7 +6,7 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 
 | Sprint | Slice | Status |
 |---|---|---|
-| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ◐ in progress |
+| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ◐ in progress — page-head groups 1–2 |
 | 2A | Dining (`roof.php`, `restaurant.php`), Contact, Directions | ☐ |
 | 2B | Gallery, About, Blog and guides | ☐ |
 | 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ☐ |
@@ -17,6 +17,8 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 ## SPRINT 1: foundation rollout, branch `feature/sprint-1-page-head-migration`
 
 Progress update (2026-10-13): PR [#42](https://github.com/tchouhanjsm/garh-jaisal-website/pull/42) merged the frozen pre-refactor head fixture and screenshot-sheet CI support. Do not regenerate the fixture during migration. The next page-head change intentionally adds the shared Hotel/WebSite nodes on migrated pages; the snapshot test excludes only those shared graph roots from the page-specific comparison and separately asserts their IDs, types and approved values.
+
+Progress update (2026-10-13): PR [#43](https://github.com/tchouhanjsm/garh-jaisal-website/pull/43) migrated the first six pages to the shared head. This batch migrates the second planned group (`pack.php`, `desert-safari.php`, `car-tours.php`, `guided-jaisalmer-tour.php`, `camping.php`, `car-rental.php`, `city-tour.php`, `book-rooms-in-jaisalmer.php`). Keep the frozen fixture unchanged; explicitly assert shared Hotel/WebSite roots and retain page-specific metadata/schema. Group 3 and the experience renderer remain.
 
 Make 5 commits in this order. Each commit must leave CI green. If the connector cannot run PHP or a browser, rely on CI after each push and keep commits small.
 
