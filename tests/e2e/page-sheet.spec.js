@@ -48,6 +48,18 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
         expect(response, 'No HTTP response for ' + route).not.toBeNull();
         expect(response.status(), 'Unexpected status for ' + route).toBeLessThan(400);
 
+        // Capture the resting visual state, not a focus outline or an in-flight
+        // smooth scroll from the previous route. This affects the test context only.
+        await page.evaluate(() => {
+          document.documentElement.style.scrollBehavior = 'auto';
+          document.body.style.scrollBehavior = 'auto';
+          if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur();
+          }
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        });
+        await page.waitForFunction(() => window.scrollY === 0);
+
         let offset = 0;
         let steps = 0;
         while (true) {
@@ -72,7 +84,13 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
         )));
         await page.waitForTimeout(120);
         await page.waitForTimeout(800);
-        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.evaluate(() => {
+          if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur();
+          }
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        });
+        await page.waitForFunction(() => window.scrollY === 0);
         await page.waitForTimeout(100);
 
         const filename = routeSlug(route) + '-' + viewport.width + '.jpg';
