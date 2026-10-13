@@ -10,77 +10,56 @@ $heroImage = $siteUrl . '/img/v2/facade.jpg';
 ?>
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?></title>
-  <meta name="description" content="<?= htmlspecialchars($pageDescription, ENT_QUOTES, 'UTF-8') ?>">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="<?= htmlspecialchars($canonical, ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:type" content="article">
-  <meta property="og:title" content="<?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:description" content="<?= htmlspecialchars($pageDescription, ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:url" content="<?= htmlspecialchars($canonical, ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:image" content="<?= htmlspecialchars($heroImage, ENT_QUOTES, 'UTF-8') ?>">
-  <meta property="og:image:alt" content="Historic sandstone architecture inside Jaisalmer Fort">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="<?= htmlspecialchars($pageTitle, ENT_QUOTES, 'UTF-8') ?>">
-  <meta name="twitter:description" content="<?= htmlspecialchars($pageDescription, ENT_QUOTES, 'UTF-8') ?>">
-  <meta name="twitter:image" content="<?= htmlspecialchars($heroImage, ENT_QUOTES, 'UTF-8') ?>">
-  <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/garh-v2.css">
-  <link rel="stylesheet" href="css/article.css">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0C646S1FQ0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    <?php foreach ((array) ($siteConfig['analytics_ids'] ?? []) as $analyticsId): ?>
-    gtag('config', '<?= htmlspecialchars($analyticsId, ENT_QUOTES, 'UTF-8') ?>');
-    <?php endforeach; ?>
-  </script>
-  <script type="application/ld+json">
-  <?= json_encode([
-      '@context' => 'https://schema.org',
-      '@graph' => [
-          [
-              '@type' => 'BlogPosting',
-              '@id' => $canonical . '#article',
-              'headline' => $pageTitle,
-              'description' => $pageDescription,
-              'image' => [$heroImage],
-              'datePublished' => '2026-10-06',
-              'dateModified' => '2026-10-06',
-              'author' => ['@type' => 'Organization', 'name' => 'Hotel Garh Jaisal Haveli', 'url' => $siteUrl . '/'],
-              'publisher' => ['@id' => $siteUrl . '/#hotel'],
-              'mainEntityOfPage' => ['@id' => $canonical . '#webpage'],
-              'inLanguage' => 'en-IN'
-          ],
-          [
-              '@type' => 'WebPage',
-              '@id' => $canonical . '#webpage',
-              'url' => $canonical,
-              'name' => $pageTitle,
-              'isPartOf' => ['@id' => $siteUrl . '/#website'],
-              'about' => ['@id' => $siteUrl . '/#hotel'],
-              'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
-          ],
-          [
-              '@type' => 'BreadcrumbList',
-              '@id' => $canonical . '#breadcrumb',
-              'itemListElement' => [
-                  ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $siteUrl . '/'],
-                  ['@type' => 'ListItem', 'position' => 2, 'name' => 'Journal', 'item' => $siteUrl . '/blog.php'],
-                  ['@type' => 'ListItem', 'position' => 3, 'name' => 'Jaisalmer 2-Day Itinerary', 'item' => $canonical],
-              ],
-          ],
-      ],
-  ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>
-  </script>
-</head>
+<?php
+$page = [
+    'title' => $pageTitle,
+    'description' => $pageDescription,
+    'path' => '/jaisalmer-2-day-itinerary.php',
+    'og_type' => 'article',
+    'og_title' => $pageTitle,
+    'og_description' => $pageDescription,
+    'og_image' => '/img/v2/facade.jpg',
+    'og_image_alt' => 'Historic sandstone architecture inside Jaisalmer Fort',
+    'twitter_title' => $pageTitle,
+    'twitter_description' => $pageDescription,
+    'twitter_image' => '/img/v2/facade.jpg',
+    'css' => ['css/article.css'],
+    'schema' => [
+        [
+            '@type' => 'BlogPosting',
+            '@id' => $canonical . '#article',
+            'headline' => $pageTitle,
+            'description' => $pageDescription,
+            'image' => [$heroImage],
+            'datePublished' => '2026-10-06',
+            'dateModified' => '2026-10-06',
+            'author' => ['@type' => 'Organization', 'name' => 'Hotel Garh Jaisal Haveli', 'url' => $siteUrl . '/'],
+            'publisher' => ['@id' => $siteUrl . '/#hotel'],
+            'mainEntityOfPage' => ['@id' => $canonical . '#webpage'],
+            'inLanguage' => 'en-IN',
+        ],
+        [
+            '@type' => 'WebPage',
+            '@id' => $canonical . '#webpage',
+            'url' => $canonical,
+            'name' => $pageTitle,
+            'isPartOf' => ['@id' => $siteUrl . '/#website'],
+            'about' => ['@id' => $siteUrl . '/#hotel'],
+            'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            '@id' => $canonical . '#breadcrumb',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $siteUrl . '/'],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Journal', 'item' => $siteUrl . '/blog.php'],
+                ['@type' => 'ListItem', 'position' => 3, 'name' => 'Jaisalmer 2-Day Itinerary', 'item' => $canonical],
+            ],
+        ],
+    ],
+];
+require __DIR__ . '/include/page-head.php';
+?>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 <main class="article-page" id="main-content" tabindex="-1">
