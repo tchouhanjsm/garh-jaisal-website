@@ -24,6 +24,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -52,3 +54,30 @@ jobs:
 
       - name: Verify launch hardening configuration
         run: php scripts/check-launch-hardening.php
+
+
+  responsive-image-review:
+    name: responsive image review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned image tooling
+        run: python -m pip install Pillow==11.3.0
+
+      - name: Build responsive image review candidates
+        run: python scripts/build-responsive-image-review.py
+
+      - name: Upload responsive image review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: responsive-image-review
+          path: artifacts/responsive-image-review/
+          if-no-files-found: error
+          retention-days: 7

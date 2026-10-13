@@ -38,3 +38,19 @@ These results measure exact tracked file sizes in the repository, not production
 ## Workflow cleanup
 
 The bootstrap workflow used to generate and commit the derivatives is temporary and should be removed once the generated files are committed to the feature branch. Normal PHP and browser CI remain the final merge gates.
+
+
+## Sprint 3B — large-source inventory and responsive-size review
+
+The current tracked tree contains 16 original source images larger than 400,000 bytes (excluding files already under `img/optimized/`). Largest source: `img/tent1.jpg` at 6,138,540 bytes (~5.85 MiB). The complete candidate set is encoded in `scripts/build-responsive-image-review.py` so every run is repeatable.
+
+Run the candidate generator locally with Python 3.12 and Pillow 11.3.0:
+
+```bash
+python -m pip install Pillow==11.3.0
+python scripts/build-responsive-image-review.py
+```
+
+It writes source-preserving WebP review candidates for 480px, 800px and 1200px maximum widths under `artifacts/responsive-image-review/variants/`, plus an exact-byte JSON report and a side-by-side contact sheet. The same command runs in CI and uploads the `responsive-image-review` artifact. It never changes or deletes original photos and never adds a public runtime reference.
+
+The already accepted same-dimension derivatives remain the only image outputs enabled by the site's helper. Newly resized variants remain review-only until the owner checks them against the full-size photos; this avoids changing room/tour imagery or sharpness by filename assumption. The 6.14 MB tent photo is retained even though it is not part of the currently rendered 26-route payload audit; its other repository uses should be reviewed before changing its delivery path.

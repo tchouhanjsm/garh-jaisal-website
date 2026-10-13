@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Sprint 3A — launch hardening: Apache safeguards, contact form/email resilience, custom 404 |
+| Current phase | Combined Sprint 3A/3B — launch hardening, accessible image inventory, responsive image review, history-based sitemap and cPanel handoff |
 | Base branch | `main` |
 | Baseline commit | `8aa17416a9c9bdfbbb6450e06b0d4b5be0a28008` (main after PR #50) |
 | Last merged PR | [#50 — fix Gallery checks and extend Sprint 2B/2C](https://github.com/tchouhanjsm/garh-jaisal-website/pull/50) |
 | CI evidence | PR #50 merge SHA `8aa17416a9c9bdfbbb6450e06b0d4b5be0a28008`: [Site Checks passed](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38406061398), [Browser E2E passed](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38406061155), [390px/1280px page-sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38406061155/artifacts/11819118159) |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/sprint-3a-launch-hardening` — review Apache/cPanel safeguards, harden contact submission failure paths, and add a navigable noindex 404 page |
-| Next action | Run PHP 7.4/8.2 lint, strict site/publication checks, launch-hardening static gate, full Browser E2E and screenshot sheet on the exact PR head; owner reviews before merge/deploy |
+| Active batch | `feature/sprint-3a-launch-hardening` — PR #51 combines 3A hardening with 3B sitemap dates, image audit/size review, deployment guidance and staging QA |
+| Next action | Require final exact-head PHP 7.4/8.2 checks, publication/sitemap checks, image-review job, Browser E2E and screenshot sheet; owner reviews and merges, then stages manually before any release tag |
 
 ## Phase roadmap
 
@@ -610,3 +610,11 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Contact sessions use HttpOnly/SameSite=Lax cookies and Secure when PHP sees HTTPS. CAPTCHA verification sends the secret in a POST body rather than a URL; session throttling now runs before the remote verification call; CAPTCHA hostname must match the configured site host.
 - Added safe phone/WhatsApp recovery actions for form failures, a noindex custom 404 page, a static Apache contract gate and browser tests that never send a real enquiry.
 - cPanel/Apache module behavior and production redirects remain unverified; owner must inspect the diff and test on staging before deployment. No cPanel changes or deployment performed.
+
+
+## Sprint 3B continuation folded into PR #51
+
+- Image audit reviewed rendered images on all 26 sitemap routes: 0 missing `alt` attributes; 29 empty-alt usages are the labelled WhatsApp icon or four decorative page heroes, with the heroes now explicitly `aria-hidden`.
+- Original photos remain unchanged. Existing 11 accepted WebP derivatives save 2,909,109 tracked bytes across that accepted subset; a CI responsive-size review artifact previews 480/800/1200px candidates without switching live references before visual approval.
+- Sitemap `lastmod` now uses the latest Git committer date for each route PHP source; CI fetches full history and fails if a trustworthy date cannot be derived. XML dates were generated from the current branch's commit history.
+- Added cPanel deployment notes and a staging QA checklist. No server changes or release tag made; `v1.0.0` remains contingent on owner merge and staging approval.
