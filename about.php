@@ -205,17 +205,29 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section about-cta">
-    <div class="site-shell">
-      <p class="eyebrow">Stay</p>
-      <h2>Come for the fort, stay for the house.</h2>
-      <p>Check availability, or send a note if you want help with an itinerary before you arrive.</p>
-      <div class="actions">
-        <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Book your stay</a>
-        <a class="button button-light" href="contact.php">Contact the hotel</a>
-      </div>
-    </div>
-  </section>
+  <?php
+$ctaBand = [
+    'section_class' => 'section about-cta',
+    'inner_class' => 'site-shell',
+    'eyebrow' => 'Stay',
+    'title' => 'Come for the fort, stay for the house.',
+    'text' => 'Check availability, or send a note if you want help with an itinerary before you arrive.',
+    'actions_class' => 'actions',
+    'primary' => [
+        'label' => 'Book your stay',
+        'href' => $bookingUrl,
+        'class' => 'button button-primary',
+        'target' => '_blank',
+        'rel' => 'noopener',
+    ],
+    'secondary' => [
+        'label' => 'Contact the hotel',
+        'href' => 'contact.php',
+        'class' => 'button button-light',
+    ],
+];
+require __DIR__ . '/include/ui/cta-band.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
