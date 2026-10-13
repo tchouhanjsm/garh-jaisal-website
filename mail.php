@@ -131,7 +131,10 @@ $body .= '<tr><td style="padding:5px;">Message</td><td style="padding:5px;">'
     . nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8')) . '</td></tr>';
 $body .= '</table>';
 
-$fromAddress = (string) ($siteConfig['hotel_email'] ?? 'info@hotelgarhjaisal.com');
+$fromAddress = trim((string) ($siteConfig['hotel_email'] ?? 'info@hotelgarhjaisal.com'));
+if (preg_match('/[\r\n]/', $fromAddress) || filter_var($fromAddress, FILTER_VALIDATE_EMAIL) === false) {
+    $fromAddress = 'info@hotelgarhjaisal.com';
+}
 $headers = "MIME-Version: 1.0\r\n";
 $headers .= "Content-type:text/html;charset=UTF-8\r\n";
 $headers .= 'From: ' . str_replace(["\r", "\n"], '', $fromAddress) . "\r\n";
