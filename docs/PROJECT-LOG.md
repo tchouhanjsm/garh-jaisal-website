@@ -7,22 +7,22 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Retired icon-font asset cleanup; staging and release readiness remain owner-gated |
+| Current phase | Repeatable cPanel staging package; owner-controlled staging validation remains the release gate |
 | Base branch | `main` |
-| Baseline commit | `b0de32389378d55654c5e1d97adf54a10095b3ec` (PR #52 merge commit) |
-| Last merged PR | [#52 — reconcile launch status after PR #51](https://github.com/tchouhanjsm/garh-jaisal-website/pull/52) |
-| Exact-main CI evidence | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38426975392); [Browser E2E/screenshots PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38426975468) |
-| Screenshot evidence | [390px/1280px page sheet and browser artifacts](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38426975468) |
+| Baseline commit | `80b40250a4b95ba37aacf73c683892a2678e40f6` (PR #53 merge commit) |
+| Last merged PR | [#53 — remove unused legacy icon-font assets](https://github.com/tchouhanjsm/garh-jaisal-website/pull/53) |
+| Exact-main CI evidence | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38430084277); [Browser E2E/screenshots PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38430084161) |
+| Screenshot evidence | [390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38430084161/artifacts/11830946028); [browser reports/traces](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38430084161/artifacts/11830547266) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Open PRs at baseline verification | None |
-| Next action | Remove only legacy icon-font assets proven unused by the static reference gate and browser request test; staging/image approval remain release gates |
+| Next action | Generate a hash-verified runtime-only staging ZIP from merged main; owner must validate staging and approve image variants before release/tagging |
 
 ## Phase roadmap
 
 | Phase | Goal | Status |
 |---|---|---|
-| 0 | Repository hygiene and safe CI baseline | ✓ CI and asset cleanup merged; font-reference cleanup remains |
+| 0 | Repository hygiene and safe CI baseline | ✓ CI, legacy CSS/JS/include/font cleanup merged; runtime guards retained |
 | 1 | Site-wide audit with prioritised backlog | ◐ ongoing evidence-led defect fixes |
 | 2 | Booking conversion and mobile UX | ◐ responsive navigation and booking URL reuse merged; conversion event measurement remains open |
 | 3 | Technical SEO foundation | ✓ shared rendered metadata and JSON-LD regression checks |
@@ -69,10 +69,14 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Owner-side staging, cPanel/Apache behavior, form delivery and full-size image approval remain mandatory before release/tagging. No deployment or release tag was made.
 - Next engineering action: complete retained-font reference verification before any deletion; then use a separate reversible cleanup PR only for assets proven unused.
 
+## Completed phase — legacy icon-font cleanup (PR #53 merged)
 
-## Next phase — legacy icon-font cleanup (2026-10-13)
+- PR #53 removed 16 unused local Font Awesome, Glyphicons and Icofont files (8,217,618 tracked bytes) behind the source-reference guard and a sitemap-wide browser request regression. [Exact-head Site Checks passed](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38428599901) and [Browser E2E passed](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38428599781).
+- The follow-on PR adds no changes to Google Fonts, public routes, CSS declarations, image mappings, booking destinations, form behavior or analytics IDs.
 
-- Base verified after PR #52: `main` at `b0de32389378d55654c5e1d97adf54a10095b3ec`; exact-main [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38426975392) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38426975468) passed.
-- This slice removes 16 tracked legacy Font Awesome, Glyphicons and Icofont files (8,217,618 bytes total) only alongside a new static reference gate in `scripts/check-site.php` and a sitemap-wide Playwright check that published routes make no local `/fonts/` requests.
-- Hosted Google Fonts, stylesheets, markup, icon rendering, room/photo mappings, public URLs and GA4 settings are not changed. The static gate fails if any retired asset returns or runtime/test sources reference a retired path/family.
-- Release readiness remains separate: staging `.htaccess`, reCAPTCHA and mail behavior and owner approval of responsive image variants are still required. No deployment or release tag is authorized by this cleanup.
+## Next sprint — repeatable cPanel deployment package (2026-10-13)
+
+- Baseline after PR #53: main at `80b40250a4b95ba37aacf73c683892a2678e40f6`; exact-main [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38430084277) and [Browser E2E/screenshots](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38430084161) passed.
+- The next slice adds a standard-library package builder, unit tests for path selection and sitemap coverage, and a GitHub Actions workflow. Pull requests run checks but do not publish a ZIP. Only pushes or manual dispatches from main create the downloadable package, sidecar manifest and SHA-256 checksum.
+- The package contains tracked runtime files and excludes documentation, development tooling, CI, tests and server-local configuration. It does not deploy; it is only a candidate for owner-controlled staging.
+- Release blockers remain: cPanel/PHP/Apache compatibility, redirect/header behavior, staging CAPTCHA/mail behavior, owner approval of resized image candidates, and approved privacy/booking policy text.

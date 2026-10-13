@@ -11,7 +11,8 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 2B | Gallery, About, Blog and guides | ✓ merged in PR #50; visual review artifact available |
 | 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ◐ responsive detail protections and draft shells merged in PR #50; policy pages remain noindex/off-nav until owner supplies terms |
 | 3A | Launch hardening: `.htaccess`, form/email resilience, custom 404 | ✓ PR #51 merged; exact-main Site Checks and Browser E2E passed |
-| 3B | Image compression, alt text, sitemap dates, cPanel handoff, release tag | ◐ PR #51 merged and exact-main CI passed; resized candidates remain review-only, staging and image approval pending, no tag/deployment |
+| 3B | Image compression, alt text, sitemap dates, cPanel handoff, release tag | ◐ PR #51 and cleanup PRs #52–#53 merged; image variants remain review-only, owner staging/image approval pending, no tag/deployment |
+| 4 | Repeatable cPanel staging package and safe release preflight | ◐ package builder, route coverage tests and main-only artifact; owner staging sign-off remains required |
 
 ---
 
@@ -178,3 +179,11 @@ Stop there: the owner merges.
 - `scripts/check-site.php --strict-images` must fail if a retired asset is present or a retained PHP/CSS/JS/HTML/XML source references a retired font path/family.
 - Playwright checks all sitemap routes once on desktop-1280 and asserts that no local `/fonts/` request is made. Require exact-head PHP 7.4/8.2 lint/checks, sitemap/publication gates, full Browser E2E and the 390px/1280px screenshot sheet.
 - This phase does not close the staging/release gate. Keep image variants review-only until the owner approves them and do not deploy or create `v1.0.0` before staging sign-off.
+
+## Sprint 4 — repeatable cPanel staging package (2026-10-13)
+
+- Add a standard-library Python package builder that packages only Git-tracked runtime files, verifies every published sitemap route is present, and fails if server-only local config is tracked.
+- Add unit tests for runtime allowlisting, development-file exclusion, sitemap coverage, canonical-host validation and path traversal rejection.
+- Add `.github/workflows/deployment-package.yml`: pull requests run package preflight/unit checks; only pushes or manual dispatches from main upload the ZIP, SHA-256 checksum and sidecar manifest. The workflow must never deploy to a host.
+- Update the cPanel handoff with package commit/checksum verification and how to preserve server-only config during staging.
+- Acceptance: PHP 7.4/8.2 Site Checks, sitemap/publication gates, Browser E2E/screenshot sheet, Python package unit tests, package preflight and main-only artifact generation all green on the exact PR/merge SHA. Owner validates cPanel/Apache behavior, form delivery and resized image candidates on staging. Only the owner approves deployment/release tagging.

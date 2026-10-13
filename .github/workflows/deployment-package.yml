@@ -1,0 +1,57 @@
+name: cPanel deployment package
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    name: deployment package preflight
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Unit test package selection and safety gates
+        run: python -m unittest discover --start-directory tests --pattern 'test_*.py' -v
+
+      - name: Verify runtime package contents and sitemap route coverage
+        run: python scripts/build_deploy_package.py --check
+
+  build:
+    name: build owner-reviewed staging package
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    needs: preflight
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build runtime ZIP and integrity manifest
+        run: python scripts/build_deploy_package.py --output-dir artifacts/cpanel-deployment
+
+      - name: Upload cPanel deployment package (no deployment)
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpanel-deployment-package-${{ github.sha }}
+          path: artifacts/cpanel-deployment/
+          if-no-files-found: error
+          retention-days: 14
