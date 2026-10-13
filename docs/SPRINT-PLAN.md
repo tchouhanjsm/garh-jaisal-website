@@ -6,7 +6,7 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 
 | Sprint | Slice | Status |
 |---|---|---|
-| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ◐ in progress — UI partials are being adopted; dead-asset cleanup remains |
+| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ◐ in progress — UI partials merged; legacy JS/include cleanup in PR #47, CSS and fonts split into later reviewable slices |
 | 2A | Dining (`roof.php`, `restaurant.php`), Contact, Directions | ☐ |
 | 2B | Gallery, About, Blog and guides | ☐ |
 | 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ☐ |
@@ -22,7 +22,7 @@ Progress update (2026-10-13): PR [#43](https://github.com/tchouhanjsm/garh-jaisa
 
 Progress update (2026-10-13): PR #45 completes group 3 (`roof.php`, `restaurant.php`, `blog.php` and the three guides) and the shared experience renderer. The fixture remains unchanged; the shared-schema regression now covers all sitemap routes, and the source checker requires all public routes to use `page-head.php` directly or through the renderer.
 
-Progress update (2026-10-13): PR #46 adds escaped reusable UI partials and adopts them on the six planned final CTAs, the Directions FAQ and the experience FAQ/heading. Existing body copy and destinations are preserved; the browser regression asserts CTA destinations and FAQ structure. After owner merge, Sprint 1 has one implementation slice remaining: re-verify references before dead-asset removal, with fonts handled separately. The screenshot-sheet workflow remains provided by PR #41.
+Progress update (2026-10-13): PR #46 is merged. PR #47 removes only reference-verified, unreferenced legacy JavaScript bundles and retired includes. To honor the 25-file review limit, the 12 legacy CSS files are a separate follow-up; fonts are removed only after confirming no retained CSS references them, in their own revertible commit. The screenshot-sheet workflow remains provided by PR #41.
 
 Make 5 commits in this order. Each commit must leave CI green. If the connector cannot run PHP or a browser, rely on CI after each push and keep commits small.
 
