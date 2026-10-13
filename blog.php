@@ -65,7 +65,27 @@ require __DIR__ . '/include/page-head.php';
       </div>
     </div>
   </section>
-  <section class="section article-footer-cta"><div class="site-shell article-cta-inner"><p class="eyebrow">Plan from the Fort</p><h2>Stay inside Jaisalmer Fort.</h2><p>Explore rooms, arrival information and desert experiences before you book.</p><div class="actions"><a class="button button-primary" href="room.php">View rooms</a><a class="button button-secondary" href="pack.php">Explore experiences</a></div></div></section>
+  <?php
+$ctaBand = [
+    'section_class' => 'section article-footer-cta',
+    'inner_class' => 'site-shell article-cta-inner',
+    'eyebrow' => 'Plan from the Fort',
+    'title' => 'Stay inside Jaisalmer Fort.',
+    'text' => 'Explore rooms, arrival information and desert experiences before you book.',
+    'actions_class' => 'actions',
+    'primary' => [
+        'label' => 'View rooms',
+        'href' => 'room.php',
+        'class' => 'button button-primary',
+    ],
+    'secondary' => [
+        'label' => 'Explore experiences',
+        'href' => 'pack.php',
+        'class' => 'button button-secondary',
+    ],
+];
+require __DIR__ . '/include/ui/cta-band.php';
+?>
 </main>
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
 <script src="js/garh-v2.js"></script>
