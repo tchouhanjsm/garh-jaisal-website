@@ -49,6 +49,17 @@ async function captureHead(page, route) {
       '/car-rental.php',
       '/city-tour.php',
       '/book-rooms-in-jaisalmer.php',
+      '/roof.php',
+      '/blog.php',
+      '/jaisalmer-fort-guide.php',
+      '/desert-safari-guide.php',
+      '/jaisalmer-2-day-itinerary.php',
+      '/cultural-safari.php',
+      '/full-day-jaisalmer-tour.php',
+      '/half-day-jaisalmer-tour.php',
+      '/sleep-under-the-stars.php',
+      '/sunset-camel-safari.php',
+      '/swiss-tent-safari.php',
     ].includes(route);
     const sharedRootIds = new Set([siteBase + '#hotel', siteBase + '#website']);
     let invalidJsonLdScripts = 0;
@@ -211,22 +222,7 @@ test('migrated page heads contain one shared Hotel and WebSite schema node', asy
   test.skip(testInfo.project.name !== 'desktop-1280', 'Shared schema is verified once on desktop-1280');
   test.setTimeout(120_000);
 
-  const routes = [
-    '/',
-    '/about.php',
-    '/room.php',
-    '/contact.php',
-    '/direction.php',
-    '/gallery.php',
-    '/pack.php',
-    '/desert-safari.php',
-    '/car-tours.php',
-    '/guided-jaisalmer-tour.php',
-    '/camping.php',
-    '/car-rental.php',
-    '/city-tour.php',
-    '/book-rooms-in-jaisalmer.php',
-  ];
+  const routes = getSitemapRoutes();
   const context = await browser.newContext({
     baseURL: BASE_URL,
     viewport: { width: 1280, height: 800 },

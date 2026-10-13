@@ -231,38 +231,28 @@ $schema = [
 ?>
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><?= e($restaurant['name']) ?> | Restaurant in Jaisalmer</title>
-  <meta name="description" content="Rajasthani food at <?= e($restaurant['name']) ?>, the rooftop restaurant at Garh Jaisal Haveli inside Jaisalmer Fort.">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="<?= e($pageUrl) ?>">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="<?= e($restaurant['name']) ?> | Restaurant in Jaisalmer">
-  <meta property="og:description" content="Rajasthani food on the rooftop at Garh Jaisal Haveli inside Jaisalmer Fort.">
-  <meta property="og:url" content="<?= e($pageUrl) ?>">
-  <meta property="og:image" content="<?= e($heroImage) ?>">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="<?= e($restaurant['name']) ?> | Restaurant in Jaisalmer">
-  <meta name="twitter:description" content="Rajasthani food on the rooftop at Garh Jaisal Haveli inside Jaisalmer Fort.">
-  <meta name="twitter:image" content="<?= e($heroImage) ?>">
-  <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/garh-v2.css">
-  <link rel="stylesheet" href="css/restaurant.css">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0C646S1FQ0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-0C646S1FQ0');
-    gtag('config', 'G-6S5PCEVXH4');
-  </script>
-  <script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP) ?></script>
-</head>
+<?php
+$page = [
+    'title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
+    'description' => "Rajasthani food at " . $restaurant['name'] . ", the rooftop restaurant at Garh Jaisal Haveli inside Jaisalmer Fort.",
+    'path' => '/restaurant.php',
+    'og_type' => 'website',
+    'og_title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
+    'og_description' => 'Rajasthani food on the rooftop at Garh Jaisal Haveli inside Jaisalmer Fort.',
+    'og_image' => '/img/rest2.jpg',
+    'twitter_title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
+    'twitter_description' => 'Rajasthani food on the rooftop at Garh Jaisal Haveli inside Jaisalmer Fort.',
+    'twitter_image' => '/img/rest2.jpg',
+    'css' => ['css/restaurant.css'],
+    'schema' => array_values(array_filter(
+        $schema['@graph'],
+        static function ($node) {
+            return !in_array($node['@type'] ?? '', ['Hotel', 'WebSite'], true);
+        }
+    )),
+];
+require __DIR__ . '/include/page-head.php';
+?>
 <body class="restaurant-page">
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 

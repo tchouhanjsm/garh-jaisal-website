@@ -31,55 +31,58 @@ $addUnique = static function (&$list, $message) {
     }
 };
 
-// 1. Basic SEO tags. Shared includes are not considered proof on their own;
-// pages that build metadata dynamically are reported for manual verification.
+$experienceRendererSource = $readFile($root . '/include/experience-page.php');
+$rendererUsesSharedHead = strpos($experienceRendererSource, 'page-head.php') !== false;
+
+// 1. Basic SEO tags. Pages using the shared renderer are validated through
+// their configuration contract and rendered-browser regression tests.
 foreach ($public as $file) {
     $name = basename($file);
     $source = $readFile($file);
+    $usesExperienceRenderer = strpos($source, 'experience-page.php') !== false && $rendererUsesSharedHead;
+    $usesSharedHead = strpos($source, 'include/page-head.php') !== false || $usesExperienceRenderer;
     $missing = [];
 
-    foreach ([
-        '/<title\b/i' => 'title',
-        '/<meta\s+name=["\']description["\']/i' => 'meta description',
-        '/<link\s+rel=["\']canonical["\']/i' => 'canonical',
-    ] as $pattern => $label) {
-        if (!preg_match($pattern, $source)) {
-            $missing[] = $label;
+    if (!$usesSharedHead) {
+        foreach ([
+            '/<title\b/i' => 'title',
+            '/<meta\s+name=["\']description["\']/i' => 'meta description',
+            '/<link\s+rel=["\']canonical["\']/i' => 'canonical',
+        ] as $pattern => $label) {
+            if (!preg_match($pattern, $source)) {
+                $missing[] = $label;
+            }
+        }
+
+        if ($missing) {
+            $message = $name . ': ' . implode(', ', $missing) . ' not found literally; verify rendered head output';
+            $addUnique($warnings, $message);
         }
     }
 
-    if ($missing) {
-        $message = $name . ': ' . implode(', ', $missing) . ' not found literally; verify rendered head output';
-        $addUnique($warnings, $message);
-    }
-
-    $h1Count = preg_match_all('/<h1\b/i', $source);
-    if ($h1Count !== false && $h1Count > 1) {
-        $addUnique($warnings, $name . ': multiple literal H1 elements found');
-    } elseif ($h1Count === 0) {
-        $addUnique($warnings, $name . ': no literal H1 found; verify rendered page');
+    if (!$usesExperienceRenderer) {
+        $h1Count = preg_match_all('/<h1\b/i', $source);
+        if ($h1Count !== false && $h1Count > 1) {
+            $addUnique($warnings, $name . ': multiple literal H1 elements found');
+        } elseif ($h1Count === 0) {
+            $addUnique($warnings, $name . ': no literal H1 found; verify rendered page');
+        }
     }
 }
 
-// Shared page-head migration is staged across page groups. Keep this as a warning
-// until group 3 and the shared experience renderer are migrated; then promote
-// the diagnostic to an error.
-$requireSharedPageHead = false;
-$experienceRendererSource = $readFile($root . '/include/experience-page.php');
+// All public pages must now use the shared page-head renderer directly or
+// inherit it from include/experience-page.php. Rendered output is tested in CI.
+$requireSharedPageHead = true;
 foreach ($public as $file) {
     $name = basename($file);
     $source = $readFile($file);
     $usesSharedHead = strpos($source, 'include/page-head.php') !== false;
-    if (
-        !$usesSharedHead
-        && strpos($source, 'experience-page.php') !== false
-        && strpos($experienceRendererSource, 'include/page-head.php') !== false
-    ) {
+    if (!$usesSharedHead && strpos($source, 'experience-page.php') !== false && $rendererUsesSharedHead) {
         $usesSharedHead = true;
     }
 
     if (!$usesSharedHead) {
-        $message = $name . ': public page does not use the shared page-head renderer yet';
+        $message = $name . ': public page does not use the shared page-head renderer';
         if ($requireSharedPageHead) {
             $errors[] = $message;
         } else {
@@ -208,10 +211,8 @@ foreach ($standaloneExperiencePages as $relative) {
         continue;
     }
     $source = $readFile($path);
-    foreach (['<title', 'name="description"', 'rel="canonical"'] as $marker) {
-        if (stripos($source, $marker) === false) {
-            $addUnique($warnings, $relative . ': standalone landing page missing literal metadata marker ' . $marker);
-        }
+    if (strpos($source, 'include/page-head.php') === false) {
+        $errors[] = $relative . ': standalone landing page must use the shared page-head renderer';
     }
 }
 $rendererPath = $root . '/include/experience-page.php';
@@ -219,9 +220,15 @@ if (!is_file($rendererPath)) {
     $errors[] = 'include/experience-page.php is missing';
 } else {
     $renderer = $readFile($rendererPath);
-    foreach (['<title', 'name="description"', 'rel="canonical"'] as $marker) {
-        if (stripos($renderer, $marker) === false) {
-            $errors[] = 'experience renderer missing expected metadata marker: ' . $marker;
+    foreach ([
+        'page-head.php',
+        "'title' => \$experience['title']",
+        "'description' => \$experience['description']",
+        "'path' => '/' . \$experience['slug'] . '.php'",
+        "'robots' => \$isIndexableExperience ? 'index,follow' : 'noindex,follow'",
+    ] as $marker) {
+        if (strpos($renderer, $marker) === false) {
+            $errors[] = 'experience renderer is missing shared-head contract marker: ' . $marker;
         }
     }
 }

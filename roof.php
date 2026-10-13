@@ -2,109 +2,46 @@
 $activePage = 'dining';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $bookingUrl = $siteConfig['booking_url'];
+$siteUrl = rtrim($siteConfig['site_url'], '/');
+$canonical = $siteUrl . '/roof.php';
 ?>
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen</title>
-
-  <meta
-    name="description"
-    content="Rooftop dining at Garh Jaisal's Kitchen in Jaisalmer: vegetarian, vegan and non-vegetarian meals, candlelight dinners, and views of havelis, palace and lake."
-  >
-
-  <meta name="robots" content="index,follow">
-
-  <link
-    rel="canonical"
-    href="https://www.hotelgarhjaisal.com/roof.php"
-  >
-
-  <meta property="og:type" content="website">
-  <meta
-    property="og:title"
-    content="Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen"
-  >
-  <meta
-    property="og:description"
-    content="Candlelight dinners and city views at Garh Jaisal's Kitchen, the rooftop restaurant inside Jaisalmer Fort."
-  >
-  <meta
-    property="og:url"
-    content="https://www.hotelgarhjaisal.com/roof.php"
-  >
-  <meta
-    property="og:image"
-    content="https://www.hotelgarhjaisal.com/img/v2/fort-from-roof.jpg"
-  >
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta
-    name="twitter:title"
-    content="Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen"
-  >
-  <meta
-    name="twitter:description"
-    content="Candlelight dinners and city views at Garh Jaisal's Kitchen, the rooftop restaurant inside Jaisalmer Fort."
-  >
-  <meta
-    name="twitter:image"
-    content="https://www.hotelgarhjaisal.com/img/v2/fort-from-roof.jpg"
-  >
-
-  <link
-    rel="icon"
-    type="image/png"
-    href="img/jaisalmerlogo.png"
-  >
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/garh-v2.css">
-  <link rel="stylesheet" href="css/roof.css">
-
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0C646S1FQ0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag(){
-      dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-    gtag('config', 'G-0C646S1FQ0');
-    gtag('config', 'G-6S5PCEVXH4');
-  </script>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        "@id": "https://www.hotelgarhjaisal.com/roof.php#webpage",
-        "url": "https://www.hotelgarhjaisal.com/roof.php",
-        "name": "Rooftop Dining at Garh Jaisal's Kitchen | Jaisalmer Fort",
-        "isPartOf": {"@id": "https://www.hotelgarhjaisal.com/#website"},
-        "about": {"@id": "https://www.hotelgarhjaisal.com/restaurant.php#restaurant"},
-        "breadcrumb": {"@id": "https://www.hotelgarhjaisal.com/roof.php#breadcrumb"}
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": "https://www.hotelgarhjaisal.com/roof.php#breadcrumb",
-        "itemListElement": [
-          {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.hotelgarhjaisal.com/"},
-          {"@type": "ListItem", "position": 2, "name": "Rooftop dining", "item": "https://www.hotelgarhjaisal.com/roof.php"}
-        ]
-      }
-    ]
-  }
-  </script>
-</head>
+<?php
+$page = [
+    'title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
+    'description' => "Rooftop dining at Garh Jaisal's Kitchen in Jaisalmer: vegetarian, vegan and non-vegetarian meals, candlelight dinners, and views of havelis, palace and lake.",
+    'path' => '/roof.php',
+    'og_type' => 'website',
+    'og_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
+    'og_description' => "Candlelight dinners and city views at Garh Jaisal's Kitchen, the rooftop restaurant inside Jaisalmer Fort.",
+    'og_image' => '/img/v2/fort-from-roof.jpg',
+    'twitter_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
+    'twitter_description' => "Candlelight dinners and city views at Garh Jaisal's Kitchen, the rooftop restaurant inside Jaisalmer Fort.",
+    'twitter_image' => '/img/v2/fort-from-roof.jpg',
+    'css' => ['css/roof.css'],
+    'schema' => [
+        [
+            '@type' => 'WebPage',
+            '@id' => $canonical . '#webpage',
+            'url' => $canonical,
+            'name' => "Rooftop Dining at Garh Jaisal's Kitchen | Jaisalmer Fort",
+            'isPartOf' => ['@id' => $siteUrl . '/#website'],
+            'about' => ['@id' => $siteUrl . '/restaurant.php#restaurant'],
+            'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            '@id' => $canonical . '#breadcrumb',
+            'itemListElement' => [
+                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $siteUrl . '/'],
+                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Rooftop dining', 'item' => $canonical],
+            ],
+        ],
+    ],
+];
+require __DIR__ . '/include/page-head.php';
+?>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
