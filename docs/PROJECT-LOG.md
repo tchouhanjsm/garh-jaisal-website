@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Sprint 1 — shared page-head/schema foundation, page groups 1–2 |
+| Current phase | Sprint 1 — shared page-head/schema foundation; groups 1–3 and experience renderer are being completed; UI partials/dead-asset removal remain |
 | Base branch | `main` |
-| Baseline commit | `1a8b9e43566c9fb01734e97574c0efb667c04a50` (main after PR #43) |
-| Last merged PR | [#43 — centralize page head and migrate first page group](https://github.com/tchouhanjsm/garh-jaisal-website/pull/43) |
-| CI on baseline | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38355597701) and [Browser E2E + screenshot sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38355597763) passed on PR #43's exact head before owner merge |
+| Baseline commit | `438946452872dcc8b87fb593eff6869858f9d75d` (main after PR #44) |
+| Last merged PR | [#44 — migrate packages and tour pages to shared head](https://github.com/tchouhanjsm/garh-jaisal-website/pull/44) |
+| CI evidence | PR #44 exact head `8e43f40bfb180c2c32c02dd11e7a6b80dd2aa23c`: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38359596089) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38359595950) passed; [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38359595950/artifacts/11793244750) available |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/sprint-1-page-head-migration-b` — migrate Packages and tour/landing pages to the shared head while preserving existing metadata, page-specific schema and both GA4 IDs |
-| Next action | Review exact-head CI and `page-sheet`; after owner-merge, migrate Dining/Blog/guides, then the experience renderer and draft/noindex pages |
+| Active batch | `feature/sprint-1-page-head-completion` — migrate Dining, Blog, guides and the shared experience renderer while preserving frozen head output and both GA4 IDs |
+| Next action | Review PR #45 on its exact head, including `page-sheet`; after owner-merge, build reusable UI partials, then remove reference-verified dead assets (fonts in a separate revertible commit) |
 
 ## Phase roadmap
 
@@ -539,3 +539,12 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Final workflow restores `contents: read` and removes both temporary bootstrap steps. The test fails if the fixture is missing or any frozen output changes; it does not weaken assertions.
 - No public PHP page, URL, content, schema values, GA IDs, image mapping, owner fact, rate, or price changed. Production and cPanel were not touched.
 - Next: after this PR is owner-merged and exact-head checks pass, proceed with the shared page-head foundation and the first page group.
+
+
+## Sprint 1 — remaining shared page heads (PR #45)
+
+- Verified base: main \`438946452872dcc8b87fb593eff6869858f9d75d\`; PR #44 is latest merged and no implementation PR was open before this batch.
+- Migrated \`roof.php\`, \`restaurant.php\`, \`blog.php\`, three guides and \`include/experience-page.php\` to the shared head; public URLs and page body sections stay unchanged.
+- Preserved title, description, canonical, robots policy, social metadata, page-specific JSON-LD and both configured GA4 IDs; added shared \`og:image:alt\` support and retained the frozen fixture.
+- Validation gate: exact-head PHP 7.4/8.2 Site Checks, Browser E2E and the 390px/1280px page-sheet artifact; local PHP/Chromium were not run by the connector.
+- Owner questions: none for this technical refactor; existing operational facts remain open in \`docs/OWNER-FACTS.md\`. Next: reusable UI partials, then verified dead assets with fonts as a separate revertible commit.
