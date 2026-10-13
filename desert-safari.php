@@ -126,7 +126,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  
+
   <section class="section site-faq desert-faq" aria-labelledby="desert-faq-title">
     <div class="site-shell">
       <div class="section-head">

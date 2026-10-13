@@ -205,7 +205,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  
+
   <section class="section site-faq packages-faq" aria-labelledby="packages-faq-title">
     <div class="site-shell">
       <div class="section-head">
