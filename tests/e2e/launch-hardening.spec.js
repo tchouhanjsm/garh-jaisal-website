@@ -10,8 +10,8 @@ test.describe('Sprint 3A launch hardening', () => {
     await expect(page.getByRole('link', { name: 'Back to home' })).toHaveAttribute('href', 'index.php');
     await expect(page.getByRole('link', { name: 'Explore rooms' })).toHaveAttribute('href', 'room.php');
     await expect(page.getByRole('link', { name: 'Contact the hotel' })).toHaveAttribute('href', 'contact.php');
-    await expect(page.getByRole('link', { name: 'WhatsApp' })).toHaveAttribute('href', /^https:\/\//);
-    await expect(page.getByRole('link', { name: 'Check room availability' })).toHaveAttribute('href', /^https:\/\//);
+    await expect(page.locator('#main-content').getByRole('link', { name: 'WhatsApp' })).toHaveAttribute('href', /^https:\/\//);
+    await expect(page.locator('#main-content').getByRole('link', { name: 'Check room availability' })).toHaveAttribute('href', /^https:\/\//);
   });
 
   test('mail endpoint redirects GET requests without processing a submission', async ({ request }) => {
