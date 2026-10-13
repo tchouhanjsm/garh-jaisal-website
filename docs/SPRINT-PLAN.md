@@ -6,7 +6,7 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 
 | Sprint | Slice | Status |
 |---|---|---|
-| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ◐ in progress — shared head groups 1–3 and experience renderer; UI partials and dead-asset cleanup remain |
+| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ◐ in progress — UI partials are being adopted; dead-asset cleanup remains |
 | 2A | Dining (`roof.php`, `restaurant.php`), Contact, Directions | ☐ |
 | 2B | Gallery, About, Blog and guides | ☐ |
 | 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ☐ |
@@ -20,7 +20,9 @@ Progress update (2026-10-13): PR [#42](https://github.com/tchouhanjsm/garh-jaisa
 
 Progress update (2026-10-13): PR [#43](https://github.com/tchouhanjsm/garh-jaisal-website/pull/43) migrated the first six pages to the shared head. PR [#44](https://github.com/tchouhanjsm/garh-jaisal-website/pull/44) then migrated the second planned group (`pack.php`, `desert-safari.php`, `car-tours.php`, `guided-jaisalmer-tour.php`, `camping.php`, `car-rental.php`, `city-tour.php`, `book-rooms-in-jaisalmer.php`), preserving the frozen fixture and both GA4 IDs.
 
-Progress update (2026-10-13): PR #45 completes group 3 (`roof.php`, `restaurant.php`, `blog.php` and the three guides) and the shared experience renderer. The fixture remains unchanged; the shared-schema regression now covers all sitemap routes, and the source checker requires all public routes to use `page-head.php` directly or through the renderer. After this, Sprint 1 has two implementation slices remaining: reusable UI partials and reference-verified dead-asset removal; the screenshot-sheet workflow was delivered with PR #41.
+Progress update (2026-10-13): PR #45 completes group 3 (`roof.php`, `restaurant.php`, `blog.php` and the three guides) and the shared experience renderer. The fixture remains unchanged; the shared-schema regression now covers all sitemap routes, and the source checker requires all public routes to use `page-head.php` directly or through the renderer.
+
+Progress update (2026-10-13): PR #46 adds escaped reusable UI partials and adopts them on the six planned final CTAs, the Directions FAQ and the experience FAQ/heading. Existing body copy and destinations are preserved; the browser regression asserts CTA destinations and FAQ structure. After owner merge, Sprint 1 has one implementation slice remaining: re-verify references before dead-asset removal, with fonts handled separately. The screenshot-sheet workflow remains provided by PR #41.
 
 Make 5 commits in this order. Each commit must leave CI green. If the connector cannot run PHP or a browser, rely on CI after each push and keep commits small.
 
