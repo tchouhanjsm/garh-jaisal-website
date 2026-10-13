@@ -69,6 +69,27 @@ test('approved WebP derivatives preserve dimensions, map to the same source phot
       const response = await page.goto(route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
       expect(response, `No HTTP response for ${route}`).not.toBeNull();
       expect(response.status(), `Unexpected status for ${route}`).toBeLessThan(400);
+      // Force the candidate images to resolve their srcset before reading currentSrc.
+      // Below-fold lazy images otherwise may still report the fallback src at DOMContentLoaded.
+      const optimizedSourcePaths = sources.filter(item => item.derivativeExists).map(item => item.source);
+      await page.locator('img').evaluateAll(async (nodes, candidateSources) => {
+        const candidates = nodes.filter(image => {
+          try {
+            const path = decodeURIComponent(new URL(image.src, document.baseURI).pathname).replace(/^\/+/, '');
+            return candidateSources.includes(path);
+          } catch {
+            return false;
+          }
+        });
+        await Promise.all(candidates.map(async image => {
+          image.loading = 'eager';
+          image.srcset = image.getAttribute('srcset') || '';
+          if (image.decode) {
+            try { await image.decode(); } catch { /* The assertion below reports if fallback is selected. */ }
+          }
+        }));
+      }, optimizedSourcePaths);
+
       const images = await page.locator('img').evaluateAll(nodes => nodes.map(image => {
         const toPath = value => {
           try { return decodeURIComponent(new URL(value, document.baseURI).pathname).replace(/^\/+/, ''); }
