@@ -15,7 +15,7 @@ $defaults = [
     'hotel_email' => 'info@hotelgarhjaisal.com',
     'recaptcha_site_key' => '6LcPO8wqAAAAAKCGR-vt2pvgN8d0lj3flL7_DDtY',
     'recaptcha_secret' => '',
-    // Owner decision needed: confirm which measurement IDs should be active.
+    // Owner-approved: keep both GA4 IDs; shared page head loads gtag.js once and configures each ID once.
     'analytics_ids' => ['G-0C646S1FQ0', 'G-6S5PCEVXH4'],
     // Configure real recipients in site-config.local.php on the server.
     'inquiry_recipients' => [],
