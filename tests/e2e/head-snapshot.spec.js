@@ -17,7 +17,10 @@ async function captureHead(page, route) {
   expect(response, 'No HTTP response for ' + route).not.toBeNull();
   expect(response.status(), 'Unexpected status for ' + route).toBeLessThan(400);
 
-  const snapshot = await page.evaluate(() => {
+  const snapshot = await page.evaluate(({ route }) => {
+    // Migrated pages now emit the shared Hotel and WebSite graph roots from
+    // page-head.php. Keep the frozen fixture focused on the page-specific
+    // schema from before migration; the next test asserts these shared nodes.
     const readMeta = selector => {
       const element = document.querySelector(selector);
       return element ? element.getAttribute('content') : null;
@@ -31,6 +34,15 @@ async function captureHead(page, route) {
       .sort((left, right) => left.key.localeCompare(right.key) || left.content.localeCompare(right.content));
 
     const jsonLdTypes = [];
+    const siteBase = new URL('/', document.querySelector('link[rel="canonical"]')?.href || window.location.href).href;
+    const ignoreSharedRootsForBaseline = [
+      '/about.php',
+      '/room.php',
+      '/contact.php',
+      '/direction.php',
+      '/gallery.php',
+    ].includes(route);
+    const sharedRootIds = new Set([siteBase + '#hotel', siteBase + '#website']);
     let invalidJsonLdScripts = 0;
     const visitJsonLd = value => {
       if (Array.isArray(value)) {
@@ -38,6 +50,9 @@ async function captureHead(page, route) {
         return;
       }
       if (!value || typeof value !== 'object') {
+        return;
+      }
+      if (ignoreSharedRootsForBaseline && sharedRootIds.has(value['@id'])) {
         return;
       }
       if (value['@type']) {
@@ -76,7 +91,7 @@ async function captureHead(page, route) {
       gtagScriptCount: document.querySelectorAll('script[src*="googletagmanager.com/gtag/js"]').length,
       gtagConfigIds,
     };
-  });
+  }, { route });
 
   return { route, ...snapshot };
 }
@@ -182,4 +197,92 @@ test('sitemap head output matches the frozen pre-refactor baseline', async ({ br
     path: ARTIFACT_PATH,
     contentType: 'application/json',
   });
+});
+
+test('migrated page heads contain one shared Hotel and WebSite schema node', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Shared schema is verified once on desktop-1280');
+  test.setTimeout(120_000);
+
+  const routes = [
+    '/',
+    '/about.php',
+    '/room.php',
+    '/contact.php',
+    '/direction.php',
+    '/gallery.php',
+  ];
+  const context = await browser.newContext({
+    baseURL: BASE_URL,
+    viewport: { width: 1280, height: 800 },
+    deviceScaleFactor: 1,
+  });
+  await context.route('https://www.googletagmanager.com/**', route => route.abort());
+  const page = await context.newPage();
+
+  try {
+    for (const route of routes) {
+      const response = await page.goto(route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
+      expect(response, 'No HTTP response for ' + route).not.toBeNull();
+      expect(response.status(), 'Unexpected status for ' + route).toBeLessThan(400);
+
+      const entities = await page.evaluate(() => {
+        const base = new URL('/', document.querySelector('link[rel="canonical"]')?.href || window.location.href).href;
+        const hotelId = base + '#hotel';
+        const websiteId = base + '#website';
+        const hotel = [];
+        const website = [];
+        const visit = value => {
+          if (Array.isArray(value)) {
+            value.forEach(visit);
+            return;
+          }
+          if (!value || typeof value !== 'object') return;
+
+          if (value['@id'] === hotelId && value['@type'] === 'Hotel') hotel.push(value);
+          if (value['@id'] === websiteId && value['@type'] === 'WebSite') website.push(value);
+          Object.values(value).forEach(visit);
+        };
+
+        for (const script of document.querySelectorAll('script[type="application/ld+json"]')) {
+          try {
+            visit(JSON.parse(script.textContent || 'null'));
+          } catch {
+            // The snapshot regression test separately reports invalid JSON-LD.
+          }
+        }
+        return { base, hotel, website };
+      });
+
+      expect(entities.hotel, route + ': exactly one shared Hotel node').toHaveLength(1);
+      expect(entities.website, route + ': exactly one shared WebSite node').toHaveLength(1);
+      expect(entities.hotel[0]).toMatchObject({
+        '@type': 'Hotel',
+        '@id': entities.base + '#hotel',
+        name: 'Hotel Garh Jaisal Haveli',
+        url: entities.base,
+        telephone: '+91-7727047567',
+        image: [
+          entities.base + 'img/v2/facade.jpg',
+          entities.base + 'img/5.webp',
+        ],
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Fort Kotari Para, Inside Jaisalmer Fort',
+          addressLocality: 'Jaisalmer',
+          addressRegion: 'Rajasthan',
+          postalCode: '345001',
+          addressCountry: 'IN',
+        },
+      });
+      expect(entities.website[0]).toMatchObject({
+        '@type': 'WebSite',
+        '@id': entities.base + '#website',
+        url: entities.base,
+        name: 'Garh Jaisal Haveli',
+        publisher: { '@id': entities.base + '#hotel' },
+      });
+    }
+  } finally {
+    await context.close();
+  }
 });

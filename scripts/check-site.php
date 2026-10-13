@@ -61,6 +61,33 @@ foreach ($public as $file) {
     }
 }
 
+// Shared page-head migration is staged. Keep this as a warning until every
+// public page (including the experience renderer) uses include/page-head.php;
+// then promote the diagnostic to an error.
+$requireSharedPageHead = false;
+$experienceRendererSource = $readFile($root . '/include/experience-page.php');
+foreach ($public as $file) {
+    $name = basename($file);
+    $source = $readFile($file);
+    $usesSharedHead = strpos($source, 'include/page-head.php') !== false;
+    if (
+        !$usesSharedHead
+        && strpos($source, 'experience-page.php') !== false
+        && strpos($experienceRendererSource, 'include/page-head.php') !== false
+    ) {
+        $usesSharedHead = true;
+    }
+
+    if (!$usesSharedHead) {
+        $message = $name . ': public page does not use the shared page-head renderer yet';
+        if ($requireSharedPageHead) {
+            $errors[] = $message;
+        } else {
+            $addUnique($warnings, $message);
+        }
+    }
+}
+
 // 2. Sitemap references must point to local files when a URL is a site path.
 $sitemapPath = $root . '/sitemap.xml';
 $sitemap = is_file($sitemapPath) ? $readFile($sitemapPath) : '';

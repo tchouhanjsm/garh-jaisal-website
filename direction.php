@@ -10,69 +10,39 @@ $whatsappUrl = $siteConfig['whatsapp_url'];
 ?>
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Directions to Garh Jaisal Haveli | Jaisalmer Fort</title>
-  <meta
-    name="description"
-    content="Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival instructions, reception hours and hotel contact details."
-  >
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://www.hotelgarhjaisal.com/direction.php">
-
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Getting to Garh Jaisal Haveli inside Jaisalmer Fort">
-  <meta
-    property="og:description"
-    content="Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival instructions, reception hours and hotel contact details."
-  >
-  <meta property="og:url" content="https://www.hotelgarhjaisal.com/direction.php">
-  <meta property="og:image" content="https://www.hotelgarhjaisal.com/img/jcity.jpg">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Getting to Garh Jaisal Haveli inside Jaisalmer Fort">
-  <meta
-    name="twitter:description"
-    content="Find Garh Jaisal Haveli inside Jaisalmer Fort. Walk from Fort Parking, call for luggage help, and see reception hours, phone numbers and the address."
-  >
-  <meta name="twitter:image" content="https://www.hotelgarhjaisal.com/img/jcity.jpg">
-
-  <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/garh-v2.css">
-  <link rel="stylesheet" href="css/arrival.css">
-
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0C646S1FQ0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-0C646S1FQ0');
-    gtag('config', 'G-6S5PCEVXH4');
-  </script>
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Place",
-    "name": "Garh Jaisal Haveli",
-    "url": "https://www.hotelgarhjaisal.com/direction.php",
-    "telephone": ["+91 77270 47567", "+91 2992 253836"],
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Fort Kotari Para, Inside Jaisalmer Fort",
-      "addressLocality": "Jaisalmer",
-      "addressRegion": "Rajasthan",
-      "postalCode": "345001",
-      "addressCountry": "IN"
-    }
-  }
-  </script>
-</head>
+<?php
+$schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
+$schemaPageUrl = $schemaSiteUrl . '/direction.php';
+$page = [
+    'title' => 'Directions to Garh Jaisal Haveli | Jaisalmer Fort',
+    'description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival instructions, reception hours and hotel contact details.',
+    'path' => '/direction.php',
+    'og_title' => 'Getting to Garh Jaisal Haveli inside Jaisalmer Fort',
+    'og_description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival instructions, reception hours and hotel contact details.',
+    'og_image' => '/img/jcity.jpg',
+    'twitter_title' => 'Getting to Garh Jaisal Haveli inside Jaisalmer Fort',
+    'twitter_description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. Walk from Fort Parking, call for luggage help, and see reception hours, phone numbers and the address.',
+    'twitter_image' => '/img/jcity.jpg',
+    'css' => ['css/arrival.css'],
+    'schema' => [
+        [
+            '@type' => 'Place',
+            'name' => 'Garh Jaisal Haveli',
+            'url' => $schemaPageUrl,
+            'telephone' => ['+91 77270 47567', '+91 2992 253836'],
+            'address' => [
+                '@type' => 'PostalAddress',
+                'streetAddress' => 'Fort Kotari Para, Inside Jaisalmer Fort',
+                'addressLocality' => 'Jaisalmer',
+                'addressRegion' => 'Rajasthan',
+                'postalCode' => '345001',
+                'addressCountry' => 'IN',
+            ],
+        ],
+    ],
+];
+require __DIR__ . '/include/page-head.php';
+?>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 

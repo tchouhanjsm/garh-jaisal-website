@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Sprint 1 — committed rendered head baseline and screenshot evidence (PR #42) |
+| Current phase | Sprint 1 — shared page-head/schema foundation and first six-page migration |
 | Base branch | `main` |
-| Baseline commit | `f17523727effe40855d3ef2bbeca8e576d7a42d7` (main after PR #41) |
-| Last merged PR | [#41 — freeze page head baseline and add screenshot sheet](https://github.com/tchouhanjsm/garh-jaisal-website/pull/41) |
-| CI on main | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38349850361) passed on `f17523727effe40855d3ef2bbeca8e576d7a42d7`; [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38349850346) failed because the new required head-snapshot fixture was missing, which PR #42 addresses |
+| Baseline commit | `d5acb7f9c915e87527da70e2eee9154ed3209bd7` (main after PR #42) |
+| Last merged PR | [#42 — commit frozen head snapshot fixture](https://github.com/tchouhanjsm/garh-jaisal-website/pull/42) |
+| CI on baseline | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38354302604) passed on PHP 7.4 and 8.2; [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38354302647) passed on the exact baseline commit |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/sprint-1-baseline-fixture` — commit the frozen pre-refactor head fixture, remove CI write permissions, and keep snapshot comparisons strict |
-| Next action | After PR #42 is owner-merged and exact-head checks pass, create the shared `include/page-head.php` / `include/schema.php` foundation and migrate the first page group while the fixture stays unchanged |
+| Active batch | `feature/sprint-1-page-head-migration` — centralise head markup and shared Hotel/WebSite schema; migrate Home, About, Rooms, Contact, Directions and Gallery without changing page copy or page-specific schema |
+| Next action | Review exact-head CI and the `page-sheet` artifact; after owner-merge, migrate the second page group and then the remaining public pages |
 
 ## Phase roadmap
 

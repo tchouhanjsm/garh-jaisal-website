@@ -13,101 +13,51 @@ $floorCount = count($roomsByFloor);
 ?>
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <title>Rooms at Garh Jaisal Haveli | Jaisalmer Fort</title>
-
-  <meta
-    name="description"
-    content="Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort, including Sweet Purple, Rising Sun, Scarlet, Opium, Red Maharani, Green and BlueSky."
-  >
-
-  <meta name="robots" content="index,follow">
-
-  <link
-    rel="canonical"
-    href="https://www.hotelgarhjaisal.com/room.php"
-  >
-
-  <meta property="og:type" content="website">
-  <meta
-    property="og:title"
-    content="Rooms at Garh Jaisal Haveli | Jaisalmer Fort"
-  >
-  <meta
-    property="og:description"
-    content="Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort."
-  >
-  <meta
-    property="og:url"
-    content="https://www.hotelgarhjaisal.com/room.php"
-  >
-  <meta
-    property="og:image"
-    content="https://www.hotelgarhjaisal.com/img/purple-room.jpg"
-  >
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta
-    name="twitter:title"
-    content="Rooms at Garh Jaisal Haveli | Jaisalmer Fort"
-  >
-  <meta
-    name="twitter:description"
-    content="Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort."
-  >
-  <meta
-    name="twitter:image"
-    content="https://www.hotelgarhjaisal.com/img/purple-room.jpg"
-  >
-
-  <link
-    rel="icon"
-    type="image/png"
-    href="img/jaisalmerlogo.png"
-  >
-
-  <link rel="stylesheet" href="css/garh-v2.css">
-
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0C646S1FQ0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag(){
-      dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-    gtag('config', 'G-0C646S1FQ0');
-    gtag('config', 'G-6S5PCEVXH4');
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@graph":[
-      {
-        "@type":"WebPage",
-        "@id":"https://www.hotelgarhjaisal.com/room.php#webpage",
-        "url":"https://www.hotelgarhjaisal.com/room.php",
-        "name":"Rooms at Garh Jaisal Haveli | Jaisalmer Fort",
-        "isPartOf":{"@id":"https://www.hotelgarhjaisal.com/#website"},
-        "about":{"@id":"https://www.hotelgarhjaisal.com/#hotel"},
-        "breadcrumb":{"@id":"https://www.hotelgarhjaisal.com/room.php#breadcrumb"}
-      },
-      {
-        "@type":"BreadcrumbList",
-        "@id":"https://www.hotelgarhjaisal.com/room.php#breadcrumb",
-        "itemListElement":[
-          {"@type":"ListItem","position":1,"name":"Home","item":"https://www.hotelgarhjaisal.com/"},
-          {"@type":"ListItem","position":2,"name":"Rooms","item":"https://www.hotelgarhjaisal.com/room.php"}
-        ]
-      }
-    ]
-  }
-  </script>
-</head>
+<?php
+$schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
+$schemaPageUrl = $schemaSiteUrl . '/room.php';
+$page = [
+    'title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
+    'description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort, including Sweet Purple, Rising Sun, Scarlet, Opium, Red Maharani, Green and BlueSky.',
+    'path' => '/room.php',
+    'og_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
+    'og_description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort.',
+    'og_image' => '/img/purple-room.jpg',
+    'twitter_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
+    'twitter_description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort.',
+    'twitter_image' => '/img/purple-room.jpg',
+    'schema' => [
+        [
+            '@type' => 'WebPage',
+            '@id' => $schemaPageUrl . '#webpage',
+            'url' => $schemaPageUrl,
+            'name' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
+            'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
+            'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
+            'breadcrumb' => ['@id' => $schemaPageUrl . '#breadcrumb'],
+        ],
+        [
+            '@type' => 'BreadcrumbList',
+            '@id' => $schemaPageUrl . '#breadcrumb',
+            'itemListElement' => [
+                [
+                    '@type' => 'ListItem',
+                    'position' => 1,
+                    'name' => 'Home',
+                    'item' => $schemaSiteUrl . '/',
+                ],
+                [
+                    '@type' => 'ListItem',
+                    'position' => 2,
+                    'name' => 'Rooms',
+                    'item' => $schemaPageUrl,
+                ],
+            ],
+        ],
+    ],
+];
+require __DIR__ . '/include/page-head.php';
+?>
 
 <body>
 
