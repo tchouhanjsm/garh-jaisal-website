@@ -6,7 +6,7 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 
 | Sprint | Slice | Status |
 |---|---|---|
-| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ✓ merged through PR #48; fonts remain a separate reversible cleanup after a retained-CSS reference scan |
+| 1 | Foundation: page shell, UI partials, dead-asset removal, screenshot sheet | ✓ merged through PR #48; legacy icon-font assets are removed in a separate reference-guarded cleanup; hosted Google Fonts remain |
 | 2A | Dining (`roof.php`, `restaurant.php`), Contact, Directions | ✓ page group and reciprocal Dining/responsive fixes merged through PRs #49–#50 |
 | 2B | Gallery, About, Blog and guides | ✓ merged in PR #50; visual review artifact available |
 | 2C | Tour detail template, `privacy.php`, `booking-policy.php` | ◐ responsive detail protections and draft shells merged in PR #50; policy pages remain noindex/off-nav until owner supplies terms |
@@ -171,3 +171,10 @@ Stop there: the owner merges.
 - A rendered image-accessibility test checks every sitemap route; decorative hero images are explicitly hidden from assistive technology. Existing originals and existing image URLs stay intact.
 - CI builds a responsive WebP review artifact at widths up to 480, 800 and 1200 pixels for the 16 original tracked image files over 400,000 bytes (including the 6,138,540-byte `img/tent1.jpg`). Review outputs are not public references yet.
 - Added cPanel deployment and staging QA guides. The owner must approve image visuals, test Apache rules on staging, and approve release before creating `v1.0.0`.
+
+## Next phase — legacy icon-font asset cleanup (2026-10-13)
+
+- Remove the 16 tracked legacy Font Awesome, Glyphicons and Icofont files only with source-reference and published-route request guards in place. This is a reversible asset-only change; no CSS class, icon markup, page design or external Google Fonts behavior changes.
+- `scripts/check-site.php --strict-images` must fail if a retired asset is present or a retained PHP/CSS/JS/HTML/XML source references a retired font path/family.
+- Playwright checks all sitemap routes once on desktop-1280 and asserts that no local `/fonts/` request is made. Require exact-head PHP 7.4/8.2 lint/checks, sitemap/publication gates, full Browser E2E and the 390px/1280px screenshot sheet.
+- This phase does not close the staging/release gate. Keep image variants review-only until the owner approves them and do not deploy or create `v1.0.0` before staging sign-off.
