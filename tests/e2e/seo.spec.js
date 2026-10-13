@@ -168,6 +168,30 @@ test('home page surfaces fort arrival constraints and keeps key discovery sectio
   await expect(bookingLink).toHaveAttribute('rel', /noopener/);
 });
 
+test('the stay-inside-the-fort guide is reachable from Home and Rooms', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Direct-stay discovery checks run once');
+
+  const cases = [
+    { route: '/', selector: '.final-cta-guide-link' },
+    { route: '/room.php', selector: '.rooms-cta-guide-link' },
+  ];
+
+  for (const item of cases) {
+    const response = await page.goto(item.route, { waitUntil: 'domcontentloaded' });
+    expect(response, `No HTTP response for ${item.route}`).not.toBeNull();
+    expect(response.status(), `Unexpected status for ${item.route}`).toBeLessThan(400);
+
+    const guideLink = page.locator(item.selector);
+    await expect(guideLink, `Expected guide link on ${item.route}`).toBeVisible();
+    await expect(guideLink).toHaveAttribute('href', 'book-rooms-in-jaisalmer.php');
+    await expect(guideLink).toContainText('Read our guide to staying inside Jaisalmer Fort');
+
+    await guideLink.click();
+    await expect(page).toHaveURL(/\/book-rooms-in-jaisalmer\.php$/);
+    await expect(page.locator('main h1')).toContainText('Staying inside Jaisalmer Fort');
+  }
+});
+
 test('rooms page floor navigation targets each rendered room section', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Room floor navigation checks run once');
   const response = await page.goto('/room.php', { waitUntil: 'domcontentloaded' });

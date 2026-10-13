@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Staging isolation and automated QA; owner-controlled staging validation remains the release gate |
+| Current phase | Direct-stay guide discoverability; real staging and release approval remain owner-gated |
 | Base branch | `main` |
-| Baseline commit | `ff34f6bb4debb9129c2456a918c502b84adad53c` (PR #54 merge commit) |
-| Last merged PR | [#54 — safe cPanel deployment package workflow](https://github.com/tchouhanjsm/garh-jaisal-website/pull/54) |
-| Exact-main CI evidence | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38432500907); [cPanel package PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38432500854); [Browser E2E/screenshot sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38432500866) |
-| Screenshot evidence | [PR #54 page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38431409628/artifacts/11831127680); main post-merge screenshot workflow evidence is tracked above |
+| Baseline commit | `09b60a45adf607052475e69aad4c379e9fd66445` (PR #55 merge commit) |
+| Last merged PR | [#55 — safe staging QA gate and host isolation](https://github.com/tchouhanjsm/garh-jaisal-website/pull/55) |
+| PR #55 final-tree checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38435193551); [cPanel preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38435193394); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38435193466); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38435193463) |
+| Screenshot evidence | [390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38435193463/artifacts/11833211433); [staging QA evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38435193466/artifacts/11831984737) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None after PR #54 merge |
-| Next action | Owner stages the matching package, runs Staging QA against the real HTTPS staging host, then signs off mail/CAPTCHA, images and release gates |
+| Open PRs at baseline verification | None after PR #55 merge |
+| Next action | Link the existing stay guide from Home and Rooms; owner reviews the page sheet, then runs external Staging QA on a real HTTPS staging host |
 
 ## Phase roadmap
 
@@ -88,3 +88,10 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Correct the staging blocker where a blanket non-`www` redirect would send a staging subdomain to production. Canonical redirects are scoped to production apex/`www` aliases; the shared page head forces noindex outside the exact production origin.
 - Add non-production robots regression tests, an exact-main target validator, and a manual staging-browser workflow covering sitemap routes, metadata, JSON-LD, image accessibility/dimensions, overflow, server protection headers, blocked config/hidden files, branded 404 and screenshot evidence.
 - Staging remains unverified until the owner provides an HTTPS staging URL, applies the matching local configuration, runs the workflow against the exact staged package commit and completes manual mail/CAPTCHA/Apache checks. CI does not deploy or create a release tag.
+
+
+## Sprint 6 — direct-stay guide discoverability (PR in review)
+- Baseline: PR #55 merged at `09b60a45adf607052475e69aad4c379e9fd66445`; final-tree Site Checks, package preflight, Staging QA dry run and Browser E2E passed.
+- The approved stay guide was in the sitemap but had no inbound links from Home or Rooms, contrary to the approved architecture.
+- Link the existing `book-rooms-in-jaisalmer.php` guide from both pages and add a rendered navigation regression; URLs, booking destinations, photo mappings and both GA4 IDs remain unchanged.
+- Owner review first: Home, Rooms and the guide at 390px/1280px. Real staging, CAPTCHA/mail, image approval and release remain owner-gated.

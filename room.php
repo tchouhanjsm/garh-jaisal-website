@@ -292,12 +292,18 @@ $ctaBand = [
     'eyebrow' => 'Plan your stay',
     'title' => 'Choose your room.',
     'text' => 'Check current availability and rates through our booking system.',
+    'actions_class' => 'actions',
     'primary' => [
         'label' => 'Book your stay',
         'href' => $bookingUrl,
         'class' => 'button button-primary',
         'target' => '_blank',
         'rel' => 'noopener',
+    ],
+    'secondary' => [
+        'label' => 'Read our guide to staying inside Jaisalmer Fort →',
+        'href' => 'book-rooms-in-jaisalmer.php',
+        'class' => 'text-link rooms-cta-guide-link',
     ],
 ];
 require __DIR__ . '/include/ui/cta-band.php';
