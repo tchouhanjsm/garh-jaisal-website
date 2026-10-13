@@ -285,28 +285,23 @@ require __DIR__ . '/include/page-head.php';
        BOOKING CTA
        ===================================================== -->
 
-  <section class="section rooms-cta">
-    <div class="site-shell rooms-cta-inner">
-
-      <p class="eyebrow">Plan your stay</p>
-
-      <h2>Choose your room.</h2>
-
-      <p>
-        Check current availability and rates through our booking system.
-      </p>
-
-      <a
-        class="button button-primary"
-        href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
-        target="_blank"
-        rel="noopener"
-      >
-        Book your stay
-      </a>
-
-    </div>
-  </section>
+  <?php
+$ctaBand = [
+    'section_class' => 'section rooms-cta',
+    'inner_class' => 'site-shell rooms-cta-inner',
+    'eyebrow' => 'Plan your stay',
+    'title' => 'Choose your room.',
+    'text' => 'Check current availability and rates through our booking system.',
+    'primary' => [
+        'label' => 'Book your stay',
+        'href' => $bookingUrl,
+        'class' => 'button button-primary',
+        'target' => '_blank',
+        'rel' => 'noopener',
+    ],
+];
+require __DIR__ . '/include/ui/cta-band.php';
+?>
 
 </main>
 
