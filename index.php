@@ -5,79 +5,31 @@ $bookingUrl = $siteConfig['booking_url'];
 ?>
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Garh Jaisal Haveli | Stay Inside Jaisalmer Fort</title>
-  <meta name="description" content="Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Heritage rooms, rooftop views, dining and desert experiences in the heart of the living fort.">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://www.hotelgarhjaisal.com/">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Garh Jaisal Haveli | Stay Inside Jaisalmer Fort">
-  <meta property="og:description" content="Heritage rooms, rooftop views and desert experiences inside Jaisalmer Fort.">
-  <meta property="og:url" content="https://www.hotelgarhjaisal.com/">
-  <meta property="og:image" content="https://www.hotelgarhjaisal.com/img/v2/facade.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Garh Jaisal Haveli | Stay Inside Jaisalmer Fort">
-  <meta name="twitter:description" content="Heritage rooms, rooftop views and desert experiences inside Jaisalmer Fort.">
-  <meta name="twitter:image" content="https://www.hotelgarhjaisal.com/img/v2/facade.jpg">
-  <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/garh-v2.css">
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0C646S1FQ0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-0C646S1FQ0');
-    gtag('config', 'G-6S5PCEVXH4');
-  </script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Hotel",
-      "@id": "https://www.hotelgarhjaisal.com/#hotel",
-      "name": "Hotel Garh Jaisal Haveli",
-      "url": "https://www.hotelgarhjaisal.com/",
-      "telephone": "+91-7727047567",
-      "image": [
-        "https://www.hotelgarhjaisal.com/img/v2/facade.jpg",
-        "https://www.hotelgarhjaisal.com/img/5.webp"
-      ],
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Fort Kotari Para, Inside Jaisalmer Fort",
-        "addressLocality": "Jaisalmer",
-        "addressRegion": "Rajasthan",
-        "postalCode": "345001",
-        "addressCountry": "IN"
-      }
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://www.hotelgarhjaisal.com/#website",
-      "url": "https://www.hotelgarhjaisal.com/",
-      "name": "Garh Jaisal Haveli",
-      "publisher": {
-        "@id": "https://www.hotelgarhjaisal.com/#hotel"
-      }
-    },
-    {
-      "@type": "WebPage",
-      "@id": "https://www.hotelgarhjaisal.com/#webpage",
-      "url": "https://www.hotelgarhjaisal.com/",
-      "name": "Garh Jaisal Haveli | Stay Inside Jaisalmer Fort",
-      "isPartOf": {"@id": "https://www.hotelgarhjaisal.com/#website"},
-      "about": {"@id": "https://www.hotelgarhjaisal.com/#hotel"}
-    }
-  ]
-}
-</script>
-</head>
+<?php
+$schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
+$schemaPageUrl = $schemaSiteUrl . '/';
+$page = [
+    'title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
+    'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Heritage rooms, rooftop views, dining and desert experiences in the heart of the living fort.',
+    'path' => '/',
+    'og_title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
+    'og_description' => 'Heritage rooms, rooftop views and desert experiences inside Jaisalmer Fort.',
+    'og_image' => '/img/v2/facade.jpg',
+    'twitter_title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
+    'twitter_description' => 'Heritage rooms, rooftop views and desert experiences inside Jaisalmer Fort.',
+    'twitter_image' => '/img/v2/facade.jpg',
+    'schema' => [
+        [
+            '@type' => 'WebPage',
+            '@id' => $schemaPageUrl . '#webpage',
+            'url' => $schemaPageUrl,
+            'name' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
+            'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
+            'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
+        ],
+    ],
+];
+require __DIR__ . '/include/page-head.php';
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
