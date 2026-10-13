@@ -112,8 +112,7 @@ $sortExperienceSlugs($guideItems);
       <img
         src="img/desert3.jpg"
         alt="Sand dunes in the Thar Desert near Jaisalmer"
-        width="1366"
-        height="768"
+        <?= gj_image_dimension_attributes('img/desert3.jpg') ?>
         fetchpriority="high"
       >
       <div class="package-hero-overlay"></div>
