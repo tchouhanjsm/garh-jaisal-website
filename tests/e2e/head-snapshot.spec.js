@@ -90,6 +90,10 @@ test('sitemap head output matches the frozen pre-refactor baseline', async ({ br
     viewport: { width: 1280, height: 800 },
     deviceScaleFactor: 1,
   });
+  // Measure server-rendered head output only. Third-party gtag.js can mutate the
+  // document by adding another script element after navigation; that runtime side
+  // effect is not part of the page's emitted HTML and makes this snapshot flaky.
+  await context.route('https://www.googletagmanager.com/**', route => route.abort());
   const page = await context.newPage();
   const sitemapRoutes = getSitemapRoutes();
   const pageHeads = [];
