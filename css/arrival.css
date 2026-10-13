@@ -277,3 +277,11 @@
     width:100%;
   }
 }
+
+
+/* Sprint 2A: protect grid alignment and long labels on narrow devices. */
+.arrival-page .site-shell>*,.arrival-split>*,.arrival-fact,.travel-card{min-width:0}
+.arrival-page .page-hero h1{max-width:16ch;text-wrap:balance}
+.arrival-page .section-head{align-items:start;gap:clamp(20px,4vw,48px)}
+.arrival-page .section-head>*{min-width:0}
+@media(max-width:760px){.arrival-page .section-head{grid-template-columns:minmax(0,1fr);gap:12px}.arrival-page .arrival-fact,.arrival-page .travel-card,.arrival-page .arrival-notice,.arrival-page .arrival-address{padding:20px}}

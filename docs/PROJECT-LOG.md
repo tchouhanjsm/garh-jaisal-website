@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Sprint 1 — unused legacy JS/includes removed; unused CSS cleanup and Contact layout/anti-spam fixes in progress; font cleanup pending |
+| Current phase | Sprint 2A — Contact and Directions alignment pass; Dining navigation clarity |
 | Base branch | `main` |
-| Baseline commit | `7da495f546f54bcaf471111fc02a921b54ff1fd6` (main after PR #47) |
-| Last merged PR | [#47 — remove unreferenced legacy scripts and includes](https://github.com/tchouhanjsm/garh-jaisal-website/pull/47) |
+| Baseline commit | `eb551a67d4d027493f4a2d2847c540b156c1b386` (main after PR #48) |
+| Last merged PR | [#48 — remove legacy CSS and repair Contact layout](https://github.com/tchouhanjsm/garh-jaisal-website/pull/48) |
 | CI evidence | PR #47 exact head `605e1bde0e1fee9557184c50fbe932ad7fb22260`: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38374961949) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38374961946) passed; [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38374961946/artifacts/11800474664) available |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Active batch | `feature/sprint-1-dead-css-contact-fixes` — remove source-reference-verified legacy CSS and fix Contact form overlap/honeypot layout, with browser regressions |
-| Next action | Review PR #48 exact-head CI and screenshot sheet; after owner merge, remove only font files proven unused by retained CSS in their own revertible commit, then begin Sprint 2A page redesign work |
+| Active batch | `feature/sprint-2a-dining-contact-directions` — standardise Contact hero, improve Dining discovery and lead with the parking walk on Directions |
+| Next action | Review exact-head CI and screenshot sheet for the Sprint 2A layout batch; keep font deletion separate until a final retained-CSS reference scan confirms unused files |
 
 ## Phase roadmap
 
@@ -575,3 +575,12 @@ Owner decision (2026-10-12): merge duplicates and orphans properly; if a page is
 - Contact fixes: hide the anti-spam honeypot off-screen without removing it from form submission; suppress fixed dock/bottom-bar overlays on Contact and add an inline WhatsApp action using the existing configured URL.
 - Add viewport-level regressions for Contact column alignment, no overflow, off-screen honeypot geometry and retained quick actions on other pages. No URLs, GA4 IDs, message recipient, rates, policies or form submission behavior changed.
 - Next: verify PHP 7.4/8.2, strict site checks, sitemap/publication checks, full Browser E2E and screenshot sheet on the exact PR head; then review remaining fonts in a separate revertible commit. Local PHP/Chromium were not run by the connector.
+
+
+## Sprint 2A — Contact and Directions alignment (open PR)
+
+- Base: `eb551a67d4d027493f4a2d2847c540b156c1b386`; PR #48 merged and post-merge Site Checks/Browser E2E passed.
+- Contact receives a dedicated page hero separate from its CTA and enquiry layout; existing booking, WhatsApp, form, CSRF and CAPTCHA behavior remains in place.
+- Dining hub adds a direct menu-page cross-link. Directions surfaces the existing Fort Parking walk estimate before the detailed travel cards.
+- Added browser regressions for hero/action presence, the dining link, the first directions answer and overflow at 320/390/1280px. Exact-head CI and screenshot sheet remain the merge gate.
+- No prices, policies, public URLs, schema, GA4 IDs or owner-controlled facts were changed. Local PHP/browser and production were not tested.

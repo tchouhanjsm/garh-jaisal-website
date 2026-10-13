@@ -72,7 +72,7 @@ require __DIR__ . '/include/page-head.php';
           <h2>How guests reach the haveli.</h2>
         </div>
         <p>
-          Typical door-to-door time from Jaisalmer Railway Station or the airport is about 5–20 minutes. The final part is on foot.
+          From Fort Parking, allow a 5–6 minute walk (roughly 300 metres). Typical door-to-door time from Jaisalmer Railway Station or the airport is about 5–20 minutes; the final part is on foot.
         </p>
       </div>
 
