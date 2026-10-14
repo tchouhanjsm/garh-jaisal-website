@@ -57,7 +57,7 @@ test('every room card preserves the primary booking and secondary selected-room 
     const enquiryResponse = await page.goto('/contact.php?room=' + room.slug, { waitUntil: 'domcontentloaded' });
     expect(enquiryResponse, room.name + ': Contact should return an HTTP response').not.toBeNull();
     expect(enquiryResponse.status(), room.name + ': Contact should load successfully').toBeLessThan(400);
-    await expect(page.locator('.contact-topic-context strong'), room.name + ': enquiry context').toHaveText(room.name);
+    await expect(page.locator('.contact-room-context strong'), room.name + ': enquiry context').toHaveText(room.name);
     const message = await page.locator('#message').inputValue();
     expect(message).toContain(room.name);
     expect(message).toContain('current availability, rate and room features');
