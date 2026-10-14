@@ -7,7 +7,7 @@ function roomSlug(name) {
 }
 
 test('every room card preserves the primary booking and secondary selected-room enquiry journeys', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Complete room-directory assertions run once on desktop-1280');
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Full room-directory assertion runs once on desktop-1280');
   test.setTimeout(120_000);
 
   const response = await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
