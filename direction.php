@@ -90,7 +90,7 @@ require __DIR__ . '/include/page-head.php';
         <article class="arrival-fact">
           <span>Reception</span>
           <strong>7:00 AM–10:30 PM</strong>
-          <p>Porter and escort help is available during these hours. Share your ETA by call or WhatsApp. Please share your ETA by phone or WhatsApp before arrival.</p>
+          <p>Reception hours shown here are 7:00 AM–10:30 PM. Call or WhatsApp the hotel before arrival to share your ETA and confirm what arrival assistance can be arranged.</p>
         </article>
       </div>
     </div>
@@ -196,9 +196,9 @@ require __DIR__ . '/include/page-head.php';
   <section class="section arrival-contact">
     <div class="site-shell arrival-split">
       <div>
-        <p class="eyebrow">Check-in</p>
-        <h2>Reception is open <span>7:00 AM–10:30 PM.</span></h2>
-        <p><strong>Check-in is at 13:00.</strong> If you arrive earlier, you can use the rooftop terrace while the room is prepared. For arrivals between 10:30 PM and 6:30 AM, tell the hotel at least one day ahead so someone can meet you. If a late train is unexpected, call.</p>
+        <p class="eyebrow">Arrival arrangements</p>
+        <h2>Confirm your arrival plan.</h2>
+        <p>Reception hours shown here are 7:00 AM–10:30 PM. Please contact the hotel before travel to confirm check-in and check-out times, early-arrival access, luggage storage, and arrangements for arrivals outside reception hours. Share your expected arrival time so the team can advise what may be arranged for your date.</p>
         <div class="actions">
           <a class="button button-primary" href="contact.php?topic=arrival">Contact the hotel</a>
           <a class="button button-light" href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">WhatsApp</a>
@@ -237,15 +237,15 @@ require __DIR__ . '/include/page-head.php';
               ['question' => 'Can my car enter the fort?', 'answer' => 'No. Park at Fort Parking. The hotel is about a 4 minute walk from there.'],
               ['question' => 'Can you meet me at the parking area?', 'answer' => 'Yes. Meet-and-assist is available with prior notice, or when you call on arrival.'],
               ['question' => 'Are rickshaws allowed inside?', 'answer' => 'Not during busy hours, about 8:00 AM–8:00 PM. Outside those times, rickshaws often go inside the fort.'],
-              ['question' => 'Can I check in early if I arrive before 13:00?', 'answer' => 'Early arrivals are welcome. If the room is ready, you can check in then. If it is not, use the rooftop terrace or leave your luggage until the room is ready.'],
-              ['question' => 'What if I arrive very early in the morning?', 'answer' => 'Leave your bags and spend time in the fort. Tell the hotel ahead if you want an early check-in. The team will try to arrange it.'],
+              ['question' => 'Can I check in early or leave luggage before check-in?', 'answer' => 'Contact the hotel before travel to confirm check-in times, whether early check-in is available, and whether luggage storage can be arranged.'],
+              ['question' => 'What if I arrive outside reception hours?', 'answer' => 'Reception hours shown here are 7:00 AM–10:30 PM. If you expect to arrive outside those hours, call or WhatsApp the hotel before travel to confirm whether a meet-and-assist arrangement is possible.'],
               ['question' => 'Is there a restaurant on site?', 'answer' => [
-                  ['text' => 'The rooftop restaurant serves light meals, snacks, and drinks until 10:30 PM. Breakfast is available daily. See the '],
+                  ['text' => 'The rooftop restaurant is on site. Confirm current service times, breakfast availability, and menu options with the hotel before visiting. See the '],
                   ['link' => ['label' => 'rooftop dining page', 'href' => 'roof.php']],
                   ['text' => ' for the dining space.'],
               ]],
-              ['question' => 'I am arriving late at night by train. What should I do?', 'answer' => 'If you expect to arrive between 10:30 PM and 6:30 AM, tell the hotel 24 hours ahead so staff can meet you. For an unexpected late arrival, call.'],
-              ['question' => 'Do you help with luggage?', 'answer' => 'Yes. Luggage help is available to and from Fort Parking. Your driver can call a few minutes before you arrive.'],
+              ['question' => 'I am arriving late at night by train. What should I do?', 'answer' => 'Call or WhatsApp the hotel before travel with your expected arrival time. Confirm directly with the team whether any late-arrival assistance can be arranged.'],
+              ['question' => 'Can I get help with luggage at Fort Parking?', 'answer' => 'Call or WhatsApp before arrival to confirm what luggage assistance can be arranged at Fort Parking. Your driver can also call the hotel when you are close.'],
               ['question' => 'Can I get a ride from the station or airport?', 'answer' => 'A rickshaw from the railway station is listed at about ₹300. A private sedan from the airport to Fort Parking is listed at about ₹1100. Call or WhatsApp to arrange it.'],
           ],
           'list_class' => 'faq-list',
