@@ -61,7 +61,8 @@ test('Rooms, Rooftop Dining and Car & City preserve the booking/FAQ experience',
   await page.goto('/car-tours.php', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('main nav[aria-label="Breadcrumb"]')).toHaveCount(1);
   await expect(page.getByRole('heading', { level: 2, name: 'More ways to discover Jaisalmer.' })).toBeVisible();
-  await expect(page.locator('.tour-ideas-disclaimer')).toContainText('not confirmed Garh Jaisal packages');
+  await expect(page.locator('.tour-ideas')).toContainText('not confirmed Garh Jaisal packages');
+  await expect(page.locator('.tour-ideas-disclaimer')).toContainText('An enquiry link does not reserve a tour.');
 });
 
 test('Car & City tour card media stays at 16:10 and the page has no horizontal overflow', async ({ page }) => {
