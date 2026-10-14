@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-14 |
-| Current phase | Car & City Tours discovery and selected-page review; proposed routes remain enquiry-only until owner approval |
+| Current phase | Room booking journey clarity — preserve confirmed booking/enquiry paths while regression-testing per-room choices |
 | Base branch | `main` |
-| Baseline commit | `33516d42e7e06b055c782da714cc8836f528574e` (PR #58 merge commit) |
-| Last merged PR | [#58 — add pre-booking FAQs across Rooms, Dining and Tours](https://github.com/tchouhanjsm/garh-jaisal-website/pull/58) |
-| PR #58 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923692); [cPanel preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923724); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923694); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923706) |
-| Screenshot evidence | [PR #58 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923706/artifacts/11865921955); [PR #58 Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923706/artifacts/11865817124) |
+| Baseline commit | `978c541eeeae43ce8c7e37a4e277c0fd229d0366` (PR #59 merge commit) |
+| Last merged PR | [#59 — improve Car & City tour discovery](https://github.com/tchouhanjsm/garh-jaisal-website/pull/59) |
+| PR #59 exact-main checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38509126863); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38509127039); [Staging QA local dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38509126922); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38509126973) |
+| Screenshot evidence | [PR #59 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38509126973/artifacts/11869471171); [PR #59 Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38509126973/artifacts/11869541099) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None after PR #58 merge |
-| Next action | Fix Car & City card geometry, add researched enquiry-only itinerary ideas, and regression-test Rooms/Rooftop/Car & City at 390px and 1280px |
+| Open PRs at baseline verification | None after PR #59 merge |
+| Next action | Regression-test per-room availability and room-specific enquiry paths; do not change booking URLs or add unapproved facts |
 
 ## Phase roadmap
 
@@ -119,3 +119,12 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Add six researched sightseeing themes as enquiry-only ideas, not confirmed hotel packages; each opens a safe prefilled Contact enquiry. Access, route, transport, duration, fees and price remain unconfirmed until the owner approves.
 - Research references and operational questions are in `docs/JAISALMER-TOUR-RESEARCH.md` and `docs/OWNER-FACTS.md`.
 - No new public routes, prices, booking claims, image assets/mappings, analytics IDs, third-party libraries, deployment or release tag. Real staging and operator-specific tour details remain owner-gated.
+
+
+## Sprint 10 — room booking journey clarity (PR work)
+
+- Baseline verified from live GitHub on 2026-10-14: `main` at `978c541eeeae43ce8c7e37a4e277c0fd229d0366`; PR #59 merged and no competing open PR. Exact-main Site Checks, cPanel package preflight, Staging QA local dry run, and Browser E2E/page-sheet workflows all passed.
+- Product outcome: strengthen regression coverage for the two existing per-room actions: primary availability goes to the current booking provider; secondary enquiry opens Contact prefilled for the selected room.
+- Scope is deliberately behavior-preserving: no room facts, prices, URL/canonical, booking destination, image mapping, analytics ID, policy copy or dependencies change. The room directory and Contact prefill are covered at desktop and mobile.
+- Owner review first: Rooms at 390px and 1280px; Contact with a room prefilled. Real booking-provider checkout and external staging remain owner-gated.
+- Implementation: added `tests/e2e/room-booking-clarity.spec.js` to validate the configured booking target, room-specific enquiry link/context/message for every room, action order, keyboard focus and narrow-screen overflow. No production markup/config changed.
