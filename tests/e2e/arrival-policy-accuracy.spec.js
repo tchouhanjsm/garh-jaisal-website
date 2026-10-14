@@ -44,6 +44,46 @@ test('Directions avoids unconfirmed check-in, reception and arrival promises', a
   }
 });
 
+test('home and stay guides do not republish unconfirmed arrival promises', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Cross-page arrival copy is checked once on desktop-1280');
+
+  const pages = [
+    { path: '/', label: 'Home' },
+    { path: '/book-rooms-in-jaisalmer.php', label: 'Stay guide' },
+    { path: '/jaisalmer-fort-guide.php', label: 'Fort guide' },
+  ];
+  const forbiddenClaims = [
+    { pattern: /7:00\s*AM\s*(?:to|[–-])\s*10:30\s*PM/i, label: 'fixed reception hours' },
+    { pattern: /reception is open/i, label: 'an unconfirmed published reception schedule' },
+    { pattern: /our team can meet you near Fort Parking and assist with luggage/i, label: 'a guaranteed meet-and-assist or luggage service' },
+    { pattern: /guests are met near Fort Parking/i, label: 'a guaranteed meeting at Fort Parking' },
+    { pattern: /can arrange meet-and-assist and luggage help/i, label: 'a guaranteed meet-and-assist or luggage service' },
+    { pattern: /we can meet you and assist with your luggage/i, label: 'a guaranteed luggage service' },
+  ];
+
+  for (const entry of pages) {
+    const response = await page.goto(entry.path, { waitUntil: 'domcontentloaded' });
+    expect(response, entry.label + ' must return an HTTP response').not.toBeNull();
+    expect(response.status(), entry.label + ' must load successfully').toBeLessThan(400);
+
+    const main = page.locator('main#main-content');
+    const renderedCopy = await main.innerText();
+    for (const claim of forbiddenClaims) {
+      expect(renderedCopy, entry.label + ' should not publish ' + claim.label)
+        .not.toMatch(claim.pattern);
+    }
+
+    expect(
+      await main.locator('a[href="contact.php?topic=arrival"]').count(),
+      entry.label + ' offers a contextual arrival enquiry'
+    ).toBeGreaterThan(0);
+    expect(
+      await main.locator('a[href="direction.php"]').count(),
+      entry.label + ' retains a link to the full arrival guide'
+    ).toBeGreaterThan(0);
+  }
+});
+
 test('arrival guidance remains within the viewport at mobile and desktop widths', async ({ page }) => {
   for (const viewport of [
     { width: 390, height: 844 },

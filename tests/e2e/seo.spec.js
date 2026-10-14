@@ -146,8 +146,11 @@ test('home page surfaces fort arrival constraints and keeps key discovery sectio
   await expect(arrivalNote).toBeVisible();
   await expect(arrivalNote.getByRole('heading', { name: 'Arriving inside the fort' })).toBeVisible();
   await expect(arrivalNote).toContainText('Vehicles cannot enter Jaisalmer Fort');
-  await expect(arrivalNote).toContainText('7:00 AM–10:30 PM');
+  await expect(arrivalNote).toContainText('confirm current reception hours');
+  await expect(arrivalNote).not.toContainText('7:00 AM–10:30 PM');
   await expect(arrivalNote.getByRole('link', { name: 'Read the arrival guide' })).toHaveAttribute('href', 'direction.php');
+  await expect(arrivalNote.getByRole('link', { name: 'send an arrival enquiry' }))
+    .toHaveAttribute('href', 'contact.php?topic=arrival');
 
   for (const [id, heading] of [
     ['rooms-preview', 'Rooms shaped by Jaisalmer.'],

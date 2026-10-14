@@ -21,8 +21,10 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 10 | Room booking journey clarity | ✓ merged in PR #60; exact-head Site Checks, package preflight, Staging QA and Browser E2E/screenshot sheet passed |
 | 11 | Arrival policy accuracy | ✓ merged in PR #61; unconfirmed arrival policy promises removed |
 | 12 | Arrival enquiry completion | ✓ folded into PR #61; arrival-to-Contact handoff covered by Browser E2E |
-| 13 | Dining availability accuracy | ◐ folded into PR #62; remove unconfirmed meal hours and unsupported time constraints |
-| 14 | Dining enquiry completion | ◐ folded into PR #62; unify restaurant/rooftop Contact and WhatsApp handoffs |
+| 13 | Dining availability accuracy | ✓ merged in PR #62; unconfirmed meal hours and time constraints removed |
+| 14 | Dining enquiry completion | ✓ merged in PR #62; restaurant/rooftop handoffs covered by Browser E2E |
+| 15 | Site-wide arrival claim accuracy | ◐ folded into PR #63; remove stale reception/assistance claims from Home and two guides |
+| 16 | Contextual arrival enquiry consistency | ◐ folded into PR #63; keep Directions and Contact arrival routes across all three pages |
 
 ---
 
@@ -273,3 +275,24 @@ Stop there: the owner merges.
 - Add a direct dining enquiry action to the existing unavailable-online-request fallback; keep Call and WhatsApp available.
 - Add Browser E2E for rooftop and restaurant entry points, the prefilled journey, no real submission, no unconfirmed meal times, viewport overflow and accessible tap targets.
 - Online mail delivery, live staging, owner-approved service hours and dining operations remain owner-gated; no analytics events or new dependencies are added.
+
+
+## Sprint 15 — site-wide arrival claim accuracy (folded into PR #63)
+
+**Outcome:** ensure Home and planning guides do not republish reception or assistance promises withdrawn until the owner confirms them.
+
+- Replace the previous fixed reception schedule with guidance to confirm current hours and any late-arrival arrangements directly with the hotel.
+- Replace unconditional meet-and-assist/luggage guarantees with clear wording to ask whether help can be arranged and wait for confirmation.
+- Preserve verified route facts: vehicles cannot enter fort lanes; guests continue on foot after Fort Parking. Public URLs and canonicals remain unchanged.
+- Refresh article `dateModified` and sitemap `lastmod` for changed public routes.
+- Acceptance: exact-head PHP 7.4/8.2 Site Checks, sitemap/publication guards, package preflight, Staging QA, full Browser E2E and screenshot sheet pass.
+
+## Sprint 16 — contextual arrival enquiry consistency (folded into PR #63)
+
+**Outcome:** give guests a consistent way to ask about arrival without implying assistance is booked.
+
+- Retain each page's link to `direction.php` and include `contact.php?topic=arrival` from Home, the Stay Guide and the Fort Guide.
+- Add rendered Browser E2E to assert these pages do not show withdrawn fixed hours or unconditional luggage/meet-and-assist claims.
+- Keep check-in/out times, reception hours, storage and late-arrival availability as owner-input items; do not restore any unconfirmed values or policies.
+- No new dependencies, routes, analytics events, booking destination changes, mail configuration or production changes.
+- Manual visual review at 390px/1280px and live staging/form-delivery checks remain owner-gated.

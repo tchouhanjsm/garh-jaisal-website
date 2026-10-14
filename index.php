@@ -96,7 +96,7 @@ require __DIR__ . '/include/page-head.php';
     <div class="home-arrival-note-copy">
       <p class="eyebrow">Before you arrive</p>
       <h2 id="home-arrival-title">Arriving inside the fort</h2>
-      <p><strong>Vehicles cannot enter Jaisalmer Fort.</strong> The final stretch to Garh Jaisal Haveli is on foot through the fort lanes. Reception is open 7:00 AM–10:30 PM; please contact us in advance for late arrivals.</p>
+      <p><strong>Vehicles cannot enter Jaisalmer Fort.</strong> The final stretch to Garh Jaisal Haveli is on foot through the fort lanes. Contact the hotel before travelling to confirm current reception hours and any late-arrival arrangements, or <a href="contact.php?topic=arrival">send an arrival enquiry</a>.</p>
     </div>
     <a class="button button-primary" href="direction.php">Read the arrival guide</a>
   </div>
@@ -145,7 +145,7 @@ require __DIR__ . '/include/page-head.php';
           <div>
             <h3>Help with arrival</h3>
             <p>
-              Our team can meet you near Fort Parking and assist with luggage.
+              Contact the hotel before arrival to ask whether meet-and-assist or luggage help can be arranged; wait for confirmation before relying on any arrangement.
             </p>
           </div>
         </article>
@@ -358,8 +358,8 @@ require __DIR__ . '/include/page-head.php';
 
       <div class="step">
         <span>03</span>
-        <strong>Meet our team</strong>
-        <span>We can meet you and assist with your luggage.</span>
+        <strong>Ask about arrival assistance</strong>
+        <span>Contact the hotel before travelling to ask whether help can be arranged; wait for confirmation before relying on it.</span>
       </div>
 
       <div class="step">
@@ -372,8 +372,7 @@ require __DIR__ . '/include/page-head.php';
 
     <div class="callout">
       <p>
-        <strong>Reception:</strong> 7:00 AM – 10:30 PM.
-        Please contact us in advance for late arrivals.
+        <strong>Before travelling:</strong> Confirm current reception hours and ask whether late-arrival arrangements can be made, or <a href="contact.php?topic=arrival">send an arrival enquiry</a>.
       </p>
 
       <a class="button" href="direction.php">
