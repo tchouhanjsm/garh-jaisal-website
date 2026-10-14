@@ -1,7 +1,12 @@
 <?php
 $activePage = 'packages';
 $siteConfig = require __DIR__ . '/include/site-config.php';
-$bookingUrl = $siteConfig['booking_url'];
+$whatsappUrl = rtrim($siteConfig['whatsapp_url'], '/');
+$walkWhatsAppUrl = $whatsappUrl . '?text=' . rawurlencode(
+    'Hello, I would like to enquire about the guided walk inside Jaisalmer Fort, including the Jain temples, Palace Museum and heritage street walk. '
+    . 'Preferred date: [add date]. Preferred guide language: [add language]. '
+    . 'Please confirm the current price, guide availability, route, opening/access rules and any entry fees.'
+);
 ?>
 <!doctype html>
 <html lang="en">
@@ -10,27 +15,28 @@ $siteUrl = rtrim($siteConfig['site_url'], '/');
 $canonical = $siteUrl . '/city-tour.php';
 require_once __DIR__ . '/include/schema.php';
 $faqItems = [
-    ['question' => "What is the Fort walk?", 'answer' => "It is a walk from Garh Jaisal Haveli through the lanes inside Jaisalmer Fort."],
-    ['question' => "Can I compare it with a longer guided tour?", 'answer' => "Yes. The Guided Jaisalmer Tours page links to half-day and full-day options; contact the hotel to discuss what suits your available time."],
-    ['question' => "How do I confirm the current price?", 'answer' => "Contact the hotel for the current price and details before booking."],
+    ['question' => "Which places are part of the Fort walk?", 'answer' => "The planned walk focuses on the Jain temples inside Jaisalmer Fort, the Palace Museum and a heritage street walk. The final order and access depend on opening hours and current visitor rules."],
+    ['question' => "Which guide languages can I request?", 'answer' => "Ask about a guide in English, Hindi, Bengali, Italian, French, Spanish or German. Availability must be confirmed for your date."],
+    ['question' => "How do I get the current price?", 'answer' => "Prices are shared on enquiry. Message the hotel on WhatsApp with your preferred date and guide language to confirm the current price and any applicable entry fees."],
+    ['question' => "Can I compare it with a longer guided tour?", 'answer' => "Yes. The Guided Jaisalmer Tours page links to half-day and full-day options, which can be discussed separately."],
 ];
 $page = [
-    'title' => 'A Walk through Jaisalmer Fort | Garh Jaisal Haveli',
-    'description' => 'A walk inside Jaisalmer Fort starts from Garh Jaisal Haveli and continues through the lanes of the fort. Ask the hotel for the current price.',
+    'title' => 'Jaisalmer Fort Walk | Jain Temples, Palace Museum & Heritage Lanes | Garh Jaisal Haveli',
+    'description' => 'Ask about a guided walk inside Jaisalmer Fort focused on the Jain temples, Palace Museum and heritage streets. Current prices and guide-language availability are shared on WhatsApp.',
     'path' => '/city-tour.php',
-    'og_title' => 'A Walk through Jaisalmer Fort | Garh Jaisal Haveli',
-    'og_description' => 'A walk inside Jaisalmer Fort starts from Garh Jaisal Haveli and continues through the lanes of the fort. Ask the hotel for the current price.',
-    'og_image' => '/img/1.webp',
-    'twitter_title' => 'A Walk through Jaisalmer Fort | Garh Jaisal Haveli',
-    'twitter_description' => 'A walk inside Jaisalmer Fort starts from Garh Jaisal Haveli and continues through the lanes of the fort. Ask the hotel for the current price.',
-    'twitter_image' => '/img/1.webp',
+    'og_title' => 'Jaisalmer Fort Walk | Jain Temples, Palace Museum & Heritage Lanes | Garh Jaisal Haveli',
+    'og_description' => 'Ask about a guided walk inside Jaisalmer Fort focused on the Jain temples, Palace Museum and heritage streets. Current prices and guide-language availability are shared on WhatsApp.',
+    'og_image' => '/img/v2/facade.jpg',
+    'twitter_title' => 'Jaisalmer Fort Walk | Jain Temples, Palace Museum & Heritage Lanes | Garh Jaisal Haveli',
+    'twitter_description' => 'Ask about a guided walk inside Jaisalmer Fort focused on the Jain temples, Palace Museum and heritage streets. Current prices and guide-language availability are shared on WhatsApp.',
+    'twitter_image' => '/img/v2/facade.jpg',
     'css' => ['css/packages.css', 'css/tour.css'],
     'schema' => [
         [
             '@type' => 'WebPage',
             '@id' => $canonical . '#webpage',
             'url' => $canonical,
-            'name' => 'A Walk through Jaisalmer Fort | Garh Jaisal Haveli',
+            'name' => 'Jaisalmer Fort Walk | Jain Temples, Palace Museum & Heritage Lanes | Garh Jaisal Haveli',
             'isPartOf' => ['@id' => $siteUrl . '/#website'],
             'about' => ['@id' => $siteUrl . '/#hotel'],
             'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
@@ -54,22 +60,65 @@ require __DIR__ . '/include/page-head.php';
 
 <main id="main-content" tabindex="-1">
   <nav class="section" aria-label="Breadcrumb"><div class="site-shell"><a href="car-tours.php">← Car &amp; City Tours</a></div></nav>
-  <section class="page-hero">
+  <section class="page-hero tour-detail-hero">
     <div class="site-shell page-hero-inner">
-      <h1>A walk inside Jaisalmer Fort</h1>
-      <p>
-        Take a walk inside Jaisalmer Fort from the haveli, and continue
-        through the fort lanes.
-      </p>
+      <p class="eyebrow">Guided Fort walk</p>
+      <h1>A walk through Jaisalmer Fort</h1>
+      <p>Explore the living fort on foot with a planned route focused on its Jain temples, Palace Museum and historic heritage streets. Ask about guide-language availability and the current price before you set out.</p>
+      <div class="actions">
+        <a class="button button-primary" href="<?= htmlspecialchars($walkWhatsAppUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Ask about the walk on WhatsApp</a>
+        <a class="button button-outline" href="guided-jaisalmer-tour.php">Compare half-day and full-day tours</a>
+      </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section tour-service-section" aria-labelledby="fort-walk-stops-title">
     <div class="site-shell">
-      <p><a class="button button-primary" href="contact.php">Contact the hotel</a></p>
-      <p><a class="button button-outline" href="direction.php">Plan your arrival</a></p>
-      <div class="package-note">
-        <p>Ask the hotel for the <a href="contact.php">current price</a>.</p>
+      <div class="section-head">
+        <div><p class="eyebrow">The planned route</p><h2 id="fort-walk-stops-title">Three ways to experience the Fort.</h2></div>
+        <p>The order, entry access and any admission charges should be confirmed against opening hours and visitor rules for your date.</p>
+      </div>
+      <div class="tour-service-grid">
+        <article class="tour-service-card">
+          <span class="tour-service-index" aria-hidden="true">01</span>
+          <h3>Jain temples inside Jaisalmer Fort</h3>
+          <p>Explore the Fort's Jain temple heritage and architectural detail, subject to current visitor access and temple rules.</p>
+        </article>
+        <article class="tour-service-card">
+          <span class="tour-service-index" aria-hidden="true">02</span>
+          <h3>Palace Museum</h3>
+          <p>Include the Palace Museum in the planned heritage walk; confirm opening hours, access and any admission fee before the visit.</p>
+        </article>
+        <article class="tour-service-card">
+          <span class="tour-service-index" aria-hidden="true">03</span>
+          <h3>Heritage street walk</h3>
+          <p>Continue through the Fort's lanes and streets to take in the living-fort setting, sandstone architecture and local life.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section tour-language-section" aria-labelledby="fort-walk-language-title">
+    <div class="site-shell tour-language-layout">
+      <div>
+        <p class="eyebrow">Guide languages</p>
+        <h2 id="fort-walk-language-title">Choose the language that works for you.</h2>
+        <p>Ask about guide availability in your preferred language for the date of your visit.</p>
+      </div>
+      <ul class="tour-language-list" aria-label="Guide languages to enquire about">
+        <li>English</li><li>Hindi</li><li>Bengali</li><li>Italian</li><li>French</li><li>Spanish</li><li>German</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section tour-enquiry-panel">
+    <div class="site-shell tour-enquiry-panel-inner">
+      <p class="eyebrow">Confirm before you go</p>
+      <h2>Get the route and current price on WhatsApp.</h2>
+      <p>Tell us your date and preferred guide language. We'll confirm current availability, access, route details and any applicable entry fees before you make plans.</p>
+      <div class="actions">
+        <a class="button button-primary" href="<?= htmlspecialchars($walkWhatsAppUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Enquire on WhatsApp</a>
+        <a class="button button-secondary" href="direction.php">Plan your arrival</a>
       </div>
     </div>
   </section>

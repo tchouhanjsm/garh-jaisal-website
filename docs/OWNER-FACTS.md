@@ -14,6 +14,7 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | Instagram profile | `https://www.instagram.com/garhjaisal/` | 2026-10-14 |
 | Garh Jaisal's Kitchen Maps destination | `https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8`; use this destination for the restaurant directions QR. Owner also supplied the Google Maps embed URL. | 2026-10-14 |
 | Desert Camp imagery | Owner-provided image assets are in `img/Desert_Camp/`; visually review subject/caption mapping before release. Do not restore removed or unlicensed images. | 2026-10-14 |
+| Jaisalmer Fort walk | Planned walk focuses on Jain temples inside Jaisalmer Fort, the Palace Museum and a heritage street walk. Current price and guide-language availability are confirmed on WhatsApp for the requested date. | 2026-10-14 |
 
 ## Needed to unblock pages
 | # | Question | Answer | Unblocks |

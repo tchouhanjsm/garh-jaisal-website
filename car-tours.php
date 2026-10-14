@@ -63,7 +63,7 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell package-hero-content">
       <p class="eyebrow">Car &amp; City Tours</p>
       <h1>Explore Jaisalmer and plan your route.</h1>
-      <p>Choose an existing guided city tour, or ask whether a themed sightseeing route can be arranged. New route ideas are not confirmed packages; access, transport, timings, inclusions and price must be confirmed before booking.</p>
+      <p>Choose a guided walk inside Jaisalmer Fort, compare the half-day and full-day city tours, or enquire separately about SUV/sedan pickup, drop-off and intercity journeys across Rajasthan and Delhi. New themed routes remain ideas until the hotel confirms feasibility, access, transport, timings, inclusions and price.</p>
       <div class="actions">
         <a class="button button-primary" href="contact.php">Ask about arrangements</a>
         <a class="button button-light" href="guided-jaisalmer-tour.php">View guided city tours</a>
@@ -78,8 +78,8 @@ require __DIR__ . '/include/page-head.php';
       </div>
       <div class="experience-card-grid">
         <article class="experience-card"><a href="guided-jaisalmer-tour.php"><div class="experience-card-media"><img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Historic facade inside Jaisalmer Fort" loading="lazy"></div><div class="experience-card-copy"><p class="experience-card-kicker">Guided city tours</p><h2>Guided Jaisalmer Tours</h2><p>Compare the existing half-day and full-day guided tour options.</p><span>View guided tours →</span></div></a></article>
-        <article class="experience-card"><a href="city-tour.php"><div class="experience-card-media"><img src="img/1.webp" alt="Historic lanes and architecture inside Jaisalmer Fort" width="1200" height="800" loading="lazy"></div><div class="experience-card-copy"><p class="experience-card-kicker">Fort walk</p><h2>A Walk inside Jaisalmer Fort</h2><p>Read about the existing fort walk and ask the hotel to confirm the current arrangements.</p><span>Explore the Fort walk →</span></div></a></article>
-        <article class="experience-card"><a href="car-rental.php"><div class="experience-card-media"><img src="img/desert10.jpg" alt="Desert landscape near Jaisalmer" width="1366" height="768" loading="lazy"></div><div class="experience-card-copy"><p class="experience-card-kicker">Car arrangements</p><h2>Car for Arrival or a Desert Day</h2><p>Contact the hotel to confirm vehicle arrangements, route, availability and current price.</p><span>Ask about car arrangements →</span></div></a></article>
+        <article class="experience-card"><a href="city-tour.php"><div class="experience-card-media"><img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Historic sandstone architecture inside Jaisalmer Fort" loading="lazy"></div><div class="experience-card-copy"><p class="experience-card-kicker">Fort walk</p><h2>A Walk inside Jaisalmer Fort</h2><p>Read about the existing fort walk and ask the hotel to confirm the current arrangements.</p><span>Explore the Fort walk →</span></div></a></article>
+        <article class="experience-card"><a href="car-rental.php"><div class="experience-card-media"><img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Historic architecture in Jaisalmer, the starting point for car arrangements" loading="lazy"></div><div class="experience-card-copy"><p class="experience-card-kicker">Car arrangements</p><h2>Car for Arrival or a Desert Day</h2><p>Contact the hotel to confirm vehicle arrangements, route, availability and current price.</p><span>Ask about car arrangements →</span></div></a></article>
       </div>
     </div>
   </section>

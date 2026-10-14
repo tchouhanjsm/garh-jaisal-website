@@ -24,3 +24,40 @@
     grid-template-columns:1fr;
   }
 }
+
+
+/* Batch 3 — Fort walk and car-arrangement service layouts. */
+.tour-detail-hero .page-hero-inner { max-width: 940px; }
+.tour-detail-hero h1 { max-width: 19ch; text-wrap: balance; }
+.tour-detail-hero .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
+.tour-service-section { background: var(--cream); }
+.tour-service-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; margin-top:28px; }
+.tour-service-card { min-width:0; padding:clamp(20px,3vw,30px); border:1px solid var(--line); background:#fffdf9; }
+.tour-service-index { display:inline-grid; place-items:center; width:38px; height:38px; margin-bottom:22px; border-radius:50%; background:var(--sand-light); color:var(--brown); font-weight:700; }
+.tour-service-card h3 { margin:0 0 12px; font-size:clamp(1.2rem,2vw,1.55rem); line-height:1.18; }
+.tour-service-card p { margin:0; color:var(--muted); line-height:1.65; }
+.tour-language-section { background:var(--sand-light); }
+.tour-language-layout { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); align-items:center; gap:clamp(24px,5vw,64px); }
+.tour-language-layout h2 { margin:0 0 12px; font-size:clamp(1.8rem,3vw,2.8rem); }
+.tour-language-layout p { color:var(--muted); line-height:1.65; }
+.tour-language-list { display:flex; flex-wrap:wrap; gap:10px; margin:0; padding:0; list-style:none; }
+.tour-language-list li { padding:10px 14px; border:1px solid var(--line); border-radius:999px; background:#fffdf9; color:var(--ink); font-size:.92rem; }
+.tour-enquiry-panel { background:var(--dark); color:#f7eee6; }
+.tour-enquiry-panel-inner { padding:clamp(26px,5vw,56px); border:1px solid rgba(255,255,255,.16); }
+.tour-enquiry-panel h2 { max-width:22ch; color:#f4d19a; font-size:clamp(1.8rem,3vw,3rem); }
+.tour-enquiry-panel p:not(.eyebrow) { max-width:68ch; color:#eadfd4; line-height:1.65; }
+.tour-service-note { margin-top:22px; padding:clamp(18px,3vw,28px); border-left:3px solid var(--sand); background:var(--sand-light); }
+.tour-service-note h3 { margin:0 0 8px; font-size:1.3rem; }
+.tour-service-note p { margin:0 0 12px; color:var(--muted); line-height:1.6; }
+.tour-service-note .text-link { min-height:44px; display:inline-flex; align-items:center; font-weight:600; }
+@media (max-width:900px) {
+  .tour-service-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .tour-language-layout { grid-template-columns:minmax(0,1fr); }
+}
+@media (max-width:600px) {
+  .tour-service-grid { grid-template-columns:minmax(0,1fr); }
+  .tour-detail-hero .actions { flex-direction:column; align-items:stretch; }
+  .tour-detail-hero .actions .button { width:100%; justify-content:center; }
+  .tour-enquiry-panel .actions { flex-direction:column; align-items:stretch; }
+  .tour-enquiry-panel .actions .button { width:100%; justify-content:center; }
+}
