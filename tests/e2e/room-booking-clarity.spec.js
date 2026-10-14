@@ -51,7 +51,7 @@ test('every room card keeps booking primary and selected-room enquiry secondary'
     expect(enquiryResponse, room.name + ': Contact should return an HTTP response').not.toBeNull();
     expect(enquiryResponse.status(), room.name + ': Contact should load successfully').toBeLessThan(400);
     await expect(page.locator('.contact-topic-context strong'), room.name + ': enquiry context').toHaveText(room.name);
-    await expect(page.locator('#message'), room.name + ': prefilled enquiry').toHaveValue(new RegExp(room.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    await expect(page.locator('#message'), room.name + ': prefilled enquiry').toHaveValue(new RegExp(room.name));
     await expect(page.locator('form.contact-form button[type="submit"]')).toHaveText('Send message');
   }
 });
