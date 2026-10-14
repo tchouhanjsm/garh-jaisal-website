@@ -17,7 +17,8 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 6 | Direct-stay guide discoverability | ✓ merged in PR #56; guide linked from Home and Rooms with exact-head Browser E2E and screenshot evidence |
 | 7 | Experience publication boundaries | ✓ merged in PR #57; hidden/draft sitemap and navigation gates plus sitemap-wide browser regression passed on exact PR head |
 | 8 | Pre-booking FAQ coverage | ✓ merged in PR #58; FAQPage schema matches visible FAQs and exact-head Browser E2E passed |
-| 9 | Car & City tour discovery and selected-page QA | ◐ remove duplicate breadcrumb, standardize image tile geometry, add researched enquiry-only itinerary ideas, and test Rooms/Rooftop/Car & City at 390px and 1280px |
+| 9 | Car & City tour discovery and selected-page QA | ✓ merged in PR #59; exact-main Site Checks, package preflight, Staging QA and Browser E2E/screenshot sheet passed |
+| 10 | Room booking journey clarity | ◐ regression-test per-room booking and enquiry actions at mobile/desktop; preserve all owner-approved destinations and room facts |
 
 ---
 
@@ -214,3 +215,15 @@ Stop there: the owner merges.
 - Add Browser E2E for media ratio, one breadcrumb landmark, responsive overflow, all six contact-prefill topics, and Rooms/Rooftop Dining FAQ/CTA paths.
 - Update research/owner-fact docs, layout findings, project log and sitemap lastmod for changed PHP routes.
 - Done when PHP 7.4/8.2 Site Checks, cPanel preflight, Staging QA dry run, full Browser E2E and the 390px/1280px screenshot sheet pass on one exact head SHA.
+
+
+## Sprint 10 — room booking journey clarity
+
+**Branch:** `feature/sprint-10-room-booking-clarity`  
+**Outcome:** protect the two existing choices on each room card without changing how guests book or enquire.
+
+- Keep the current external booking URL, all room names/descriptions/features, every image mapping, existing Contact room-prefill format, all public URLs/canonicals and both GA4 IDs unchanged.
+- Add a focused Browser E2E suite that reads the room registry, visits all seven current room cards, verifies each primary availability link and secondary room-specific enquiry link, and checks rendered Contact copy matches the selected room.
+- Check primary-before-secondary action order, keyboard reachability, mobile and desktop overflow; retain the existing FAQ/schema suite and all other Browser E2E coverage.
+- Run the standard CI matrix: PHP lint and strict source checks on PHP 7.4/8.2, sitemap/publication checks, package preflight, staging dry run, full Browser E2E and full page screenshot sheet.
+- Do not add room rates, policy promises, a new form, new dependency, analytics behavior or production changes. External booking provider and real staging behavior remain unverified by CI.
