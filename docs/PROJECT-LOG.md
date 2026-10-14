@@ -130,7 +130,7 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 ## Sprint 11 — arrival policy accuracy + enquiry completion (PR #61 in review)
 
 - Baseline `main`: `2c587f98d3f926367c5cfaee2f81ef240dd59296`; PR #61 adds the next arrival-to-contact slice in the same vertical batch.
-- Removed remaining unconfirmed meet-and-assist and luggage guarantees across Directions and updated page metadata to avoid claiming published reception hours.
+- Removed remaining unconfirmed meet-and-assist and luggage guarantees across Directions; updated metadata and only the approved Directions entries in the frozen head snapshot fixture.
 - Fixed Browser E2E strict-mode failure by targeting the named Call/WhatsApp links; added end-to-end coverage for Directions → prefilled Contact arrival enquiry and 390px/1280px overflow.
 - Contact arrival prefill now asks for check-in date, ETA and confirmation of available arrangements; tests never submit the real form.
 - Exact-head PHP/site checks, package preflight, Staging QA, Browser E2E and screenshot sheet must pass after this commit; owner visual review and live form-delivery/staging checks remain pending.
