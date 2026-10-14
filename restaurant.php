@@ -12,6 +12,9 @@ $restaurant = [
     'tagline' => 'Rajasthani food on the rooftop.',
     'address' => 'Fort Kotari Para, Inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001',
 ];
+$googleMapsUrl = 'https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8';
+$googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.6918725708306!2d70.9117074793457!3d26.913272400000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3947bd9e89a679cf%3A0xd196c3f044898c10!2sGarh%20Jaisal's%20Kitchen!5e0!3m2!1sen!2sin!4v1791990366078!5m2!1sen!2sin";
+$instagramUrl = 'https://www.instagram.com/garhjaisal/';
 
 /* Menu/prices are from the supplied restaurant design. Verify the live menu before staging. */
 $menu = [
@@ -37,6 +40,7 @@ $menu = [
         ['n' => 'Kesar Kulfi', 'd' => 'Slow-reduced milk, saffron and pistachio.', 'p' => 200, 'veg' => true, 'sig' => false],
     ],
 ];
+$menuCategories = array_keys($menu);
 
 function e($value): string {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
@@ -303,10 +307,21 @@ require __DIR__ . '/include/page-head.php';
       <p>Try dishes such as Laal Maas, Ker Sangri, Gatte ki Sabzi and Dal Baati Churma, alongside breads and desserts.</p>
     </div>
 
-    <div class="site-shell restaurant-gallery" aria-label="Restaurant and rooftop views">
-      <figure><img src="img/rest3.jpg" alt="Rooftop view from Garh Jaisal's Kitchen" loading="lazy" width="1200" height="800"></figure>
-      <figure><img src="img/rest4.jpg" alt="Evening rooftop setting at Garh Jaisal's Kitchen" loading="lazy" width="1200" height="800"></figure>
-      <figure><img src="img/rest5.jpg" alt="Rooftop table at Garh Jaisal's Kitchen" loading="lazy" width="1200" height="800"></figure>
+    <div class="site-shell restaurant-gallery-social">
+      <div class="restaurant-gallery" aria-label="Restaurant and rooftop photo gallery">
+        <figure><img src="img/res1.jpg" alt="Dining at Garh Jaisal's Kitchen" loading="lazy" width="1200" height="800"></figure>
+        <figure><img src="img/rest3.jpg" alt="View from the rooftop restaurant at Garh Jaisal's Kitchen" loading="lazy" width="1200" height="800"></figure>
+        <figure><img src="img/rest4.jpg" alt="Evening setting at Garh Jaisal's Kitchen" loading="lazy" width="1200" height="800"></figure>
+        <figure><img src="img/rest5.jpg" alt="Rooftop table at Garh Jaisal's Kitchen" loading="lazy" width="1200" height="800"></figure>
+      </div>
+      <aside class="restaurant-instagram-panel" aria-labelledby="restaurant-instagram-title">
+        <p class="eyebrow">Follow along</p>
+        <p class="restaurant-instagram-wordmark" aria-hidden="true">Instagram</p>
+        <h2 id="restaurant-instagram-title">More moments from the rooftop.</h2>
+        <p>See new restaurant photos and reels on the Garh Jaisal Haveli Instagram profile.</p>
+        <a class="button button-primary" href="<?= e($instagramUrl) ?>" target="_blank" rel="noopener">Follow @garhjaisal <span aria-hidden="true">↗</span></a>
+        <p class="restaurant-instagram-note">A lightweight profile link keeps this page quick to load. Individual posts and reels can be featured when their direct URLs are approved.</p>
+      </aside>
     </div>
   </section>
 
@@ -345,31 +360,42 @@ require __DIR__ . '/include/page-head.php';
         <button class="restaurant-vegtoggle" type="button" aria-pressed="false">Vegetarian only</button>
       </div>
 
-      <nav class="restaurant-tabs" aria-label="Menu sections">
-        <?php foreach (array_keys($menu) as $category): ?>
-          <a href="#<?= e(slugify($category)) ?>"><?= e($category) ?></a>
-        <?php endforeach; ?>
-      </nav>
+      <div class="restaurant-menu-booklet" data-menu-booklet>
+        <nav class="restaurant-tabs" aria-label="Menu sections">
+          <?php foreach ($menuCategories as $menuIndex => $category): ?>
+            <a href="#<?= e(slugify($category)) ?>" data-menu-tab aria-controls="<?= e(slugify($category)) ?>" <?= $menuIndex === 0 ? 'aria-current="location"' : '' ?>><?= e($category) ?></a>
+          <?php endforeach; ?>
+        </nav>
 
-      <?php foreach ($menu as $category => $dishes): ?>
-        <section class="restaurant-category" id="<?= e(slugify($category)) ?>">
-          <h3><?= e($category) ?></h3>
-          <ul>
-            <?php foreach ($dishes as $dish): ?>
-              <li class="restaurant-dish" data-veg="<?= $dish['veg'] ? '1' : '0' ?>">
-                <span class="restaurant-mark <?= $dish['veg'] ? 'is-veg' : 'is-nonveg' ?>" aria-hidden="true"></span>
-                <div>
-                  <h4><?= e($dish['n']) ?></h4>
-                  <p><?= e($dish['d']) ?></p>
-                </div>
-                <span class="restaurant-price">₹<?= number_format($dish['p']) ?></span>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-        </section>
-      <?php endforeach; ?>
+        <div class="restaurant-booklet-controls" aria-label="Menu booklet controls">
+          <button type="button" data-menu-previous disabled>← Previous</button>
+          <p data-menu-page-status aria-live="polite" role="status">Page 1 of <?= count($menuCategories) ?>: <?= e($menuCategories[0]) ?></p>
+          <button type="button" data-menu-next>Next →</button>
+          <button type="button" data-menu-print>Print menu</button>
+        </div>
 
-      <p class="restaurant-note">Menu items and listed prices may change. Please confirm the current menu and prices with the hotel.</p>
+        <div class="restaurant-menu-pages">
+          <?php foreach ($menu as $category => $dishes): ?>
+            <section class="restaurant-category" id="<?= e(slugify($category)) ?>" data-menu-page data-menu-page-label="<?= e($category) ?>" aria-labelledby="restaurant-menu-heading-<?= e(slugify($category)) ?>">
+              <h3 id="restaurant-menu-heading-<?= e(slugify($category)) ?>"><?= e($category) ?></h3>
+              <ul>
+                <?php foreach ($dishes as $dish): ?>
+                  <li class="restaurant-dish" data-veg="<?= $dish['veg'] ? '1' : '0' ?>">
+                    <span class="restaurant-mark <?= $dish['veg'] ? 'is-veg' : 'is-nonveg' ?>" aria-hidden="true"></span>
+                    <div>
+                      <h4><?= e($dish['n']) ?></h4>
+                      <p><?= e($dish['d']) ?></p>
+                    </div>
+                    <span class="restaurant-price">₹<?= number_format($dish['p']) ?></span>
+                  </li>
+                <?php endforeach; ?>
+              </ul>
+            </section>
+          <?php endforeach; ?>
+        </div>
+
+        <p class="restaurant-note">Menu items and listed prices may change. Please confirm the current menu and prices with the hotel.</p>
+      </div>
     </div>
   </section>
 
@@ -384,6 +410,45 @@ require __DIR__ . '/include/page-head.php';
         <article><h3>Dietary requests</h3><p>Ask the hotel about current vegetarian, vegan, Jain and allergy options.</p></article>
         <article><h3>Walk-ins</h3><p>Availability can vary. Contact the hotel ahead of time, especially for larger groups.</p></article>
         <p class="restaurant-contact-help">Questions about current menu options or dietary requests? <a class="text-link" href="contact.php?topic=dining">Send a dining enquiry →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section restaurant-find-us" aria-labelledby="restaurant-find-us-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Find us</p>
+          <h2 id="restaurant-find-us-title">Find Garh Jaisal's Kitchen.</h2>
+        </div>
+        <p>Open the verified Google Maps destination or scan the QR code to get directions to the restaurant.</p>
+      </div>
+      <div class="restaurant-find-grid">
+        <div class="restaurant-map-frame">
+          <iframe
+            src="<?= e($googleMapsEmbedUrl) ?>"
+            title="Google Maps location of Garh Jaisal's Kitchen"
+            width="600"
+            height="450"
+            style="border:0;"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+          ></iframe>
+        </div>
+        <aside class="restaurant-map-qr-card">
+          <img
+            src="img/restaurant-maps-qr.svg"
+            alt="QR code to open Google Maps directions to Garh Jaisal's Kitchen"
+            width="370"
+            height="370"
+            loading="lazy"
+            decoding="async"
+          >
+          <h3>Scan for directions</h3>
+          <p>Use your phone camera to open the restaurant's Google Maps destination.</p>
+          <a class="text-link" href="<?= e($googleMapsUrl) ?>" target="_blank" rel="noopener">Open directions in Google Maps ↗</a>
+        </aside>
       </div>
     </div>
   </section>

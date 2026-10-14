@@ -26,7 +26,8 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 15 | Site-wide arrival claim accuracy | ✓ merged in PR #63; stale reception/assistance claims removed from Home and two guides |
 | 16 | Contextual arrival enquiry consistency | ✓ merged in PR #63; Directions and Contact arrival routes retained across all three pages |
 | 17 | Booking and enquiry intent measurement | ✓ PR #64 merged; intent events routed to both approved GA4 IDs; live-property validation still owner-side |
-| 18 | Licensed Desert Gallery and Swiss Tent Safari conversion | ◐ PR #66 in review; owner-provided camp gallery, confirmed facilities and clearer package inclusions/exclusions; no deployment authorized |
+| 18 | Licensed Desert Gallery and Swiss Tent Safari conversion | ✓ PR #66 merged; post-merge checks passed; visual photo/caption review remains owner-side |
+| 19 | Restaurant conversion: menu booklet, maps QR and social follow | ◐ PR #67 in review; existing menu data retained, owner-confirmed directions QR added; no deployment authorized |
 
 ---
 
@@ -329,3 +330,14 @@ Stop there: the owner merges.
 - Use “High tea with snacks” in package inclusions; explicitly exclude alcoholic beverages, soft drinks and a separate jeep safari excursion (must be booked separately). Keep included jeep transport distinguishable from an optional jeep safari.
 - Record owner-confirmed tent facilities, tour languages, car services, Instagram and Google Maps destination in `docs/OWNER-FACTS.md`. Privacy/cancellation/booking-policy copy remains blocked until owner supplies exact wording.
 - Required gates: PHP 7.4/8.2 Site Checks, strict image references, sitemap freshness, package preflight, full Browser E2E and 390px/1280px screenshot sheet. No production deploy or real staging test is authorized by this PR.
+
+
+## Sprint 19 — restaurant conversion: booklet, directions and social follow (PR #67 in review)
+
+**Outcome:** let guests browse the restaurant menu without a long scroll, find the correct Maps destination quickly, and discover the restaurant's social profile without slowing the page with third-party feed scripts.
+
+- Turn the existing category-based menu into a progressive-enhancement booklet: categories, previous/next, page status and print action. Without JavaScript, keep category anchor navigation and all content available.
+- Add a responsive map embed and QR code encoding the owner-confirmed Google Maps share URL. Include a clear directions link.
+- Add a compact Instagram follow rail beside the existing restaurant photo gallery. Do not fake a live feed or embed unverified posts; direct post/reel URLs may be added when supplied.
+- Retain existing menu items/prices and their current-menu disclaimer. Owner must confirm the menu before staging; no service hours or table availability promises are added.
+- Required gates: PHP 7.4/8.2 Site Checks, strict image references, sitemap freshness, package preflight, full Browser E2E and 390px/1280px screenshot sheet. Staging and production remain owner-controlled.
