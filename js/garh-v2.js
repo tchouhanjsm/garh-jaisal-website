@@ -7,6 +7,119 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
   }
 
+  // Measure booking and contact intent without treating a click or form interaction
+  // as a completed booking or submitted enquiry. Destination IDs come from site-config.php.
+  const analyticsConfig = window.gjAnalyticsConfig && typeof window.gjAnalyticsConfig === 'object'
+    ? window.gjAnalyticsConfig
+    : {};
+  const analyticsDestinations = Array.isArray(analyticsConfig.destinations)
+    ? Array.from(new Set(analyticsConfig.destinations.filter(id => typeof id === 'string' && /^G-[A-Z0-9]+$/i.test(id))))
+    : [];
+  let bookingDestination = null;
+  try {
+    if (typeof analyticsConfig.bookingUrl === 'string' && analyticsConfig.bookingUrl) {
+      bookingDestination = new URL(analyticsConfig.bookingUrl, window.location.href);
+    }
+  } catch {
+    bookingDestination = null;
+  }
+
+  const currentPageContext = () => {
+    const route = (window.location.pathname.split('/').filter(Boolean).pop() || 'index.php').toLowerCase();
+    if (route === 'index.php') return 'home';
+    if (route === 'room.php') return 'rooms';
+    if (route === 'roof.php' || route === 'restaurant.php') return 'dining';
+    if (route === 'direction.php') return 'arrival';
+    if (route === 'contact.php') return 'contact';
+    if (route === 'pack.php' || route === 'car-tours.php' || route === 'desert-safari.php' ||
+        route === 'camping.php' || route.includes('safari') || route.includes('tour')) return 'experiences';
+    if (route.includes('guide') || route.includes('itinerary') || route === 'blog.php') return 'guides';
+    return 'site_content';
+  };
+
+  const trackIntentEvent = (eventName, parameters) => {
+    if (typeof window.gtag !== 'function' || analyticsDestinations.length === 0) return;
+    window.gtag('event', eventName, Object.assign({}, parameters, {
+      send_to: analyticsDestinations,
+      transport_type: 'beacon'
+    }));
+  };
+
+  const labelForTrackedLink = (anchor, kind) => {
+    if (kind === 'call') return 'call';
+    if (kind === 'whatsapp') return 'whatsapp';
+    const label = (anchor.innerText || anchor.getAttribute('aria-label') || anchor.getAttribute('title') || '')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return (label || kind).slice(0, 80);
+  };
+
+  document.addEventListener('click', (event) => {
+    const anchor = event.target instanceof Element ? event.target.closest('a[href]') : null;
+    if (!anchor) return;
+
+    let destination;
+    try {
+      destination = new URL(anchor.href, window.location.href);
+    } catch {
+      return;
+    }
+
+    const eventContext = {
+      page_path: window.location.pathname || '/',
+      page_context: currentPageContext()
+    };
+
+    if (
+      bookingDestination &&
+      destination.origin === bookingDestination.origin &&
+      destination.pathname === bookingDestination.pathname
+    ) {
+      trackIntentEvent('booking_outbound_click', Object.assign({}, eventContext, {
+        cta_label: labelForTrackedLink(anchor, 'booking')
+      }));
+      return;
+    }
+
+    if (destination.protocol === 'tel:') {
+      trackIntentEvent('click_to_call', Object.assign({}, eventContext, {
+        cta_label: labelForTrackedLink(anchor, 'call')
+      }));
+      return;
+    }
+
+    if (['wa.me', 'whatsapp.com', 'api.whatsapp.com'].includes(destination.hostname.toLowerCase())) {
+      trackIntentEvent('click_whatsapp', Object.assign({}, eventContext, {
+        cta_label: labelForTrackedLink(anchor, 'whatsapp')
+      }));
+    }
+  }, true);
+
+  const contactForm = document.querySelector('form.contact-form');
+  let enquiryStartSent = false;
+  if (contactForm) {
+    document.addEventListener('focusin', (event) => {
+      if (enquiryStartSent || !(event.target instanceof Element)) return;
+      if (!event.target.matches('input:not([type="hidden"]), textarea, select')) return;
+      if (event.target.closest('form.contact-form') !== contactForm) return;
+
+      const query = new URLSearchParams(window.location.search);
+      let enquiryContext = 'general';
+      if (contactForm.querySelector('.contact-room-context')) {
+        enquiryContext = 'room';
+      } else if (query.get('topic') === 'arrival' || query.get('topic') === 'dining') {
+        enquiryContext = query.get('topic');
+      }
+
+      enquiryStartSent = true;
+      trackIntentEvent('enquiry_start', {
+        page_path: window.location.pathname || '/',
+        page_context: 'contact',
+        enquiry_context: enquiryContext
+      });
+    });
+  }
+
   const gallery = document.querySelector('.gallery-page');
   if (gallery) {
     const filters = Array.from(gallery.querySelectorAll('[data-gallery-filter]'));
