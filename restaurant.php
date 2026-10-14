@@ -11,11 +11,6 @@ $restaurant = [
     'name' => "Garh Jaisal's Kitchen",
     'tagline' => 'Rajasthani food on the rooftop.',
     'address' => 'Fort Kotari Para, Inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001',
-    'hours' => [
-        'Breakfast' => '7:30 am – 10:30 am',
-        'Lunch' => '12:30 pm – 3:30 pm',
-        'Dinner' => '7:00 pm – 11:00 pm',
-    ],
 ];
 
 /* Menu/prices are from the supplied restaurant design. Verify the live menu before staging. */
@@ -53,7 +48,10 @@ function slugify(string $value): string {
 }
 
 $waLink = $whatsappUrl . '?text=' . rawurlencode(
-    'Hello, I would like to enquire about a table at ' . $restaurant['name'] . '.'
+    'Hello, I would like to enquire about a table at ' . $restaurant['name']
+    . '. Preferred date: [add date]. Preferred time: [add time]. Number of guests: [add number].'
+    . ' Please confirm current service hours, table availability, menu options and prices,'
+    . ' and available dietary options for my preferred date.'
 );
 
 $errors = [];
@@ -109,8 +107,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($old['date'] === '' || $old['date'] < $today) {
         $errors['date'] = 'Choose today or a future date.';
     }
-    if ($old['time'] === '' || $old['time'] < '07:30' || $old['time'] > '23:00') {
-        $errors['time'] = 'Choose a time between 7:30 am and 11:00 pm.';
+    if (!preg_match('/^(?:[01][0-9]|2[0-3]):[0-5][0-9]$/D', $old['time'])) {
+        $errors['time'] = 'Enter a valid preferred time; the hotel will confirm availability.';
     }
     if ((int) $old['guests'] < 1 || (int) $old['guests'] > 20) {
         $errors['guests'] = 'Guests must be between 1 and 20.';
@@ -236,7 +234,7 @@ require_once __DIR__ . '/include/schema.php';
 $faqItems = [
     ['question' => "Where is Garh Jaisal’s Kitchen?", 'answer' => "Garh Jaisal’s Kitchen is located at Fort Kotari Para, inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001."],
     ['question' => "Can menu items and prices change?", 'answer' => "Yes. Menu items and listed prices may change; confirm the current menu and prices with the hotel before visiting."],
-    ['question' => "How do I request a table?", 'answer' => "Use the table enquiry form when online requests are available, or call or message the hotel on WhatsApp. Availability can vary, especially for larger groups."],
+    ['question' => "How do I request a table?", 'answer' => "Use the table enquiry form when online requests are available, or contact the hotel by phone or WhatsApp. A request is not confirmed until the hotel replies. Availability can vary, especially for larger groups."],
     ['question' => "Can I ask about dietary requirements?", 'answer' => "Ask the hotel about current vegetarian, vegan, Jain and allergy options before confirming your meal."],
 ];
 $page = [
@@ -289,10 +287,10 @@ require __DIR__ . '/include/page-head.php';
       </div>
     </div>
 
-    <div class="site-shell restaurant-hours" aria-label="Dining hours">
-      <?php foreach ($restaurant['hours'] as $meal => $time): ?>
-        <div><span><?= e($meal) ?></span><strong><?= e($time) ?></strong></div>
-      <?php endforeach; ?>
+    <div class="site-shell restaurant-hours" aria-label="Dining information">
+      <div><span>Service hours</span><strong>Confirm current hours with the hotel</strong></div>
+      <div><span>Menu</span><strong>Ask about current dishes and prices</strong></div>
+      <div><span>Table availability</span><strong>Confirm for your preferred date and time</strong></div>
     </div>
   </section>
 
@@ -412,6 +410,7 @@ require __DIR__ . '/include/page-head.php';
             <div class="restaurant-reservation-actions">
               <a class="button button-primary" href="tel:<?= e($hotelPhone) ?>">Call the hotel</a>
               <a class="button button-secondary" href="<?= e($waLink) ?>" target="_blank" rel="noopener">Ask on WhatsApp</a>
+              <a class="button button-secondary" href="contact.php?topic=dining">Send a dining enquiry</a>
             </div>
           </div>
         <?php else: ?>
@@ -429,7 +428,7 @@ require __DIR__ . '/include/page-head.php';
                 ['whatsapp', 'WhatsApp number *', 'tel', 'required autocomplete="tel" inputmode="tel"'],
                 ['email', 'Email', 'email', 'autocomplete="email"'],
                 ['date', 'Date *', 'date', 'required min="' . date('Y-m-d') . '"'],
-                ['time', 'Time *', 'time', 'required min="07:30" max="23:00"'],
+                ['time', 'Preferred time *', 'time', 'required'],
                 ['guests', 'Guests *', 'number', 'required min="1" max="20" inputmode="numeric"'],
             ];
             foreach ($fields as [$id, $label, $type, $attrs]): ?>
@@ -440,7 +439,7 @@ require __DIR__ . '/include/page-head.php';
               </div>
             <?php endforeach; ?>
 
-            <p class="restaurant-policy">For same-day bookings, calling or WhatsApp is usually quickest.</p>
+            <p class="restaurant-policy">This is a request, not a confirmed booking. The hotel will contact you to confirm availability for your preferred date and time. For same-day enquiries, calling or WhatsApp may be quicker.</p>
             <button class="button button-primary" type="submit">Request a table</button>
           </form>
         <?php endif; ?>

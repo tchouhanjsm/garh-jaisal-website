@@ -353,7 +353,12 @@ test('arrival and dining contact links preserve their topic in the editable enqu
 
   await page.goto('/contact.php?topic=dining', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.contact-topic-context')).toContainText('Rooftop dining');
-  await expect(page.locator('#message')).toHaveValue(/enquire about rooftop dining/);
+  const diningMessage = page.locator('#message');
+  await expect(diningMessage).toHaveValue(/enquire about a table at Garh Jaisal's Kitchen/);
+  await expect(diningMessage).toHaveValue(/Preferred date: \[add date\]/);
+  await expect(diningMessage).toHaveValue(/Preferred time: \[add time\]/);
+  await expect(diningMessage).toHaveValue(/Number of guests: \[add number\]/);
+  await expect(diningMessage).toHaveValue(/confirm current service hours, table availability/);
 });
 
 test('invalid enquiry context is ignored and a selected room takes precedence over a generic topic', async ({ page }, testInfo) => {

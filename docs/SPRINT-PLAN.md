@@ -19,8 +19,10 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 8 | Pre-booking FAQ coverage | ✓ merged in PR #58; FAQPage schema matches visible FAQs and exact-head Browser E2E passed |
 | 9 | Car & City tour discovery and selected-page QA | ✓ merged in PR #59; exact-main Site Checks, package preflight, Staging QA and Browser E2E/screenshot sheet passed |
 | 10 | Room booking journey clarity | ✓ merged in PR #60; exact-head Site Checks, package preflight, Staging QA and Browser E2E/screenshot sheet passed |
-| 11 | Arrival policy accuracy | ◐ PR #61 in review; unsupported assistance promises removed and exact-head checks pending |
-| 12 | Arrival enquiry completion | ◐ folded into PR #61: contextual prefilled Contact form and end-to-end journey regression |
+| 11 | Arrival policy accuracy | ✓ merged in PR #61; unconfirmed arrival policy promises removed |
+| 12 | Arrival enquiry completion | ✓ folded into PR #61; arrival-to-Contact handoff covered by Browser E2E |
+| 13 | Dining availability accuracy | ◐ folded into PR #62; remove unconfirmed meal hours and unsupported time constraints |
+| 14 | Dining enquiry completion | ◐ folded into PR #62; unify restaurant/rooftop Contact and WhatsApp handoffs |
 
 ---
 
@@ -250,3 +252,24 @@ Stop there: the owner merges.
 - Arrival-specific form guidance tells guests to wait for hotel confirmation before relying on meet-and-assist or luggage help.
 - Browser E2E follows the CTA into the form, checks the contextual copy and message, and deliberately never submits the form.
 - No new route, dependency, analytics behavior, service guarantee or mail-delivery claim is introduced.
+
+
+## Sprint 13 — dining availability accuracy (folded into PR #62)
+
+**Outcome:** stop publishing meal times that are not confirmed in `docs/OWNER-FACTS.md`.
+
+- Replace the hard-coded breakfast/lunch/dinner schedule with clear instructions to confirm current service hours, menu and table availability.
+- Remove unapproved min/max time limits from the optional reservation form while retaining valid time-format validation; never enable online requests through this PR.
+- Clarify in the dining FAQ that a request is not confirmed until the hotel replies.
+- Keep all current public URLs, menu entries/prices, images, schema IDs, booking links and both GA4 IDs unchanged.
+- Acceptance: PHP 7.4/8.2 checks, sitemap freshness, package preflight, Staging QA, full Browser E2E and responsive page sheet all pass on the exact PR head.
+
+## Sprint 14 — dining enquiry completion (folded into PR #62)
+
+**Outcome:** carry useful context into the dining enquiry without implying that a table is booked.
+
+- Enrich the existing WhatsApp and `contact.php?topic=dining` draft with preferred date, time and party size; ask the hotel to confirm hours, current menu/prices and dietary options.
+- Add a Contact-page context message that states the dining enquiry is not a reservation confirmation.
+- Add a direct dining enquiry action to the existing unavailable-online-request fallback; keep Call and WhatsApp available.
+- Add Browser E2E for rooftop and restaurant entry points, the prefilled journey, no real submission, no unconfirmed meal times, viewport overflow and accessible tap targets.
+- Online mail delivery, live staging, owner-approved service hours and dining operations remain owner-gated; no analytics events or new dependencies are added.
