@@ -10,7 +10,7 @@ $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] 
 <?php
 require_once __DIR__ . '/include/schema.php';
 $faqItems = [
-    ['question' => "Which options are listed in Car & City Tours?", 'answer' => "The hub links to guided Jaisalmer tours, a walk inside Jaisalmer Fort, and car arrangements for arrival or a desert day."],
+    ['question' => "Which tour ideas can I ask about?", 'answer' => "The page lists existing guided tours, a Fort walk and car arrangements, plus suggested themes around havelis, Jain architecture, Kuldhara, photography and natural history. Suggested themes are enquiry ideas, not confirmed packages."],
     ['question' => "Can the hotel arrange a car for arrival?", 'answer' => "The hotel can arrange a car for arrival or a desert day. Confirm the route, pickup arrangement and current price directly with the hotel."],
     ['question' => "How do I confirm timing and price?", 'answer' => "Contact the hotel with your travel date and intended route to confirm current availability, pickup details and price."],
 ];
@@ -63,7 +63,7 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell package-hero-content">
       <p class="eyebrow">Car &amp; City Tours</p>
       <h1>Explore Jaisalmer and plan your route.</h1>
-      <p>Choose an existing guided city tour or contact Garh Jaisal Haveli to ask about car arrangements. Current routes, timings, inclusions and prices must be confirmed for your travel date.</p>
+      <p>Choose an existing guided city tour, or ask whether a themed sightseeing route can be arranged. New route ideas are not confirmed packages; access, transport, timings, inclusions and price must be confirmed before booking.</p>
       <div class="actions">
         <a class="button button-primary" href="contact.php">Ask about arrangements</a>
         <a class="button button-light" href="guided-jaisalmer-tour.php">View guided city tours</a>
@@ -72,18 +72,68 @@ require __DIR__ . '/include/page-head.php';
   </section>
   <section class="section">
     <div class="site-shell">
-      <nav class="breadcrumb-nav" aria-label="Tour categories"><ol><li><a href="pack.php">All packages</a></li><li aria-current="page">Car &amp; City Tours</li></ol></nav>
       <div class="section-head">
         <div><p class="eyebrow">Guided tours</p><h2>Explore the city with a guide.</h2></div>
         <p>Choose a half-day or full-day guided tour, or ask about a walk through the lanes of Jaisalmer Fort.</p>
       </div>
       <div class="experience-card-grid">
-        <article class="experience-card"><a href="guided-jaisalmer-tour.php"><img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Historic facade inside Jaisalmer Fort" loading="lazy"><div><p class="experience-card-kicker">Guided city tours</p><h2>Guided Jaisalmer Tours</h2><p>Compare the existing half-day and full-day guided tour options.</p><span>View guided tours →</span></div></a></article>
-        <article class="experience-card"><a href="city-tour.php"><img src="img/1.webp" alt="Historic lanes and architecture inside Jaisalmer Fort" width="1200" height="800" loading="lazy"><div><p class="experience-card-kicker">Fort walk</p><h2>A Walk inside Jaisalmer Fort</h2><p>Read about the existing fort walk and ask the hotel to confirm the current arrangements.</p><span>Explore the Fort walk →</span></div></a></article>
-        <article class="experience-card"><a href="car-rental.php"><img src="img/desert10.jpg" alt="Desert landscape near Jaisalmer" width="1366" height="768" loading="lazy"><div><p class="experience-card-kicker">Car arrangements</p><h2>Car for Arrival or a Desert Day</h2><p>Contact the hotel to confirm vehicle arrangements, route, availability and current price.</p><span>Ask about car arrangements →</span></div></a></article>
+        <article class="experience-card"><a href="guided-jaisalmer-tour.php"><div class="experience-card-media"><img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Historic facade inside Jaisalmer Fort" loading="lazy"></div><div class="experience-card-copy"><p class="experience-card-kicker">Guided city tours</p><h2>Guided Jaisalmer Tours</h2><p>Compare the existing half-day and full-day guided tour options.</p><span>View guided tours →</span></div></a></article>
+        <article class="experience-card"><a href="city-tour.php"><div class="experience-card-media"><img src="img/1.webp" alt="Historic lanes and architecture inside Jaisalmer Fort" width="1200" height="800" loading="lazy"></div><div class="experience-card-copy"><p class="experience-card-kicker">Fort walk</p><h2>A Walk inside Jaisalmer Fort</h2><p>Read about the existing fort walk and ask the hotel to confirm the current arrangements.</p><span>Explore the Fort walk →</span></div></a></article>
+        <article class="experience-card"><a href="car-rental.php"><div class="experience-card-media"><img src="img/desert10.jpg" alt="Desert landscape near Jaisalmer" width="1366" height="768" loading="lazy"></div><div class="experience-card-copy"><p class="experience-card-kicker">Car arrangements</p><h2>Car for Arrival or a Desert Day</h2><p>Contact the hotel to confirm vehicle arrangements, route, availability and current price.</p><span>Ask about car arrangements →</span></div></a></article>
       </div>
     </div>
   </section>
+  <section class="section tour-ideas" aria-labelledby="tour-ideas-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Explore by interest</p>
+          <h2 id="tour-ideas-title">More ways to discover Jaisalmer.</h2>
+        </div>
+        <p>These researched themes may help shape a private or guided itinerary. They are ideas to enquire about, not confirmed Garh Jaisal packages.</p>
+      </div>
+      <p class="tour-ideas-disclaimer">Before accepting a booking, the hotel must confirm whether the route can be arranged, current access and visitor rules, transport, guide availability, timings, fees and the final price. An enquiry link does not reserve a tour.</p>
+      <div class="tour-idea-grid">
+        <article class="tour-idea-card">
+          <p class="tour-idea-kicker">Architecture & heritage</p>
+          <h3>Golden sandstone havelis</h3>
+          <p>A heritage-focused route built around Jaisalmer’s carved havelis and old-city architecture, with stops agreed in advance.</p>
+          <a class="tour-idea-link" href="contact.php?topic=heritage-havelis">Ask about this itinerary idea <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="tour-idea-card">
+          <p class="tour-idea-kicker">Fort & sacred architecture</p>
+          <h3>Jain temples inside the Fort</h3>
+          <p>An architecture-led visit focused on the Jain temples within Jaisalmer Fort, subject to current visitor access and temple rules.</p>
+          <a class="tour-idea-link" href="contact.php?topic=jain-temples">Ask about this itinerary idea <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="tour-idea-card">
+          <p class="tour-idea-kicker">Photography & landscapes</p>
+          <h3>Lake and cenotaph viewpoints</h3>
+          <p>Ask about a photography-friendly route involving Gadisar Lake, Bada Bagh or Vyas Chhatri. These stops may need to be planned as separate outings.</p>
+          <a class="tour-idea-link" href="contact.php?topic=lake-cenotaph-photo">Ask about this itinerary idea <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="tour-idea-card">
+          <p class="tour-idea-kicker">Living history & landscape</p>
+          <h3>Kuldhara and the desert edge</h3>
+          <p>A proposed heritage outing around Kuldhara and the surrounding landscape. Daylight access, visitor rules and the route must be checked.</p>
+          <a class="tour-idea-link" href="contact.php?topic=kuldhara-landscape">Ask about this itinerary idea <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="tour-idea-card">
+          <p class="tour-idea-kicker">Geology & nature</p>
+          <h3>Fossils or desert ecology</h3>
+          <p>Ask which natural-history option, if any, can be arranged: Akal Wood Fossil Park or a suitable Desert National Park area visit. Wildlife sightings are never guaranteed.</p>
+          <a class="tour-idea-link" href="contact.php?topic=natural-history">Ask about this itinerary idea <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="tour-idea-card">
+          <p class="tour-idea-kicker">Military history</p>
+          <h3>Longewala War Memorial</h3>
+          <p>A potential history-focused day excursion. Operational feasibility, visitor requirements, route, transport and total time need confirmation.</p>
+          <a class="tour-idea-link" href="contact.php?topic=longewala-history">Ask about this itinerary idea <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <section class="section packages-cta"><div class="site-shell"><div class="packages-cta-inner"><p class="eyebrow">Plan with the hotel</p><h2>Confirm the details before you travel.</h2><p>Tour routes, timings, transport, fees and availability can vary. Contact the hotel for the current details for your date.</p><div class="actions"><a class="button button-primary" href="contact.php">Contact Garh Jaisal Haveli</a><a class="button button-secondary" href="direction.php">Plan your arrival</a></div></div></div></section>
 
   <section class="section site-faq car-tours-faq" aria-labelledby="car-tours-faq-title">

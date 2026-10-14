@@ -38,10 +38,11 @@ Landing page: book-rooms-in-jaisalmer.php (not in header or footer)
 | L8 | P1 | **Contact page breaks the pattern:** no hero, H1 sits inside a plain section. | `contact.php` outline. | Use the standard hero. |
 | L9 | P2 | **Label mismatch:** menu says "Blog", footer says "Jaisalmer travel guides", the page H1 says "Practical Jaisalmer travel guides". | Header, footer, `blog.php` | Pick one name ("Journal" or "Guides") and use it everywhere. |
 | L10 | P2 | ~~Dining active state is inconsistent.~~ **Resolved.** | Both `restaurant.php` and `roof.php` set `$activePage = 'dining'`, matching `include/nav-data.php`. | No change required unless rendered-browser evidence finds a regression. |
-| L11 | P2 | **`book-rooms-in-jaisalmer.php` is a landing page with no navigation entry**, and its H1 is dynamic or empty in source. | Outline | Decide: keep as a campaign page (linked from home and rooms) or fold it into rooms. Check the H1 renders. |
+| L11 | P2 | ~~`book-rooms-in-jaisalmer.php` has no navigation entry or reliable H1.~~ **Resolved in PR #56.** | Home and Rooms both link to the existing guide; the rendered page has its expected H1. | Keep its campaign URL and navigation regressions green. |
 | L12 | P2 | **Responsive CSS is thin:** `garh-v2.css` is 1,562 lines with only 4 `@media` rules, and many legacy CSS files remain. | `grep @media` | Audit at 390, 768 and 1280px in Phase 2 and Phase 5. |
 | L13 | P2 | **No visible rates or "from" price** anywhere in the structure; `tariff.php` is blocked in robots. | `robots.txt`, outlines | Owner decision: show "from ₹X" on room cards? |
 | L14 | P2 | ~~No FAQ on Rooms, Dining or Experiences pages.~~ **Resolved in Sprint 8.** | Shared visible FAQ component is used on Rooms, rooftop dining, menu, Packages, Desert Tours, Car & City Tours, guided tours, Fort walk, car arrangements and camping. | Keep Browser E2E parity checks between each visible Q&A and its FAQPage JSON-LD. |
+| L15 | P2 | ~~Car & City Tours repeats its category breadcrumb and its three live cards have inconsistent image geometry.~~ **Addressed in Sprint 9.** | Visual review of the 390px/1280px page sheet after PR #58. | Keep one breadcrumb landmark and 16:10 card-media regression green. |
 
 ## 3. Proposed structure
 
