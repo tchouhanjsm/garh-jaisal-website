@@ -127,3 +127,4 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Product outcome: strengthen regression coverage for the two existing per-room actions: primary availability goes to the current booking provider; secondary enquiry opens Contact prefilled for the selected room.
 - Scope is deliberately behavior-preserving: no room facts, prices, URL/canonical, booking destination, image mapping, analytics ID, policy copy or dependencies change. The room directory and Contact prefill are covered at desktop and mobile.
 - Owner review first: Rooms at 390px and 1280px; Contact with a room prefilled. Real booking-provider checkout and external staging remain owner-gated.
+- Implementation: added `tests/e2e/room-booking-clarity.spec.js` to validate the configured booking target, room-specific enquiry link/context/message for every room, action order, keyboard focus and narrow-screen overflow. No production markup/config changed.
