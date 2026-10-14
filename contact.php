@@ -46,6 +46,30 @@ $contactTopics = [
         'label' => 'Rooftop dining',
         'message' => 'Hello, I would like to enquire about rooftop dining. Please confirm current menu options, dining availability and arrangements for my preferred date.',
     ],
+    'heritage-havelis' => [
+        'label' => 'Havelis and architecture itinerary idea',
+        'message' => 'Hello, I would like to ask whether a Jaisalmer havelis and architecture route can be arranged. Please confirm the possible stops, guide availability, timings, transport if needed, applicable entry fees and current price for my travel date.',
+    ],
+    'jain-temples' => [
+        'label' => 'Jain temples and Fort architecture itinerary idea',
+        'message' => 'Hello, I would like to ask whether a visit focused on Jaisalmer Fort Jain temples and architecture can be arranged. Please confirm current visitor access and temple rules, timings, guide availability, applicable fees and current price for my travel date.',
+    ],
+    'lake-cenotaph-photo' => [
+        'label' => 'Gadisar Lake and cenotaph photography itinerary idea',
+        'message' => 'Hello, I would like to ask whether a photography-friendly sightseeing route involving Gadisar Lake, Bada Bagh or Vyas Chhatri can be arranged. Please advise which stops are feasible, the route, access times, transport, applicable fees and current price for my travel date.',
+    ],
+    'kuldhara-landscape' => [
+        'label' => 'Kuldhara and desert landscape itinerary idea',
+        'message' => 'Hello, I would like to ask whether a Kuldhara heritage and nearby desert landscape outing can be arranged. Please confirm current visitor access and rules, possible route, transport, timings, applicable fees and current price for my travel date.',
+    ],
+    'natural-history' => [
+        'label' => 'Akal Wood Fossil Park or desert ecology itinerary idea',
+        'message' => 'Hello, I would like to ask whether a natural-history outing to Akal Wood Fossil Park or a suitable Desert National Park area can be arranged. Please confirm the feasible option, access requirements, responsible viewing arrangements, route, transport, timings, applicable fees and current price for my travel date.',
+    ],
+    'longewala-history' => [
+        'label' => 'Longewala War Memorial itinerary idea',
+        'message' => 'Hello, I would like to ask whether a day excursion to Longewala War Memorial can be arranged. Please confirm current visitor requirements, route feasibility, total travel time, transport, operating days, applicable fees and current price for my travel date.',
+    ],
 ];
 $contactTopic = null;
 $requestedTopic = $_GET['topic'] ?? '';

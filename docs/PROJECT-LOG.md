@@ -6,17 +6,17 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-13 |
-| Current phase | Pre-booking FAQ coverage; owner-dependent product, staging and release decisions remain gated |
+| Last updated | 2026-10-14 |
+| Current phase | Car & City Tours discovery and selected-page review; proposed routes remain enquiry-only until owner approval |
 | Base branch | `main` |
-| Baseline commit | `5415e67b422b2318dfb576e7d84531bacaa5e271` (PR #57 merge commit) |
-| Last merged PR | [#57 — enforce hidden experience publication boundaries](https://github.com/tchouhanjsm/garh-jaisal-website/pull/57) |
-| PR #57 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677652); [cPanel preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677679); [Staging QA local dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677493); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677684) |
-| Screenshot evidence | [PR #57 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677684/artifacts/11834807257); [PR #57 staging QA evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677493/artifacts/11834059436) |
+| Baseline commit | `33516d42e7e06b055c782da714cc8836f528574e` (PR #58 merge commit) |
+| Last merged PR | [#58 — add pre-booking FAQs across Rooms, Dining and Tours](https://github.com/tchouhanjsm/garh-jaisal-website/pull/58) |
+| PR #58 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923692); [cPanel preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923724); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923694); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923706) |
+| Screenshot evidence | [PR #58 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923706/artifacts/11865921955); [PR #58 Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923706/artifacts/11865817124) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None after PR #57 merge |
-| Next action | Add visible pre-booking FAQs and matching structured data across key room, dining and experience landing pages; real staging remains owner-gated |
+| Open PRs at baseline verification | None after PR #58 merge |
+| Next action | Fix Car & City card geometry, add researched enquiry-only itinerary ideas, and regression-test Rooms/Rooftop/Car & City at 390px and 1280px |
 
 ## Phase roadmap
 
@@ -105,10 +105,17 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Exact PR-head [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677652), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677679), [Staging QA dry run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677493) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677684) passed. [Page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677684/artifacts/11834807257).
 - Real staging, CAPTCHA/mail, final image approval and release remain owner-gated.
 
-## Sprint 8 — pre-booking FAQ coverage (PR in review)
+## Sprint 8 — pre-booking FAQ coverage (PR #58 merged)
 
-- Baseline is PR #57 merge commit `5415e67b422b2318dfb576e7d84531bacaa5e271`.
-- Add visible, fact-checked Q&A to Rooms, rooftop dining, restaurant menu, Packages, Desert Tours, Car & City Tours, guided tours, Fort walk, car arrangements and camping.
-- Render FAQPage JSON-LD from the same answer data used by the shared FAQ partial, avoiding content/schema drift; update the frozen head fixture for the intentional type additions.
-- Browser tests compare every rendered question and answer with structured data, exercise keyboard toggles, and check FAQ overflow/touch targets across the viewport projects.
-- No new rates, operating details, package inclusions, policies, photos, URLs, booking destinations or GA4 changes. Real staging and release remain owner-gated.
+- Baseline: PR #57 merged at `5415e67b422b2318dfb576e7d84531bacaa5e271`; PR #58 merged to main at `33516d42e7e06b055c782da714cc8836f528574e`.
+- Added visible FAQs and matching FAQPage schema on Rooms, rooftop dining, menu, Packages, Desert Tours, Car & City Tours, guided tours, Fort walk, car arrangements and camping.
+- Exact PR-head [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923692), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923724), [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923694) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923706) passed. [390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923706/artifacts/11865921955).
+- Real staging, CAPTCHA/mail, final image approval and release remain owner-gated.
+
+## Sprint 9 — Car & City tour discovery and selected-page QA (PR in review)
+
+- Baseline: main at `33516d42e7e06b055c782da714cc8836f528574e`; main-push Site Checks, package preflight, Staging QA and Browser E2E passed on this SHA.
+- Remove the duplicate category breadcrumb and give the three existing Car & City cards fixed 16:10 media frames; protect Rooms and Rooftop Dining with selected-page Browser E2E.
+- Add six researched sightseeing themes as enquiry-only ideas, not confirmed hotel packages; each opens a safe prefilled Contact enquiry. Access, route, transport, duration, fees and price remain unconfirmed until the owner approves.
+- Research references and operational questions are in `docs/JAISALMER-TOUR-RESEARCH.md` and `docs/OWNER-FACTS.md`.
+- No new public routes, prices, booking claims, image assets/mappings, analytics IDs, third-party libraries, deployment or release tag. Real staging and operator-specific tour details remain owner-gated.

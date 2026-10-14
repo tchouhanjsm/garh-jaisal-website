@@ -24,3 +24,16 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | 10 | Reception hours and late-arrival process (currently 7:00 AM to 10:30 PM on the site: confirm) | | Directions |
 | 11 | Hosting: cPanel PHP version, can the repo be deployed through cPanel Git? | | Sprint 3 |
 | 12 | Photos missing for any page (list pages where you want new images) | | Design |
+| 13 | Which researched Jaisalmer itinerary themes may become actual offerings? Approve each theme and confirm route/stops, duration, vehicle, guide, access/permissions, fees, inclusions and price | | Car & City Tours and future detail pages |
+
+
+## Research-led tour ideas — not approved offers
+
+These are candidates for review, not a promise that Garh Jaisal Haveli currently operates or can arrange them. Keep public copy framed as an enquiry until the owner approves each option and its operational details. See `docs/JAISALMER-TOUR-RESEARCH.md` for official destination sources and suggested validation.
+
+- Havelis and architecture route.
+- Jain temples and Fort architecture visit.
+- Gadisar Lake / Bada Bagh / Vyas Chhatri photography route (may require separate outings).
+- Kuldhara heritage and desert landscape visit.
+- Akal Wood Fossil Park or Desert National Park nature route (separate options; wildlife is never guaranteed).
+- Longewala War Memorial history excursion (visitor requirements and travel logistics must be verified).

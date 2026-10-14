@@ -16,7 +16,8 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 5 | Staging isolation, non-production noindex and repeatable staging QA | ✓ merged in PR #55; local QA dry run passes, real staging/cPanel and CAPTCHA/mail checks remain owner-gated |
 | 6 | Direct-stay guide discoverability | ✓ merged in PR #56; guide linked from Home and Rooms with exact-head Browser E2E and screenshot evidence |
 | 7 | Experience publication boundaries | ✓ merged in PR #57; hidden/draft sitemap and navigation gates plus sitemap-wide browser regression passed on exact PR head |
-| 8 | Pre-booking FAQ coverage | ◐ add visible, fact-checked FAQs and matching FAQPage schema across Rooms, Dining and experience landing pages; verify parity and responsive accordions |
+| 8 | Pre-booking FAQ coverage | ✓ merged in PR #58; FAQPage schema matches visible FAQs and exact-head Browser E2E passed |
+| 9 | Car & City tour discovery and selected-page QA | ◐ remove duplicate breadcrumb, standardize image tile geometry, add researched enquiry-only itinerary ideas, and test Rooms/Rooftop/Car & City at 390px and 1280px |
 
 ---
 
@@ -200,3 +201,16 @@ Stop there: the owner merges.
 - Add PHP regression coverage for staging noindex and a dependency-free Node validator for HTTPS staging origin, production-host rejection, main-branch workflow, and exact staged-package commit matching.
 - Add a manual, non-deploying Staging QA workflow. On PR/main push it runs a local smoke test; on owner-dispatched `main` runs it against the supplied staging URL, verifies all sitemap routes, canonical paths, robots, JSON-LD, images, mobile overflow, protected config/hidden files, headers and branded 404, and uploads a 390px/1280px visual artifact.
 - Acceptance: PHP 7.4/8.2 Site Checks, package preflight, Browser E2E/page sheet, Staging QA local smoke, staging-target unit tests and PHP noindex regressions pass on the exact PR head. External staging behavior remains unverified until the owner provides a staging URL and runs the manual workflow. No deployment, form submission or release tag is authorized.
+
+
+## Sprint 9 — Car & City tour discovery and selected-page QA
+
+**Branch:** `feature/car-city-tour-discovery`  
+**Vertical slice:** Car & City Tours + prefilled enquiry destinations + selected-page visual regression.
+
+- Fix the repeated breadcrumb on `car-tours.php` and wrap the three existing card images in consistent 16:10 media containers, preserving image mappings.
+- Add six research-backed sightseeing themes as enquiry-only ideas. These are not confirmed products; operational details require owner approval.
+- Add allowlisted Contact topic keys and prefilled enquiry messages for the six ideas. No form submission is automated.
+- Add Browser E2E for media ratio, one breadcrumb landmark, responsive overflow, all six contact-prefill topics, and Rooms/Rooftop Dining FAQ/CTA paths.
+- Update research/owner-fact docs, layout findings, project log and sitemap lastmod for changed PHP routes.
+- Done when PHP 7.4/8.2 Site Checks, cPanel preflight, Staging QA dry run, full Browser E2E and the 390px/1280px screenshot sheet pass on one exact head SHA.
