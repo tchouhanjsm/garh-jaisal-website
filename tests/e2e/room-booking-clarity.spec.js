@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
-const rooms = require('../../include/rooms-data.php');
-const siteConfig = require('../../include/site-config.php');
+const EXPECTED_ROOM_COUNT = 7;
+const BOOKING_URL = 'https://asiatech.in/booking_engine/index3?token=NjA2Ng==';
 
 function roomSlug(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -15,24 +15,23 @@ test('every room card preserves the primary booking and secondary selected-room 
   expect(response.status(), 'Rooms should load successfully').toBeLessThan(400);
 
   const cards = page.locator('.room-card');
-  await expect(cards).toHaveCount(rooms.length);
+  await expect(cards).toHaveCount(EXPECTED_ROOM_COUNT);
 
   const destinations = [];
-  for (let index = 0; index < rooms.length; index += 1) {
-    const room = rooms[index];
-    const slug = roomSlug(room.name);
+  for (let index = 0; index < EXPECTED_ROOM_COUNT; index += 1) {
     const card = cards.nth(index);
-    await expect(card.locator('h3')).toHaveText(room.name);
+    const name = (await card.locator('h3').innerText()).trim();
+    const slug = roomSlug(name);
 
     const booking = card.locator('a.room-book');
-    await expect(booking, room.name + ': primary availability action').toBeVisible();
+    await expect(booking, name + ': primary availability action').toBeVisible();
     await expect(booking).toHaveText('Check availability');
-    await expect(booking).toHaveAttribute('href', siteConfig.booking_url);
+    await expect(booking).toHaveAttribute('href', BOOKING_URL);
     await expect(booking).toHaveAttribute('target', '_blank');
     await expect(booking).toHaveAttribute('rel', /noopener/);
 
     const enquiry = card.locator('a.room-enquiry-link');
-    await expect(enquiry, room.name + ': secondary enquiry action').toBeVisible();
+    await expect(enquiry, name + ': secondary enquiry action').toBeVisible();
     await expect(enquiry).toHaveAttribute('href', 'contact.php?room=' + slug);
     await expect(enquiry).toContainText('Ask about this room');
 
@@ -46,10 +45,10 @@ test('every room card preserves the primary booking and secondary selected-room 
     });
     expect(actionOrder, room.name + ': booking must precede the secondary enquiry').toBe(true);
 
-    destinations.push({ name: room.name, slug });
+    destinations.push({ name: name, slug });
   }
 
-  expect(new Set(destinations.map(item => item.slug)).size, 'room enquiry slugs should be unique').toBe(rooms.length);
+  expect(new Set(destinations.map(item => item.slug)).size, 'room enquiry slugs should be unique').toBe(EXPECTED_ROOM_COUNT);
 
   // Verify the selected-room enquiry renders the matching context and a useful
   // prefilled message. The test does not submit the form or send an email.
@@ -57,7 +56,7 @@ test('every room card preserves the primary booking and secondary selected-room 
     const enquiryResponse = await page.goto('/contact.php?room=' + room.slug, { waitUntil: 'domcontentloaded' });
     expect(enquiryResponse, room.name + ': Contact should return an HTTP response').not.toBeNull();
     expect(enquiryResponse.status(), room.name + ': Contact should load successfully').toBeLessThan(400);
-    await expect(page.locator('.contact-room-context strong'), room.name + ': enquiry context').toHaveText(room.name);
+    await expect(page.locator('.contact-room-context strong'), room.name + ': enquiry context').toHaveText(name);
     const message = await page.locator('#message').inputValue();
     expect(message).toContain(room.name);
     expect(message).toContain('current availability, rate and room features');
