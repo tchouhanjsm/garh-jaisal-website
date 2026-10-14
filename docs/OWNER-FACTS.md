@@ -31,6 +31,8 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | 11 | Hosting: cPanel PHP version, can the repo be deployed through cPanel Git? | | Sprint 3 |
 | 12 | Photos missing for any page (list pages where you want new images) | Owner-provided Desert Camp photos are available in `img/Desert_Camp/`; continue to request page-specific images where the current library is insufficient. | Design |
 | 13 | Which researched Jaisalmer itinerary themes may become actual offerings? Approve each theme and confirm route/stops, duration, vehicle, guide, access/permissions, fees, inclusions and price | | Car & City Tours and future detail pages |
+| 14 | Which exact Instagram posts/reels should be embedded on the restaurant page? | NEEDS OWNER INPUT: profile URL is confirmed, but specific public post/reel URLs have not been supplied. Keep a lightweight profile link until direct URLs are approved. | `restaurant.php` |
+| 15 | Are the current restaurant menu items and prices still accurate? | NEEDS OWNER INPUT: the current `restaurant.php` menu data needs confirmation against the live menu before staging. | `restaurant.php` |
 
 
 ## Research-led tour ideas — not approved offers

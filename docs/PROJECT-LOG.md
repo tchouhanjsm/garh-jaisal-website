@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-14 |
-| Current phase | Batch 1 — Swiss Tent Safari and licensed Desert Gallery |
+| Current phase | Batch 2 — Restaurant menu booklet, directions and social discovery |
 | Base branch | `main` |
-| Baseline commit | `31996b4db6e04502f5422926a5ea3fdcf923c6e4` (PR #65 merge commit) |
-| Last merged PR | [#65 — replace unlicensed image references](https://github.com/tchouhanjsm/garh-jaisal-website/pull/65) |
-| PR #65 merge-commit checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38582891256); [cPanel package PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38582891190); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38582891186); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38582891584) |
-| Screenshot evidence | [PR #65 390px/1280px page sheet and Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38582891584) |
+| Baseline commit | `77b2d4f8336c346367aafe0c4ae53047ae2e2978` (PR #66 merge commit) |
+| Last merged PR | [#66 — improve Desert Gallery and Swiss Tent Safari](https://github.com/tchouhanjsm/garh-jaisal-website/pull/66) |
+| PR #66 merge-commit checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38591668766); [cPanel package PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38591668628); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38591668656); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38591668629) |
+| Screenshot evidence | [PR #66 390px/1280px page sheet and Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38591668629) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None at Batch 1 branch creation |
-| Next action | Review PR #66 exact-head CI, Swiss-tent presentation and photo/caption match; owner alone merges |
+| Open PRs at baseline verification | None at Batch 2 branch creation |
+| Next action | Review PR #67 exact-head CI, restaurant booklet, Maps QR and mobile layout; owner alone merges |
 
 ## Phase roadmap
 
@@ -173,10 +173,16 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - The QR artwork `img/restaurant_QR.png` is not part of this PR’s changed files. Its Google Business Profile destination and restaurant-page integration are a separate follow-up, pending the exact profile share URL.
 
 
-## Batch 1 — Swiss Tent Safari and Desert Gallery (PR #66 in review)
+## Batch 1 — Swiss Tent Safari and Desert Gallery (PR #66 merged)
 
-- Baseline: PR #65 merged at `31996b4db6e04502f5422926a5ea3fdcf923c6e4`; no production deployment.
-- Replace the Desert Gallery's remaining legacy images with the five owner-provided `img/Desert_Camp/` photos and link the section to the Swiss Tent Safari page.
-- Add an optional shared-experience gallery/facilities renderer; update Swiss-tent inclusions, exclusions, FAQs, and hero photo from owner-confirmed facts.
-- Add Browser E2E for image inventory, confirmed facilities, high tea wording, jeep-safari exclusion and narrow-screen overflow; keep SEO snapshot and sitemap lastmod aligned.
-- Owner review first: Gallery and Swiss Tent Safari at 390px/1280px; visually confirm each image and caption before merge. Policies, deployment and real staging remain owner-gated.
+- PR #66 merged to `main` at `77b2d4f8336c346367aafe0c4ae53047ae2e2978`; post-merge Site Checks, package preflight, staging dry run and Browser E2E/screenshot sheet passed.
+- Desert Gallery now uses the five owner-provided `img/Desert_Camp/` photos; Swiss tent facilities and high-tea / package-exclusion wording are recorded from owner confirmation.
+- The remaining visual check is that every photo's caption matches its actual subject; no production deployment or real-host validation was performed.
+
+## Batch 2 — Restaurant menu booklet and directions (PR #67 in review)
+
+- Baseline: PR #66 merge commit `77b2d4f8336c346367aafe0c4ae53047ae2e2978`; no open PRs at batch start.
+- Build an accessible menu booklet with category tabs, previous/next, page status, vegetarian filter and print-friendly full menu, preserving the existing menu data and disclaimer.
+- Add the owner-confirmed Google Maps embed and scannable directions QR; add a compact Instagram follow panel using existing restaurant assets and the approved profile link.
+- Add Browser E2E for booklet state, QR/map targets, Instagram link, and responsive no-overflow behavior. Specific Instagram post/reel URLs and current menu/price verification remain owner-side items.
+- No production deployment or external staging was performed; owner alone merges and deploys.
