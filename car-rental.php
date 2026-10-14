@@ -16,8 +16,7 @@ $siteUrl = rtrim($siteConfig['site_url'], '/');
 $canonical = $siteUrl . '/car-rental.php';
 require_once __DIR__ . '/include/schema.php';
 $faqItems = [
-    ['question' => "Which vehicles can I enquire about?", 'answer' => "SUV and sedan arrangements can be requested. Confirm the available vehicle, route and final quote for your travel date."],
-    ['question' => "Which areas can you serve?", 'answer' => "Enquire about pickup, drop-off and intercity journeys across Rajasthan and Delhi. Share the exact locations so the route can be confirmed."],
+    ['question' => "Which vehicles and areas can I enquire about?", 'answer' => "SUV and sedan arrangements can be requested for desert pickup/drop-off and intercity journeys across Rajasthan and Delhi. Share your exact locations and date so the route, vehicle and quote can be confirmed."],
     ['question' => "What languages can the driver communicate in?", 'answer' => "Drivers can communicate in Hindi and English. Tell the hotel if you have any specific communication needs."],
     ['question' => "Can a car enter the Fort lanes to reach the haveli?", 'answer' => "Cars cannot enter the narrow Fort lanes. For hotel arrival, use Fort Parking and follow the Directions page for the final walk."],
 ];

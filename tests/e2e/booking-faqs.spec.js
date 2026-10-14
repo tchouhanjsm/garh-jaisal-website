@@ -47,13 +47,13 @@ const FAQ_ROUTES = [
     "route": "/city-tour.php",
     "section": ".fort-walk-faq",
     "heading": "Questions about the Fort walk.",
-    "count": 4
+    "count": 3
   },
   {
     "route": "/car-rental.php",
     "section": ".car-rental-faq",
     "heading": "Before arranging a car.",
-    "count": 4
+    "count": 3
   },
   {
     "route": "/camping.php",

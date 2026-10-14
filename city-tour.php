@@ -16,8 +16,7 @@ $canonical = $siteUrl . '/city-tour.php';
 require_once __DIR__ . '/include/schema.php';
 $faqItems = [
     ['question' => "Which places are part of the Fort walk?", 'answer' => "The planned walk focuses on the Jain temples inside Jaisalmer Fort, the Palace Museum and a heritage street walk. The final order and access depend on opening hours and current visitor rules."],
-    ['question' => "Which guide languages can I request?", 'answer' => "Ask about a guide in English, Hindi, Bengali, Italian, French, Spanish or German. Availability must be confirmed for your date."],
-    ['question' => "How do I get the current price?", 'answer' => "Prices are shared on enquiry. Message the hotel on WhatsApp with your preferred date and guide language to confirm the current price and any applicable entry fees."],
+    ['question' => "Which guide languages can I request, and how do I confirm the current price?", 'answer' => "Ask about English, Hindi, Bengali, Italian, French, Spanish or German. Message the hotel on WhatsApp with your date and preferred guide language to confirm availability, current price and any applicable entry fees."],
     ['question' => "Can I compare it with a longer guided tour?", 'answer' => "Yes. The Guided Jaisalmer Tours page links to half-day and full-day options, which can be discussed separately."],
 ];
 $page = [
