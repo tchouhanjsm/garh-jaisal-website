@@ -16,7 +16,7 @@
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Open PRs at baseline verification | None at Sprint 17 branch creation |
-| Next action | Review Sprint 17 conversion-measurement PR and exact-head CI; owner alone merges |
+| Next action | Review [PR #64](https://github.com/tchouhanjsm/garh-jaisal-website/pull/64) and exact-head CI; owner alone merges |
 
 ## Phase roadmap
 
@@ -155,7 +155,7 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Official check-in/out, current reception hours and assistance availability remain owner-input items. CI did not verify the live cPanel host or submit a real enquiry.
 
 
-## Sprint 17 — booking and enquiry intent measurement (implementation PR)
+## Sprint 17 — booking and enquiry intent measurement (PR #64 in review)
 
 - Baseline `main`: `f441272b17fdbf520e5a06a84612fd5b84bfb8be`; branch: `feature/sprint-17-conversion-measurement`. Owner approved the event contract on 2026-10-14.
 - Add `booking_outbound_click`, `click_to_call`, `click_whatsapp` and `enquiry_start`; route each custom event to both configured GA4 IDs using the site configuration as the single source of truth.

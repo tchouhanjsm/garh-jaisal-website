@@ -23,9 +23,9 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 12 | Arrival enquiry completion | ✓ folded into PR #61; arrival-to-Contact handoff covered by Browser E2E |
 | 13 | Dining availability accuracy | ✓ merged in PR #62; unconfirmed meal hours and time constraints removed |
 | 14 | Dining enquiry completion | ✓ merged in PR #62; restaurant/rooftop handoffs covered by Browser E2E |
-| 15 | Site-wide arrival claim accuracy | ◐ folded into PR #63; remove stale reception/assistance claims from Home and two guides |
-| 16 | Contextual arrival enquiry consistency | ◐ folded into PR #63; keep Directions and Contact arrival routes across all three pages |
-| 17 | Booking and enquiry intent measurement | ◐ implementation PR; track outbound booking, Call, WhatsApp and contextual enquiry-start intent in both approved GA4 IDs |
+| 15 | Site-wide arrival claim accuracy | ✓ merged in PR #63; stale reception/assistance claims removed from Home and two guides |
+| 16 | Contextual arrival enquiry consistency | ✓ merged in PR #63; Directions and Contact arrival routes retained across all three pages |
+| 17 | Booking and enquiry intent measurement | ◐ PR #64 open for owner review; intent events routed to both approved GA4 IDs; no merge or deployment authorized |
 
 ---
 
@@ -298,7 +298,7 @@ Stop there: the owner merges.
 - No new dependencies, routes, analytics events, booking destination changes, mail configuration or production changes.
 - Manual visual review at 390px/1280px and live staging/form-delivery checks remain owner-gated.
 
- 
+
 ## Sprint 17 — booking and enquiry intent measurement
 
 **Outcome:** make visitor intent visible without conflating outbound clicks or an enquiry-form start with a completed booking or sent message.
