@@ -43,7 +43,7 @@ test('every room card preserves the primary booking and secondary selected-room 
         (primary.compareDocumentPosition(secondary) & Node.DOCUMENT_POSITION_FOLLOWING)
       );
     });
-    expect(actionOrder, room.name + ': booking must precede the secondary enquiry').toBe(true);
+    expect(actionOrder, name + ': booking must precede the secondary enquiry').toBe(true);
 
     destinations.push({ name: name, slug });
   }
@@ -56,7 +56,7 @@ test('every room card preserves the primary booking and secondary selected-room 
     const enquiryResponse = await page.goto('/contact.php?room=' + room.slug, { waitUntil: 'domcontentloaded' });
     expect(enquiryResponse, room.name + ': Contact should return an HTTP response').not.toBeNull();
     expect(enquiryResponse.status(), room.name + ': Contact should load successfully').toBeLessThan(400);
-    await expect(page.locator('.contact-room-context strong'), room.name + ': enquiry context').toHaveText(name);
+    await expect(page.locator('.contact-room-context strong'), room.name + ': enquiry context').toHaveText(room.name);
     const message = await page.locator('#message').inputValue();
     expect(message).toContain(room.name);
     expect(message).toContain('current availability, rate and room features');
