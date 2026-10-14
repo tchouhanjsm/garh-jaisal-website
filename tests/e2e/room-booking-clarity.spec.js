@@ -70,6 +70,15 @@ test('room booking and enquiry actions remain usable without horizontal overflow
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
 
+  await page.setViewportSize({ width: 390, height: 844 });
+  const mobileMetrics = await page.evaluate(() => ({
+    viewport: window.innerWidth,
+    document: document.documentElement.scrollWidth,
+  }));
+  expect(mobileMetrics.document, 'Rooms must not overflow horizontally at mobile width')
+    .toBeLessThanOrEqual(mobileMetrics.viewport + 1);
+  await page.setViewportSize({ width: 1280, height: 800 });
+
   const metrics = await page.evaluate(() => ({
     viewport: window.innerWidth,
     document: document.documentElement.scrollWidth,
