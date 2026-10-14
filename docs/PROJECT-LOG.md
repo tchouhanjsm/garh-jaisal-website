@@ -140,6 +140,6 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 
 - Baseline `main`: `c1834eca165ef67f53cca18153be7e08ab657112`; no competing open PRs at branch creation.
 - Removed unconfirmed breakfast/lunch/dinner hours and fixed reservation-time limits; guests are directed to confirm current hours and table availability.
-- Aligned restaurant WhatsApp and Contact prefills around preferred date/time/party size; made clear that an enquiry is not a confirmed table.
+- Aligned restaurant WhatsApp and Contact prefills around preferred date/time/party size; updated the shared site-smoke assertion to verify the new text, and made clear that an enquiry is not a confirmed table.
 - Added Browser E2E for rooftop and restaurant enquiry handoffs, fallback actions, responsive overflow and touch-target size; updated Contact/restaurant sitemap dates.
 - Exact-head Site Checks, package preflight, Staging QA, Browser E2E and screenshot sheet are required; online mail, live staging and official dining hours remain owner-gated.
