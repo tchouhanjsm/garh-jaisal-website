@@ -151,4 +151,4 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Removed stale reception-hour and unconditional meet-and-assist/luggage promises from Home, the Stay Guide and the Fort Guide; linked each page to Directions and the contextual arrival enquiry.
 - Added rendered Browser E2E to guard the three public pages against withdrawn promises and verify both arrival destinations remain available.
 - Updated article `dateModified` values, sitemap dates and project/sprint snapshots.
-- Exact-head CI and screenshot sheet are required; official check-in/out, current reception hours and assistance availability remain owner-input items.
+- First Browser E2E run caught one stale homepage assertion in `tests/e2e/seo.spec.js`; updated it to require confirmation wording and the arrival enquiry link rather than the withdrawn schedule. Full CI and screenshot sheet must pass on the new exact head; official check-in/out, current reception hours and assistance availability remain owner-input items.
