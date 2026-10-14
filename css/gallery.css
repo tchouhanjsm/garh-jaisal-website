@@ -375,3 +375,14 @@
     padding-inline: 9px;
   }
 }
+
+
+/* Batch 1 — contextual path from licensed desert photographs to the Swiss tent page. */
+.gallery-section-cta { display:flex; align-items:center; justify-content:space-between; gap:22px; margin-top:24px; padding:clamp(18px,3vw,28px); border:1px solid var(--line); background:var(--sand-light); }
+.gallery-section-cta-copy { min-width:0; }
+.gallery-section-cta h3 { margin:0 0 7px; color:var(--dark); font-family:"Source Serif 4",Georgia,"Times New Roman",serif; font-size:clamp(1.5rem,3vw,2.2rem); line-height:1.15; }
+.gallery-section-cta p { max-width:62ch; margin:0; color:var(--muted); line-height:1.6; }
+@media (max-width:640px) {
+  .gallery-section-cta { align-items:stretch; flex-direction:column; }
+  .gallery-section-cta .button { align-self:flex-start; max-width:100%; white-space:normal; text-align:center; }
+}

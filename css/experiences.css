@@ -895,3 +895,19 @@
     padding: 22px 20px;
   }
 }
+
+
+/* Batch 1 — optional experience photo gallery and confirmed tent facilities. */
+.experience-photo-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin-top:26px; }
+.experience-photo-card { min-width:0; margin:0; overflow:hidden; border:1px solid var(--line); background:#fff; }
+.experience-photo-card img { display:block; width:100%; aspect-ratio:4/3; object-fit:cover; }
+.experience-photo-card figcaption { padding:12px 14px; color:var(--muted); font-size:.84rem; line-height:1.5; }
+.experience-facility-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:26px 0 0; padding:0; list-style:none; }
+.experience-facility-grid li { display:flex; align-items:flex-start; gap:10px; min-width:0; padding:16px; border:1px solid var(--line); background:#fff; line-height:1.5; }
+.experience-facility-check { flex:0 0 auto; display:inline-grid; place-items:center; width:24px; height:24px; border-radius:50%; background:var(--sand-light); color:var(--brown); font-weight:700; }
+@media (max-width:900px) { .experience-photo-grid,.experience-facility-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:560px) {
+  .experience-photo-grid,.experience-facility-grid { grid-template-columns:minmax(0,1fr); gap:12px; }
+  .experience-photo-card figcaption { padding:12px; }
+  .experience-facility-grid li { padding:14px; }
+}

@@ -8,6 +8,12 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | Google Analytics IDs | Keep both: G-0C646S1FQ0 and G-6S5PCEVXH4 | 2026-10-13 |
 | Menu and page structure | Approved (see `docs/SITE-ARCHITECTURE.md`) | 2026-10-12 |
 | Duplicate and orphan pages | Hide unclear ones temporarily; review at the end | 2026-10-12 |
+| Swiss tent facilities | All Swiss tents have a king-size bed, attached bathroom with hot/cold shower, tea and coffee maker, toiletries, study table, full-length mirror and towels. | 2026-10-14 |
+| Guide languages | English, Hindi, Bengali, Italian, French, Spanish and German; ask before promising any additional language. | 2026-10-14 |
+| Car services | SUV and sedan arrangements across Rajasthan and Delhi; drivers can communicate in Hindi and English. Confirm route, vehicle and availability for each booking. | 2026-10-14 |
+| Instagram profile | `https://www.instagram.com/garhjaisal/` | 2026-10-14 |
+| Garh Jaisal's Kitchen Maps destination | `https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8`; use this destination for the restaurant directions QR. Owner also supplied the Google Maps embed URL. | 2026-10-14 |
+| Desert Camp imagery | Owner-provided image assets are in `img/Desert_Camp/`; visually review subject/caption mapping before release. Do not restore removed or unlicensed images. | 2026-10-14 |
 
 ## Needed to unblock pages
 | # | Question | Answer | Unblocks |
@@ -16,14 +22,14 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | 2 | Rajasthan tours: which routes, single or multi-day, price shown or "on request" | | `rajasthan-tours.php` |
 | 3 | Is `explore-the-desert` a different full-day product from the sunset safari? If yes, how? | | restore or redirect |
 | 4 | Show "from" prices on room cards? If yes, per room and the wording ("from ₹X per night, taxes extra"?) | | Rooms |
-| 5 | Cancellation and booking policy (your words) | | `booking-policy.php` |
+| 5 | Cancellation and booking policy (your words) | NEEDS OWNER INPUT: owner will supply approved policy wording. Keep policy pages noindex/off-navigation until the text is provided and approved. | `booking-policy.php` |
 | 6 | Privacy: who is the data controller, which email handles requests | | `privacy.php` |
 | 7 | Check-in and check-out times, early-arrival access and luggage storage | NEEDS OWNER INPUT: confirm official times and whether early check-in or luggage storage can be arranged. Do not publish a specific time or promise before approval. | Rooms, Directions, schema |
 | 8 | Real guest reviews you may quote (text, first name, source, date) | | Home, Rooms |
 | 9 | Rooftop kitchen: opening hours, is a table booking by phone/WhatsApp only? | NEEDS OWNER INPUT: confirm current service hours and whether online table requests are enabled or guests should contact the hotel directly. Do not publish meal times or imply a table is reserved until approved. | Dining |
 | 10 | Reception hours and late-arrival process (the site previously showed 7:00 AM to 10:30 PM: confirm) | NEEDS OWNER INPUT: confirm current reception hours and whether meet-and-assist or luggage help can be arranged outside those hours. Do not state a fixed advance-notice rule unless approved. | Directions |
 | 11 | Hosting: cPanel PHP version, can the repo be deployed through cPanel Git? | | Sprint 3 |
-| 12 | Photos missing for any page (list pages where you want new images) | | Design |
+| 12 | Photos missing for any page (list pages where you want new images) | Owner-provided Desert Camp photos are available in `img/Desert_Camp/`; continue to request page-specific images where the current library is insufficient. | Design |
 | 13 | Which researched Jaisalmer itinerary themes may become actual offerings? Approve each theme and confirm route/stops, duration, vehicle, guide, access/permissions, fees, inclusions and price | | Car & City Tours and future detail pages |
 
 
