@@ -165,6 +165,8 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 
 ## PR #65 — licensed image reference replacement (2026-10-14)
 
+- Refreshed `tests/fixtures/head-snapshot.json` for the intentional Open Graph/Twitter image changes on Sleep Under the Stars and Sunset Camel Safari; the rendered head metadata test stays enabled and still guards titles, descriptions, canonicals, schema types, analytics IDs and draft visibility.
+
 - Replaced removed image references in the homepage, Desert Gallery and shared experience data without restoring any image reported for copyright infringement.
 - Kept the deleted image files deleted; aligned the responsive-image review inventory and WebP regression manifest with the surviving/new licensed asset set.
 - Regenerated the sitemap timestamp for the changed Gallery route; PR-head CI and screenshot evidence must pass before owner merge.
