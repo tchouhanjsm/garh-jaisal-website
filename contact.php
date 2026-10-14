@@ -44,7 +44,7 @@ $contactTopics = [
     ],
     'dining' => [
         'label' => 'Rooftop dining',
-        'message' => 'Hello, I would like to enquire about rooftop dining. Please confirm current menu options, dining availability and arrangements for my preferred date.',
+        'message' => 'Hello, I would like to enquire about a table at Garh Jaisal\'s Kitchen. Preferred date: [add date]. Preferred time: [add time]. Number of guests: [add number]. Please confirm current service hours, table availability, menu options and prices, and available dietary options for my preferred date.',
     ],
     'heritage-havelis' => [
         'label' => 'Havelis and architecture itinerary idea',
@@ -202,6 +202,8 @@ require __DIR__ . '/include/page-head.php';
           <?php elseif ($contactTopic !== null): ?>
             <?php if ($contactTopicKey === 'arrival'): ?>
               <p class="contact-topic-context">Enquiry topic: <strong><?= htmlspecialchars($contactTopic['label'], ENT_QUOTES, 'UTF-8') ?></strong>. Add your check-in date and expected arrival time to the draft message so the hotel can advise what may be arranged. Do not rely on meet-and-assist or luggage assistance until the hotel confirms it.</p>
+            <?php elseif ($contactTopicKey === 'dining'): ?>
+              <p class="contact-topic-context">Enquiry topic: <strong><?= htmlspecialchars($contactTopic['label'], ENT_QUOTES, 'UTF-8') ?></strong>. Add your preferred date, time and number of guests. This enquiry does not confirm a table; wait for the hotel to confirm service hours and availability.</p>
             <?php else: ?>
               <p class="contact-topic-context">Enquiry topic: <strong><?= htmlspecialchars($contactTopic['label'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your date or any specific questions.</p>
             <?php endif; ?>
