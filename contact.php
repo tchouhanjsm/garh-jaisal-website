@@ -40,7 +40,7 @@ if (
 $contactTopics = [
     'arrival' => [
         'label' => 'Arrival arrangements',
-        'message' => 'Hello, I would like to confirm arrival arrangements for my stay. Please advise on the route from Fort Parking, meet-and-assist or luggage-help options, and what I should plan for at my arrival time.',
+        'message' => 'Hello, I would like to confirm arrival arrangements for my stay. My check-in date is: [add date]. My expected arrival time is: [add time]. Please confirm current reception hours, the route from Fort Parking, and whether meet-and-assist or luggage help can be arranged for that date and time. Please confirm the official check-in/check-out times and any instructions for arrivals outside reception hours.',
     ],
     'dining' => [
         'label' => 'Rooftop dining',
@@ -72,6 +72,7 @@ $contactTopics = [
     ],
 ];
 $contactTopic = null;
+$contactTopicKey = null;
 $requestedTopic = $_GET['topic'] ?? '';
 if (
     $contactExperience === null
@@ -80,6 +81,7 @@ if (
     && isset($contactTopics[$requestedTopic])
 ) {
     $contactTopic = $contactTopics[$requestedTopic];
+    $contactTopicKey = $requestedTopic;
 }
 
 $prefilledMessage = '';
@@ -198,7 +200,11 @@ require __DIR__ . '/include/page-head.php';
           <?php elseif ($contactRoom !== null): ?>
             <p class="contact-room-context">Room enquiry: <strong><?= htmlspecialchars($contactRoom['name'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your travel dates or any specific questions.</p>
           <?php elseif ($contactTopic !== null): ?>
-            <p class="contact-topic-context">Enquiry topic: <strong><?= htmlspecialchars($contactTopic['label'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your date or any specific questions.</p>
+            <?php if ($contactTopicKey === 'arrival'): ?>
+              <p class="contact-topic-context">Enquiry topic: <strong><?= htmlspecialchars($contactTopic['label'], ENT_QUOTES, 'UTF-8') ?></strong>. Add your check-in date and expected arrival time to the draft message so the hotel can advise what may be arranged. Do not rely on meet-and-assist or luggage assistance until the hotel confirms it.</p>
+            <?php else: ?>
+              <p class="contact-topic-context">Enquiry topic: <strong><?= htmlspecialchars($contactTopic['label'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your date or any specific questions.</p>
+            <?php endif; ?>
           <?php endif; ?>
           <?php if ($errorMessage !== ''): ?>
             <p class="contact-error" role="alert"><?= htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8') ?></p>

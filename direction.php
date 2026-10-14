@@ -15,13 +15,13 @@ $schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $schemaPageUrl = $schemaSiteUrl . '/direction.php';
 $page = [
     'title' => 'Directions to Garh Jaisal Haveli | Jaisalmer Fort',
-    'description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival instructions, reception hours and hotel contact details.',
+    'description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival guidance and hotel contact details.',
     'path' => '/direction.php',
     'og_title' => 'Getting to Garh Jaisal Haveli inside Jaisalmer Fort',
-    'og_description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival instructions, reception hours and hotel contact details.',
+    'og_description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival guidance and hotel contact details.',
     'og_image' => '/img/jcity.jpg',
     'twitter_title' => 'Getting to Garh Jaisal Haveli inside Jaisalmer Fort',
-    'twitter_description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. Walk from Fort Parking, call for luggage help, and see reception hours, phone numbers and the address.',
+    'twitter_description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. Check the walking route from Fort Parking, travel notes, and hotel contact details.',
     'twitter_image' => '/img/jcity.jpg',
     'css' => ['css/arrival.css'],
     'schema' => [
@@ -55,7 +55,7 @@ require __DIR__ . '/include/page-head.php';
       <p class="eyebrow">Getting here</p>
       <h1>Arrive inside Jaisalmer Fort.</h1>
       <p>
-        Garh Jaisal Haveli is inside the fort. Cars stop at Fort Parking, then it is a short walk through the lanes. Call ahead and the team can meet you and help with luggage.
+        Garh Jaisal Haveli is inside the fort. Cars stop at Fort Parking, then it is a short walk through the lanes. Contact the hotel before travel to ask whether arrival or luggage assistance can be arranged.
       </p>
       <div class="actions">
         <a class="button button-primary" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>">Call <?= htmlspecialchars($hotelPhoneDisplay, ENT_QUOTES, 'UTF-8') ?></a>
@@ -80,7 +80,7 @@ require __DIR__ . '/include/page-head.php';
         <article class="arrival-fact">
           <span>From Fort Parking</span>
           <strong>5–6 min walk</strong>
-          <p>The team can meet you at the parking area and help with luggage. The walk is roughly 300 metres and can take longer when the fort is busy.</p>
+          <p>The walk is roughly 300 metres and can take longer when the fort is busy. Contact the hotel before arrival to ask whether assistance can be arranged.</p>
         </article>
         <article class="arrival-fact">
           <span>From the fort entrance</span>
@@ -88,9 +88,9 @@ require __DIR__ . '/include/page-head.php';
           <p>About 200 metres from the fort entrance to the haveli.</p>
         </article>
         <article class="arrival-fact">
-          <span>Reception</span>
-          <strong>7:00 AM–10:30 PM</strong>
-          <p>Porter and escort help is available during these hours. Share your ETA by call or WhatsApp. Please share your ETA by phone or WhatsApp before arrival.</p>
+          <span>Reception and arrival help</span>
+          <strong>Contact to confirm</strong>
+          <p>Call or WhatsApp the hotel before arrival to confirm current reception hours, share your ETA, and ask what arrival assistance can be arranged.</p>
         </article>
       </div>
     </div>
@@ -119,8 +119,8 @@ require __DIR__ . '/include/page-head.php';
         </div>
         <div class="step">
           <span>03</span>
-          <strong>Meet the team</strong>
-          <span>With notice, or when you call on arrival, staff can meet you and help with luggage.</span>
+          <strong>Ask about assistance</strong>
+          <span>Contact the hotel before travel to ask whether staff can meet you or help with luggage. Wait for confirmation before relying on any arrangement.</span>
         </div>
         <div class="step">
           <span>04</span>
@@ -148,7 +148,7 @@ require __DIR__ . '/include/page-head.php';
         </article>
         <article class="travel-card">
           <h3>Jaisalmer airport</h3>
-          <p>A private sedan to Fort Parking is listed at about ₹1100 and about 20 minutes. A porter can meet you when you reach the parking area.</p>
+          <p>A private sedan to Fort Parking is listed at about ₹1100 and about 20 minutes. Contact the hotel ahead of time to confirm availability and ask about assistance from the parking area.</p>
         </article>
         <article class="travel-card">
           <h3>Inside the fort</h3>
@@ -161,7 +161,7 @@ require __DIR__ . '/include/page-head.php';
           <p class="eyebrow">Busy hours</p>
           <h3>Rickshaws often stay outside from 8:00 AM to 8:00 PM.</h3>
           <p>
-            In those hours, rickshaws are often not allowed inside the fort because the lanes are narrow and crowded. The team can meet you at Fort Parking, walk you in, and help with luggage. Outside those hours, rickshaws often go inside the fort.
+            In those hours, rickshaws are often not allowed inside the fort because the lanes are narrow and crowded. Contact the hotel to ask whether walking or luggage assistance can be arranged, and confirm before relying on it. Outside those hours, rickshaws often go inside the fort.
           </p>
         </div>
         <a class="button button-primary" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>">Call when you arrive</a>
@@ -174,7 +174,7 @@ require __DIR__ . '/include/page-head.php';
       <div>
         <p class="eyebrow">Walking in</p>
         <h2>The route is cobbled, with two short stair sections.</h2>
-        <p>The fort lanes are narrow and uneven in places. Porter and escort help is available from 7:00 AM to 10:30 PM. Asking ahead is recommended.</p>
+        <p>The fort lanes are narrow and uneven in places. Contact the hotel before arrival to ask whether luggage or escort help can be arranged, and confirm any service hours in advance.</p>
       </div>
       <ul class="access-list">
         <li>
@@ -186,8 +186,8 @@ require __DIR__ . '/include/page-head.php';
           <span>Uneven cobbles and short stair sections along the route.</span>
         </li>
         <li>
-          <strong>Help offered</strong>
-          <span>Luggage help and a meet-and-assist at Fort Parking.</span>
+          <strong>Arrival assistance</strong>
+          <span>Ask the hotel whether luggage help or meet-and-assist can be arranged for your date.</span>
         </li>
       </ul>
     </div>
@@ -196,9 +196,9 @@ require __DIR__ . '/include/page-head.php';
   <section class="section arrival-contact">
     <div class="site-shell arrival-split">
       <div>
-        <p class="eyebrow">Check-in</p>
-        <h2>Reception is open <span>7:00 AM–10:30 PM.</span></h2>
-        <p><strong>Check-in is at 13:00.</strong> If you arrive earlier, you can use the rooftop terrace while the room is prepared. For arrivals between 10:30 PM and 6:30 AM, tell the hotel at least one day ahead so someone can meet you. If a late train is unexpected, call.</p>
+        <p class="eyebrow">Arrival arrangements</p>
+        <h2>Confirm your arrival plan.</h2>
+        <p>Please contact the hotel before travel to confirm current reception hours, check-in and check-out times, early-arrival access, luggage storage, and arrangements for arrivals outside reception hours. Share your expected arrival time so the team can advise what may be arranged for your date.</p>
         <div class="actions">
           <a class="button button-primary" href="contact.php?topic=arrival">Contact the hotel</a>
           <a class="button button-light" href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">WhatsApp</a>
@@ -235,17 +235,17 @@ require __DIR__ . '/include/page-head.php';
       $faq = [
           'items' => [
               ['question' => 'Can my car enter the fort?', 'answer' => 'No. Park at Fort Parking. The hotel is about a 4 minute walk from there.'],
-              ['question' => 'Can you meet me at the parking area?', 'answer' => 'Yes. Meet-and-assist is available with prior notice, or when you call on arrival.'],
+              ['question' => 'Can you meet me at the parking area?', 'answer' => 'Contact the hotel before travel with your expected arrival time and ask whether staff can meet you. Do not assume meet-and-assist is confirmed until the hotel replies.'],
               ['question' => 'Are rickshaws allowed inside?', 'answer' => 'Not during busy hours, about 8:00 AM–8:00 PM. Outside those times, rickshaws often go inside the fort.'],
-              ['question' => 'Can I check in early if I arrive before 13:00?', 'answer' => 'Early arrivals are welcome. If the room is ready, you can check in then. If it is not, use the rooftop terrace or leave your luggage until the room is ready.'],
-              ['question' => 'What if I arrive very early in the morning?', 'answer' => 'Leave your bags and spend time in the fort. Tell the hotel ahead if you want an early check-in. The team will try to arrange it.'],
+              ['question' => 'Can I check in early or leave luggage before check-in?', 'answer' => 'Contact the hotel before travel to confirm check-in times, whether early check-in is available, and whether luggage storage can be arranged.'],
+              ['question' => 'What if I arrive outside reception hours?', 'answer' => 'Call or WhatsApp the hotel before travel to confirm current reception hours and ask whether a meet-and-assist arrangement can be made for your expected arrival time.'],
               ['question' => 'Is there a restaurant on site?', 'answer' => [
-                  ['text' => 'The rooftop restaurant serves light meals, snacks, and drinks until 10:30 PM. Breakfast is available daily. See the '],
+                  ['text' => 'The rooftop restaurant is on site. Confirm current service times, breakfast availability, and menu options with the hotel before visiting. See the '],
                   ['link' => ['label' => 'rooftop dining page', 'href' => 'roof.php']],
                   ['text' => ' for the dining space.'],
               ]],
-              ['question' => 'I am arriving late at night by train. What should I do?', 'answer' => 'If you expect to arrive between 10:30 PM and 6:30 AM, tell the hotel 24 hours ahead so staff can meet you. For an unexpected late arrival, call.'],
-              ['question' => 'Do you help with luggage?', 'answer' => 'Yes. Luggage help is available to and from Fort Parking. Your driver can call a few minutes before you arrive.'],
+              ['question' => 'I am arriving late at night by train. What should I do?', 'answer' => 'Call or WhatsApp the hotel before travel with your expected arrival time. Confirm current reception hours and whether late-arrival assistance can be arranged; do not assume a late-night meet is confirmed until the team confirms it.'],
+              ['question' => 'Can I get help with luggage at Fort Parking?', 'answer' => 'Call or WhatsApp before arrival to confirm what luggage assistance can be arranged at Fort Parking. Your driver can also call the hotel when you are close.'],
               ['question' => 'Can I get a ride from the station or airport?', 'answer' => 'A rickshaw from the railway station is listed at about ₹300. A private sedan from the airport to Fort Parking is listed at about ₹1100. Call or WhatsApp to arrange it.'],
           ],
           'list_class' => 'faq-list',

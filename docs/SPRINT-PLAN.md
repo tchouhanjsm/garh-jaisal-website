@@ -18,7 +18,9 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 7 | Experience publication boundaries | ✓ merged in PR #57; hidden/draft sitemap and navigation gates plus sitemap-wide browser regression passed on exact PR head |
 | 8 | Pre-booking FAQ coverage | ✓ merged in PR #58; FAQPage schema matches visible FAQs and exact-head Browser E2E passed |
 | 9 | Car & City tour discovery and selected-page QA | ✓ merged in PR #59; exact-main Site Checks, package preflight, Staging QA and Browser E2E/screenshot sheet passed |
-| 10 | Room booking journey clarity | ◐ regression-test per-room booking and enquiry actions at mobile/desktop; preserve all owner-approved destinations and room facts |
+| 10 | Room booking journey clarity | ✓ merged in PR #60; exact-head Site Checks, package preflight, Staging QA and Browser E2E/screenshot sheet passed |
+| 11 | Arrival policy accuracy | ◐ PR #61 in review; unsupported assistance promises removed and exact-head checks pending |
+| 12 | Arrival enquiry completion | ◐ folded into PR #61: contextual prefilled Contact form and end-to-end journey regression |
 
 ---
 
@@ -227,3 +229,24 @@ Stop there: the owner merges.
 - Check primary-before-secondary action order, keyboard reachability, mobile and desktop overflow; retain the existing FAQ/schema suite and all other Browser E2E coverage.
 - Run the standard CI matrix: PHP lint and strict source checks on PHP 7.4/8.2, sitemap/publication checks, package preflight, staging dry run, full Browser E2E and full page screenshot sheet.
 - Do not add room rates, policy promises, a new form, new dependency, analytics behavior or production changes. External booking provider and real staging behavior remain unverified by CI.
+
+
+## Sprint 11 — arrival policy accuracy
+
+**Branch:** `feature/arrival-policy-accuracy`  
+**Outcome:** prevent guest confusion caused by arrival times and service promises that the owner-facts record does not confirm.
+
+- Remove unconfirmed check-in, early-arrival, reception-hour, luggage and late-arrival guarantees throughout Directions; retain practical route information and direct guests to confirm current arrangements.
+- Keep public URLs, canonicals, navigation, booking destinations and existing contact paths. Do not add replacement service promises, policy wording or prices.
+- Keep `docs/OWNER-FACTS.md` as the authority for unresolved check-in/check-out, reception, storage and late-arrival details.
+- Exact-head browser coverage checks the rendered wording, contact destinations, unsupported promises and no horizontal overflow at 390px/1280px; full-site checks and screenshot sheet remain required.
+- Acceptance: PHP 7.4/8.2 Site Checks, strict site checks, sitemap freshness, package preflight, Staging QA, Browser E2E and screenshot sheet pass on the exact PR head; owner visual review and live staging checks remain required.
+
+## Sprint 12 — arrival enquiry completion (folded into PR #61)
+
+**Outcome:** turn the Directions arrival CTA into a clear, contextual enquiry without implying that any assistance is already booked.
+
+- The Directions CTA opens the allowlisted `contact.php?topic=arrival` journey and prepopulates check-in date, expected arrival time and questions for the hotel to confirm.
+- Arrival-specific form guidance tells guests to wait for hotel confirmation before relying on meet-and-assist or luggage help.
+- Browser E2E follows the CTA into the form, checks the contextual copy and message, and deliberately never submits the form.
+- No new route, dependency, analytics behavior, service guarantee or mail-delivery claim is introduced.

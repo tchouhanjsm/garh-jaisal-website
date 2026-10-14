@@ -18,10 +18,10 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | 4 | Show "from" prices on room cards? If yes, per room and the wording ("from ₹X per night, taxes extra"?) | | Rooms |
 | 5 | Cancellation and booking policy (your words) | | `booking-policy.php` |
 | 6 | Privacy: who is the data controller, which email handles requests | | `privacy.php` |
-| 7 | Check-in and check-out times | | Rooms, schema |
+| 7 | Check-in and check-out times, early-arrival access and luggage storage | NEEDS OWNER INPUT: confirm official times and whether early check-in or luggage storage can be arranged. Do not publish a specific time or promise before approval. | Rooms, Directions, schema |
 | 8 | Real guest reviews you may quote (text, first name, source, date) | | Home, Rooms |
 | 9 | Rooftop kitchen: opening hours, is a table booking by phone/WhatsApp only? | | Dining |
-| 10 | Reception hours and late-arrival process (currently 7:00 AM to 10:30 PM on the site: confirm) | | Directions |
+| 10 | Reception hours and late-arrival process (the site previously showed 7:00 AM to 10:30 PM: confirm) | NEEDS OWNER INPUT: confirm current reception hours and whether meet-and-assist or luggage help can be arranged outside those hours. Do not state a fixed advance-notice rule unless approved. | Directions |
 | 11 | Hosting: cPanel PHP version, can the repo be deployed through cPanel Git? | | Sprint 3 |
 | 12 | Photos missing for any page (list pages where you want new images) | | Design |
 | 13 | Which researched Jaisalmer itinerary themes may become actual offerings? Approve each theme and confirm route/stops, duration, vehicle, guide, access/permissions, fees, inclusions and price | | Car & City Tours and future detail pages |
