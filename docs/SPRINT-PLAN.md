@@ -18,7 +18,8 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 7 | Experience publication boundaries | ✓ merged in PR #57; hidden/draft sitemap and navigation gates plus sitemap-wide browser regression passed on exact PR head |
 | 8 | Pre-booking FAQ coverage | ✓ merged in PR #58; FAQPage schema matches visible FAQs and exact-head Browser E2E passed |
 | 9 | Car & City tour discovery and selected-page QA | ✓ merged in PR #59; exact-main Site Checks, package preflight, Staging QA and Browser E2E/screenshot sheet passed |
-| 10 | Room booking journey clarity | ◐ regression-test per-room booking and enquiry actions at mobile/desktop; preserve all owner-approved destinations and room facts |
+| 10 | Room booking journey clarity | ✓ merged in PR #60; exact-head Site Checks, package preflight, Staging QA and Browser E2E/screenshot sheet passed |
+| 11 | Arrival policy accuracy | ◐ remove unconfirmed check-in, reception-hour and dining-time promises from Directions; preserve contact routes and test responsive copy |
 
 ---
 
@@ -227,3 +228,15 @@ Stop there: the owner merges.
 - Check primary-before-secondary action order, keyboard reachability, mobile and desktop overflow; retain the existing FAQ/schema suite and all other Browser E2E coverage.
 - Run the standard CI matrix: PHP lint and strict source checks on PHP 7.4/8.2, sitemap/publication checks, package preflight, staging dry run, full Browser E2E and full page screenshot sheet.
 - Do not add room rates, policy promises, a new form, new dependency, analytics behavior or production changes. External booking provider and real staging behavior remain unverified by CI.
+
+
+## Sprint 11 — arrival policy accuracy
+
+**Branch:** `feature/arrival-policy-accuracy`  
+**Outcome:** prevent guest confusion caused by arrival times and service promises that the owner-facts record does not confirm.
+
+- Replace the unapproved 13:00 check-in time and unconfirmed early-arrival, terrace/luggage-storage, fixed late-arrival notice, reception-hours and restaurant-service promises with clear instructions to contact the hotel and confirm what can be arranged.
+- Keep contact links, address, current URL, canonical, navigation and booking paths. Do not add a replacement time, refund/booking policy or new service promise.
+- Update `docs/OWNER-FACTS.md` to keep check-in/check-out, current reception hours and late-arrival/luggage arrangements explicitly owner-blocked until answered.
+- Add Browser E2E assertions for the rendered Direction page’s wording, call/WhatsApp paths and no horizontal overflow at 390px and 1280px. Keep the site-wide four-viewport suite and 390px/1280px page sheet required.
+- Acceptance: exact-head PHP 7.4/8.2 Site Checks, strict site checks, sitemap freshness, package preflight, staging dry run, Browser E2E and screenshot artifact all pass. Real reception, storage, late-arrival availability and restaurant service hours remain owner-confirmation items.
