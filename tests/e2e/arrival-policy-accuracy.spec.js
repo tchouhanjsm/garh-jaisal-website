@@ -37,6 +37,7 @@ test('Directions avoids unconfirmed check-in, reception and arrival promises', a
     'A porter can meet you when you reach the parking area',
     'Luggage help and a meet-and-assist at Fort Parking',
     'Meet-and-assist is available with prior notice',
+    'Meet the team',
   ]) {
     expect(renderedCopy, 'Directions should not publish unconfirmed claim: ' + unconfirmedClaim)
       .not.toContain(unconfirmedClaim);

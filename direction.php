@@ -119,7 +119,7 @@ require __DIR__ . '/include/page-head.php';
         </div>
         <div class="step">
           <span>03</span>
-          <strong>Meet the team</strong>
+          <strong>Ask about assistance</strong>
           <span>Contact the hotel before travel to ask whether staff can meet you or help with luggage. Wait for confirmation before relying on any arrangement.</span>
         </div>
         <div class="step">
