@@ -430,8 +430,7 @@ return [
         'faq' => [
             ['question' => 'What does the half-day tour cover?', 'answer' => 'The current route focuses on Jaisalmer Fort, heritage lanes, selected havelis and local markets, with the exact route adapted to the day.'],
             ['question' => 'Does it include entry fees?', 'answer' => 'Entry fees are not included unless specifically confirmed in the booking.'],
-            ['question' => 'Can the tour start from the hotel?', 'answer' => 'The planned starting point is Garh Jaisal Haveli inside Jaisalmer Fort, subject to the confirmed itinerary.'],
-            ['question' => 'Which guide languages can I request?', 'answer' => 'Ask about English, Hindi, Bengali, Italian, French, Spanish or German. Availability and the current price are confirmed on WhatsApp for your date.'],
+            ['question' => 'Can the tour start from the hotel?', 'answer' => 'The planned starting point is Garh Jaisal Haveli inside Jaisalmer Fort, subject to the confirmed itinerary. Ask on WhatsApp to confirm guide availability in English, Hindi, Bengali, Italian, French, Spanish or German and the current price for your date.'],
         ],
         
         'related' => ['full-day-jaisalmer-tour', 'sunset-camel-safari'],
@@ -488,8 +487,7 @@ return [
         'faq' => [
             ['question' => 'What does the full-day tour cover?', 'answer' => 'The route combines Jaisalmer Fort, historic havelis, markets and additional heritage areas according to the confirmed itinerary.'],
             ['question' => 'Are meals included?', 'answer' => 'Meals are not included unless specifically confirmed in the booking.'],
-            ['question' => 'Can we request specific places?', 'answer' => 'Yes. Tell the hotel what you want to prioritise so the route can be discussed with the guide before the tour.'],
-            ['question' => 'Which guide languages can I request?', 'answer' => 'Ask about English, Hindi, Bengali, Italian, French, Spanish or German. Availability and the current price are confirmed on WhatsApp for your date.'],
+            ['question' => 'Can we request specific places?', 'answer' => 'Yes. Tell the hotel what you want to prioritise so the route can be discussed with the guide before the tour. Ask on WhatsApp to confirm guide availability in English, Hindi, Bengali, Italian, French, Spanish or German and the current price for your date.'],
         ],
         
         'related' => ['half-day-jaisalmer-tour', 'sunset-camel-safari'],
