@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-14 |
-| Current phase | Arrival policy accuracy + end-to-end arrival enquiry completion |
+| Current phase | Dining availability accuracy + end-to-end dining enquiry completion |
 | Base branch | `main` |
-| Baseline commit | `2c587f98d3f926367c5cfaee2f81ef240dd59296` (PR #60 merge commit) |
-| Last merged PR | [#60 — protect room booking and enquiry journeys](https://github.com/tchouhanjsm/garh-jaisal-website/pull/60) |
-| PR #60 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38510062198); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38510066758); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38510082036); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38510096820) |
-| Screenshot evidence | [PR #60 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38510096820/artifacts/11869742641); [PR #60 Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38510096820/artifacts/11870035224) |
+| Baseline commit | `c1834eca165ef67f53cca18153be7e08ab657112` (PR #61 merge commit) |
+| Last merged PR | [#61 — complete trustworthy arrival enquiry journey](https://github.com/tchouhanjsm/garh-jaisal-website/pull/61) |
+| PR #61 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38521315521); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38521315469); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38521315358); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38521315357) |
+| Screenshot evidence | [PR #61 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38521315357/artifacts/11873159546); [PR #61 Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38521315357/artifacts/11873214566) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None after PR #60 merge |
-| Next action | Verify PR #61 exact-head checks and review Directions → prefilled arrival enquiry at 390px and 1280px; owner merges |
+| Open PRs at baseline verification | None after PR #61 merge |
+| Next action | Verify PR #62 exact-head checks and review restaurant/contact dining enquiries at 390px and 1280px; owner merges |
 
 ## Phase roadmap
 
@@ -112,7 +112,7 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Exact PR-head [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923692), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923724), [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923694) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923706) passed. [390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38500923706/artifacts/11865921955).
 - Real staging, CAPTCHA/mail, final image approval and release remain owner-gated.
 
-## Sprint 9 — Car & City tour discovery and selected-page QA (PR in review)
+## Sprint 9 — Car & City tour discovery and selected-page QA (PR #59 merged)
 
 - Baseline: main at `33516d42e7e06b055c782da714cc8836f528574e`; main-push Site Checks, package preflight, Staging QA and Browser E2E passed on this SHA.
 - Remove the duplicate category breadcrumb and give the three existing Car & City cards fixed 16:10 media frames; protect Rooms and Rooftop Dining with selected-page Browser E2E.
@@ -127,10 +127,19 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Added `tests/e2e/room-booking-clarity.spec.js` to protect the existing availability destination and selected-room Contact journey for all seven rooms.
 - Exact PR-head PHP/site checks, package preflight, staging dry run, Browser E2E and screenshot sheet passed; real booking-provider checkout and external staging remain owner-gated.
 
-## Sprint 11 — arrival policy accuracy + enquiry completion (PR #61 in review)
+## Sprint 11–12 — arrival policy accuracy + enquiry completion (PR #61 merged)
 
-- Baseline `main`: `2c587f98d3f926367c5cfaee2f81ef240dd59296`; PR #61 adds the next arrival-to-contact slice in the same vertical batch.
-- Removed remaining unconfirmed meet-and-assist and luggage guarantees across Directions; updated metadata and only the approved Directions entries in the frozen head snapshot fixture.
-- Fixed Browser E2E strict-mode failure by targeting the named Call/WhatsApp links; added end-to-end coverage for Directions → prefilled Contact arrival enquiry and 390px/1280px overflow.
-- Contact arrival prefill now asks for check-in date, ETA and confirmation of available arrangements; tests never submit the real form.
-- Exact-head PHP/site checks, package preflight, Staging QA, Browser E2E and screenshot sheet must pass after this commit; owner visual review and live form-delivery/staging checks remain pending.
+- PR #61 merged to `main` at `c1834eca165ef67f53cca18153be7e08ab657112`; exact-head Site Checks, package preflight, Staging QA and Browser E2E/screenshot sheet passed.
+- Removed unconfirmed reception, early-arrival, dining-time and meet-and-assist promises; updated only approved Directions description values in the frozen metadata fixture.
+- Added an arrival-specific Contact prefill for check-in date/ETA and regression coverage for Directions → Contact without submitting a live enquiry.
+- No public routes, booking destinations, image mappings, GA4 IDs, dependencies, confirmed prices or policy terms changed.
+- Owner confirmation of arrival/dining hours and live staging/mail delivery remains required.
+
+
+## Sprint 13–14 — dining availability accuracy + enquiry completion (PR #62 in review)
+
+- Baseline `main`: `c1834eca165ef67f53cca18153be7e08ab657112`; no competing open PRs at branch creation.
+- Removed unconfirmed breakfast/lunch/dinner hours and fixed reservation-time limits; guests are directed to confirm current hours and table availability.
+- Aligned restaurant WhatsApp and Contact prefills around preferred date/time/party size; made clear that an enquiry is not a confirmed table.
+- Added Browser E2E for rooftop and restaurant enquiry handoffs, fallback actions, responsive overflow and touch-target size; updated Contact/restaurant sitemap dates.
+- Exact-head Site Checks, package preflight, Staging QA, Browser E2E and screenshot sheet are required; online mail, live staging and official dining hours remain owner-gated.
