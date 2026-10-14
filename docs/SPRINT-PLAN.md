@@ -223,7 +223,7 @@ Stop there: the owner merges.
 **Outcome:** protect the two existing choices on each room card without changing how guests book or enquire.
 
 - Keep the current external booking URL, all room names/descriptions/features, every image mapping, existing Contact room-prefill format, all public URLs/canonicals and both GA4 IDs unchanged.
-- Add a focused Browser E2E suite that reads the room registry, visits all seven current room cards, verifies each primary availability link and secondary room-specific enquiry link, and checks rendered Contact copy matches the selected room.
+- Added `tests/e2e/room-booking-clarity.spec.js`: it reads the room registry, visits all current room cards, verifies each primary availability link and secondary room-specific enquiry link, and checks rendered Contact copy matches the selected room.
 - Check primary-before-secondary action order, keyboard reachability, mobile and desktop overflow; retain the existing FAQ/schema suite and all other Browser E2E coverage.
 - Run the standard CI matrix: PHP lint and strict source checks on PHP 7.4/8.2, sitemap/publication checks, package preflight, staging dry run, full Browser E2E and full page screenshot sheet.
 - Do not add room rates, policy promises, a new form, new dependency, analytics behavior or production changes. External booking provider and real staging behavior remain unverified by CI.
