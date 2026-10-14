@@ -16,7 +16,7 @@
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Open PRs at baseline verification | None at Sprint 17 branch creation |
-| Next action | Review [PR #64](https://github.com/tchouhanjsm/garh-jaisal-website/pull/64) and exact-head CI; owner alone merges |
+| Next action | Review PR #65 exact-head CI and licensed image replacements; owner alone merges |
 
 ## Phase roadmap
 
@@ -161,3 +161,13 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Add `booking_outbound_click`, `click_to_call`, `click_whatsapp` and `enquiry_start`; route each custom event to both configured GA4 IDs using the site configuration as the single source of truth.
 - Enquiry context is limited to `room`, `dining`, `arrival` or `general`. Send only route/context and static CTA metadata; never send field contents, messages, email addresses, or query strings. These events represent intent, not confirmed bookings or sent enquiries.
 - Browser E2E checks event payloads and routing in the data layer, and focuses the form without submitting it. Actual GA4 receipt, Realtime/DebugView validation, and optional custom-dimension registration remain owner-side checks.
+
+
+## PR #65 — licensed image reference replacement (2026-10-14)
+
+- Refreshed `tests/fixtures/head-snapshot.json` for the intentional Open Graph/Twitter image changes on Sleep Under the Stars and Sunset Camel Safari; the rendered head metadata test stays enabled and still guards titles, descriptions, canonicals, schema types, analytics IDs and draft visibility.
+
+- Replaced removed image references in the homepage, Desert Gallery and shared experience data without restoring any image reported for copyright infringement.
+- Kept the deleted image files deleted; aligned the responsive-image review inventory and WebP regression manifest with the surviving/new licensed asset set.
+- Regenerated the sitemap timestamp for the changed Gallery route; PR-head CI and screenshot evidence must pass before owner merge.
+- The QR artwork `img/restaurant_QR.png` is not part of this PR’s changed files. Its Google Business Profile destination and restaurant-page integration are a separate follow-up, pending the exact profile share URL.

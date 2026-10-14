@@ -25,7 +25,7 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 14 | Dining enquiry completion | ✓ merged in PR #62; restaurant/rooftop handoffs covered by Browser E2E |
 | 15 | Site-wide arrival claim accuracy | ✓ merged in PR #63; stale reception/assistance claims removed from Home and two guides |
 | 16 | Contextual arrival enquiry consistency | ✓ merged in PR #63; Directions and Contact arrival routes retained across all three pages |
-| 17 | Booking and enquiry intent measurement | ◐ PR #64 open for owner review; intent events routed to both approved GA4 IDs; no merge or deployment authorized |
+| 17 | Booking and enquiry intent measurement | ✓ PR #64 merged; intent events routed to both approved GA4 IDs; live-property validation still owner-side |
 
 ---
 
@@ -309,3 +309,11 @@ Stop there: the owner merges.
 - Route the events to both configured GA4 IDs using `send_to`; use beacon transport for click-intent events. Do not create a purchase/booking-complete event.
 - Add Browser E2E that asserts event names, payloads, one-time form-start behavior and both destination IDs while preventing real external navigation. No live booking, email or enquiry submission is part of the tests.
 - Update the Smart Check matrix and Project Log within this PR. Actual GA4 receipt, Realtime/DebugView and property-level custom-dimension setup remain manual checks; no production deployment is authorized.
+
+
+## PR #65 — licensed image reference replacement (2026-10-14)
+
+- Replace reported/unlicensed image paths with surviving hotel assets and newly supplied Desert Camp photographs; do not restore deleted images.
+- Keep the Gallery and experience data mappings, responsive-image review candidates, optimization regression manifest, and `sitemap.xml` aligned to the remaining files.
+- Required exact-head gates: PHP 7.4/8.2 Site Checks, sitemap/publication checks, responsive-image review, full Browser E2E and screenshot sheet.
+- Restaurant QR integration is a separate slice and must use the exact owner-verified Google Business Profile/Maps share URL.

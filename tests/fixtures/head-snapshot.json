@@ -164,12 +164,11 @@
     "Sleep Under the Stars in the Jaisalmer Desert | Garh Jaisal Haveli",
     "Spend a night in the Jaisalmer desert with camel riding, sunset in the dunes, dinner prepared in the desert, sleeping under the stars and breakfast.",
     "https://www.hotelgarhjaisal.com/sleep-under-the-stars.php",
-    "https://www.hotelgarhjaisal.com/img/desert4.jpg",
-    "Sleeping under the stars in the desert near Jaisalmer",
+    "https://www.hotelgarhjaisal.com/img/Desert_Camp/CampingInJsm.jpeg",
+    "Desert camping experience near Jaisalmer",
     "Sunset Camel Safari in Jaisalmer | Garh Jaisal Haveli",
     "A sunset camel safari from Jaisalmer with desert transport, a camel ride, sunset in the dunes, tea and snacks, dinner prepared in the desert and return to town.",
     "https://www.hotelgarhjaisal.com/sunset-camel-safari.php",
-    "https://www.hotelgarhjaisal.com/img/desert6.jpg",
     "Camel riders travelling across the dunes near Jaisalmer",
     "Overnight Swiss Tent Safari in Jaisalmer | Garh Jaisal Haveli",
     "Spend a night in the Jaisalmer desert in a Swiss Deluxe Tent with camel riding, sunset, cultural programme, dinner and breakfast.",
@@ -1728,11 +1727,11 @@
         ],
         [
           32,
-          168
+          96
         ],
         [
           97,
-          169
+          168
         ],
         [
           34,
@@ -1756,7 +1755,7 @@
         ],
         [
           41,
-          168
+          96
         ],
         [
           42,
@@ -1781,26 +1780,26 @@
     ],
     [
       25,
+      169,
       170,
       171,
-      172,
       29,
       [
         [
           30,
-          171
+          170
         ],
         [
           32,
-          173
+          172
         ],
         [
           97,
-          174
+          173
         ],
         [
           34,
-          170
+          169
         ],
         [
           35,
@@ -1808,7 +1807,7 @@
         ],
         [
           37,
-          172
+          171
         ],
         [
           38,
@@ -1816,15 +1815,15 @@
         ],
         [
           40,
-          171
+          170
         ],
         [
           41,
-          173
+          172
         ],
         [
           42,
-          170
+          169
         ]
       ],
       [
@@ -1846,19 +1845,19 @@
   ],
   "draftAndHiddenPages": [
     [
+      174,
       175,
-      176,
-      177
+      176
     ],
     [
+      177,
       178,
-      179,
-      177
+      176
     ],
     [
+      179,
       180,
-      181,
-      177
+      176
     ]
   ]
 }

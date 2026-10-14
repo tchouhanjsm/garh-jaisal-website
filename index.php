@@ -407,14 +407,14 @@ require __DIR__ . '/include/page-head.php';
 
       <figure>
         <img
-          src="img/3.webp" <?= gj_image_dimension_attributes('img/3.webp') ?>
+          src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?>
           alt="Sandstone architecture at Garh Jaisal Haveli"
           loading="lazy">
       </figure>
 
       <figure>
         <img
-          src="img/big2.jpg" <?= gj_image_dimension_attributes('img/big2.jpg') ?>
+          src="img/v2/fort-from-roof.jpg" <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?>
           alt="Rooftop view at Garh Jaisal Haveli"
           loading="lazy">
       </figure>
