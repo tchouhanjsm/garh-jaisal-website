@@ -40,6 +40,7 @@ function expectRoutedOnce(events, eventName, expectedPath, expectedContext) {
 
 test('booking, call and WhatsApp intent events route to both approved GA4 IDs', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Conversion event routing runs once on desktop-1280');
+  await page.route('https://www.googletagmanager.com/**', route => route.abort());
   await preventTrackedNavigation(page);
 
   await page.goto('/contact.php', { waitUntil: 'domcontentloaded' });
@@ -66,6 +67,7 @@ test('booking, call and WhatsApp intent events route to both approved GA4 IDs', 
 
 test('enquiry_start reports room, dining, arrival or general on first form interaction only', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Enquiry context regression runs once on desktop-1280');
+  await page.route('https://www.googletagmanager.com/**', route => route.abort());
 
   await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
   const roomEnquiryPath = await page.locator('a.room-enquiry-link').first().getAttribute('href');
