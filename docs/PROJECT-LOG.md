@@ -16,7 +16,7 @@
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Open PRs at baseline verification | None at Batch 3 branch creation |
-| Next action | Review PR #68 exact-head CI, Fort walk, vehicle-service routes and arrival map; owner alone merges |
+| Next action | Fix three Browser E2E failures, confirm exact-head rerun and review PR #68; next planned work is Sprint 21 SEO content cluster |
 
 ## Phase roadmap
 

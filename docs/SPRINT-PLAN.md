@@ -28,6 +28,9 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 17 | Booking and enquiry intent measurement | ✓ PR #64 merged; intent events routed to both approved GA4 IDs; live-property validation still owner-side |
 | 18 | Licensed Desert Gallery and Swiss Tent Safari conversion | ✓ PR #66 merged; post-merge checks passed; visual photo/caption review remains owner-side |
 | 19 | Restaurant conversion: menu booklet, maps QR and social follow | ✓ PR #67 merged; post-merge Site Checks, package preflight, staging dry run and Browser E2E passed |
+| 20 | Fort walk, car services and Directions map | ◐ PR #68 in review; E2E failures being fixed; metadata freeze retained |
+| 21 | SEO content cluster and Packages conversion | Planned after Sprint 20; enrich `pack.php` and build a researched, internally linked travel-intent content cluster without thin duplicate pages |
+| 22 | Guest policies and trust pages | Blocked on owner-approved privacy, terms and cancellation/refund wording; keep unpublished/noindex until confirmed |
 | 20 | Fort walk, car services and Directions map | ◐ PR #68 in review; confirmed Fort-walk stops and guide languages, SUV/sedan route enquiries and responsive arrival map |
 
 ---
@@ -353,3 +356,21 @@ Stop there: the owner merges.
 - Direct half-day/full-day city-tour price and language enquiries to WhatsApp. Do not display rates or imply that a guide in a requested language is guaranteed before availability is confirmed.
 - Add a responsive Google Maps map section to `direction.php` and preserve the existing exact hotel Maps destination link. Reinforce that the last part is on foot because cars cannot enter the Fort lanes.
 - Required gates: PHP 7.4/8.2 Site Checks, strict-image checks, sitemap freshness, full Browser E2E and 320/390/1280/1440 responsive checks. No real staging-host validation or production deployment in this PR.
+
+
+## Sprint 21 — SEO content cluster and Packages conversion (planned after PR #68)
+
+**Commercial goal:** capture more non-brand searches and turn guide readers into direct room, tour or dining enquiries.
+
+- Review current `blog.php`, existing guide pages, sitemap and internal links before proposing new URLs. Map high-intent topic clusters to one best destination to avoid keyword cannibalisation.
+- Improve `pack.php` hierarchy, concise experience descriptions, landscape/cropped media and clear links to tour and car-service enquiry paths; retain only licensed/owner-provided images.
+- Build a coherent set of substantive articles from real guest planning intent: choosing among Jaisalmer desert experiences, visiting/staying inside Jaisalmer Fort, and a practical 2-day Jaisalmer plan. Prefer improving/connecting existing guides when intent already overlaps; do not mass-produce near-duplicate pages.
+- Each page needs a distinct search intent, helpful original content, descriptive title/meta, one H1, appropriate FAQ schema only for visible Q&A, relevant internal links and a contextual direct-contact CTA. Do not invent reviews, rankings, prices, opening hours or service guarantees.
+- Add E2E coverage for sitemap/navigation reachability, internal links, metadata uniqueness, CTA journeys and responsive image crops. Use Search Console/GA4 after release to prioritize future content by impressions, clicks and enquiry intent.
+
+## Sprint 22 — Guest policies and trust pages (owner-blocked)
+
+- Keep the privacy policy, terms and the single combined cancellation/refund policy page in draft/noindex/off-navigation status until the owner provides the approved policy wording.
+- Confirm the privacy/data-controller name and contact email, information collected, contact-form processing and retention language before publishing the privacy page.
+- Keep guest FAQs as their own useful pre-booking page and avoid legal claims until the owner supplies the copy. Do not invent refund windows, deposits, cancellation charges, check-in/out times or exceptions.
+- Once approved wording is supplied, implement the policy pages as one trust-focused slice, update internal links/sitemap only after publication approval, and add tests that draft/approved state and exact visible copy are consistent.
