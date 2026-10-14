@@ -163,14 +163,14 @@ require __DIR__ . '/include/page-head.php';
       'title' => 'Desert experiences',
       'description' => 'Desert landscapes, camel safaris and overnight experiences arranged from Jaisalmer.',
       'images' => [
-        ['desert1.jpg', 'Desert landscape near Jaisalmer'],
+        ['Desert_Camp/camp_from_above.jpeg', 'Desert camp viewed from above near Jaisalmer'],
         ['desert2.jpg', 'Sand dunes near Jaisalmer'],
-        ['desert5.jpg', 'Desert experience near Jaisalmer'],
+        ['Desert_Camp/camp_evening.jpeg', 'Evening at the desert camp near Jaisalmer'],
         ['desert3.jpg', 'Desert dunes near Jaisalmer'],
-        ['desert4.jpg', 'Desert safari near Jaisalmer'],
-        ['desert6.jpg', 'Camel safari in the desert near Jaisalmer'],
+        ['Desert_Camp/CampingInJsm.jpeg', 'Camping experience near Jaisalmer'],
+        ['Desert_Camp/tent_deluxe.jpeg', 'Deluxe tent accommodation at the desert camp near Jaisalmer'],
         ['desert7.jpg', 'Desert camp experience near Jaisalmer'],
-        ['desert8.jpg', 'Desert landscape near Jaisalmer'],
+        ['Desert_Camp/camp_dinner.jpeg', 'Dinner at the desert camp near Jaisalmer'],
         ['desert10.jpg', 'Desert experience near Jaisalmer']
       ]
     ],
