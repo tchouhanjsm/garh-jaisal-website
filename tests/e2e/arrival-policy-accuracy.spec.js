@@ -11,8 +11,8 @@ test('Directions avoids unconfirmed check-in, reception and arrival promises', a
   await expect(arrival.getByRole('heading', { level: 2, name: 'Confirm your arrival plan.' })).toBeVisible();
   await expect(arrival).toContainText('confirm current reception hours, check-in and check-out times, early-arrival access, luggage storage');
   await expect(arrival).toContainText('Share your expected arrival time');
-  await expect(arrival.locator('a[href^="tel:"]')).toBeVisible();
-  await expect(arrival.locator('a[href^="https://wa.me/"]')).toBeVisible();
+  await expect(arrival.getByRole('link', { name: 'Call', exact: true })).toBeVisible();
+  await expect(arrival.getByRole('link', { name: 'WhatsApp', exact: true })).toBeVisible();
 
   const arrivalFaq = page.locator('.arrival-faq');
   await expect(arrivalFaq).toContainText('Can I check in early or leave luggage before check-in?');
@@ -31,6 +31,12 @@ test('Directions avoids unconfirmed check-in, reception and arrival promises', a
     'Breakfast is available daily',
     'until 10:30 PM',
     'use the rooftop terrace while the room is prepared',
+    'team can meet you and help with luggage',
+    'team can meet you at the parking area and help with luggage',
+    'staff can meet you and help with luggage',
+    'A porter can meet you when you reach the parking area',
+    'Luggage help and a meet-and-assist at Fort Parking',
+    'Meet-and-assist is available with prior notice',
   ]) {
     expect(renderedCopy, 'Directions should not publish unconfirmed claim: ' + unconfirmedClaim)
       .not.toContain(unconfirmedClaim);

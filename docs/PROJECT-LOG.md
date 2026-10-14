@@ -7,7 +7,7 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-14 |
-| Current phase | Arrival policy accuracy — remove unconfirmed check-in, reception-hour and dining-time promises |
+| Current phase | Arrival policy accuracy + end-to-end arrival enquiry completion |
 | Base branch | `main` |
 | Baseline commit | `2c587f98d3f926367c5cfaee2f81ef240dd59296` (PR #60 merge commit) |
 | Last merged PR | [#60 — protect room booking and enquiry journeys](https://github.com/tchouhanjsm/garh-jaisal-website/pull/60) |
@@ -16,7 +16,7 @@
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Open PRs at baseline verification | None after PR #60 merge |
-| Next action | Remove unsupported arrival-policy promises while keeping all public URLs and contact destinations intact |
+| Next action | Verify PR #61 exact-head checks and review Directions → prefilled arrival enquiry at 390px and 1280px; owner merges |
 
 ## Phase roadmap
 
@@ -127,9 +127,10 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Added `tests/e2e/room-booking-clarity.spec.js` to protect the existing availability destination and selected-room Contact journey for all seven rooms.
 - Exact PR-head PHP/site checks, package preflight, staging dry run, Browser E2E and screenshot sheet passed; real booking-provider checkout and external staging remain owner-gated.
 
-## Sprint 11 — arrival policy accuracy (implementation PR)
+## Sprint 11 — arrival policy accuracy + enquiry completion (PR #61 in review)
 
-- Baseline `main`: `2c587f98d3f926367c5cfaee2f81ef240dd59296`; verified PR #60 merged and no competing open PR. PR #60 exact-head checks and Browser E2E passed.
-- Removed unconfirmed check-in time, early-arrival/terrace/luggage promises, fixed late-arrival notice rules, and specific restaurant service-time claims from Directions; the page now asks guests to confirm arrangements directly.
-- Updated `docs/OWNER-FACTS.md`, refreshed the Directions `sitemap.xml` lastmod, and added rendered Browser E2E coverage for unsupported claims, contact paths and mobile/desktop overflow.
-- No route, canonical, booking destination, analytics IDs, rates or new guest promises changed. Owner must confirm check-in/out, reception hours, storage and late-arrival arrangements before those specifics can be published.
+- Baseline `main`: `2c587f98d3f926367c5cfaee2f81ef240dd59296`; PR #61 adds the next arrival-to-contact slice in the same vertical batch.
+- Removed remaining unconfirmed meet-and-assist and luggage guarantees across Directions and updated page metadata to avoid claiming published reception hours.
+- Fixed Browser E2E strict-mode failure by targeting the named Call/WhatsApp links; added end-to-end coverage for Directions → prefilled Contact arrival enquiry and 390px/1280px overflow.
+- Contact arrival prefill now asks for check-in date, ETA and confirmation of available arrangements; tests never submit the real form.
+- Exact-head PHP/site checks, package preflight, Staging QA, Browser E2E and screenshot sheet must pass after this commit; owner visual review and live form-delivery/staging checks remain pending.
