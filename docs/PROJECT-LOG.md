@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-14 |
-| Current phase | Room booking journey clarity — preserve confirmed booking/enquiry paths while regression-testing per-room choices |
+| Current phase | Arrival policy accuracy — remove unconfirmed check-in, reception-hour and dining-time promises |
 | Base branch | `main` |
-| Baseline commit | `978c541eeeae43ce8c7e37a4e277c0fd229d0366` (PR #59 merge commit) |
-| Last merged PR | [#59 — improve Car & City tour discovery](https://github.com/tchouhanjsm/garh-jaisal-website/pull/59) |
-| PR #59 exact-main checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38509126863); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38509127039); [Staging QA local dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38509126922); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38509126973) |
-| Screenshot evidence | [PR #59 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38509126973/artifacts/11869471171); [PR #59 Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38509126973/artifacts/11869541099) |
+| Baseline commit | `2c587f98d3f926367c5cfaee2f81ef240dd59296` (PR #60 merge commit) |
+| Last merged PR | [#60 — protect room booking and enquiry journeys](https://github.com/tchouhanjsm/garh-jaisal-website/pull/60) |
+| PR #60 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38510062198); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38510066758); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38510082036); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38510096820) |
+| Screenshot evidence | [PR #60 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38510096820/artifacts/11869742641); [PR #60 Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38510096820/artifacts/11870035224) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None after PR #59 merge |
-| Next action | Regression-test per-room availability and room-specific enquiry paths; do not change booking URLs or add unapproved facts |
+| Open PRs at baseline verification | None after PR #60 merge |
+| Next action | Remove unsupported arrival-policy promises while keeping all public URLs and contact destinations intact |
 
 ## Phase roadmap
 
@@ -121,10 +121,15 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - No new public routes, prices, booking claims, image assets/mappings, analytics IDs, third-party libraries, deployment or release tag. Real staging and operator-specific tour details remain owner-gated.
 
 
-## Sprint 10 — room booking journey clarity (PR work)
+## Sprint 10 — room booking journey clarity (PR #60 merged)
 
-- Baseline verified from live GitHub on 2026-10-14: `main` at `978c541eeeae43ce8c7e37a4e277c0fd229d0366`; PR #59 merged and no competing open PR. Exact-main Site Checks, cPanel package preflight, Staging QA local dry run, and Browser E2E/page-sheet workflows all passed.
-- Product outcome: strengthen regression coverage for the two existing per-room actions: primary availability goes to the current booking provider; secondary enquiry opens Contact prefilled for the selected room.
-- Scope is deliberately behavior-preserving: no room facts, prices, URL/canonical, booking destination, image mapping, analytics ID, policy copy or dependencies change. The room directory and Contact prefill are covered at desktop and mobile.
-- Owner review first: Rooms at 390px and 1280px; Contact with a room prefilled. Real booking-provider checkout and external staging remain owner-gated.
-- Implementation: added `tests/e2e/room-booking-clarity.spec.js` to validate the configured booking target, room-specific enquiry link/context/message for every room, action order, keyboard focus and narrow-screen overflow. No production markup/config changed.
+- PR #60 merged to main at `2c587f98d3f926367c5cfaee2f81ef240dd59296`; no open PRs remained at the next-batch baseline.
+- Added `tests/e2e/room-booking-clarity.spec.js` to protect the existing availability destination and selected-room Contact journey for all seven rooms.
+- Exact PR-head PHP/site checks, package preflight, staging dry run, Browser E2E and screenshot sheet passed; real booking-provider checkout and external staging remain owner-gated.
+
+## Sprint 11 — arrival policy accuracy (implementation PR)
+
+- Baseline `main`: `2c587f98d3f926367c5cfaee2f81ef240dd59296`; verified PR #60 merged and no competing open PR. PR #60 exact-head checks and Browser E2E passed.
+- Removed unconfirmed check-in time, early-arrival/terrace/luggage promises, fixed late-arrival notice rules, and specific restaurant service-time claims from Directions; the page now asks guests to confirm arrangements directly.
+- Updated `docs/OWNER-FACTS.md`, refreshed the Directions `sitemap.xml` lastmod, and added rendered Browser E2E coverage for unsupported claims, contact paths and mobile/desktop overflow.
+- No route, canonical, booking destination, analytics IDs, rates or new guest promises changed. Owner must confirm check-in/out, reception hours, storage and late-arrival arrangements before those specifics can be published.
