@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-14 |
-| Current phase | Dining availability accuracy + end-to-end dining enquiry completion |
+| Current phase | Site-wide arrival claim accuracy + contextual arrival enquiry consistency |
 | Base branch | `main` |
-| Baseline commit | `c1834eca165ef67f53cca18153be7e08ab657112` (PR #61 merge commit) |
-| Last merged PR | [#61 — complete trustworthy arrival enquiry journey](https://github.com/tchouhanjsm/garh-jaisal-website/pull/61) |
-| PR #61 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38521315521); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38521315469); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38521315358); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38521315357) |
-| Screenshot evidence | [PR #61 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38521315357/artifacts/11873159546); [PR #61 Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38521315357/artifacts/11873214566) |
+| Baseline commit | `29afa115f5e6b1b0f64b45ac1846bac03052634d` (PR #62 merge commit) |
+| Last merged PR | [#62 — complete trustworthy dining enquiry journey](https://github.com/tchouhanjsm/garh-jaisal-website/pull/62) |
+| PR #62 merge-commit checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38526675908); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38526675925); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38526675853); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38526675926) |
+| Screenshot evidence | [PR #62 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38526675926/artifacts/11876177377); [PR #62 Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38526675926/artifacts/11876676427) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None after PR #61 merge |
-| Next action | Verify PR #62 exact-head checks and review restaurant/contact dining enquiries at 390px and 1280px; owner merges |
+| Open PRs at baseline verification | None after PR #62 merge |
+| Next action | Verify PR #63 exact-head checks and review Home, Stay Guide and Fort Guide arrival flows at 390px and 1280px; owner merges |
 
 ## Phase roadmap
 
@@ -136,10 +136,19 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Owner confirmation of arrival/dining hours and live staging/mail delivery remains required.
 
 
-## Sprint 13–14 — dining availability accuracy + enquiry completion (PR #62 in review)
+## Sprint 13–14 — dining availability accuracy + enquiry completion (PR #62 merged)
 
-- Baseline `main`: `c1834eca165ef67f53cca18153be7e08ab657112`; no competing open PRs at branch creation.
-- Removed unconfirmed breakfast/lunch/dinner hours and fixed reservation-time limits; guests are directed to confirm current hours and table availability.
-- Aligned restaurant WhatsApp and Contact prefills around preferred date/time/party size; updated the shared site-smoke assertion to verify the new text, and made clear that an enquiry is not a confirmed table.
-- Added Browser E2E for rooftop and restaurant enquiry handoffs, fallback actions, responsive overflow and touch-target size; updated Contact/restaurant sitemap dates.
-- Exact-head Site Checks, package preflight, Staging QA, Browser E2E and screenshot sheet are required; online mail, live staging and official dining hours remain owner-gated.
+- PR #62 merged to `main` at `29afa115f5e6b1b0f64b45ac1846bac03052634d`; all four merge-commit CI workflows passed.
+- Removed unconfirmed meal hours and reservation-time limits; clarified the dining request is not a confirmed table and improved WhatsApp/Contact prefills.
+- Added a direct dining enquiry fallback and end-to-end coverage; aligned the shared site-smoke assertion with the structured prefill.
+- Contact/restaurant sitemap dates updated; online table-request mail was not enabled.
+- Owner confirmation of dining hours and live staging/mail delivery remain required.
+
+
+## Sprint 15–16 — site-wide arrival accuracy + contextual enquiry consistency (PR #63 in review)
+
+- Baseline `main`: `29afa115f5e6b1b0f64b45ac1846bac03052634d` (PR #62 merge); no competing open PRs at branch creation.
+- Removed stale reception-hour and unconditional meet-and-assist/luggage promises from Home, the Stay Guide and the Fort Guide; linked each page to Directions and the contextual arrival enquiry.
+- Added rendered Browser E2E to guard the three public pages against withdrawn promises and verify both arrival destinations remain available.
+- Updated article `dateModified` values, sitemap dates and project/sprint snapshots.
+- Exact-head CI and screenshot sheet are required; official check-in/out, current reception hours and assistance availability remain owner-input items.

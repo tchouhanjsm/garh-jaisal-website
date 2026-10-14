@@ -27,7 +27,7 @@ $page = [
             '@type' => 'Article',
             'headline' => 'Staying inside Jaisalmer Fort',
             'datePublished' => '2026-10-02',
-            'dateModified' => '2026-10-02',
+            'dateModified' => '2026-10-14',
             'image' => 'https://www.hotelgarhjaisal.com/img/v2/fort-from-roof.jpg',
             'author' => ['@type' => 'Organization', 'name' => 'Hotel Garh Jaisal Haveli', 'url' => 'https://www.hotelgarhjaisal.com/'],
             'publisher' => ['@id' => 'https://www.hotelgarhjaisal.com/#hotel'],
@@ -60,7 +60,7 @@ require __DIR__ . '/include/page-head.php';
       <article>
         <p class="eyebrow" id="arrive">Arrive</p>
         <h2>The last part is on foot.</h2>
-        <p>Vehicles do not drive into the fort lanes. Guests are met near Fort Parking, then walk in with the hotel’s help for luggage. Reception is open from 7:00 AM to 10:30 PM. Call +91 77270 47567 or +91 2992 253836 before a late arrival. The full route is on the <a href="direction.php">arrival guide</a>.</p>
+        <p>Vehicles cannot enter the fort lanes, so guests continue on foot after Fort Parking. Contact the hotel before travel to confirm current reception hours and ask whether luggage or late-arrival assistance can be arranged; wait for confirmation before relying on it. See the <a href="direction.php">arrival guide</a> or <a href="contact.php?topic=arrival">send an arrival enquiry</a>.</p>
         <p class="eyebrow" id="stay">Stay</p>
         <h2>Rooms inside the haveli.</h2>
         <p>The rooms are Sweet Purple, Rising Sun, Scarlet, Opium, Red Maharani, Green, and BlueSky. Each is different. Sweet Purple has a carved bed and a second bed. Green has a window seat. Rates stay on the booking engine, not on this page. <a href="room.php">See the rooms</a>.</p>
