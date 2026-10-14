@@ -168,6 +168,47 @@ require __DIR__ . '/page-head.php';
     </div>
   </section>
 
+  <?php if (!empty($experience['gallery'])): ?>
+    <section class="section experience-photo-gallery" aria-labelledby="experience-photo-gallery-title">
+      <div class="site-shell">
+        <div class="section-head">
+          <div><p class="eyebrow">Photo gallery</p><h2 id="experience-photo-gallery-title"><?= htmlspecialchars($experience['gallery_title'] ?? 'Explore the experience', ENT_QUOTES, 'UTF-8') ?></h2></div>
+          <p><?= htmlspecialchars($experience['gallery_intro'] ?? 'Take a closer look at this experience.', ENT_QUOTES, 'UTF-8') ?></p>
+        </div>
+        <div class="experience-photo-grid" data-experience-gallery>
+          <?php foreach ($experience['gallery'] as $photo): ?>
+            <figure class="experience-photo-card">
+              <img
+                src="<?= htmlspecialchars($photo['src'], ENT_QUOTES, 'UTF-8') ?>"
+                <?= gj_image_dimension_attributes($photo['src']) ?>
+                alt="<?= htmlspecialchars($photo['alt'], ENT_QUOTES, 'UTF-8') ?>"
+                loading="lazy"
+                decoding="async"
+              >
+              <figcaption><?= htmlspecialchars($photo['caption'] ?? $photo['alt'], ENT_QUOTES, 'UTF-8') ?></figcaption>
+            </figure>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    </section>
+  <?php endif; ?>
+
+  <?php if (!empty($experience['facilities'])): ?>
+    <section class="section experience-facilities" aria-labelledby="experience-facilities-title">
+      <div class="site-shell">
+        <div class="section-head">
+          <div><p class="eyebrow">Comforts included</p><h2 id="experience-facilities-title">Facilities in every Swiss tent</h2></div>
+          <p>Each tent is equipped with the everyday comforts you need for an overnight stay in the desert.</p>
+        </div>
+        <ul class="experience-facility-grid">
+          <?php foreach ($experience['facilities'] as $facility): ?>
+            <li><span class="experience-facility-check" aria-hidden="true">✓</span><span><?= htmlspecialchars($facility, ENT_QUOTES, 'UTF-8') ?></span></li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    </section>
+  <?php endif; ?>
+
   <section class="section experience-itinerary">
     <div class="site-shell">
       <div class="section-head">

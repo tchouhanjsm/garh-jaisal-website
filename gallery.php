@@ -161,18 +161,20 @@ require __DIR__ . '/include/page-head.php';
     'desert' => [
       'eyebrow' => 'Desert',
       'title' => 'Desert experiences',
-      'description' => 'Desert landscapes, camel safaris and overnight experiences arranged from Jaisalmer.',
+      'description' => 'Browse owner-provided photos of the desert camp, Swiss tent accommodation and dining setting.',
       'images' => [
         ['Desert_Camp/camp_from_above.jpeg', 'Desert camp viewed from above near Jaisalmer'],
-        ['desert2.jpg', 'Sand dunes near Jaisalmer'],
         ['Desert_Camp/camp_evening.jpeg', 'Evening at the desert camp near Jaisalmer'],
-        ['desert3.jpg', 'Desert dunes near Jaisalmer'],
         ['Desert_Camp/CampingInJsm.jpeg', 'Camping experience near Jaisalmer'],
         ['Desert_Camp/tent_deluxe.jpeg', 'Deluxe tent accommodation at the desert camp near Jaisalmer'],
-        ['desert7.jpg', 'Desert camp experience near Jaisalmer'],
-        ['Desert_Camp/camp_dinner.jpeg', 'Dinner at the desert camp near Jaisalmer'],
-        ['desert10.jpg', 'Desert experience near Jaisalmer']
-      ]
+        ['Desert_Camp/camp_dinner.jpeg', 'Dinner at the desert camp near Jaisalmer']
+      ],
+      'cta' => [
+        'title' => 'Planning an overnight desert stay?',
+        'text' => 'Explore the Swiss tent facilities, photo gallery and package details before you enquire.',
+        'label' => 'Explore Swiss Tent Safari',
+        'href' => 'swiss-tent-safari.php',
+      ],
     ],
     'restaurant' => [
       'eyebrow' => 'Restaurant',
@@ -220,6 +222,17 @@ require __DIR__ . '/include/page-head.php';
             </figure>
           <?php endforeach; ?>
         </div>
+        <?php if (!empty($section['cta'])): ?>
+          <div class="gallery-section-cta">
+            <div class="gallery-section-cta-copy">
+              <h3><?= htmlspecialchars($section['cta']['title'], ENT_QUOTES, 'UTF-8') ?></h3>
+              <p><?= htmlspecialchars($section['cta']['text'], ENT_QUOTES, 'UTF-8') ?></p>
+            </div>
+            <a class="button button-primary" href="<?= htmlspecialchars($section['cta']['href'], ENT_QUOTES, 'UTF-8') ?>">
+              <?= htmlspecialchars($section['cta']['label'], ENT_QUOTES, 'UTF-8') ?>
+            </a>
+          </div>
+        <?php endif; ?>
       </div>
     </section>
   <?php endforeach; ?>

@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-14 |
-| Current phase | Sprint 17 — booking and enquiry intent measurement |
+| Current phase | Batch 1 — Swiss Tent Safari and licensed Desert Gallery |
 | Base branch | `main` |
-| Baseline commit | `f441272b17fdbf520e5a06a84612fd5b84bfb8be` (PR #63 merge commit) |
-| Last merged PR | [#63 — site-wide arrival claim accuracy](https://github.com/tchouhanjsm/garh-jaisal-website/pull/63) |
-| PR #63 merge-commit checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913587); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913723); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913752); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913569) |
-| Screenshot evidence | [PR #63 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913569/artifacts/11878533834); [PR #63 Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913569/artifacts/11878259357) |
+| Baseline commit | `31996b4db6e04502f5422926a5ea3fdcf923c6e4` (PR #65 merge commit) |
+| Last merged PR | [#65 — replace unlicensed image references](https://github.com/tchouhanjsm/garh-jaisal-website/pull/65) |
+| PR #65 merge-commit checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38582891256); [cPanel package PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38582891190); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38582891186); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38582891584) |
+| Screenshot evidence | [PR #65 390px/1280px page sheet and Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38582891584) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None at Sprint 17 branch creation |
-| Next action | Review PR #65 exact-head CI and licensed image replacements; owner alone merges |
+| Open PRs at baseline verification | None at Batch 1 branch creation |
+| Next action | Review PR #66 exact-head CI, Swiss-tent presentation and photo/caption match; owner alone merges |
 
 ## Phase roadmap
 
@@ -24,13 +24,13 @@
 |---|---|---|
 | 0 | Repository hygiene and safe CI baseline | ✓ CI, legacy CSS/JS/include/font cleanup merged; runtime guards retained |
 | 1 | Site-wide audit with prioritised backlog | ◐ ongoing evidence-led defect fixes |
-| 2 | Booking conversion and mobile UX | ◐ responsive navigation and booking URL reuse merged; conversion event measurement remains open |
+| 2 | Booking conversion and mobile UX | ◐ responsive navigation, booking URL reuse and intent-event instrumentation merged; live conversion validation remains owner-side |
 | 3 | Technical SEO foundation | ✓ shared rendered metadata and JSON-LD regression checks |
 | 4 | Local SEO and content depth | ◐ inventory exists; copy and owner-fact findings require review |
 | 5 | Performance and Core Web Vitals | ◐ image derivatives and review candidates exist; controlled Lighthouse/field measurement remains open |
 | 6 | Accessibility | ◐ rendered image alt audit passes; manual contrast, keyboard and screen-reader review remains |
 | 7 | Form, email and security hardening | ◐ PR #51 tests pass; staging mail/CAPTCHA and cPanel behavior remain unverified |
-| 8 | Analytics measurement | ◐ Sprint 17 event contract approved; implementation and live-property validation pending |
+| 8 | Analytics measurement | ◐ intent-event implementation merged in PR #64; live-property validation pending |
 | 9 | Staging QA and cPanel handoff | ◐ guides committed; owner-run staging verification pending |
 | 10 | Monthly improvement loop | ☐ not started |
 
@@ -155,7 +155,7 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Official check-in/out, current reception hours and assistance availability remain owner-input items. CI did not verify the live cPanel host or submit a real enquiry.
 
 
-## Sprint 17 — booking and enquiry intent measurement (PR #64 in review)
+## Sprint 17 — booking and enquiry intent measurement (PR #64 merged)
 
 - Baseline `main`: `f441272b17fdbf520e5a06a84612fd5b84bfb8be`; branch: `feature/sprint-17-conversion-measurement`. Owner approved the event contract on 2026-10-14.
 - Add `booking_outbound_click`, `click_to_call`, `click_whatsapp` and `enquiry_start`; route each custom event to both configured GA4 IDs using the site configuration as the single source of truth.
@@ -169,5 +169,14 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 
 - Replaced removed image references in the homepage, Desert Gallery and shared experience data without restoring any image reported for copyright infringement.
 - Kept the deleted image files deleted; aligned the responsive-image review inventory and WebP regression manifest with the surviving/new licensed asset set.
-- Regenerated the sitemap timestamp for the changed Gallery route; PR-head CI and screenshot evidence must pass before owner merge.
+- Regenerated the Gallery sitemap timestamp. Main-merge Site Checks, package, staging dry-run and Browser E2E passed on `31996b4`; final visual subject/caption confirmation remains an owner review.
 - The QR artwork `img/restaurant_QR.png` is not part of this PR’s changed files. Its Google Business Profile destination and restaurant-page integration are a separate follow-up, pending the exact profile share URL.
+
+
+## Batch 1 — Swiss Tent Safari and Desert Gallery (PR #66 in review)
+
+- Baseline: PR #65 merged at `31996b4db6e04502f5422926a5ea3fdcf923c6e4`; no production deployment.
+- Replace the Desert Gallery's remaining legacy images with the five owner-provided `img/Desert_Camp/` photos and link the section to the Swiss Tent Safari page.
+- Add an optional shared-experience gallery/facilities renderer; update Swiss-tent inclusions, exclusions, FAQs, and hero photo from owner-confirmed facts.
+- Add Browser E2E for image inventory, confirmed facilities, high tea wording, jeep-safari exclusion and narrow-screen overflow; keep SEO snapshot and sitemap lastmod aligned.
+- Owner review first: Gallery and Swiss Tent Safari at 390px/1280px; visually confirm each image and caption before merge. Policies, deployment and real staging remain owner-gated.

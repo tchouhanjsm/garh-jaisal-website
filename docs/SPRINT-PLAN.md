@@ -26,6 +26,7 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 15 | Site-wide arrival claim accuracy | ✓ merged in PR #63; stale reception/assistance claims removed from Home and two guides |
 | 16 | Contextual arrival enquiry consistency | ✓ merged in PR #63; Directions and Contact arrival routes retained across all three pages |
 | 17 | Booking and enquiry intent measurement | ✓ PR #64 merged; intent events routed to both approved GA4 IDs; live-property validation still owner-side |
+| 18 | Licensed Desert Gallery and Swiss Tent Safari conversion | ◐ PR #66 in review; owner-provided camp gallery, confirmed facilities and clearer package inclusions/exclusions; no deployment authorized |
 
 ---
 
@@ -317,3 +318,14 @@ Stop there: the owner merges.
 - Keep the Gallery and experience data mappings, responsive-image review candidates, optimization regression manifest, and `sitemap.xml` aligned to the remaining files.
 - Required exact-head gates: PHP 7.4/8.2 Site Checks, sitemap/publication checks, responsive-image review, full Browser E2E and screenshot sheet.
 - Restaurant QR integration is a separate slice and must use the exact owner-verified Google Business Profile/Maps share URL.
+
+
+## Sprint 18 — licensed Desert Gallery and Swiss Tent Safari (PR #66 in review)
+
+**Outcome:** give overnight-desert guests real owner-provided imagery, a clear list of tent facilities, and an accurate understanding of package inclusions before they enquire.
+
+- Replace the Desert Gallery's legacy desert images with five photos from `img/Desert_Camp/`; add an enquiry path to the Swiss Tent Safari page.
+- Reuse the shared experience template to render an optional photo gallery and facilities section only when data exists. Change the Swiss-tent hero to the owner-provided tent image and update the head snapshot fixture.
+- Use “High tea with snacks” in package inclusions; explicitly exclude alcoholic beverages, soft drinks and a separate jeep safari excursion (must be booked separately). Keep included jeep transport distinguishable from an optional jeep safari.
+- Record owner-confirmed tent facilities, tour languages, car services, Instagram and Google Maps destination in `docs/OWNER-FACTS.md`. Privacy/cancellation/booking-policy copy remains blocked until owner supplies exact wording.
+- Required gates: PHP 7.4/8.2 Site Checks, strict image references, sitemap freshness, package preflight, full Browser E2E and 390px/1280px screenshot sheet. No production deploy or real staging test is authorized by this PR.
