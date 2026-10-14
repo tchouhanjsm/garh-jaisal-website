@@ -1,7 +1,5 @@
 const { test, expect } = require('@playwright/test');
 
-const BASE_URL = 'http://127.0.0.1:8080';
-
 function roomSlug(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
