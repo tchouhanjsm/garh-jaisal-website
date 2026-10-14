@@ -15,6 +15,13 @@ usort($items, static function ($a, $b) use ($experiences) {
 <!doctype html>
 <html lang="en">
 <?php
+require_once __DIR__ . '/include/schema.php';
+$faqItems = [
+    ['question' => "Which desert options are listed here?", 'answer' => "The hub links to a sunset camel safari, cultural desert evening, Sleep Under the Stars and the Swiss Tent Safari. A separate Camping page explains the two overnight setups."],
+    ['question' => "Do desert departure times stay the same all year?", 'answer' => "No. Departure and sunset timings change with the season. Confirm the schedule with the hotel for your travel date."],
+    ['question' => "How do I choose between a same-evening trip and an overnight stay?", 'answer' => "Choose based on whether you want to return to Jaisalmer the same evening or sleep in the desert, then compare the overnight setup and confirmed inclusions."],
+    ['question' => "How do I confirm the route and inclusions?", 'answer' => "Ask the hotel to confirm the current price, departure details, route, pickup arrangement, availability and exact inclusions for your date."],
+];
 $page = [
     'title' => 'Desert Safari in Jaisalmer | Camel Safari & Overnight Experiences',
     'description' => 'Explore desert safari options arranged from Garh Jaisal Haveli, including sunset camel safari, cultural evening, sleeping under the stars and Swiss tent stays.',
@@ -48,6 +55,7 @@ $page = [
         ],
     ],
 ];
+$page['schema'][] = gj_schema_faq($faqItems, $canonical);
 require __DIR__ . '/include/page-head.php';
 ?>
 <body>
@@ -118,7 +126,24 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section experience-cta">
+
+  <section class="section site-faq desert-faq" aria-labelledby="desert-faq-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div><p class="eyebrow">Common questions</p><h2 id="desert-faq-title">Questions about choosing a desert safari.</h2></div>
+        <p>Seasonal timing and package details should be confirmed for your date.</p>
+      </div>
+      <?php
+      $faq = [
+          'items' => $faqItems,
+          'item_class' => 'faq-item',
+          'answer_wrapper_class' => 'faq-answer',
+      ];
+      require __DIR__ . '/include/ui/faq.php';
+      ?>
+    </div>
+  </section>
+<section class="section experience-cta">
     <div class="site-shell experience-cta-inner">
       <p class="eyebrow">Plan from the Fort</p>
       <h2>Stay inside Jaisalmer Fort, then head into the desert.</h2>

@@ -8,6 +8,12 @@ $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] 
 <!doctype html>
 <html lang="en">
 <?php
+require_once __DIR__ . '/include/schema.php';
+$faqItems = [
+    ['question' => "Which options are listed in Car & City Tours?", 'answer' => "The hub links to guided Jaisalmer tours, a walk inside Jaisalmer Fort, and car arrangements for arrival or a desert day."],
+    ['question' => "Can the hotel arrange a car for arrival?", 'answer' => "The hotel can arrange a car for arrival or a desert day. Confirm the route, pickup arrangement and current price directly with the hotel."],
+    ['question' => "How do I confirm timing and price?", 'answer' => "Contact the hotel with your travel date and intended route to confirm current availability, pickup details and price."],
+];
 $page = [
     'title' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
     'description' => 'Explore guided Jaisalmer city tours and enquire about car arrangements for arrival or a desert day with Garh Jaisal Haveli. Confirm current details directly with the hotel.',
@@ -42,6 +48,7 @@ $page = [
         ],
     ],
 ];
+$page['schema'][] = gj_schema_faq($faqItems, $canonical);
 require __DIR__ . '/include/page-head.php';
 ?>
 <body>
@@ -78,6 +85,23 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
   <section class="section packages-cta"><div class="site-shell"><div class="packages-cta-inner"><p class="eyebrow">Plan with the hotel</p><h2>Confirm the details before you travel.</h2><p>Tour routes, timings, transport, fees and availability can vary. Contact the hotel for the current details for your date.</p><div class="actions"><a class="button button-primary" href="contact.php">Contact Garh Jaisal Haveli</a><a class="button button-secondary" href="direction.php">Plan your arrival</a></div></div></div></section>
+
+  <section class="section site-faq car-tours-faq" aria-labelledby="car-tours-faq-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div><p class="eyebrow">Common questions</p><h2 id="car-tours-faq-title">Questions about city tours and car arrangements.</h2></div>
+        <p>Routes and car arrangements depend on your plans; confirm the current details with the hotel.</p>
+      </div>
+      <?php
+      $faq = [
+          'items' => $faqItems,
+          'item_class' => 'faq-item',
+          'answer_wrapper_class' => 'faq-answer',
+      ];
+      require __DIR__ . '/include/ui/faq.php';
+      ?>
+    </div>
+  </section>
 </main>
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
 <script src="js/garh-v2.js"></script>

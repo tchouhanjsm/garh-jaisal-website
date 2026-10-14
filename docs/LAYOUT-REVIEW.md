@@ -41,7 +41,7 @@ Landing page: book-rooms-in-jaisalmer.php (not in header or footer)
 | L11 | P2 | **`book-rooms-in-jaisalmer.php` is a landing page with no navigation entry**, and its H1 is dynamic or empty in source. | Outline | Decide: keep as a campaign page (linked from home and rooms) or fold it into rooms. Check the H1 renders. |
 | L12 | P2 | **Responsive CSS is thin:** `garh-v2.css` is 1,562 lines with only 4 `@media` rules, and many legacy CSS files remain. | `grep @media` | Audit at 390, 768 and 1280px in Phase 2 and Phase 5. |
 | L13 | P2 | **No visible rates or "from" price** anywhere in the structure; `tariff.php` is blocked in robots. | `robots.txt`, outlines | Owner decision: show "from ₹X" on room cards? |
-| L14 | P2 | **No FAQ on Rooms, Dining or Experiences pages** (only Directions has one). | Outlines | Add short FAQs (visible text, then FAQ schema). |
+| L14 | P2 | ~~No FAQ on Rooms, Dining or Experiences pages.~~ **Resolved in Sprint 8.** | Shared visible FAQ component is used on Rooms, rooftop dining, menu, Packages, Desert Tours, Car & City Tours, guided tours, Fort walk, car arrangements and camping. | Keep Browser E2E parity checks between each visible Q&A and its FAQPage JSON-LD. |
 
 ## 3. Proposed structure
 

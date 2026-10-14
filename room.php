@@ -16,6 +16,14 @@ $floorCount = count($roomsByFloor);
 <?php
 $schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $schemaPageUrl = $schemaSiteUrl . '/room.php';
+require_once __DIR__ . '/include/schema.php';
+$faqItems = [
+    ['question' => "Where is Garh Jaisal Haveli?", 'answer' => "Garh Jaisal Haveli is inside Jaisalmer Fort. Vehicles cannot enter the fort lanes, so plan for a final walk from Fort Parking."],
+    ['question' => "How do I check current room rates and availability?", 'answer' => "Use a Check availability or Book your stay link on this page to check current rates and availability for your dates."],
+    ['question' => "Are all rooms on the same floor?", 'answer' => "No. The rooms are located on the ground and first floors of the haveli."],
+    ['question' => "Do all rooms have the same facilities?", 'answer' => "No. Facilities vary by room; compare each room’s listed features before choosing."],
+    ['question' => "Where can I find arrival instructions?", 'answer' => "The Directions page explains how to reach the fort and the final walk to the haveli."],
+];
 $page = [
     'title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort, including Sweet Purple, Rising Sun, Scarlet, Opium, Red Maharani, Green and BlueSky.',
@@ -56,6 +64,7 @@ $page = [
         ],
     ],
 ];
+$page['schema'][] = gj_schema_faq($faqItems, $schemaPageUrl);
 require __DIR__ . '/include/page-head.php';
 ?>
 
@@ -281,6 +290,23 @@ require __DIR__ . '/include/page-head.php';
   </section>
 
 
+
+  <section class="section site-faq room-faq" aria-labelledby="room-faq-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div><p class="eyebrow">Common questions</p><h2 id="room-faq-title">Questions before you choose a room.</h2></div>
+        <p>A few practical details can help you choose a room and plan your arrival.</p>
+      </div>
+      <?php
+      $faq = [
+          'items' => $faqItems,
+          'item_class' => 'faq-item',
+          'answer_wrapper_class' => 'faq-answer',
+      ];
+      require __DIR__ . '/include/ui/faq.php';
+      ?>
+    </div>
+  </section>
   <!-- =====================================================
        BOOKING CTA
        ===================================================== -->

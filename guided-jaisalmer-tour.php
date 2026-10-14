@@ -15,6 +15,12 @@ usort($items, static function ($a, $b) use ($experiences) {
 <!doctype html>
 <html lang="en">
 <?php
+require_once __DIR__ . '/include/schema.php';
+$faqItems = [
+    ['question' => "Which guided tour lengths are listed?", 'answer' => "The hub links to half-day and full-day Jaisalmer tour options, alongside the walk inside Jaisalmer Fort."],
+    ['question' => "Can the guided route be adjusted?", 'answer' => "The route can be adjusted around your interests, opening hours and the time available on your travel date."],
+    ['question' => "What should I confirm before booking?", 'answer' => "Ask the hotel to confirm the current price, route, guide availability and language, entry fees where applicable, and pickup arrangements."],
+];
 $page = [
     'title' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
     'description' => 'Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.',
@@ -48,6 +54,7 @@ $page = [
         ],
     ],
 ];
+$page['schema'][] = gj_schema_faq($faqItems, $canonical);
 require __DIR__ . '/include/page-head.php';
 ?>
 <body>
@@ -122,6 +129,23 @@ require __DIR__ . '/include/page-head.php';
       <h2>See the Fort, then connect it to the city around it.</h2>
       <p>Ask the hotel about the current guide availability, route, guide language and applicable entry fees.</p>
       <div class="actions"><a class="button button-primary" href="contact.php">Contact us</a><a class="button button-secondary" href="desert-safari.php">Explore desert safaris</a></div>
+    </div>
+  </section>
+
+  <section class="section site-faq guided-tours-faq" aria-labelledby="guided-tours-faq-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div><p class="eyebrow">Common questions</p><h2 id="guided-tours-faq-title">Before choosing a guided tour.</h2></div>
+        <p>Confirm the itinerary and current arrangements before finalising your plan.</p>
+      </div>
+      <?php
+      $faq = [
+          'items' => $faqItems,
+          'item_class' => 'faq-item',
+          'answer_wrapper_class' => 'faq-answer',
+      ];
+      require __DIR__ . '/include/ui/faq.php';
+      ?>
     </div>
   </section>
 </main>

@@ -232,6 +232,13 @@ $schema = [
 <!doctype html>
 <html lang="en">
 <?php
+require_once __DIR__ . '/include/schema.php';
+$faqItems = [
+    ['question' => "Where is Garh Jaisal’s Kitchen?", 'answer' => "Garh Jaisal’s Kitchen is located at Fort Kotari Para, inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001."],
+    ['question' => "Can menu items and prices change?", 'answer' => "Yes. Menu items and listed prices may change; confirm the current menu and prices with the hotel before visiting."],
+    ['question' => "How do I request a table?", 'answer' => "Use the table enquiry form when online requests are available, or call or message the hotel on WhatsApp. Availability can vary, especially for larger groups."],
+    ['question' => "Can I ask about dietary requirements?", 'answer' => "Ask the hotel about current vegetarian, vegan, Jain and allergy options before confirming your meal."],
+];
 $page = [
     'title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
     'description' => "Rajasthani food at " . $restaurant['name'] . ", the rooftop restaurant at Garh Jaisal Haveli inside Jaisalmer Fort.",
@@ -251,6 +258,7 @@ $page = [
         }
     )),
 ];
+$page['schema'][] = gj_schema_faq($faqItems, $pageUrl);
 require __DIR__ . '/include/page-head.php';
 ?>
 <body class="restaurant-page">
@@ -437,6 +445,23 @@ require __DIR__ . '/include/page-head.php';
           </form>
         <?php endif; ?>
       </div>
+    </div>
+  </section>
+
+  <section class="section site-faq restaurant-faq" aria-labelledby="restaurant-faq-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div><p class="eyebrow">Common questions</p><h2 id="restaurant-faq-title">Before you request a table.</h2></div>
+        <p>The team can confirm current menu details, dietary options and table availability.</p>
+      </div>
+      <?php
+      $faq = [
+          'items' => $faqItems,
+          'item_class' => 'faq-item',
+          'answer_wrapper_class' => 'faq-answer',
+      ];
+      require __DIR__ . '/include/ui/faq.php';
+      ?>
     </div>
   </section>
 </main>

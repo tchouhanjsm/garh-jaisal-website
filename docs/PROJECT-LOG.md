@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-13 |
-| Current phase | Experience publication boundaries; unresolved product, staging and release decisions remain owner-gated |
+| Current phase | Pre-booking FAQ coverage; owner-dependent product, staging and release decisions remain gated |
 | Base branch | `main` |
-| Baseline commit | `68f1a931b656e5b0d4df8e89f676eeec6bf060ea` (PR #56 merge commit) |
-| Last merged PR | [#56 — link stay guide from Home and Rooms](https://github.com/tchouhanjsm/garh-jaisal-website/pull/56) |
-| PR #56 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562231); [cPanel preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562240); [Staging QA local dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562309); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562317) |
-| Screenshot evidence | [PR #56 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562317/artifacts/11833009704); [PR #56 staging QA evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562309/artifacts/11833078639) |
+| Baseline commit | `5415e67b422b2318dfb576e7d84531bacaa5e271` (PR #57 merge commit) |
+| Last merged PR | [#57 — enforce hidden experience publication boundaries](https://github.com/tchouhanjsm/garh-jaisal-website/pull/57) |
+| PR #57 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677652); [cPanel preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677679); [Staging QA local dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677493); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677684) |
+| Screenshot evidence | [PR #57 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677684/artifacts/11834807257); [PR #57 staging QA evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677493/artifacts/11834059436) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None after PR #56 merge |
-| Next action | Remove stale public promotion of the hidden Explore-the-Desert overlap page and enforce draft/hidden discovery boundaries; real staging remains owner-gated |
+| Open PRs at baseline verification | None after PR #57 merge |
+| Next action | Add visible pre-booking FAQs and matching structured data across key room, dining and experience landing pages; real staging remains owner-gated |
 
 ## Phase roadmap
 
@@ -97,10 +97,18 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Exact-head [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562231), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562240), [Staging QA dry run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562309) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562317) passed. Evidence artifacts: [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562317/artifacts/11833009704) and [staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38437562309/artifacts/11833078639).
 - Owner review first: Home, Rooms and the guide at 390px/1280px. Real staging, CAPTCHA/mail, image approval and release remain owner-gated.
 
-## Sprint 7 — experience publication boundaries (PR in review)
+## Sprint 7 — experience publication boundaries (PR #57 merged)
 
-- Baseline is PR #56 merge commit `68f1a931b656e5b0d4df8e89f676eeec6bf060ea`. This closes a concrete mismatch in the approved architecture, not a new audit-only slice.
-- `explore-the-desert` remains hidden/noindex and keeps its existing URL while owner fact #3 is unanswered; the live Desert Tours planner must not present it as available.
-- Add a source-level gate that validates experience statuses and ensures non-live registry entries remain available as URLs but stay out of the sitemap and shared navigation/footer data. Live registry entries must remain in the sitemap.
-- Expand the rendered-browser publication-boundary regression to every sitemap route and verify the hidden page remains HTTP-success/noindex without redirects.
-- No tour facts, prices, redirects, photo mappings, booking destinations or GA4 changes. Real staging, CAPTCHA/mail validation and release approval remain owner-gated.
+- Baseline: PR #56 merged at `68f1a931b656e5b0d4df8e89f676eeec6bf060ea`; PR #57 merged at `5415e67b422b2318dfb576e7d84531bacaa5e271`.
+- Removed live Desert Tours planner copy that promoted the hidden `explore-the-desert` page, without retiring its URL or changing its noindex state.
+- Added source checks for valid experience statuses, route-file availability, and live/non-live sitemap and navigation boundaries; browser coverage checks every sitemap route.
+- Exact PR-head [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677652), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677679), [Staging QA dry run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677493) and [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677684) passed. [Page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38439677684/artifacts/11834807257).
+- Real staging, CAPTCHA/mail, final image approval and release remain owner-gated.
+
+## Sprint 8 — pre-booking FAQ coverage (PR in review)
+
+- Baseline is PR #57 merge commit `5415e67b422b2318dfb576e7d84531bacaa5e271`.
+- Add visible, fact-checked Q&A to Rooms, rooftop dining, restaurant menu, Packages, Desert Tours, Car & City Tours, guided tours, Fort walk, car arrangements and camping.
+- Render FAQPage JSON-LD from the same answer data used by the shared FAQ partial, avoiding content/schema drift; update the frozen head fixture for the intentional type additions.
+- Browser tests compare every rendered question and answer with structured data, exercise keyboard toggles, and check FAQ overflow/touch targets across the viewport projects.
+- No new rates, operating details, package inclusions, policies, photos, URLs, booking destinations or GA4 changes. Real staging and release remain owner-gated.
