@@ -25,6 +25,7 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 14 | Dining enquiry completion | ✓ merged in PR #62; restaurant/rooftop handoffs covered by Browser E2E |
 | 15 | Site-wide arrival claim accuracy | ◐ folded into PR #63; remove stale reception/assistance claims from Home and two guides |
 | 16 | Contextual arrival enquiry consistency | ◐ folded into PR #63; keep Directions and Contact arrival routes across all three pages |
+| 17 | Booking and enquiry intent measurement | ◐ implementation PR; track outbound booking, Call, WhatsApp and contextual enquiry-start intent in both approved GA4 IDs |
 
 ---
 
@@ -296,3 +297,15 @@ Stop there: the owner merges.
 - Keep check-in/out times, reception hours, storage and late-arrival availability as owner-input items; do not restore any unconfirmed values or policies.
 - No new dependencies, routes, analytics events, booking destination changes, mail configuration or production changes.
 - Manual visual review at 390px/1280px and live staging/form-delivery checks remain owner-gated.
+
+ 
+## Sprint 17 — booking and enquiry intent measurement
+
+**Outcome:** make visitor intent visible without conflating outbound clicks or an enquiry-form start with a completed booking or sent message.
+
+- Use `include/site-config.php` as the single source of truth for the two approved GA4 destinations and the existing booking URL; preserve both IDs and all existing booking/contact destinations.
+- Track `booking_outbound_click`, `click_to_call`, and `click_whatsapp` when those links are clicked. Track `enquiry_start` once when a visitor first focuses a field in the existing Contact form.
+- Include `page_path`, a low-cardinality `page_context`, a static `cta_label` where relevant, and `enquiry_context` limited to `room`, `dining`, `arrival`, or `general`. Do not send query strings, field values, messages, email addresses, or phone values.
+- Route the events to both configured GA4 IDs using `send_to`; use beacon transport for click-intent events. Do not create a purchase/booking-complete event.
+- Add Browser E2E that asserts event names, payloads, one-time form-start behavior and both destination IDs while preventing real external navigation. No live booking, email or enquiry submission is part of the tests.
+- Update the Smart Check matrix and Project Log within this PR. Actual GA4 receipt, Realtime/DebugView and property-level custom-dimension setup remain manual checks; no production deployment is authorized.

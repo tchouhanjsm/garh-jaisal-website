@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-14 |
-| Current phase | Site-wide arrival claim accuracy + contextual arrival enquiry consistency |
+| Current phase | Sprint 17 — booking and enquiry intent measurement |
 | Base branch | `main` |
-| Baseline commit | `29afa115f5e6b1b0f64b45ac1846bac03052634d` (PR #62 merge commit) |
-| Last merged PR | [#62 — complete trustworthy dining enquiry journey](https://github.com/tchouhanjsm/garh-jaisal-website/pull/62) |
-| PR #62 merge-commit checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38526675908); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38526675925); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38526675853); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38526675926) |
-| Screenshot evidence | [PR #62 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38526675926/artifacts/11876177377); [PR #62 Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38526675926/artifacts/11876676427) |
+| Baseline commit | `f441272b17fdbf520e5a06a84612fd5b84bfb8be` (PR #63 merge commit) |
+| Last merged PR | [#63 — site-wide arrival claim accuracy](https://github.com/tchouhanjsm/garh-jaisal-website/pull/63) |
+| PR #63 merge-commit checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913587); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913723); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913752); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913569) |
+| Screenshot evidence | [PR #63 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913569/artifacts/11878533834); [PR #63 Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913569/artifacts/11878259357) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None after PR #62 merge |
-| Next action | Verify PR #63 exact-head checks and review Home, Stay Guide and Fort Guide arrival flows at 390px and 1280px; owner merges |
+| Open PRs at baseline verification | None at Sprint 17 branch creation |
+| Next action | Review Sprint 17 conversion-measurement PR and exact-head CI; owner alone merges |
 
 ## Phase roadmap
 
@@ -30,7 +30,7 @@
 | 5 | Performance and Core Web Vitals | ◐ image derivatives and review candidates exist; controlled Lighthouse/field measurement remains open |
 | 6 | Accessibility | ◐ rendered image alt audit passes; manual contrast, keyboard and screen-reader review remains |
 | 7 | Form, email and security hardening | ◐ PR #51 tests pass; staging mail/CAPTCHA and cPanel behavior remain unverified |
-| 8 | Analytics measurement | ◐ both owner-approved GA4 IDs retained; conversion event/property semantics need owner decision |
+| 8 | Analytics measurement | ◐ Sprint 17 event contract approved; implementation and live-property validation pending |
 | 9 | Staging QA and cPanel handoff | ◐ guides committed; owner-run staging verification pending |
 | 10 | Monthly improvement loop | ☐ not started |
 
@@ -53,7 +53,7 @@
 - Confirm actual cPanel PHP version and support for the `.htaccess` directives/overrides.
 - Complete staging checks for redirects, error page, security headers, CAPTCHA, configured mail recipients and successful/failing enquiry paths.
 - Inspect the responsive WebP artifact at full size before any candidate goes live.
-- Confirm the conversion event plan and intended use of both GA4 properties.
+- Validate event receipt in both GA4 properties using Realtime/DebugView and decide whether to register custom dimensions for the new event parameters.
 - Supply approved privacy and booking/cancellation policy wording before draft pages can be linked or indexed.
 
 
@@ -145,10 +145,19 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Owner confirmation of dining hours and live staging/mail delivery remain required.
 
 
-## Sprint 15–16 — site-wide arrival accuracy + contextual enquiry consistency (PR #63 in review)
+## Sprint 15–16 — site-wide arrival accuracy + contextual enquiry consistency (PR #63 merged)
 
-- Baseline `main`: `29afa115f5e6b1b0f64b45ac1846bac03052634d` (PR #62 merge); no competing open PRs at branch creation.
+- PR #63 merged to `main` at `f441272b17fdbf520e5a06a84612fd5b84bfb8be`.
 - Removed stale reception-hour and unconditional meet-and-assist/luggage promises from Home, the Stay Guide and the Fort Guide; linked each page to Directions and the contextual arrival enquiry.
-- Added rendered Browser E2E to guard the three public pages against withdrawn promises and verify both arrival destinations remain available.
-- Updated article `dateModified` values, sitemap dates and project/sprint snapshots.
-- First Browser E2E run caught one stale homepage assertion in `tests/e2e/seo.spec.js`; updated it to require confirmation wording and the arrival enquiry link rather than the withdrawn schedule. Full CI and screenshot sheet must pass on the new exact head; official check-in/out, current reception hours and assistance availability remain owner-input items.
+- Added rendered Browser E2E to guard all three public pages against withdrawn promises and verify both arrival destinations remain available.
+- Updated article `dateModified` values, sitemap dates and project/sprint snapshots. Corrected an intermediate stale homepage assertion without weakening the test.
+- Exact merge-SHA Site Checks, cPanel package preflight, Staging QA dry run, and Browser E2E/screenshot generation all passed: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913587), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913723), [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913752), [Browser E2E and screenshot sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38531913569).
+- Official check-in/out, current reception hours and assistance availability remain owner-input items. CI did not verify the live cPanel host or submit a real enquiry.
+
+
+## Sprint 17 — booking and enquiry intent measurement (implementation PR)
+
+- Baseline `main`: `f441272b17fdbf520e5a06a84612fd5b84bfb8be`; branch: `feature/sprint-17-conversion-measurement`. Owner approved the event contract on 2026-10-14.
+- Add `booking_outbound_click`, `click_to_call`, `click_whatsapp` and `enquiry_start`; route each custom event to both configured GA4 IDs using the site configuration as the single source of truth.
+- Enquiry context is limited to `room`, `dining`, `arrival` or `general`. Send only route/context and static CTA metadata; never send field contents, messages, email addresses, or query strings. These events represent intent, not confirmed bookings or sent enquiries.
+- Browser E2E checks event payloads and routing in the data layer, and focuses the form without submitting it. Actual GA4 receipt, Realtime/DebugView validation, and optional custom-dimension registration remain owner-side checks.

@@ -173,6 +173,10 @@ $analyticsIds = array_values(array_unique(array_filter(
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    window.gjAnalyticsConfig = {
+      destinations: <?php echo json_encode($analyticsIds, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>,
+      bookingUrl: <?php echo json_encode((string) ($siteConfig['booking_url'] ?? ''), JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>
+    };
     gtag('js', new Date());
 <?php foreach ($analyticsIds as $analyticsId): ?>
     gtag('config', <?= json_encode($analyticsId, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) ?>);

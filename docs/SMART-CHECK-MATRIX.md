@@ -13,7 +13,7 @@ All four roles (Full-Stack Developer, SEO Content Writer, Debugger, UI/UX Lead) 
 | CSS, navigation, shared header/footer, layout, room cards | UI/UX Lead | Full-Stack Developer, Debugger | Playwright smoke; no horizontal overflow | 320×700, 390×844, 1280×800, 1440×900 projects; inspect screenshot artifacts |
 | Forms, controls, icons, images, keyboard behavior | UI/UX Lead | SEO Content Writer | Static audit plus rendered checks where available | Keyboard and focus checks, labels and alt text; manual review for contrast and screen readers |
 | Image paths, formats, dimensions, mapping | UI/UX Lead | Full-Stack Developer | Strict image-reference check; verify file exists | Visual room-to-image matching; file size and dimensions; responsive rendering |
-| Booking URLs, call/WhatsApp links, thank-you page, analytics | UI/UX Lead | Full-Stack Developer | Assert expected destination and event wiring without sending a live enquiry | Owner-confirmed GA4 property and event plan; consent and privacy behavior if applicable |
+| Booking URLs, call/WhatsApp links, thank-you page, analytics | UI/UX Lead | Full-Stack Developer | Assert existing destinations and Browser E2E event payload/routing without sending a live enquiry | Live GA4 receipt, Realtime/DebugView, consent and property-level custom dimensions remain owner-side checks |
 | Titles, descriptions, canonicals, H1, sitemap, JSON-LD, redirects | SEO Content Writer | Debugger, Full-Stack Developer | Rendered SEO E2E checks over sitemap routes | Actual HTTP response and rendered HTML; do not rely on source heuristics alone |
 | Landing pages, area guides, headings, internal links, location intent | SEO Content Writer | UI/UX Lead | Fact-check against approved project content; heading, link and metadata checks | Existing URLs and canonical targets confirmed; never fabricate hotel facts or location claims |
 | CSS/JS/image payload, third-party scripts, font loading | UI/UX Lead | Full-Stack Developer | Rendered performance/resource inventory on sitemap routes | Review largest resources, document timings, image dimensions, alt attributes and lazy-loading candidates; controlled Lighthouse/Core Web Vitals measurement remains separate |
@@ -46,7 +46,7 @@ These rely on role judgment or separate controlled/manual checks:
 
 - SEO copy quality: uniqueness, intent and usefulness of titles and descriptions.
 - Form, mail and security behavior (no automated tests yet).
-- Booking and analytics event wiring.
+- Live GA4 receipt, Realtime/DebugView validation, and custom-dimension setup (event wiring and data-layer routing are covered by Browser E2E).
 - Production performance, Lighthouse scoring and field Core Web Vitals (LCP, INP and CLS).
 - Visual correctness, physical-device coverage, contrast and screen-reader quality.
 - Current hotel facts, and cPanel-specific configuration and PHP version.
