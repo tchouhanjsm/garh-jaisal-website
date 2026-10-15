@@ -38,6 +38,8 @@ $staticPages = [
     ['path' => '/jaisalmer-fort-guide.php', 'priority' => '0.7'],
     ['path' => '/desert-safari-guide.php', 'priority' => '0.7'],
     ['path' => '/jaisalmer-2-day-itinerary.php', 'priority' => '0.7'],
+    ['path' => '/jaisalmer-3-day-itinerary.php', 'priority' => '0.7'],
+    ['path' => '/jaisalmer-honeymoon-guide.php', 'priority' => '0.7'],
     ['path' => '/camping.php', 'priority' => '0.5'],
     ['path' => '/car-rental.php', 'priority' => '0.5'],
     ['path' => '/city-tour.php', 'priority' => '0.5'],

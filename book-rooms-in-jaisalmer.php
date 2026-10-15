@@ -27,7 +27,7 @@ $page = [
             '@type' => 'Article',
             'headline' => 'Staying inside Jaisalmer Fort',
             'datePublished' => '2026-10-02',
-            'dateModified' => '2026-10-14',
+            'dateModified' => '2026-10-15',
             'image' => 'https://www.hotelgarhjaisal.com/img/v2/fort-from-roof.jpg',
             'author' => ['@type' => 'Organization', 'name' => 'Hotel Garh Jaisal Haveli', 'url' => 'https://www.hotelgarhjaisal.com/'],
             'publisher' => ['@id' => 'https://www.hotelgarhjaisal.com/#hotel'],
@@ -67,6 +67,7 @@ require __DIR__ . '/include/page-head.php';
         <p class="eyebrow" id="eat">Eat</p>
         <h2>Meals on the roof.</h2>
         <p>Garh Jaisal’s Kitchen is the rooftop restaurant. The menu includes vegetarian, vegan, and non-vegetarian dishes, and candlelight dinners can be arranged. Hours and prices are confirmed with the hotel. From the terrace you look over the havelis and the lit city. <a href="roof.php">Rooftop dining</a>.</p>
+        <p>Planning a honeymoon or couples’ escape? Our <a href="jaisalmer-honeymoon-guide.php">Jaisalmer honeymoon guide</a> helps you plan a Fort stay, rooftop dinner and desert experience while checking details that depend on your dates.</p>
         <p class="eyebrow" id="desert">Desert</p>
         <h2>The Thar, arranged from the fort.</h2>
         <p>Camel safaris, a night under the stars, and Swiss tent stays are arranged from the hotel. October to March is the busy season. Ask the hotel for the current price before you commit. <a href="pack.php">Desert experiences</a>.</p>
