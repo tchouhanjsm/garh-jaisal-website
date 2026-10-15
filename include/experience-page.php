@@ -53,7 +53,17 @@ if ($parentSlug !== 'pack' && isset($experiences[$parentSlug]) && ($experiences[
 $breadcrumbs[] = ['name' => $experience['h1'], 'url' => $canonical];
 $isIndexableExperience = ($experience['status'] ?? 'live') === 'live';
 $experienceContactUrl = 'contact.php';
-if ($isIndexableExperience && ($experience['duration_type'] ?? 'hub') !== 'hub' && !empty($experience['slug'])) {
+$experienceContactLabel = 'Ask about availability';
+$experienceBottomContactLabel = 'Contact us';
+$isWhatsAppCityTour = in_array($experience['slug'] ?? '', ['half-day-jaisalmer-tour', 'full-day-jaisalmer-tour'], true);
+if ($isWhatsAppCityTour) {
+    $message = 'Hello, I would like to enquire about the ' . $experience['h1'] . '. '
+        . 'Travel date: [add date]. Preferred guide language: [add language]. '
+        . 'Please confirm the current price, route, guide availability, start time and any applicable entry fees.';
+    $experienceContactUrl = rtrim($siteConfig['whatsapp_url'], '/') . '?text=' . rawurlencode($message);
+    $experienceContactLabel = 'Ask on WhatsApp';
+    $experienceBottomContactLabel = 'Ask on WhatsApp';
+} elseif ($isIndexableExperience && ($experience['duration_type'] ?? 'hub') !== 'hub' && !empty($experience['slug'])) {
     $experienceContactUrl .= '?experience=' . rawurlencode((string) $experience['slug']);
 }
 
@@ -141,7 +151,7 @@ require __DIR__ . '/page-head.php';
       <h1><?= htmlspecialchars($experience['h1'], ENT_QUOTES, 'UTF-8') ?></h1>
       <p><?= htmlspecialchars($experience['summary'], ENT_QUOTES, 'UTF-8') ?></p>
       <div class="actions">
-        <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>">Ask about availability</a>
+        <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
         <a class="button button-light" href="pack.php">View all experiences</a>
       </div>
     </div>
@@ -323,7 +333,7 @@ require __DIR__ . '/page-head.php';
       <h2>Stay inside Jaisalmer Fort, then explore beyond it.</h2>
       <p>Ask the hotel about the latest experience details, availability and arrangements for your travel date.</p>
       <div class="actions">
-        <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>">Contact us</a>
+        <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceBottomContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
         <a class="button button-secondary" href="room.php">View rooms</a>
       </div>
     </div>

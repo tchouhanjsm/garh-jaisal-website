@@ -266,6 +266,21 @@ test('experience availability CTAs carry live tour context into the enquiry form
 
   for (const scenario of scenarios) {
     await page.goto(scenario.route, { waitUntil: 'domcontentloaded' });
+
+    if (scenario.slug === 'half-day-jaisalmer-tour') {
+      const quoteLinks = page.getByRole('link', { name: 'Ask on WhatsApp' });
+      await expect(quoteLinks).toHaveCount(2);
+      for (const link of await quoteLinks.all()) {
+        await expect(link).toHaveAttribute('href', /^https:\/\/wa\.me\//);
+        await expect(link).toHaveAttribute('target', '_blank');
+        await expect(link).toHaveAttribute('rel', /noopener/);
+        const message = await link.evaluate(element => new URL(element.href).searchParams.get('text') || '');
+        expect(message).toContain(scenario.title);
+        expect(message).toContain('current price');
+      }
+      continue;
+    }
+
     await expect(page.getByRole('link', { name: 'Ask about availability' }))
       .toHaveAttribute('href', 'contact.php?experience=' + scenario.slug);
     await expect(page.getByRole('link', { name: 'Contact us' }))

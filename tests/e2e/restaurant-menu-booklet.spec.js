@@ -54,6 +54,13 @@ test('restaurant directions QR, map and Instagram link use the verified destinat
   await expect(qr).toHaveAttribute('src', 'img/restaurant-maps-qr.svg');
   await expect(qr).toHaveAttribute('width', '370');
   await expect(qr).toHaveAttribute('height', '370');
+  const qrResponse = await page.request.get('/img/restaurant-maps-qr.svg');
+  expect(qrResponse.ok()).toBe(true);
+  const qrSvg = await qrResponse.text();
+  expect(qrSvg).toContain('https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8');
+  expect(qrSvg).toContain('viewBox="0 0 37 37"');
+  expect(qrSvg).toContain('shape-rendering="crispEdges"');
+  expect(qrSvg).toContain('<path');
 
   await expect(directions.locator('iframe')).toHaveAttribute('title', "Google Maps location of Garh Jaisal's Kitchen");
   await expect(directions.getByRole('link', { name: 'Open directions in Google Maps ↗' }))

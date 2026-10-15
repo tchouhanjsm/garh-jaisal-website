@@ -285,3 +285,21 @@
 .arrival-page .section-head{align-items:start;gap:clamp(20px,4vw,48px)}
 .arrival-page .section-head>*{min-width:0}
 @media(max-width:760px){.arrival-page .section-head{grid-template-columns:minmax(0,1fr);gap:12px}.arrival-page .arrival-fact,.arrival-page .travel-card,.arrival-page .arrival-notice,.arrival-page .arrival-address{padding:20px}}
+
+
+/* Batch 3 — responsive Google Maps panel for the Fort arrival guide. */
+.arrival-map { background:#fff; }
+.arrival-map-grid { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(260px,.8fr); gap:clamp(20px,4vw,42px); align-items:stretch; margin-top:26px; }
+.arrival-map-frame { min-width:0; min-height:320px; overflow:hidden; border:1px solid var(--line); background:#e8ded1; }
+.arrival-map-frame iframe { display:block; width:100%; height:100%; min-height:340px; border:0; }
+.arrival-map-copy { display:flex; min-width:0; flex-direction:column; align-items:flex-start; justify-content:center; padding:clamp(20px,3vw,32px); border:1px solid var(--line); background:var(--sand-light); }
+.arrival-map-copy h3 { margin:0 0 12px; font-size:clamp(1.4rem,2.5vw,2rem); }
+.arrival-map-copy p:not(.eyebrow) { margin:0 0 14px; color:var(--muted); line-height:1.65; }
+.arrival-map-copy .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
+.arrival-map-copy .button { min-height:44px; white-space:normal; text-align:center; }
+@media(max-width:900px) { .arrival-map-grid { grid-template-columns:minmax(0,1fr); } }
+@media(max-width:600px) {
+  .arrival-map-frame,.arrival-map-frame iframe { min-height:280px; }
+  .arrival-map-copy .actions { width:100%; flex-direction:column; align-items:stretch; }
+  .arrival-map-copy .button { width:100%; justify-content:center; }
+}

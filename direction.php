@@ -7,6 +7,8 @@ $hotelPhoneDisplay = $siteConfig['hotel_phone_display'];
 $hotelPhoneAlt = $siteConfig['hotel_phone_alt'];
 $hotelPhoneAltDisplay = $siteConfig['hotel_phone_alt_display'];
 $whatsappUrl = $siteConfig['whatsapp_url'];
+$hotelMapsUrl = 'https://maps.app.goo.gl/nAbRiZhv78FSbju48';
+$hotelMapsEmbedUrl = 'https://www.google.com/maps?q=Garh+Jaisal+Haveli%2C+Fort+Kotari+Para%2C+Inside+Jaisalmer+Fort%2C+Jaisalmer%2C+Rajasthan+345001&output=embed';
 ?>
 <!doctype html>
 <html lang="en">
@@ -193,6 +195,38 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
+  <section class="section arrival-map" aria-labelledby="arrival-map-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div><p class="eyebrow">Map and navigation</p><h2 id="arrival-map-title">Find the hotel inside Jaisalmer Fort.</h2></div>
+        <p>Use the map for the surrounding area, then open the hotel's exact Google Maps pin before travelling. Cars cannot enter the narrow Fort lanes.</p>
+      </div>
+      <div class="arrival-map-grid">
+        <div class="arrival-map-frame">
+          <iframe
+            src="<?= htmlspecialchars($hotelMapsEmbedUrl, ENT_QUOTES, 'UTF-8') ?>"
+            title="Map of Garh Jaisal Haveli near Fort Kotari Para inside Jaisalmer Fort"
+            width="600"
+            height="450"
+            style="border:0;"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+          ></iframe>
+        </div>
+        <div class="arrival-map-copy">
+          <p class="eyebrow">Last part on foot</p>
+          <h3>Stop at Fort Parking.</h3>
+          <p>From the parking area, follow the walking route through the Fort lanes. If you need pickup or luggage assistance, contact the hotel in advance to confirm what can be arranged.</p>
+          <div class="actions">
+            <a class="button button-primary" href="<?= htmlspecialchars($hotelMapsUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Open exact hotel pin in Google Maps</a>
+            <a class="button button-secondary" href="contact.php?topic=arrival">Confirm arrival arrangements</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section arrival-contact">
     <div class="site-shell arrival-split">
       <div>
@@ -218,7 +252,7 @@ require __DIR__ . '/include/page-head.php';
           <a href="mailto:mukeshkila@yahoo.com">mukeshkila@yahoo.com</a>
         </p>
         <p>
-          <a href="https://maps.app.goo.gl/nAbRiZhv78FSbju48" target="_blank" rel="noopener">Open in Google Maps</a>
+          <a href="<?= htmlspecialchars($hotelMapsUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Open in Google Maps</a>
         </p>
       </address>
     </div>

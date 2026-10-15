@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-14 |
-| Current phase | Batch 2 — Restaurant menu booklet, directions and social discovery |
+| Current phase | Batch 3 — Fort walk, car services and arrival map |
 | Base branch | `main` |
-| Baseline commit | `77b2d4f8336c346367aafe0c4ae53047ae2e2978` (PR #66 merge commit) |
-| Last merged PR | [#66 — improve Desert Gallery and Swiss Tent Safari](https://github.com/tchouhanjsm/garh-jaisal-website/pull/66) |
-| PR #66 merge-commit checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38591668766); [cPanel package PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38591668628); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38591668656); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38591668629) |
-| Screenshot evidence | [PR #66 390px/1280px page sheet and Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38591668629) |
+| Baseline commit | `d68902aadc4347cd7e0e760ca5048dac14093de7` (PR #67 merge commit) |
+| Last merged PR | [#67 — improve restaurant menu and directions](https://github.com/tchouhanjsm/garh-jaisal-website/pull/67) |
+| PR #67 merge-commit checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38596532659); [cPanel package PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38596532375); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38596532267); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38596532404) |
+| Screenshot evidence | [PR #67 390px/1280px page sheet and Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38596532404) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None at Batch 2 branch creation |
-| Next action | Review PR #67 exact-head CI, restaurant booklet, Maps QR and mobile layout; owner alone merges |
+| Open PRs at baseline verification | None at Batch 3 branch creation |
+| Next action | Fix three Browser E2E failures, confirm exact-head rerun and review PR #68; next planned work is Sprint 21 SEO content cluster |
 
 ## Phase roadmap
 
@@ -170,19 +170,25 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Replaced removed image references in the homepage, Desert Gallery and shared experience data without restoring any image reported for copyright infringement.
 - Kept the deleted image files deleted; aligned the responsive-image review inventory and WebP regression manifest with the surviving/new licensed asset set.
 - Regenerated the Gallery sitemap timestamp. Main-merge Site Checks, package, staging dry-run and Browser E2E passed on `31996b4`; final visual subject/caption confirmation remains an owner review.
-- The QR artwork `img/restaurant_QR.png` is not part of this PR’s changed files. Its Google Business Profile destination and restaurant-page integration are a separate follow-up, pending the exact profile share URL.
+- PR #67 added `img/restaurant-maps-qr.svg` for the owner-confirmed Maps URL. This batch replaces the initial hand-authored QR matrix with a generated QR from the verified destination and adds regression coverage for the asset.
 
 
 ## Batch 1 — Swiss Tent Safari and Desert Gallery (PR #66 merged)
 
 - PR #66 merged to `main` at `77b2d4f8336c346367aafe0c4ae53047ae2e2978`; post-merge Site Checks, package preflight, staging dry run and Browser E2E/screenshot sheet passed.
-- Desert Gallery now uses the five owner-provided `img/Desert_Camp/` photos; Swiss tent facilities and high-tea / package-exclusion wording are recorded from owner confirmation.
-- The remaining visual check is that every photo's caption matches its actual subject; no production deployment or real-host validation was performed.
+- Desert Gallery uses the five owner-provided `img/Desert_Camp/` photos; Swiss-tent facilities and high-tea / package-exclusion wording come from owner confirmation.
+- Final visual photo/caption review remains owner-side; no production deployment or real-host validation was performed.
 
-## Batch 2 — Restaurant menu booklet and directions (PR #67 in review)
+## Batch 2 — Restaurant menu booklet and directions (PR #67 merged)
 
-- Baseline: PR #66 merge commit `77b2d4f8336c346367aafe0c4ae53047ae2e2978`; no open PRs at batch start.
-- Build an accessible menu booklet with category tabs, previous/next, page status, vegetarian filter and print-friendly full menu, preserving the existing menu data and disclaimer.
-- Add the owner-confirmed Google Maps embed and scannable directions QR; add a compact Instagram follow panel using existing restaurant assets and the approved profile link.
-- Add Browser E2E for booklet state, QR/map targets, Instagram link, and responsive no-overflow behavior. Specific Instagram post/reel URLs and current menu/price verification remain owner-side items.
-- No production deployment or external staging was performed; owner alone merges and deploys.
+- PR #67 merged to `main` at `d68902aadc4347cd7e0e760ca5048dac14093de7`; post-merge Site Checks, package preflight, staging dry run and Browser E2E/screenshot sheet passed.
+- The menu booklet, map/directions panel and Instagram profile CTA are implemented; current menu and price confirmation remains an owner task before staging.
+- This batch revalidates the restaurant QR matrix against the exact owner-confirmed Maps URL.
+
+## Batch 3 — Fort walk, car services and arrival map (PR #68 in review)
+
+- Baseline: PR #67 merge commit `d68902aadc4347cd7e0e760ca5048dac14093de7`; no open PRs at batch start.
+- Expand the Fort walk around the Jain temples, Palace Museum and heritage street walk; direct guide-language and current-price enquiries to WhatsApp.
+- Make SUV/sedan desert pickup/drop-off and intercity car journeys across Rajasthan and Delhi distinct from walking tours. State Hindi/English driver communication.
+- Add the responsive Directions map while preserving the current exact hotel Maps pin; validate the restaurant QR asset and keep a browser regression for it.
+- No staging-host test or production deployment is authorized by this PR.
