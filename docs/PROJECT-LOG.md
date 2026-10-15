@@ -6,17 +6,17 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-14 |
-| Current phase | Batch 3 — Fort walk, car services and arrival map |
+| Last updated | 2026-10-15 |
+| Current phase | Sprint 21 — SEO content cluster and Packages conversion (Batch 1) |
 | Base branch | `main` |
-| Baseline commit | `d68902aadc4347cd7e0e760ca5048dac14093de7` (PR #67 merge commit) |
-| Last merged PR | [#67 — improve restaurant menu and directions](https://github.com/tchouhanjsm/garh-jaisal-website/pull/67) |
-| PR #67 merge-commit checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38596532659); [cPanel package PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38596532375); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38596532267); [Browser E2E + screenshot sheet PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38596532404) |
-| Screenshot evidence | [PR #67 390px/1280px page sheet and Browser evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38596532404) |
+| Baseline commit | `47ca61866482e8046b2ea230da0cc18eaacf779f` (PR #68 merge commit) |
+| Last merged PR | [#68 — improve Fort walk, car services and directions](https://github.com/tchouhanjsm/garh-jaisal-website/pull/68) |
+| PR #68 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38607504032); [cPanel package PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38607504001); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38607503864); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38607503842) |
+| Screenshot evidence | [PR #68 390px/1280px page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38607503842/artifacts/11917425177) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at baseline verification | None at Batch 3 branch creation |
-| Next action | Fix three Browser E2E failures, confirm exact-head rerun and review PR #68; next planned work is Sprint 21 SEO content cluster |
+| Open PRs at batch baseline | None at verification |
+| Next action | Review the Sprint 21 Packages-to-guides and car-arrangements slice on its exact PR head; owner retains merge, staging and production authority. |
 
 ## Phase roadmap
 
@@ -185,10 +185,20 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - The menu booklet, map/directions panel and Instagram profile CTA are implemented; current menu and price confirmation remains an owner task before staging.
 - This batch revalidates the restaurant QR matrix against the exact owner-confirmed Maps URL.
 
-## Batch 3 — Fort walk, car services and arrival map (PR #68 in review)
+## Batch 3 — Fort walk, car services and arrival map (PR #68 merged)
 
 - Baseline: PR #67 merge commit `d68902aadc4347cd7e0e760ca5048dac14093de7`; no open PRs at batch start.
 - Expand the Fort walk around the Jain temples, Palace Museum and heritage street walk; direct guide-language and current-price enquiries to WhatsApp.
 - Make SUV/sedan desert pickup/drop-off and intercity car journeys across Rajasthan and Delhi distinct from walking tours. State Hindi/English driver communication.
 - Add the responsive Directions map while preserving the current exact hotel Maps pin; validate the restaurant QR asset and keep a browser regression for it.
-- No staging-host test or production deployment is authorized by this PR.
+- PR #68 merged to `main` at `47ca61866482e8046b2ea230da0cc18eaacf779f`. Exact PR-head `a1fbda68b01312f6b623ef2e6d8a29aef70a6e51` checks passed: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38607504032), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38607504001), [Staging QA dry run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38607503864), and [Browser E2E/screenshot sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38607503842). This is not real staging-host validation.
+- No staging-host test or production deployment was performed for this PR.
+
+
+## Sprint 21 Batch 1 — Packages-to-guide discovery and vehicle path (PR #69 in review)
+
+- Reuse the three existing planning guides rather than create near-duplicate URLs. Add reciprocal discovery cards from Packages to the Fort guide, desert comparison guide and two-day itinerary.
+- Add a direct Packages-to-`car-rental.php` path so guests who need a vehicle can reach the owner-confirmed SUV/sedan arrangements and travel-date quote journey without first finding the Car & City hub.
+- Reuse existing licensed/owner-provided images and the established experience-card layout; keep existing public URLs, page metadata, rates, policies, analytics and booking destinations unchanged.
+- Refresh only the existing `/pack.php` sitemap `lastmod` to match its Git-derived source date; do not add or remove a sitemap route or change its priority.
+- Add Browser E2E for the three guide destinations and vehicle-arrangements path. Exact-head CI and visual artifact review remain prerequisites to owner approval; no live staging or production change is authorized.
