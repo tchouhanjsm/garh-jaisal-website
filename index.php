@@ -18,6 +18,7 @@ $page = [
     'twitter_title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
     'twitter_description' => 'Heritage rooms, rooftop views and desert experiences inside Jaisalmer Fort.',
     'twitter_image' => '/img/v2/facade.jpg',
+    'css' => ['css/thar-sunset-story.css'],
     'schema' => [
         [
             '@type' => 'WebPage',
@@ -34,7 +35,7 @@ require __DIR__ . '/include/page-head.php';
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main id="main-content" tabindex="-1">
+<main id="main-content" class="thar-sunset-story thar-sunset-story--home" tabindex="-1">
 <section class="hero">
   <div class="hero-media">
     <img
@@ -71,7 +72,7 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
-<section class="home-discovery" aria-label="Explore Garh Jaisal Haveli">
+<section class="home-discovery" aria-label="Explore Garh Jaisal Haveli" data-story-reveal>
   <div class="site-shell home-discovery-grid">
     <a class="home-discovery-link" href="room.php">
       <span class="home-discovery-number" aria-hidden="true">01</span>
@@ -91,7 +92,7 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
-<section class="home-arrival-note" aria-labelledby="home-arrival-title">
+<section class="home-arrival-note" data-story-reveal aria-labelledby="home-arrival-title">
   <div class="site-shell home-arrival-note-inner">
     <div class="home-arrival-note-copy">
       <p class="eyebrow">Before you arrive</p>
@@ -102,7 +103,7 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
-<section class="section intro">
+<section class="section intro" data-story-reveal>
   <div class="site-shell intro-grid">
 
     <div class="intro-copy">
@@ -164,7 +165,7 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
-  <section class="section home-rooms" id="rooms-preview" aria-labelledby="rooms-preview-title">
+  <section class="section home-rooms" id="rooms-preview" data-story-reveal aria-labelledby="rooms-preview-title">
     <?php
     $rooms = require __DIR__ . '/include/rooms-data.php';
     $featuredRooms = array_slice($rooms, 0, 3);
@@ -196,7 +197,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-<section class="section section-feature home-rooftop" id="rooftop-dining" aria-labelledby="rooftop-dining-title">
+<section class="section section-feature home-rooftop" id="rooftop-dining" data-story-reveal aria-labelledby="rooftop-dining-title">
   <div class="site-shell wide-feature">
 
     <div class="copy">
@@ -232,7 +233,7 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
-<section class="section home-experiences" id="desert-experiences" aria-labelledby="desert-experiences-title">
+<section class="section home-experiences" id="desert-experiences" data-story-reveal aria-labelledby="desert-experiences-title">
   <div class="site-shell">
 
     <div class="section-head">
@@ -327,7 +328,7 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
-<section class="section arrival" id="arrival-guide" aria-labelledby="arrival-guide-title">
+<section class="section arrival" id="arrival-guide" data-story-reveal aria-labelledby="arrival-guide-title">
   <div class="site-shell">
 
     <div class="section-head">
@@ -382,7 +383,7 @@ require __DIR__ . '/include/page-head.php';
 
   </div>
 </section>
-<section class="section home-gallery" id="property-gallery" aria-labelledby="property-gallery-title">
+<section class="section home-gallery" id="property-gallery" data-story-reveal aria-labelledby="property-gallery-title">
   <div class="site-shell">
 
     <div class="section-head">

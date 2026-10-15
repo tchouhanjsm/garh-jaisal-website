@@ -34,6 +34,7 @@ $page = [
     'twitter_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'twitter_description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort.',
     'twitter_image' => '/img/purple-room.jpg',
+    'css' => ['css/thar-sunset-story.css'],
     'schema' => [
         [
             '@type' => 'WebPage',
@@ -72,7 +73,7 @@ require __DIR__ . '/include/page-head.php';
 
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main class="rooms-page" id="main-content" tabindex="-1">
+<main class="rooms-page thar-sunset-story thar-sunset-story--rooms" id="main-content" tabindex="-1">
 
   <!-- =====================================================
        PAGE HERO
@@ -120,7 +121,7 @@ require __DIR__ . '/include/page-head.php';
        INTRO
        ===================================================== -->
 
-  <section class="section rooms-intro">
+  <section class="section rooms-intro" data-story-reveal>
     <div class="site-shell rooms-intro-grid">
 
       <div>
@@ -182,7 +183,7 @@ require __DIR__ . '/include/page-head.php';
     $floorIndex++;
   ?>
   <?php $floorId = 'rooms-' . trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($floorKicker)), '-'); ?>
-  <section id="<?= htmlspecialchars($floorId, ENT_QUOTES, 'UTF-8') ?>" class="<?= htmlspecialchars($floorClass, ENT_QUOTES, 'UTF-8') ?>">
+  <section id="<?= htmlspecialchars($floorId, ENT_QUOTES, 'UTF-8') ?>" class="<?= htmlspecialchars($floorClass, ENT_QUOTES, 'UTF-8') ?>" data-story-reveal>
     <div class="site-shell">
 
       <div class="room-floor-heading">
@@ -264,7 +265,7 @@ require __DIR__ . '/include/page-head.php';
        STAY INFORMATION
        ===================================================== -->
 
-  <section class="section rooms-info">
+  <section class="section rooms-info" data-story-reveal>
     <div class="site-shell">
 
       <div class="rooms-info-box">
@@ -301,7 +302,7 @@ require __DIR__ . '/include/page-head.php';
 
 
 
-  <section class="section site-faq room-faq" aria-labelledby="room-faq-title">
+  <section class="section site-faq room-faq" data-story-reveal aria-labelledby="room-faq-title">
     <div class="site-shell">
       <div class="section-head">
         <div><p class="eyebrow">Common questions</p><h2 id="room-faq-title">Questions before you choose a room.</h2></div>

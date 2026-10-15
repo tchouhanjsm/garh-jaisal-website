@@ -7,16 +7,18 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-15 |
-| Current phase | Sprint 23 — unified catalogue, comparison ladders and Trip tray (Batch 1) |
+| Current phase | Sprint 24 — Thar Sunset visual storytelling (Batch 1, PR in review) |
 | Base branch | `main` |
-| Baseline commit | `55b5a205a2b80a20f4298950ec2e7a50e8d1782a` (PR #71 merge commit) |
-| Last merged PR | [#71 — Thar Sunset identity and conversion foundation](https://github.com/tchouhanjsm/garh-jaisal-website/pull/71) |
-| PR #71 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38689334426); [cPanel package PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38689334387); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38689334439); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38689334417) |
-| Screenshot evidence | [PR #71 responsive page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38689334417/artifacts/11951107957) |
-| Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
+| Baseline commit | `c7adfa2b8e1d761e8a0e53867791a7935c1c06a7` (PR #72 merge commit) |
+| Last merged PR | [#72 — Unified catalogue and Trip tray](https://github.com/tchouhanjsm/garh-jaisal-website/pull/72) |
+| PR #72 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215503); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215516); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215504); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215501) — exact PR-head SHA `2ccedb9f9dd603ccd396949bdb4fa46c457682bd` |
+| Screenshot evidence | [PR #72 page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215501/artifacts/11954593789) |
+| Image review evidence | [PR #72 responsive image review](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215503/artifacts/11954773684) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Open PRs at batch baseline | None at verification |
-| Next action | Review Sprint 23 Batch 1 catalogue and Trip tray on its exact PR head; owner retains merge, staging and production authority. |
+| Staging evidence | [PR #72 non-deploying QA report and screenshots](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215504/artifacts/11954712619); external staging target was not supplied, so real-host QA is still owner-side. |
+| Merge-commit evidence | The retrieved PR-triggered run query did not return merge-SHA workflows; inspect main-push Actions runs before claiming post-merge CI verification. |
+| Next action | Review the Sprint 24 PR head and responsive artifacts; real staging and production release remain owner-controlled. |
 
 ## Phase roadmap
 
@@ -219,10 +221,19 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - PR #71 CI fix follow-up: the first Browser E2E run exposed a 42px inherited mobile toggle size, booking token serialization changing when UTMs were appended through the URL serializer, and an Escape-key expectation that predated the compact 1081–1366px navigation. The fix restores a 44px mobile hit area, appends only encoded UTM fields to the original URL string so the token representation is preserved, updates the room-booking regression to verify both token preservation and attribution, and makes Escape close an open submenu before the compact menu. Recheck exact-head CI before owner review.
 
 
-## Sprint 23 Batch 1 — unified catalogue, comparisons and Trip tray (PR in review)
+## Sprint 23 Batch 1 — unified catalogue, comparisons and Trip tray (PR #72 merged)
 
-- Baseline: PR #71 merged to `main` at `55b5a205a2b80a20f4298950ec2e7a50e8d1782a`; merged-head evidence is in the Snapshot.
-- Added `catalogue.php` and a central reviewed list that resolves existing live experience and room content rather than copying operational facts. Prices remain on request; no guest reviews, availability or margin assumptions were added.
-- Added a session-only Trip shortlist across catalogue, room, package/experience, transport and rooftop dining paths. It stores selections only in the current tab and opens an editable WhatsApp draft; there is no server-side lead log and no personal details are collected by the tray.
-- Added the catalogue to sitemap/SEO coverage and Browser E2E tests for route metadata, selected-item replacement, camp comparison and safe WhatsApp draft construction. Restaurant R1 remains owner-blocked on hours, slot capacity, mail handling and approved privacy/retention wording.
-- This PR is not a production deployment; owner review, exact-head CI, screenshot review, real staging and release decisions remain separate.
+- PR #72 merged to `main` at `c7adfa2b8e1d761e8a0e53867791a7935c1c06a7` on 2026-10-15. It added `catalogue.php`, one reviewed catalogue list that resolves the existing room/experience sources, reusable product cards, camp and transport comparisons, and a session-only Trip tray.
+- The Trip tray stores product selections only in the current browser tab and opens an editable WhatsApp draft. It does not create a server-side lead, submit an enquiry, reserve a table/room or confirm availability; unapproved prices remain absent.
+- Exact PR-head `2ccedb9f9dd603ccd396949bdb4fa46c457682bd` checks passed: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215503), [cPanel package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215516), [Staging QA dry run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215504) and [Browser E2E/page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215501). PHP 7.4/8.2 and strict site/sitemap gates passed. The package-generation job and external staging-target step were skipped; this is not live cPanel validation.
+- Artifacts: [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215501/artifacts/11954593789), [staging QA evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215504/artifacts/11954712619), [responsive image review](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215503/artifacts/11954773684).
+- The merge commit's main-push workflow runs were not independently confirmed by the PR-triggered run query; check GitHub Actions before claiming those specific post-merge checks. No production deployment was made.
+
+## Sprint 24 — Batch 1: Thar Sunset visual storytelling (PR in review)
+
+- Baseline: PR #72 merge commit `c7adfa2b8e1d761e8a0e53867791a7935c1c06a7`. This batch applies one shared, token-aware visual layer to Home, Rooms, Packages, Trip Planner, rooftop dining, Blog and the shared experience template instead of independent page-by-page styling.
+- Reuses current Thar Sunset tokens and approved images; adds dusk-led overlays, an architectural arch crop to existing rooftop/editorial photos, consistent fine keylines and restrained scroll-entry motion. Existing image mappings, copy facts, metadata, public URLs, booking links/token and both GA4 IDs remain unchanged.
+- Reveal behavior is progressive enhancement: content is never hidden by default; reduced-motion preference, missing JavaScript and unsupported IntersectionObserver leave content readable. No third-party library or external asset was added.
+- Smart Check acceptance: Full-Stack Developer—shared stylesheet and shared experience renderer, no duplicated fact source; SEO Content Writer—copy, canonical/schema and publication status unchanged; Debugger—fallbacks and reduced-motion/viewport regressions covered; UI/UX Lead—review screenshot artifacts across narrow mobile through desktop and keep every primary action at least 44px.
+- Required exact-head gates are Site Checks (PHP 7.4/8.2, strict site/image and sitemap), cPanel package preflight, non-deploying Staging QA and full Browser E2E/screenshot evidence. This log describes the current PR scope; its live run state must be read from the PR. Real staging, final visual approval and deployment remain owner-side.
+

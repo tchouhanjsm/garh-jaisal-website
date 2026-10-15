@@ -26,7 +26,7 @@ $page = [
     'twitter_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
     'twitter_description' => "Candlelight dinners and city views at Garh Jaisal's Kitchen, the rooftop restaurant inside Jaisalmer Fort.",
     'twitter_image' => '/img/v2/fort-from-roof.jpg',
-    'css' => ['css/roof.css'],
+    'css' => ['css/roof.css', 'css/thar-sunset-story.css'],
     'schema' => [
         [
             '@type' => 'WebPage',
@@ -53,7 +53,7 @@ require __DIR__ . '/include/page-head.php';
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main class="roof-page" id="main-content" tabindex="-1">
+<main class="roof-page thar-sunset-story thar-sunset-story--dining" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo">
     <div class="page-hero-media" aria-hidden="true">
       <img src="img/v2/fort-from-roof.jpg" <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
@@ -78,7 +78,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" data-story-reveal>
     <div class="site-shell">
       <div class="section-head">
         <div>
@@ -182,7 +182,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section site-faq roof-faq" aria-labelledby="roof-faq-title">
+  <section class="section site-faq roof-faq" data-story-reveal aria-labelledby="roof-faq-title">
     <div class="site-shell">
       <div class="section-head">
         <div><p class="eyebrow">Common questions</p><h2 id="roof-faq-title">Rooftop dining questions.</h2></div>

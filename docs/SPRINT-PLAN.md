@@ -31,6 +31,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 20 | Fort walk, car services and Directions map | ✓ PR #68 merged; exact PR-head Site Checks, package preflight, staging dry run and Browser E2E passed; real staging remains owner-gated |
 | 21 | SEO content cluster and Packages conversion | ◐ Batch 1 merged in PR #69; Batch 2 adds a distinct 3-day itinerary and honeymoon guide, reciprocal links and sitemap coverage |
 | 22 | Guest policies and trust pages | Blocked on owner-approved privacy, terms and cancellation/refund wording; keep unpublished/noindex until confirmed |
+| 23 | Unified catalogue, comparison ladders and session-only Trip tray | ✓ PR #72 merged; exact PR-head PHP/site checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |
+| 24 | Thar Sunset visual storytelling across high-intent journeys | ◐ Current implementation PR; exact-head gates and responsive screenshot review required before owner approval |
 
 ---
 
@@ -412,20 +414,29 @@ Stop there: the owner merges.
 Owner-blocked items remain explicit: no fabricated prices, hours, capacity, reviews, policy terms, licensed-partner details or font assets.
 
 
-## Sprint 23 — Batch 1: unified catalogue, comparison ladders and Trip tray (PR in review)
+## Sprint 23 — Batch 1: unified catalogue, comparison ladders and Trip tray (PR #72 merged)
 
-**Commercial goal:** help a guest combine a Fort stay, desert experience, guided tour, car arrangement and rooftop dining into one practical enquiry while keeping all prices and date-specific details owner-confirmed.
+**Commercial goal:** help a guest combine a Fort stay, desert experience, guided tour, car arrangement and rooftop dining into one practical enquiry while keeping current prices and date-specific details owner-confirmed.
 
-- Add `catalogue.php` using one reviewed catalogue list that points to existing room and published experience sources. Do not duplicate source facts, publish unconfirmed “from” prices, or infer availability.
-- Standardise a premium product-card anatomy across the catalogue with an image, category/promise, duration where confirmed, current price-on-request label, Add to Trip and Ask on WhatsApp. Keep the existing booking-engine link available for room availability.
-- Add open-sky vs Swiss-tent comparison from approved experience facts; distinguish desert pickup, intercity car arrangements and Fort arrival walking guidance.
-- Add a tab-scoped Trip tray that stores selected product IDs/titles/URLs only, limits selection size, lets guests replace the generic room pick with a specific room, and prepares an editable WhatsApp message. Do not create a server-side lead log, collect guest contact details or report a completed enquiry in this slice.
-- Add sitemap, frozen-head-baseline and Browser E2E contracts. Required gates: PHP 7.4/8.2, strict-image/site checks, sitemap freshness, package preflight, non-deploying staging QA, full Browser E2E and the 390/1280 screenshot sheet, with 320/768/1440 responsive coverage. Owner reviews catalogue copy and screenshots before merge.
+- PR #72 merged to `main` at `c7adfa2b8e1d761e8a0e53867791a7935c1c06a7`. The new `catalogue.php` uses the reviewed central catalogue data to resolve current room and published-experience sources; shared product cards, open-sky/Swiss-tent and transport comparisons, and the tab-scoped Trip tray make options easier to assemble.
+- Trip selection remains a shortlist only. WhatsApp opens an editable draft; the site does not log a server lead, capture contact details in Trip storage, send an enquiry, make a reservation or confirm availability.
+- Exact PR-head PHP 7.4/8.2, strict site/sitemap, package preflight, non-deploying Staging QA and Browser E2E/screenshot gates passed. See the [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215503), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215516), [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215504) and [Browser E2E/page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215501). Staging QA was a local dry run; there is no deployment authorization.
 
-### Remaining sequence after Sprint 23
+## Sprint 24 — Batch 1: Thar Sunset visual storytelling (PR in review)
 
-1. **Restaurant R1 — real table-request flow (P0, owner-dependent):** implement 30-minute slot generation, CSRF/honeypot/rate limit, out-of-web-root lead storage, acknowledgement email and manual confirmation only after the owner approves operating days/hours, last seating, same-day cutoff, closed dates, capacity/max party size, recipient/handler, mail settings and privacy/retention wording. Never auto-confirm requests.
-2. **V2 visual storytelling completion:** apply the dusk hero, approved arch/portrait/cinematic image crops and subtle reduced-motion-safe reveals to priority stay and experience pages; switch font delivery only after licensed WOFF2 subsets exist.
-3. **V6 trust proof and V7 transport calculator:** use only dated, sourced reviews and owner-approved partner/safety facts; transport estimates require confirmed route/rates and explicit assumptions.
-4. **R2–R4:** Night Kitchen’s distinct garnet/brass identity, “Tonight” and story sections, then FAQ/cross-sell/schema; the owner must approve the restaurant name/direction and current menu first.
-5. **V8–V10 / growth:** first-party editorial cards only with approval, then local/AI-search work and measured performance/schema budget improvements. Do not add partner ads or publish ratings until evidence is provided.
+**Commercial goal:** make the hotel’s highest-intent browsing journeys feel like one distinctive, editorial Thar Sunset experience, while keeping trusted facts, enquiry and booking actions prominent.
+
+- Add a single reusable stylesheet scoped to Home, Rooms, Packages, Trip Planner, rooftop dining, Blog and the shared experience template. Reuse the existing approved Thar Sunset design tokens and current photo mappings.
+- Apply dusk-led overlays to current hero photography, architectural arch crops to existing rooftop/editorial images, consistent gold keylines and restrained reveal-on-entry motion.
+- Make reveal effects progressive enhancement: never hide content by default; leave it readable without JavaScript or IntersectionObserver, and suppress animation when reduced motion is requested.
+- Keep all page copy, prices, schema/canonicals, public URLs, external booking links and token, both GA4 IDs and catalogue facts unchanged. Do not add fonts, images or libraries.
+- Acceptance: full Browser E2E contract for Home, Rooms, Packages, Trip Planner, rooftop dining, Blog and a shared experience page; no overflow at 320/390/768/1280/1440px; primary action hit-area checks; reduced-motion and reveal behavior; exact-head PHP 7.4/8.2, strict site/image, sitemap, package preflight, Staging QA dry run and responsive screenshot evidence.
+
+### Remaining sequence after Sprint 24
+
+1. **Restaurant R1 — real table-request workflow (P0, owner-dependent):** still blocked on approved operating days/hours, last seating, same-day cut-off, closures, real capacity/max party size, notification recipient and handler, privacy/retention wording, mail configuration and the approved guest acknowledgement/contact flow. Do not ship slot availability, live submission or a server lead store until those facts are confirmed. Requests must never auto-confirm.
+2. **V6/V7 — trust proof and transport calculator:** use dated, sourced reviews and owner-approved partner/safety facts; transport estimates require confirmed routes, rate model and assumptions.
+3. **R2–R4 — Night Kitchen:** only after R1 is reliable and owner approves the restaurant identity/story, current menu and prices; do not invent hours or table availability.
+4. **V8–V10 / growth:** editorial house cards only with approval; prioritise local/AI-search work and performance/schema changes only from measured evidence.
+
+Owner-blocked items remain explicit: no fabricated prices, hours, capacity, reviews, policy terms, licensed-partner details or font assets.
