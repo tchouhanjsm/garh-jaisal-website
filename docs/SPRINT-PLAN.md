@@ -41,10 +41,10 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 30 | Shared breadcrumb/schema parity across high-intent hubs and Journal guides | ✓ merged in PR #78; breadcrumb/JSON-LD parity regression coverage passed |
 | 31 | Desert experience photo galleries | ✓ merged in PR #80; exact-head Site Checks, package preflight, Staging QA dry run, Browser E2E and responsive page sheet passed; owner visual review remains |
 | 32 | High-intent package discovery and guest-choice clarity | ✓ PR #81 merged; discovery hubs feed the existing session-only Trip shortlist and user-reviewed WhatsApp draft |
-| 33 | Brand foundation, contrast and shared component consistency | ◐ combined bulk PR #82: brand constitution, validated core token pairs, bastion motif, 6px controls/cards and room-photo arch crop |
-| 34 | Restaurant enquiry completion and conversion measurement | ◐ existing form/fallback stays safe; activation remains blocked on owner-confirmed recipients, privacy/retention text and acknowledgement flow |
-| 35 | Home and high-intent photography/performance pass | ◐ reuse existing licensed assets and crop/grade rules first; performance budgets require a reproducible baseline; paid shoot owner-gated |
-| 36 | Experience comparison and Trip shortlist visual polish | Planned within the combined design track after page-sheet review; preserve existing registry facts and session-only storage |
+| 33 | Brand foundation, contrast and shared component consistency | ✓ PR #82 merged; brand constitution, token contrast contract, bastion motif and shared 6px geometry |
+| 34 | Restaurant enquiry completion and conversion measurement | ◐ PR #83: accessible server validation, dining CTA/form intent events, direct-contact fallback retained; mail delivery remains owner-gated |
+| 35 | Home and high-intent photography/performance pass | ◐ keep image audit and candidates review-only until owner inspects variants; no runtime asset promotion in PR #83 |
+| 36 | Experience comparison and Trip shortlist visual polish | ◐ PR #83 extends the arch-photo treatment to catalogue and experience cards; preserve registry facts and session-only storage |
 | 37 | Restaurant identity and six first-party marketing templates | Planned after restaurant operational facts and first visual review; Canva Brand Kit is the low-friction default |
 
 ---
@@ -541,8 +541,10 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 
 After Sprint 32, review owner-approved content and data quality across high-intent room/desert/tour choices, then prioritise an evidence-led performance or accessibility slice based on measured CI inventories. Restaurant R1, privacy/cancellation publication, paid transport estimates and third-party proof remain explicitly blocked on owner input. Do not bundle these independent blocked projects into Sprint 32.
 
-## Combined design track — PR #82 (current bulk implementation)
+## Sprints 34–36 — restaurant enquiry, event measurement and visual consistency (PR #83)
 
-The goal is to implement reusable identity guardrails and visible components together, then keep follow-on commits in this same PR while they remain part of the approved design/conversion slice. The first implementation establishes `docs/BRAND.md`, contrast CI, existing-token refinement, the bastion motif, consistent 6px button/card geometry and a room-image arch crop. It does not replace the logo, add font dependencies, create new offers, or activate restaurant mail.
+This bulk slice makes the existing restaurant request path more accessible and measurable without changing whether online mail requests are enabled. Field-level server errors are programmatically linked to inputs; focus returns to the first invalid field; tests run against a separate local PHP process with `GJ_RESTAURANT_MAIL_ENABLED=1` and invalid/synthetic submissions only.
 
-Next in-scope additions for this same PR may include safe, testable improvements to the existing home/experience visual system, repeatable image/payload evidence and the table-enquiry presentation. Do not activate external mail or introduce unverified prices/policies without the facts specified in `docs/OWNER-FACTS.md`. Keep the PR coherent, update this plan and the Project Log with each meaningful batch, and stop before merge/deployment for owner review.
+Analytics distinguish `restaurant_enquiry_start` and `restaurant_request_attempt`; neither means the hotel received a request or confirmed a table. Only approved campaign fields go to both configured GA4 destinations, and personal form fields are explicitly excluded in tests. The disabled fallback continues to offer Call, WhatsApp and Contact.
+
+The visual pass extends the approved bastion motif and architectural photo crop to restaurant, catalogue and experience media. Do not promote responsive image variants into runtime until the owner reviews the review-sheet artifact. Do not enable server mail, add guest leads, publish new offers/prices/hours, or alter public routes/canonicals without confirmed facts and owner approval.
