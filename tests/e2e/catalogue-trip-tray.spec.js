@@ -66,3 +66,39 @@ test('Trip tray combines a room and a desert stay without collecting guest detai
   await expect(page.locator('[data-trip-toggle]')).toBeHidden();
   await expect(page.locator('[data-trip-panel]')).toBeHidden();
 });
+
+
+test('experience discovery hubs let guests shortlist verified options without turning ideas into offers', async ({ page }, testInfo) => {
+  test.skip(!['desktop-1280', 'mobile-390'].includes(testInfo.project.name), 'Discovery journey checked at desktop and mobile widths.');
+  for (const route of ['/desert-safari.php', '/car-tours.php']) {
+    const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+    expect(response).not.toBeNull();
+    expect(response.status()).toBeLessThan(400);
+    const canonical = await page.locator('head link[rel="canonical"]').getAttribute('href');
+    expect(canonical).toBe('https://www.hotelgarhjaisal.com' + route);
+    await expect(page.locator('main')).toContainText('Build your trip shortlist');
+    await expect(page.locator('main')).not.toContainText('Book instantly');
+    await expect(page.locator('main')).not.toContainText('Confirmed availability');
+    await expect(page.locator('main')).not.toContainText('₹');
+  }
+
+  await page.goto('/desert-safari.php', { waitUntil: 'domcontentloaded' });
+  const desertCards = page.locator('.experience-card');
+  await expect(desertCards).toHaveCount(4);
+  await expect(desertCards.locator('[data-trip-add]')).toHaveCount(4);
+  await page.locator('.experience-card [data-trip-add]').first().click();
+  await expect(page.locator('[data-trip-count]')).toHaveText('1');
+
+  await page.goto('/car-tours.php', { waitUntil: 'domcontentloaded' });
+  const firstThreeOffers = page.locator('.experience-card').filter({ has: page.locator('[data-trip-add]') });
+  await expect(firstThreeOffers).toHaveCount(3);
+  await expect(page.locator('.tour-idea-card [data-trip-add]')).toHaveCount(0);
+  await page.locator('.experience-card [data-trip-add]').nth(1).click();
+  await expect(page.locator('[data-trip-count]')).toHaveText('2');
+  await page.locator('[data-trip-toggle]').click();
+  await expect(page.locator('[data-trip-items]')).toContainText('A Walk inside Jaisalmer Fort');
+  await expect(page.locator('[data-trip-items]')).toContainText('Sunset Camel Safari in Jaisalmer');
+  const stored = await page.evaluate(() => sessionStorage.getItem('gj-trip-items-v1'));
+  expect(stored).toContain('fort-walk');
+  expect(stored).not.toMatch(/email|mobile|phone|contactName/i);
+});
