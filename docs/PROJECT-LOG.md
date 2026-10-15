@@ -18,7 +18,8 @@
 | Open PRs at batch baseline | None at verification |
 | Staging evidence | [PR #72 non-deploying QA report and screenshots](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215504/artifacts/11954712619); external staging target was not supplied, so real-host QA is still owner-side. |
 | Merge-commit evidence | The retrieved PR-triggered run query did not return merge-SHA workflows; inspect main-push Actions runs before claiming post-merge CI verification. |
-| Staging evidence | PR #73 QA was a local non-deploying dry run; external staging target was not supplied. No production deployment occurred. |\n| Next action | Review Sprint 25 guide content, source links, exact-head CI and the page-sheet artifact; real staging and production release remain owner-controlled. |
+| Staging evidence | PR #73 QA was a local non-deploying dry run; external staging target was not supplied. No production deployment occurred. |
+| Next action | Review Sprint 25 guide content, source links, exact-head CI and the page-sheet artifact; real staging and production release remain owner-controlled. |
 
 ## Phase roadmap
 
