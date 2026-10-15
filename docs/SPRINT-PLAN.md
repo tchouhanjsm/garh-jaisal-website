@@ -363,7 +363,7 @@ Stop there: the owner merges.
 
 **Commercial goal:** capture more non-brand searches and turn guide readers into direct room, tour or dining enquiries.
 
-**Batch 1 vertical slice:** the three target planning guides already exist, so do not create duplicate articles. Add a reciprocal discovery module to `pack.php` using the existing card system and current licensed/owner-provided image paths, plus a direct link to `car-rental.php`. Regression-test every destination, preserve existing metadata and public URLs, and validate the exact PR head in CI before owner review. This improves discoverability; it does not claim an SEO ranking or booking lift.
+**Batch 1 vertical slice:** the three target planning guides already exist, so do not create duplicate articles. Add a reciprocal discovery module to `pack.php` using the existing card system and current licensed/owner-provided image paths, plus a direct link to `car-rental.php`. Refresh only the existing `/pack.php` sitemap `lastmod` to match its Git-derived source date; do not change route inventory or priorities. Regression-test every destination, preserve page metadata and public URLs, and validate the exact PR head in CI before owner review. This improves discoverability; it does not claim an SEO ranking or booking lift.
 
 - Review current `blog.php`, existing guide pages, sitemap and internal links before proposing new URLs. Map high-intent topic clusters to one best destination to avoid keyword cannibalisation.
 - Improve `pack.php` hierarchy, concise experience descriptions, landscape/cropped media and clear links to tour and car-service enquiry paths; retain only licensed/owner-provided images.
