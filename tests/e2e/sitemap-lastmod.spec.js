@@ -8,7 +8,8 @@ test('sitemap gives every published URL a valid Git-derived lastmod date', async
   const entries = [...sitemap.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<priority>([^<]+)<\/priority>\s*<\/url>/gi)]
     .map(([, loc, lastmod, priority]) => ({ loc, lastmod, priority }));
 
-  expect(entries.length, 'All published sitemap entries must be parsed').toBe(28);
+  expect(entries.length, 'All published sitemap entries must be parsed').toBe(29);
+  expect(entries.some(entry => entry.loc.endsWith('/catalogue.php')), 'Trip catalogue must be indexable').toBe(true);
   for (const entry of entries) {
     expect(entry.lastmod, 'lastmod must be an ISO calendar date for ' + entry.loc).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     const date = new Date(entry.lastmod + 'T00:00:00Z');

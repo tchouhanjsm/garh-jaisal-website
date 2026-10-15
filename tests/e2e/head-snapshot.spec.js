@@ -17,6 +17,7 @@ const DRAFT_AND_HIDDEN_ROUTES = [
 const ROUTES_ADDED_AFTER_FROZEN_HEAD_BASELINE = [
   '/jaisalmer-3-day-itinerary.php',
   '/jaisalmer-honeymoon-guide.php',
+  '/catalogue.php',
 ];
 
 async function captureHead(page, route) {

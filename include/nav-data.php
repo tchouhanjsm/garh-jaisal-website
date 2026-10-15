@@ -94,5 +94,6 @@ return [
         ['label' => 'Car & City Tours', 'url' => 'car-tours.php'],
         ['label' => 'Gallery', 'url' => 'gallery.php'],
         ['label' => 'Blog', 'url' => 'blog.php'],
+        ['label' => 'Build a trip', 'url' => 'catalogue.php'],
     ],
 ];

@@ -276,6 +276,213 @@ document.addEventListener('DOMContentLoaded', () => {
     applyFilter('all');
   }
 
+
+  // Session-only Trip tray: store product choices, never personal data or form fields.
+  const tripTray = document.querySelector('[data-trip-tray]');
+  if (tripTray) {
+    const storageKey = 'gj-trip-items-v1';
+    const trigger = tripTray.querySelector('[data-trip-toggle]');
+    const panel = tripTray.querySelector('[data-trip-panel]');
+    const closeButton = tripTray.querySelector('[data-trip-close]');
+    const clearButton = tripTray.querySelector('[data-trip-clear]');
+    const itemsList = tripTray.querySelector('[data-trip-items]');
+    const emptyMessage = tripTray.querySelector('[data-trip-empty]');
+    const countBadge = tripTray.querySelector('[data-trip-count]');
+    const status = tripTray.querySelector('[data-trip-status]');
+    const sendLink = tripTray.querySelector('[data-trip-send]');
+
+    const validTripItem = (item) => Boolean(
+      item &&
+      typeof item.id === 'string' && /^[a-z0-9][a-z0-9-]{0,79}$/.test(item.id) &&
+      typeof item.title === 'string' && item.title.trim() !== '' && item.title.length <= 140 &&
+      typeof item.url === 'string' && /^[a-z0-9-]+\.php(?:#[a-z0-9-]+)?$/i.test(item.url) &&
+      (typeof item.group === 'string' || typeof item.group === 'undefined')
+    );
+    const readTripItems = () => {
+      try {
+        const stored = JSON.parse(window.sessionStorage.getItem(storageKey) || '[]');
+        return Array.isArray(stored) ? stored.filter(validTripItem).slice(0, 12) : [];
+      } catch {
+        return [];
+      }
+    };
+    let tripItems = readTripItems();
+
+    const persistTripItems = () => {
+      try {
+        window.sessionStorage.setItem(storageKey, JSON.stringify(tripItems));
+      } catch {
+        // Keep the current in-memory list usable when session storage is unavailable.
+      }
+    };
+
+    const setPanelOpen = (open, moveFocus) => {
+      panel.hidden = !open;
+      trigger.setAttribute('aria-expanded', String(open));
+      if (open && moveFocus) closeButton.focus();
+      if (!open && moveFocus) trigger.focus();
+    };
+
+    const updateOutboundWhatsApp = () => {
+      if (!sendLink) return;
+      const base = sendLink.dataset.whatsappBase || '';
+      try {
+        const destination = new URL(base, window.location.href);
+        const selections = tripItems.map(item => '- ' + item.title).join('\n');
+        const message = "Hello, I'd like to plan a Jaisalmer trip with Garh Jaisal Haveli.\n" +
+          "Please share current rates, availability and confirmed arrangements for these options:\n" +
+          selections + "\nTravel dates: [add dates].\nPlease confirm what can be arranged for my dates.";
+        destination.searchParams.set('text', message);
+        sendLink.href = destination.toString();
+      } catch {
+        sendLink.href = base || '#';
+      }
+    };
+
+    const refreshAddButtons = () => {
+      tripTray.querySelectorAll('[data-trip-add]').forEach((buttonElement) => {
+        const id = buttonElement.dataset.tripId || '';
+        const selected = tripItems.some(item => item.id === id);
+        const title = buttonElement.dataset.tripTitle || 'this option';
+        if (!buttonElement.dataset.defaultLabel) {
+          buttonElement.dataset.defaultLabel = (buttonElement.textContent || 'Add to Trip').trim();
+        }
+        buttonElement.textContent = selected ? 'Added to Trip' : buttonElement.dataset.defaultLabel;
+        buttonElement.setAttribute('aria-pressed', String(selected));
+        buttonElement.setAttribute('aria-label', selected
+          ? 'Remove ' + title + ' from your Trip'
+          : 'Add ' + title + ' to your Trip');
+        buttonElement.classList.toggle('is-added', selected);
+      });
+      document.querySelectorAll('[data-trip-add]').forEach((buttonElement) => {
+        const id = buttonElement.dataset.tripId || '';
+        const selected = tripItems.some(item => item.id === id);
+        const title = buttonElement.dataset.tripTitle || 'this option';
+        if (!buttonElement.dataset.defaultLabel) {
+          buttonElement.dataset.defaultLabel = (buttonElement.textContent || 'Add to Trip').trim();
+        }
+        buttonElement.textContent = selected ? 'Added to Trip' : buttonElement.dataset.defaultLabel;
+        buttonElement.setAttribute('aria-pressed', String(selected));
+        buttonElement.setAttribute('aria-label', selected
+          ? 'Remove ' + title + ' from your Trip'
+          : 'Add ' + title + ' to your Trip');
+        buttonElement.classList.toggle('is-added', selected);
+      });
+    };
+
+    const renderTripTray = () => {
+      const hasItems = tripItems.length > 0;
+      trigger.hidden = !hasItems;
+      countBadge.textContent = String(tripItems.length);
+      clearButton.hidden = !hasItems;
+      sendLink.hidden = !hasItems;
+      emptyMessage.hidden = hasItems;
+      itemsList.replaceChildren();
+
+      tripItems.forEach((item) => {
+        const listItem = document.createElement('li');
+        listItem.className = 'trip-tray-item';
+        const details = document.createElement('a');
+        details.href = item.url;
+        details.textContent = item.title;
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'trip-tray-remove';
+        remove.textContent = 'Remove';
+        remove.setAttribute('aria-label', 'Remove ' + item.title + ' from your Trip');
+        remove.addEventListener('click', () => {
+          tripItems = tripItems.filter(candidate => candidate.id !== item.id);
+          persistTripItems();
+          status.textContent = item.title + ' removed from your Trip.';
+          if (!tripItems.length) setPanelOpen(false, false);
+          renderTripTray();
+        });
+        listItem.append(details, remove);
+        itemsList.append(listItem);
+      });
+
+      if (!hasItems) setPanelOpen(false, false);
+      updateOutboundWhatsApp();
+      refreshAddButtons();
+    };
+
+    document.querySelectorAll('[data-trip-add]').forEach((buttonElement) => {
+      buttonElement.addEventListener('click', () => {
+        const item = {
+          id: buttonElement.dataset.tripId || '',
+          title: (buttonElement.dataset.tripTitle || '').trim(),
+          url: buttonElement.dataset.tripUrl || '',
+          group: buttonElement.dataset.tripGroup || ''
+        };
+        if (!validTripItem(item)) {
+          status.textContent = 'This option could not be added. Open the item page and try again.';
+          return;
+        }
+
+        const existingIndex = tripItems.findIndex(candidate => candidate.id === item.id);
+        if (existingIndex >= 0) {
+          tripItems.splice(existingIndex, 1);
+          status.textContent = item.title + ' removed from your Trip.';
+        } else {
+          if (item.group) {
+            tripItems = tripItems.filter(candidate => candidate.group !== item.group);
+          }
+          if (tripItems.length >= 12) {
+            status.textContent = 'Your Trip has reached 12 options. Remove one before adding another.';
+            return;
+          }
+          tripItems.push(item);
+          status.textContent = item.title + ' added to your Trip.';
+          trackIntentEvent('add_to_trip', {
+            page_path: window.location.pathname || '/',
+            page_context: currentPageContext(),
+            item_id: item.id,
+            item_name: item.title
+          });
+        }
+        persistTripItems();
+        renderTripTray();
+      });
+    });
+
+    trigger.addEventListener('click', () => {
+      const open = panel.hidden;
+      setPanelOpen(open, open);
+      if (open) {
+        trackIntentEvent('trip_open', {
+          page_path: window.location.pathname || '/',
+          page_context: currentPageContext(),
+          item_count: tripItems.length
+        });
+      }
+    });
+    closeButton.addEventListener('click', () => setPanelOpen(false, true));
+    clearButton.addEventListener('click', () => {
+      tripItems = [];
+      persistTripItems();
+      status.textContent = 'Your Trip shortlist has been cleared.';
+      setPanelOpen(false, false);
+      renderTripTray();
+    });
+    sendLink.addEventListener('click', () => {
+      if (!tripItems.length) return;
+      trackIntentEvent('trip_send_intent', {
+        page_path: window.location.pathname || '/',
+        page_context: currentPageContext(),
+        item_count: tripItems.length
+      });
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !panel.hidden) {
+        setPanelOpen(false, true);
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
+    });
+
+    renderTripTray();
+  }
+
   const button = document.querySelector('.nav-toggle');
   const nav = document.querySelector('.main-nav');
   if (!button || !nav) return;

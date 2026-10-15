@@ -67,6 +67,11 @@ require __DIR__ . '/include/page-head.php';
       <p>Enquire about pickup and drop-off from desert locations, transfers and intercity journeys. SUV and sedan arrangements are available by enquiry, with drivers who can communicate in Hindi and English.</p>
       <div class="actions">
         <a class="button button-primary" href="<?= htmlspecialchars($carWhatsAppUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Request a car quote on WhatsApp</a>
+        <?php
+          $tripItem = ['id' => 'car-arrangements', 'title' => 'SUV and sedan arrangements', 'url' => 'car-rental.php', 'group' => 'transport'];
+          $tripButtonClass = 'button button-outline';
+          require __DIR__ . '/include/ui/trip-add-button.php';
+        ?>
         <a class="button button-outline" href="direction.php">Directions to the haveli</a>
       </div>
     </div>
