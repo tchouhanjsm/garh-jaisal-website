@@ -74,8 +74,8 @@ require __DIR__ . '/include/page-head.php';
       <h1>Desert Safari in Jaisalmer</h1>
       <p>Choose a desert experience based on how much time you have, whether you want to return the same evening, and how you would like to spend the night.</p>
       <div class="actions">
-        <a class="button button-primary" href="contact.php">Ask about availability</a>
-        <a class="button button-light" href="pack.php">Back to packages</a>
+        <a class="button button-primary" href="catalogue.php">Build your trip shortlist</a>
+        <a class="button button-light" href="contact.php?topic=desert-safari">Ask about desert options</a>
       </div>
     </div>
   </section>
@@ -102,6 +102,14 @@ require __DIR__ . '/include/page-head.php';
                 <span>View itinerary →</span>
               </div>
             </a>
+            <div class="experience-card-plan-action">
+              <?php
+              $tripItem = ['id' => $slug, 'title' => $item['h1'], 'url' => $slug . '.php'];
+              $tripButtonClass = 'button button-secondary';
+              require __DIR__ . '/include/ui/trip-add-button.php';
+              unset($tripItem, $tripButtonClass);
+              ?>
+            </div>
           </article>
         <?php endforeach; ?>
       </div>
@@ -121,7 +129,7 @@ require __DIR__ . '/include/page-head.php';
         <article><strong>One evening</strong><p>Choose a sunset camel safari or cultural safari and return to Jaisalmer the same evening.</p></article>
         <article><strong>One night, open sky</strong><p>Choose Sleep Under the Stars for an overnight desert experience without tent accommodation.</p></article>
         <article><strong>One night, tent</strong><p>Choose the Swiss Tent Safari when you prefer tent accommodation and a cultural evening.</p></article>
-        <article><strong>Need help choosing?</strong><p>Ask us to compare the currently available desert options and confirm the current price, route, pickup arrangement and timing for your travel date.</p><a class="text-link" href="contact.php">Ask about desert options →</a></article>
+        <article><strong>Need help choosing?</strong><p>Ask us to compare the currently available desert options and confirm the current price, route, pickup arrangement and timing for your travel date.</p><a class="text-link" href="contact.php">Ask about desert options →</a><a class="text-link" href="catalogue.php">Add options to your Trip shortlist →</a></article>
       </div>
     </div>
   </section>

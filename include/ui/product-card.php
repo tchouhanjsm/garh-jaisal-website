@@ -50,6 +50,7 @@ $productBookUrl = (string) ($product['book_url'] ?? '');
     <?php if ($productBookUrl !== ''): ?>
       <a class="product-card-book" href="<?= htmlspecialchars($productBookUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check room availability</a>
     <?php endif; ?>
+    <p class="product-card-planning-note">Planning a combination? Add this option to your Trip shortlist; the hotel confirms current rates and arrangements.</p>
   </div>
 </article>
 <?php
