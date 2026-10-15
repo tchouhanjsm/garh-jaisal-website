@@ -483,6 +483,23 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTripTray();
   }
 
+  // Restrained editorial reveals are progressive enhancement: the page stays visible.
+  const storyTargets = Array.from(
+    document.querySelectorAll('main.thar-sunset-story [data-story-reveal]')
+  );
+  const prefersReducedMotion = typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (storyTargets.length && !prefersReducedMotion && 'IntersectionObserver' in window) {
+    const storyObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('story-is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -28px 0px' });
+    storyTargets.forEach((target) => storyObserver.observe(target));
+  }
+
   const button = document.querySelector('.nav-toggle');
   const nav = document.querySelector('.main-nav');
   if (!button || !nav) return;

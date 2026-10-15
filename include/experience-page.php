@@ -112,7 +112,7 @@ $page = [
     'twitter_title' => $experience['title'],
     'twitter_description' => $experience['description'],
     'twitter_image' => '/' . ltrim($experience['hero_image'], '/'),
-    'css' => ['css/experiences.css'],
+    'css' => ['css/experiences.css', 'css/thar-sunset-story.css'],
     'schema' => $schemaGraph,
 ];
 require __DIR__ . '/page-head.php';
@@ -121,7 +121,7 @@ require __DIR__ . '/page-head.php';
 <body>
 <?php include __DIR__ . '/header-v2.php'; ?>
 
-<main id="main-content" tabindex="-1">
+<main id="main-content" class="thar-sunset-story thar-sunset-story--experience" tabindex="-1">
   <section class="experience-hero">
     <div class="experience-hero-media">
       <img
@@ -164,7 +164,7 @@ require __DIR__ . '/page-head.php';
     </div>
   </section>
 
-  <section class="section experience-overview">
+  <section class="section experience-overview" data-story-reveal>
     <div class="site-shell">
       <div class="section-head">
         <div>
@@ -186,7 +186,7 @@ require __DIR__ . '/page-head.php';
   </section>
 
   <?php if (!empty($experience['gallery'])): ?>
-    <section class="section experience-photo-gallery" aria-labelledby="experience-photo-gallery-title">
+    <section class="section experience-photo-gallery" data-story-reveal aria-labelledby="experience-photo-gallery-title">
       <div class="site-shell">
         <div class="section-head">
           <div><p class="eyebrow">Photo gallery</p><h2 id="experience-photo-gallery-title"><?= htmlspecialchars($experience['gallery_title'] ?? 'Explore the experience', ENT_QUOTES, 'UTF-8') ?></h2></div>
@@ -211,7 +211,7 @@ require __DIR__ . '/page-head.php';
   <?php endif; ?>
 
   <?php if (!empty($experience['facilities'])): ?>
-    <section class="section experience-facilities" aria-labelledby="experience-facilities-title">
+    <section class="section experience-facilities" data-story-reveal aria-labelledby="experience-facilities-title">
       <div class="site-shell">
         <div class="section-head">
           <div><p class="eyebrow">Comforts included</p><h2 id="experience-facilities-title">Facilities in every Swiss tent</h2></div>
@@ -226,7 +226,7 @@ require __DIR__ . '/page-head.php';
     </section>
   <?php endif; ?>
 
-  <section class="section experience-itinerary">
+  <section class="section experience-itinerary" data-story-reveal>
     <div class="site-shell">
       <div class="section-head">
         <div>
@@ -250,7 +250,7 @@ require __DIR__ . '/page-head.php';
     </div>
   </section>
 
-  <section class="section experience-details">
+  <section class="section experience-details" data-story-reveal>
     <div class="site-shell experience-details-grid">
       <div class="experience-detail-card">
         <p class="eyebrow">Included</p>
@@ -279,7 +279,7 @@ require __DIR__ . '/page-head.php';
   </section>
 
   <?php if (!empty($experience['faq'])): ?>
-    <section class="section experience-faq">
+    <section class="section experience-faq" data-story-reveal>
       <div class="site-shell">
         <?php
         $sectionHead = [
@@ -302,7 +302,7 @@ require __DIR__ . '/page-head.php';
   <?php endif; ?>
 
   <?php if (!empty($experience['related'])): ?>
-    <section class="section related-experiences">
+    <section class="section related-experiences" data-story-reveal>
       <div class="site-shell">
         <div class="section-head">
           <div>
@@ -334,7 +334,7 @@ require __DIR__ . '/page-head.php';
     </section>
   <?php endif; ?>
 
-  <section class="section experience-cta">
+  <section class="section experience-cta" data-story-reveal>
     <div class="site-shell experience-cta-inner">
       <p class="eyebrow">Plan your stay</p>
       <h2>Stay inside Jaisalmer Fort, then explore beyond it.</h2>

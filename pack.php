@@ -41,7 +41,7 @@ $page = [
     'twitter_title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
     'twitter_description' => 'Choose from desert safari experiences and guided Jaisalmer tours arranged from Garh Jaisal Haveli inside Jaisalmer Fort.',
     'twitter_image' => '/img/desert3.jpg',
-    'css' => ['css/packages.css', 'css/experiences.css'],
+    'css' => ['css/packages.css', 'css/experiences.css', 'css/thar-sunset-story.css'],
     'schema' => [
         [
             '@type' => 'WebPage',
@@ -70,7 +70,7 @@ require __DIR__ . '/include/page-head.php';
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main id="main-content" tabindex="-1">
+<main id="main-content" class="thar-sunset-story thar-sunset-story--experiences" tabindex="-1">
   <section class="package-hero">
     <div class="package-hero-media">
       <img
@@ -96,7 +96,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section experience-map-section" id="experience-categories" aria-labelledby="experience-categories-title">
+  <section class="section experience-map-section" id="experience-categories" data-story-reveal aria-labelledby="experience-categories-title">
     <div class="site-shell">
       <div class="section-head">
         <div>
@@ -123,7 +123,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section" id="desert-options" aria-labelledby="desert-options-title">
+  <section class="section" id="desert-options" data-story-reveal aria-labelledby="desert-options-title">
     <div class="site-shell">
       <div class="section-head">
         <div>
@@ -156,7 +156,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section route-planner" id="city-options" aria-labelledby="city-options-title">
+  <section class="section route-planner" id="city-options" data-story-reveal aria-labelledby="city-options-title">
     <div class="site-shell">
       <div class="section-head">
         <div>
@@ -189,7 +189,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section packages-planning" id="plan-by-time">
+  <section class="section packages-planning" id="plan-by-time" data-story-reveal>
     <div class="site-shell">
       <div class="section-head">
         <div>
@@ -217,7 +217,7 @@ require __DIR__ . '/include/page-head.php';
 
 
 
-  <section class="section package-guide-section" id="planning-guides" aria-labelledby="planning-guides-title">
+  <section class="section package-guide-section" id="planning-guides" data-story-reveal aria-labelledby="planning-guides-title">
     <div class="site-shell">
       <div class="section-head">
         <div>
@@ -276,7 +276,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section site-faq packages-faq" aria-labelledby="packages-faq-title">
+  <section class="section site-faq packages-faq" data-story-reveal aria-labelledby="packages-faq-title">
     <div class="site-shell">
       <div class="section-head">
         <div><p class="eyebrow">Common questions</p><h2 id="packages-faq-title">Questions about Jaisalmer experiences.</h2></div>
@@ -292,7 +292,7 @@ require __DIR__ . '/include/page-head.php';
       ?>
     </div>
   </section>
-<section class="section packages-cta">
+<section class="section packages-cta" data-story-reveal>
     <div class="site-shell">
       <div class="packages-cta-inner">
         <p class="eyebrow">Need help choosing?</p>

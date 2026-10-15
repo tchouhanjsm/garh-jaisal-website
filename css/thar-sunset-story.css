@@ -1,0 +1,131 @@
+/*
+ * Sprint 24 — Thar Sunset visual storytelling.
+ * Scoped to the shared story class so unrelated and draft routes are untouched.
+ * Reuses owner-approved palette tokens and existing photographs; no new facts,
+ * third-party assets, font delivery, booking behavior, or image mappings.
+ */
+
+main.thar-sunset-story{
+  --story-keyline:rgba(217,164,65,.42);
+}
+
+main.thar-sunset-story .section-head h2{
+  line-height:1.08;
+  letter-spacing:-.025em;
+  text-wrap:balance;
+}
+
+main.thar-sunset-story .section-head .eyebrow::before,
+main.thar-sunset-story .hero-content > .eyebrow::before,
+main.thar-sunset-story .rooms-hero-copy > .eyebrow::before,
+main.thar-sunset-story .package-hero-content > .eyebrow::before,
+main.thar-sunset-story .catalogue-hero-content > .eyebrow::before,
+main.thar-sunset-story .experience-hero-content > .eyebrow::before,
+main.thar-sunset-story .page-hero-inner > .eyebrow::before,
+main.thar-sunset-story .article-hero .eyebrow::before{
+  content:"";
+  display:inline-block;
+  width:1.55rem;
+  height:1px;
+  margin-inline-end:.65rem;
+  vertical-align:middle;
+  background:currentColor;
+  opacity:.8;
+}
+
+main.thar-sunset-story--home .hero-overlay{
+  background:
+    linear-gradient(180deg,rgba(20,18,43,.06) 8%,rgba(91,26,43,.24) 42%,rgba(20,18,43,.88) 100%);
+}
+
+main.thar-sunset-story--rooms .page-hero.page-hero--photo::after,
+main.thar-sunset-story--dining .page-hero.page-hero--photo::after{
+  background:
+    linear-gradient(90deg,rgba(20,18,43,.84) 0%,rgba(91,26,43,.54) 50%,rgba(20,18,43,.12) 100%),
+    linear-gradient(180deg,rgba(20,18,43,.1) 0%,rgba(20,18,43,.3) 100%);
+}
+
+main.thar-sunset-story--experiences .package-hero-overlay{
+  background:linear-gradient(180deg,rgba(20,18,43,.12) 7%,rgba(91,26,43,.32) 44%,rgba(20,18,43,.88) 100%);
+}
+
+main.thar-sunset-story--experience .experience-hero-overlay{
+  background:linear-gradient(180deg,rgba(20,18,43,.12) 8%,rgba(91,26,43,.28) 44%,rgba(20,18,43,.9) 100%);
+}
+
+main.thar-sunset-story--catalogue .catalogue-hero-overlay{
+  background:linear-gradient(90deg,rgba(20,18,43,.94) 0%,rgba(91,26,43,.68) 53%,rgba(20,18,43,.16) 100%);
+}
+
+main.thar-sunset-story--dining .roof-banner{
+  padding:7px;
+  border:1px solid var(--story-keyline);
+  border-radius:50% 50% 8px 8px / 34% 34% 8px 8px;
+  background:linear-gradient(135deg,var(--garnet),var(--night));
+}
+
+main.thar-sunset-story--dining .roof-banner img{
+  border-radius:inherit;
+}
+
+main.thar-sunset-story--journal .blog-card{
+  overflow:hidden;
+  border-color:var(--story-keyline);
+  border-radius:var(--radius,10px);
+  box-shadow:0 4px 18px rgba(20,18,43,.055);
+}
+
+main.thar-sunset-story--journal .blog-card-image{
+  margin:8px 8px 0;
+  border:1px solid var(--story-keyline);
+  border-radius:48% 48% 4px 4px / 22% 22% 4px 4px;
+  background:linear-gradient(135deg,var(--garnet),var(--night));
+}
+
+main.thar-sunset-story--journal .blog-card-image img{
+  border-radius:inherit;
+}
+
+main.thar-sunset-story--catalogue .product-card,
+main.thar-sunset-story--rooms .room-card,
+main.thar-sunset-story--experiences .experience-card{
+  border-color:var(--story-keyline);
+}
+
+main.thar-sunset-story [data-story-reveal].story-is-visible{
+  animation:thar-sunset-rise 520ms cubic-bezier(.2,.7,.25,1) both;
+}
+
+@keyframes thar-sunset-rise{
+  from{opacity:.84;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@media(max-width:760px){
+  main.thar-sunset-story--rooms .page-hero.page-hero--photo::after,
+  main.thar-sunset-story--dining .page-hero.page-hero--photo::after{
+    background:linear-gradient(180deg,rgba(20,18,43,.46) 0%,rgba(91,26,43,.52) 48%,rgba(20,18,43,.92) 100%);
+  }
+
+  main.thar-sunset-story--catalogue .catalogue-hero-overlay{
+    background:linear-gradient(180deg,rgba(20,18,43,.18) 0%,rgba(91,26,43,.62) 46%,rgba(20,18,43,.95) 100%);
+  }
+
+  main.thar-sunset-story--dining .roof-banner{
+    border-radius:48% 48% 7px 7px / 24% 24% 7px 7px;
+  }
+
+  main.thar-sunset-story--journal .blog-card-image{
+    margin:7px 7px 0;
+    border-radius:48% 48% 4px 4px / 18% 18% 4px 4px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  main.thar-sunset-story [data-story-reveal],
+  main.thar-sunset-story [data-story-reveal].story-is-visible{
+    animation:none!important;
+    opacity:1!important;
+    transform:none!important;
+  }
+}

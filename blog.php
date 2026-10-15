@@ -20,7 +20,7 @@ $page = [
     'twitter_title' => $pageTitle,
     'twitter_description' => $pageDescription,
     'twitter_image' => '/img/v2/fort-from-roof.jpg',
-    'css' => ['css/article.css'],
+    'css' => ['css/article.css', 'css/thar-sunset-story.css'],
     'schema' => [
         [
             '@type' => 'WebPage',
@@ -46,7 +46,7 @@ require __DIR__ . '/include/page-head.php';
 ?>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
-<main class="article-page" id="main-content" tabindex="-1">
+<main class="article-page thar-sunset-story thar-sunset-story--journal" id="main-content" tabindex="-1">
   <section class="article-hero">
     <div class="site-shell article-hero-inner">
       <?php
@@ -61,7 +61,7 @@ require __DIR__ . '/include/page-head.php';
       <p class="lede">Plan your stay with practical guides to the living Fort, desert experiences, longer itineraries and a couples’ escape. Confirm date-sensitive details before booking.</p>
     </div>
   </section>
-  <section class="section">
+  <section class="section" data-story-reveal>
     <div class="site-shell">
       <div class="section-head"><div><p class="eyebrow">Start with the useful stuff</p><h2>Guides written around an actual stay.</h2></div><p>These guides use the hotel's current guest information and are designed to answer practical questions before you arrive. Time-sensitive details should always be confirmed for your travel date.</p></div>
       <div class="blog-grid">

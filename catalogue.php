@@ -67,7 +67,7 @@ $page = [
     'path' => '/catalogue.php',
     'og_image' => '/img/desert3.jpg',
     'og_image_alt' => 'Sand dunes in the Thar Desert near Jaisalmer',
-    'css' => ['css/catalogue.css'],
+    'css' => ['css/catalogue.css', 'css/thar-sunset-story.css'],
     'schema' => [
         [
             '@type' => 'WebPage',
@@ -105,7 +105,7 @@ require __DIR__ . '/include/page-head.php';
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
-<main id="main-content" class="catalogue-page" tabindex="-1">
+<main id="main-content" class="catalogue-page thar-sunset-story thar-sunset-story--catalogue" tabindex="-1">
   <section class="catalogue-hero" aria-labelledby="catalogue-title">
     <div class="catalogue-hero-media" aria-hidden="true">
       <img src="img/desert3.jpg" <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes('img/desert3.jpg') : '' ?> alt="" fetchpriority="high" decoding="async">
@@ -123,7 +123,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section catalogue-products" id="trip-products" aria-labelledby="trip-products-title">
+  <section class="section catalogue-products" id="trip-products" data-story-reveal aria-labelledby="trip-products-title">
     <div class="site-shell">
       <div class="section-head">
         <div>
@@ -153,7 +153,7 @@ require __DIR__ . '/include/page-head.php';
       }
   }
   ?>
-  <section class="section catalogue-compare" aria-labelledby="camp-compare-title">
+  <section class="section catalogue-compare" data-story-reveal aria-labelledby="camp-compare-title">
     <div class="site-shell">
       <div class="section-head">
         <div>
@@ -208,7 +208,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section catalogue-transport" aria-labelledby="transport-compare-title">
+  <section class="section catalogue-transport" data-story-reveal aria-labelledby="transport-compare-title">
     <div class="site-shell">
       <div class="section-head">
         <div>
@@ -254,7 +254,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section catalogue-next-step">
+  <section class="section catalogue-next-step" data-story-reveal>
     <div class="site-shell catalogue-next-step-inner">
       <p class="eyebrow">One enquiry, several options</p>
       <h2>Put your shortlist together, then ask us to confirm it.</h2>
@@ -266,7 +266,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section site-faq catalogue-faq" aria-labelledby="catalogue-faq-title">
+  <section class="section site-faq catalogue-faq" data-story-reveal aria-labelledby="catalogue-faq-title">
     <div class="site-shell">
       <div class="section-head">
         <div><p class="eyebrow">Good to know</p><h2 id="catalogue-faq-title">Planning your Trip.</h2></div>
