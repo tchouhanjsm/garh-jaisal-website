@@ -7,15 +7,15 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-15 |
-| Current phase | Sprint 27 — contextual editorial enquiry handoff (Batch 1, PR in review) |
+| Current phase | Sprint 28 — four source-backed Jaisalmer Journal guides (Batch 1, PR in review) |
 | Base branch | `main` |
-| Baseline commit | `e64d6fb79173975e0c7489da523b98377d26b0d0` (PR #75 merge commit) |
-| Last merged PR | [#75 — Consolidate editorial guides on the shared renderer](https://github.com/tchouhanjsm/garh-jaisal-website/pull/75) |
+| Baseline commit | `24c9d68d7b834d780d20e3fe83a2926afa1b239a` (PR #76 merge commit) |
+| Last merged PR | [#76 — Contextual editorial enquiry handoff](https://github.com/tchouhanjsm/garh-jaisal-website/pull/76) |
 | PR #75 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714317109); [package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714317141); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714316979); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714317044) |
 | PR #75 merge-SHA checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710861); [package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710636); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710691); [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710939) was still running at this snapshot |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Next action | Review Sprint 27's contextual contact messages, route-specific WhatsApp handoffs and privacy-safe intent labels; owner merge/deploy remains required. |
+| PR #76 merge-SHA checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718084075); [package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718083937); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718083928); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718084012); [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718084012/artifacts/11964531596) |\n| Live-host evidence | No external cPanel staging or production deployment occurred. |
+| Next action | Review Sprint 28’s four guide routes, fact-safe copy, contextual WhatsApp handoffs, sitemap consistency and exact-head browser evidence; owner merge/deploy remains required. |
 
 ## Phase roadmap
 
@@ -252,3 +252,14 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Map only allowlisted guide topics to the coarse `travel_planning` GA4 enquiry context. Do not send message text, personal fields or arbitrary query values to analytics.
 - Regression coverage checks direct CTA targets, prefilled messages, WhatsApp context and enquiry_start routing. Dates, rates, timings, availability and package inclusions remain subject to hotel confirmation.
 - R1 live submission, live staging and production remain out of scope until owner decisions and owner release.
+
+
+## Sprint 28 — Batch 1: four source-backed Jaisalmer Journal guides (PR in review)
+
+**Commercial goal:** expand useful non-brand discovery and help a guest choose what to explore, eat, see and buy without creating unsupported operational promises.
+
+- Add four distinct, data-driven guides for Jaisalmer havelis and architecture, regional food, places beyond the Fort, and local markets and crafts. Each uses the shared editorial renderer, approved existing imagery, official tourism references, three contextual next steps and a direct enquiry path.
+- Add all four routes to the Journal archive, the explicit sitemap allowlist and `sitemap.xml`. Extend sitemap route-count and frozen-head snapshot exclusions, and add browser coverage for article content, canonical metadata, source-link safety, Journal cards and the no-unverified-operational-promises guard.
+- Add contextual WhatsApp labels to these new routes; keep the existing GA4 IDs and public URLs unchanged.
+- The food guide does not claim any particular dish or dietary option is on the current restaurant menu; access, prices, entry rules, route, transport and guide details remain date-specific and require confirmation where applicable.
+- R1 table requests, source-verified reviews, licensed operator claims and transport rates remain owner-dependent. No cPanel staging or production deployment is included.
