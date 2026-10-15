@@ -8,9 +8,17 @@ test('sitemap gives every published URL a valid Git-derived lastmod date', async
   const entries = [...sitemap.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<priority>([^<]+)<\/priority>\s*<\/url>/gi)]
     .map(([, loc, lastmod, priority]) => ({ loc, lastmod, priority }));
 
-  expect(entries.length, 'All published sitemap entries must be parsed').toBe(32);
+  expect(entries.length, 'All published sitemap entries must be parsed').toBe(36);
   expect(entries.some(entry => entry.loc.endsWith('/catalogue.php')), 'Trip catalogue must be indexable').toBe(true);
-  for (const route of ['/best-time-to-visit-jaisalmer.php', '/how-to-reach-jaisalmer.php', '/jaisalmer-desert-safari-packing-list.php']) {
+  for (const route of [
+    '/best-time-to-visit-jaisalmer.php',
+    '/how-to-reach-jaisalmer.php',
+    '/jaisalmer-desert-safari-packing-list.php',
+    '/jaisalmer-havelis-guide.php',
+    '/jaisalmer-food-guide.php',
+    '/jaisalmer-beyond-the-fort-guide.php',
+    '/jaisalmer-markets-and-crafts-guide.php',
+  ]) {
     expect(entries.some(entry => entry.loc.endsWith(route)), route + ' must be indexable').toBe(true);
   }
   for (const entry of entries) {
