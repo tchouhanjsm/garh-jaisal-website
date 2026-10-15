@@ -1,0 +1,17 @@
+/* Owner-approved design tokens from the Garh Jaisal Final Master Plan.
+   Loaded after the base stylesheet so existing page-specific styles keep their order. */
+:root{
+  --night:#14122B;
+  --night-2:#241B3F;
+  --gold:#D9A441;
+  --gold-ink:#8A6212;
+  --saffron:#B94A0E;
+  --garnet:#5B1A2B;
+  --parchment:#F7EFE0;
+  --sand:#EADBC0;
+  --ink:#231A14;
+  --peacock:#1F7A78;
+  --alert:#A62B1F;
+  --font-display:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --font-body:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}

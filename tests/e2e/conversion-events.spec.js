@@ -43,16 +43,36 @@ test('booking, call and WhatsApp intent events route to both approved GA4 IDs', 
   await page.route('https://www.googletagmanager.com/**', route => route.abort());
   await preventTrackedNavigation(page);
 
-  await page.goto('/contact.php', { waitUntil: 'domcontentloaded' });
+  await page.goto('/contact.php?utm_source=google&utm_medium=cpc&utm_campaign=fort_offer&topic=arrival&email=private%40example.com', { waitUntil: 'domcontentloaded' });
   const config = await page.evaluate(() => window.gjAnalyticsConfig || null);
   expect(config, 'shared page head exposes analytics routing from site config').not.toBeNull();
   expect(config.destinations).toEqual(EXPECTED_ANALYTICS_IDS);
   expect(new URL(config.bookingUrl).hostname).toBe('asiatech.in');
 
+  const bookingHref = await page.locator('a.contact-booking-button').getAttribute('href');
+  const bookingUrl = new URL(bookingHref, 'https://www.hotelgarhjaisal.com');
+  expect(bookingUrl.searchParams.get('token')).toBe('NjA2Ng==');
+  expect(bookingUrl.searchParams.get('utm_source')).toBe('google');
+  expect(bookingUrl.searchParams.get('utm_medium')).toBe('cpc');
+  expect(bookingUrl.searchParams.get('utm_campaign')).toBe('fort_offer');
+  expect(bookingUrl.searchParams.get('utm_content')).toBe('contact');
+  expect(bookingUrl.searchParams.has('email')).toBe(false);
+  expect(bookingUrl.searchParams.has('topic')).toBe(false);
+
+  const genericWhatsAppHref = await page.locator('.nav-mega-foot a[href*="wa.me"]').first().getAttribute('href');
+  const genericWhatsAppUrl = new URL(genericWhatsAppHref);
+  expect(genericWhatsAppUrl.searchParams.get('text')).toMatch(/enquiring about/i);
+  expect(genericWhatsAppUrl.searchParams.get('email')).toBeNull();
+
   await page.locator('a.contact-booking-button').click();
   let events = await readTrackedEvents(page);
   const booking = expectRoutedOnce(events, 'booking_outbound_click', '/contact.php', 'contact');
   expect(booking.cta_label).toMatch(/availability/i);
+  expect(booking.utm_source).toBe('google');
+  expect(booking.utm_medium).toBe('cpc');
+  expect(booking.utm_campaign).toBe('fort_offer');
+  expect(booking).not.toHaveProperty('email');
+  expect(booking).not.toHaveProperty('topic');
 
   await page.locator('a[href^="tel:"]').first().click();
   events = await readTrackedEvents(page);
