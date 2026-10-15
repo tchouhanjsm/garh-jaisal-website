@@ -71,6 +71,24 @@ require __DIR__ . '/include/page-head.php';
         <article class="blog-card"><a href="jaisalmer-3-day-itinerary.php"><div class="blog-card-image"><img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Historic sandstone architecture inside Jaisalmer Fort" loading="lazy"></div><div class="blog-card-body"><p class="blog-card-meta">Three-day itinerary</p><h2>Jaisalmer in 3 Days: Fort, Heritage &amp; Desert</h2><p>A flexible three-day plan with a Fort stay, guided heritage sightseeing and a choice of same-evening or overnight desert experience.</p><span class="text-link">Explore the 3-day plan →</span></div></a></article>
         <article class="blog-card"><a href="jaisalmer-honeymoon-guide.php"><div class="blog-card-image"><img src="img/v2/fort-from-roof.jpg" <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?> alt="Rooftop view across Jaisalmer Fort" loading="lazy"></div><div class="blog-card-body"><p class="blog-card-meta">Couples &amp; honeymoon</p><h2>Jaisalmer Honeymoon Guide</h2><p>Plan a heritage stay, ask about rooftop dining and choose a desert experience without assuming everything is one fixed package.</p><span class="text-link">Plan a couples’ escape →</span></div></a></article>
         <article class="blog-card"><a href="book-rooms-in-jaisalmer.php"><div class="blog-card-body"><p class="blog-card-meta">Staying inside the Fort</p><h2>Staying inside Jaisalmer Fort</h2><p>The last part of the journey is on foot, and a room, a rooftop meal and a desert night can fit together into one stay.</p><span class="text-link">Read the stay guide →</span></div></a></article>
+        <article class="blog-card">
+          <a href="best-time-to-visit-jaisalmer.php">
+            <div class="blog-card-image"><img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Golden sandstone architecture inside Jaisalmer Fort" loading="lazy"></div>
+            <div class="blog-card-body"><p class="blog-card-meta">When to visit</p><h2>Best Time to Visit Jaisalmer</h2><p>Compare seasons, outdoor comfort and the details to check before settling on travel dates.</p><span class="text-link">Choose your season →</span></div>
+          </a>
+        </article>
+        <article class="blog-card">
+          <a href="how-to-reach-jaisalmer.php">
+            <div class="blog-card-image"><img src="img/v2/fort-from-roof.jpg" <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?> alt="Jaisalmer Fort and the sandstone city viewed from a rooftop" loading="lazy"></div>
+            <div class="blog-card-body"><p class="blog-card-meta">Arrival guide</p><h2>How to Reach Jaisalmer</h2><p>Plan the air, rail or road journey, then prepare for the final walk inside Jaisalmer Fort.</p><span class="text-link">Plan your arrival →</span></div>
+          </a>
+        </article>
+        <article class="blog-card">
+          <a href="jaisalmer-desert-safari-packing-list.php">
+            <div class="blog-card-image"><img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg') ?> alt="Sand dunes in the Thar Desert near Jaisalmer" loading="lazy"></div>
+            <div class="blog-card-body"><p class="blog-card-meta">Desert checklist</p><h2>What to Pack for a Desert Safari</h2><p>A practical checklist for clothing, footwear, personal essentials and what to confirm for an overnight stay.</p><span class="text-link">Prepare for the desert →</span></div>
+          </a>
+        </article>
       </div>
     </div>
   </section>

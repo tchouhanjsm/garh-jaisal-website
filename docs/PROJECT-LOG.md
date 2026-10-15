@@ -7,18 +7,18 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-15 |
-| Current phase | Sprint 24 — Thar Sunset visual storytelling (Batch 1, PR in review) |
+| Current phase | Sprint 25 — editorial content depth (Batch 1, PR in review) |
 | Base branch | `main` |
-| Baseline commit | `c7adfa2b8e1d761e8a0e53867791a7935c1c06a7` (PR #72 merge commit) |
-| Last merged PR | [#72 — Unified catalogue and Trip tray](https://github.com/tchouhanjsm/garh-jaisal-website/pull/72) |
-| PR #72 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215503); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215516); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215504); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215501) — exact PR-head SHA `2ccedb9f9dd603ccd396949bdb4fa46c457682bd` |
-| Screenshot evidence | [PR #72 page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215501/artifacts/11954593789) |
+| Baseline commit | `943cc325980b06b65ac7e629fb405eb9c612e4ea` (PR #73 merge commit) |
+| Last merged PR | [#73 — Thar Sunset storytelling across key guest journeys](https://github.com/tchouhanjsm/garh-jaisal-website/pull/73) |
+| PR #73 post-merge checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069268); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069258); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704071645); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069260) — merge SHA `943cc325980b06b65ac7e629fb405eb9c612e4ea` |
+| Screenshot evidence | [PR #73 main-push page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069260/artifacts/11958400378) |
 | Image review evidence | [PR #72 responsive image review](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215503/artifacts/11954773684) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Open PRs at batch baseline | None at verification |
 | Staging evidence | [PR #72 non-deploying QA report and screenshots](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215504/artifacts/11954712619); external staging target was not supplied, so real-host QA is still owner-side. |
 | Merge-commit evidence | The retrieved PR-triggered run query did not return merge-SHA workflows; inspect main-push Actions runs before claiming post-merge CI verification. |
-| Next action | Review the Sprint 24 PR head and responsive artifacts; real staging and production release remain owner-controlled. |
+| Staging evidence | PR #73 QA was a local non-deploying dry run; external staging target was not supplied. No production deployment occurred. |\n| Next action | Review Sprint 25 guide content, source links, exact-head CI and the page-sheet artifact; real staging and production release remain owner-controlled. |
 
 ## Phase roadmap
 
@@ -229,11 +229,17 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Artifacts: [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215501/artifacts/11954593789), [staging QA evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215504/artifacts/11954712619), [responsive image review](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215503/artifacts/11954773684).
 - The merge commit's main-push workflow runs were not independently confirmed by the PR-triggered run query; check GitHub Actions before claiming those specific post-merge checks. No production deployment was made.
 
-## Sprint 24 — Batch 1: Thar Sunset visual storytelling (PR in review)
+## Sprint 24 — Batch 1: Thar Sunset visual storytelling (PR #73 merged)
 
-- Baseline: PR #72 merge commit `c7adfa2b8e1d761e8a0e53867791a7935c1c06a7`. This batch applies one shared, token-aware visual layer to Home, Rooms, Packages, Trip Planner, rooftop dining, Blog and the shared experience template instead of independent page-by-page styling.
-- Reuses current Thar Sunset tokens and approved images; adds dusk-led overlays, an architectural arch crop to existing rooftop/editorial photos, consistent fine keylines and restrained scroll-entry motion. Existing image mappings, copy facts, metadata, public URLs, booking links/token and both GA4 IDs remain unchanged.
-- Reveal behavior is progressive enhancement: content is never hidden by default; reduced-motion preference, missing JavaScript and unsupported IntersectionObserver leave content readable. No third-party library or external asset was added.
-- Smart Check acceptance: Full-Stack Developer—shared stylesheet and shared experience renderer, no duplicated fact source; SEO Content Writer—copy, canonical/schema and publication status unchanged; Debugger—fallbacks and reduced-motion/viewport regressions covered; UI/UX Lead—review screenshot artifacts across narrow mobile through desktop and keep every primary action at least 44px.
-- Required exact-head gates are Site Checks (PHP 7.4/8.2, strict site/image and sitemap), cPanel package preflight, non-deploying Staging QA and full Browser E2E/screenshot evidence. This log describes the current PR scope; its live run state must be read from the PR. Real staging, final visual approval and deployment remain owner-side.
+- PR #73 merged to `main` at `943cc325980b06b65ac7e629fb405eb9c612e4ea` on 2026-10-15. It applied a shared Thar Sunset layer to Home, Rooms, Packages, Trip Planner, rooftop dining, Blog and the shared experience template.
+- Reused existing approved images and tokens; added dusk-led overlays, arch framing, consistent keylines and reduced-motion-aware progressive reveals. Booking URLs/tokens, analytics IDs, public URLs, page copy and operating facts stayed unchanged.
+- Main-push Site Checks, package preflight and the non-deploying Staging QA run passed: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069268), [package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069258), [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704071645). Post-merge [Browser E2E passed](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069260) and produced the [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069260/artifacts/11958400378).
+- Staging QA did not connect to an external cPanel host and no production deployment occurred.
+
+## Sprint 25 — Batch 1: source-backed Jaisalmer travel guides (PR in review)
+
+- Add three distinct, source-linked guides: best time to visit, how to reach Jaisalmer and arrive inside the Fort, and a desert-safari packing checklist. These expand the Journal without duplicating existing Fort, desert-comparison, itinerary or honeymoon topics.
+- Use a single data file and shared article renderer, the approved existing photo library, Blog archive cards, source links, contextual internal links, BlogPosting/WebPage/BreadcrumbList schema, and sitemap coverage.
+- No new rates, train/flight schedules, tour timings, inclusions, safety claims or booking promises. Seasonal statements are attributed to official Rajasthan Tourism/RTDC guidance and explicitly caveated as broad guidance; live schedules and date-sensitive arrangements must be checked with the provider.
+- Acceptance includes exact-head PHP 7.4/8.2 and strict site/image checks, sitemap freshness, package preflight, non-deploying Staging QA, full Browser E2E, SEO/canonical/schema tests and the responsive page sheet. Real cPanel staging and production remain owner-side.
 

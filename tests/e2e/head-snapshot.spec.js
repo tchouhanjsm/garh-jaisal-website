@@ -18,6 +18,9 @@ const ROUTES_ADDED_AFTER_FROZEN_HEAD_BASELINE = [
   '/jaisalmer-3-day-itinerary.php',
   '/jaisalmer-honeymoon-guide.php',
   '/catalogue.php',
+  '/best-time-to-visit-jaisalmer.php',
+  '/how-to-reach-jaisalmer.php',
+  '/jaisalmer-desert-safari-packing-list.php',
 ];
 
 async function captureHead(page, route) {
