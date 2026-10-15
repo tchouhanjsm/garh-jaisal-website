@@ -33,7 +33,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 22 | Guest policies and trust pages | Blocked on owner-approved privacy, terms and cancellation/refund wording; keep unpublished/noindex until confirmed |
 | 23 | Unified catalogue, comparison ladders and session-only Trip tray | ✓ PR #72 merged; exact PR-head PHP/site checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |
 | 24 | Thar Sunset visual storytelling across high-intent journeys | ✓ PR #73 merged; post-merge Site Checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |
-| 25 | Source-backed Jaisalmer travel-guide cluster | ◐ PR in review; three guides use a shared data-driven renderer, approved imagery, official sources and sitemap/browser contracts |
+| 25 | Source-backed Jaisalmer travel-guide cluster | ✓ PR #74 merged; all four post-merge CI workflows passed on `241cddea9d02e4d29acb82941937797320f767ba` |
+| 26 | Shared editorial renderer consolidation | ◐ Batch 1 migrates five established high-intent guides onto the shared renderer with structured content blocks and exact-route regressions |
 
 ---
 
@@ -442,7 +443,7 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - Source seasonal, travel access and packing guidance from official Rajasthan Tourism/RTDC references. Schedule and weather statements remain broad/caveated; current timetables and date-specific arrangements must be confirmed directly.
 - Acceptance: PHP 7.4/8.2 lint, strict site/image/publication gates, sitemap freshness, cPanel package preflight, non-deploying Staging QA, full Browser E2E across the sitemap, route/canonical/schema assertions and responsive page-sheet evidence.
 
-### Remaining sequence after Sprint 25
+### Remaining sequence after Sprint 26
 
 1. **Restaurant R1 — real table-request workflow (P0, owner-dependent):** still blocked on approved operating days/hours, last seating, same-day cut-off, closures, capacity/max party size, notification recipient/handler, approved privacy/retention wording, mail configuration and acknowledgement/contact flow. Do not enable slot availability or live submission until the owner approves those facts. Requests must never auto-confirm.
 2. **V6/V7 — trust proof and transport calculator:** use dated, sourced reviews and owner-approved operator/safety facts; estimates require confirmed routes, rate model and assumptions.
@@ -450,3 +451,14 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 4. **V8–V10 / growth:** first-party editorial placements only with owner approval; improve local/AI search and performance/schema from measured evidence, not assumptions.
 
 Owner-blocked items remain explicit: no fabricated prices, hours, capacity, reviews, policy terms, licensed-partner details or font assets.
+
+
+## Sprint 26 — Batch 1: shared editorial renderer consolidation (PR in review)
+
+**Commercial and engineering goal:** make future Journal work faster and more consistent without discarding existing high-intent content or its search contract.
+
+- Migrate the Jaisalmer Fort guide, Desert Safari guide, two-day itinerary, three-day itinerary and honeymoon guide to `include/editorial-guides-data.php` and `include/editorial-guide-page.php`. Keep public routes, titles/descriptions/canonicals, publication dates, approved hero assets and CTA destinations.
+- Extend the renderer with ordered content blocks for paragraphs, subheadings, lists, key facts and comparison tables. Escape all values and retain the narrow allowlisted internal-link syntax.
+- Keep article.css presentation and preserve related-content destinations, schema and CTA safety attributes.
+- E2E checks route H1, canonical, BlogPosting schema, sources, related cards and CTA target/rel, plus Fort facts, desert comparison rows and itinerary subheadings.
+- No new rates, timings, availability, reviews, policies or operational promises. Restaurant R1 and trust/calculator features remain owner-blocked; real staging and production remain owner-controlled.

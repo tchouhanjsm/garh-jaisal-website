@@ -7,19 +7,17 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-15 |
-| Current phase | Sprint 25 — editorial content depth (Batch 1, PR in review) |
+| Current phase | Sprint 26 — editorial renderer consolidation (Batch 1, PR in review) |
 | Base branch | `main` |
-| Baseline commit | `943cc325980b06b65ac7e629fb405eb9c612e4ea` (PR #73 merge commit) |
-| Last merged PR | [#73 — Thar Sunset storytelling across key guest journeys](https://github.com/tchouhanjsm/garh-jaisal-website/pull/73) |
-| PR #73 post-merge checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069268); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069258); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704071645); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069260) — merge SHA `943cc325980b06b65ac7e629fb405eb9c612e4ea` |
-| Screenshot evidence | [PR #73 main-push page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069260/artifacts/11958400378) |
+| Baseline commit | `241cddea9d02e4d29acb82941937797320f767ba` (PR #74 merge commit) |
+| Last merged PR | [#74 — Source-backed Jaisalmer travel-guide cluster](https://github.com/tchouhanjsm/garh-jaisal-website/pull/74) |
+| PR #74 post-merge checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38709787842); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38709787792); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38709787833); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38709787769) — merge SHA `241cddea9d02e4d29acb82941937797320f767ba` |
+| Screenshot evidence | [PR #74 page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38709787769/artifacts/11959834579) |
 | Image review evidence | [PR #72 responsive image review](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215503/artifacts/11954773684) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Open PRs at batch baseline | None at verification |
-| Staging evidence | [PR #72 non-deploying QA report and screenshots](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215504/artifacts/11954712619); external staging target was not supplied, so real-host QA is still owner-side. |
-| Merge-commit evidence | The retrieved PR-triggered run query did not return merge-SHA workflows; inspect main-push Actions runs before claiming post-merge CI verification. |
-| Staging evidence | PR #73 QA was a local non-deploying dry run; external staging target was not supplied. No production deployment occurred. |
-| Next action | Review Sprint 25 guide content, source links, exact-head CI and the page-sheet artifact; real staging and production release remain owner-controlled. |
+| Staging evidence | PR #74 Staging QA was a non-deploying dry run; no live cPanel validation or production deployment occurred. |
+| Next action | Review the five migrated editorial routes and exact-head CI; real staging and production release remain owner-controlled. |
 
 ## Phase roadmap
 
@@ -237,10 +235,16 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Main-push Site Checks, package preflight and the non-deploying Staging QA run passed: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069268), [package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069258), [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704071645). Post-merge [Browser E2E passed](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069260) and produced the [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069260/artifacts/11958400378).
 - Staging QA did not connect to an external cPanel host and no production deployment occurred.
 
-## Sprint 25 — Batch 1: source-backed Jaisalmer travel guides (PR in review)
+## Sprint 25 — Batch 1: source-backed Jaisalmer travel guides (PR #74 merged)
 
-- Add three distinct, source-linked guides: best time to visit, how to reach Jaisalmer and arrive inside the Fort, and a desert-safari packing checklist. These expand the Journal without duplicating existing Fort, desert-comparison, itinerary or honeymoon topics.
-- Use a single data file and shared article renderer, the approved existing photo library, Blog archive cards, source links, contextual internal links, BlogPosting/WebPage/BreadcrumbList schema, and sitemap coverage.
-- No new rates, train/flight schedules, tour timings, inclusions, safety claims or booking promises. Seasonal statements are attributed to official Rajasthan Tourism/RTDC guidance and explicitly caveated as broad guidance; live schedules and date-sensitive arrangements must be checked with the provider.
-- Acceptance includes exact-head PHP 7.4/8.2 and strict site/image checks, sitemap freshness, package preflight, non-deploying Staging QA, full Browser E2E, SEO/canonical/schema tests and the responsive page sheet. Real cPanel staging and production remain owner-side.
+- PR #74 merged to `main` at `241cddea9d02e4d29acb82941937797320f767ba` on 2026-10-15. It added the best-time-to-visit, how-to-reach and desert-safari packing guides through the shared data-driven renderer.
+- Post-merge Site Checks, package preflight, non-deploying Staging QA and Browser E2E all passed on the merge SHA. [Page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38709787769/artifacts/11959834579).
+- Official travel references are linked; no new rates, schedules, timings, package promises, policies or availability claims were introduced. No production deployment occurred.
 
+## Sprint 26 — Batch 1: shared editorial renderer consolidation (PR in review)
+
+- Migrate five existing high-intent editorial routes — Fort guide, Desert Safari guide, two-day itinerary, three-day itinerary and honeymoon guide — to the shared renderer without changing public URLs, titles, descriptions, canonicals, publication dates or approved hero images.
+- Extend the renderer with escaped content blocks for subheadings, facts, comparison tables and ordered/unordered lists. Preserve internal links through the narrow allowlist.
+- Keep existing article.css styling, BlogPosting/WebPage/BreadcrumbList schema, CTA destinations and related-content routes.
+- Owner review: Fort guide, Desert Safari guide and two-day itinerary first. Restaurant R1 remains blocked on approved operational and privacy details; this batch does not add live booking behavior.
+- Exact-head CI must pass, including PHP 7.4/8.2, strict site/image checks, sitemap freshness, package preflight, non-deploying Staging QA and Browser E2E/page-sheet artifact.
