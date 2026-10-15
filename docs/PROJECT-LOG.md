@@ -200,4 +200,5 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Reuse the three existing planning guides rather than create near-duplicate URLs. Add reciprocal discovery cards from Packages to the Fort guide, desert comparison guide and two-day itinerary.
 - Add a direct Packages-to-`car-rental.php` path so guests who need a vehicle can reach the owner-confirmed SUV/sedan arrangements and travel-date quote journey without first finding the Car & City hub.
 - Reuse existing licensed/owner-provided images and the established experience-card layout; keep existing public URLs, page metadata, rates, policies, analytics and booking destinations unchanged.
+- Refresh only the existing `/pack.php` sitemap `lastmod` to match its Git-derived source date; do not add or remove a sitemap route or change its priority.
 - Add Browser E2E for the three guide destinations and vehicle-arrangements path. Exact-head CI and visual artifact review remain prerequisites to owner approval; no live staging or production change is authorized.
