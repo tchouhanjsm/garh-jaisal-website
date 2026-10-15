@@ -25,9 +25,9 @@ test.describe('Sprint 21 editorial intent cluster', () => {
     await expect(page.locator('#day3')).toContainText('return-transfer arrangement');
     await expect(page.locator('a[href="jaisalmer-2-day-itinerary.php"]')).toBeVisible();
     await expect(page.locator('#day2 a[href="city-tour.php"]')).toBeVisible();
-    await expect(page.locator('a[href="car-rental.php"]')).toBeVisible();
-    await expect(page.locator('a.button-primary')).toHaveAttribute('target', '_blank');
-    await expect(page.locator('a.button-primary')).toHaveAttribute('rel', /noopener/);
+    await expect(page.locator('#day3 a[href="car-rental.php"]')).toBeVisible();
+    await expect(page.locator('.article-footer-cta a.button-primary')).toHaveAttribute('target', '_blank');
+    await expect(page.locator('.article-footer-cta a.button-primary')).toHaveAttribute('rel', /noopener/);
   });
 
   test('honeymoon guide explains confirmable arrangements instead of a fixed package', async ({ page }, testInfo) => {
@@ -42,7 +42,7 @@ test.describe('Sprint 21 editorial intent cluster', () => {
     await expect(page.locator('#desert a[href="sleep-under-the-stars.php"]')).toBeVisible();
     await expect(page.locator('#desert a[href="swiss-tent-safari.php"]')).toBeVisible();
     await expect(page.locator('a[href="contact.php?topic=dining"]')).toBeVisible();
-    await expect(page.locator('a.button-primary')).toHaveAttribute('target', '_blank');
+    await expect(page.locator('.article-footer-cta a.button-primary')).toHaveAttribute('target', '_blank');
   });
 
   test('existing guides link contextually into the new content cluster', async ({ page }, testInfo) => {
