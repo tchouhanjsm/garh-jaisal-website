@@ -55,6 +55,9 @@ jobs:
       - name: Verify experience gallery assets
         run: php tests/php/experience-gallery-assets.php
 
+      - name: Verify experience discovery shortlist contract
+        run: php tests/php/experience-discovery.php
+
       - name: Verify launch hardening configuration
         run: php scripts/check-launch-hardening.php
 
