@@ -24,6 +24,7 @@ test('catalogue renders the reviewed product choices without unapproved prices',
   await expect(page.locator('#camp-compare-title')).toHaveText('Open sky or a Swiss tent?');
   await expect(page.locator('#transport-compare-title')).toHaveText('Choose the journey you need.');
   await expect(page.locator('main')).not.toContainText('₹');
+  await expect(page.locator('.product-card-planning-note')).toHaveCount(9);
 });
 
 test('Trip tray combines a room and a desert stay without collecting guest details', async ({ page }, testInfo) => {
