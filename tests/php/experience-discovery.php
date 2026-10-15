@@ -19,9 +19,15 @@ foreach ($required as $path => $ids) {
     if (strpos($source, 'catalogue.php') === false || strpos($source, 'Build your trip shortlist') === false) {
         $errors[] = $path . ': missing contextual link to the unified Trip shortlist';
     }
-    foreach ($ids as $id) {
-        if (strpos($source, "'id' => '" . $id . "'") === false) {
-            $errors[] = $path . ': missing Trip shortlist item ' . $id;
+    if ($path === 'desert-safari.php') {
+        if (strpos($source, "foreach ($items as $slug)") === false || strpos($source, "'id' => $slug") === false || strpos($source, "'url' => $slug . '.php'") === false) {
+            $errors[] = 'desert-safari.php: shared experience loop must generate each shortlist item from the published slug';
+        }
+    } else {
+        foreach ($ids as $id) {
+            if (strpos($source, "'id' => '" . $id . "'") === false) {
+                $errors[] = $path . ': missing Trip shortlist item ' . $id;
+            }
         }
     }
 }
