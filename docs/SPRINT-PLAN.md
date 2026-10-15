@@ -32,7 +32,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 21 | SEO content cluster and Packages conversion | ◐ Batch 1 merged in PR #69; Batch 2 adds a distinct 3-day itinerary and honeymoon guide, reciprocal links and sitemap coverage |
 | 22 | Guest policies and trust pages | Blocked on owner-approved privacy, terms and cancellation/refund wording; keep unpublished/noindex until confirmed |
 | 23 | Unified catalogue, comparison ladders and session-only Trip tray | ✓ PR #72 merged; exact PR-head PHP/site checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |
-| 24 | Thar Sunset visual storytelling across high-intent journeys | ✓ PR #73 merged; post-merge Site Checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |\n| 25 | Source-backed Jaisalmer travel-guide cluster | ◐ PR in review; three guides use a shared data-driven renderer, approved imagery, official sources and sitemap/browser contracts |
+| 24 | Thar Sunset visual storytelling across high-intent journeys | ✓ PR #73 merged; post-merge Site Checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |
+| 25 | Source-backed Jaisalmer travel-guide cluster | ◐ PR in review; three guides use a shared data-driven renderer, approved imagery, official sources and sitemap/browser contracts |
 
 ---
 
