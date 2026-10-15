@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-15 |
-| Current phase | Sprint 28 — four source-backed Jaisalmer Journal guides (Batch 1, PR in review) |
+| Current phase | Sprint 29 — structured-data fidelity for Rooms, Contact and Directions (Batch 1, PR in review) |
 | Base branch | `main` |
-| Baseline commit | `24c9d68d7b834d780d20e3fe83a2926afa1b239a` (PR #76 merge commit) |
-| Last merged PR | [#76 — Contextual editorial enquiry handoff](https://github.com/tchouhanjsm/garh-jaisal-website/pull/76) |
+| Baseline commit | `471636e1f074b8983bb46cd4f614ed335147f7fd` (PR #77 merge commit) |
+| Last merged PR | [#77 — Four source-backed Journal guides](https://github.com/tchouhanjsm/garh-jaisal-website/pull/77) |
 | PR #75 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714317109); [package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714317141); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714316979); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714317044) |
 | PR #75 merge-SHA checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710861); [package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710636); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710691); [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710939) was still running at this snapshot |
 | Production URL | https://www.hotelgarhjaisal.com |
 | PR #76 merge-SHA checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718084075); [package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718083937); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718083928); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718084012); [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718084012/artifacts/11964531596) |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Next action | Review Sprint 28’s four guide routes, fact-safe copy, contextual WhatsApp handoffs, sitemap consistency and exact-head browser evidence; owner merge/deploy remains required. |
+| Next action | Review Sprint 29’s BreadcrumbList parity and registry-backed HotelRoom entities; owner merge/deploy remains required. |
 
 ## Phase roadmap
 
@@ -255,7 +255,10 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - R1 live submission, live staging and production remain out of scope until owner decisions and owner release.
 
 
-## Sprint 28 — Batch 1: four source-backed Jaisalmer Journal guides (PR in review)
+## Sprint 28 — Batch 1: four source-backed Jaisalmer Journal guides (PR #77 merged)
+
+- PR #77 merged to `main` at `471636e1f074b8983bb46cd4f614ed335147f7fd`.
+- Merge-SHA Site Checks, cPanel package preflight and non-deploying Staging QA passed. [Browser E2E/screenshot run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38721176971) was still in progress at this snapshot; do not describe its post-merge screenshot artifact as reviewed yet.
 
 **Commercial goal:** expand useful non-brand discovery and help a guest choose what to explore, eat, see and buy without creating unsupported operational promises.
 
@@ -264,3 +267,11 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Add contextual WhatsApp labels to these new routes; keep the existing GA4 IDs and public URLs unchanged.
 - The food guide does not claim any particular dish or dietary option is on the current restaurant menu; access, prices, entry rules, route, transport and guide details remain date-specific and require confirmation where applicable.
 - R1 table requests, source-verified reviews, licensed operator claims and transport rates remain owner-dependent. No cPanel staging or production deployment is included.
+
+
+## Sprint 29 — Batch 1: structured-data fidelity (PR in review)
+
+- Add shared, allowlisted breadcrumb JSON-LD from the same `$breadcrumbs` array used by the visible Contact and Directions breadcrumb partial. Preserve existing route/canonical URLs.
+- Emit `HotelRoom` entities from the visible `rooms-data.php` source of truth: room name, description, image, listed features and an ID matching the room card anchor. Connect the Rooms WebPage's `mainEntity` to those nodes.
+- Do not add prices, offers, availability, ratings, reviews, occupancy or facilities that are not explicitly in the registry. Keep the frozen head snapshot stable by separately testing this new room schema.
+- E2E verifies breadcrumb parity and visible-card/schema parity. No sitemap changes, new dependencies, real enquiries, staging upload, merge or production deployment.
