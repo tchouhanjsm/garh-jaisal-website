@@ -130,7 +130,7 @@ return [
         'cta_primary_label' => 'Build your trip',
         'cta_primary_href' => 'catalogue.php',
         'cta_secondary_label' => 'Ask the hotel',
-        'cta_secondary_href' => 'contact.php',
+        'cta_secondary_href' => 'contact.php?topic=visit-planning',
     ],
     'how-to-reach-jaisalmer' => [
         'slug' => 'how-to-reach-jaisalmer',
@@ -392,7 +392,7 @@ return [
         'cta_primary_label' => 'Explore desert experiences',
         'cta_primary_href' => 'desert-safari.php',
         'cta_secondary_label' => 'Ask the hotel',
-        'cta_secondary_href' => 'contact.php',
+        'cta_secondary_href' => 'contact.php?topic=desert-packing',
     ],
     'jaisalmer-fort-guide' => [
         'slug' => 'jaisalmer-fort-guide',
@@ -597,7 +597,7 @@ return [
         'cta_primary_target' => '_blank',
         'cta_primary_rel' => 'noopener',
         'cta_secondary_label' => 'Contact the hotel',
-        'cta_secondary_href' => 'contact.php'
+        'cta_secondary_href' => 'contact.php?topic=fort-guide'
     ],
     'desert-safari-guide' => [
         'slug' => 'desert-safari-guide',
@@ -806,7 +806,7 @@ return [
         'cta_primary_target' => '_blank',
         'cta_primary_rel' => 'noopener',
         'cta_secondary_label' => 'Contact the hotel',
-        'cta_secondary_href' => 'contact.php'
+        'cta_secondary_href' => 'contact.php?topic=desert-safari'
     ],
     'jaisalmer-2-day-itinerary' => [
         'slug' => 'jaisalmer-2-day-itinerary',
@@ -1007,7 +1007,7 @@ return [
         'cta_primary_target' => '_blank',
         'cta_primary_rel' => 'noopener',
         'cta_secondary_label' => 'Contact the hotel',
-        'cta_secondary_href' => 'contact.php'
+        'cta_secondary_href' => 'contact.php?topic=two-day-itinerary'
     ],
     'jaisalmer-3-day-itinerary' => [
         'slug' => 'jaisalmer-3-day-itinerary',
@@ -1213,7 +1213,7 @@ return [
         'cta_primary_target' => '_blank',
         'cta_primary_rel' => 'noopener',
         'cta_secondary_label' => 'Contact the hotel',
-        'cta_secondary_href' => 'contact.php'
+        'cta_secondary_href' => 'contact.php?topic=three-day-itinerary'
     ],
     'jaisalmer-honeymoon-guide' => [
         'slug' => 'jaisalmer-honeymoon-guide',
@@ -1387,6 +1387,6 @@ return [
         'cta_primary_target' => '_blank',
         'cta_primary_rel' => 'noopener',
         'cta_secondary_label' => 'Contact the hotel',
-        'cta_secondary_href' => 'contact.php'
+        'cta_secondary_href' => 'contact.php?topic=honeymoon'
     ]
 ];

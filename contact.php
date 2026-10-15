@@ -46,6 +46,34 @@ $contactTopics = [
         'label' => 'Rooftop dining',
         'message' => 'Hello, I would like to enquire about a table at Garh Jaisal\'s Kitchen. Preferred date: [add date]. Preferred time: [add time]. Number of guests: [add number]. Please confirm current service hours, table availability, menu options and prices, and available dietary options for my preferred date.',
     ],
+    'visit-planning' => [
+        'label' => 'Jaisalmer visit planning',
+        'message' => 'Hello, I am planning a visit to Jaisalmer. My travel dates or month are: [add dates]. Planned trip length: [add number of days]. Please share general seasonal considerations and confirm current room, guide and desert options, prices and availability for those dates.',
+    ],
+    'desert-packing' => [
+        'label' => 'Desert safari preparation',
+        'message' => 'Hello, I am preparing for a Jaisalmer desert safari. My travel date is: [add date]. Planned experience, if known: [add experience]. Please confirm the current inclusions and transport for the selected experience, plus any packing considerations I should check before departure.',
+    ],
+    'fort-guide' => [
+        'label' => 'Jaisalmer Fort visit',
+        'message' => 'Hello, I am planning a visit to Jaisalmer Fort. My travel date is: [add date]. Please confirm current guide availability and languages, the possible Fort walk, applicable entry fees and any access requirements for that date.',
+    ],
+    'desert-safari' => [
+        'label' => 'Jaisalmer desert safari',
+        'message' => 'Hello, I would like to enquire about a Jaisalmer desert experience. My travel date is: [add date]. Number of guests: [add number]. Preferred style: sunset return or overnight. Please confirm current options, timings, transport, inclusions, prices and availability for my date.',
+    ],
+    'two-day-itinerary' => [
+        'label' => 'Two-day Jaisalmer itinerary',
+        'message' => 'Hello, I am planning a two-day visit to Jaisalmer. My travel dates are: [add dates]. Please advise which current guided, rooftop dining and desert options may fit the trip, and confirm availability, timings, prices and inclusions for my dates.',
+    ],
+    'three-day-itinerary' => [
+        'label' => 'Three-day Jaisalmer itinerary',
+        'message' => 'Hello, I am planning a three-day visit to Jaisalmer. My travel dates are: [add dates]. I would like to ask about a Fort stay, a guided heritage route and a desert option. Please confirm current availability, guide language, timings, prices and inclusions for my dates.',
+    ],
+    'honeymoon' => [
+        'label' => 'Couples and honeymoon planning',
+        'message' => 'Hello, I am planning a couples trip or honeymoon in Jaisalmer. My travel dates are: [add dates]. I would like to enquire about room options, rooftop dining and desert experiences. Please confirm current availability, prices and arrangements; this enquiry does not reserve anything.',
+    ],
     'heritage-havelis' => [
         'label' => 'Havelis and architecture itinerary idea',
         'message' => 'Hello, I would like to ask whether a Jaisalmer havelis and architecture route can be arranged. Please confirm the possible stops, guide availability, timings, transport if needed, applicable entry fees and current price for my travel date.',

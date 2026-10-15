@@ -34,7 +34,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 23 | Unified catalogue, comparison ladders and session-only Trip tray | ✓ PR #72 merged; exact PR-head PHP/site checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |
 | 24 | Thar Sunset visual storytelling across high-intent journeys | ✓ PR #73 merged; post-merge Site Checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |
 | 25 | Source-backed Jaisalmer travel-guide cluster | ✓ PR #74 merged; all four post-merge CI workflows passed on `241cddea9d02e4d29acb82941937797320f767ba` |
-| 26 | Shared editorial renderer consolidation | ◐ Batch 1 migrates five established high-intent guides onto the shared renderer with structured content blocks and exact-route regressions |
+| 26 | Shared editorial renderer consolidation | ✓ PR #75 merged; PR-head Site Checks, package, Staging QA and Browser E2E passed |
+| 27 | Contextual editorial enquiry handoff | ◐ Batch 1 connects eight editorial guides to topic-specific contact drafts and WhatsApp messages with privacy-safe intent measurement |
 
 ---
 
@@ -443,7 +444,7 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - Source seasonal, travel access and packing guidance from official Rajasthan Tourism/RTDC references. Schedule and weather statements remain broad/caveated; current timetables and date-specific arrangements must be confirmed directly.
 - Acceptance: PHP 7.4/8.2 lint, strict site/image/publication gates, sitemap freshness, cPanel package preflight, non-deploying Staging QA, full Browser E2E across the sitemap, route/canonical/schema assertions and responsive page-sheet evidence.
 
-### Remaining sequence after Sprint 26
+### Remaining sequence after Sprint 27
 
 1. **Restaurant R1 — real table-request workflow (P0, owner-dependent):** still blocked on approved operating days/hours, last seating, same-day cut-off, closures, capacity/max party size, notification recipient/handler, approved privacy/retention wording, mail configuration and acknowledgement/contact flow. Do not enable slot availability or live submission until the owner approves those facts. Requests must never auto-confirm.
 2. **V6/V7 — trust proof and transport calculator:** use dated, sourced reviews and owner-approved operator/safety facts; estimates require confirmed routes, rate model and assumptions.
@@ -462,3 +463,14 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - Keep article.css presentation and preserve related-content destinations, schema and CTA safety attributes.
 - E2E checks route H1, canonical, BlogPosting schema, sources, related cards and CTA target/rel, plus Fort facts, desert comparison rows and itinerary subheadings.
 - No new rates, timings, availability, reviews, policies or operational promises. Restaurant R1 and trust/calculator features remain owner-blocked; real staging and production remain owner-controlled.
+
+
+## Sprint 27 — Batch 1: contextual editorial enquiry handoff (PR in review)
+
+**Commercial goal:** reduce steps between a guest reading a guide and sending a useful, correctly framed enquiry without creating new promises or a live booking system.
+
+- The eight editorial guides carry a specific topic into the existing contact form. Seven curated prompts cover visit planning, desert packing, the Fort, desert safari, two-day planning, three-day planning and honeymoon planning; the How to Reach guide continues using the approved arrival path.
+- Route-specific WhatsApp text covers these guides and existing live tour/experience pages that could otherwise fall back to a generic hotel enquiry.
+- GA4 keeps its existing event names and destinations. Only an allowlisted topic yields the coarse `travel_planning` context; names, email, message text and arbitrary query parameters are never sent.
+- Browser E2E verifies contact prefill, WhatsApp context, existing arrival behavior and exactly-once `enquiry_start` classification on the PR head.
+- R1 remains owner-blocked. No live slots, auto-confirmation, unapproved hours, rates, reviews or package facts are introduced. Real cPanel staging and production remain owner-controlled.
