@@ -12,6 +12,13 @@ const DRAFT_AND_HIDDEN_ROUTES = [
   '/explore-the-desert.php',
 ];
 
+// These articles were added after the original frozen head baseline. They remain
+// covered by rendered SEO metadata tests and editorial-content-cluster.spec.js.
+const ROUTES_ADDED_AFTER_FROZEN_HEAD_BASELINE = [
+  '/jaisalmer-3-day-itinerary.php',
+  '/jaisalmer-honeymoon-guide.php',
+];
+
 async function captureHead(page, route) {
   const response = await page.goto(route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
   expect(response, 'No HTTP response for ' + route).not.toBeNull();
@@ -203,16 +210,24 @@ test('sitemap head output matches the frozen pre-refactor baseline', async ({ br
     'Missing committed pre-refactor fixture; capture it before any shared-head migration.'
   ).toBe(true);
   const expected = JSON.parse(fs.readFileSync(FIXTURE_PATH, 'utf8'));
-  const comparable = compactSnapshot(snapshot);
+  const frozenBaseline = {
+    ...snapshot,
+    sitemapRoutes: snapshot.sitemapRoutes.filter(route => !ROUTES_ADDED_AFTER_FROZEN_HEAD_BASELINE.includes(route)),
+    pageHeads: snapshot.pageHeads.filter(head => !ROUTES_ADDED_AFTER_FROZEN_HEAD_BASELINE.includes(head.route)),
+  };
+  const comparable = compactSnapshot(frozenBaseline);
   expect(
     comparable,
-    'Titles, metadata, canonicals, social tags, JSON-LD types, analytics and draft visibility changed'
+    'Existing route titles, metadata, canonicals, social tags, JSON-LD types, analytics and draft visibility changed'
   ).toEqual(expected);
 
+  // Keep full current output as an artifact; only the fixture comparison omits
+  // new articles whose metadata and visible-content contracts have their own tests.
+  const fullComparable = compactSnapshot(snapshot);
   fs.mkdirSync(path.dirname(ARTIFACT_PATH), { recursive: true });
-  const json = JSON.stringify(comparable, null, 2) + '\n';
+  const json = JSON.stringify(fullComparable, null, 2) + '\n';
   fs.writeFileSync(ARTIFACT_PATH, json);
-  await testInfo.attach('frozen-head-snapshot', {
+  await testInfo.attach('current-head-snapshot', {
     path: ARTIFACT_PATH,
     contentType: 'application/json',
   });

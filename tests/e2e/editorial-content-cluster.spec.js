@@ -24,7 +24,7 @@ test.describe('Sprint 21 editorial intent cluster', () => {
     await expect(page.locator('#day2')).toContainText('Jain temples');
     await expect(page.locator('#day3')).toContainText('return-transfer arrangement');
     await expect(page.locator('a[href="jaisalmer-2-day-itinerary.php"]')).toBeVisible();
-    await expect(page.locator('a[href="city-tour.php"]')).toBeVisible();
+    await expect(page.locator('#day2 a[href="city-tour.php"]')).toBeVisible();
     await expect(page.locator('a[href="car-rental.php"]')).toBeVisible();
     await expect(page.locator('a.button-primary')).toHaveAttribute('target', '_blank');
     await expect(page.locator('a.button-primary')).toHaveAttribute('rel', /noopener/);
@@ -38,9 +38,9 @@ test.describe('Sprint 21 editorial intent cluster', () => {
     await expect(page.locator('#dining')).toContainText('should be confirmed directly with the hotel');
     await expect(page.locator('#desert')).toContainText('king-size bed');
     await expect(page.locator('#desert')).toContainText('attached bathroom');
-    await expect(page.locator('a[href="sunset-camel-safari.php"]')).toBeVisible();
-    await expect(page.locator('a[href="sleep-under-the-stars.php"]')).toBeVisible();
-    await expect(page.locator('a[href="swiss-tent-safari.php"]')).toBeVisible();
+    await expect(page.locator('#desert a[href="sunset-camel-safari.php"]')).toBeVisible();
+    await expect(page.locator('#desert a[href="sleep-under-the-stars.php"]')).toBeVisible();
+    await expect(page.locator('#desert a[href="swiss-tent-safari.php"]')).toBeVisible();
     await expect(page.locator('a[href="contact.php?topic=dining"]')).toBeVisible();
     await expect(page.locator('a.button-primary')).toHaveAttribute('target', '_blank');
   });
