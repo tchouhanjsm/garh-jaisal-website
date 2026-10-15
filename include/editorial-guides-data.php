@@ -1389,4 +1389,434 @@ return [
         'cta_secondary_label' => 'Contact the hotel',
         'cta_secondary_href' => 'contact.php?topic=honeymoon'
     ]
+,
+
+    'jaisalmer-havelis-guide' => [
+        'slug' => 'jaisalmer-havelis-guide',
+        'title' => 'Jaisalmer Havelis Guide | Sandstone Architecture & Heritage',
+        'description' => 'Explore Jaisalmer’s carved sandstone havelis, the details to notice in their architecture, and how to plan a respectful heritage walk.',
+        'h1' => 'Jaisalmer Havelis: A Guide to Sandstone Architecture',
+        'eyebrow' => 'Architecture and heritage guide',
+        'lede' => 'Jaisalmer’s havelis reward a slower look. Carved stone screens, projecting windows, balconies and detailed facades tell stories about the old city and its trading past. Use this guide to notice the architecture and plan a respectful visit without assuming that every building is open to visitors.',
+        'hero_image' => 'img/v2/facade.jpg',
+        'hero_alt' => 'Golden sandstone facade inside Jaisalmer Fort',
+        'date_published' => '2026-10-15',
+        'date_modified' => '2026-10-15',
+        'date_display' => '15 October 2026',
+        'toc' => [
+            ['id' => 'read-the-street', 'label' => 'Read the streetscape'],
+            ['id' => 'patwon-ki-haveli', 'label' => 'Patwon Ki Haveli'],
+            ['id' => 'nathmal-ki-haveli', 'label' => 'Nathmal Ki Haveli'],
+            ['id' => 'salim-singh-ki-haveli', 'label' => 'Salim Singh Ki Haveli'],
+            ['id' => 'details-to-notice', 'label' => 'Architectural details'],
+            ['id' => 'plan-respectfully', 'label' => 'Plan a respectful visit']
+        ],
+        'sections' => [
+            [
+                'id' => 'read-the-street',
+                'heading' => 'Read the streetscape, not just the famous facade',
+                'paragraphs' => [
+                    'Jaisalmer’s old city is known for honey-coloured sandstone buildings and narrow lanes. A haveli was a substantial residence associated with a household, and its facade could communicate status, taste and craft. The most rewarding way to explore is not to race from one photo stop to another, but to notice how windows, screens, balconies and entrances fit into a dense streetscape.',
+                    'The Fort is a living place as well as a historic landmark. Residents use its streets, doorways and shared spaces every day. Keep entrances clear, speak quietly in residential lanes, and remember that an attractive doorway does not automatically mean the building or courtyard is open to the public.',
+                    'A short walk focused on exterior details is different from a visit to a ticketed heritage interior or a shop inside a historic building. Confirm access, visiting arrangements and any applicable fee before travelling specifically to enter a site.'
+                ],
+                'items' => [
+                    'Look for carved stonework, shade, windows and balconies rather than photographing only the whole building.',
+                    'Give residents, worshippers, shopkeepers and other visitors room to move through narrow streets.',
+                    'Treat an exterior view, an open shop and a public heritage interior as different kinds of access.'
+                ]
+            ],
+            [
+                'id' => 'patwon-ki-haveli',
+                'heading' => 'Patwon Ki Haveli: a cluster of ornate residences',
+                'paragraphs' => [
+                    'Patwon Ki Haveli is one of Jaisalmer’s best-known architectural landmarks. Official destination guidance describes a cluster of five havelis, noted for elaborate carving and detailed sandstone facades. The complex is a useful place to understand how related residences can read as one continuous architectural composition.',
+                    'When viewing the facade, step back far enough to see the rhythm of openings and projecting forms, then look more closely at the stonework. Details can be easier to appreciate from a respectful distance than from a doorway or congested spot directly beneath the building. Follow posted rules if you enter a visitor area.',
+                    'Do not assume every room or part of the complex is accessible on the day you arrive. Confirm current access, admission charges and photography rules through a current official or on-site source.'
+                ]
+            ],
+            [
+                'id' => 'nathmal-ki-haveli',
+                'heading' => 'Nathmal Ki Haveli: notice the details',
+                'paragraphs' => [
+                    'Nathmal Ki Haveli is often discussed for its construction story and decorative detail. Rajasthan Tourism describes two architect brothers working from opposite sides, an account that encourages visitors to look closely rather than expect every detail to mirror perfectly. Use official interpretation for the history presented at the site.',
+                    'The building also illustrates how a large residence can bring together public-facing ornament and spaces shaped by daily life. Look at the facade as a crafted surface, but do not assume that every portion is a museum or that the whole interior is available for unrestricted viewing.',
+                    'Opening arrangements, shop access, entry charges and photography permissions can change. Check them close to your visit, particularly if a specific interior is the main reason for going.'
+                ]
+            ],
+            [
+                'id' => 'salim-singh-ki-haveli',
+                'heading' => 'Salim Singh Ki Haveli and the old city today',
+                'paragraphs' => [
+                    'Salim Singh Ki Haveli is another distinctive landmark in Jaisalmer’s architectural story. Official visitor guidance describes a building whose history remains connected to its present-day surroundings, with parts in use and markets and craft sellers nearby. Heritage here is not limited to a museum setting.',
+                    'Observe the outline of the upper facade, then compare its appearance with the more repetitive patterns of other havelis. Differences in openings, roofline and carved features make an architecture walk more interesting than treating every sandstone building as interchangeable.',
+                    'Because parts of the building and nearby lanes remain active, follow site instructions. Do not enter areas marked private, photograph people or workspaces without permission, or block routes used by residents and visitors.'
+                ]
+            ],
+            [
+                'id' => 'details-to-notice',
+                'heading' => 'A simple checklist for sandstone architecture',
+                'paragraphs' => [
+                    'You do not need to be an architect to enjoy these buildings. Start with the shape of the facade, then look at individual details: the projection of a balcony, the depth of a window recess, a carved screen or the way a doorway is framed. Light and shadow can change how these features appear, so a slower look often reveals more than repeated photographs.',
+                    'Compare buildings by asking questions rather than declaring one universally best. How does a screen soften sunlight? How does a projecting window change the line of a wall? Which patterns repeat, and which seem specific to one house? This approach helps you notice craft without inventing a story about a particular artisan or household.',
+                    'If a guide is part of your plan, ask the hotel to confirm current availability, language and proposed route for your date. Do not assume every guide covers the same interiors or that every route includes entry to each landmark.'
+                ],
+                'items' => [
+                    'Stone screens and pierced patterns.',
+                    'Projecting windows, balconies and jharokhas.',
+                    'Carved lintels, brackets, borders and doorway details.',
+                    'How buildings meet the street and how people use those spaces today.'
+                ]
+            ],
+            [
+                'id' => 'plan-respectfully',
+                'heading' => 'Plan a heritage walk with care',
+                'paragraphs' => [
+                    'Begin with the [Jaisalmer Fort guide](jaisalmer-fort-guide.php) for the wider setting, or use the [two-day itinerary](jaisalmer-2-day-itinerary.php) to consider how much time to leave for the Fort and old city. These are planning aids rather than guaranteed schedules; confirm current access and guide arrangements before you commit.',
+                    'Wear footwear suited to historic streets, carry water appropriate to the weather and keep your route flexible. The lanes can be narrow and uneven, and cars cannot enter every part of the Fort. If you have mobility requirements, ask about the actual route and surfaces rather than assuming it is step-free.',
+                    'For date-specific questions about a possible heritage walk, guide availability, languages, access or fees, send the hotel an enquiry. That message is a request for current information, not a confirmed tour booking.'
+                ]
+            ]
+        ],
+        'sources' => [
+            ['label' => 'Rajasthan Tourism — Jaisalmer destination guide', 'url' => 'https://www.tourism.rajasthan.gov.in/jaisalmer.html', 'note' => 'Official destination overview of the Fort, havelis and heritage.'],
+            ['label' => 'Incredible India — Patwon Ki Haveli', 'url' => 'https://www.incredibleindia.gov.in/en/rajasthan/jaisalmer/patwon-ki-haveli', 'note' => 'Official visitor guidance for the cluster of havelis.'],
+            ['label' => 'Incredible India — Nathmal Ki Haveli', 'url' => 'https://www.incredibleindia.gov.in/en/rajasthan/jaisalmer/nathmal-ki-haveli', 'note' => 'Official architectural and visitor information.'],
+            ['label' => 'Incredible India — Salim Singh Ki Haveli', 'url' => 'https://www.incredibleindia.gov.in/en/rajasthan/jaisalmer/salim-singh-ki-haveli', 'note' => 'Official background on the haveli and old-city setting.']
+        ],
+        'related' => [
+            ['href' => 'jaisalmer-fort-guide.php', 'label' => 'Fort guide', 'title' => 'Explore the living Fort', 'text' => 'Start with the Fort’s setting and practical walking context.'],
+            ['href' => 'jaisalmer-2-day-itinerary.php', 'label' => 'Itinerary', 'title' => 'Jaisalmer in 2 Days', 'text' => 'Build a realistic sequence around your priorities.'],
+            ['href' => 'city-tour.php', 'label' => 'Guided visit', 'title' => 'Ask about a city or heritage walk', 'text' => 'Confirm the current route and arrangements for your date.']
+        ],
+        'cta_title' => 'Make room for Jaisalmer’s details',
+        'cta_text' => 'Ask about a possible heritage walk, current guide availability and arrangements that can be confirmed for your dates.',
+        'cta_primary_label' => 'Build your trip',
+        'cta_primary_href' => 'catalogue.php',
+        'cta_secondary_label' => 'Ask about havelis and architecture',
+        'cta_secondary_href' => 'contact.php?topic=heritage-havelis'
+    ],
+    'jaisalmer-food-guide' => [
+        'slug' => 'jaisalmer-food-guide',
+        'title' => 'Jaisalmer Food Guide | Rajasthani Dishes to Discover',
+        'description' => 'Discover regional Rajasthani dishes and Jaisalmer food traditions, questions to ask before ordering, and how to confirm the current menu.',
+        'h1' => 'A Food Lover’s Guide to Jaisalmer and Rajasthan',
+        'eyebrow' => 'Food and local culture guide',
+        'lede' => 'Food is one of the easiest ways to explore Rajasthan’s regional character. Jaisalmer’s wider culinary scene brings together savoury snacks, hearty dishes, sweets and cooling drinks. This guide is a starting point for discovery, not a claim that every dish is available at a particular restaurant today.',
+        'hero_image' => 'img/v2/rooftop-dusk.jpg',
+        'hero_alt' => 'Rooftop dining setting at dusk in Jaisalmer',
+        'date_published' => '2026-10-15',
+        'date_modified' => '2026-10-15',
+        'date_display' => '15 October 2026',
+        'toc' => [
+            ['id' => 'regional-food', 'label' => 'Regional food and desert life'],
+            ['id' => 'snacks', 'label' => 'Snacks and street-food favourites'],
+            ['id' => 'hearty-dishes', 'label' => 'Hearty regional dishes'],
+            ['id' => 'drinks-and-sweets', 'label' => 'Drinks and sweet finishes'],
+            ['id' => 'order-thoughtfully', 'label' => 'Order with care'],
+            ['id' => 'rooftop-dining', 'label' => 'Ask about current dining']
+        ],
+        'sections' => [
+            [
+                'id' => 'regional-food',
+                'heading' => 'Regional food is part of the destination',
+                'paragraphs' => [
+                    'Jaisalmer sits within Rajasthan’s desert region, but there is no single dish that represents every household or kitchen. Food traditions reflect local ingredients, family preferences, trade, climate and the wider culinary links across the state. Approach this guide as a list of ideas to look for, not a fixed tasting menu or a guarantee that a named dish will be served wherever you stop.',
+                    'A useful first question is what is made fresh that day and how it is prepared. For snacks, ask whether an item is fried to order. For a full meal, ask about ingredients and spice level. If you have dietary needs or allergies, describe them clearly and ask the kitchen to confirm whether it can prepare the dish safely; do not rely on a name alone.',
+                    'Official Incredible India food guidance highlights several Rajasthani dishes and Jaisalmer-area food experiences. The names below can help you recognise options while exploring, but current menus, prices, portions and preparation methods vary and should be confirmed directly.'
+                ]
+            ],
+            [
+                'id' => 'snacks',
+                'heading' => 'Start with savoury snacks',
+                'paragraphs' => [
+                    'Mirchi bhajiya and pyaz ki kachori are two savoury snacks named in official Jaisalmer food guidance. Both are useful names to recognise if you enjoy Indian snacks, but preparation differs between vendors. Ask about the filling, chilli intensity and whether a portion is made fresh if those details matter to you.',
+                    'Food from a market stall and food served as part of a sit-down meal can be different experiences. At a busy stall, observe how food is handled and whether it appears freshly prepared. At a restaurant, ask about portion size and whether a snack is intended to share before ordering several items.',
+                    'Do not confuse regional association with guaranteed availability. A street-food name in a travel guide is not evidence that a nearby cafe, rooftop restaurant or hotel kitchen has it on today’s menu.'
+                ],
+                'items' => [
+                    'Mirchi bhajiya — ask how spicy the chilli and batter are.',
+                    'Pyaz ki kachori — ask about the filling and how it is served.',
+                    'Compare the preparation and setting rather than assuming every vendor follows the same recipe.'
+                ]
+            ],
+            [
+                'id' => 'hearty-dishes',
+                'heading' => 'Recognise the hearty dishes of Rajasthan',
+                'paragraphs' => [
+                    'Dal baati choorma is one of Rajasthan’s well-known meal combinations: lentils with baked wheat baati and a sweet, crumbly choorma preparation. It is often a substantial meal, so ask about the portion and accompaniments instead of ordering it alongside several large dishes by default.',
+                    'Gatte ki sabzi and ker sangri are also part of the regional vocabulary highlighted in official tourism material. Ingredients and recipes can vary, so ask a restaurant how a particular preparation is made. If you avoid dairy, gluten, nuts or specific ingredients for medical or religious reasons, ask directly rather than making assumptions from a dish name.',
+                    'Rajasthan’s wider menu includes food with different levels of heat and richness. Select one or two dishes that interest you and ask for a clear description. That is more useful than ordering from a photograph without understanding the ingredients or serving size.'
+                ],
+                'items' => [
+                    'Dal baati choorma — a familiar hearty regional combination.',
+                    'Gatte ki sabzi — ask about the dumpling ingredients and gravy.',
+                    'Ker sangri — ask how the preparation is seasoned and served.',
+                    'Laal maas appears in wider Rajasthani food guidance; confirm ingredients and chilli level before ordering.'
+                ]
+            ],
+            [
+                'id' => 'drinks-and-sweets',
+                'heading' => 'Leave room for drinks and a sweet finish',
+                'paragraphs' => [
+                    'Official Jaisalmer food guidance also names kesariya thandai and makhania lassi. They are useful examples to recognise, but recipes and ingredients differ. Ask how a drink is prepared, whether it contains dairy or nuts, and whether it is made fresh or from a prepared mix if that matters to you.',
+                    'A cool drink or a small sweet can round out a meal without making every stop a large dining commitment. If you are walking through the old city, choose a pause that fits the weather and your route rather than planning around an unverified opening time or assuming a particular stall will be open.',
+                    'A local food experience should feel enjoyable rather than rushed. Ask questions, listen to the answer and choose something simpler if the ingredients or preparation are unclear.'
+                ]
+            ],
+            [
+                'id' => 'order-thoughtfully',
+                'heading' => 'A practical checklist before you order',
+                'paragraphs' => [
+                    'Food descriptions can be broad. Ask whether a dish is vegetarian, which cooking fat is used, whether it contains dairy or nuts, and how spicy it is. If you have a food allergy, tell the restaurant explicitly and ask whether it can avoid cross-contact; do not treat an informal assurance as a medical guarantee.',
+                    'For groups, agree on whether dishes are individual portions or intended to share. If you need to eat at a particular time, confirm current service hours directly. A travel page can describe a regional dish but cannot establish that a kitchen is serving it that day.',
+                    'If you have mobility requirements or are meeting someone at a specific address, confirm the route and seating arrangements before travelling. In the Fort, lanes can be narrow and the last part of the journey may involve walking.'
+                ],
+                'items' => [
+                    'Ingredients, cooking fat, spice level and serving size.',
+                    'Food allergies and cross-contact concerns, confirmed directly with staff.',
+                    'Current service hours, menu, prices and dietary options.',
+                    'A realistic walking and arrival plan if you are dining inside the Fort.'
+                ]
+            ],
+            [
+                'id' => 'rooftop-dining',
+                'heading' => 'Ask about the hotel’s current rooftop dining options',
+                'paragraphs' => [
+                    'Garh Jaisal’s Kitchen is the hotel’s rooftop dining destination, but this guide does not assert that any particular regional dish, dietary accommodation, service time or price is currently available. Ask the team what is being served on your date, which options fit your preferences, and whether a table can be arranged for your requested time.',
+                    'If you are staying inside Jaisalmer Fort, consider the practical sequence of arrival, walking through the lanes and dining. The hotel’s [directions page](direction.php) explains the arrival context. Leave time to reach the property and confirm directions in advance if you are unfamiliar with the Fort.',
+                    'For current menu details or rooftop-dining questions, use the contact form. An enquiry is not a table reservation, and the hotel must confirm the actual arrangements directly.'
+                ],
+                'items' => [
+                    'Ask for the current menu and prices before relying on an item mentioned in a travel article.',
+                    'Confirm the preferred date, number of guests, service time and dietary questions.',
+                    'Ask directly whether your requested table can be accommodated.'
+                ]
+            ]
+        ],
+        'sources' => [
+            ['label' => 'Incredible India — Discover Jaisalmer’s Culinary Kaleidoscope', 'url' => 'https://www.incredibleindia.gov.in/en/rajasthan/jaisalmer/discover-jaisalmers-culinary-kaleidoscope', 'note' => 'Official overview of named snacks, dishes and drinks; not a current restaurant menu.'],
+            ['label' => 'Rajasthan Tourism — Jaisalmer destination guide', 'url' => 'https://www.tourism.rajasthan.gov.in/jaisalmer.html', 'note' => 'Official destination context for planning a visit.']
+        ],
+        'related' => [
+            ['href' => 'roof.php', 'label' => 'Dining', 'title' => 'Explore rooftop dining', 'text' => 'Check the current menu and practical details with the hotel.'],
+            ['href' => 'jaisalmer-2-day-itinerary.php', 'label' => 'Itinerary', 'title' => 'Jaisalmer in 2 Days', 'text' => 'Plan time for food and heritage without overloading the day.'],
+            ['href' => 'catalogue.php', 'label' => 'Plan together', 'title' => 'Build your Jaisalmer trip', 'text' => 'Shortlist the current room and experience categories.']
+        ],
+        'cta_title' => 'Ask what is on the menu for your visit',
+        'cta_text' => 'Confirm current dishes, prices, service arrangements and dietary questions directly with the team.',
+        'cta_primary_label' => 'Explore rooftop dining',
+        'cta_primary_href' => 'roof.php',
+        'cta_secondary_label' => 'Ask about dining',
+        'cta_secondary_href' => 'contact.php?topic=dining'
+    ],
+    'jaisalmer-beyond-the-fort-guide' => [
+        'slug' => 'jaisalmer-beyond-the-fort-guide',
+        'title' => 'Beyond Jaisalmer Fort | Lake, Cenotaphs & Day-Trip Ideas',
+        'description' => 'Plan beyond Jaisalmer Fort with ideas for Gadisar Lake, Bada Bagh and wider desert heritage, while confirming access and transport for your date.',
+        'h1' => 'Beyond Jaisalmer Fort: Places to Explore Around the Golden City',
+        'eyebrow' => 'Places and itinerary guide',
+        'lede' => 'The living Fort is a natural focus in Jaisalmer, but the wider destination offers other ways to understand the city and its landscape. Use these place ideas to decide what matters to you, then confirm current access, travel time and transport before arranging a day around them.',
+        'hero_image' => 'img/v2/fort-from-roof.jpg',
+        'hero_alt' => 'Jaisalmer Fort seen from a rooftop across the golden city',
+        'date_published' => '2026-10-15',
+        'date_modified' => '2026-10-15',
+        'date_display' => '15 October 2026',
+        'toc' => [
+            ['id' => 'choose-your-outing', 'label' => 'Choose by interest'],
+            ['id' => 'gadisar-lake', 'label' => 'Gadisar Lake'],
+            ['id' => 'bada-bagh', 'label' => 'Bada Bagh'],
+            ['id' => 'desert-and-villages', 'label' => 'Desert and heritage landscapes'],
+            ['id' => 'build-a-realistic-day', 'label' => 'Build a realistic day'],
+            ['id' => 'confirm-before-going', 'label' => 'Confirm before departure']
+        ],
+        'sections' => [
+            [
+                'id' => 'choose-your-outing',
+                'heading' => 'Choose an outing by the kind of experience you want',
+                'paragraphs' => [
+                    'A trip beyond the Fort can be about a waterside pause, historic architecture, the landscape around the city or a broader route through desert country. These are different outings, and it is rarely helpful to treat them as one short excursion without checking the route. Begin with the places that interest you most, then confirm arrangements for the time you have.',
+                    'Official destination guidance presents Jaisalmer as more than its Fort, with heritage sites, lakes and desert landscapes in the wider region. Individual places have their own access arrangements and visitor rules. A location on a tourism list does not guarantee that the route is suitable for every traveller or open on every date.',
+                    'Keep the Fort visit separate unless you have checked distances and travel time between stops. Cars cannot enter every part of the Fort, and the final walk is an important part of arriving at a Fort-side hotel. A transfer between outlying sights and the city needs its own confirmation.'
+                ],
+                'items' => [
+                    'Water and city views: consider Gadisar Lake.',
+                    'Historic landscape and cenotaph architecture: consider Bada Bagh.',
+                    'Wider desert heritage or nature: confirm the exact site, route and permissions before leaving the city.'
+                ]
+            ],
+            [
+                'id' => 'gadisar-lake',
+                'heading' => 'Gadisar Lake: a different perspective on the city',
+                'paragraphs' => [
+                    'Gadisar Lake is part of Jaisalmer’s historical landscape and is recognised in official destination material as a traditional water source for the city. Its setting brings water, stone structures, gateways and views together in a way that contrasts with the sandstone lanes of the Fort.',
+                    'Take time to look at the relationship between the lake and its built surroundings rather than assuming the visit must revolve around a single activity. Local rules and visitor activities can vary. Check current access before planning around a boat ride or a particular view.',
+                    'The lake may fit as a separate stop before or after a Fort-focused visit, but the best order depends on your start point and transport. Ask for the route and timing to be checked for the day instead of relying on a generic itinerary or an old photograph.'
+                ]
+            ],
+            [
+                'id' => 'bada-bagh',
+                'heading' => 'Bada Bagh: cenotaphs and the desert horizon',
+                'paragraphs' => [
+                    'Bada Bagh is known for its sandstone cenotaphs, often called chhatris. The structures and open setting offer another way to notice the relationship between architecture, memory and the surrounding landscape. It is a different experience from walking through busy Fort lanes, so consider whether you want time for close observation or to combine the stop with other places beyond the city.',
+                    'Light changes the appearance of sandstone, and photographs can make a place seem quieter or more accessible than it will be in person. Confirm current visitor access, charges, rules, transport and the time needed for the journey. Do not assume a sunset visit is permitted or practical on a given date without checking.',
+                    'Follow signs and instructions, avoid climbing on structures, and be respectful of places with cultural or memorial significance. Keep the route flexible if conditions, traffic or access differ from what you expected.'
+                ]
+            ],
+            [
+                'id' => 'desert-and-villages',
+                'heading' => 'Look beyond the city carefully',
+                'paragraphs' => [
+                    'The wider Jaisalmer region includes desert landscapes and heritage sites that need more planning than a short city stop. Places such as Kuldhara or the region’s protected desert landscape may interest travellers who have more time. Current access, route, visitor rules and any need for an authorised operator must be checked using current official information.',
+                    'Do not treat every desert attraction as interchangeable. A heritage settlement, a protected natural area and a commercial desert camp have different purposes and rules. Wildlife sightings, landscape conditions, permissions and activity availability cannot be guaranteed. Never enter restricted areas or approach animals for a photograph.',
+                    'If an outing includes a third-party activity, ask who operates it and what is included. Confirm vehicle type, pickup point, travel time, price, permissions and relevant safety information before agreeing. This page does not certify outside providers or imply that the hotel operates each destination experience.'
+                ]
+            ],
+            [
+                'id' => 'build-a-realistic-day',
+                'heading' => 'Build a realistic route instead of collecting stops',
+                'paragraphs' => [
+                    'Begin by noting how much usable time you have after arrival and before departure. Select one or two priorities, then ask for a route that fits the actual locations. Distances on a map do not include every delay, access restriction, waiting period or time spent at a site.',
+                    'A [two-day itinerary](jaisalmer-2-day-itinerary.php) can help you plan the Fort and city without trying to include every possible outing. For a longer visit, compare the [three-day itinerary](jaisalmer-3-day-itinerary.php) and decide which extra stop deserves a dedicated part of the day. These articles are planning aids, not confirmed schedules or fixed packages.',
+                    'If you need a vehicle, give the hotel your date, start point, destinations, number of travellers and relevant mobility needs. Ask for the actual route, expected duration, vehicle and price to be confirmed before relying on the plan.'
+                ]
+            ],
+            [
+                'id' => 'confirm-before-going',
+                'heading' => 'What to confirm before you leave',
+                'paragraphs' => [
+                    'Check current entry rules and access from an official or on-site source. Ask whether there are restrictions, whether photography is allowed, and whether the proposed route can be completed with the transport you have arranged. Keep a backup option rather than tying the entire day to one stop.',
+                    'For a route involving Gadisar Lake or Bada Bagh, you can send the hotel an enquiry with your dates and preferred stops. The team can confirm what arrangements are possible at that time. This is not a promise that every site can be combined, a guide is available, or a specific vehicle can be supplied.',
+                    'Finish the plan with a realistic return window, especially if you have a separate meal, onward train or room check-in. Confirm details that affect your own journey directly rather than assuming an older blog post is current.'
+                ],
+                'items' => [
+                    'Exact stops and order of travel.',
+                    'Current access, fees, opening arrangements and photography rules.',
+                    'Transport, guide language, journey duration and confirmed cost.',
+                    'Return plan and a flexible alternative if access or conditions change.'
+                ]
+            ]
+        ],
+        'sources' => [
+            ['label' => 'Incredible India — Jaisalmer destination guide', 'url' => 'https://www.incredibleindia.gov.in/en/rajasthan/jaisalmer', 'note' => 'Official overview of the Fort, lakes, heritage and wider desert destination.'],
+            ['label' => 'Incredible India — Bada Bagh', 'url' => 'https://www.incredibleindia.gov.in/en/rajasthan/jaisalmer/bada-bagh', 'note' => 'Official background on the cenotaphs and visitor information.'],
+            ['label' => 'Incredible India — A journey through Jaisalmer’s religious spots', 'url' => 'https://www.incredibleindia.gov.in/en/rajasthan/jaisalmer/a-journey-through-its-religious-spots', 'note' => 'Official context for historic places around Gadisar Lake.']
+        ],
+        'related' => [
+            ['href' => 'jaisalmer-3-day-itinerary.php', 'label' => 'Itinerary', 'title' => 'Jaisalmer in 3 Days', 'text' => 'Consider where an extra outing can fit without rushing.'],
+            ['href' => 'car-tours.php', 'label' => 'Transport', 'title' => 'Explore sightseeing arrangements', 'text' => 'Confirm route, vehicle and price for your date.'],
+            ['href' => 'jaisalmer-fort-guide.php', 'label' => 'Fort guide', 'title' => 'Explore Jaisalmer Fort', 'text' => 'Start with the city’s central heritage setting.']
+        ],
+        'cta_title' => 'Choose your stops, then confirm the route',
+        'cta_text' => 'Share your travel date and preferred places so current access, transport and possible arrangements can be checked.',
+        'cta_primary_label' => 'Explore sightseeing options',
+        'cta_primary_href' => 'car-tours.php',
+        'cta_secondary_label' => 'Ask about places beyond the Fort',
+        'cta_secondary_href' => 'contact.php?topic=lake-cenotaph-photo'
+    ],
+    'jaisalmer-markets-and-crafts-guide' => [
+        'slug' => 'jaisalmer-markets-and-crafts-guide',
+        'title' => 'Jaisalmer Markets & Crafts Guide | Shopping with Care',
+        'description' => 'Explore Jaisalmer’s bazaars, textiles, embroidery, leatherwork and jewellery, with practical questions for thoughtful shopping and provenance.',
+        'h1' => 'Jaisalmer Markets and Crafts: What to Look For',
+        'eyebrow' => 'Markets, crafts and culture guide',
+        'lede' => 'The bazaars are another way to experience Jaisalmer’s living culture. Textiles, embroidery, jewellery, leather goods and decorative objects offer plenty to notice, even when you are not shopping. Use this guide to explore thoughtfully and avoid assuming that every item has a verified origin or material.',
+        'hero_image' => 'img/v2/fort-from-roof.jpg',
+        'hero_alt' => 'Historic Jaisalmer rooftops overlooking the old city',
+        'date_published' => '2026-10-15',
+        'date_modified' => '2026-10-15',
+        'date_display' => '15 October 2026',
+        'toc' => [
+            ['id' => 'markets-as-culture', 'label' => 'Markets as part of the city'],
+            ['id' => 'textiles-and-embroidery', 'label' => 'Textiles and embroidery'],
+            ['id' => 'leatherwork-and-jewellery', 'label' => 'Leatherwork and jewellery'],
+            ['id' => 'ask-about-provenance', 'label' => 'Ask about provenance'],
+            ['id' => 'shop-thoughtfully', 'label' => 'Shop thoughtfully'],
+            ['id' => 'fit-shopping-into-a-trip', 'label' => 'Fit shopping into your trip']
+        ],
+        'sections' => [
+            [
+                'id' => 'markets-as-culture',
+                'heading' => 'Markets are part of Jaisalmer’s living culture',
+                'paragraphs' => [
+                    'Jaisalmer’s bazaars connect visitors with the city’s trading history and its current craft culture. Official tourism guidance highlights markets including Sadar Bazaar, Bhatia Bazaar, Sonaron Ka Bas and Pansari Bazaar, with different kinds of goods described in each area. The mix of shops changes over time, so treat those names as starting points, not a guarantee that a particular seller or product will be present.',
+                    'A market walk can be enjoyable even if you do not plan to buy anything. Observe colour, pattern, materials and how objects are displayed. If you are interested in how a craft is made, ask politely whether the seller can explain the process. Do not photograph a person, workshop or item in a private setting without permission.',
+                    'Bazaars can be busy and lanes may be narrow. Keep valuables secure, make room for pedestrians and residents, and leave extra time if shopping is combined with a heritage visit. Confirm a meeting point or pickup location before wandering into a crowded area.'
+                ]
+            ],
+            [
+                'id' => 'textiles-and-embroidery',
+                'heading' => 'Textiles, prints and embroidery',
+                'paragraphs' => [
+                    'Official Jaisalmer shopping guidance points to colourful textiles, mirror work, applique, tie-and-dye and block-printed patterns among products visitors may encounter. You may see these techniques on scarves, dupattas, clothing, cushion covers, bags and home furnishings. Look at the stitching, pattern alignment, backing and finishing, not only the overall colour.',
+                    'Two objects that look similar can differ in how they were made, where the materials came from and how much work went into them. Ask whether a design is handmade, machine-embroidered, printed or assembled from several processes. The seller’s answer helps you understand the item, but a verbal description is not independent certification. Ask for a written description or other evidence if origin or method matters to you.',
+                    'Consider how you will carry and use the item. Fabric size, colour transfer, washing requirements, weight and delicate embellishments can affect whether a purchase is practical. Ask about care instructions and packaging rather than assuming an item is ready for a long journey.'
+                ],
+                'items' => [
+                    'Mirror work and decorative embroidery.',
+                    'Tie-and-dye, block prints and applique patterns.',
+                    'Scarves, dupattas, bags and home textiles.',
+                    'Ask about care instructions, materials and how the piece was produced.'
+                ]
+            ],
+            [
+                'id' => 'leatherwork-and-jewellery',
+                'heading' => 'Leather goods, jewellery and decorative objects',
+                'paragraphs' => [
+                    'Official tourism guidance describes leather goods and embroidered juttis, as well as jewellery and other decorative products in the city’s bazaars. If you are interested in footwear, bags or accessories, inspect stitching, seams, fastening and finish. Ask what material is used and whether there are care instructions. Do not assume that appearance proves a product’s source or composition.',
+                    'Jewellery needs its own questions. Ask what metal or stone is being sold, how purity or authenticity is represented, whether weight and making charges are itemised, and what documentation accompanies the purchase. Claims about gold, silver, gemstones or antiquity should not be accepted solely because a piece looks distinctive. For higher-value items, compare shops and consider independent verification before spending.',
+                    'A small decorative object can still carry a story about the person who made it. If a shopkeeper explains a technique or motif, ask whether that information can be recorded so you can remember it. Enjoy the variety without turning a souvenir into an unsupported claim about age, rarity or artisan provenance.'
+                ]
+            ],
+            [
+                'id' => 'ask-about-provenance',
+                'heading' => 'Ask clear questions about origin and materials',
+                'paragraphs' => [
+                    'Words such as traditional, antique, handmade, natural and locally made can mean different things in different shops. If a claim matters to your decision, ask for specifics: who made the item, where it was made, what materials are used, and what can be documented. A tourism article can describe regional craft traditions, but it cannot authenticate an individual product in a market.',
+                    'Use particular care with fossil stones, old-looking objects and items presented as rare. Ask about legality, source and documentation before purchasing anything that may be a natural specimen or protected material. Do not buy an object if you are uncertain whether taking it across borders or through airport security is permitted.',
+                    'Agree the final total, accepted payment method, packaging and return or exchange terms before purchasing. Shops have their own policies, and a general travel article does not establish that a particular seller offers refunds, certificates or shipping.'
+                ],
+                'items' => [
+                    'What is the material, and how can it be identified?',
+                    'Where was the item made, and what evidence supports that description?',
+                    'Is a receipt or written item description available?',
+                    'What are the final price, payment terms and return conditions?'
+                ]
+            ],
+            [
+                'id' => 'shop-thoughtfully',
+                'heading' => 'Shop thoughtfully and respect the people behind the craft',
+                'paragraphs' => [
+                    'Price comparison is useful, but a purchase is not only about finding the lowest number. Compare similar materials and quality, ask what is included, and give yourself time to decide. If an item is fragile or handmade, ask how it should be packed and transported. Avoid pressure to purchase quickly when you do not understand the product or its terms.',
+                    'Treat vendors as people going about their work, not as props for holiday photographs. Ask before taking portraits, respect a request not to photograph, and do not obstruct a stall while composing a picture. If you learn something valuable from a maker or seller, you can show appreciation without feeling obliged to buy an item.',
+                    'A thoughtful souvenir can preserve a memory without needing a dramatic claim attached to it. Record the shop name, material and story you were told, but distinguish what the seller explained from what you have independently verified.'
+                ]
+            ],
+            [
+                'id' => 'fit-shopping-into-a-trip',
+                'heading' => 'Fit a market walk into a realistic itinerary',
+                'paragraphs' => [
+                    'Shopping can be paired with a Fort and heritage visit, but the best sequence depends on your interests, walking pace, current site access and transport. The [Jaisalmer Fort guide](jaisalmer-fort-guide.php) gives the setting; the [two-day itinerary](jaisalmer-2-day-itinerary.php) offers a starting point for distributing experiences without assuming every stop is guaranteed.',
+                    'If you want help planning a route that combines markets and havelis, ask whether a heritage or city walk can be arranged for your date. Confirm the proposed stops, guide language, route length, access restrictions, transport and price before deciding. A page describing a walking idea is not proof that a guide or itinerary is available.',
+                    'Keep purchases manageable until you know how you will carry them. If you leave Jaisalmer the same day, allow a buffer for collecting items, packing them and reaching onward transport. Current traffic, access and shop opening arrangements should be checked close to travel.'
+                ]
+            ]
+        ],
+        'sources' => [
+            ['label' => 'Incredible India — Enter Jaisalmer’s Treasure-Filled Markets', 'url' => 'https://www.incredibleindia.gov.in/en/rajasthan/jaisalmer/enter-jaisalmers-treasure-filled-markets', 'note' => 'Official overview of bazaar areas, textiles, embroidery, jewellery and other goods.'],
+            ['label' => 'Incredible India — Jaisalmer destination guide', 'url' => 'https://www.incredibleindia.gov.in/en/rajasthan/jaisalmer', 'note' => 'Official destination context for local crafts and cultural traditions.'],
+            ['label' => 'Incredible India — Salim Singh Ki Haveli', 'url' => 'https://www.incredibleindia.gov.in/en/rajasthan/jaisalmer/salim-singh-ki-haveli', 'note' => 'Official background on nearby old-city markets and craft sellers.']
+        ],
+        'related' => [
+            ['href' => 'jaisalmer-havelis-guide.php', 'label' => 'Architecture', 'title' => 'Explore Jaisalmer’s havelis', 'text' => 'Learn what to notice on a heritage walk.'],
+            ['href' => 'jaisalmer-2-day-itinerary.php', 'label' => 'Itinerary', 'title' => 'Jaisalmer in 2 Days', 'text' => 'Leave space for both the Fort and bazaar lanes.'],
+            ['href' => 'catalogue.php', 'label' => 'Plan together', 'title' => 'Build your Jaisalmer trip', 'text' => 'Shortlist current stay and tour categories.']
+        ],
+        'cta_title' => 'Plan a thoughtful walk through the old city',
+        'cta_text' => 'Ask about the current feasibility of a market and heritage route, with stops and guide arrangements confirmed before you go.',
+        'cta_primary_label' => 'Explore city tour options',
+        'cta_primary_href' => 'car-tours.php',
+        'cta_secondary_label' => 'Ask about a heritage route',
+        'cta_secondary_href' => 'contact.php?topic=heritage-havelis'
+    ]
 ];
