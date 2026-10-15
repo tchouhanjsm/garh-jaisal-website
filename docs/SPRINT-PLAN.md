@@ -36,7 +36,9 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 25 | Source-backed Jaisalmer travel-guide cluster | ✓ PR #74 merged; all four post-merge CI workflows passed on `241cddea9d02e4d29acb82941937797320f767ba` |
 | 26 | Shared editorial renderer consolidation | ✓ PR #75 merged; PR-head Site Checks, package, Staging QA and Browser E2E passed |
 | 27 | Contextual editorial enquiry handoff | ✓ PR #76 merged at `24c9d68d7b834d780d20e3fe83a2926afa1b239a`; post-merge Site Checks, package preflight, Staging QA dry run and Browser E2E passed |
-| 28 | Four source-backed Jaisalmer Journal guides | ◐ Batch 1 adds havelis/architecture, regional food, beyond-the-Fort places and markets/crafts; shared renderer, contextual enquiry handoffs, explicit sitemap and browser regression coverage |
+| 28 | Four source-backed Jaisalmer Journal guides | ✓ PR #77 merged at `471636e1f074b8983bb46cd4f614ed335147f7fd`; Site Checks, package preflight and Staging QA passed; post-merge Browser E2E still running at this snapshot |
+| 29 | Structured-data fidelity for Rooms, Contact and Directions | ◐ Combined into PR #78 with exact frozen-baseline exception and registry-backed HotelRoom parity |
+| 30 | Shared breadcrumb/schema parity across high-intent hubs and Journal guides | ◐ Combined into PR #78: reuse one breadcrumb data array for Rooms, Packages, Blog, Contact, Directions and the shared editorial renderer; add visible breadcrumbs to Rooms and Packages |
 
 ---
 
@@ -483,3 +485,25 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - Journal cards, canonical and BlogPosting output, three related links, contact handoffs and route-specific WhatsApp copy are verified by Browser E2E.
 - The sitemap allowlist, generated sitemap and frozen head baseline exclusions are updated consistently. PHP/site checks, package preflight, non-deploying Staging QA and Browser E2E must all pass on the exact PR head, with a screenshot/page-sheet artifact available for owner review.
 - Owner remains responsible for merge and any live staging/production deployment.
+
+
+## Sprint 29 — Batch 1: structured-data fidelity
+
+**Commercial and technical goal:** make existing on-page information easier for search engines to associate with the correct page and room without inventing offer or operational details.
+
+- Use one shared helper to derive BreadcrumbList nodes from the exact visible breadcrumb items. Add visible breadcrumbs plus matching WebPage/ContactPage references on Contact and Directions.
+- Add HotelRoom entities for the current room cards using `include/rooms-data.php`. Each node must match the card's visible name, description, image, and feature list, and be referenced from the Rooms WebPage's `mainEntity`.
+- Preserve canonical URLs, both GA4 IDs, all live public URLs, and the frozen SEO baseline. A focused Playwright test validates the new structured data and its parity with visible content; refresh the Directions sitemap lastmod without changing sitemap membership.
+- Acceptance: PHP 7.4/8.2 Site Checks, sitemap checks (unchanged route list), package preflight, non-deploying Staging QA and Browser E2E/page-sheet must all pass on the exact PR head. No external staging or production deployment in this PR.
+
+
+## Sprint 30 — Batch 1: shared breadcrumb parity (combined into PR #78)
+
+**Commercial and engineering goal:** keep the guest's navigation trail visible on high-intent landing pages and make its structured-data representation come from the same reviewed data as the UI.
+
+- Reuse the shared gj_schema_breadcrumb_list() helper in Rooms, Packages, Blog and the shared Journal renderer; eliminate their hand-maintained duplicate BreadcrumbList arrays.
+- Add visible Home → Rooms and Home → Packages breadcrumbs using the existing shared UI partial. Contact and Directions already use this same pattern.
+- Normalize Blog's schema breadcrumb label to the visible label "Blog". The editorial renderer derives both visible and JSON-LD labels/URLs from a single $breadcrumbs array.
+- Expand Playwright parity coverage across Contact, Directions, Rooms, Packages, Blog and a representative shared-renderer article.
+- Do not add or change public routes, canonical URLs, booking destinations, analytics IDs, rates, availability, review claims or operational facts. Keep the pre-refactor fixture immutable and exclude only the exact newly introduced Sprint 29 node IDs already covered by dedicated assertions.
+- Acceptance: PHP 7.4/8.2 and strict site checks, sitemap/package/Staging QA gates, browser E2E and 390px/1280px screenshot sheet all pass on the exact updated PR head. Staging QA remains non-deploying; owner retains merge/deploy authority.

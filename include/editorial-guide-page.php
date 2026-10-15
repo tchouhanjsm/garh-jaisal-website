@@ -42,6 +42,13 @@ $escapeGuide = static function ($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 };
 $guideBreadcrumbLabel = (string) ($guide['breadcrumb_label'] ?? $guide['h1']);
+$breadcrumbs = [
+    ['label' => 'Home', 'href' => '/'],
+    ['label' => 'Journal', 'href' => '/blog.php'],
+    ['label' => $guideBreadcrumbLabel],
+];
+require_once __DIR__ . '/schema.php';
+$breadcrumbSchema = gj_schema_breadcrumb_list($siteUrl, '/' . $guide['slug'] . '.php', $breadcrumbs);
 $resolveGuideHref = static function ($value) use ($siteConfig) {
     if ((string) $value === '@booking') return (string) ($siteConfig['booking_url'] ?? '#');
     return (string) $value;
@@ -99,15 +106,7 @@ $schemaGraph = [
         'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
         'inLanguage' => 'en-IN',
     ],
-    [
-        '@type' => 'BreadcrumbList',
-        '@id' => $canonical . '#breadcrumb',
-        'itemListElement' => [
-            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $siteUrl . '/'],
-            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Journal', 'item' => $siteUrl . '/blog.php'],
-            ['@type' => 'ListItem', 'position' => 3, 'name' => $guideBreadcrumbLabel, 'item' => $canonical],
-        ],
-    ],
+    $breadcrumbSchema,
 ];
 $isDraft = ($guide['status'] ?? 'live') !== 'live';
 if ($isDraft) {
@@ -140,14 +139,7 @@ require __DIR__ . '/page-head.php';
 <main class="article-page<?= (!array_key_exists('story_style', $guide) || !empty($guide['story_style'])) ? ' thar-sunset-story thar-sunset-story--journal' : '' ?>" id="main-content" tabindex="-1">
   <header class="article-hero" data-story-reveal>
     <div class="site-shell article-hero-inner">
-      <?php
-      $breadcrumbs = [
-          ['label' => 'Home', 'href' => '/'],
-          ['label' => 'Journal', 'href' => '/blog.php'],
-          ['label' => $guideBreadcrumbLabel],
-      ];
-      require __DIR__ . '/ui/breadcrumb.php';
-      ?>
+      <?php require __DIR__ . '/ui/breadcrumb.php'; ?>
       <p class="eyebrow"><?= $escapeGuide($guide['eyebrow']) ?></p>
       <div class="article-meta">
         <span>Published <?= $escapeGuide($guide['date_display']) ?></span>

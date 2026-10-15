@@ -9,6 +9,12 @@ $canonical = $siteUrl . '/blog.php';
 <!doctype html>
 <html lang="en">
 <?php
+require_once __DIR__ . '/include/schema.php';
+$breadcrumbs = [
+    ['label' => 'Home', 'href' => '/'],
+    ['label' => 'Blog'],
+];
+$breadcrumbSchema = gj_schema_breadcrumb_list($siteUrl, '/blog.php', $breadcrumbs);
 $page = [
     'title' => $pageTitle,
     'description' => $pageDescription,
@@ -32,14 +38,7 @@ $page = [
             'about' => ['@id' => $siteUrl . '/#hotel'],
             'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
         ],
-        [
-            '@type' => 'BreadcrumbList',
-            '@id' => $canonical . '#breadcrumb',
-            'itemListElement' => [
-                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $siteUrl . '/'],
-                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Journal', 'item' => $canonical],
-            ],
-        ],
+        $breadcrumbSchema,
     ],
 ];
 require __DIR__ . '/include/page-head.php';
@@ -49,13 +48,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="article-page thar-sunset-story thar-sunset-story--journal" id="main-content" tabindex="-1">
   <section class="article-hero">
     <div class="site-shell article-hero-inner">
-      <?php
-      $breadcrumbs = [
-          ['label' => 'Home', 'href' => '/'],
-          ['label' => 'Blog'],
-      ];
-      require __DIR__ . '/include/ui/breadcrumb.php';
-      ?>
+      <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>
       <p class="eyebrow">Blog</p>
       <h1>Travel guides for Jaisalmer’s Fort, food and desert.</h1>
       <p class="lede">Explore the living Fort, carved havelis, regional food, old-city markets and the landscapes beyond the city. Use these guides to plan your interests, then confirm date-sensitive access, menus and arrangements directly.</p>

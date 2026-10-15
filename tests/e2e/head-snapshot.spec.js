@@ -89,6 +89,22 @@ async function captureHead(page, route) {
       if (ignoreSharedRootsForBaseline && sharedRootIds.has(value['@id'])) {
         return;
       }
+      // These exact Sprint 29 nodes did not exist in the frozen pre-refactor
+      // fixture. Their visible/schema parity is asserted in schema-fidelity.spec.js.
+      // Keep this allowlist ID-specific: unrelated JSON-LD changes must still fail.
+      const sprint29SchemaNodeIds = new Set([
+        siteBase + 'contact.php#breadcrumb',
+        siteBase + 'direction.php#breadcrumb',
+        siteBase + 'direction.php#webpage',
+      ]);
+      if (sprint29SchemaNodeIds.has(value['@id'])) {
+        return;
+      }
+      // HotelRoom nodes on /room.php are intentionally tested against the
+      // live room registry in schema-fidelity.spec.js, not the frozen baseline.
+      if (route === '/room.php' && value['@type'] === 'HotelRoom') {
+        return;
+      }
       if (value['@type']) {
         const values = Array.isArray(value['@type']) ? value['@type'] : [value['@type']];
         values.forEach(type => jsonLdTypes.push(String(type)));

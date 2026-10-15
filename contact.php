@@ -150,6 +150,12 @@ $canonical = 'https://www.hotelgarhjaisal.com/contact.php';
 <?php
 $schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $schemaPageUrl = $schemaSiteUrl . '/contact.php';
+require_once __DIR__ . '/include/schema.php';
+$breadcrumbs = [
+    ['label' => 'Home', 'href' => '/'],
+    ['label' => 'Contact'],
+];
+$breadcrumbSchema = gj_schema_breadcrumb_list($schemaSiteUrl, '/contact.php', $breadcrumbs);
 $page = [
     'title' => $pageTitle,
     'description' => $pageDescription,
@@ -164,7 +170,11 @@ $page = [
     'schema' => [
         [
             '@type' => 'ContactPage',
+            '@id' => $schemaPageUrl . '#webpage',
             'name' => 'Contact Hotel Garh Jaisal Haveli',
+            'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
+            'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
+            'breadcrumb' => ['@id' => $schemaPageUrl . '#breadcrumb'],
             'url' => $schemaPageUrl,
             'mainEntity' => [
                 '@type' => 'Hotel',
@@ -181,6 +191,7 @@ $page = [
                 ],
             ],
         ],
+        $breadcrumbSchema,
     ],
 ];
 require __DIR__ . '/include/page-head.php';
@@ -191,6 +202,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="contact-page" id="main-content" tabindex="-1">
   <section class="page-hero contact-hero">
     <div class="site-shell page-hero-inner">
+      <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>
       <p class="eyebrow">Plan your stay</p>
       <h1>Contact Garh Jaisal Haveli in Jaisalmer Fort.</h1>
       <p class="contact-lead">Write or call Hotel Garh Jaisal Haveli. Ask about rooms, arrival, rooftop dining, or desert and city experiences arranged by the hotel.</p>
