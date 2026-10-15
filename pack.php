@@ -90,7 +90,7 @@ require __DIR__ . '/include/page-head.php';
         that fits the time you have in Jaisalmer.
       </p>
       <div class="actions">
-        <a class="button button-primary" href="contact.php">Ask about availability</a>
+        <a class="button button-primary" href="#experience-categories">Explore tour categories</a>
         <a class="button button-light" href="catalogue.php">Build your trip</a>
       </div>
     </div>

@@ -96,6 +96,10 @@ $page = [
     ],
 ];
 $page['schema'][] = gj_schema_faq($faqItems, $canonical);
+?>
+<!doctype html>
+<html lang="en">
+<?php
 require __DIR__ . '/include/page-head.php';
 ?>
 <body>

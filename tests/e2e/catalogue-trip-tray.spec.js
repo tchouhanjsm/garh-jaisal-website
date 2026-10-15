@@ -18,7 +18,9 @@ test('catalogue renders the reviewed product choices without unapproved prices',
     await expect(image).toHaveAttribute('alt', /\S+/);
   }
   await expect(cards.locator('[data-trip-add]')).toHaveCount(9);
-  await expect(cards).toContainText('Current price on request');
+  for (const card of await cards.all()) {
+    await expect(card).toContainText('Current price on request');
+  }
   await expect(page.locator('#camp-compare-title')).toHaveText('Open sky or a Swiss tent?');
   await expect(page.locator('#transport-compare-title')).toHaveText('Choose the journey you need.');
   await expect(page.locator('main')).not.toContainText('₹');
