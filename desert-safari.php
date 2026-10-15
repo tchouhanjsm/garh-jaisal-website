@@ -110,7 +110,6 @@ require __DIR__ . '/include/page-head.php';
               unset($tripItem, $tripButtonClass);
               ?>
             </div>
-            </a>
           </article>
         <?php endforeach; ?>
       </div>
