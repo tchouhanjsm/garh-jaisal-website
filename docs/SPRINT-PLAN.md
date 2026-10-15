@@ -492,5 +492,5 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 
 - Use one shared helper to derive BreadcrumbList nodes from the exact visible breadcrumb items. Add visible breadcrumbs plus matching WebPage/ContactPage references on Contact and Directions.
 - Add HotelRoom entities for the current room cards using `include/rooms-data.php`. Each node must match the card's visible name, description, image, and feature list, and be referenced from the Rooms WebPage's `mainEntity`.
-- Preserve canonical URLs, both GA4 IDs, all live public URLs, and the frozen SEO baseline. A focused Playwright test validates the new structured data and its parity with visible content.
+- Preserve canonical URLs, both GA4 IDs, all live public URLs, and the frozen SEO baseline. A focused Playwright test validates the new structured data and its parity with visible content; refresh the Directions sitemap lastmod without changing sitemap membership.
 - Acceptance: PHP 7.4/8.2 Site Checks, sitemap checks (unchanged route list), package preflight, non-deploying Staging QA and Browser E2E/page-sheet must all pass on the exact PR head. No external staging or production deployment in this PR.
