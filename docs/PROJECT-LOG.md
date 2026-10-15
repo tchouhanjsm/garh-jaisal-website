@@ -16,7 +16,9 @@
 | Image review evidence | [PR #72 responsive image review](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215503/artifacts/11954773684) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Open PRs at batch baseline | None at verification |
-| Staging evidence | [PR #72 non-deploying QA report and screenshots](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215504/artifacts/11954712619); external staging target was not supplied, so real-host QA is still owner-side. |\n| Merge-commit evidence | The retrieved PR-triggered run query did not return merge-SHA workflows; inspect main-push Actions runs before claiming post-merge CI verification. |\n| Next action | Review the Sprint 24 PR head and responsive artifacts; real staging and production release remain owner-controlled. |
+| Staging evidence | [PR #72 non-deploying QA report and screenshots](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215504/artifacts/11954712619); external staging target was not supplied, so real-host QA is still owner-side. |
+| Merge-commit evidence | The retrieved PR-triggered run query did not return merge-SHA workflows; inspect main-push Actions runs before claiming post-merge CI verification. |
+| Next action | Review the Sprint 24 PR head and responsive artifacts; real staging and production release remain owner-controlled. |
 
 ## Phase roadmap
 
