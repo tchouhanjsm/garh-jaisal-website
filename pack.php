@@ -206,6 +206,66 @@ require __DIR__ . '/include/page-head.php';
   </section>
 
 
+
+  <section class="section package-guide-section" id="planning-guides" aria-labelledby="planning-guides-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Plan before you enquire</p>
+          <h2 id="planning-guides-title">Use a guide to shape your Jaisalmer visit.</h2>
+        </div>
+        <p>These practical guides help you compare the Fort, desert and short-stay options. Confirm travel-date details with the hotel before relying on timings, routes or inclusions.</p>
+      </div>
+
+      <div class="experience-card-grid package-guide-grid">
+        <article class="experience-card">
+          <a href="jaisalmer-fort-guide.php">
+            <img src="img/v2/fort-from-roof.jpg" <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?> alt="Jaisalmer Fort viewed from a rooftop in the fort" loading="lazy" decoding="async">
+            <div>
+              <p class="experience-card-kicker">Fort &amp; arrival</p>
+              <h3>Explore Jaisalmer Fort</h3>
+              <p>Understand the living Fort, the final walk from Fort Parking, and ways to combine heritage sightseeing with your stay.</p>
+              <span>Read the Fort guide →</span>
+            </div>
+          </a>
+        </article>
+        <article class="experience-card">
+          <a href="desert-safari-guide.php">
+            <img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg') ?> alt="Sand dunes in the Thar Desert near Jaisalmer" loading="lazy" decoding="async">
+            <div>
+              <p class="experience-card-kicker">Desert choices</p>
+              <h3>Compare desert experiences</h3>
+              <p>Compare same-evening and overnight options, then confirm the route and package inclusions for your travel date.</p>
+              <span>Compare desert options →</span>
+            </div>
+          </a>
+        </article>
+        <article class="experience-card">
+          <a href="jaisalmer-2-day-itinerary.php">
+            <img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Historic sandstone architecture inside Jaisalmer Fort" loading="lazy" decoding="async">
+            <div>
+              <p class="experience-card-kicker">Short-stay planning</p>
+              <h3>Plan two days in Jaisalmer</h3>
+              <p>Use a flexible outline for Fort time, guided sightseeing, rooftop dining and a desert experience.</p>
+              <span>Read the 2-day itinerary →</span>
+            </div>
+          </a>
+        </article>
+      </div>
+
+      <aside class="package-guide-service" aria-labelledby="package-guide-service-title">
+        <div class="package-guide-service-copy">
+          <p class="eyebrow">Need a vehicle?</p>
+          <h3 id="package-guide-service-title">Ask about SUV and sedan arrangements.</h3>
+          <p>Share your travel date, route, pickup point, travellers and luggage so the hotel can confirm vehicle availability and a current quote.</p>
+        </div>
+        <div class="actions">
+          <a class="button button-primary" href="car-rental.php">Explore car arrangements</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
   <section class="section site-faq packages-faq" aria-labelledby="packages-faq-title">
     <div class="site-shell">
       <div class="section-head">
