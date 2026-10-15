@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-15 |
-| Current phase | Sprints 29–30 — structured-data fidelity and reusable breadcrumb parity (combined Batch 1 in PR #78 review) |
+| Current phase | Sprint 31 — desert experience photo galleries (PR #80 in review) |
 | Base branch | `main` |
-| Baseline commit | `471636e1f074b8983bb46cd4f614ed335147f7fd` (PR #77 merge commit) |
-| Last merged PR | [#77 — Four source-backed Journal guides](https://github.com/tchouhanjsm/garh-jaisal-website/pull/77) |
+| Baseline commit | `472a8be4bb288003195c8d4195f2b3fd2046942c` (PR #79 merge commit) |
+| Last merged PR | [#79 — Desert camp and stargazing photo assets](https://github.com/tchouhanjsm/garh-jaisal-website/pull/79) |
 | PR #75 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714317109); [package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714317141); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714316979); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714317044) |
 | PR #75 merge-SHA checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710861); [package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710636); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710691); [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710939) was still running at this snapshot |
 | Production URL | https://www.hotelgarhjaisal.com |
 | PR #76 merge-SHA checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718084075); [package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718083937); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718083928); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718084012); [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718084012/artifacts/11964531596) |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Next action | Verify the corrected frozen-head snapshot and exact-head Browser E2E/page-sheet for the combined Sprints 29–30 batch; owner review/merge/deploy remains required. |
+| Next action | Finish exact-head Browser E2E/page-sheet for PR #80; owner reviews the photo subjects/captions and 390px/1280px pages before merging. Owner retains merge/deploy authority. |
 
 ## Phase roadmap
 
@@ -277,3 +277,11 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Browser coverage checks label, URL path, order and page-entity reference parity across Contact, Directions, Rooms, Packages, Blog and a representative shared-renderer guide, plus room card/schema parity and the no-invented-offers guard.
 - The Directions sitemap lastmod is refreshed; route inventory, canonical URLs, booking destinations, GA4 IDs and live content remain unchanged. No new dependencies, real enquiry workflow, external staging upload, merge or production deployment.
 - **Release gate:** all CI workflows must pass on the new exact PR head and the responsive page-sheet artifact must be reviewed. The prior failure is diagnosed, not yet considered resolved until that new run finishes.
+
+
+## Sprint 31 — desert experience photo galleries (PR #80 in review)
+
+- Baseline: PR #79 merge commit `472a8be4bb288003195c8d4195f2b3fd2046942c`; PR #80 integrates 9 Sleep Under the Stars photos, expands Swiss Tent Safari to 11 photos, and updates the main Desert Gallery to 20 curated images.
+- Adds regression coverage for local gallery assets, alt text, captions and main-Gallery references; the initial sitemap failure was fixed by refreshing `gallery.php` lastmod to `2026-10-15`.
+- On fix commit `14cee1f18fc27a21c8eb803ed26fd79fc494d7c6`, PHP 7.4/8.2 Site Checks, responsive-image review, package preflight and non-deploying Staging QA passed; Browser E2E/page-sheet was still running at log update time.
+- Owner review remains: inspect gallery subjects/captions at 390px and 1280px. No external cPanel staging or production deployment occurred.
