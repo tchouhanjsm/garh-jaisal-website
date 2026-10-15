@@ -32,7 +32,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 21 | SEO content cluster and Packages conversion | ◐ Batch 1 merged in PR #69; Batch 2 adds a distinct 3-day itinerary and honeymoon guide, reciprocal links and sitemap coverage |
 | 22 | Guest policies and trust pages | Blocked on owner-approved privacy, terms and cancellation/refund wording; keep unpublished/noindex until confirmed |
 | 23 | Unified catalogue, comparison ladders and session-only Trip tray | ✓ PR #72 merged; exact PR-head PHP/site checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |
-| 24 | Thar Sunset visual storytelling across high-intent journeys | ◐ Current implementation PR; exact-head gates and responsive screenshot review required before owner approval |
+| 24 | Thar Sunset visual storytelling across high-intent journeys | ✓ PR #73 merged; post-merge Site Checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |
+| 25 | Source-backed Jaisalmer travel-guide cluster | ◐ PR in review; three guides use a shared data-driven renderer, approved imagery, official sources and sitemap/browser contracts |
 
 ---
 
@@ -422,21 +423,30 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - Trip selection remains a shortlist only. WhatsApp opens an editable draft; the site does not log a server lead, capture contact details in Trip storage, send an enquiry, make a reservation or confirm availability.
 - Exact PR-head PHP 7.4/8.2, strict site/sitemap, package preflight, non-deploying Staging QA and Browser E2E/screenshot gates passed. See the [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215503), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215516), [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215504) and [Browser E2E/page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215501). Staging QA was a local dry run; there is no deployment authorization.
 
-## Sprint 24 — Batch 1: Thar Sunset visual storytelling (PR in review)
+## Sprint 24 — Batch 1: Thar Sunset visual storytelling (PR #73 merged)
 
-**Commercial goal:** make the hotel’s highest-intent browsing journeys feel like one distinctive, editorial Thar Sunset experience, while keeping trusted facts, enquiry and booking actions prominent.
+**Commercial goal:** make high-intent guest journeys feel like one distinctive Thar Sunset experience while keeping trusted facts and booking actions prominent.
 
-- Add a single reusable stylesheet scoped to Home, Rooms, Packages, Trip Planner, rooftop dining, Blog and the shared experience template. Reuse the existing approved Thar Sunset design tokens and current photo mappings.
-- Apply dusk-led overlays to current hero photography, architectural arch crops to existing rooftop/editorial images, consistent gold keylines and restrained reveal-on-entry motion.
-- Make reveal effects progressive enhancement: never hide content by default; leave it readable without JavaScript or IntersectionObserver, and suppress animation when reduced motion is requested.
-- Keep all page copy, prices, schema/canonicals, public URLs, external booking links and token, both GA4 IDs and catalogue facts unchanged. Do not add fonts, images or libraries.
-- Acceptance: full Browser E2E contract for Home, Rooms, Packages, Trip Planner, rooftop dining, Blog and a shared experience page; no overflow at 320/390/768/1280/1440px; primary action hit-area checks; reduced-motion and reveal behavior; exact-head PHP 7.4/8.2, strict site/image, sitemap, package preflight, Staging QA dry run and responsive screenshot evidence.
+- PR #73 merged to `main` at `943cc325980b06b65ac7e629fb405eb9c612e4ea`. A shared token-aware stylesheet now covers Home, Rooms, Packages, Trip Planner, rooftop dining, Blog and the shared experience template.
+- Existing approved images and current palette tokens are reused. Dusk-led hero overlays, arch framing and subtle viewport reveals retain content visibility without JavaScript/IntersectionObserver and honour reduced-motion preferences.
+- Booking URLs/tokens, public routes, metadata/schema facts, copy, both GA4 IDs and operational claims stayed unchanged.
+- Post-merge Site Checks, package preflight, non-deploying Staging QA and Browser E2E passed. The screenshot sheet is [available here](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069260/artifacts/11958400378); the Staging QA run was a local dry run, not live cPanel validation.
 
-### Remaining sequence after Sprint 24
+## Sprint 25 — Batch 1: source-backed Jaisalmer travel-guide cluster (PR in review)
 
-1. **Restaurant R1 — real table-request workflow (P0, owner-dependent):** still blocked on approved operating days/hours, last seating, same-day cut-off, closures, real capacity/max party size, notification recipient and handler, privacy/retention wording, mail configuration and the approved guest acknowledgement/contact flow. Do not ship slot availability, live submission or a server lead store until those facts are confirmed. Requests must never auto-confirm.
-2. **V6/V7 — trust proof and transport calculator:** use dated, sourced reviews and owner-approved partner/safety facts; transport estimates require confirmed routes, rate model and assumptions.
-3. **R2–R4 — Night Kitchen:** only after R1 is reliable and owner approves the restaurant identity/story, current menu and prices; do not invent hours or table availability.
-4. **V8–V10 / growth:** editorial house cards only with approval; prioritise local/AI-search work and performance/schema changes only from measured evidence.
+**Commercial goal:** expand useful non-brand discovery, answer real pre-trip questions and connect readers to the hotel’s existing direct enquiry pathways without inventing operational facts.
+
+- Publish three distinct guides: **Best Time to Visit Jaisalmer**, **How to Reach Jaisalmer and Arrive Inside the Fort**, and **What to Pack for a Jaisalmer Desert Safari**.
+- Use one shared editorial data file and PHP renderer instead of copying three article head blocks. The renderer emits the established BlogPosting, WebPage and BreadcrumbList schema, uses the shared page head, and escapes all copy with a narrowly allowlisted internal-link syntax.
+- Reuse only existing approved assets. Add the three cards to Blog, add three routes to the explicit sitemap allowlist, exclude their new metadata from the frozen historical head fixture while retaining rendered SEO and content checks, and add the exact sitemap route-count/content assertions.
+- Source seasonal, travel access and packing guidance from official Rajasthan Tourism/RTDC references. Schedule and weather statements remain broad/caveated; current timetables and date-specific arrangements must be confirmed directly.
+- Acceptance: PHP 7.4/8.2 lint, strict site/image/publication gates, sitemap freshness, cPanel package preflight, non-deploying Staging QA, full Browser E2E across the sitemap, route/canonical/schema assertions and responsive page-sheet evidence.
+
+### Remaining sequence after Sprint 25
+
+1. **Restaurant R1 — real table-request workflow (P0, owner-dependent):** still blocked on approved operating days/hours, last seating, same-day cut-off, closures, capacity/max party size, notification recipient/handler, approved privacy/retention wording, mail configuration and acknowledgement/contact flow. Do not enable slot availability or live submission until the owner approves those facts. Requests must never auto-confirm.
+2. **V6/V7 — trust proof and transport calculator:** use dated, sourced reviews and owner-approved operator/safety facts; estimates require confirmed routes, rate model and assumptions.
+3. **R2–R4 — Night Kitchen:** after R1 works reliably and the owner approves the restaurant identity, current menu and prices; no invented hours or availability.
+4. **V8–V10 / growth:** first-party editorial placements only with owner approval; improve local/AI search and performance/schema from measured evidence, not assumptions.
 
 Owner-blocked items remain explicit: no fabricated prices, hours, capacity, reviews, policy terms, licensed-partner details or font assets.

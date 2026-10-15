@@ -33,6 +33,8 @@ $addUnique = static function (&$list, $message) {
 
 $experienceRendererSource = $readFile($root . '/include/experience-page.php');
 $rendererUsesSharedHead = strpos($experienceRendererSource, 'page-head.php') !== false;
+$editorialGuideRendererSource = $readFile($root . '/include/editorial-guide-page.php');
+$editorialGuideRendererUsesSharedHead = strpos($editorialGuideRendererSource, 'page-head.php') !== false;
 
 // 1. Basic SEO tags. Pages using the shared renderer are validated through
 // their configuration contract and rendered-browser regression tests.
@@ -40,7 +42,8 @@ foreach ($public as $file) {
     $name = basename($file);
     $source = $readFile($file);
     $usesExperienceRenderer = strpos($source, 'experience-page.php') !== false && $rendererUsesSharedHead;
-    $usesSharedHead = strpos($source, 'include/page-head.php') !== false || $usesExperienceRenderer;
+    $usesEditorialGuideRenderer = strpos($source, 'editorial-guide-page.php') !== false && $editorialGuideRendererUsesSharedHead;
+    $usesSharedHead = strpos($source, 'include/page-head.php') !== false || $usesExperienceRenderer || $usesEditorialGuideRenderer;
     $missing = [];
 
     if (!$usesSharedHead) {
@@ -60,7 +63,7 @@ foreach ($public as $file) {
         }
     }
 
-    if (!$usesExperienceRenderer) {
+    if (!$usesExperienceRenderer && !$usesEditorialGuideRenderer) {
         $h1Count = preg_match_all('/<h1\b/i', $source);
         if ($h1Count !== false && $h1Count > 1) {
             $addUnique($warnings, $name . ': multiple literal H1 elements found');
@@ -70,14 +73,17 @@ foreach ($public as $file) {
     }
 }
 
-// All public pages must now use the shared page-head renderer directly or
-// inherit it from include/experience-page.php. Rendered output is tested in CI.
+// All public pages must use the shared page-head renderer directly or inherit
+// it from one of the approved data-driven page renderers. Rendered output is tested in CI.
 $requireSharedPageHead = true;
 foreach ($public as $file) {
     $name = basename($file);
     $source = $readFile($file);
     $usesSharedHead = strpos($source, 'include/page-head.php') !== false;
     if (!$usesSharedHead && strpos($source, 'experience-page.php') !== false && $rendererUsesSharedHead) {
+        $usesSharedHead = true;
+    }
+    if (!$usesSharedHead && strpos($source, 'editorial-guide-page.php') !== false && $editorialGuideRendererUsesSharedHead) {
         $usesSharedHead = true;
     }
 

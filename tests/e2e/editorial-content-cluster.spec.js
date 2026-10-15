@@ -54,4 +54,67 @@ test.describe('Sprint 21 editorial intent cluster', () => {
     await page.goto('/jaisalmer-2-day-itinerary.php', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('a[href="jaisalmer-3-day-itinerary.php"]')).toBeVisible();
   });
+
+  test('new seasonal, arrival and packing guides are discoverable from the Journal', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-1280', 'Journal discovery is checked once.');
+    await page.goto('/blog.php', { waitUntil: 'domcontentloaded' });
+    const grid = page.locator('.blog-grid');
+    const expectedCards = [
+      ['best-time-to-visit-jaisalmer.php', 'Best Time to Visit Jaisalmer'],
+      ['how-to-reach-jaisalmer.php', 'How to Reach Jaisalmer'],
+      ['jaisalmer-desert-safari-packing-list.php', 'What to Pack for a Desert Safari'],
+    ];
+    for (const [href, title] of expectedCards) {
+      const card = grid.locator('a[href="' + href + '"]');
+      await expect(card, href + ': visible archive card').toBeVisible();
+      await expect(card.locator('img'), href + ': existing approved photo with alt text').toHaveAttribute('alt', /\S+/);
+      await expect(card).toContainText(title);
+    }
+  });
+
+  test('new editorial guides share metadata, official references and contextual next steps', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-1280', 'Guide content and metadata are checked once.');
+    test.setTimeout(90_000);
+    const guides = [
+      {
+        route: '/best-time-to-visit-jaisalmer.php',
+        title: 'Best Time to Visit Jaisalmer: Choose a Season for Your Trip',
+        section: '#cooler-months',
+        expected: 'October through March',
+      },
+      {
+        route: '/how-to-reach-jaisalmer.php',
+        title: 'How to Reach Jaisalmer and Arrive Inside the Fort',
+        section: '#fort-arrival',
+        expected: 'cars cannot enter the lanes inside Jaisalmer Fort',
+      },
+      {
+        route: '/jaisalmer-desert-safari-packing-list.php',
+        title: 'What to Pack for a Jaisalmer Desert Safari',
+        section: '#overnight',
+        expected: 'king-size bed',
+      },
+    ];
+
+    for (const guide of guides) {
+      const response = await page.goto(guide.route, { waitUntil: 'domcontentloaded' });
+      expect(response, guide.route + ': expected an HTTP response').not.toBeNull();
+      expect(response.status(), guide.route + ': route should be public').toBeLessThan(400);
+      await expect(page.locator('main h1')).toHaveText(guide.title);
+      await expect(page.locator('main.thar-sunset-story--journal')).toHaveCount(1);
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.hotelgarhjaisal.com' + guide.route);
+      await expect(page.locator(guide.section)).toContainText(guide.expected);
+      await expect(page.locator('#official-sources a')).not.toHaveCount(0);
+      await expect(page.locator('.article-next-card')).toHaveCount(3);
+      await expect(page.locator('.article-footer-cta a.button-primary')).toBeVisible();
+      await expect(page.locator('.article-content')).not.toContainText(/\[[^\]]+\]\(/);
+
+      const outbound = page.locator('#official-sources a[target="_blank"]');
+      expect(await outbound.count(), guide.route + ': external source links exist').toBeGreaterThan(0);
+      for (const link of await outbound.all()) {
+        await expect(link).toHaveAttribute('rel', /noopener/);
+      }
+    }
+  });
+
 });
