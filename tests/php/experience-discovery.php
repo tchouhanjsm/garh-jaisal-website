@@ -20,7 +20,7 @@ foreach ($required as $path => $ids) {
         $errors[] = $path . ': missing contextual link to the unified Trip shortlist';
     }
     if ($path === 'desert-safari.php') {
-        if (strpos($source, "foreach ($items as $slug)") === false || strpos($source, "'id' => $slug") === false || strpos($source, "'url' => $slug . '.php'") === false) {
+        if (strpos($source, 'foreach ($items as $slug)') === false || strpos($source, "'id' => $slug") === false || strpos($source, "'url' => $slug . '.php'") === false) {
             $errors[] = 'desert-safari.php: shared experience loop must generate each shortlist item from the published slug';
         }
     } else {
