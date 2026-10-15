@@ -35,7 +35,7 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 24 | Thar Sunset visual storytelling across high-intent journeys | ✓ PR #73 merged; post-merge Site Checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |
 | 25 | Source-backed Jaisalmer travel-guide cluster | ✓ PR #74 merged; all four post-merge CI workflows passed on `241cddea9d02e4d29acb82941937797320f767ba` |
 | 26 | Shared editorial renderer consolidation | ✓ PR #75 merged; PR-head Site Checks, package, Staging QA and Browser E2E passed |
-| 27 | Contextual editorial enquiry handoff | ◐ Batch 1 connects eight editorial guides to topic-specific contact drafts and WhatsApp messages with privacy-safe intent measurement |
+| 27 | Contextual editorial enquiry handoff | ✓ PR #76 merged at `24c9d68d7b834d780d20e3fe83a2926afa1b239a`; post-merge Site Checks, package preflight, Staging QA dry run and Browser E2E passed |\n| 28 | Four source-backed Jaisalmer Journal guides | ◐ Batch 1 adds havelis/architecture, regional food, beyond-the-Fort places and markets/crafts; shared renderer, contextual enquiry handoffs, explicit sitemap and browser regression coverage |
 
 ---
 
@@ -444,7 +444,7 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - Source seasonal, travel access and packing guidance from official Rajasthan Tourism/RTDC references. Schedule and weather statements remain broad/caveated; current timetables and date-specific arrangements must be confirmed directly.
 - Acceptance: PHP 7.4/8.2 lint, strict site/image/publication gates, sitemap freshness, cPanel package preflight, non-deploying Staging QA, full Browser E2E across the sitemap, route/canonical/schema assertions and responsive page-sheet evidence.
 
-### Remaining sequence after Sprint 27
+### Remaining sequence after Sprint 28
 
 1. **Restaurant R1 — real table-request workflow (P0, owner-dependent):** still blocked on approved operating days/hours, last seating, same-day cut-off, closures, capacity/max party size, notification recipient/handler, approved privacy/retention wording, mail configuration and acknowledgement/contact flow. Do not enable slot availability or live submission until the owner approves those facts. Requests must never auto-confirm.
 2. **V6/V7 — trust proof and transport calculator:** use dated, sourced reviews and owner-approved operator/safety facts; estimates require confirmed routes, rate model and assumptions.
@@ -474,3 +474,11 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - GA4 keeps its existing event names and destinations. Only an allowlisted topic yields the coarse `travel_planning` context; names, email, message text and arbitrary query parameters are never sent.
 - Browser E2E verifies contact prefill, WhatsApp context, existing arrival behavior and exactly-once `enquiry_start` classification on the PR head.
 - R1 remains owner-blocked. No live slots, auto-confirmation, unapproved hours, rates, reviews or package facts are introduced. Real cPanel staging and production remain owner-controlled.
+
+
+### Sprint 28 acceptance gates
+
+- Four new guide routes use the shared renderer and carry official tourism sources; no fabricated restaurant menu, fee, opening time, guide, transport price, availability or operator credential is published.
+- Journal cards, canonical and BlogPosting output, three related links, contact handoffs and route-specific WhatsApp copy are verified by Browser E2E.
+- The sitemap allowlist, generated sitemap and frozen head baseline exclusions are updated consistently. PHP/site checks, package preflight, non-deploying Staging QA and Browser E2E must all pass on the exact PR head, with a screenshot/page-sheet artifact available for owner review.
+- Owner remains responsible for merge and any live staging/production deployment.
