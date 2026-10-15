@@ -274,4 +274,4 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Add shared, allowlisted breadcrumb JSON-LD from the same `$breadcrumbs` array used by the visible Contact and Directions breadcrumb partial. Preserve existing route/canonical URLs.
 - Emit `HotelRoom` entities from the visible `rooms-data.php` source of truth: room name, description, image, listed features and an ID matching the room card anchor. Connect the Rooms WebPage's `mainEntity` to those nodes.
 - Do not add prices, offers, availability, ratings, reviews, occupancy or facilities that are not explicitly in the registry. Keep the frozen head snapshot stable by separately testing this new room schema.
-- E2E verifies breadcrumb parity and visible-card/schema parity. No sitemap changes, new dependencies, real enquiries, staging upload, merge or production deployment.
+- E2E verifies breadcrumb parity and visible-card/schema parity. Sitemap route inventory remains unchanged; `direction.php` lastmod is refreshed to match its updated source. No new dependencies, real enquiries, staging upload, merge or production deployment.
