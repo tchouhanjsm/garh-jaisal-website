@@ -38,7 +38,9 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 27 | Contextual editorial enquiry handoff | ✓ PR #76 merged at `24c9d68d7b834d780d20e3fe83a2926afa1b239a`; post-merge Site Checks, package preflight, Staging QA dry run and Browser E2E passed |
 | 28 | Four source-backed Jaisalmer Journal guides | ✓ PR #77 merged at `471636e1f074b8983bb46cd4f614ed335147f7fd`; Site Checks, package preflight and Staging QA passed; post-merge Browser E2E still running at this snapshot |
 | 29 | Structured-data fidelity for Rooms, Contact and Directions | ◐ Combined into PR #78 with exact frozen-baseline exception and registry-backed HotelRoom parity |
-| 30 | Shared breadcrumb/schema parity across high-intent hubs and Journal guides | ◐ Combined into PR #78: reuse one breadcrumb data array for Rooms, Packages, Blog, Contact, Directions and the shared editorial renderer; add visible breadcrumbs to Rooms and Packages |
+| 30 | Shared breadcrumb/schema parity across high-intent hubs and Journal guides | ✓ merged in PR #78; breadcrumb/JSON-LD parity regression coverage passed |
+| 31 | Desert experience photo galleries | ✓ merged in PR #80; exact-head Site Checks, package preflight, Staging QA dry run, Browser E2E and responsive page sheet passed; owner visual review remains |
+| 32 | High-intent package discovery and guest-choice clarity | ◐ current batch: improve catalogue/category cross-links and user-reviewed enquiry path with source-backed regression coverage; preserve session-only Trip tray; no live booking/lead logging |
 
 ---
 
@@ -509,14 +511,27 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - Acceptance: PHP 7.4/8.2 and strict site checks, sitemap/package/Staging QA gates, browser E2E and 390px/1280px screenshot sheet all pass on the exact updated PR head. Staging QA remains non-deploying; owner retains merge/deploy authority.
 
 
-## Sprint 31 — desert experience photo galleries (PR #80 in review)
+## Sprint 31 — desert experience photo galleries (PR #80 merged)
 
-**Commercial goal:** give guests a useful visual comparison of the open-air Sleep Under the Stars experience and the Swiss Deluxe Tent stay before they enquire.
+**Commercial goal:** make the real visual difference between the open-air Sleep Under the Stars experience and the Swiss Deluxe Tent stay easier to understand before a guest enquires.
 
-- Add a nine-photo gallery to Sleep Under the Stars; expand the Swiss Tent Safari gallery to eleven photos covering tent interior/exterior, bathroom, camp and evening programme.
-- Bring the curated images into the main Desert Gallery with descriptive alt text and keep the overnight-options CTA pointed to `camping.php`.
-- Add PHP and Playwright regression guards for gallery file existence, alt text/captions, required asset paths, rendered image order/count, no-overflow behavior and main Gallery references. Run them through the existing PHP 7.4/8.2 and Browser E2E workflows.
-- Keep the commit bounded to already curated assets; do not add the unreviewed 356 MB raw image collection, new operational claims, prices, schedules or availability.
-- Acceptance on the exact PR head: PHP 7.4/8.2 Site Checks, strict image checks, generated sitemap freshness, publication boundaries, package preflight, non-deploying Staging QA, Browser E2E and the 390px/1280px screenshot sheet must pass. The owner reviews subjects/captions and approves merge; no live cPanel or production deployment is part of this batch.
+- PR #80 merged to main at `8a1fe8ab3be1392b9cda82657a580947072075ce`.
+- Nine Sleep Under the Stars photos and eleven Swiss Tent Safari photos are integrated into the respective experience pages; curated assets also appear in the main Gallery.
+- PHP and Playwright regression coverage protects file paths, captions, alt text, required imagery, rendered gallery order/count and mobile overflow.
+- Exact-head Site Checks, package preflight, non-deploying Staging QA and Browser E2E/page sheet passed on PR head `03c20b1dbf5c5053fc1898336c612778257e9a33`. Page sheet: [390px/1280px artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38753963491/artifacts/11982838456).
+- No external cPanel staging or production deployment occurred. Owner visual review of subjects/captions remains required.
 
-**Next phase rule:** do not open the next implementation PR until PR #80 is owner-merged. Restaurant R1 remains blocked on owner-approved operating hours, last seating, closures/capacity, notification handling, privacy/retention wording and mail configuration. Select the next unblocked high-value slice after the owner review rather than inventing these inputs.
+## Sprint 32 — high-intent package discovery and guest-choice clarity (current batch)
+
+**Commercial goal:** help guests move between package categories, the useful detail pages and a clear enquiry next step without inventing prices/availability or creating a booking promise.
+
+- Build on `include/experience-data.php`, `include/catalogue-data.php`, `include/rooms-data.php`, `include/ui/product-card.php` and the shared experience renderer rather than maintaining duplicate product details.
+- Improve the catalogue and package discovery paths, with concise comparison cues from registry-backed details and contextual links between the catalogue and relevant tour hubs. Preserve current public URLs, canonical metadata, both GA4 IDs and the session-only Trip tray.
+- The Trip tray stores only selected product IDs/titles/URLs in tab-scoped session storage and opens a user-editable WhatsApp draft; do not add server lead storage, contact details, form submission or availability confirmation.
+- Add/update Playwright plus PHP/source regression guards for card counts and links, current price-on-request messaging, no unsupported commercial claims, safe Trip data boundaries and responsive overflow.
+- Acceptance: PHP 7.4/8.2 Site Checks (including `php scripts/check-site.php --strict-images` and `php scripts/generate-sitemap.php --check`), publication/SEO checks, package preflight, non-deploying Staging QA and Browser E2E with the 390px/1280px page sheet all pass on the exact PR head.
+- Do not start Restaurant R1, a lead log, transport-price calculator or review proof until their owner-fact, privacy, rate-model and sourcing dependencies are approved.
+
+## Next unblocked direction
+
+After Sprint 32, review owner-approved content and data quality across high-intent room/desert/tour choices, then prioritise an evidence-led performance or accessibility slice based on measured CI inventories. Restaurant R1, privacy/cancellation publication, paid transport estimates and third-party proof remain explicitly blocked on owner input. Do not bundle these independent blocked projects into Sprint 32.
