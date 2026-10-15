@@ -26,7 +26,16 @@ test('every room card preserves the primary booking and secondary selected-room 
     const booking = card.locator('a.room-book');
     await expect(booking, name + ': primary availability action').toBeVisible();
     await expect(booking).toHaveText('Check availability');
-    await expect(booking).toHaveAttribute('href', BOOKING_URL);
+    const bookingHref = await booking.getAttribute('href');
+    expect(bookingHref, name + ': booking token and original serialization are preserved')
+      .toContain(BOOKING_URL);
+    const bookingUrl = new URL(bookingHref);
+    expect(bookingUrl.origin + bookingUrl.pathname).toBe('https://asiatech.in/booking_engine/index3');
+    expect(bookingUrl.searchParams.get('token')).toBe('NjA2Ng==');
+    expect(bookingUrl.searchParams.get('utm_source')).toBe('hotel_website');
+    expect(bookingUrl.searchParams.get('utm_medium')).toBe('website');
+    expect(bookingUrl.searchParams.get('utm_campaign')).toBe('direct_booking');
+    expect(bookingUrl.searchParams.get('utm_content')).toBe('room');
     await expect(booking).toHaveAttribute('target', '_blank');
     await expect(booking).toHaveAttribute('rel', /noopener/);
 

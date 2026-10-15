@@ -103,17 +103,25 @@ test('skip link is the first tab stop and transfers focus to main content', asyn
   await expect(page.locator('main#main-content')).toBeFocused();
 });
 
-test('desktop submenu Escape closes the panel and restores focus to its toggle', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Desktop submenu keyboard behavior is checked once');
+test('compact navigation Escape closes the submenu and restores focus to its toggle', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Compact navigation keyboard behavior is checked once');
   await page.goto('/');
+  const navToggle = page.locator('.nav-toggle');
+  const nav = page.locator('#main-nav');
+  await navToggle.click();
+  await expect(nav).toBeVisible();
+
   const item = page.locator('[data-nav-item]').first();
   const toggle = item.locator('.nav-sub-toggle');
-  await toggle.focus();
+  await toggle.click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+  await expect(item.locator('.nav-sub')).toBeVisible();
+
   await page.keyboard.press('Escape');
   await expect(toggle).toBeFocused();
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await expect(item.locator('.nav-sub')).toBeHidden();
+  await expect(nav, 'Escape should close the submenu before closing the overall compact menu').toBeVisible();
 });
 
 test('shared design tokens and primitives are defined with responsive and reduced-motion guards', async ({ page }, testInfo) => {

@@ -214,3 +214,6 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Added the owner-approved Thar Sunset tokens, saffron primary actions, 13px eyebrows and 44px controls; added compact navigation through 1366px without collapsing the rest of the page layout.
 - Added allowlisted outbound booking UTMs and page-topic WhatsApp defaults; existing messages, the booking token and both GA4 IDs remain unchanged, and arbitrary query parameters are not forwarded.
 - PR #71 is in review; exact-head CI/logs, screenshots and responsive visual review are gates. No staging-host test, live GA4 receipt, merge or deployment is claimed.
+
+
+- PR #71 CI fix follow-up: the first Browser E2E run exposed a 42px inherited mobile toggle size, booking token serialization changing when UTMs were appended through the URL serializer, and an Escape-key expectation that predated the compact 1081–1366px navigation. The fix restores a 44px mobile hit area, appends only encoded UTM fields to the original URL string so the token representation is preserved, updates the room-booking regression to verify both token preservation and attribution, and makes Escape close an open submenu before the compact menu. Recheck exact-head CI before owner review.

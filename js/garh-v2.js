@@ -111,10 +111,19 @@ document.addEventListener('DOMContentLoaded', () => {
         destination.origin === bookingDestination.origin &&
         destination.pathname === bookingDestination.pathname
       ) {
-        attributionKeys.forEach((key) => {
-          if (!destination.searchParams.has(key)) destination.searchParams.set(key, attribution[key]);
-        });
-        anchor.href = destination.toString();
+        const missingAttribution = attributionKeys
+          .filter((key) => !destination.searchParams.has(key))
+          .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(attribution[key]));
+        if (missingAttribution.length) {
+          const originalHref = anchor.getAttribute('href') || anchor.href;
+          const hashIndex = originalHref.indexOf('#');
+          const hash = hashIndex >= 0 ? originalHref.slice(hashIndex) : '';
+          const withoutHash = hashIndex >= 0 ? originalHref.slice(0, hashIndex) : originalHref;
+          const separator = !withoutHash.includes('?')
+            ? '?'
+            : (withoutHash.endsWith('?') || withoutHash.endsWith('&') ? '' : '&');
+          anchor.setAttribute('href', withoutHash + separator + missingAttribution.join('&') + hash);
+        }
         return;
       }
 
@@ -338,7 +347,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (event.key !== 'Escape') return;
 
     const compactNavigation = window.matchMedia('(max-width:1366px)').matches;
-    if (compactNavigation && nav.classList.contains('is-open')) {
+    const hasOpenSubmenu = items.some((item) => item.classList.contains('is-open'));
+    if (compactNavigation && nav.classList.contains('is-open') && !hasOpenSubmenu) {
       setMenu(false);
       button.focus();
       event.preventDefault();
