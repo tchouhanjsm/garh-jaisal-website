@@ -124,6 +124,10 @@ $page = [
     'css' => ['css/article.css', 'css/thar-sunset-story.css'],
     'schema' => $schemaGraph,
 ];
+?>
+<!doctype html>
+<html lang="en">
+<?php
 require __DIR__ . '/page-head.php';
 ?>
 <body>
