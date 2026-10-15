@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const attributionForCurrentPage = () => {
     const incoming = new URLSearchParams(window.location.search);
     const route = (window.location.pathname.split('/').filter(Boolean).pop() || 'index.php')
-      .replace(/\\.php$/i, '')
+      .replace(/\.php$/i, '')
       .toLowerCase()
       .replace(/[^a-z0-9._-]/g, '-');
     return {
