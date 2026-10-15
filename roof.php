@@ -118,6 +118,15 @@ require __DIR__ . '/include/page-head.php';
         </p>
       </div>
 
+      <div class="roof-trip-action">
+        <?php
+          $tripItem = ['id' => 'rooftop-dining', 'title' => "Rooftop dining at Garh Jaisal's Kitchen", 'url' => 'roof.php', 'group' => 'dining'];
+          $tripButtonClass = 'button button-secondary';
+          require __DIR__ . '/include/ui/trip-add-button.php';
+        ?>
+        <a class="text-link" href="catalogue.php">Combine dining with a stay or desert option →</a>
+      </div>
+
       <div class="cards">
         <article class="card">
           <div class="card-image">

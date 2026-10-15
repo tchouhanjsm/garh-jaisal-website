@@ -56,3 +56,5 @@ $footerNav = $footerNavData['footer'];
     <span>Jaisalmer, Rajasthan</span>
   </div>
 </footer>
+
+<?php require __DIR__ . '/ui/trip-tray.php'; ?>

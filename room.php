@@ -224,6 +224,16 @@ require __DIR__ . '/include/page-head.php';
               <?php endforeach; ?>
             </ul>
 
+            <?php
+              $tripItem = [
+                  'id' => 'room-' . $roomSlug,
+                  'title' => $room['name'],
+                  'url' => 'room.php#' . $roomId,
+                  'group' => 'stay',
+              ];
+              $tripButtonClass = 'button button-light';
+              require __DIR__ . '/include/ui/trip-add-button.php';
+            ?>
             <a
               class="button button-primary room-book"
               aria-label="Check availability for <?= htmlspecialchars($room['name'], ENT_QUOTES, 'UTF-8') ?>"

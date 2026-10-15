@@ -152,7 +152,14 @@ require __DIR__ . '/page-head.php';
       <p><?= htmlspecialchars($experience['summary'], ENT_QUOTES, 'UTF-8') ?></p>
       <div class="actions">
         <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
-        <a class="button button-light" href="pack.php">View all experiences</a>
+<?php if ($isIndexableExperience && ($experience['duration_type'] ?? 'hub') !== 'hub'): ?>
+        <?php
+        $tripItem = ['id' => $experience['slug'], 'title' => $experience['h1'], 'url' => $experience['slug'] . '.php'];
+        $tripButtonClass = 'button button-light';
+        require __DIR__ . '/ui/trip-add-button.php';
+        ?>
+<?php endif; ?>
+        <a class="button button-light" href="catalogue.php">Build your trip</a>
       </div>
     </div>
   </section>

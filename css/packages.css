@@ -523,3 +523,17 @@
     width:100%;
   }
 }
+
+
+/* Sprint 23 — trip-selection action follows each existing experience card link. */
+.experience-card > .trip-add-button{
+  align-self:flex-start;
+  margin:0 20px 20px;
+  max-width:calc(100% - 40px);
+}
+@media(max-width:500px){
+  .experience-card > .trip-add-button{
+    align-self:stretch;
+    width:calc(100% - 40px);
+  }
+}

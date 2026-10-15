@@ -7,16 +7,16 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-15 |
-| Current phase | Sprint 22 — Thar Sunset identity and conversion foundation (Batch 1) |
+| Current phase | Sprint 23 — unified catalogue, comparison ladders and Trip tray (Batch 1) |
 | Base branch | `main` |
-| Baseline commit | `0fc49aff876248989205227cc5d9a5c14615dc8b` (PR #70 merge commit) |
-| Last merged PR | [#70 — high-intent Jaisalmer editorial guides](https://github.com/tchouhanjsm/garh-jaisal-website/pull/70) |
-| PR #70 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38678578129); [cPanel package PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38678578119); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38678578112); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38678578154) |
-| Screenshot evidence | [PR #70 responsive page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38678578154/artifacts/11946962345) |
+| Baseline commit | `55b5a205a2b80a20f4298950ec2e7a50e8d1782a` (PR #71 merge commit) |
+| Last merged PR | [#71 — Thar Sunset identity and conversion foundation](https://github.com/tchouhanjsm/garh-jaisal-website/pull/71) |
+| PR #71 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38689334426); [cPanel package PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38689334387); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38689334439); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38689334417) |
+| Screenshot evidence | [PR #71 responsive page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38689334417/artifacts/11951107957) |
 | Image review evidence | [Responsive WebP candidates](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38423513526/artifacts/11828260774) — review-only, not enabled for runtime |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Open PRs at batch baseline | None at verification |
-| Next action | Review the Sprint 22 Batch 1 identity/conversion foundation on its exact PR head; owner retains merge, staging and production authority. |
+| Next action | Review Sprint 23 Batch 1 catalogue and Trip tray on its exact PR head; owner retains merge, staging and production authority. |
 
 ## Phase roadmap
 
@@ -208,12 +208,21 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Extend sitemap coverage and add Browser E2E for discovery, metadata/route coverage, reciprocal links and CTA markup. Initial PR #70 Browser E2E exposed duplicate global-link selectors, a stale 26-route assertion and the frozen legacy head baseline's assumption that no new content routes exist. The selectors are now scoped to article sections and the article footer (including a second pass for a shared car-rental link and shared primary CTA), the sitemap contract tracks 28 URLs, new pages remain covered by rendered SEO/content tests, and the frozen baseline now filters only those post-baseline routes. The Blog head fixture records its intentional metadata update. Re-run the exact head before merge; no production deploy or ranking guarantee is implied.
 
 
-## Sprint 22 Batch 1 — Thar Sunset identity and conversion foundation (PR #71)
+## Sprint 22 Batch 1 — Thar Sunset identity and conversion foundation (PR #71 merged)
 
 - Baseline: PR #70 merged to `main` at `0fc49aff876248989205227cc5d9a5c14615dc8b`; PR #70 exact-head gates and screenshot evidence are recorded in the Snapshot.
 - Added the owner-approved Thar Sunset tokens, saffron primary actions, 13px eyebrows and 44px controls; added compact navigation through 1366px without collapsing the rest of the page layout.
 - Added allowlisted outbound booking UTMs and page-topic WhatsApp defaults; existing messages, the booking token and both GA4 IDs remain unchanged, and arbitrary query parameters are not forwarded.
-- PR #71 is in review; exact-head CI/logs, screenshots and responsive visual review are gates. No staging-host test, live GA4 receipt, merge or deployment is claimed.
+- PR #71 merged to `main` at `55b5a205a2b80a20f4298950ec2e7a50e8d1782a`; exact-head checks passed, including 394 Browser E2E tests with no retries. Staging was a non-deploying dry run; live GA4 receipt and production deployment remain owner-side.
 
 
 - PR #71 CI fix follow-up: the first Browser E2E run exposed a 42px inherited mobile toggle size, booking token serialization changing when UTMs were appended through the URL serializer, and an Escape-key expectation that predated the compact 1081–1366px navigation. The fix restores a 44px mobile hit area, appends only encoded UTM fields to the original URL string so the token representation is preserved, updates the room-booking regression to verify both token preservation and attribution, and makes Escape close an open submenu before the compact menu. Recheck exact-head CI before owner review.
+
+
+## Sprint 23 Batch 1 — unified catalogue, comparisons and Trip tray (PR in review)
+
+- Baseline: PR #71 merged to `main` at `55b5a205a2b80a20f4298950ec2e7a50e8d1782a`; merged-head evidence is in the Snapshot.
+- Added `catalogue.php` and a central reviewed list that resolves existing live experience and room content rather than copying operational facts. Prices remain on request; no guest reviews, availability or margin assumptions were added.
+- Added a session-only Trip shortlist across catalogue, room, package/experience, transport and rooftop dining paths. It stores selections only in the current tab and opens an editable WhatsApp draft; there is no server-side lead log and no personal details are collected by the tray.
+- Added the catalogue to sitemap/SEO coverage and Browser E2E tests for route metadata, selected-item replacement, camp comparison and safe WhatsApp draft construction. Restaurant R1 remains owner-blocked on hours, slot capacity, mail handling and approved privacy/retention wording.
+- This PR is not a production deployment; owner review, exact-head CI, screenshot review, real staging and release decisions remain separate.

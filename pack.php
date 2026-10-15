@@ -91,7 +91,7 @@ require __DIR__ . '/include/page-head.php';
       </p>
       <div class="actions">
         <a class="button button-primary" href="contact.php">Ask about availability</a>
-        <a class="button button-light" href="#experience-categories">Explore tour categories</a>
+        <a class="button button-light" href="catalogue.php">Build your trip</a>
       </div>
     </div>
   </section>
@@ -145,6 +145,11 @@ require __DIR__ . '/include/page-head.php';
                 <span>View itinerary →</span>
               </div>
             </a>
+            <?php
+              $tripItem = ['id' => $slug, 'title' => $item['h1'], 'url' => $slug . '.php'];
+              $tripButtonClass = 'button button-secondary';
+              require __DIR__ . '/include/ui/trip-add-button.php';
+            ?>
           </article>
         <?php endforeach; ?>
       </div>
@@ -173,6 +178,11 @@ require __DIR__ . '/include/page-head.php';
                 <span>View itinerary →</span>
               </div>
             </a>
+            <?php
+              $tripItem = ['id' => $slug, 'title' => $item['h1'], 'url' => $slug . '.php'];
+              $tripButtonClass = 'button button-secondary';
+              require __DIR__ . '/include/ui/trip-add-button.php';
+            ?>
           </article>
         <?php endforeach; ?>
       </div>

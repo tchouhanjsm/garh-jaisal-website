@@ -27,6 +27,7 @@ $staticPages = [
     ['path' => '/', 'priority' => '1.0'],
     ['path' => '/room.php', 'priority' => '0.9'],
     ['path' => '/pack.php', 'priority' => '0.9'],
+    ['path' => '/catalogue.php', 'priority' => '0.8'],
     ['path' => '/direction.php', 'priority' => '0.9'],
     ['path' => '/roof.php', 'priority' => '0.8'],
     ['path' => '/restaurant.php', 'priority' => '0.8'],

@@ -390,7 +390,7 @@ Stop there: the owner merges.
 - Once approved wording is supplied, implement the policy pages as one trust-focused slice, update internal links/sitemap only after publication approval, and add tests that draft/approved state and exact visible copy are consistent.
 
 
-## Sprint 22 — Batch 1: Thar Sunset identity and conversion foundation (PR in review)
+## Sprint 22 — Batch 1: Thar Sunset identity and conversion foundation (PR #71 merged)
 
 **Commercial goal:** make the site more recognisable and the next booking/enquiry action easier without changing established public URLs or making new operational promises.
 
@@ -410,3 +410,22 @@ Stop there: the owner merges.
 6. **V8–V10 / R2–R4:** editorial house ads only after owner approvals; complete the restaurant’s distinct Night Kitchen visual/story/FAQ experience after R1 works reliably; performance and schema changes are budget- and source-verified.
 
 Owner-blocked items remain explicit: no fabricated prices, hours, capacity, reviews, policy terms, licensed-partner details or font assets.
+
+
+## Sprint 23 — Batch 1: unified catalogue, comparison ladders and Trip tray (PR in review)
+
+**Commercial goal:** help a guest combine a Fort stay, desert experience, guided tour, car arrangement and rooftop dining into one practical enquiry while keeping all prices and date-specific details owner-confirmed.
+
+- Add `catalogue.php` using one reviewed catalogue list that points to existing room and published experience sources. Do not duplicate source facts, publish unconfirmed “from” prices, or infer availability.
+- Standardise a premium product-card anatomy across the catalogue with an image, category/promise, duration where confirmed, current price-on-request label, Add to Trip and Ask on WhatsApp. Keep the existing booking-engine link available for room availability.
+- Add open-sky vs Swiss-tent comparison from approved experience facts; distinguish desert pickup, intercity car arrangements and Fort arrival walking guidance.
+- Add a tab-scoped Trip tray that stores selected product IDs/titles/URLs only, limits selection size, lets guests replace the generic room pick with a specific room, and prepares an editable WhatsApp message. Do not create a server-side lead log, collect guest contact details or report a completed enquiry in this slice.
+- Add sitemap, frozen-head-baseline and Browser E2E contracts. Required gates: PHP 7.4/8.2, strict-image/site checks, sitemap freshness, package preflight, non-deploying staging QA, full Browser E2E and the 390/1280 screenshot sheet, with 320/768/1440 responsive coverage. Owner reviews catalogue copy and screenshots before merge.
+
+### Remaining sequence after Sprint 23
+
+1. **Restaurant R1 — real table-request flow (P0, owner-dependent):** implement 30-minute slot generation, CSRF/honeypot/rate limit, out-of-web-root lead storage, acknowledgement email and manual confirmation only after the owner approves operating days/hours, last seating, same-day cutoff, closed dates, capacity/max party size, recipient/handler, mail settings and privacy/retention wording. Never auto-confirm requests.
+2. **V2 visual storytelling completion:** apply the dusk hero, approved arch/portrait/cinematic image crops and subtle reduced-motion-safe reveals to priority stay and experience pages; switch font delivery only after licensed WOFF2 subsets exist.
+3. **V6 trust proof and V7 transport calculator:** use only dated, sourced reviews and owner-approved partner/safety facts; transport estimates require confirmed route/rates and explicit assumptions.
+4. **R2–R4:** Night Kitchen’s distinct garnet/brass identity, “Tonight” and story sections, then FAQ/cross-sell/schema; the owner must approve the restaurant name/direction and current menu first.
+5. **V8–V10 / growth:** first-party editorial cards only with approval, then local/AI-search work and measured performance/schema budget improvements. Do not add partner ads or publish ratings until evidence is provided.
