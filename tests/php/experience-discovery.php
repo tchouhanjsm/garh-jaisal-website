@@ -31,9 +31,16 @@ foreach (['sunset-camel-safari', 'cultural-safari', 'sleep-under-the-stars', 'sw
     }
 }
 $catalogueSource = file_get_contents($root . '/catalogue.php');
+$tripScriptSource = file_get_contents($root . '/js/garh-v2.js');
 if (!is_string($catalogueSource) || strpos($catalogueSource, 'gj-trip-items-v1') !== false) {
     // Storage key belongs to JS; server-side catalogue must not persist guest selections.
     $errors[] = 'catalogue.php must not add server-side Trip storage';
+}
+if (!is_string($tripScriptSource) || strpos($tripScriptSource, "sessionStorage.getItem('gj-trip-items-v1')") === false) {
+    $errors[] = 'Trip selections must remain in tab-scoped session storage';
+}
+if (is_string($tripScriptSource) && preg_match('/localStorage|fetch\\s*\\(|XMLHttpRequest|navigator\\.sendBeacon/', $tripScriptSource)) {
+    $errors[] = 'Trip tray must not gain persistent or network-backed storage in this phase';
 }
 $card = file_get_contents($root . '/include/ui/product-card.php');
 if (!is_string($card) || strpos($card, 'Current price on request') === false || strpos($card, 'product-card-planning-note') === false) {
