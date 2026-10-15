@@ -2,8 +2,8 @@
 $activePage = 'blog';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $siteUrl = rtrim($siteConfig['site_url'], '/');
-$pageTitle = 'Jaisalmer Travel Guides | Garh Jaisal Haveli';
-$pageDescription = 'Practical Jaisalmer travel guides from Garh Jaisal Haveli, covering the Fort, arrival, desert safari options and a 2-day itinerary.';
+$pageTitle = 'Jaisalmer Travel Guides | Fort, Desert & Itineraries | Garh Jaisal Haveli';
+$pageDescription = 'Explore practical Jaisalmer travel guides for the Fort, desert safaris, 2- and 3-day itineraries, honeymoon planning and arrival at Garh Jaisal Haveli.';
 $canonical = $siteUrl . '/blog.php';
 ?>
 <!doctype html>
@@ -58,7 +58,7 @@ require __DIR__ . '/include/page-head.php';
       ?>
       <p class="eyebrow">Blog</p>
       <h1>Practical Jaisalmer travel guides.</h1>
-      <p class="lede">Notes from inside Jaisalmer Fort: how to arrive, how to explore the living fort, how to choose a desert safari and how to shape a short stay.</p>
+      <p class="lede">Plan your stay with practical guides to the living Fort, desert experiences, longer itineraries and a couples’ escape. Confirm date-sensitive details before booking.</p>
     </div>
   </section>
   <section class="section">
@@ -68,6 +68,8 @@ require __DIR__ . '/include/page-head.php';
         <article class="blog-card blog-card--featured"><a href="jaisalmer-fort-guide.php"><div class="blog-card-image"><img src="img/v2/fort-from-roof.jpg" <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?> alt="Jaisalmer Fort viewed from a rooftop" loading="lazy"></div><div class="blog-card-body"><p class="blog-card-meta">Jaisalmer Fort</p><h2>Jaisalmer Fort Guide</h2><p>Arrival, walking inside the Fort, guided sightseeing, rooms, rooftop dining and combining the Fort with the desert.</p><span class="text-link">Read the guide →</span></div></a></article>
         <article class="blog-card"><a href="desert-safari-guide.php"><div class="blog-card-image"><img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg') ?> alt="Sand dunes near Jaisalmer" loading="lazy"></div><div class="blog-card-body"><p class="blog-card-meta">Desert safari</p><h2>How to Choose a Jaisalmer Desert Safari</h2><p>Compare sunset, cultural and overnight options by time, camel ride and sleeping arrangement.</p><span class="text-link">Read the guide →</span></div></a></article>
         <article class="blog-card"><a href="jaisalmer-2-day-itinerary.php"><div class="blog-card-image"><img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Historic sandstone architecture inside Jaisalmer Fort" loading="lazy"></div><div class="blog-card-body"><p class="blog-card-meta">Itinerary</p><h2>Jaisalmer 2-Day Itinerary</h2><p>A practical plan for combining the Fort, guided sightseeing, rooftop dining and a desert experience.</p><span class="text-link">See the itinerary →</span></div></a></article>
+        <article class="blog-card"><a href="jaisalmer-3-day-itinerary.php"><div class="blog-card-image"><img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Historic sandstone architecture inside Jaisalmer Fort" loading="lazy"></div><div class="blog-card-body"><p class="blog-card-meta">Three-day itinerary</p><h2>Jaisalmer in 3 Days: Fort, Heritage &amp; Desert</h2><p>A flexible three-day plan with a Fort stay, guided heritage sightseeing and a choice of same-evening or overnight desert experience.</p><span class="text-link">Explore the 3-day plan →</span></div></a></article>
+        <article class="blog-card"><a href="jaisalmer-honeymoon-guide.php"><div class="blog-card-image"><img src="img/v2/fort-from-roof.jpg" <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?> alt="Rooftop view across Jaisalmer Fort" loading="lazy"></div><div class="blog-card-body"><p class="blog-card-meta">Couples &amp; honeymoon</p><h2>Jaisalmer Honeymoon Guide</h2><p>Plan a heritage stay, ask about rooftop dining and choose a desert experience without assuming everything is one fixed package.</p><span class="text-link">Plan a couples’ escape →</span></div></a></article>
         <article class="blog-card"><a href="book-rooms-in-jaisalmer.php"><div class="blog-card-body"><p class="blog-card-meta">Staying inside the Fort</p><h2>Staying inside Jaisalmer Fort</h2><p>The last part of the journey is on foot, and a room, a rooftop meal and a desert night can fit together into one stay.</p><span class="text-link">Read the stay guide →</span></div></a></article>
       </div>
     </div>

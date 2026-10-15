@@ -29,7 +29,7 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 18 | Licensed Desert Gallery and Swiss Tent Safari conversion | ✓ PR #66 merged; post-merge checks passed; visual photo/caption review remains owner-side |
 | 19 | Restaurant conversion: menu booklet, maps QR and social follow | ✓ PR #67 merged; post-merge Site Checks, package preflight, staging dry run and Browser E2E passed |
 | 20 | Fort walk, car services and Directions map | ✓ PR #68 merged; exact PR-head Site Checks, package preflight, staging dry run and Browser E2E passed; real staging remains owner-gated |
-| 21 | SEO content cluster and Packages conversion | ◐ Batch 1: connect Packages to the three existing planning guides and the direct car-arrangements page; continue content/SEO review without duplicate pages |
+| 21 | SEO content cluster and Packages conversion | ◐ Batch 1 merged in PR #69; Batch 2 adds a distinct 3-day itinerary and honeymoon guide, reciprocal links and sitemap coverage |
 | 22 | Guest policies and trust pages | Blocked on owner-approved privacy, terms and cancellation/refund wording; keep unpublished/noindex until confirmed |
 
 ---
@@ -367,9 +367,20 @@ Stop there: the owner merges.
 
 - Review current `blog.php`, existing guide pages, sitemap and internal links before proposing new URLs. Map high-intent topic clusters to one best destination to avoid keyword cannibalisation.
 - Improve `pack.php` hierarchy, concise experience descriptions, landscape/cropped media and clear links to tour and car-service enquiry paths; retain only licensed/owner-provided images.
-- Build a coherent set of substantive articles from real guest planning intent: choosing among Jaisalmer desert experiences, visiting/staying inside Jaisalmer Fort, and a practical 2-day Jaisalmer plan. Prefer improving/connecting existing guides when intent already overlaps; do not mass-produce near-duplicate pages.
+- The Fort guide, desert-safari comparison, Fort-stay guide and 2-day itinerary already exist. Keep each on its best destination URL; upgrade and link those pages where intent overlaps instead of publishing a second article for the same query.
 - Each page needs a distinct search intent, helpful original content, descriptive title/meta, one H1, appropriate FAQ schema only for visible Q&A, relevant internal links and a contextual direct-contact CTA. Do not invent reviews, rankings, prices, opening hours or service guarantees.
 - Add E2E coverage for sitemap/navigation reachability, internal links, metadata uniqueness, CTA journeys and responsive image crops. Use Search Console/GA4 after release to prioritize future content by impressions, clicks and enquiry intent.
+
+## Sprint 21 Batch 2 — editorial intent cluster (implementation in review)
+
+**Commercial goal:** turn high-intent non-brand planning searches into informed room, dining and desert enquiries without fragmenting the current guide cluster.
+
+- Publish `jaisalmer-3-day-itinerary.php` for duration-specific intent and retain `jaisalmer-2-day-itinerary.php` as the two-day destination. Explain Fort, heritage and desert choices without inventing departure times, prices, external stops or availability.
+- Publish `jaisalmer-honeymoon-guide.php` as a couples-planning guide, not a fixed honeymoon package. Connect room booking, rooftop dining, guided Fort sightseeing and listed desert options; make date-dependent arrangements explicit.
+- Add both pages to `blog.php`, the explicit `scripts/generate-sitemap.php` allowlist and `sitemap.xml`. Add contextual links from the existing Fort, desert, Fort-stay and two-day guides.
+- Reuse editorial CSS, shared page-head/breadcrumb partials and approved images. Each page has one H1, unique title/description, matching HTTPS canonical, BlogPosting/WebPage/BreadcrumbList schema, descriptive image alt text and booking/contact paths.
+- Add Browser E2E for archive discovery, topic-specific content, reciprocal links and CTA markup. Required gates: PHP 7.4/8.2 lint, strict site/image checks, sitemap freshness, package preflight, non-deploying staging dry run, full Browser E2E and responsive page sheet on the exact PR head.
+- Do not claim ranking or traffic lift from publication alone. After owner review and eventual publication, use Search Console and both configured GA4 properties to measure impressions, clicks and enquiry intent. Real staging, GA4 receipt and production deployment remain owner-gated.
 
 ## Sprint 22 — Guest policies and trust pages (owner-blocked)
 
