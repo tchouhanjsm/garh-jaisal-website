@@ -25,12 +25,12 @@ main.thar-sunset-story .page-hero-inner > .eyebrow::before,
 main.thar-sunset-story .article-hero .eyebrow::before{
   content:"";
   display:inline-block;
-  width:1.55rem;
-  height:1px;
+  width:2.25rem;
+  height:.75rem;
   margin-inline-end:.65rem;
   vertical-align:middle;
-  background:currentColor;
-  opacity:.8;
+  background:url("../img/brand/bastion-line.svg") left center / contain no-repeat;
+  opacity:.9;
 }
 
 main.thar-sunset-story--home .hero-overlay{
@@ -127,5 +127,30 @@ main.thar-sunset-story [data-story-reveal].story-is-visible{
     animation:none!important;
     opacity:1!important;
     transform:none!important;
+  }
+}
+
+/* Sprint 33 — extend the visual system to existing shared surfaces. */
+main.thar-sunset-story .room-card,
+main.thar-sunset-story .product-card,
+main.thar-sunset-story .experience-card,
+main.thar-sunset-story .blog-card,
+main.thar-sunset-story .catalogue-compare-card,
+main.thar-sunset-story .catalogue-transport-card{
+  border-radius:var(--radius-card,6px);
+}
+
+/* Architectural arch crop for room photography; the card itself stays square-cornered. */
+main.thar-sunset-story--rooms .room-card-media{
+  margin:12px 12px 0;
+  border:1px solid var(--story-keyline);
+  border-radius:48% 48% 6px 6px / 22% 22% 6px 6px;
+}
+main.thar-sunset-story--rooms .room-card-media img{
+  border-radius:inherit;
+}
+@media(max-width:760px){
+  main.thar-sunset-story--rooms .room-card-media{
+    margin:8px 8px 0;
   }
 }

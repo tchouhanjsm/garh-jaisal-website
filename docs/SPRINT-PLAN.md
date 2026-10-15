@@ -40,7 +40,12 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 29 | Structured-data fidelity for Rooms, Contact and Directions | ◐ Combined into PR #78 with exact frozen-baseline exception and registry-backed HotelRoom parity |
 | 30 | Shared breadcrumb/schema parity across high-intent hubs and Journal guides | ✓ merged in PR #78; breadcrumb/JSON-LD parity regression coverage passed |
 | 31 | Desert experience photo galleries | ✓ merged in PR #80; exact-head Site Checks, package preflight, Staging QA dry run, Browser E2E and responsive page sheet passed; owner visual review remains |
-| 32 | High-intent package discovery and guest-choice clarity | ◐ current batch: improve catalogue/category cross-links and user-reviewed enquiry path with source-backed regression coverage; preserve session-only Trip tray; no live booking/lead logging |
+| 32 | High-intent package discovery and guest-choice clarity | ✓ PR #81 merged; discovery hubs feed the existing session-only Trip shortlist and user-reviewed WhatsApp draft |
+| 33 | Brand foundation, contrast and shared component consistency | ◐ combined bulk PR #82: brand constitution, validated core token pairs, bastion motif, 6px controls/cards and room-photo arch crop |
+| 34 | Restaurant enquiry completion and conversion measurement | ◐ existing form/fallback stays safe; activation remains blocked on owner-confirmed recipients, privacy/retention text and acknowledgement flow |
+| 35 | Home and high-intent photography/performance pass | ◐ reuse existing licensed assets and crop/grade rules first; performance budgets require a reproducible baseline; paid shoot owner-gated |
+| 36 | Experience comparison and Trip shortlist visual polish | Planned within the combined design track after page-sheet review; preserve existing registry facts and session-only storage |
+| 37 | Restaurant identity and six first-party marketing templates | Planned after restaurant operational facts and first visual review; Canva Brand Kit is the low-friction default |
 
 ---
 
@@ -535,3 +540,9 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 ## Next unblocked direction
 
 After Sprint 32, review owner-approved content and data quality across high-intent room/desert/tour choices, then prioritise an evidence-led performance or accessibility slice based on measured CI inventories. Restaurant R1, privacy/cancellation publication, paid transport estimates and third-party proof remain explicitly blocked on owner input. Do not bundle these independent blocked projects into Sprint 32.
+
+## Combined design track — PR #82 (current bulk implementation)
+
+The goal is to implement reusable identity guardrails and visible components together, then keep follow-on commits in this same PR while they remain part of the approved design/conversion slice. The first implementation establishes `docs/BRAND.md`, contrast CI, existing-token refinement, the bastion motif, consistent 6px button/card geometry and a room-image arch crop. It does not replace the logo, add font dependencies, create new offers, or activate restaurant mail.
+
+Next in-scope additions for this same PR may include safe, testable improvements to the existing home/experience visual system, repeatable image/payload evidence and the table-enquiry presentation. Do not activate external mail or introduce unverified prices/policies without the facts specified in `docs/OWNER-FACTS.md`. Keep the PR coherent, update this plan and the Project Log with each meaningful batch, and stop before merge/deployment for owner review.

@@ -339,6 +339,8 @@
 }
 
 .restaurant-form-card{
+  border:1px solid var(--line);
+  border-radius:var(--radius-card,6px);
   background:#fffdf9;
   color:var(--ink);
   padding:clamp(22px,4vw,34px);
@@ -411,7 +413,9 @@
 
 .restaurant-notice{
   padding:20px;
+  border:1px solid var(--line);
   border-left:3px solid var(--sand);
+  border-radius:0 var(--radius-card,6px) var(--radius-card,6px) 0;
   background:var(--sand-light);
 }
 

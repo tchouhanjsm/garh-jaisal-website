@@ -89,7 +89,7 @@
   min-width:0;
   overflow:hidden;
   border:1px solid #d9c9ae;
-  border-radius:12px;
+  border-radius:var(--radius-card,6px);
   background:#fffdf8;
   box-shadow:0 10px 28px rgba(20,18,43,.07);
 }

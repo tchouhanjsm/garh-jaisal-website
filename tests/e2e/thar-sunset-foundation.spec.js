@@ -8,13 +8,15 @@ test('Thar Sunset tokens, CTA contrast and responsive navigation remain usable',
     return {
       night: root.getPropertyValue('--night').trim().toLowerCase(),
       saffron: root.getPropertyValue('--saffron').trim().toLowerCase(),
-      parchment: root.getPropertyValue('--parchment').trim().toLowerCase()
+      parchment: root.getPropertyValue('--parchment').trim().toLowerCase(),
+      peacock: root.getPropertyValue('--peacock').trim().toLowerCase()
     };
   });
   expect(tokens).toEqual({
     night: '#14122b',
     saffron: '#b94a0e',
-    parchment: '#f7efe0'
+    parchment: '#f7efe0',
+    peacock: '#1d7472'
   });
 
   const eyebrowSize = await page.locator('.eyebrow').first().evaluate(element => parseFloat(getComputedStyle(element).fontSize));
@@ -24,6 +26,11 @@ test('Thar Sunset tokens, CTA contrast and responsive navigation remain usable',
   const primaryBox = await primaryAction.boundingBox();
   expect(primaryBox).not.toBeNull();
   expect(primaryBox.height).toBeGreaterThanOrEqual(44);
+  const primaryRadius = await primaryAction.evaluate(element => getComputedStyle(element).borderTopLeftRadius);
+  expect(primaryRadius).toBe('6px');
+
+  const motifBackground = await page.locator('main.thar-sunset-story .section-head .eyebrow').first().evaluate(element => getComputedStyle(element, '::before').backgroundImage);
+  expect(motifBackground).toContain('bastion-line.svg');
 
   const width = page.viewportSize().width;
   const navToggle = page.locator('.nav-toggle');

@@ -326,6 +326,7 @@
 .experience-card{
   background:#fff;
   border:1px solid var(--line);
+  border-radius:var(--radius-card,6px);
   overflow:hidden;
 }
 
