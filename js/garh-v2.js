@@ -91,6 +91,22 @@ document.addEventListener('DOMContentLoaded', () => {
       'direction.php': 'arrival directions',
       'contact.php': 'the details on the contact page',
       'blog.php': 'Jaisalmer travel planning',
+      'book-rooms-in-jaisalmer.php': 'a stay inside Jaisalmer Fort',
+      'best-time-to-visit-jaisalmer.php': 'planning when to visit Jaisalmer',
+      'how-to-reach-jaisalmer.php': 'how to reach Jaisalmer and enter the Fort',
+      'jaisalmer-desert-safari-packing-list.php': 'packing for a Jaisalmer desert safari',
+      'jaisalmer-fort-guide.php': 'planning a visit to Jaisalmer Fort',
+      'desert-safari-guide.php': 'choosing a Jaisalmer desert safari',
+      'jaisalmer-2-day-itinerary.php': 'a two-day Jaisalmer itinerary',
+      'desert-safari.php': 'Jaisalmer desert safari options',
+      'sunset-camel-safari.php': 'the sunset camel safari',
+      'cultural-safari.php': 'the cultural desert safari',
+      'sleep-under-the-stars.php': 'the Sleep Under the Stars desert stay',
+      'swiss-tent-safari.php': 'the Swiss Tent Safari',
+      'guided-jaisalmer-tour.php': 'a guided Jaisalmer tour',
+      'city-tour.php': 'the guided Fort walk',
+      'half-day-jaisalmer-tour.php': 'a half-day Jaisalmer tour',
+      'full-day-jaisalmer-tour.php': 'a full-day Jaisalmer tour',
       'jaisalmer-3-day-itinerary.php': 'a three-day Jaisalmer itinerary',
       'jaisalmer-honeymoon-guide.php': 'a couples trip to Jaisalmer'
     };
@@ -189,11 +205,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (event.target.closest('form.contact-form') !== contactForm) return;
 
       const query = new URLSearchParams(window.location.search);
+      const requestedTopic = query.get('topic') || '';
+      const travelPlanningTopics = [
+        'visit-planning', 'desert-packing', 'fort-guide', 'desert-safari',
+        'two-day-itinerary', 'three-day-itinerary', 'honeymoon'
+      ];
       let enquiryContext = 'general';
       if (contactForm.querySelector('.contact-room-context')) {
         enquiryContext = 'room';
-      } else if (query.get('topic') === 'arrival' || query.get('topic') === 'dining') {
-        enquiryContext = query.get('topic');
+      } else if (requestedTopic === 'arrival' || requestedTopic === 'dining') {
+        enquiryContext = requestedTopic;
+      } else if (travelPlanningTopics.includes(requestedTopic)) {
+        enquiryContext = 'travel_planning';
       }
 
       enquiryStartSent = true;

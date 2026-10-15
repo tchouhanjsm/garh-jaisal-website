@@ -7,17 +7,15 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-15 |
-| Current phase | Sprint 26 — editorial renderer consolidation (Batch 1, PR in review) |
+| Current phase | Sprint 27 — contextual editorial enquiry handoff (Batch 1, PR in review) |
 | Base branch | `main` |
-| Baseline commit | `241cddea9d02e4d29acb82941937797320f767ba` (PR #74 merge commit) |
-| Last merged PR | [#74 — Source-backed Jaisalmer travel-guide cluster](https://github.com/tchouhanjsm/garh-jaisal-website/pull/74) |
-| PR #74 post-merge checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38709787842); [cPanel package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38709787792); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38709787833); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38709787769) — merge SHA `241cddea9d02e4d29acb82941937797320f767ba` |
-| Screenshot evidence | [PR #74 page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38709787769/artifacts/11959834579) |
-| Image review evidence | [PR #72 responsive image review](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38698215503/artifacts/11954773684) — review-only, not enabled for runtime |
+| Baseline commit | `e64d6fb79173975e0c7489da523b98377d26b0d0` (PR #75 merge commit) |
+| Last merged PR | [#75 — Consolidate editorial guides on the shared renderer](https://github.com/tchouhanjsm/garh-jaisal-website/pull/75) |
+| PR #75 exact-head checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714317109); [package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714317141); [Staging QA PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714316979); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38714317044) |
+| PR #75 merge-SHA checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710861); [package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710636); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710691); [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38715710939) was still running at this snapshot |
 | Production URL | https://www.hotelgarhjaisal.com |
-| Open PRs at batch baseline | None at verification |
-| Staging evidence | PR #74 Staging QA was a non-deploying dry run; no live cPanel validation or production deployment occurred. |
-| Next action | Review the five migrated editorial routes and exact-head CI; real staging and production release remain owner-controlled. |
+| Live-host evidence | No external cPanel staging or production deployment occurred. |
+| Next action | Review Sprint 27's contextual contact messages, route-specific WhatsApp handoffs and privacy-safe intent labels; owner merge/deploy remains required. |
 
 ## Phase roadmap
 
@@ -241,10 +239,16 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - Post-merge Site Checks, package preflight, non-deploying Staging QA and Browser E2E all passed on the merge SHA. [Page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38709787769/artifacts/11959834579).
 - Official travel references are linked; no new rates, schedules, timings, package promises, policies or availability claims were introduced. No production deployment occurred.
 
-## Sprint 26 — Batch 1: shared editorial renderer consolidation (PR in review)
+## Sprint 26 — Batch 1: shared editorial renderer consolidation (PR #75 merged)
 
-- Migrate five existing high-intent editorial routes — Fort guide, Desert Safari guide, two-day itinerary, three-day itinerary and honeymoon guide — to the shared renderer without changing public URLs, titles, descriptions, canonicals, publication dates or approved hero images.
-- Extend the renderer with escaped content blocks for subheadings, facts, comparison tables and ordered/unordered lists. Preserve internal links through the narrow allowlist.
-- Keep existing article.css styling, BlogPosting/WebPage/BreadcrumbList schema, CTA destinations and related-content routes.
-- Owner review: Fort guide, Desert Safari guide and two-day itinerary first. Restaurant R1 remains blocked on approved operational and privacy details; this batch does not add live booking behavior.
-- Exact-head CI must pass, including PHP 7.4/8.2, strict site/image checks, sitemap freshness, package preflight, non-deploying Staging QA and Browser E2E/page-sheet artifact.
+- PR #75 merged to `main` at `e64d6fb79173975e0c7489da523b98377d26b0d0` on 2026-10-15. It consolidated five existing high-intent guides onto the shared registry/renderer while preserving public URLs, metadata, approved imagery, article styling and direct-booking/contact CTAs.
+- PR-head PHP 7.4/8.2 and site checks, package preflight, Staging QA dry run and Browser E2E all passed. Main-push Site Checks, package preflight and Staging QA also passed; merge-SHA Browser E2E was still running at this snapshot.
+- No production deployment or live-host validation occurred. Restaurant booking and transport estimates remain owner-gated.
+
+## Sprint 27 — Batch 1: contextual editorial enquiry handoff (PR in review)
+
+- Preserve reader intent across all eight editorial guides: route each secondary CTA to an allowlisted, topic-specific contact draft and give global WhatsApp actions a route-specific opening.
+- Add seven curated message templates for visit planning, Fort visits, desert safari, packing, two-day and three-day itineraries, and honeymoon planning. The existing arrival topic remains unchanged.
+- Map only allowlisted guide topics to the coarse `travel_planning` GA4 enquiry context. Do not send message text, personal fields or arbitrary query values to analytics.
+- Regression coverage checks direct CTA targets, prefilled messages, WhatsApp context and enquiry_start routing. Dates, rates, timings, availability and package inclusions remain subject to hotel confirmation.
+- R1 live submission, live staging and production remain out of scope until owner decisions and owner release.
