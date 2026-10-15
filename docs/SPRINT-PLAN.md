@@ -35,7 +35,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 24 | Thar Sunset visual storytelling across high-intent journeys | ✓ PR #73 merged; post-merge Site Checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |
 | 25 | Source-backed Jaisalmer travel-guide cluster | ✓ PR #74 merged; all four post-merge CI workflows passed on `241cddea9d02e4d29acb82941937797320f767ba` |
 | 26 | Shared editorial renderer consolidation | ✓ PR #75 merged; PR-head Site Checks, package, Staging QA and Browser E2E passed |
-| 27 | Contextual editorial enquiry handoff | ✓ PR #76 merged at `24c9d68d7b834d780d20e3fe83a2926afa1b239a`; post-merge Site Checks, package preflight, Staging QA dry run and Browser E2E passed |\n| 28 | Four source-backed Jaisalmer Journal guides | ◐ Batch 1 adds havelis/architecture, regional food, beyond-the-Fort places and markets/crafts; shared renderer, contextual enquiry handoffs, explicit sitemap and browser regression coverage |
+| 27 | Contextual editorial enquiry handoff | ✓ PR #76 merged at `24c9d68d7b834d780d20e3fe83a2926afa1b239a`; post-merge Site Checks, package preflight, Staging QA dry run and Browser E2E passed |
+| 28 | Four source-backed Jaisalmer Journal guides | ◐ Batch 1 adds havelis/architecture, regional food, beyond-the-Fort places and markets/crafts; shared renderer, contextual enquiry handoffs, explicit sitemap and browser regression coverage |
 
 ---
 
