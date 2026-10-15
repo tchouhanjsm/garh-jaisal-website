@@ -17,9 +17,18 @@ test('Swiss Tent Safari shows confirmed facilities, owner-provided photos and cl
     'img/Desert_Camp/CampingInJsm.jpeg',
     'img/Desert_Camp/tent_deluxe.jpeg',
     'img/Desert_Camp/camp_dinner.jpeg',
+    'img/Desert_Camp/Bathroom.jpeg',
+    'img/Desert_Camp/Outtent.jpeg',
+    'img/Desert_Camp/Prog.jpeg',
+    'img/Desert_Camp/Tent.jpeg',
+    'img/Desert_Camp/Tentout.jpeg',
+    'img/Desert_Camp/tentout1.jpeg',
   ]);
-  await expect(gallery.locator('img')).toHaveCount(5);
+  await expect(gallery.locator('img')).toHaveCount(11);
   await expect(gallery.getByText('Swiss Deluxe Tent accommodation')).toBeVisible();
+  await expect(gallery.getByText('The attached bathroom', { exact: true })).toBeVisible();
+  await expect(gallery.getByText('The evening programme', { exact: true })).toBeVisible();
+  await expect(gallery.getByText('Inside the Swiss Deluxe Tent', { exact: true })).toBeVisible();
 
   const facilities = page.locator('.experience-facilities');
   await expect(facilities.getByText('King-size bed', { exact: true })).toBeVisible();

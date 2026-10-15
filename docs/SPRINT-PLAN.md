@@ -515,7 +515,7 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 
 - Add a nine-photo gallery to Sleep Under the Stars; expand the Swiss Tent Safari gallery to eleven photos covering tent interior/exterior, bathroom, camp and evening programme.
 - Bring the curated images into the main Desert Gallery with descriptive alt text and keep the overnight-options CTA pointed to `camping.php`.
-- Add a PHP regression guard for experience gallery file existence, alt text/captions, required asset paths and the corresponding main Gallery references. Run it in the existing PHP 7.4/8.2 checks.
+- Add PHP and Playwright regression guards for gallery file existence, alt text/captions, required asset paths, rendered image order/count, no-overflow behavior and main Gallery references. Run them through the existing PHP 7.4/8.2 and Browser E2E workflows.
 - Keep the commit bounded to already curated assets; do not add the unreviewed 356 MB raw image collection, new operational claims, prices, schedules or availability.
 - Acceptance on the exact PR head: PHP 7.4/8.2 Site Checks, strict image checks, generated sitemap freshness, publication boundaries, package preflight, non-deploying Staging QA, Browser E2E and the 390px/1280px screenshot sheet must pass. The owner reviews subjects/captions and approves merge; no live cPanel or production deployment is part of this batch.
 
