@@ -52,6 +52,9 @@ jobs:
       - name: Verify experience publication boundaries
         run: php scripts/check-experience-publication.php
 
+      - name: Verify experience gallery assets
+        run: php tests/php/experience-gallery-assets.php
+
       - name: Verify launch hardening configuration
         run: php scripts/check-launch-hardening.php
 
