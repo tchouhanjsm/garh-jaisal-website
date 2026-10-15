@@ -911,3 +911,13 @@
   .experience-photo-card figcaption { padding:12px; }
   .experience-facility-grid li { padding:14px; }
 }
+
+/* Sprint 32: standalone shortlist action follows each linked card. */
+.experience-card-plan-action {
+  padding: 0 22px 22px;
+  background: #fff;
+}
+.experience-card-plan-action .trip-add-button {
+  width: 100%;
+  min-height: 44px;
+}
