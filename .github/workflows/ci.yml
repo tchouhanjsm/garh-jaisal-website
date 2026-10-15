@@ -64,6 +64,19 @@ jobs:
       - name: Verify staging and non-production noindex behavior
         run: php tests/php/staging-noindex.php
 
+  brand-contrast:
+    name: brand contrast and token contract (PHP 8.2)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+      - name: Verify brand contrast, tokens and motif asset
+        run: php scripts/check-brand-contrast.php
 
   responsive-image-review:
     name: responsive image review

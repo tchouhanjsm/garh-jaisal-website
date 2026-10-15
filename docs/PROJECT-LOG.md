@@ -7,14 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-15 |
-| Current phase | Sprint 32 — high-intent package discovery and guest-choice clarity (this PR) |
+| Current phase | Sprint 33 — combined brand foundation, accessible UI and visual consistency (PR #82) |
 | Base branch | `main` |
-| Baseline commit | `8a1fe8ab3be1392b9cda82657a580947072075ce` (PR #80 merge commit) |
-| Last merged PR | [#80 — Desert experience photo galleries](https://github.com/tchouhanjsm/garh-jaisal-website/pull/80) |
-| PR #80 exact-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38753963082) |
-| PR #80 exact-head package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38753963087) |
-| PR #80 exact-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38753963187) |
-| PR #80 exact-head Browser E2E/page sheet | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38753963491); [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38753963491/artifacts/11982838456); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38753963491/artifacts/11982539085) |
+| Baseline commit | `f9bed798efc99d7aec88098a9116e4e8a0e787c6` (PR #81 merge commit) |
+| Last merged PR | [#81 — package discovery and guest-choice clarity](https://github.com/tchouhanjsm/garh-jaisal-website/pull/81) |
+| PR #81 main push Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38766848927) |
+| PR #81 main push package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38766848951) |
+| PR #81 main push Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38766848993) |
+| PR #81 main push Browser E2E/page sheet | Pending when this batch started: [run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38766848994); refresh result/artifact links before owner approval |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
 | Owner review | Inspect PR #80's Sleep Under the Stars and Swiss Tent Safari photos/captions and the main Gallery at 390px and 1280px. |
@@ -42,9 +42,9 @@
 - Exact PR-head Site Checks, cPanel package preflight, non-deploying Staging QA and Browser E2E/page sheet passed on `03c20b1dbf5c5053fc1898336c612778257e9a33`; artifacts are linked in the Snapshot. PR #80's live merge state was re-verified before this follow-on.
 - No cPanel staging upload or production deployment occurred; the owner still needs to review subjects/captions at 390px and 1280px.
 
-## Sprint 32 — high-intent package discovery and guest-choice clarity (this PR)
+## Sprint 32 — high-intent package discovery and guest-choice clarity (PR #81)
 
-- Baseline is verified main SHA `8a1fe8ab3be1392b9cda82657a580947072075ce`; no open PRs existed at the start of the batch.
+- Baseline is verified main SHA `f9bed798efc99d7aec88098a9116e4e8a0e787c6`, the PR #81 merge commit.
 - Improve the catalogue/package guest journey using the current experience/room registries and shared templates: clearer, source-backed choices, consistent contextual links and no false implication of availability or confirmation. The session-only Trip tray remains a shortlist and WhatsApp stays a user-reviewed draft.
 - Add meaningful PHP/source and browser regression coverage for responsive catalogue decisions and safe handoff; preserve all public URLs, canonicals, both GA4 IDs, booking destinations and the no-personal-data storage boundary.
 - Required exact-head CI: PHP 7.4/8.2 Site Checks including strict images and sitemap, publication checks, cPanel package preflight, non-deploying Staging QA, Browser E2E and 390px/1280px page sheet. Owner visual review and live staging remain separate.
@@ -56,3 +56,10 @@
 - Privacy and booking/cancellation terms remain draft/noindex until owner-approved wording is supplied. Do not invent refunds, deposits, cancellation windows or exceptions.
 - Transport quotes/calculators remain blocked on route/rate assumptions and a reviewed model; no estimate should be implied by visual comparisons.
 - Review proof, licence/partner/safety claims, font licensing and production performance claims require verified source evidence and owner approval.
+
+## Sprint 33 — combined brand foundation and accessible UI (PR #82)
+- Build on the existing Thar Sunset tokens, shared head, image safeguards and four-viewport E2E; add `docs/BRAND.md`, documented 6px controls/cards, decorative bastion SVG and arch crop for room photography.
+- Contrast CI checks representative approved token pairs; Peacock Teal was darkened to `#1D7472` because its original `#1F7A78` measured 4.47:1 on parchment.
+- Sprints 34–35 continue in this bulk PR only where they can be safely verified; restaurant mail activation, photography spend and live performance claims remain owner-gated.
+- Site Checks, cPanel package preflight and non-deploying Staging QA passed for PR #81's merge SHA. Browser E2E was still running at the start of this batch; refresh the result and new PR #82 exact-head artifacts before approval.
+- No merge, staging upload or production deployment has been performed by this implementation.
