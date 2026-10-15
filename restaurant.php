@@ -492,15 +492,27 @@ require __DIR__ . '/include/page-head.php';
                 ['name', 'Name *', 'text', 'required autocomplete="name"'],
                 ['whatsapp', 'WhatsApp number *', 'tel', 'required autocomplete="tel" inputmode="tel"'],
                 ['email', 'Email', 'email', 'autocomplete="email"'],
-                ['date', 'Date *', 'date', 'required min="' . date('Y-m-d') . '"'],
-                ['time', 'Preferred time *', 'time', 'required'],
-                ['guests', 'Guests *', 'number', 'required min="1" max="20" inputmode="numeric"'],
+                ['date', 'Date *', 'date', 'required min="' . date('Y-m-d') . '" autocomplete="off"'],
+                ['time', 'Preferred time *', 'time', 'required autocomplete="off"'],
+                ['guests', 'Guests *', 'number', 'required min="1" max="20" inputmode="numeric" autocomplete="off"'],
             ];
-            foreach ($fields as [$id, $label, $type, $attrs]): ?>
-              <div class="restaurant-field <?= isset($errors[$id]) ? 'has-error' : '' ?>">
+            foreach ($fields as [$id, $label, $type, $attrs]):
+                $hasFieldError = isset($errors[$id]);
+                $fieldErrorId = 'restaurant-error-' . $id;
+            ?>
+              <div class="restaurant-field <?= $hasFieldError ? 'has-error' : '' ?>">
                 <label for="<?= e($id) ?>"><?= e($label) ?></label>
-                <input id="<?= e($id) ?>" name="<?= e($id) ?>" type="<?= e($type) ?>" value="<?= e($old[$id]) ?>" <?= $attrs ?> autocomplete="off">
-                <?php if (isset($errors[$id])): ?><small><?= e($errors[$id]) ?></small><?php endif; ?>
+                <input
+                  id="<?= e($id) ?>"
+                  name="<?= e($id) ?>"
+                  type="<?= e($type) ?>"
+                  value="<?= e($old[$id]) ?>"
+                  <?= $attrs ?>
+                  <?= $hasFieldError ? 'aria-invalid="true" aria-describedby="' . e($fieldErrorId) . '"' : '' ?>
+                >
+                <?php if ($hasFieldError): ?>
+                  <small id="<?= e($fieldErrorId) ?>"><?= e($errors[$id]) ?></small>
+                <?php endif; ?>
               </div>
             <?php endforeach; ?>
 

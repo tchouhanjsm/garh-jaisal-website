@@ -114,3 +114,34 @@ test('enquiry_start reports room, dining, arrival or general on first form inter
     expect(parameters).not.toHaveProperty('link_url');
   }
 });
+
+test('restaurant fallback call and WhatsApp intents route safely to both approved analytics destinations', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Restaurant fallback analytics runs once on desktop-1280');
+  await page.route('https://www.googletagmanager.com/**', route => route.abort());
+  await preventTrackedNavigation(page);
+
+  await page.goto('/restaurant.php?utm_source=google&utm_medium=cpc&utm_campaign=restaurant_cta&utm_content=dining&email=private%40example.com&topic=private', {
+    waitUntil: 'domcontentloaded'
+  });
+  const fallback = page.locator('.restaurant-reservation-unavailable');
+  await expect(fallback).toBeVisible();
+
+  await fallback.getByRole('link', { name: 'Call the hotel' }).click();
+  let events = await readTrackedEvents(page);
+  const call = expectRoutedOnce(events, 'click_to_call', '/restaurant.php', 'dining');
+  expect(call.cta_label).toBe('call');
+  expect(call.utm_source).toBe('google');
+  expect(call.utm_medium).toBe('cpc');
+  expect(call.utm_campaign).toBe('restaurant_cta');
+  expect(call.utm_content).toBe('dining');
+  expect(call).not.toHaveProperty('email');
+  expect(call).not.toHaveProperty('topic');
+
+  await fallback.getByRole('link', { name: 'Ask on WhatsApp' }).click();
+  events = await readTrackedEvents(page);
+  const whatsapp = expectRoutedOnce(events, 'click_whatsapp', '/restaurant.php', 'dining');
+  expect(whatsapp.cta_label).toBe('whatsapp');
+  expect(whatsapp.utm_source).toBe('google');
+  expect(whatsapp).not.toHaveProperty('email');
+  expect(whatsapp).not.toHaveProperty('topic');
+});
