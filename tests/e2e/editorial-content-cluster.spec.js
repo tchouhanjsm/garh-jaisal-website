@@ -118,3 +118,29 @@ test.describe('Sprint 21 editorial intent cluster', () => {
   });
 
 });
+
+
+test('legacy high-intent guides use the shared renderer and retain their public contracts', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Shared renderer coverage runs once on desktop-1280');
+  const cases = [
+    { route: '/jaisalmer-fort-guide.php', h1: 'Jaisalmer Fort Guide', facts: 2, cards: 3 },
+    { route: '/desert-safari-guide.php', h1: 'Desert Safari in Jaisalmer: How to Choose an Experience', tableRows: 4, cards: 3 },
+    { route: '/jaisalmer-2-day-itinerary.php', h1: 'Jaisalmer 2-Day Itinerary', subheadings: 5, cards: 3 },
+    { route: '/jaisalmer-3-day-itinerary.php', h1: 'Jaisalmer in 3 Days: A Flexible Fort, Heritage and Desert Itinerary', cards: 3 },
+    { route: '/jaisalmer-honeymoon-guide.php', h1: 'Plan a Jaisalmer Honeymoon Around a Fort Stay and Desert Night', cards: 3 },
+  ];
+  for (const entry of cases) {
+    await page.goto(entry.route, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('main h1')).toHaveText(entry.h1);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.hotelgarhjaisal.com' + entry.route);
+    await expect(page.locator('.article-content > section').first()).toBeVisible();
+    await expect(page.locator('#official-sources')).toBeVisible();
+    await expect(page.locator('.article-next-grid a')).toHaveCount(entry.cards);
+    await expect(page.locator('.article-footer-cta a.button-primary')).toHaveAttribute('target', '_blank');
+    await expect(page.locator('.article-footer-cta a.button-primary')).toHaveAttribute('rel', /noopener/);
+    expect(await page.locator('script[type="application/ld+json"]').textContent()).toContain('BlogPosting');
+    if (entry.facts) await expect(page.locator('.article-facts .article-fact')).toHaveCount(entry.facts);
+    if (entry.tableRows) await expect(page.locator('.article-table tbody tr')).toHaveCount(entry.tableRows);
+    if (entry.subheadings) await expect(page.locator('.article-content h3')).toHaveCount(entry.subheadings);
+  }
+});

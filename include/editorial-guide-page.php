@@ -41,6 +41,11 @@ $canonical = $siteUrl . '/' . $guide['slug'] . '.php';
 $escapeGuide = static function ($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 };
+$guideBreadcrumbLabel = (string) ($guide['breadcrumb_label'] ?? $guide['h1']);
+$resolveGuideHref = static function ($value) use ($siteConfig) {
+    if ((string) $value === '@booking') return (string) ($siteConfig['booking_url'] ?? '#');
+    return (string) $value;
+};
 /*
  * Article copy may contain simple, curated [label](relative-route.php) links.
  * Render only that narrow internal-link syntax; everything else is escaped.
@@ -73,7 +78,7 @@ $schemaGraph = [
     [
         '@type' => 'BlogPosting',
         '@id' => $canonical . '#article',
-        'headline' => $guide['h1'],
+        'headline' => $guide['schema_headline'] ?? $guide['h1'],
         'description' => $guide['description'],
         'image' => [$siteUrl . '/' . ltrim($guide['hero_image'], '/')],
         'datePublished' => $guide['date_published'],
@@ -100,7 +105,7 @@ $schemaGraph = [
         'itemListElement' => [
             ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $siteUrl . '/'],
             ['@type' => 'ListItem', 'position' => 2, 'name' => 'Journal', 'item' => $siteUrl . '/blog.php'],
-            ['@type' => 'ListItem', 'position' => 3, 'name' => $guide['h1'], 'item' => $canonical],
+            ['@type' => 'ListItem', 'position' => 3, 'name' => $guideBreadcrumbLabel, 'item' => $canonical],
         ],
     ],
 ];
@@ -121,7 +126,7 @@ $page = [
     'twitter_title' => $guide['title'],
     'twitter_description' => $guide['description'],
     'twitter_image' => '/' . ltrim($guide['hero_image'], '/'),
-    'css' => ['css/article.css', 'css/thar-sunset-story.css'],
+    'css' => (isset($guide['css']) && is_array($guide['css'])) ? $guide['css'] : ['css/article.css', 'css/thar-sunset-story.css'],
     'schema' => $schemaGraph,
 ];
 ?>
@@ -132,21 +137,21 @@ require __DIR__ . '/page-head.php';
 ?>
 <body>
 <?php include __DIR__ . '/header-v2.php'; ?>
-<main class="article-page thar-sunset-story thar-sunset-story--journal" id="main-content" tabindex="-1">
+<main class="article-page<?= (!array_key_exists('story_style', $guide) || !empty($guide['story_style'])) ? ' thar-sunset-story thar-sunset-story--journal' : '' ?>" id="main-content" tabindex="-1">
   <header class="article-hero" data-story-reveal>
     <div class="site-shell article-hero-inner">
       <?php
       $breadcrumbs = [
           ['label' => 'Home', 'href' => '/'],
           ['label' => 'Journal', 'href' => '/blog.php'],
-          ['label' => $guide['h1']],
+          ['label' => $guideBreadcrumbLabel],
       ];
       require __DIR__ . '/ui/breadcrumb.php';
       ?>
       <p class="eyebrow"><?= $escapeGuide($guide['eyebrow']) ?></p>
       <div class="article-meta">
         <span>Published <?= $escapeGuide($guide['date_display']) ?></span>
-        <span>Prepared from official travel guidance and current hotel information</span>
+        <span><?= $escapeGuide($guide['meta_note'] ?? 'Prepared from official travel guidance and current hotel information') ?></span>
       </div>
       <h1><?= $escapeGuide($guide['h1']) ?></h1>
       <p class="lede"><?= $escapeGuide($guide['lede']) ?></p>
@@ -172,19 +177,25 @@ require __DIR__ . '/page-head.php';
         </figure>
         <?php foreach ($guide['sections'] as $section): ?>
           <section id="<?= $escapeGuide($section['id']) ?>" data-story-reveal>
+            <?php if (!empty($section['eyebrow'])): ?><p class="eyebrow"><?= $escapeGuide($section['eyebrow']) ?></p><?php endif; ?>
             <h2><?= $escapeGuide($section['heading']) ?></h2>
-            <?php foreach (($section['paragraphs'] ?? []) as $paragraph): ?>
-              <p><?= $renderGuideText($paragraph) ?></p>
-            <?php endforeach; ?>
-            <?php if (!empty($section['items'])): ?>
-              <ul>
-                <?php foreach ($section['items'] as $item): ?>
-                  <li><?= $renderGuideText($item) ?></li>
-                <?php endforeach; ?>
-              </ul>
-            <?php endif; ?>
-            <?php if (!empty($section['callout'])): ?>
-              <div class="article-callout"><strong><?= $escapeGuide($section['callout']) ?></strong></div>
+            <?php if (isset($section['blocks']) && is_array($section['blocks'])): ?>
+              <?php foreach ($section['blocks'] as $block): ?>
+                <?php if (($block['type'] ?? '') === 'paragraph'): ?><p><?= $renderGuideText($block['text'] ?? '') ?></p>
+                <?php elseif (($block['type'] ?? '') === 'subheading'): ?><h3><?= $escapeGuide($block['text'] ?? '') ?></h3>
+                <?php elseif (($block['type'] ?? '') === 'list' && !empty($block['items'])): ?>
+                  <?php if (!empty($block['ordered'])): ?><ol><?php else: ?><ul><?php endif; ?><?php foreach ($block['items'] as $item): ?><li><?= $renderGuideText($item) ?></li><?php endforeach; ?><?php if (!empty($block['ordered'])): ?></ol><?php else: ?></ul><?php endif; ?>
+                <?php elseif (($block['type'] ?? '') === 'facts' && !empty($block['items'])): ?>
+                  <div class="article-facts"><?php foreach ($block['items'] as $fact): ?><div class="article-fact"><span><?= $escapeGuide($fact['label'] ?? '') ?></span><strong><?= $escapeGuide($fact['value'] ?? '') ?></strong></div><?php endforeach; ?></div>
+                <?php elseif (($block['type'] ?? '') === 'table' && !empty($block['headers'])): ?>
+                  <div class="article-table-wrap"><table class="article-table"><thead><tr><?php foreach ($block['headers'] as $header): ?><th scope="col"><?= $escapeGuide($header) ?></th><?php endforeach; ?></tr></thead><tbody><?php foreach (($block['rows'] ?? []) as $row): ?><tr><?php foreach ($row as $cell): ?><td><?= $renderGuideText($cell) ?></td><?php endforeach; ?></tr><?php endforeach; ?></tbody></table></div>
+                <?php elseif (($block['type'] ?? '') === 'callout'): ?><div class="article-callout"><strong><?= $escapeGuide($block['text'] ?? '') ?></strong></div>
+                <?php endif; ?>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <?php foreach (($section['paragraphs'] ?? []) as $paragraph): ?><p><?= $renderGuideText($paragraph) ?></p><?php endforeach; ?>
+              <?php if (!empty($section['items'])): ?><ul><?php foreach ($section['items'] as $item): ?><li><?= $renderGuideText($item) ?></li><?php endforeach; ?></ul><?php endif; ?>
+              <?php if (!empty($section['callout'])): ?><div class="article-callout"><strong><?= $escapeGuide($section['callout']) ?></strong></div><?php endif; ?>
             <?php endif; ?>
           </section>
         <?php endforeach; ?>
@@ -209,15 +220,15 @@ require __DIR__ . '/page-head.php';
   <section class="section" data-story-reveal aria-labelledby="editorial-next-title">
     <div class="site-shell">
       <div class="section-head">
-        <div><p class="eyebrow">Keep planning</p><h2 id="editorial-next-title">Useful next steps.</h2></div>
-        <p>Choose the next question you need to answer, then confirm anything that depends on your dates.</p>
+        <div><p class="eyebrow"><?= $escapeGuide($guide['related_eyebrow'] ?? 'Keep planning') ?></p><?php if (!array_key_exists('related_title', $guide) || $guide['related_title'] !== ''): ?><h2 id="editorial-next-title"><?= $escapeGuide($guide['related_title'] ?? 'Useful next steps.') ?></h2><?php endif; ?></div>
+        <?php if (!array_key_exists('related_intro', $guide) || $guide['related_intro'] !== ''): ?><p><?= $escapeGuide($guide['related_intro'] ?? 'Choose the next question you need to answer, then confirm anything that depends on your dates.') ?></p><?php endif; ?>
       </div>
       <div class="article-next-grid">
         <?php foreach ($guide['related'] as $item): ?>
           <a class="article-next-card" href="<?= $escapeGuide($item['href']) ?>">
             <span><?= $escapeGuide($item['label']) ?></span>
             <strong><?= $escapeGuide($item['title']) ?></strong>
-            <p><?= $escapeGuide($item['text']) ?></p>
+            <?php if (!empty($item['text'])): ?><p><?= $escapeGuide($item['text']) ?></p><?php endif; ?>
           </a>
         <?php endforeach; ?>
       </div>
@@ -228,19 +239,23 @@ require __DIR__ . '/page-head.php';
   $ctaBand = [
       'section_class' => 'section article-footer-cta',
       'inner_class' => 'site-shell article-cta-inner',
-      'eyebrow' => 'Plan with Garh Jaisal Haveli',
+      'eyebrow' => $guide['cta_eyebrow'] ?? 'Plan with Garh Jaisal Haveli',
       'title' => $guide['cta_title'],
       'text' => $guide['cta_text'],
       'actions_class' => 'actions',
       'primary' => [
           'label' => $guide['cta_primary_label'],
-          'href' => $guide['cta_primary_href'],
+          'href' => $resolveGuideHref($guide['cta_primary_href']),
           'class' => 'button button-primary',
+          'target' => $guide['cta_primary_target'] ?? '',
+          'rel' => $guide['cta_primary_rel'] ?? '',
       ],
       'secondary' => [
           'label' => $guide['cta_secondary_label'],
-          'href' => $guide['cta_secondary_href'],
+          'href' => $resolveGuideHref($guide['cta_secondary_href']),
           'class' => 'button button-secondary',
+          'target' => $guide['cta_secondary_target'] ?? '',
+          'rel' => $guide['cta_secondary_rel'] ?? '',
       ],
   ];
   require __DIR__ . '/ui/cta-band.php';

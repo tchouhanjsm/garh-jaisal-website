@@ -394,4 +394,999 @@ return [
         'cta_secondary_label' => 'Ask the hotel',
         'cta_secondary_href' => 'contact.php',
     ],
+    'jaisalmer-fort-guide' => [
+        'slug' => 'jaisalmer-fort-guide',
+        'title' => 'Jaisalmer Fort Guide | Staying Inside the Living Fort',
+        'description' => 'A practical Jaisalmer Fort guide from Garh Jaisal Haveli: arrival, walking inside the fort, guided tours, rooms, rooftop dining and combining the Fort with the desert.',
+        'h1' => 'Jaisalmer Fort Guide',
+        'eyebrow' => 'Jaisalmer Fort guide',
+        'lede' => 'A practical Jaisalmer Fort guide from Garh Jaisal Haveli: arrival, walking inside the fort, guided tours, rooms, rooftop dining and combining the Fort with the desert.',
+        'hero_image' => 'img/v2/fort-from-roof.jpg',
+        'hero_alt' => 'Jaisalmer Fort viewed from a rooftop in the fort',
+        'date_published' => '2026-10-06',
+        'date_modified' => '2026-10-15',
+        'date_display' => '2026-10-06',
+        'meta_note' => 'Prepared from Garh Jaisal Haveli\'s current guest information',
+        'schema_headline' => 'Jaisalmer Fort Guide | Staying Inside the Living Fort',
+        'breadcrumb_label' => 'Jaisalmer Fort Guide',
+        'css' => [
+            'css/article.css'
+        ],
+        'story_style' => false,
+        'related_eyebrow' => 'Continue planning',
+        'related_title' => '',
+        'related_intro' => '',
+        'toc' => [
+            [
+                'id' => 'overview',
+                'label' => 'Jaisalmer Fort is a living part of the city.'
+            ],
+            [
+                'id' => 'arrive',
+                'label' => 'Getting inside the fort takes one final walk.'
+            ],
+            [
+                'id' => 'explore',
+                'label' => 'Give the fort more than one hurried walk.'
+            ],
+            [
+                'id' => 'stay',
+                'label' => 'What is different about sleeping in the fort?'
+            ],
+            [
+                'id' => 'desert',
+                'label' => 'Combine the Fort with a desert experience.'
+            ],
+            [
+                'id' => 'plan',
+                'label' => 'A simple way to plan your visit.'
+            ]
+        ],
+        'sections' => [
+            [
+                'id' => 'overview',
+                'eyebrow' => 'Start here',
+                'heading' => 'Jaisalmer Fort is a living part of the city.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Jaisalmer Fort is not simply a monument you visit and leave behind. People live and work within the fort, and the lanes remain part of everyday Jaisalmer. Staying inside the fort changes the rhythm of a visit: you can step out into the lanes early, return between sightseeing plans, and watch the fort change as the day moves on.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Garh Jaisal Haveli is located inside Jaisalmer Fort, so this guide focuses on the practical side of staying here: how to arrive, how to explore the fort, what to combine with a fort visit, and where the desert fits into a short Jaisalmer stay.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'arrive',
+                'eyebrow' => 'Arrival',
+                'heading' => 'Getting inside the fort takes one final walk.',
+                'blocks' => [
+                    [
+                        'type' => 'facts',
+                        'items' => [
+                            [
+                                'label' => 'Fort Parking',
+                                'value' => 'About 300 m / 5–6 min walk'
+                            ],
+                            [
+                                'label' => 'Fort entrance',
+                                'value' => 'About 200 m / 3–4 min walk'
+                            ]
+                        ]
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Cars cannot enter the narrow fort lanes. Guests arriving by road use Fort Parking and then continue on foot. Contact the hotel before travel to ask whether meet-and-assist or luggage help can be arranged; wait for confirmation before relying on it.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'The route is part of staying in the fort, but the cobbled lanes and short stair sections are worth knowing about before arrival. Confirm current reception hours and check-in/check-out times with the hotel. See the full [Jaisalmer Fort arrival guide](direction.php) or [send an arrival enquiry](contact.php?topic=arrival) before your trip.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'explore',
+                'eyebrow' => 'Exploring',
+                'heading' => 'Give the fort more than one hurried walk.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'A first pass through the fort can focus on orientation: the lanes around your hotel, viewpoints, architecture, and the parts of the fort that are most active during the day. A second walk often feels different because the same lanes change with light, temperature and activity.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'For visitors who want more context, the hotel can arrange a [guided Jaisalmer tour](guided-jaisalmer-tour.php). The half-day option is designed for a focused introduction, while the full-day route leaves more room for havelis, markets and additional heritage areas.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'stay',
+                'eyebrow' => 'Staying inside',
+                'heading' => 'What is different about sleeping in the fort?',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'The main difference is location. Instead of returning to a hotel outside the fort after sightseeing, you stay among the fort\'s lanes and sandstone buildings. Garh Jaisal Haveli has seven individually named heritage rooms, each with its own character. See the [rooms page](room.php) for the current room collection and facilities.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'For meals, [Garh Jaisal\'s Kitchen](roof.php) is the rooftop dining space. A rooftop meal also gives you a different view of the fort and the city after dark.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Planning a special trip as a couple? Read our [Jaisalmer honeymoon guide](jaisalmer-honeymoon-guide.php) for a practical way to combine a Fort stay, rooftop dining and a desert experience.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'desert',
+                'eyebrow' => 'Beyond the fort',
+                'heading' => 'Combine the Fort with a desert experience.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'A Jaisalmer stay does not have to be a choice between fort and desert. They work well together. You can spend your city time exploring the fort and havelis, then arrange a desert experience from the hotel.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Options currently include a [desert safari in Jaisalmer](desert-safari.php), sunset camel safari, sleep under the stars, cultural desert evening and an overnight Swiss tent option. The right choice depends on whether you want to return the same evening or stay overnight.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'plan',
+                'eyebrow' => 'Planning',
+                'heading' => 'A simple way to plan your visit.',
+                'blocks' => [
+                    [
+                        'type' => 'list',
+                        'ordered' => true,
+                        'items' => [
+                            'Arrive and settle inside the fort.',
+                            'Use a half-day or full-day guided route if you want more local context.',
+                            'Keep an evening for the rooftop or a sunset desert experience.',
+                            'Use the final morning for a quieter fort walk before departure.'
+                        ]
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'For a fuller plan, see our [Jaisalmer 2-day itinerary](jaisalmer-2-day-itinerary.php).'
+                    ]
+                ]
+            ]
+        ],
+        'sources' => [
+            [
+                'label' => 'Rajasthan Tourism — Jaisalmer destination guide',
+                'url' => 'https://www.tourism.rajasthan.gov.in/jaisalmer.html',
+                'note' => 'Official destination overview; confirm date-sensitive travel details before departure.'
+            ],
+            [
+                'label' => 'Rajasthan Tourism Development Corporation — Travel Tips',
+                'url' => 'https://rtdc.tourism.rajasthan.gov.in/Pages/TravelTips.aspx',
+                'note' => 'General trip-planning guidance; current schedules and arrangements must be confirmed directly.'
+            ]
+        ],
+        'related' => [
+            [
+                'href' => 'direction.php',
+                'label' => 'Arrival guide',
+                'title' => 'How to reach Garh Jaisal Haveli',
+                'text' => ''
+            ],
+            [
+                'href' => 'guided-jaisalmer-tour.php',
+                'label' => 'Guided tour',
+                'title' => 'Guided Jaisalmer tours',
+                'text' => ''
+            ],
+            [
+                'href' => 'jaisalmer-2-day-itinerary.php',
+                'label' => 'Itinerary',
+                'title' => '2-day Jaisalmer itinerary',
+                'text' => ''
+            ]
+        ],
+        'cta_eyebrow' => 'Plan your stay',
+        'cta_title' => 'Stay inside Jaisalmer Fort, then explore beyond it.',
+        'cta_text' => 'Ask the hotel about rooms, arrival, guided tours and desert experiences for your travel dates.',
+        'cta_primary_label' => 'Book your stay',
+        'cta_primary_href' => '@booking',
+        'cta_primary_target' => '_blank',
+        'cta_primary_rel' => 'noopener',
+        'cta_secondary_label' => 'Contact the hotel',
+        'cta_secondary_href' => 'contact.php'
+    ],
+    'desert-safari-guide' => [
+        'slug' => 'desert-safari-guide',
+        'title' => 'Desert Safari in Jaisalmer: How to Choose an Experience | Garh Jaisal Haveli',
+        'description' => 'Understand the different desert safari options in Jaisalmer, from sunset camel rides to sleeping under the stars and Swiss tent stays, and choose one that fits your time.',
+        'h1' => 'Desert Safari in Jaisalmer: How to Choose an Experience',
+        'eyebrow' => 'Desert safari guide',
+        'lede' => 'Understand the different desert safari options in Jaisalmer, from sunset camel rides to sleeping under the stars and Swiss tent stays, and choose one that fits your time.',
+        'hero_image' => 'img/desert3.jpg',
+        'hero_alt' => 'Sand dunes in the Thar Desert near Jaisalmer',
+        'date_published' => '2026-10-06',
+        'date_modified' => '2026-10-15',
+        'date_display' => '2026-10-06',
+        'meta_note' => 'Prepared from Garh Jaisal Haveli\'s current guest information',
+        'schema_headline' => 'Desert Safari in Jaisalmer: How to Choose an Experience | Garh Jaisal Haveli',
+        'breadcrumb_label' => 'Desert Safari Guide',
+        'css' => [
+            'css/article.css'
+        ],
+        'story_style' => false,
+        'related_eyebrow' => 'Continue planning',
+        'related_title' => '',
+        'related_intro' => '',
+        'toc' => [
+            [
+                'id' => 'what',
+                'label' => 'Desert safari is not one single experience.'
+            ],
+            [
+                'id' => 'compare',
+                'label' => 'Choose the experience by time and overnight style.'
+            ],
+            [
+                'id' => 'sequence',
+                'label' => 'What a desert evening usually looks like.'
+            ],
+            [
+                'id' => 'packing',
+                'label' => 'Pack for the desert, not just for the photograph.'
+            ],
+            [
+                'id' => 'choose',
+                'label' => 'One question usually decides the right package.'
+            ]
+        ],
+        'sections' => [
+            [
+                'id' => 'what',
+                'eyebrow' => 'Understand the options',
+                'heading' => 'Desert safari is not one single experience.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'A Jaisalmer desert trip can mean a short sunset camel safari, a cultural evening, or an overnight stay away from the city. The important choice is not only the camel ride. It is how much time you want in the desert, whether you want to sleep there, and what kind of accommodation you prefer.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Garh Jaisal Haveli currently arranges several options. The pages below describe the current package structure; confirm final timing, route and inclusions for your date.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'compare',
+                'eyebrow' => 'Compare',
+                'heading' => 'Choose the experience by time and overnight style.',
+                'blocks' => [
+                    [
+                        'type' => 'table',
+                        'headers' => [
+                            'Experience',
+                            'Overnight',
+                            'Camel ride',
+                            'Best fit'
+                        ],
+                        'rows' => [
+                            [
+                                '[Sunset Camel Safari](sunset-camel-safari.php)',
+                                'No',
+                                'Yes',
+                                'Sunset and return to Jaisalmer the same evening'
+                            ],
+                            [
+                                '[Cultural Desert Safari](cultural-safari.php)',
+                                'Check package',
+                                'Yes',
+                                'Desert evening with cultural programme'
+                            ],
+                            [
+                                '[Sleep Under the Stars](sleep-under-the-stars.php)',
+                                'Yes',
+                                'Yes',
+                                'Open-sky overnight experience'
+                            ],
+                            [
+                                '[Swiss Tent Safari](swiss-tent-safari.php)',
+                                'Yes',
+                                'Yes',
+                                'Overnight desert stay in a Swiss Deluxe Tent'
+                            ]
+                        ]
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'The current [desert safari hub](desert-safari.php) is the best place to compare the full set of options.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'sequence',
+                'eyebrow' => 'Typical flow',
+                'heading' => 'What a desert evening usually looks like.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'The exact clock times change with sunset and season, but the experience has a clear rhythm: leave Jaisalmer, travel through the desert route, ride by camel, spend time around the dunes, then either return to town or continue into the overnight part of the experience.'
+                    ],
+                    [
+                        'type' => 'list',
+                        'ordered' => true,
+                        'items' => [
+                            'Departure from Jaisalmer by the confirmed transport.',
+                            'Route stops included in your package.',
+                            'Camel ride towards the dunes.',
+                            'Time around sunset with tea, coffee or snacks where included.',
+                            'Dinner and cultural programme where included.',
+                            'Return to Jaisalmer or overnight stay, depending on the experience.'
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'id' => 'packing',
+                'eyebrow' => 'What to bring',
+                'heading' => 'Pack for the desert, not just for the photograph.',
+                'blocks' => [
+                    [
+                        'type' => 'list',
+                        'ordered' => false,
+                        'items' => [
+                            'Light layers for the daytime.',
+                            'A warmer layer for the evening, especially in winter.',
+                            'Closed or comfortable footwear for sand and uneven ground.',
+                            'Water and personal medication.',
+                            'Minimal luggage if you are staying overnight.'
+                        ]
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'For an open-sky stay, ask about the current bedding arrangement and night temperatures before confirming.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'choose',
+                'eyebrow' => 'Make the choice easier',
+                'heading' => 'One question usually decides the right package.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Ask yourself: Do I want to return to Jaisalmer the same evening? If yes, a sunset or cultural evening may fit. If no, compare the open-sky experience with the Swiss tent option based on your preferred overnight setup.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Guests who want more detail can read the individual [experience itineraries](pack.php) before contacting the hotel. Couples planning a special stay can also use our [Jaisalmer honeymoon guide](jaisalmer-honeymoon-guide.php) to connect the Fort, rooftop dining and desert options.'
+                    ]
+                ]
+            ]
+        ],
+        'sources' => [
+            [
+                'label' => 'Rajasthan Tourism — Jaisalmer destination guide',
+                'url' => 'https://www.tourism.rajasthan.gov.in/jaisalmer.html',
+                'note' => 'Official destination overview; confirm date-sensitive travel details before departure.'
+            ],
+            [
+                'label' => 'Rajasthan Tourism Development Corporation — Travel Tips',
+                'url' => 'https://rtdc.tourism.rajasthan.gov.in/Pages/TravelTips.aspx',
+                'note' => 'General trip-planning guidance; current schedules and arrangements must be confirmed directly.'
+            ]
+        ],
+        'related' => [
+            [
+                'href' => 'sunset-camel-safari.php',
+                'label' => 'Same evening',
+                'title' => 'Sunset Camel Safari',
+                'text' => ''
+            ],
+            [
+                'href' => 'swiss-tent-safari.php',
+                'label' => 'Overnight',
+                'title' => 'Swiss Tent Safari',
+                'text' => ''
+            ],
+            [
+                'href' => 'jaisalmer-2-day-itinerary.php',
+                'label' => 'Plan',
+                'title' => '2-day Jaisalmer itinerary',
+                'text' => ''
+            ]
+        ],
+        'cta_eyebrow' => 'Plan your stay',
+        'cta_title' => 'Stay inside Jaisalmer Fort, then explore beyond it.',
+        'cta_text' => 'Ask the hotel about rooms, arrival, guided tours and desert experiences for your travel dates.',
+        'cta_primary_label' => 'Book your stay',
+        'cta_primary_href' => '@booking',
+        'cta_primary_target' => '_blank',
+        'cta_primary_rel' => 'noopener',
+        'cta_secondary_label' => 'Contact the hotel',
+        'cta_secondary_href' => 'contact.php'
+    ],
+    'jaisalmer-2-day-itinerary' => [
+        'slug' => 'jaisalmer-2-day-itinerary',
+        'title' => 'Jaisalmer 2-Day Itinerary | Fort, City & Desert',
+        'description' => 'A practical 2-day Jaisalmer itinerary built around staying inside Jaisalmer Fort, with time for heritage sightseeing, rooftop dining and a desert experience.',
+        'h1' => 'Jaisalmer 2-Day Itinerary',
+        'eyebrow' => '2-day itinerary',
+        'lede' => 'A practical 2-day Jaisalmer itinerary built around staying inside Jaisalmer Fort, with time for heritage sightseeing, rooftop dining and a desert experience.',
+        'hero_image' => 'img/v2/facade.jpg',
+        'hero_alt' => 'Historic sandstone architecture inside Jaisalmer Fort',
+        'date_published' => '2026-10-06',
+        'date_modified' => '2026-10-15',
+        'date_display' => '2026-10-06',
+        'meta_note' => 'Prepared from Garh Jaisal Haveli\'s current guest information',
+        'schema_headline' => 'Jaisalmer 2-Day Itinerary | Fort, City & Desert',
+        'breadcrumb_label' => '2-Day Itinerary',
+        'css' => [
+            'css/article.css'
+        ],
+        'story_style' => false,
+        'related_eyebrow' => 'Continue planning',
+        'related_title' => '',
+        'related_intro' => '',
+        'toc' => [
+            [
+                'id' => 'overview',
+                'label' => 'A two-day Jaisalmer stay works best when the Fort and desert get their own time.'
+            ],
+            [
+                'id' => 'day1',
+                'label' => 'Stay inside the Fort and get oriented.'
+            ],
+            [
+                'id' => 'day2',
+                'label' => 'Use the morning for the city, then choose the desert.'
+            ],
+            [
+                'id' => 'variants',
+                'label' => 'Three easy variations.'
+            ],
+            [
+                'id' => 'book',
+                'label' => 'Confirm the details that can change.'
+            ]
+        ],
+        'sections' => [
+            [
+                'id' => 'overview',
+                'eyebrow' => 'At a glance',
+                'heading' => 'A two-day Jaisalmer stay works best when the Fort and desert get their own time.',
+                'blocks' => [
+                    [
+                        'type' => 'facts',
+                        'items' => [
+                            [
+                                'label' => 'Day 1',
+                                'value' => 'Fort, havelis and rooftop evening'
+                            ],
+                            [
+                                'label' => 'Day 2',
+                                'value' => 'Guided Jaisalmer route + desert'
+                            ]
+                        ]
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'This itinerary is designed around staying inside Jaisalmer Fort at Garh Jaisal Haveli. It is a planning framework, not a fixed timetable: actual sightseeing and desert timings should be adjusted for opening hours, weather, travel plans and the confirmed experience.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'day1',
+                'eyebrow' => 'Day 1',
+                'heading' => 'Stay inside the Fort and get oriented.',
+                'blocks' => [
+                    [
+                        'type' => 'subheading',
+                        'text' => 'Arrival and check-in'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Use the [arrival guide](direction.php) before you leave for Jaisalmer. Because vehicles cannot enter the fort lanes, plan enough time for the final walk from Fort Parking.'
+                    ],
+                    [
+                        'type' => 'subheading',
+                        'text' => 'Afternoon: explore the Fort'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Walk the lanes around Garh Jaisal Haveli and get a feel for the living fort. You can keep the first afternoon flexible rather than filling it with transfers.'
+                    ],
+                    [
+                        'type' => 'subheading',
+                        'text' => 'Evening: rooftop or sunset desert'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Choose between a quieter evening at [Garh Jaisal\'s Kitchen](roof.php) and a [sunset camel safari](sunset-camel-safari.php) if you want the desert on your first day.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'day2',
+                'eyebrow' => 'Day 2',
+                'heading' => 'Use the morning for the city, then choose the desert.',
+                'blocks' => [
+                    [
+                        'type' => 'subheading',
+                        'text' => 'Morning: guided Jaisalmer'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Take the [guided Jaisalmer route](guided-jaisalmer-tour.php) that matches your time. A half-day keeps the focus tight; a full-day gives you more room for heritage stops and local context.'
+                    ],
+                    [
+                        'type' => 'subheading',
+                        'text' => 'Afternoon to evening: desert'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Return from the city route and head into the desert if you have chosen a same-day safari. For an overnight plan, compare [Sleep Under the Stars](sleep-under-the-stars.php) with the [Swiss Tent Safari](swiss-tent-safari.php).'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'variants',
+                'eyebrow' => 'Adjust the plan',
+                'heading' => 'Three easy variations.',
+                'blocks' => [
+                    [
+                        'type' => 'list',
+                        'ordered' => false,
+                        'items' => [
+                            'More heritage: choose the full-day guided route and keep the desert for a separate future stay.',
+                            'More desert: keep Day 1 inside the fort and reserve Day 2 for a longer desert experience.',
+                            'More relaxed: use a half-day tour, leave space for the rooftop and choose a sunset safari rather than an overnight.'
+                        ]
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Have a third day? Our [Jaisalmer 3-day itinerary](jaisalmer-3-day-itinerary.php) explains how to leave room for the Fort, guided heritage sightseeing and a same-evening or overnight desert option.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'book',
+                'eyebrow' => 'Before you book',
+                'heading' => 'Confirm the details that can change.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Ask the hotel to confirm the current room availability, guide language, entry fees where applicable, desert departure arrangement, overnight facilities and final return time. This keeps the itinerary realistic rather than treating it like a fixed tour brochure.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'For the latest options, start with [Packages & Experiences](pack.php) or [contact the hotel](contact.php).'
+                    ]
+                ]
+            ]
+        ],
+        'sources' => [
+            [
+                'label' => 'Rajasthan Tourism — Jaisalmer destination guide',
+                'url' => 'https://www.tourism.rajasthan.gov.in/jaisalmer.html',
+                'note' => 'Official destination overview; confirm date-sensitive travel details before departure.'
+            ],
+            [
+                'label' => 'Rajasthan Tourism Development Corporation — Travel Tips',
+                'url' => 'https://rtdc.tourism.rajasthan.gov.in/Pages/TravelTips.aspx',
+                'note' => 'General trip-planning guidance; current schedules and arrangements must be confirmed directly.'
+            ]
+        ],
+        'related' => [
+            [
+                'href' => 'jaisalmer-fort-guide.php',
+                'label' => 'Read first',
+                'title' => 'Jaisalmer Fort Guide',
+                'text' => ''
+            ],
+            [
+                'href' => 'desert-safari-guide.php',
+                'label' => 'Choose',
+                'title' => 'Desert Safari Guide',
+                'text' => ''
+            ],
+            [
+                'href' => 'guided-jaisalmer-tour.php',
+                'label' => 'Explore',
+                'title' => 'Guided Jaisalmer Tours',
+                'text' => ''
+            ]
+        ],
+        'cta_eyebrow' => 'Plan your stay',
+        'cta_title' => 'Stay inside Jaisalmer Fort, then explore beyond it.',
+        'cta_text' => 'Ask the hotel about rooms, arrival, guided tours and desert experiences for your travel dates.',
+        'cta_primary_label' => 'Book your stay',
+        'cta_primary_href' => '@booking',
+        'cta_primary_target' => '_blank',
+        'cta_primary_rel' => 'noopener',
+        'cta_secondary_label' => 'Contact the hotel',
+        'cta_secondary_href' => 'contact.php'
+    ],
+    'jaisalmer-3-day-itinerary' => [
+        'slug' => 'jaisalmer-3-day-itinerary',
+        'title' => 'Jaisalmer 3-Day Itinerary | Fort, Heritage & Desert',
+        'description' => 'Plan three days in Jaisalmer with a Fort stay, guided heritage sightseeing and a desert experience. Compare same-evening and overnight options.',
+        'h1' => 'Jaisalmer in 3 Days: A Flexible Fort, Heritage and Desert Itinerary',
+        'eyebrow' => 'Three-day itinerary',
+        'lede' => 'Use three days to make room for the living Fort, a guided heritage route and the desert. The key decision is whether your second night is spent inside the Fort or on an overnight desert experience.',
+        'hero_image' => 'img/v2/facade.jpg',
+        'hero_alt' => 'Historic sandstone architecture inside Jaisalmer Fort',
+        'date_published' => '2026-10-15',
+        'date_modified' => '2026-10-15',
+        'date_display' => '2026-10-15',
+        'meta_note' => 'Prepared from Garh Jaisal Haveli\'s current guest information',
+        'schema_headline' => 'Jaisalmer 3-Day Itinerary | Fort, Heritage & Desert',
+        'breadcrumb_label' => '3-Day Itinerary',
+        'css' => [
+            'css/article.css'
+        ],
+        'story_style' => false,
+        'related_eyebrow' => 'Continue planning',
+        'related_title' => '',
+        'related_intro' => '',
+        'toc' => [
+            [
+                'id' => 'overview',
+                'label' => 'Build the trip around the Fort, heritage sightseeing and your preferred desert night.'
+            ],
+            [
+                'id' => 'day1',
+                'label' => 'Arrive, settle in and get to know the living Fort.'
+            ],
+            [
+                'id' => 'day2',
+                'label' => 'Give the Fort and heritage route a proper place in the plan.'
+            ],
+            [
+                'id' => 'day3',
+                'label' => 'Use the final day according to where you spent the second night.'
+            ],
+            [
+                'id' => 'overnight',
+                'label' => 'Same-evening desert safari or an overnight stay?'
+            ],
+            [
+                'id' => 'before-booking',
+                'label' => 'Confirm the details that make the itinerary realistic.'
+            ]
+        ],
+        'sections' => [
+            [
+                'id' => 'overview',
+                'eyebrow' => 'At a glance',
+                'heading' => 'Build the trip around the Fort, heritage sightseeing and your preferred desert night.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'A three-day visit gives you space to organise the city and desert without treating every hour as a fixed tour. This guide is a planning framework, not a confirmed package or timetable. Current availability, guide language, route details, opening hours and package inclusions need to be checked for your dates.'
+                    ],
+                    [
+                        'type' => 'facts',
+                        'items' => [
+                            [
+                                'label' => 'City base',
+                                'value' => 'Stay inside Jaisalmer Fort'
+                            ],
+                            [
+                                'label' => 'Main choice',
+                                'value' => 'Return from the desert or stay overnight'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'id' => 'day1',
+                'eyebrow' => 'Day 1',
+                'heading' => 'Arrive, settle in and get to know the living Fort.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Vehicles cannot enter the narrow Fort lanes, so guests continue on foot after Fort Parking. Read the [Jaisalmer Fort arrival guide](direction.php) before travelling and contact the hotel if you need to discuss the final approach.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Keep the first part of the day flexible: explore the lanes around your stay and avoid packing too many transfers into arrival day. Browse the [heritage rooms](room.php) and confirm current room availability through the booking journey.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'For an evening meal, explore [Garh Jaisal\'s Kitchen](roof.php). Confirm current menu, prices, service hours and table availability directly with the hotel.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'day2',
+                'eyebrow' => 'Day 2',
+                'heading' => 'Give the Fort and heritage route a proper place in the plan.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Use the second day for a guided route if you want more context than a self-guided walk. The Fort walk focuses on the Jain temples inside Jaisalmer Fort, the Palace Museum and a heritage street walk. Ask the hotel to confirm current price, guide language and availability for your date through the [city-tour enquiry](city-tour.php).'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Guide languages currently listed by the hotel include English, Hindi, Bengali, Italian, French, Spanish and German; availability is confirmed for the requested date. Leave room to rest rather than scheduling around unconfirmed departure times.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'day3',
+                'eyebrow' => 'Day 3',
+                'heading' => 'Use the final day according to where you spent the second night.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'If you stayed in the Fort, keep the morning for a final walk or onward departure. If you spent the second night in the desert, confirm the return-transfer arrangement and timing before committing to a train, flight or onward car; do not assume a particular return time.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'For longer journeys or a pickup/drop-off arrangement, share your route and date with the hotel. SUV and sedan arrangements can be requested across Rajasthan and Delhi, with route, vehicle and availability confirmed for each booking. See [car arrangements](car-rental.php).'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'overnight',
+                'eyebrow' => 'Choose your second night',
+                'heading' => 'Same-evening desert safari or an overnight stay?',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Prefer to sleep in Jaisalmer: compare the [sunset camel safari](sunset-camel-safari.php) when you want a desert experience without changing where you sleep that night; confirm timing and inclusions for your date.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Want to stay in the desert: compare [Sleep Under the Stars](sleep-under-the-stars.php) with the [Swiss Tent Safari](swiss-tent-safari.php). Ask what is included in the selected package and confirm transfer and return details.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'For a full comparison of current choices, read the [Jaisalmer desert safari guide](desert-safari-guide.php) and [Packages & Experiences](pack.php).'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'before-booking',
+                'eyebrow' => 'Before you book',
+                'heading' => 'Confirm the details that make the itinerary realistic.',
+                'blocks' => [
+                    [
+                        'type' => 'list',
+                        'ordered' => false,
+                        'items' => [
+                            'Room availability and the walk from Fort Parking.',
+                            'Current guide price, requested language and date availability.',
+                            'The selected desert experience, its exact inclusions and return arrangement.',
+                            'Current rooftop dining hours, menu and prices.',
+                            'Any road transfer, vehicle or pickup/drop-off request.'
+                        ]
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'The [Jaisalmer 2-day itinerary](jaisalmer-2-day-itinerary.php) is an alternative if you have less time. For room dates, go to [rooms](room.php) or [contact the hotel](contact.php).'
+                    ]
+                ]
+            ]
+        ],
+        'sources' => [
+            [
+                'label' => 'Rajasthan Tourism — Jaisalmer destination guide',
+                'url' => 'https://www.tourism.rajasthan.gov.in/jaisalmer.html',
+                'note' => 'Official destination overview; confirm date-sensitive travel details before departure.'
+            ],
+            [
+                'label' => 'Rajasthan Tourism Development Corporation — Travel Tips',
+                'url' => 'https://rtdc.tourism.rajasthan.gov.in/Pages/TravelTips.aspx',
+                'note' => 'General trip-planning guidance; current schedules and arrangements must be confirmed directly.'
+            ]
+        ],
+        'related' => [
+            [
+                'href' => 'jaisalmer-fort-guide.php',
+                'label' => 'Heritage',
+                'title' => 'Jaisalmer Fort Guide',
+                'text' => ''
+            ],
+            [
+                'href' => 'desert-safari-guide.php',
+                'label' => 'Compare',
+                'title' => 'Desert Safari Guide',
+                'text' => ''
+            ],
+            [
+                'href' => 'jaisalmer-honeymoon-guide.php',
+                'label' => 'Couples',
+                'title' => 'Jaisalmer Honeymoon Guide',
+                'text' => ''
+            ]
+        ],
+        'cta_eyebrow' => 'Plan your stay',
+        'cta_title' => 'Stay inside Jaisalmer Fort, then make room for the desert.',
+        'cta_text' => 'Check room availability and ask the hotel to confirm the guided route, desert option and travel arrangements for your dates.',
+        'cta_primary_label' => 'Check room availability',
+        'cta_primary_href' => '@booking',
+        'cta_primary_target' => '_blank',
+        'cta_primary_rel' => 'noopener',
+        'cta_secondary_label' => 'Contact the hotel',
+        'cta_secondary_href' => 'contact.php'
+    ],
+    'jaisalmer-honeymoon-guide' => [
+        'slug' => 'jaisalmer-honeymoon-guide',
+        'title' => 'Jaisalmer Honeymoon Guide | Fort Stay & Desert Night',
+        'description' => 'Plan a Jaisalmer honeymoon with a heritage stay inside the Fort, rooftop dining and a choice of sunset safari or overnight desert stay. Confirm details for your dates.',
+        'h1' => 'Plan a Jaisalmer Honeymoon Around a Fort Stay and Desert Night',
+        'eyebrow' => 'Couples & honeymoon planning',
+        'lede' => 'A heritage stay, a rooftop evening and the right desert experience can shape a memorable Jaisalmer trip. Use this guide to plan the pieces and confirm which arrangements are available for your dates.',
+        'hero_image' => 'img/v2/fort-from-roof.jpg',
+        'hero_alt' => 'Rooftop view across Jaisalmer Fort',
+        'date_published' => '2026-10-15',
+        'date_modified' => '2026-10-15',
+        'date_display' => '2026-10-15',
+        'meta_note' => 'Prepared from Garh Jaisal Haveli\'s current guest information',
+        'schema_headline' => 'Jaisalmer Honeymoon Guide | Fort Stay & Desert Night',
+        'breadcrumb_label' => 'Honeymoon Guide',
+        'css' => [
+            'css/article.css'
+        ],
+        'story_style' => false,
+        'related_eyebrow' => 'Continue planning',
+        'related_title' => '',
+        'related_intro' => '',
+        'toc' => [
+            [
+                'id' => 'start',
+                'label' => 'Make the heritage stay part of the trip, not just a place to sleep.'
+            ],
+            [
+                'id' => 'heritage',
+                'label' => 'Leave space for a Fort walk and local context.'
+            ],
+            [
+                'id' => 'dining',
+                'label' => 'Ask about dinner arrangements before building the evening around them.'
+            ],
+            [
+                'id' => 'desert',
+                'label' => 'Decide whether you want to return to town or sleep in the desert.'
+            ],
+            [
+                'id' => 'details',
+                'label' => 'Confirm the parts that change with dates and preferences.'
+            ]
+        ],
+        'sections' => [
+            [
+                'id' => 'start',
+                'eyebrow' => 'Start with the Fort',
+                'heading' => 'Make the heritage stay part of the trip, not just a place to sleep.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Garh Jaisal Haveli is inside Jaisalmer Fort. Staying here places you among the Fort\'s lanes, rather than outside the walls. The final approach is on foot because vehicles cannot enter the narrow Fort lanes; read the [arrival guide](direction.php) and plan for the walk from Fort Parking.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Start with the [heritage rooms](room.php) and check availability for your dates through the [stay guide](book-rooms-in-jaisalmer.php) or the direct booking journey. This page is a planning guide, not a fixed honeymoon package: room, dining and desert arrangements should each be confirmed before you rely on them.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'heritage',
+                'eyebrow' => 'Make time for heritage',
+                'heading' => 'Leave space for a Fort walk and local context.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Walk the Fort at your own pace or ask about the guided Fort route, which focuses on the Jain temples inside Jaisalmer Fort, the Palace Museum and a heritage street walk. Current price, language and guide availability are confirmed for the requested date.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'The hotel lists guides in English, Hindi, Bengali, Italian, French, Spanish and German. Share your preferred language and date so availability can be checked. For practical background, see the [Jaisalmer Fort guide](jaisalmer-fort-guide.php).'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'dining',
+                'eyebrow' => 'Plan a rooftop dinner',
+                'heading' => 'Ask about dinner arrangements before building the evening around them.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => '[Garh Jaisal\'s Kitchen](roof.php) is the rooftop restaurant. Candlelight dinners can be arranged, but current service hours, the menu, prices and date availability should be confirmed directly with the hotel. A request is not a confirmed table or dinner arrangement.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Send a [dining enquiry](contact.php?topic=dining) with your preferred date and party size. Ask the hotel to confirm the current menu and arrangements before treating the evening as booked.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'desert',
+                'eyebrow' => 'Choose the desert style',
+                'heading' => 'Decide whether you want to return to town or sleep in the desert.',
+                'blocks' => [
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Return the same evening: compare the [sunset camel safari](sunset-camel-safari.php) when you want a desert experience without changing where you sleep that night; confirm timing and inclusions for your date.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Spend a night outside town: compare [Sleep Under the Stars](sleep-under-the-stars.php) with the [Swiss Tent Safari](swiss-tent-safari.php). The Swiss tents have a king-size bed, an attached bathroom with hot and cold shower, tea and coffee maker, toiletries, study table, full-length mirror and towels. Confirm all other package inclusions and transfer details for your selected date.'
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'Use the [desert safari comparison guide](desert-safari-guide.php) before choosing. A sunset experience and an overnight stay are different plans; do not assume a separate jeep safari or another extra is included unless confirmed in the selected package.'
+                    ]
+                ]
+            ],
+            [
+                'id' => 'details',
+                'eyebrow' => 'Before you book',
+                'heading' => 'Confirm the parts that change with dates and preferences.',
+                'blocks' => [
+                    [
+                        'type' => 'list',
+                        'ordered' => false,
+                        'items' => [
+                            'Room type, room availability and the final walk into the Fort.',
+                            'Whether a candlelight dinner can be arranged for your date, plus current menu, prices and service hours.',
+                            'Guide language and availability if you want a guided Fort or heritage walk.',
+                            'Desert experience, accommodation style, inclusions and return arrangements.',
+                            'Any SUV or sedan route, pickup point and availability that you need the hotel to confirm.'
+                        ]
+                    ],
+                    [
+                        'type' => 'paragraph',
+                        'text' => 'For a structured trip plan, use the [Jaisalmer 3-day itinerary](jaisalmer-3-day-itinerary.php). For a room enquiry, start from [rooms](room.php) or [contact the hotel](contact.php).'
+                    ]
+                ]
+            ]
+        ],
+        'sources' => [
+            [
+                'label' => 'Rajasthan Tourism — Jaisalmer destination guide',
+                'url' => 'https://www.tourism.rajasthan.gov.in/jaisalmer.html',
+                'note' => 'Official destination overview; confirm date-sensitive travel details before departure.'
+            ],
+            [
+                'label' => 'Rajasthan Tourism Development Corporation — Travel Tips',
+                'url' => 'https://rtdc.tourism.rajasthan.gov.in/Pages/TravelTips.aspx',
+                'note' => 'General trip-planning guidance; current schedules and arrangements must be confirmed directly.'
+            ]
+        ],
+        'related' => [
+            [
+                'href' => 'book-rooms-in-jaisalmer.php',
+                'label' => 'Stay',
+                'title' => 'Staying inside Jaisalmer Fort',
+                'text' => ''
+            ],
+            [
+                'href' => 'jaisalmer-3-day-itinerary.php',
+                'label' => 'Itinerary',
+                'title' => 'Jaisalmer in 3 Days',
+                'text' => ''
+            ],
+            [
+                'href' => 'desert-safari-guide.php',
+                'label' => 'Desert',
+                'title' => 'Compare desert experiences',
+                'text' => ''
+            ]
+        ],
+        'cta_eyebrow' => 'Plan your stay',
+        'cta_title' => 'Bring the room, rooftop and desert plans together.',
+        'cta_text' => 'Check room availability and ask the hotel to confirm the dining, guide and desert options that fit your travel dates.',
+        'cta_primary_label' => 'Check room availability',
+        'cta_primary_href' => '@booking',
+        'cta_primary_target' => '_blank',
+        'cta_primary_rel' => 'noopener',
+        'cta_secondary_label' => 'Contact the hotel',
+        'cta_secondary_href' => 'contact.php'
+    ]
 ];
