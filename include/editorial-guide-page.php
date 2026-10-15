@@ -239,7 +239,7 @@ require __DIR__ . '/page-head.php';
   $ctaBand = [
       'section_class' => 'section article-footer-cta',
       'inner_class' => 'site-shell article-cta-inner',
-      'eyebrow' => 'Plan with Garh Jaisal Haveli',
+      'eyebrow' => $guide['cta_eyebrow'] ?? 'Plan with Garh Jaisal Haveli',
       'title' => $guide['cta_title'],
       'text' => $guide['cta_text'],
       'actions_class' => 'actions',
