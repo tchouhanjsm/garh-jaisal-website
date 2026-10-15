@@ -89,6 +89,11 @@ async function captureHead(page, route) {
       if (ignoreSharedRootsForBaseline && sharedRootIds.has(value['@id'])) {
         return;
       }
+      // HotelRoom nodes on /room.php are intentionally tested against the
+      // live room registry in schema-fidelity.spec.js, not the frozen baseline.
+      if (route === '/room.php' && value['@type'] === 'HotelRoom') {
+        return;
+      }
       if (value['@type']) {
         const values = Array.isArray(value['@type']) ? value['@type'] : [value['@type']];
         values.forEach(type => jsonLdTypes.push(String(type)));
