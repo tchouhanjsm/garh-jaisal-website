@@ -1,15 +1,14 @@
 :root{
-  --ink:#29231e;
-  --muted:#756b61;
-  --sand:#d9b27a;
-  --sand-light:#f2e8d8;
-  --cream:#fbf8f1;
-  --line:#dfd4c5;
-  --brown:#6b442d;
-  --dark:#241d18;
+  /* Legacy aliases point to the owner-approved Thar Sunset tokens in css/tokens.css. */
+  --muted:#65574f;
+  --sand-light:var(--sand);
+  --cream:var(--parchment);
+  --line:#e0d3bf;
+  --brown:var(--garnet);
+  --dark:var(--night);
   --white:#fff;
   --max:1180px;
-  --shadow:0 18px 50px rgba(42,28,18,.10);
+  --shadow:0 18px 50px rgba(20,18,43,.14);
 }
 
 *{
@@ -25,7 +24,7 @@ body{
   margin:0;
   color:var(--ink);
   background:var(--cream);
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-family:var(--font-body);
   line-height:1.65;
 }
 
@@ -87,7 +86,7 @@ a{
 .eyebrow{
   text-transform:uppercase;
   letter-spacing:.15em;
-  font-size:.73rem;
+  font-size:13px;
   font-weight:700;
   color:var(--brown);
   margin:0 0 12px;
@@ -96,7 +95,7 @@ a{
 h1,
 h2,
 h3{
-  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-family:var(--font-display);
   font-weight:400;
   line-height:1.1;
 }
@@ -150,7 +149,7 @@ p{
 
 .brand strong{
   display:block;
-  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-family:var(--font-display);
   font-size:1.15rem;
   font-weight:400;
   letter-spacing:-.01em;
@@ -236,8 +235,8 @@ p{
   display:none;
   background:none;
   border:0;
-  width:42px;
-  height:42px;
+  width:44px;
+  height:44px;
   padding:8px;
   cursor:pointer;
 }
@@ -400,9 +399,9 @@ p{
 }
 
 .button-primary{
-  background:var(--brown);
-  border-color:var(--brown);
-  color:var(--cream);
+  background:var(--saffron);
+  border-color:var(--saffron);
+  color:#fff;
 }
 
 .button-primary:hover{
@@ -523,7 +522,7 @@ p{
 }
 
 .feature-num{
-  font-family:"Source Serif 4",Georgia,serif;
+  font-family:var(--font-display);
   color:var(--brown);
   font-size:1.1rem;
 }
@@ -696,7 +695,7 @@ p{
 
 .step strong{
   display:block;
-  font-family:"Source Serif 4",Georgia,serif;
+  font-family:var(--font-display);
   font-size:1.4rem;
   margin-bottom:8px;
 }
@@ -775,7 +774,7 @@ p{
 }
 
 .review-band blockquote{
-  font-family:"Source Serif 4",Georgia,serif;
+  font-family:var(--font-display);
   font-size:clamp(1.7rem,3.2vw,2.7rem);
   line-height:1.25;
   margin:0 0 22px;
@@ -1117,7 +1116,7 @@ p{
 
 .trust-point strong{
   display:block;
-  font-family:"Source Serif 4",Georgia,serif;
+  font-family:var(--font-display);
   font-size:1.25rem;
   font-weight:400;
   margin-bottom:5px;
@@ -1250,7 +1249,9 @@ p{
   .nav-toggle{
     order:2;
     display:block;
-    flex:0 0 42px;
+    flex:0 0 44px;
+    width:44px;
+    height:44px;
   }
 
   .main-nav{
@@ -1610,8 +1611,8 @@ p{
 }
 
 .nav-sub-toggle{
-  width:22px;
-  height:22px;
+  width:44px;
+  height:44px;
   padding:0;
   display:inline-flex;
   align-items:center;
@@ -1704,7 +1705,7 @@ p{
 }
 
 .main-nav .nav-sub a.nav-group-title{
-  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-family:var(--font-display);
   font-size:1rem;
   font-weight:600;
   color:var(--brown);
@@ -2104,7 +2105,7 @@ p{
 }
 .home-arrival-note-copy h2{
   margin:0 0 7px;
-  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-family:var(--font-display);
   font-size:clamp(1.45rem,2.4vw,2rem);
   line-height:1.2;
 }
@@ -2217,7 +2218,7 @@ p{
 }
 .rooms-summary-stat strong{
   color:#fff;
-  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-family:var(--font-display);
   font-size:1.65rem;
   font-weight:500;
   line-height:1.15;
@@ -2238,7 +2239,7 @@ p{
 .rooms-directory-head h2{
   max-width:650px;
   margin:0;
-  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-family:var(--font-display);
   font-size:clamp(2rem,4.2vw,3.4rem);
   line-height:1.1;
 }
@@ -2534,3 +2535,148 @@ p{
 .site-faq .faq-answer { padding: 0 46px 18px 0; }
 .site-faq .faq-answer p { max-width: 760px; margin: 0; color: #5b5148; line-height: 1.7; }
 @media (max-width: 760px) { .site-faq .faq-item summary { font-size: 1.12rem; } .site-faq .faq-answer { padding-right: 12px; } }
+
+
+/* Sprint 22 Batch 1 — owner-approved Thar Sunset action and navigation foundation. */
+.button-primary,
+.main-nav .nav-book,
+.mobile-cta-book,
+.site-footer .footer-booking-button{
+  background:var(--saffron);
+  border-color:var(--saffron);
+  color:#fff;
+}
+.button-primary:hover,
+.main-nav .nav-book:hover,
+.site-footer .footer-booking-button:hover,
+.site-footer .footer-booking-button:focus-visible{
+  background:#923906;
+  border-color:#923906;
+  color:#fff;
+}
+.brand small{
+  font-size:13px;
+  letter-spacing:.08em;
+}
+.mobile-cta a{
+  font-size:13px;
+}
+
+/* Keep the full information architecture reachable on smaller laptops without
+   forcing the rest of each page into its mobile layout. */
+@media (min-width:1081px) and (max-width:1366px){
+  .nav-inner{
+    display:flex;
+    min-height:72px;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:0;
+  }
+  .brand{
+    order:1;
+    flex:1 1 auto;
+    min-width:0;
+  }
+  .nav-toggle{
+    order:2;
+    display:block;
+    flex:0 0 44px;
+    width:44px;
+    height:44px;
+  }
+  .main-nav{
+    position:absolute;
+    left:0;
+    right:0;
+    top:72px;
+    z-index:140;
+    display:none;
+    flex-direction:column;
+    align-items:stretch;
+    gap:0;
+    padding:8px 20px 18px;
+    border-bottom:1px solid var(--line);
+    background:var(--cream);
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+    max-height:calc(100vh - 72px);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    font-size:1rem;
+  }
+  .main-nav.is-open{
+    display:flex;
+  }
+  .main-nav a{
+    display:flex;
+    align-items:center;
+    min-height:44px;
+    padding:12px 0;
+    white-space:normal;
+  }
+  .main-nav a:not(.nav-book)::after{
+    bottom:5px;
+  }
+  .nav-item,
+  .nav-item.has-mega{
+    position:static;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 44px;
+    align-items:center;
+    gap:0;
+  }
+  .nav-sub-toggle{
+    width:44px;
+    height:44px;
+  }
+  .nav-sub,
+  .nav-mega{
+    position:static;
+    grid-column:1 / -1;
+    width:auto;
+    min-width:0;
+    padding:0 0 8px 14px;
+    background:transparent;
+    border:0;
+    border-radius:0;
+    box-shadow:none;
+  }
+  .nav-item.has-sub:hover > .nav-sub,
+  .nav-item.has-sub:focus-within > .nav-sub{
+    display:none;
+  }
+  .nav-item.has-sub.is-open > .nav-sub{
+    display:block;
+  }
+  .nav-item.has-sub:hover > .nav-sub-toggle span{
+    transform:translateY(-2px) rotate(45deg);
+  }
+  .nav-item.is-open > .nav-sub-toggle span{
+    transform:translateY(1px) rotate(225deg);
+  }
+  .nav-mega-grid{
+    grid-template-columns:1fr;
+    gap:4px;
+    padding:0;
+  }
+  .main-nav .nav-sub a{
+    display:flex;
+    min-height:44px;
+    padding:10px 8px;
+  }
+  .nav-mega-foot{
+    flex-direction:column;
+    border-top:0;
+    padding-top:0;
+  }
+  .main-nav .nav-mega-foot a{
+    min-height:44px;
+    padding:10px 8px;
+  }
+  .main-nav .nav-book{
+    justify-content:center;
+    min-height:44px;
+    margin:8px 0 0;
+    padding:12px 15px;
+  }
+}

@@ -2,7 +2,7 @@
 
 Read `docs/BRAIN.md` first. Status lives in `docs/PROJECT-LOG.md`. Questions for the owner live in `docs/OWNER-FACTS.md`.
 
-Goal: finish the redesign in about a week by making every page cheap to build, then redesigning the remaining pages in three large slices.
+Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visible and commercial vertical slice every two weeks, keep each PR to one coherent slice (typically 5–20 files), and leave merge/deployment authority with the owner.
 
 | Sprint | Slice | Status |
 |---|---|---|
@@ -382,9 +382,31 @@ Stop there: the owner merges.
 - Add Browser E2E for archive discovery, topic-specific content, reciprocal links and CTA markup. Required gates: PHP 7.4/8.2 lint, strict site/image checks, sitemap freshness, package preflight, non-deploying staging dry run, full Browser E2E and responsive page sheet on the exact PR head.
 - Do not claim ranking or traffic lift from publication alone. After owner review and eventual publication, use Search Console and both configured GA4 properties to measure impressions, clicks and enquiry intent. Real staging, GA4 receipt and production deployment remain owner-gated.
 
-## Sprint 22 — Guest policies and trust pages (owner-blocked)
+## Owner-blocked follow-up — guest policies and trust pages
 
 - Keep the privacy policy, terms and the single combined cancellation/refund policy page in draft/noindex/off-navigation status until the owner provides the approved policy wording.
 - Confirm the privacy/data-controller name and contact email, information collected, contact-form processing and retention language before publishing the privacy page.
 - Keep guest FAQs as their own useful pre-booking page and avoid legal claims until the owner supplies the copy. Do not invent refund windows, deposits, cancellation charges, check-in/out times or exceptions.
 - Once approved wording is supplied, implement the policy pages as one trust-focused slice, update internal links/sitemap only after publication approval, and add tests that draft/approved state and exact visible copy are consistent.
+
+
+## Sprint 22 — Batch 1: Thar Sunset identity and conversion foundation (PR in review)
+
+**Commercial goal:** make the site more recognisable and the next booking/enquiry action easier without changing established public URLs or making new operational promises.
+
+- Introduce the master-plan palette through shared design tokens, update core color aliases and typography tokens, reserve saffron for primary actions, raise core eyebrows to 13px and control targets to at least 44px.
+- Keep sticky navigation and restore dropdown access across 1081–1366px using the compact navigation pattern; responsive checks must cover 320, 390, 768, 1280 and 1440px.
+- Append only safe, allowlisted UTM fields to the existing booking-engine URL; preserve its token, preserve existing UTMs, and exclude arbitrary query parameters and personal data from outbound links/events.
+- Prefill previously bare WhatsApp links with the current page topic while preserving every existing page-specific message. Track safe UTM context on existing intent events without reporting completed bookings or sent enquiries.
+- Update conversion and responsive regression tests plus this log. No new runtime dependency, live URL retirement, GA4 ID change, deployment or merge is part of the slice.
+
+### Next batches — dependencies first
+
+1. **Restaurant R1 — table-request workflow (P0):** build the request form, 30-minute slot engine, CSRF/honeypot/rate limit, durable lead log, acknowledgement email and manual staff-confirmation states as one reviewable vertical slice. Do not ship the backend until the owner confirms restaurant opening days/hours, last seating, same-day cut-off, closed dates/capacity, notification recipient/handler, privacy/retention wording and approved contact flow. Requests must never be auto-confirmed.
+2. **V2 — visual storytelling:** after the token/header foundation, apply the dusk hero, arch/cinematic crops and reduced-motion-safe reveal to the high-intent pages using only approved image assets. Vendor licensed WOFF2 subsets before switching font delivery away from the existing provider.
+3. **V3/V4 — unified product-card anatomy and camp/transport ladders:** use owner-confirmed catalogue facts and one source of truth before displaying prices or availability.
+4. **V5 — Trip tray and lead log:** start only with a privacy-approved retention and access model; each lead needs reference, source/UTM, status and owner.
+5. **V6/V7 — trust proof, camp ladder and transport calculator:** review proof sources and licensed-operator/safety notes before anything is represented as a bookable offer.
+6. **V8–V10 / R2–R4:** editorial house ads only after owner approvals; complete the restaurant’s distinct Night Kitchen visual/story/FAQ experience after R1 works reliably; performance and schema changes are budget- and source-verified.
+
+Owner-blocked items remain explicit: no fabricated prices, hours, capacity, reviews, policy terms, licensed-partner details or font assets.

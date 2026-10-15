@@ -54,6 +54,91 @@ document.addEventListener('DOMContentLoaded', () => {
     return (label || kind).slice(0, 80);
   };
 
+  // Keep only non-sensitive campaign fields. Never forward arbitrary query parameters or form data.
+  const attributionKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'];
+  const safeCampaignValue = (value, fallback) => (
+    typeof value === 'string' && /^[A-Za-z0-9._-]{1,80}$/.test(value.trim())
+      ? value.trim()
+      : fallback
+  );
+  const attributionForCurrentPage = () => {
+    const incoming = new URLSearchParams(window.location.search);
+    const route = (window.location.pathname.split('/').filter(Boolean).pop() || 'index.php')
+      .replace(/\.php$/i, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9._-]/g, '-');
+    return {
+      utm_source: safeCampaignValue(incoming.get('utm_source'), 'hotel_website'),
+      utm_medium: safeCampaignValue(incoming.get('utm_medium'), 'website'),
+      utm_campaign: safeCampaignValue(incoming.get('utm_campaign'), 'direct_booking'),
+      utm_content: safeCampaignValue(incoming.get('utm_content'), route || 'home')
+    };
+  };
+  const isWhatsAppHost = (hostname) => ['wa.me', 'whatsapp.com', 'api.whatsapp.com']
+    .includes(String(hostname || '').toLowerCase());
+  const whatsappTopicForCurrentPage = () => {
+    const route = (window.location.pathname.split('/').filter(Boolean).pop() || 'index.php').toLowerCase();
+    const labels = {
+      'index.php': 'a stay at Garh Jaisal Haveli',
+      'room.php': 'the heritage rooms',
+      'roof.php': 'rooftop dining',
+      'restaurant.php': "Garh Jaisal's Kitchen",
+      'pack.php': 'packages and experiences',
+      'desert-safari.php': 'desert experiences',
+      'camping.php': 'a desert camp stay',
+      'car-rental.php': 'car arrangements',
+      'car-tours.php': 'Jaisalmer sightseeing',
+      'direction.php': 'arrival directions',
+      'contact.php': 'the details on the contact page',
+      'blog.php': 'Jaisalmer travel planning',
+      'jaisalmer-3-day-itinerary.php': 'a three-day Jaisalmer itinerary',
+      'jaisalmer-honeymoon-guide.php': 'a couples trip to Jaisalmer'
+    };
+    return labels[route] || 'Garh Jaisal Haveli';
+  };
+  const prepareOutboundLinks = () => {
+    const attribution = attributionForCurrentPage();
+    document.querySelectorAll('a[href]').forEach((anchor) => {
+      let destination;
+      try {
+        destination = new URL(anchor.href, window.location.href);
+      } catch {
+        return;
+      }
+
+      if (
+        bookingDestination &&
+        destination.origin === bookingDestination.origin &&
+        destination.pathname === bookingDestination.pathname
+      ) {
+        const missingAttribution = attributionKeys
+          .filter((key) => !destination.searchParams.has(key))
+          .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(attribution[key]));
+        if (missingAttribution.length) {
+          const originalHref = anchor.getAttribute('href') || anchor.href;
+          const hashIndex = originalHref.indexOf('#');
+          const hash = hashIndex >= 0 ? originalHref.slice(hashIndex) : '';
+          const withoutHash = hashIndex >= 0 ? originalHref.slice(0, hashIndex) : originalHref;
+          const separator = !withoutHash.includes('?')
+            ? '?'
+            : (withoutHash.endsWith('?') || withoutHash.endsWith('&') ? '' : '&');
+          anchor.setAttribute('href', withoutHash + separator + missingAttribution.join('&') + hash);
+        }
+        return;
+      }
+
+      if (isWhatsAppHost(destination.hostname) && !destination.searchParams.get('text')) {
+        destination.searchParams.set(
+          'text',
+          "Hello, I'm enquiring about " + whatsappTopicForCurrentPage() +
+            '. Please share the current details and availability.'
+        );
+        anchor.href = destination.toString();
+      }
+    });
+  };
+  prepareOutboundLinks();
+
   document.addEventListener('click', (event) => {
     const anchor = event.target instanceof Element ? event.target.closest('a[href]') : null;
     if (!anchor) return;
@@ -65,10 +150,10 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const eventContext = {
+    const eventContext = Object.assign({
       page_path: window.location.pathname || '/',
       page_context: currentPageContext()
-    };
+    }, attributionForCurrentPage());
 
     if (
       bookingDestination &&
@@ -112,11 +197,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       enquiryStartSent = true;
-      trackIntentEvent('enquiry_start', {
+      trackIntentEvent('enquiry_start', Object.assign({
         page_path: window.location.pathname || '/',
         page_context: 'contact',
         enquiry_context: enquiryContext
-      });
+      }, attributionForCurrentPage()));
     });
   }
 
@@ -203,8 +288,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const forced = item.classList.contains('is-open');
     const dismissed = item.classList.contains('is-dismissed');
     const live = !forced && !dismissed && (item.matches(':hover') || item.matches(':focus-within'));
-    const mobile = window.matchMedia('(max-width:1080px)').matches;
-    const open = forced || (!mobile && live);
+    const compactNavigation = window.matchMedia('(max-width:1366px)').matches;
+    const open = forced || (!compactNavigation && live);
     toggle.setAttribute('aria-expanded', String(open));
     const label = toggle.dataset.label || '';
     toggle.setAttribute('aria-label', (open ? 'Hide ' : 'Show ') + label + ' submenu');
@@ -261,8 +346,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
 
-    const mobile = window.matchMedia('(max-width:1080px)').matches;
-    if (mobile && nav.classList.contains('is-open')) {
+    const compactNavigation = window.matchMedia('(max-width:1366px)').matches;
+    const hasOpenSubmenu = items.some((item) => item.classList.contains('is-open'));
+    if (compactNavigation && nav.classList.contains('is-open') && !hasOpenSubmenu) {
       setMenu(false);
       button.focus();
       event.preventDefault();

@@ -160,6 +160,7 @@ $analyticsIds = array_values(array_unique(array_filter(
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/garh-v2.css">
+  <link rel="stylesheet" href="css/tokens.css">
 <?php foreach ($extraStylesheets as $stylesheet): ?>
   <link rel="stylesheet" href="<?= $htmlEscape($stylesheet) ?>">
 <?php endforeach; ?>
