@@ -28,10 +28,9 @@ Goal: finish the redesign in about a week by making every page cheap to build, t
 | 17 | Booking and enquiry intent measurement | ✓ PR #64 merged; intent events routed to both approved GA4 IDs; live-property validation still owner-side |
 | 18 | Licensed Desert Gallery and Swiss Tent Safari conversion | ✓ PR #66 merged; post-merge checks passed; visual photo/caption review remains owner-side |
 | 19 | Restaurant conversion: menu booklet, maps QR and social follow | ✓ PR #67 merged; post-merge Site Checks, package preflight, staging dry run and Browser E2E passed |
-| 20 | Fort walk, car services and Directions map | ◐ PR #68 in review; E2E failures being fixed; metadata freeze retained |
-| 21 | SEO content cluster and Packages conversion | Planned after Sprint 20; enrich `pack.php` and build a researched, internally linked travel-intent content cluster without thin duplicate pages |
+| 20 | Fort walk, car services and Directions map | ✓ PR #68 merged; exact PR-head Site Checks, package preflight, staging dry run and Browser E2E passed; real staging remains owner-gated |
+| 21 | SEO content cluster and Packages conversion | ◐ Batch 1: connect Packages to the three existing planning guides and the direct car-arrangements page; continue content/SEO review without duplicate pages |
 | 22 | Guest policies and trust pages | Blocked on owner-approved privacy, terms and cancellation/refund wording; keep unpublished/noindex until confirmed |
-| 20 | Fort walk, car services and Directions map | ◐ PR #68 in review; confirmed Fort-walk stops and guide languages, SUV/sedan route enquiries and responsive arrival map |
 
 ---
 
@@ -347,9 +346,11 @@ Stop there: the owner merges.
 - Required gates: PHP 7.4/8.2 Site Checks, strict image references, sitemap freshness, package preflight, full Browser E2E and 390px/1280px screenshot sheet. Staging and production remain owner-controlled.
 
 
-## Sprint 20 — Fort walk, car services and Directions map (PR #68 in review)
+## Sprint 20 — Fort walk, car services and Directions map (PR #68 merged)
 
 **Outcome:** make the Fort walk, guided city tours and vehicle arrangements distinct products with clear enquiry paths.
+
+- PR #68 merged to `main` at `47ca61866482e8046b2ea230da0cc18eaacf779f`. Exact PR head `a1fbda68b01312f6b623ef2e6d8a29aef70a6e51` passed [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38607504032), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38607504001), [Staging QA dry run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38607503864), and [Browser E2E/screenshot sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38607503842). The staging run was a local dry run only.
 
 - Expand `city-tour.php` to cover Jain temples inside Jaisalmer Fort, the Palace Museum and heritage street walk. Display the confirmed guide-language choices; obtain current price and guide availability via WhatsApp.
 - Improve `car-rental.php` with owner-confirmed SUV/sedan arrangements, desert pickup/drop-off, intercity journeys across Rajasthan and Delhi, and Hindi/English driver communication. Quote routes via WhatsApp.
@@ -358,9 +359,11 @@ Stop there: the owner merges.
 - Required gates: PHP 7.4/8.2 Site Checks, strict-image checks, sitemap freshness, full Browser E2E and 320/390/1280/1440 responsive checks. No real staging-host validation or production deployment in this PR.
 
 
-## Sprint 21 — SEO content cluster and Packages conversion (planned after PR #68)
+## Sprint 21 — SEO content cluster and Packages conversion (Batch 1 in PR #69)
 
 **Commercial goal:** capture more non-brand searches and turn guide readers into direct room, tour or dining enquiries.
+
+**Batch 1 vertical slice:** the three target planning guides already exist, so do not create duplicate articles. Add a reciprocal discovery module to `pack.php` using the existing card system and current licensed/owner-provided image paths, plus a direct link to `car-rental.php`. Regression-test every destination, preserve existing metadata and public URLs, and validate the exact PR head in CI before owner review. This improves discoverability; it does not claim an SEO ranking or booking lift.
 
 - Review current `blog.php`, existing guide pages, sitemap and internal links before proposing new URLs. Map high-intent topic clusters to one best destination to avoid keyword cannibalisation.
 - Improve `pack.php` hierarchy, concise experience descriptions, landscape/cropped media and clear links to tour and car-service enquiry paths; retain only licensed/owner-provided images.
