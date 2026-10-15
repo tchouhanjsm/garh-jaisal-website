@@ -507,3 +507,16 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - Expand Playwright parity coverage across Contact, Directions, Rooms, Packages, Blog and a representative shared-renderer article.
 - Do not add or change public routes, canonical URLs, booking destinations, analytics IDs, rates, availability, review claims or operational facts. Keep the pre-refactor fixture immutable and exclude only the exact newly introduced Sprint 29 node IDs already covered by dedicated assertions.
 - Acceptance: PHP 7.4/8.2 and strict site checks, sitemap/package/Staging QA gates, browser E2E and 390px/1280px screenshot sheet all pass on the exact updated PR head. Staging QA remains non-deploying; owner retains merge/deploy authority.
+
+
+## Sprint 31 — desert experience photo galleries (PR #80 in review)
+
+**Commercial goal:** give guests a useful visual comparison of the open-air Sleep Under the Stars experience and the Swiss Deluxe Tent stay before they enquire.
+
+- Add a nine-photo gallery to Sleep Under the Stars; expand the Swiss Tent Safari gallery to eleven photos covering tent interior/exterior, bathroom, camp and evening programme.
+- Bring the curated images into the main Desert Gallery with descriptive alt text and keep the overnight-options CTA pointed to `camping.php`.
+- Add a PHP regression guard for experience gallery file existence, alt text/captions, required asset paths and the corresponding main Gallery references. Run it in the existing PHP 7.4/8.2 checks.
+- Keep the commit bounded to already curated assets; do not add the unreviewed 356 MB raw image collection, new operational claims, prices, schedules or availability.
+- Acceptance on the exact PR head: PHP 7.4/8.2 Site Checks, strict image checks, generated sitemap freshness, publication boundaries, package preflight, non-deploying Staging QA, Browser E2E and the 390px/1280px screenshot sheet must pass. The owner reviews subjects/captions and approves merge; no live cPanel or production deployment is part of this batch.
+
+**Next phase rule:** do not open the next implementation PR until PR #80 is owner-merged. Restaurant R1 remains blocked on owner-approved operating hours, last seating, closures/capacity, notification handling, privacy/retention wording and mail configuration. Select the next unblocked high-value slice after the owner review rather than inventing these inputs.
