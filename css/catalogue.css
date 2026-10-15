@@ -418,17 +418,7 @@
 }
 
 
-/* Sprint 32: actions stay outside the linked card so keyboard and tap targets remain distinct. */
-.experience-card-plan-action {
-  display: flex;
-  align-items: stretch;
-  padding: 0 22px 22px;
-  background: #fff;
-}
-.experience-card-plan-action .trip-add-button {
-  width: 100%;
-  min-height: 44px;
-}
+/* Sprint 32: catalogue card follow-up keeps the enquiry step clear. */
 .product-card-planning-note {
   margin: 14px 0 0;
   padding-top: 12px;
