@@ -21,6 +21,11 @@ $hotelRoomNodes = gj_schema_hotel_rooms($rooms, $schemaSiteUrl, $schemaPageUrl);
 $hotelRoomReferences = array_map(static function ($roomNode) {
     return ['@id' => $roomNode['@id']];
 }, $hotelRoomNodes);
+$breadcrumbs = [
+    ['label' => 'Home', 'href' => '/'],
+    ['label' => 'Rooms'],
+];
+$breadcrumbSchema = gj_schema_breadcrumb_list($schemaSiteUrl, '/room.php', $breadcrumbs);
 $faqItems = [
     ['question' => "Where is Garh Jaisal Haveli?", 'answer' => "Garh Jaisal Haveli is inside Jaisalmer Fort. Vehicles cannot enter the fort lanes, so plan for a final walk from Fort Parking."],
     ['question' => "How do I check current room rates and availability?", 'answer' => "Use a Check availability or Book your stay link on this page to check current rates and availability for your dates."],
@@ -50,24 +55,7 @@ $page = [
             'breadcrumb' => ['@id' => $schemaPageUrl . '#breadcrumb'],
             'mainEntity' => $hotelRoomReferences,
         ],
-        [
-            '@type' => 'BreadcrumbList',
-            '@id' => $schemaPageUrl . '#breadcrumb',
-            'itemListElement' => [
-                [
-                    '@type' => 'ListItem',
-                    'position' => 1,
-                    'name' => 'Home',
-                    'item' => $schemaSiteUrl . '/',
-                ],
-                [
-                    '@type' => 'ListItem',
-                    'position' => 2,
-                    'name' => 'Rooms',
-                    'item' => $schemaPageUrl,
-                ],
-            ],
-        ],
+        $breadcrumbSchema,
         ...$hotelRoomNodes,
     ],
 ];
@@ -91,6 +79,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
     <div class="site-shell rooms-hero-grid">
       <div class="rooms-hero-copy">
+        <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>
         <p class="eyebrow">Stay inside Jaisalmer Fort</p>
         <h1 id="rooms-page-title">Rooms at Garh Jaisal Haveli.</h1>
         <p class="rooms-hero-lede">

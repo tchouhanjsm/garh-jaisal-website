@@ -7,7 +7,7 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-15 |
-| Current phase | Sprint 29 — structured-data fidelity for Rooms, Contact and Directions (Batch 1, PR in review) |
+| Current phase | Sprints 29–30 — structured-data fidelity and reusable breadcrumb parity (combined Batch 1 in PR #78 review) |
 | Base branch | `main` |
 | Baseline commit | `471636e1f074b8983bb46cd4f614ed335147f7fd` (PR #77 merge commit) |
 | Last merged PR | [#77 — Four source-backed Journal guides](https://github.com/tchouhanjsm/garh-jaisal-website/pull/77) |
@@ -16,7 +16,7 @@
 | Production URL | https://www.hotelgarhjaisal.com |
 | PR #76 merge-SHA checks | [Site Checks PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718084075); [package preflight PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718083937); [Staging QA dry run PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718083928); [Browser E2E PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718084012); [page-sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38718084012/artifacts/11964531596) |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Next action | Review Sprint 29’s BreadcrumbList parity and registry-backed HotelRoom entities; owner merge/deploy remains required. |
+| Next action | Verify the corrected frozen-head snapshot and exact-head Browser E2E/page-sheet for the combined Sprints 29–30 batch; owner review/merge/deploy remains required. |
 
 ## Phase roadmap
 
@@ -269,9 +269,11 @@ This note supersedes stale entries above that still label PRs #48–#51 as open/
 - R1 table requests, source-verified reviews, licensed operator claims and transport rates remain owner-dependent. No cPanel staging or production deployment is included.
 
 
-## Sprint 29 — Batch 1: structured-data fidelity (PR in review)
+## Sprints 29–30 — Batch 1: schema fidelity and shared breadcrumb parity (PR #78 in review)
 
-- Add shared, allowlisted breadcrumb JSON-LD from the same `$breadcrumbs` array used by the visible Contact and Directions breadcrumb partial. Preserve existing route/canonical URLs.
-- Emit `HotelRoom` entities from the visible `rooms-data.php` source of truth: room name, description, image, listed features and an ID matching the room card anchor. Connect the Rooms WebPage's `mainEntity` to those nodes.
-- Do not add prices, offers, availability, ratings, reviews, occupancy or facilities that are not explicitly in the registry. Keep the frozen head snapshot stable by separately testing this new room schema.
-- E2E verifies breadcrumb parity and visible-card/schema parity. Sitemap route inventory remains unchanged; `direction.php` lastmod is refreshed to match its updated source. No new dependencies, real enquiries, staging upload, merge or production deployment.
+- PR #78's first exact-head Browser E2E run had 461 passing tests and one failure: the frozen pre-refactor head snapshot detected three intentionally added Sprint 29 nodes (the Contact breadcrumb, Directions breadcrumb and Directions WebPage). The fixture was not regenerated. The fix allowlists only those exact node IDs; the dedicated schema-fidelity suite continues to validate their existence and relationships.
+- Sprint 29: BreadcrumbList JSON-LD is generated from the same breadcrumb data used by the visible Contact and Directions UI. Rooms emits registry-backed HotelRoom entities that match card names, descriptions, images and listed features; its WebPage references those entities. No offers, rates, availability, occupancy, reviews or aggregate ratings are fabricated.
+- Sprint 30, combined into this PR: Rooms and Packages gain visible Home breadcrumbs; Rooms, Packages and Blog use the shared breadcrumb-schema helper; Blog uses the visible label "Blog" in its schema; the shared Journal renderer now builds both visible breadcrumbs and JSON-LD from the same array.
+- Browser coverage checks label, URL path, order and page-entity reference parity across Contact, Directions, Rooms, Packages, Blog and a representative shared-renderer guide, plus room card/schema parity and the no-invented-offers guard.
+- The Directions sitemap lastmod is refreshed; route inventory, canonical URLs, booking destinations, GA4 IDs and live content remain unchanged. No new dependencies, real enquiry workflow, external staging upload, merge or production deployment.
+- **Release gate:** all CI workflows must pass on the new exact PR head and the responsive page-sheet artifact must be reviewed. The prior failure is diagnosed, not yet considered resolved until that new run finishes.

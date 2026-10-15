@@ -26,6 +26,11 @@ $sortExperienceSlugs($guideItems);
 <html lang="en">
 <?php
 require_once __DIR__ . '/include/schema.php';
+$breadcrumbs = [
+    ['label' => 'Home', 'href' => '/'],
+    ['label' => 'Packages'],
+];
+$breadcrumbSchema = gj_schema_breadcrumb_list($siteUrl, '/pack.php', $breadcrumbs);
 $faqItems = [
     ['question' => "How should I choose an experience?", 'answer' => "Start with how much time you have and whether you want to return to Jaisalmer the same evening or stay overnight."],
     ['question' => "How do I confirm current prices and availability?", 'answer' => "Contact the hotel for the current price, availability, route, pickup arrangement, guide availability and exact inclusions for your travel date."],
@@ -53,14 +58,7 @@ $page = [
             'about' => ['@id' => $siteUrl . '/#hotel'],
             'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
         ],
-        [
-            '@type' => 'BreadcrumbList',
-            '@id' => $canonical . '#breadcrumb',
-            'itemListElement' => [
-                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $siteUrl . '/'],
-                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Packages', 'item' => $canonical],
-            ],
-        ],
+        $breadcrumbSchema,
     ],
 ];
 $page['schema'][] = gj_schema_faq($faqItems, $canonical);
@@ -83,6 +81,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
 
     <div class="site-shell package-hero-content">
+      <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>
       <p class="eyebrow">Packages and experiences</p>
       <h1>Jaisalmer desert experiences and tours.</h1>
       <p>

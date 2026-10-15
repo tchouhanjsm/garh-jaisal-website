@@ -7,12 +7,20 @@ async function readGraph(page) {
 }
 
 test.describe('Sprint 29 structured-data fidelity', () => {
-  test('Contact and Directions breadcrumb markup matches visible navigation', async ({ page }, testInfo) => {
+  test('hub and editorial breadcrumb markup matches visible navigation and schema', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop-1280', 'Breadcrumb parity runs once.');
 
     const routes = [
       { path: '/contact.php', current: 'Contact', pageType: 'ContactPage' },
       { path: '/direction.php', current: 'Directions', pageType: 'WebPage' },
+      { path: '/room.php', current: 'Rooms', pageType: 'WebPage' },
+      { path: '/pack.php', current: 'Packages', pageType: 'WebPage' },
+      { path: '/blog.php', current: 'Blog', pageType: 'WebPage' },
+      {
+        path: '/jaisalmer-havelis-guide.php',
+        current: 'Jaisalmer Havelis: A Guide to Sandstone Architecture',
+        pageType: 'WebPage',
+      },
     ];
 
     for (const route of routes) {
@@ -31,23 +39,34 @@ test.describe('Sprint 29 structured-data fidelity', () => {
             current: element.getAttribute('aria-current') === 'page',
           }))
       );
-      expect(visibleItems.map(item => item.name)).toEqual(['Home', route.current]);
+      expect(visibleItems.map(item => item.name), route.path + ': visible labels')
+        .toEqual(route.path === '/jaisalmer-havelis-guide.php'
+          ? ['Home', 'Journal', route.current]
+          : ['Home', route.current]);
       expect(visibleItems[0].href).toBe('/');
-      expect(visibleItems[1].current).toBe(true);
+      expect(visibleItems[visibleItems.length - 1].current).toBe(true);
 
       const graph = await readGraph(page);
       const breadcrumbNodes = graph.filter(node => node['@type'] === 'BreadcrumbList');
       expect(breadcrumbNodes, route.path + ': exactly one BreadcrumbList').toHaveLength(1);
       const list = breadcrumbNodes[0];
       expect(list['@id']).toBe('https://www.hotelgarhjaisal.com' + route.path + '#breadcrumb');
-      expect(list.itemListElement.map(item => item.name)).toEqual(visibleItems.map(item => item.name));
-      expect(list.itemListElement.map(item => new URL(item.item).pathname))
-        .toEqual(['/', route.path]);
-      expect(list.itemListElement.map(item => item.position)).toEqual([1, 2]);
+      expect(list.itemListElement.map(item => item.name), route.path + ': schema labels')
+        .toEqual(visibleItems.map(item => item.name));
+      const expectedPaths = visibleItems.map((item, index) =>
+        index === visibleItems.length - 1 ? route.path : item.href
+      );
+      expect(list.itemListElement.map(item => new URL(item.item).pathname), route.path + ': schema paths')
+        .toEqual(expectedPaths);
+      expect(list.itemListElement.map(item => item.position), route.path + ': ordered positions')
+        .toEqual(visibleItems.map((item, index) => index + 1));
 
-      const pageNode = graph.find(node => node['@type'] === route.pageType && node['@id'] === 'https://www.hotelgarhjaisal.com' + route.path + '#webpage');
+      const pageNode = graph.find(node =>
+        node['@type'] === route.pageType &&
+        node['@id'] === 'https://www.hotelgarhjaisal.com' + route.path + '#webpage'
+      );
       expect(pageNode, route.path + ': page entity references the breadcrumb').toBeTruthy();
-      expect(pageNode.breadcrumb['@id']).toBe(list['@id']);
+      expect(pageNode.breadcrumb['@id'], route.path + ': breadcrumb graph reference').toBe(list['@id']);
     }
   });
 
