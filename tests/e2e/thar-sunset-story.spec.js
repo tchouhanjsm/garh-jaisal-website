@@ -112,7 +112,7 @@ test('catalogue and Car & City experience cards use the controlled arch image cr
   expect(productRadius, 'Catalogue image frame uses a soft arch, not a rounded card').toContain('48%');
 
   await page.goto('/car-tours.php', { waitUntil: 'domcontentloaded' });
-  const experienceMedia = page.locator('main.thar-sunset-story--experiences .experience-card > a > .experience-card-media').first();
+  const experienceMedia = page.locator('main .experience-card > a > .experience-card-media').first();
   await expect(experienceMedia).toBeVisible();
   const experienceRadius = await experienceMedia.evaluate(element => getComputedStyle(element).borderTopLeftRadius);
   expect(experienceRadius, 'Experience image frame uses a soft arch').toContain('48%');
