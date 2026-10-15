@@ -17,6 +17,10 @@ $floorCount = count($roomsByFloor);
 $schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $schemaPageUrl = $schemaSiteUrl . '/room.php';
 require_once __DIR__ . '/include/schema.php';
+$hotelRoomNodes = gj_schema_hotel_rooms($rooms, $schemaSiteUrl, $schemaPageUrl);
+$hotelRoomReferences = array_map(static function ($roomNode) {
+    return ['@id' => $roomNode['@id']];
+}, $hotelRoomNodes);
 $faqItems = [
     ['question' => "Where is Garh Jaisal Haveli?", 'answer' => "Garh Jaisal Haveli is inside Jaisalmer Fort. Vehicles cannot enter the fort lanes, so plan for a final walk from Fort Parking."],
     ['question' => "How do I check current room rates and availability?", 'answer' => "Use a Check availability or Book your stay link on this page to check current rates and availability for your dates."],
@@ -44,6 +48,7 @@ $page = [
             'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
             'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
             'breadcrumb' => ['@id' => $schemaPageUrl . '#breadcrumb'],
+            'mainEntity' => $hotelRoomReferences,
         ],
         [
             '@type' => 'BreadcrumbList',
@@ -63,6 +68,7 @@ $page = [
                 ],
             ],
         ],
+        ...$hotelRoomNodes,
     ],
 ];
 $page['schema'][] = gj_schema_faq($faqItems, $schemaPageUrl);
