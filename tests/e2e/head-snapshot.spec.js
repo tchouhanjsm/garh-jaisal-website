@@ -21,6 +21,10 @@ const ROUTES_ADDED_AFTER_FROZEN_HEAD_BASELINE = [
   '/best-time-to-visit-jaisalmer.php',
   '/how-to-reach-jaisalmer.php',
   '/jaisalmer-desert-safari-packing-list.php',
+  '/jaisalmer-havelis-guide.php',
+  '/jaisalmer-food-guide.php',
+  '/jaisalmer-beyond-the-fort-guide.php',
+  '/jaisalmer-markets-and-crafts-guide.php',
 ];
 
 async function captureHead(page, route) {

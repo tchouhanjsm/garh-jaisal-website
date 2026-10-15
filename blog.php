@@ -57,8 +57,8 @@ require __DIR__ . '/include/page-head.php';
       require __DIR__ . '/include/ui/breadcrumb.php';
       ?>
       <p class="eyebrow">Blog</p>
-      <h1>Practical Jaisalmer travel guides.</h1>
-      <p class="lede">Plan your stay with practical guides to the living Fort, desert experiences, longer itineraries and a couples’ escape. Confirm date-sensitive details before booking.</p>
+      <h1>Travel guides for Jaisalmer’s Fort, food and desert.</h1>
+      <p class="lede">Explore the living Fort, carved havelis, regional food, old-city markets and the landscapes beyond the city. Use these guides to plan your interests, then confirm date-sensitive access, menus and arrangements directly.</p>
     </div>
   </section>
   <section class="section" data-story-reveal>
@@ -87,6 +87,30 @@ require __DIR__ . '/include/page-head.php';
           <a href="jaisalmer-desert-safari-packing-list.php">
             <div class="blog-card-image"><img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg') ?> alt="Sand dunes in the Thar Desert near Jaisalmer" loading="lazy"></div>
             <div class="blog-card-body"><p class="blog-card-meta">Desert checklist</p><h2>What to Pack for a Desert Safari</h2><p>A practical checklist for clothing, footwear, personal essentials and what to confirm for an overnight stay.</p><span class="text-link">Prepare for the desert →</span></div>
+          </a>
+        </article>
+        <article class="blog-card">
+          <a href="jaisalmer-havelis-guide.php">
+            <div class="blog-card-image"><img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Carved golden sandstone architecture in Jaisalmer" loading="lazy"></div>
+            <div class="blog-card-body"><p class="blog-card-meta">Architecture</p><h2>Jaisalmer Havelis: Sandstone Architecture</h2><p>Read the facades, notice the craftsmanship and plan a respectful heritage walk.</p><span class="text-link">Explore the havelis →</span></div>
+          </a>
+        </article>
+        <article class="blog-card">
+          <a href="jaisalmer-food-guide.php">
+            <div class="blog-card-image"><img src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg') ?> alt="Rooftop dining at dusk in Jaisalmer" loading="lazy"></div>
+            <div class="blog-card-body"><p class="blog-card-meta">Food and culture</p><h2>A Food Lover’s Guide to Jaisalmer</h2><p>Recognise regional dishes and learn what to ask before ordering or choosing a menu.</p><span class="text-link">Explore Rajasthani food →</span></div>
+          </a>
+        </article>
+        <article class="blog-card">
+          <a href="jaisalmer-beyond-the-fort-guide.php">
+            <div class="blog-card-image"><img src="img/v2/fort-from-roof.jpg" <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?> alt="View over Jaisalmer’s sandstone city and Fort" loading="lazy"></div>
+            <div class="blog-card-body"><p class="blog-card-meta">Places and day trips</p><h2>Beyond Jaisalmer Fort</h2><p>Consider Gadisar Lake, Bada Bagh and wider heritage landscapes without overloading the day.</p><span class="text-link">Explore beyond the Fort →</span></div>
+          </a>
+        </article>
+        <article class="blog-card">
+          <a href="jaisalmer-markets-and-crafts-guide.php">
+            <div class="blog-card-image"><img src="img/v2/fort-from-roof.jpg" <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?> alt="Rooftops of Jaisalmer’s historic old city" loading="lazy"></div>
+            <div class="blog-card-body"><p class="blog-card-meta">Markets and crafts</p><h2>Jaisalmer Markets and Crafts</h2><p>Explore textiles, embroidery, leatherwork and jewellery with practical provenance questions.</p><span class="text-link">Discover local markets →</span></div>
           </a>
         </article>
       </div>
