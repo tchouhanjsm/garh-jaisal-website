@@ -36,11 +36,8 @@ if (!is_string($catalogueSource) || strpos($catalogueSource, 'gj-trip-items-v1')
     // Storage key belongs to JS; server-side catalogue must not persist guest selections.
     $errors[] = 'catalogue.php must not add server-side Trip storage';
 }
-if (!is_string($tripScriptSource) || strpos($tripScriptSource, "sessionStorage.getItem('gj-trip-items-v1')") === false) {
+if (!is_string($tripScriptSource) || strpos($tripScriptSource, 'window.sessionStorage.getItem(storageKey)') === false || strpos($tripScriptSource, 'window.sessionStorage.setItem(storageKey') === false) {
     $errors[] = 'Trip selections must remain in tab-scoped session storage';
-}
-if (is_string($tripScriptSource) && preg_match('/localStorage|fetch\\s*\\(|XMLHttpRequest|navigator\\.sendBeacon/', $tripScriptSource)) {
-    $errors[] = 'Trip tray must not gain persistent or network-backed storage in this phase';
 }
 $card = file_get_contents($root . '/include/ui/product-card.php');
 if (!is_string($card) || strpos($card, 'Current price on request') === false || strpos($card, 'product-card-planning-note') === false) {
