@@ -15,6 +15,12 @@ $hotelMapsEmbedUrl = 'https://www.google.com/maps?q=Garh+Jaisal+Haveli%2C+Fort+K
 <?php
 $schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $schemaPageUrl = $schemaSiteUrl . '/direction.php';
+require_once __DIR__ . '/include/schema.php';
+$breadcrumbs = [
+    ['label' => 'Home', 'href' => '/'],
+    ['label' => 'Directions'],
+];
+$breadcrumbSchema = gj_schema_breadcrumb_list($schemaSiteUrl, '/direction.php', $breadcrumbs);
 $page = [
     'title' => 'Directions to Garh Jaisal Haveli | Jaisalmer Fort',
     'description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival guidance and hotel contact details.',
@@ -27,6 +33,17 @@ $page = [
     'twitter_image' => '/img/jcity.jpg',
     'css' => ['css/arrival.css'],
     'schema' => [
+        [
+            '@type' => 'WebPage',
+            '@id' => $schemaPageUrl . '#webpage',
+            'url' => $schemaPageUrl,
+            'name' => 'Directions to Garh Jaisal Haveli | Jaisalmer Fort',
+            'description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival guidance and hotel contact details.',
+            'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
+            'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
+            'breadcrumb' => ['@id' => $schemaPageUrl . '#breadcrumb'],
+        ],
+        $breadcrumbSchema,
         [
             '@type' => 'Place',
             'name' => 'Garh Jaisal Haveli',
@@ -54,6 +71,7 @@ require __DIR__ . '/include/page-head.php';
       <img src="img/v2/courtyard.jpg" <?= gj_image_dimension_attributes('img/v2/courtyard.jpg') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
+      <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>
       <p class="eyebrow">Getting here</p>
       <h1>Arrive inside Jaisalmer Fort.</h1>
       <p>
