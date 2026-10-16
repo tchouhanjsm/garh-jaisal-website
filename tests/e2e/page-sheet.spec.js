@@ -259,7 +259,7 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
   const contactPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   try {
     const contactCards = desertPhotos.map(photo => {
-      const sourcePath = path.join(REPOSITORY_ROOT, photo.source.replace(/^\\/+/, ''));
+      const sourcePath = path.join(REPOSITORY_ROOT, photo.source.replace(/^\/+/, ''));
       const mimeType = path.extname(sourcePath).toLowerCase() === '.png' ? 'image/png' : 'image/jpeg';
       const dataUri = 'data:' + mimeType + ';base64,' + fs.readFileSync(sourcePath).toString('base64');
       return '<figure><img src="' + dataUri + '" alt="' + escapeHtml(photo.alt) + '">' +
