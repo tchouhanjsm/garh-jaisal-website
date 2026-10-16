@@ -212,11 +212,13 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
           }
         });
         await Promise.all(localImages.map(img => {
-          img.loading = 'eager';
           if (img.complete) return Promise.resolve();
           return new Promise(resolve => {
-            img.addEventListener('load', resolve, { once: true });
-            img.addEventListener('error', resolve, { once: true });
+            const settle = () => resolve();
+            img.addEventListener('load', settle, { once: true });
+            img.addEventListener('error', settle, { once: true });
+            img.loading = 'eager';
+            if (img.complete) settle();
           });
         }));
         await Promise.all(localImages
@@ -277,8 +279,10 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
       await Promise.all(images.map(img => {
         if (img.complete) return Promise.resolve();
         return new Promise(resolve => {
-          img.addEventListener('load', resolve, { once: true });
-          img.addEventListener('error', resolve, { once: true });
+          const settle = () => resolve();
+          img.addEventListener('load', settle, { once: true });
+          img.addEventListener('error', settle, { once: true });
+          if (img.complete) settle();
         });
       }));
     });
