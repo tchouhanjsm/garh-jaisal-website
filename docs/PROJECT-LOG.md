@@ -7,7 +7,7 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-16 |
-| Current phase | Sprint 35 — home hero art direction, asset budget and screenshot evidence (PR #84 merged) |
+| Current phase | Sprint 36 — overnight comparison clarity and Trip tray keyboard accessibility (PR #85 in review) |
 | Base branch | `main` |
 | Baseline commit | `fcb1604531a4fe7dfe74838013e5a252a149c8b2` (PR #84 merge commit) |
 | Last merged PR | [#84 — art-direct homepage hero for responsive performance](https://github.com/tchouhanjsm/garh-jaisal-website/pull/84) |
@@ -86,5 +86,5 @@
 - Base: verified `main` SHA `fcb1604531a4fe7dfe74838013e5a252a149c8b2`, the PR #84 merge commit; there were no open pull requests at branch creation.
 - The overnight comparison now reads its labels and sleep/bathroom facts from the shared experience registry. A source-level regression prevents returning to slug-specific comparison copy.
 - Escape closes the open Trip tray and returns focus to the visible trigger. Browser coverage checks this alongside the existing room-plus-desert shortlist and privacy-safe WhatsApp draft.
-- PR #84's exact-head Site Checks, package preflight, non-deploying Staging QA and Browser E2E passed; its [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38845914013/artifacts/12023791438) remains available for owner comparison. Latest main push Browser E2E was still running when this batch was prepared.
+- PR #84's exact-head Site Checks, package preflight, non-deploying Staging QA and Browser E2E passed; its [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38845914013/artifacts/12023791438) remains available for owner comparison. PR #84 main-push Browser E2E passed: https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38847403964
 - Current-batch exact-head checks are required before review. No live cPanel staging or production deployment is claimed; owner retains merge/deployment authority.
