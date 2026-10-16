@@ -29,7 +29,7 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 18 | Licensed Desert Gallery and Swiss Tent Safari conversion | ✓ PR #66 merged; post-merge checks passed; visual photo/caption review remains owner-side |
 | 19 | Restaurant conversion: menu booklet, maps QR and social follow | ✓ PR #67 merged; post-merge Site Checks, package preflight, staging dry run and Browser E2E passed |
 | 20 | Fort walk, car services and Directions map | ✓ PR #68 merged; exact PR-head Site Checks, package preflight, staging dry run and Browser E2E passed; real staging remains owner-gated |
-| 21 | SEO content cluster and Packages conversion | ◐ Batch 1 merged in PR #69; Batch 2 adds a distinct 3-day itinerary and honeymoon guide, reciprocal links and sitemap coverage |
+| 21 | SEO content cluster and Packages conversion | ✓ PRs #69–#78 delivered the source-backed itinerary/honeymoon guides, reciprocal links and sitemap coverage |
 | 22 | Guest policies and trust pages | Blocked on owner-approved privacy, terms and cancellation/refund wording; keep unpublished/noindex until confirmed |
 | 23 | Unified catalogue, comparison ladders and session-only Trip tray | ✓ PR #72 merged; exact PR-head PHP/site checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |
 | 24 | Thar Sunset visual storytelling across high-intent journeys | ✓ PR #73 merged; post-merge Site Checks, package preflight, Staging QA dry run and Browser E2E passed; live staging remains owner-side |
@@ -42,13 +42,14 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 31 | Desert experience photo galleries | ✓ merged in PR #80; exact-head Site Checks, package preflight, Staging QA dry run, Browser E2E and responsive page sheet passed; owner visual review remains |
 | 32 | High-intent package discovery and guest-choice clarity | ✓ PR #81 merged; discovery hubs feed the existing session-only Trip shortlist and user-reviewed WhatsApp draft |
 | 33 | Brand foundation, contrast and shared component consistency | ✓ PR #82 merged; brand constitution, token contrast contract, bastion motif and shared 6px geometry |
-| 34 | Restaurant enquiry completion and conversion measurement | ◐ PR #83: accessible server validation, dining CTA/form intent events, direct-contact fallback retained; mail delivery remains owner-gated |
+| 34 | Restaurant enquiry completion and conversion measurement | ✓ PR #83 merged: accessible server validation, dining CTA/form intent events and direct-contact fallback; real mail delivery remains owner-gated |
 | 35 | Home and high-intent photography/performance pass | ✓ PR #84 merged the responsive art-directed hero and screenshot evidence; resized candidates remain review-only and production performance measurement is still owner-side |
 | 36 | Experience comparison and Trip shortlist visual polish | ✓ PR #85 merged at `b9b15e1db0ff8a440b7a6546775fc4d2f1f8b61f`; registry-backed overnight comparison and Escape/focus recovery; exact-head CI passed |
 | 37 | Restaurant identity and six first-party marketing templates | ✓ PR #86 merged at `113e75ab879057b780bde24ce9ec633999892dc6`; six guarded source masters, Canva workflow and restrained restaurant identity; operational facts remain owner-gated |
 | 38 | Restaurant menu navigation, dietary filter feedback and keyboard-accessible controls | ✓ PR #87 merged at `4b135980fb9e617313d9939d7601649637b2caaa`; exact-head checks, package, staging dry run and browser E2E passed; owner assistive-tech review remains |
 | 39 | Gallery curation, responsive image composition and progressive photo pagination | ✓ PR #88 merged at `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`; 36-photo selection, progressive reveal, responsive gallery evidence; owner photo/caption review remains |
-| 40 | Shared verified quick-facts component for Home, Rooms and Trip Planner | ◐ current PR: escaped semantic partial, registry-backed room count, explicit shortlist/enquiry/booking distinction, responsive regression tests |
+| 40 | Shared verified quick-facts component for Home, Rooms and Trip Planner | ✓ PR #89 merged: escaped semantic partial, registry-backed room count, clear shortlist/enquiry/booking distinction and responsive regression tests |
+| 41 | Critical-path loading and editorial featured content | ◐ current PR: non-render-blocking Google Fonts, viewport-scoped hero image preloads for Home/Rooms/Trip Planner, eager/preloaded Journal feature image, PHP and Playwright regression coverage |
 
 ---
 

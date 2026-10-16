@@ -7,10 +7,11 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-16 |
-| Current phase | Sprint 40 — shared verified quick facts for Home, Rooms and Trip Planner (current PR) |
+| Current phase | Sprint 41 — critical-path loading for high-intent pages and Journal feature image (current PR) |
 | Base branch | `main` |
-| Baseline commit | `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3` (verified `main` merge commit for PR #88) |
-| Last merged PR | [#88 — curate Gallery and add progressive photo pagination](https://github.com/tchouhanjsm/garh-jaisal-website/pull/88) |
+| Baseline commit | `1d8b02b6d0188a041bc824e30cbcfe565b14686f` (verified `main` merge commit for PR #89) |
+| Last merged PR | [#89 — add verified quick facts to high-intent pages](https://github.com/tchouhanjsm/garh-jaisal-website/pull/89) |
+| PR #89 merged | Merged 2026-10-16 at `1d8b02b6d0188a041bc824e30cbcfe565b14686f`; verified starting point for Sprint 41 |
 | PR #88 merged | [Merged 2026-10-16](https://github.com/tchouhanjsm/garh-jaisal-website/pull/88) at `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`; review head `dfbaa2c556bea8bfaabfcdfdf6b2ae51b76a7204` |
 | PR #88 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38867401576) |
 | PR #88 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38867401608) |
@@ -29,8 +30,8 @@
 | PR #86 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Owner review | Gallery Desert photo/caption mapping still needs owner approval; review Sprint 40 quick-facts presentation at 320px, 390px, 768px, 1280px and 1440px. |
-| Next action | Review the Sprint 40 quick-facts PR and responsive page sheet; owner retains merge and deployment authority. |
+| Owner review | Review PR #90's critical-path changes and the exact-head 390px/1280px screenshot sheet; rerun Lighthouse on Home, Rooms and Trip Planner after the code checks pass. Historical Desert photo/caption mapping still needs owner approval. |
+| Next action | Finish exact-head Sprint 41 CI, then owner reviews PR #90. After merge, package the approved merged SHA, stage it manually, and complete route, mail/CAPTCHA, redirect/header and visual checks before any production release. |
 ## Phase roadmap
 
 | Phase | Goal | Status |

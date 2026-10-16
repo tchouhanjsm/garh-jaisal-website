@@ -13,6 +13,10 @@ $page = [
     'title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
     'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Heritage rooms, rooftop views, dining and desert experiences in the heart of the living fort.',
     'path' => '/',
+    'preload' => [
+        ['href' => '/img/optimized/v2/facade.webp', 'media' => '(max-width: 767px)', 'fetchpriority' => 'high'],
+        ['href' => '/img/optimized/v2/fort-from-roof.webp', 'media' => '(min-width: 768px)', 'fetchpriority' => 'high'],
+    ],
     'og_title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
     'og_description' => 'Heritage rooms, rooftop views and desert experiences inside Jaisalmer Fort.',
     'og_image' => '/img/v2/facade.jpg',

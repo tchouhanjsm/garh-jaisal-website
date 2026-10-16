@@ -65,6 +65,9 @@ $page = [
     'title' => 'Jaisalmer Trip Planner | Rooms, Desert Stays, Tours & Transport',
     'description' => 'Build a Jaisalmer trip around a Fort stay, desert experience, guided tour, car arrangement or rooftop dining. Shortlist options and enquire for current rates.',
     'path' => '/catalogue.php',
+    'preload' => [
+        ['href' => '/img/optimized/desert3.webp', 'fetchpriority' => 'high'],
+    ],
     'og_image' => '/img/desert3.jpg',
     'og_image_alt' => 'Sand dunes in the Thar Desert near Jaisalmer',
     'css' => ['css/catalogue.css', 'css/thar-sunset-story.css'],

@@ -60,6 +60,9 @@ jobs:
       - name: Verify shared quick-facts component contract
         run: php tests/php/at-a-glance-contract.php
 
+      - name: Verify safe preloads and non-blocking fonts
+        run: php tests/php/preload-contract.php
+
       - name: Verify experience discovery shortlist contract
         run: php tests/php/experience-discovery.php
 

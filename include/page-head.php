@@ -84,6 +84,14 @@ $absoluteAssetUrl = static function ($value) use ($siteUrl) {
     return $siteUrl . '/' . ltrim($value, '/');
 };
 
+$preloadAssetUrl = static function ($value) {
+    $value = (string) $value;
+    if (preg_match('#^https://#i', $value)) {
+        return $value;
+    }
+    return '/' . ltrim($value, '/');
+};
+
 $extraStylesheets = $page['css'] ?? [];
 if (!is_array($extraStylesheets)) {
     throw new InvalidArgumentException('The page css value must be an array of stylesheet paths.');
@@ -158,7 +166,10 @@ $analyticsIds = array_values(array_unique(array_filter(
   <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <?php $googleFontsHref = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap'; ?>
+  <link rel="preload" as="style" href="<?= $htmlEscape($googleFontsHref) ?>">
+  <link href="<?= $htmlEscape($googleFontsHref) ?>" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="<?= $htmlEscape($googleFontsHref) ?>" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="css/garh-v2.css">
   <link rel="stylesheet" href="css/tokens.css">
 <?php foreach ($extraStylesheets as $stylesheet): ?>
@@ -166,7 +177,7 @@ $analyticsIds = array_values(array_unique(array_filter(
 <?php endforeach; ?>
 <?php foreach ($preloads as $preload): ?>
 <?php if (is_array($preload) && isset($preload['href']) && is_string($preload['href']) && $preload['href'] !== ''): ?>
-  <link rel="preload" as="image" href="<?= $htmlEscape($absoluteAssetUrl($preload['href'])) ?>"<?php if (!empty($preload['imagesrcset'])): ?> imagesrcset="<?= $htmlEscape($preload['imagesrcset']) ?>"<?php endif; ?><?php if (!empty($preload['imagesizes'])): ?> imagesizes="<?= $htmlEscape($preload['imagesizes']) ?>"<?php endif; ?>>
+  <link rel="preload" as="image" href="<?= $htmlEscape($preloadAssetUrl($preload['href'])) ?>"<?php if (isset($preload['media']) && is_string($preload['media']) && preg_match('/^\((?:min|max)-width:\s*[1-9][0-9]*px\)$/D', trim($preload['media']))): ?> media="<?= $htmlEscape(trim($preload['media'])) ?>"<?php endif; ?><?php if (($preload['fetchpriority'] ?? '') === 'high'): ?> fetchpriority="high"<?php endif; ?><?php if (!empty($preload['imagesrcset'])): ?> imagesrcset="<?= $htmlEscape($preload['imagesrcset']) ?>"<?php endif; ?><?php if (!empty($preload['imagesizes'])): ?> imagesizes="<?= $htmlEscape($preload['imagesizes']) ?>"<?php endif; ?>>
 <?php endif; ?>
 <?php endforeach; ?>
 <?php if ($analyticsIds): ?>
