@@ -141,15 +141,15 @@ require __DIR__ . '/include/page-head.php';
   </section>
 
   <?php
-  $openSky = $experiences['sleep-under-the-stars'] ?? null;
-  $swissTent = $experiences['swiss-tent-safari'] ?? null;
   $campOptions = [];
-  foreach ([
-      ['slug' => 'sleep-under-the-stars', 'item' => $openSky, 'label' => 'Open-sky overnight'],
-      ['slug' => 'swiss-tent-safari', 'item' => $swissTent, 'label' => 'Swiss tent overnight'],
-  ] as $option) {
-      if (is_array($option['item']) && ($option['item']['status'] ?? 'live') === 'live') {
-          $campOptions[] = $option;
+  foreach (['sleep-under-the-stars', 'swiss-tent-safari'] as $campSlug) {
+      $campItem = $experiences[$campSlug] ?? null;
+      if (is_array($campItem) && ($campItem['status'] ?? 'live') === 'live') {
+          $campOptions[] = [
+              'slug' => $campSlug,
+              'item' => $campItem,
+              'label' => (string) ($campItem['comparison_label'] ?? $campItem['eyebrow'] ?? 'Overnight experience'),
+          ];
       }
   }
   ?>
@@ -185,18 +185,31 @@ require __DIR__ . '/include/page-head.php';
               <p class="eyebrow"><?= htmlspecialchars($option['label'], ENT_QUOTES, 'UTF-8') ?></p>
               <h3><?= htmlspecialchars($camp['h1'], ENT_QUOTES, 'UTF-8') ?></h3>
               <p><?= htmlspecialchars($camp['summary'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
-              <ul>
-                <?php if (!empty($camp['at_a_glance']['Duration'])): ?>
-                  <li><strong>Duration:</strong> <?= htmlspecialchars($camp['at_a_glance']['Duration'], ENT_QUOTES, 'UTF-8') ?></li>
-                <?php endif; ?>
-                <?php if ($campSlug === 'sleep-under-the-stars'): ?>
-                  <li><strong>Sleep setup:</strong> Open-air, with a mattress and blankets.</li>
-                  <li><strong>Bathroom:</strong> Not the same setup as a Swiss tent; confirm the current arrangement before booking.</li>
-                <?php else: ?>
-                  <li><strong>Sleep setup:</strong> Swiss Deluxe Tent accommodation.</li>
-                  <li><strong>Bathroom:</strong> Attached bathroom with hot and cold shower.</li>
-                <?php endif; ?>
-              </ul>
+              <?php
+              $campComparisonFacts = [];
+              $campDuration = trim((string) ($camp['at_a_glance']['Duration'] ?? ''));
+              if ($campDuration !== '') {
+                  $campComparisonFacts[] = ['label' => 'Duration', 'value' => $campDuration];
+              }
+              foreach (($camp['comparison_facts'] ?? []) as $comparisonFact) {
+                  if (!is_array($comparisonFact)) {
+                      continue;
+                  }
+                  $campFactLabel = trim((string) ($comparisonFact['label'] ?? ''));
+                  $campFactValue = trim((string) ($comparisonFact['value'] ?? ''));
+                  if ($campFactLabel !== '' && $campFactValue !== '') {
+                      $campComparisonFacts[] = ['label' => $campFactLabel, 'value' => $campFactValue];
+                  }
+              }
+              ?>
+              <dl class="catalogue-compare-facts">
+                <?php foreach ($campComparisonFacts as $comparisonFact): ?>
+                  <div class="catalogue-compare-fact" data-comparison-field="<?= htmlspecialchars($comparisonFact['label'], ENT_QUOTES, 'UTF-8') ?>">
+                    <dt><?= htmlspecialchars($comparisonFact['label'], ENT_QUOTES, 'UTF-8') ?></dt>
+                    <dd><?= htmlspecialchars($comparisonFact['value'], ENT_QUOTES, 'UTF-8') ?></dd>
+                  </div>
+                <?php endforeach; ?>
+              </dl>
               <?php require __DIR__ . '/include/ui/trip-add-button.php'; ?>
               <a class="text-link" href="<?= htmlspecialchars($campSlug, ENT_QUOTES, 'UTF-8') ?>.php">Read this experience →</a>
             </div>

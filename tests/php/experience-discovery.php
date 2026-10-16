@@ -49,6 +49,52 @@ $card = file_get_contents($root . '/include/ui/product-card.php');
 if (!is_string($card) || strpos($card, 'Current price on request') === false || strpos($card, 'product-card-planning-note') === false) {
     $errors[] = 'Catalogue product card must retain price-on-request and shortlist guidance';
 }
+
+$comparisonRequirements = [
+    'sleep-under-the-stars' => [
+        'label' => 'Open-sky overnight',
+        'fields' => ['Sleep setup', 'Bathroom'],
+    ],
+    'swiss-tent-safari' => [
+        'label' => 'Swiss tent overnight',
+        'fields' => ['Sleep setup', 'Bathroom'],
+    ],
+];
+foreach ($comparisonRequirements as $slug => $requirements) {
+    $experience = $registry[$slug] ?? null;
+    if (!is_array($experience) || ($experience['status'] ?? '') !== 'live') {
+        $errors[] = 'Overnight comparison must reference a live experience: ' . $slug;
+        continue;
+    }
+    if (($experience['comparison_label'] ?? '') !== $requirements['label']) {
+        $errors[] = $slug . ': missing approved comparison label';
+    }
+    $facts = $experience['comparison_facts'] ?? [];
+    $labels = [];
+    foreach ($facts as $fact) {
+        if (!is_array($fact) || trim((string) ($fact['label'] ?? '')) === '' || trim((string) ($fact['value'] ?? '')) === '') {
+            $errors[] = $slug . ': comparison facts require non-empty labels and values';
+            continue;
+        }
+        $labels[] = (string) $fact['label'];
+    }
+    foreach ($requirements['fields'] as $field) {
+        if (!in_array($field, $labels, true)) {
+            $errors[] = $slug . ': missing registry-backed comparison field ' . $field;
+        }
+    }
+}
+if (is_string($catalogueSource)) {
+    if (strpos($catalogueSource, "if (\$campSlug === 'sleep-under-the-stars')") !== false) {
+        $errors[] = 'Overnight comparison copy must be registry-driven, not duplicated by slug';
+    }
+    if (strpos($catalogueSource, "foreach ((\$camp['comparison_facts'] ?? []) as \$comparisonFact)") === false) {
+        $errors[] = 'Catalogue comparison must render the shared registry comparison facts';
+    }
+}
+if (!is_string($tripScriptSource) || strpos($tripScriptSource, "event.key !== 'Escape'") === false || strpos($tripScriptSource, 'setPanelOpen(false, true);') === false) {
+    $errors[] = 'Trip tray must close on Escape and restore focus to its visible trigger';
+}
 if ($errors) {
     foreach ($errors as $error) {
         fwrite(STDERR, 'ERROR ' . $error . PHP_EOL);

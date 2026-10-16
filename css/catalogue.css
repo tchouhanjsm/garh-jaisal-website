@@ -268,6 +268,29 @@
   padding-left:18px;
   margin:10px 0 18px;
 }
+.catalogue-compare-facts{
+  display:grid;
+  gap:0;
+  width:100%;
+  margin:10px 0 18px;
+}
+.catalogue-compare-fact{
+  display:grid;
+  grid-template-columns:minmax(88px,.42fr) minmax(0,1fr);
+  gap:12px;
+  padding:10px 0;
+  border-top:1px solid rgba(255,255,255,.14);
+}
+.catalogue-compare-fact dt{
+  color:#f6dca9;
+  font-weight:700;
+}
+.catalogue-compare-fact dd{
+  min-width:0;
+  margin:0;
+  color:#e8dfd3;
+  line-height:1.6;
+}
 .catalogue-compare-body .trip-add-button{
   margin-top:auto;
 }
