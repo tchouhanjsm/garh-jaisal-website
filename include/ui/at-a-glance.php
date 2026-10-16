@@ -18,7 +18,10 @@ if ($uiAtAGlanceClass === '' || !preg_match('/^[A-Za-z0-9 _-]+$/D', $uiAtAGlance
     $uiAtAGlanceClass = 'at-a-glance';
 }
 $uiAtAGlanceItems = [];
-foreach (($uiAtAGlanceConfig['items'] ?? []) as $uiAtAGlanceItem) {
+$uiAtAGlanceRawItems = isset($uiAtAGlanceConfig['items']) && is_array($uiAtAGlanceConfig['items'])
+    ? $uiAtAGlanceConfig['items']
+    : [];
+foreach ($uiAtAGlanceRawItems as $uiAtAGlanceItem) {
     if (!is_array($uiAtAGlanceItem)) {
         continue;
     }
