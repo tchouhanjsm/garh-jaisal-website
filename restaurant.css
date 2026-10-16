@@ -513,3 +513,26 @@
 @media (prefers-reduced-motion:reduce){
   .restaurant-gallery img{ transition:none; }
 }
+
+
+/* Accessible menu booklet enhancement; non-JS visitors keep the complete menu. */
+.restaurant-menu-booklet.is-enhanced [data-menu-page]:not(.is-current-page) {
+  display: none;
+}
+
+.restaurant-menu-booklet.is-enhanced [data-menu-page].is-current-page {
+  display: block;
+}
+
+.restaurant-menu-booklet.is-enhanced [data-menu-tab][aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.restaurant-vegtoggle:focus-visible,
+.restaurant-tabs a:focus-visible,
+.restaurant-booklet-controls button:focus-visible {
+  outline: 3px solid var(--focus, #1d4ed8);
+  outline-offset: 3px;
+}

@@ -25,6 +25,10 @@ $email = trim((string) ($_POST['email'] ?? ''));
 $phone = trim((string) ($_POST['phone'] ?? ''));
 $message = trim((string) ($_POST['message'] ?? ''));
 $captcha = trim((string) ($_POST['g-recaptcha-response'] ?? ''));
+if ($captcha === '') {
+    header('Location: contact.php?error=captcha');
+    exit;
+}
 
 $nameLength = function_exists('mb_strlen') ? mb_strlen($name, 'UTF-8') : strlen($name);
 $messageLength = function_exists('mb_strlen') ? mb_strlen($message, 'UTF-8') : strlen($message);
@@ -55,7 +59,7 @@ if ($lastSubmission > 0 && ($now - $lastSubmission) < 30) {
 $_SESSION['contact_last_submission'] = $now;
 
 $secretKey = trim((string) ($siteConfig['recaptcha_secret'] ?? ''));
-if ($secretKey === '') {
+if ($secretKey === '' || preg_match('/(?:PASTE_|REPLACE_WITH_|CHANGE_ME|YOUR[_ -]?)/i', $secretKey)) {
     header('Location: contact.php?error=config');
     exit;
 }
@@ -78,16 +82,19 @@ $verifyContext = stream_context_create([
 $response = @file_get_contents($verifyUrl, false, $verifyContext);
 if (!is_string($response) && function_exists('curl_init')) {
     $handle = curl_init($verifyUrl);
-    curl_setopt_array($handle, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => $verifyPayload,
-        CURLOPT_CONNECTTIMEOUT => 4,
-        CURLOPT_TIMEOUT => 8,
-    ]);
-    $curlResponse = curl_exec($handle);
-    curl_close($handle);
-    $response = is_string($curlResponse) ? $curlResponse : false;
+    if ($handle !== false) {
+        curl_setopt_array($handle, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $verifyPayload,
+            CURLOPT_CONNECTTIMEOUT => 4,
+            CURLOPT_TIMEOUT => 8,
+        ]);
+        $curlResponse = curl_exec($handle);
+        $curlErrno = curl_errno($handle);
+        curl_close($handle);
+        $response = ($curlErrno === 0 && is_string($curlResponse)) ? $curlResponse : false;
+    }
 }
 $captchaData = is_string($response) ? json_decode($response) : null;
 $siteHost = strtolower((string) parse_url((string) ($siteConfig['site_url'] ?? ''), PHP_URL_HOST));
