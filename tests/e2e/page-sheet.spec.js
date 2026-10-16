@@ -251,7 +251,7 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
     JSON.stringify(galleryReviewRecords.map(record => ({
       viewport: record.width,
       desertPhotos: record.desertAltAudit,
-    })), null, 2) + '\\n'
+    })), null, 2) + '\n'
   );
   const desertPhotos = galleryReviewRecords[0].desertAltAudit;
   const contactPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
@@ -259,7 +259,7 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
     const contactCards = desertPhotos.map(photo =>
       '<figure><img src="' + BASE_URL + escapeHtml(photo.source) + '" alt="' + escapeHtml(photo.alt) + '">' +
       '<figcaption><strong>' + escapeHtml(photo.alt) + '</strong><small>' + escapeHtml(photo.source) + '</small></figcaption></figure>'
-    ).join('\\n');
+    ).join('\n');
     await contactPage.setContent(
       '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
       '<title>Desert image and alt-text review</title><style>' +
@@ -298,8 +298,8 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
     '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
       '<title>Gallery responsive and Desert image-alt review</title></head><body><h1>Gallery review — expanded Desert section</h1>' +
       '<p>Five viewport captures show all ten Desert photos expanded. The companion JSON records each source path and rendered alt text; compare the photos against the owner-provided originals before release.</p>' +
-      galleryReviewRecords.map(record => '<figure><h2>' + record.width + 'px</h2><a href="' + record.filename + '"><img src="' + record.filename + '" alt="Gallery page at ' + record.width + 'px with all Desert photos expanded" style="max-width:100%;height:auto"></a></figure>').join('\\n') +
-      '</body></html>\\n'
+      galleryReviewRecords.map(record => '<figure><h2>' + record.width + 'px</h2><a href="' + record.filename + '"><img src="' + record.filename + '" alt="Gallery page at ' + record.width + 'px with all Desert photos expanded" style="max-width:100%;height:auto"></a></figure>').join('\n') +
+      '</body></html>\n'
   );
 
   const cards = routes.map(route => {
