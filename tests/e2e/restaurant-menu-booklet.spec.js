@@ -49,6 +49,10 @@ test('restaurant directions QR, map and Instagram link use the verified destinat
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
 
+  const archFigure = page.locator('.restaurant-gallery figure:first-child');
+  const archRadius = await archFigure.evaluate(element => getComputedStyle(element).borderTopLeftRadius);
+  expect(archRadius, 'The first restaurant gallery image uses the approved arch crop').toContain('48%');
+
   const directions = page.locator('.restaurant-find-us');
   const qr = directions.getByRole('img', { name: "QR code to open Google Maps directions to Garh Jaisal's Kitchen" });
   await expect(qr).toHaveAttribute('src', 'img/restaurant-maps-qr.svg');

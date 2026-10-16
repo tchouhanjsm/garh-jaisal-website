@@ -232,6 +232,51 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const restaurantForm = document.querySelector('form.restaurant-form');
+  let restaurantEnquiryStartSent = false;
+  if (restaurantForm) {
+    document.addEventListener('focusin', (event) => {
+      if (restaurantEnquiryStartSent || !(event.target instanceof Element)) return;
+      if (!event.target.matches('input:not([type="hidden"]), textarea, select')) return;
+      if (event.target.closest('form.restaurant-form') !== restaurantForm) return;
+
+      restaurantEnquiryStartSent = true;
+      trackIntentEvent('restaurant_enquiry_start', Object.assign({
+        page_path: window.location.pathname || '/',
+        page_context: 'dining'
+      }, attributionForCurrentPage()));
+    });
+
+    restaurantForm.addEventListener('submit', () => {
+      trackIntentEvent('restaurant_request_attempt', Object.assign({
+        page_path: window.location.pathname || '/',
+        page_context: 'dining'
+      }, attributionForCurrentPage()));
+    });
+
+    const firstInvalidRestaurantField = restaurantForm.querySelector('.restaurant-field.has-error input[aria-invalid="true"]');
+    if (firstInvalidRestaurantField) {
+      const recoverRestaurantFieldFocus = () => {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        firstInvalidRestaurantField.scrollIntoView({
+          block: 'center',
+          behavior: reduceMotion ? 'auto' : 'smooth'
+        });
+        firstInvalidRestaurantField.focus({ preventScroll: true });
+      };
+
+      // The form action returns to #reserve. Wait until the browser has restored
+      // the fragment and completed document loading before applying focus recovery.
+      if (document.readyState === 'complete') {
+        window.requestAnimationFrame(recoverRestaurantFieldFocus);
+      } else {
+        window.addEventListener('load', () => {
+          window.requestAnimationFrame(recoverRestaurantFieldFocus);
+        }, { once: true });
+      }
+    }
+  }
+
   const gallery = document.querySelector('.gallery-page');
   if (gallery) {
     const filters = Array.from(gallery.querySelectorAll('[data-gallery-filter]'));

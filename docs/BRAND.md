@@ -52,3 +52,10 @@ Use the strongest real photographs already in the repository first. Any grade/cr
 ## Deferred on purpose
 
 Full logo redraw, additional logo lockups, font downloads, 60-photo shoot, video loop, fort map, large custom icon set, print/signage rollout and multiple new sub-brands do not block V1. Restaurant mail activation stays gated on confirmed recipients, privacy/retention wording, verified operating details and owner-approved acknowledgement behaviour.
+
+## Restaurant and experience extension (Sprint 34)
+
+- Use the bastion motif for key restaurant section eyebrows and keep table/contact decisions on a light parchment surface.
+- Use the architectural crop selectively on the first restaurant gallery image, catalogue media and experience cards. Keep supporting photography rectangular where a crop would obscure useful context.
+- Server validation messages must be tied to their field with `aria-describedby`, mark invalid controls, preserve focus recovery and remain readable at mobile width.
+- Conversion events may record enquiry start and request attempt only; they must never include names, email addresses, phone numbers, preferred times, dates, number of guests or form/message content.

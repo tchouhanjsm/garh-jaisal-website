@@ -610,3 +610,47 @@
   .restaurant-page .restaurant-category h3 { break-after:avoid; }
   .restaurant-page .restaurant-dish { break-inside:avoid; }
 }
+
+/* Sprint 34 — bring the approved bastion motif and arch crop to dining. */
+.restaurant-page main .eyebrow::before{
+  content:"";
+  display:inline-block;
+  width:2.25rem;
+  height:.75rem;
+  margin-inline-end:.65rem;
+  vertical-align:middle;
+  background:url("../img/brand/bastion-line.svg") left center / contain no-repeat;
+  opacity:.9;
+}
+
+.restaurant-gallery figure:first-child{
+  margin:10px 10px 0;
+  border:1px solid var(--story-keyline,rgba(217,164,65,.42));
+  border-radius:48% 48% 6px 6px / 22% 22% 6px 6px;
+}
+.restaurant-gallery figure:first-child img{
+  border-radius:inherit;
+}
+.restaurant-form-card{
+  box-shadow:0 12px 32px rgba(20,18,43,.07);
+}
+.restaurant-field input[aria-invalid="true"]{
+  border-color:var(--alert);
+  box-shadow:0 0 0 1px var(--alert);
+}
+.restaurant-field input[aria-invalid="true"]:focus-visible{
+  outline:3px solid var(--alert);
+  outline-offset:2px;
+}
+.restaurant-field small{
+  display:block;
+  line-height:1.45;
+}
+.restaurant-reservation-unavailable .button{
+  border-radius:var(--radius-control,6px);
+}
+@media(max-width:760px){
+  .restaurant-gallery figure:first-child{
+    margin:8px 8px 0;
+  }
+}

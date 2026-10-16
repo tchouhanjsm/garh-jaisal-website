@@ -154,3 +154,19 @@ main.thar-sunset-story--rooms .room-card-media img{
     margin:8px 8px 0;
   }
 }
+
+/* Sprint 34 — extend the architectural photo language to catalogue cards.
+   Catalogue is the only route in this selector group loading this story layer. */
+main.thar-sunset-story--catalogue .product-card-media{
+  margin:10px 10px 0;
+  border:1px solid var(--story-keyline,rgba(217,164,65,.42));
+  border-radius:48% 48% 6px 6px / 20% 20% 6px 6px;
+}
+main.thar-sunset-story--catalogue .product-card-media img{
+  border-radius:inherit;
+}
+@media(max-width:760px){
+  main.thar-sunset-story--catalogue .product-card-media{
+    margin:8px 8px 0;
+  }
+}

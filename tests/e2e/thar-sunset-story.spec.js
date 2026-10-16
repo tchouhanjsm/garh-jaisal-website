@@ -101,3 +101,22 @@ test('story reveals run once when targets enter the viewport', async ({ page }, 
   const opacity = await target.evaluate((element) => window.getComputedStyle(element).opacity);
   expect(Number(opacity)).toBeGreaterThan(0.8);
 });
+
+test('catalogue and Car & City experience cards use the controlled arch image crop', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Card art direction runs once at desktop width');
+
+  await page.goto('/catalogue.php', { waitUntil: 'domcontentloaded' });
+  const productMedia = page.locator('main.thar-sunset-story--catalogue .product-card-media').first();
+  await expect(productMedia).toBeVisible();
+  const productRadius = await productMedia.evaluate(element => getComputedStyle(element).borderTopLeftRadius);
+  expect(productRadius, 'Catalogue image frame uses a soft arch, not a rounded card').toContain('48%');
+
+  await page.goto('/car-tours.php', { waitUntil: 'domcontentloaded' });
+  const experienceMedia = page.locator('main .experience-card > a > .experience-card-media').first();
+  await expect(experienceMedia).toBeVisible();
+  const experienceRadius = await experienceMedia.evaluate(element => getComputedStyle(element).borderTopLeftRadius);
+  expect(experienceRadius, 'Experience image frame uses a soft arch').toContain('48%');
+
+  const noOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
+  expect(noOverflow, 'Experience arch treatment must not create horizontal overflow').toBe(true);
+});

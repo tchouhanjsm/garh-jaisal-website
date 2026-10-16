@@ -7,18 +7,18 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-15 |
-| Current phase | Sprint 33 — combined brand foundation, accessible UI and visual consistency (PR #82) |
+| Current phase | Sprints 34–36 — restaurant enquiry accessibility, conversion measurement and visual consistency (PR #83) |
 | Base branch | `main` |
-| Baseline commit | `f9bed798efc99d7aec88098a9116e4e8a0e787c6` (PR #81 merge commit) |
-| Last merged PR | [#81 — package discovery and guest-choice clarity](https://github.com/tchouhanjsm/garh-jaisal-website/pull/81) |
-| PR #81 main push Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38766848927) |
-| PR #81 main push package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38766848951) |
-| PR #81 main push Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38766848993) |
-| PR #81 main push Browser E2E/page sheet | Pending when this batch started: [run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38766848994); refresh result/artifact links before owner approval |
+| Baseline commit | `682e3364491fe5beefba712e2ad053afe9de2a64` (PR #82 merge commit) |
+| Last merged PR | [#82 — brand foundation and accessible UI](https://github.com/tchouhanjsm/garh-jaisal-website/pull/82) |
+| PR #82 main push Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38772639047) |
+| PR #82 main push package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38772639239) |
+| PR #82 main push Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38772639100) |
+| PR #82 main push Browser E2E/page sheet | Running when this batch started: [run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38772639078); refresh result/artifact links before owner approval |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
 | Owner review | Inspect PR #80's Sleep Under the Stars and Swiss Tent Safari photos/captions and the main Gallery at 390px and 1280px. |
-| Next action | Complete Sprint 32 package-discovery polish plus regression tests, then review exact-head CI/page sheet before owner decision. |
+| Next action | Review PR #82 page sheet when available; validate PR #83 restaurant form, CTA analytics and responsive visuals on its exact head. |
 
 ## Phase roadmap
 
@@ -57,9 +57,17 @@
 - Transport quotes/calculators remain blocked on route/rate assumptions and a reviewed model; no estimate should be implied by visual comparisons.
 - Review proof, licence/partner/safety claims, font licensing and production performance claims require verified source evidence and owner approval.
 
-## Sprint 33 — combined brand foundation and accessible UI (PR #82)
+## Sprint 33 — brand foundation and accessible UI (PR #82 merged)
 - Build on the existing Thar Sunset tokens, shared head, image safeguards and four-viewport E2E; add `docs/BRAND.md`, documented 6px controls/cards, decorative bastion SVG and arch crop for room photography.
 - Contrast CI checks representative approved token pairs; Peacock Teal was darkened to `#1D7472` because its original `#1F7A78` measured 4.47:1 on parchment.
 - Sprints 34–35 continue in this bulk PR only where they can be safely verified; restaurant mail activation, photography spend and live performance claims remain owner-gated.
 - Site Checks, cPanel package preflight and non-deploying Staging QA passed for PR #81's merge SHA. Browser E2E was still running at the start of this batch; refresh the result and new PR #82 exact-head artifacts before approval.
 - No merge, staging upload or production deployment has been performed by this implementation.
+
+## Sprints 34–36 — restaurant enquiry, event measurement and visual consistency (PR #83)
+- Add accessible relationships for server validation errors, focus recovery, an isolated local PHP form test, and dining intent/attempt events that exclude form values.
+- Extend bastion/arch styling to restaurant photos, catalogue product media and experience cards; no runtime image variants are promoted without owner visual review.
+- No live mail, personal-data lead store, booking-confirmation event, new price/policy or operations claim is introduced.
+- PR #82 main Site Checks, package preflight and non-deploying Staging QA passed at `682e3364491fe5beefba712e2ad053afe9de2a64`; its Browser E2E/page sheet remained in progress at branch start.
+- PR #83 exact-head Site Checks, Browser E2E (including form validation), package preflight and non-deploying Staging QA are required before owner review. No merge or deployment by the implementation.
+- The first Browser E2E run isolated a focus-recovery race on rejected restaurant requests: the form returns to `#reserve`, and fragment restoration could override focus applied during `DOMContentLoaded`. Recovery is now scheduled after document loading; the exact-head browser workflow must confirm the fix before owner review.
