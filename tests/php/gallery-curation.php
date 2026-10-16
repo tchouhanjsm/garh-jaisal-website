@@ -126,7 +126,7 @@ foreach ([
     ],
     $scriptPath => [
         'const pageSize = 6;',
-        'data-gallery-visible-count',
+        'galleryVisibleCount',
         'visibleImages',
     ],
     $stylePath => [
