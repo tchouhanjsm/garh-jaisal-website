@@ -43,11 +43,11 @@ require dirname(__DIR__, 2) . '/include/page-head.php';
 $html = (string) ob_get_clean();
 
 $assert(
-    strpos($html, 'href="https://www.hotelgarhjaisal.com/img/optimized/v2/facade.webp" media="(max-width: 767px)" fetchpriority="high"') !== false,
+    strpos($html, 'href="/img/optimized/v2/facade.webp" media="(max-width: 767px)" fetchpriority="high"') !== false,
     'The mobile image preload must include its validated media query and high priority.'
 );
 $assert(
-    strpos($html, 'href="https://www.hotelgarhjaisal.com/img/optimized/v2/fort-from-roof.webp" media="(min-width: 768px)" fetchpriority="high"') !== false,
+    strpos($html, 'href="/img/optimized/v2/fort-from-roof.webp" media="(min-width: 768px)" fetchpriority="high"') !== false,
     'The desktop image preload must include its validated media query and high priority.'
 );
 $assert(
