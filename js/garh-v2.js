@@ -256,12 +256,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const firstInvalidRestaurantField = restaurantForm.querySelector('.restaurant-field.has-error input[aria-invalid="true"]');
     if (firstInvalidRestaurantField) {
-      firstInvalidRestaurantField.focus({ preventScroll: true });
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      firstInvalidRestaurantField.scrollIntoView({
-        block: 'center',
-        behavior: reduceMotion ? 'auto' : 'smooth'
-      });
+      const recoverRestaurantFieldFocus = () => {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        firstInvalidRestaurantField.scrollIntoView({
+          block: 'center',
+          behavior: reduceMotion ? 'auto' : 'smooth'
+        });
+        firstInvalidRestaurantField.focus({ preventScroll: true });
+      };
+
+      // The form action returns to #reserve. Wait until the browser has restored
+      // the fragment and completed document loading before applying focus recovery.
+      if (document.readyState === 'complete') {
+        window.requestAnimationFrame(recoverRestaurantFieldFocus);
+      } else {
+        window.addEventListener('load', () => {
+          window.requestAnimationFrame(recoverRestaurantFieldFocus);
+        }, { once: true });
+      }
     }
   }
 
