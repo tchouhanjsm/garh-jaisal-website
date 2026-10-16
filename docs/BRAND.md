@@ -39,7 +39,7 @@ The V1 motif is a small, decorative bastion line at relevant section eyebrows. T
 
 ## Photography and performance
 
-Use the strongest real photographs already in the repository first. Any grade/crop change requires a same-image side-by-side visual review and must preserve natural skin tones and food colour. Keep originals and existing source-to-WebP safeguards. Do not introduce autoplay video as a launch requirement; use a poster first and measure the actual payload. Paid photography quantity, budget, usage rights and shoot dates remain owner-approved inputs.
+Use the strongest real photographs already in the repository first. Any grade/crop change requires a same-image side-by-side visual review and must preserve natural skin tones and food colour. Keep originals and existing source-to-WebP safeguards. The homepage art-directs the existing portrait facade below 768px and the existing wide rooftop/fort panorama from 768px upward; each selection keeps explicit intrinsic dimensions and uses a checked-in, same-dimension derivative. Resized review-only candidates stay off runtime until the owner checks the full-size originals and responsive crops. Do not introduce autoplay video as a launch requirement; use a poster first and measure the actual payload. Paid photography quantity, budget, usage rights and shoot dates remain owner-approved inputs.
 
 ## Release checklist
 

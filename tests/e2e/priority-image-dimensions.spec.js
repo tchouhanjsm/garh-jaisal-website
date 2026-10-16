@@ -20,14 +20,39 @@ test('priority images reserve their intrinsic aspect ratio on sitemap routes', a
     await page.goto(route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
     const images = await page.locator('img[fetchpriority="high"]').evaluateAll(async nodes => {
       await Promise.all(nodes.map(img => img.decode ? img.decode().catch(() => undefined) : Promise.resolve()));
-      return nodes.map(img => ({
-      src: img.currentSrc || img.src,
-      width: Number(img.getAttribute('width')),
-      height: Number(img.getAttribute('height')),
-      naturalWidth: img.naturalWidth,
-      naturalHeight: img.naturalHeight,
-      loaded: img.complete && img.naturalWidth > 0 && img.naturalHeight > 0,
-    }));
+      return nodes.map(img => {
+        const currentPath = (() => {
+          try {
+            return new URL(img.currentSrc || img.src, document.baseURI).pathname.slice(1);
+          } catch {
+            return '';
+          }
+        })();
+        const matchingSource = Array.from(img.closest('picture')?.querySelectorAll('source[srcset]') || []).find(source => (
+          source.srcset.split(',').some(candidate => {
+            try {
+              const candidatePath = new URL(candidate.trim().split(' ')[0], document.baseURI).pathname.slice(1);
+              return candidatePath === currentPath;
+            } catch {
+              return false;
+            }
+          })
+        ));
+        const dimensions = matchingSource
+          && Number(matchingSource.getAttribute('width')) > 0
+          && Number(matchingSource.getAttribute('height')) > 0
+          ? matchingSource
+          : img;
+        return {
+          src: img.currentSrc || img.src,
+          width: Number(dimensions.getAttribute('width')),
+          height: Number(dimensions.getAttribute('height')),
+          dimensionsFrom: dimensions === img ? 'img' : 'picture-source',
+          naturalWidth: img.naturalWidth,
+          naturalHeight: img.naturalHeight,
+          loaded: img.complete && img.naturalWidth > 0 && img.naturalHeight > 0,
+        };
+      });
     });
 
     for (const image of images) {

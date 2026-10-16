@@ -38,11 +38,20 @@ require __DIR__ . '/include/page-head.php';
 <main id="main-content" class="thar-sunset-story thar-sunset-story--home" tabindex="-1">
 <section class="hero">
   <div class="hero-media">
-    <img
-      src="img/v2/facade.jpg"
-      <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?>
-      alt="Carved sandstone facade of Garh Jaisal Haveli inside Jaisalmer Fort"
-      fetchpriority="high">
+    <picture class="hero-picture">
+      <source
+        media="(min-width: 768px)"
+        srcset="img/optimized/v2/fort-from-roof.webp"
+        width="2000"
+        height="1333">
+      <img
+        src="img/v2/facade.jpg"
+        <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?>
+        alt=""
+        aria-hidden="true"
+        fetchpriority="high"
+        decoding="async">
+    </picture>
     <div class="hero-overlay"></div>
   </div>
 

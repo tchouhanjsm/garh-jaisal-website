@@ -323,6 +323,12 @@ p{
   inset:0;
 }
 
+.hero-media picture{
+  position:absolute;
+  inset:0;
+  display:block;
+}
+
 .hero-media img{
   width:100%;
   height:100%;
@@ -1297,7 +1303,8 @@ p{
   }
 
   .hero-content{
-    padding:120px 0 48px;
+    /* Keep the hero actions above the fixed mobile CTA dock at tablet widths. */
+    padding:120px 0 calc(48px + 58px);
   }
 
   .hero h1{
