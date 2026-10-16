@@ -277,27 +277,58 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Curated Gallery: progressively reveal photos after the first six per section.
+  // With JavaScript disabled all curated photos remain visible; pagination is enhancement only.
   const gallery = document.querySelector('.gallery-page');
   if (gallery) {
     const filters = Array.from(gallery.querySelectorAll('[data-gallery-filter]'));
     const filterGroup = gallery.querySelector('.gallery-filters');
-    if (filterGroup) filterGroup.hidden = false;
     const sections = Array.from(gallery.querySelectorAll('[data-gallery-category]'));
     const sectionLinks = Array.from(gallery.querySelectorAll('.gallery-jump a[href^="#"]'));
+    const moreButtons = Array.from(gallery.querySelectorAll('[data-gallery-more]'));
     const dialog = gallery.querySelector('.gallery-lightbox');
     const lightboxImage = gallery.querySelector('[data-gallery-lightbox-image]');
     const caption = gallery.querySelector('[data-gallery-lightbox-caption]');
     const previous = gallery.querySelector('[data-gallery-previous]');
     const next = gallery.querySelector('[data-gallery-next]');
+    const pageSize = 6;
     let activeImages = [];
     let activeIndex = 0;
 
+    const sectionItems = (section) => Array.from(section.querySelectorAll('.gallery-item'));
+    const setVisibleCount = (section, requestedCount) => {
+      const items = sectionItems(section);
+      const visibleCount = Math.min(Math.max(0, requestedCount), items.length);
+      items.forEach((item, index) => {
+        item.hidden = index >= visibleCount;
+      });
+      section.dataset.galleryVisibleCount = String(visibleCount);
+
+      const status = section.querySelector('[data-gallery-count]');
+      if (status) {
+        status.textContent = 'Showing ' + visibleCount + ' of ' + items.length + ' curated photos.';
+      }
+      const more = section.querySelector('[data-gallery-more]');
+      if (more) {
+        const remaining = items.length - visibleCount;
+        more.hidden = remaining <= 0;
+        more.textContent = remaining > pageSize
+          ? 'Show ' + pageSize + ' more photos'
+          : 'Show ' + remaining + ' more ' + (remaining === 1 ? 'photo' : 'photos');
+      }
+    };
+
     const visibleImages = () => Array.from(gallery.querySelectorAll('[data-gallery-open]'))
-      .filter((link) => !link.closest('[data-gallery-category]')?.hidden);
+      .filter((link) => {
+        const section = link.closest('[data-gallery-category]');
+        const item = link.closest('.gallery-item');
+        return Boolean(section && item && !section.hidden && !item.hidden);
+      });
 
     const applyFilter = (category) => {
       sections.forEach((section) => {
         section.hidden = category !== 'all' && section.dataset.galleryCategory !== category;
+        setVisibleCount(section, pageSize);
       });
       sectionLinks.forEach((link) => {
         const target = link.getAttribute('href').slice(1);
@@ -312,6 +343,15 @@ document.addEventListener('DOMContentLoaded', () => {
       filter.addEventListener('click', () => {
         applyFilter(filter.dataset.galleryFilter || 'all');
         if (dialog?.open) dialog.close();
+      });
+    });
+
+    moreButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const section = button.closest('[data-gallery-category]');
+        if (!section) return;
+        const visibleCount = Number(section.dataset.galleryVisibleCount || pageSize);
+        setVisibleCount(section, visibleCount + pageSize);
       });
     });
 
@@ -345,8 +385,11 @@ document.addEventListener('DOMContentLoaded', () => {
     dialog?.addEventListener('click', (event) => {
       if (event.target === dialog) dialog.close();
     });
+
     applyFilter('all');
+    if (filterGroup) filterGroup.hidden = false;
   }
+
 
 
   // Session-only Trip tray: store product choices, never personal data or form fields.

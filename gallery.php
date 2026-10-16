@@ -109,101 +109,7 @@ require __DIR__ . '/include/page-head.php';
   </section>
 
   <?php
-  $sections = [
-    'hotel' => [
-      'eyebrow' => 'Hotel',
-      'title' => 'The haveli',
-      'description' => 'Shared spaces, sandstone details and views around Garh Jaisal Haveli.',
-      'images' => [
-        ['v2/facade.jpg', 'Carved facade of Garh Jaisal Haveli inside Jaisalmer Fort'],
-        ['v2/courtyard.jpg', 'Courtyard balconies inside Garh Jaisal Haveli'],
-        ['v2/sitting-room.jpg', 'Sitting room with carved wood at Garh Jaisal Haveli'],
-        ['v2/fort-from-roof.jpg', 'Jaisalmer Fort seen from the rooftop at dusk'],
-        ['recep1.jpg', 'Reception area at Garh Jaisal Haveli'],
-        ['s1.jpg', 'Interior of Garh Jaisal Haveli'],
-        ['s2.jpg', 'Heritage interior at Garh Jaisal Haveli'],
-        ['s3.jpg', 'Sandstone details at Garh Jaisal Haveli'],
-        ['s5.jpg', 'Heritage interior at Garh Jaisal Haveli'],
-        ['s6.jpg', 'Interior detail at Garh Jaisal Haveli'],
-        ['s7.jpg', 'Interior space at Garh Jaisal Haveli']
-      ]
-    ],
-    'rooms' => [
-      'eyebrow' => 'Rooms',
-      'title' => 'Rooms with character',
-      'description' => 'The rooms featured on the current Rooms page, shown from different angles and details.',
-      'images' => [
-        ['maharaniroom.jpg', 'Red Maharani Room at Garh Jaisal Haveli'],
-        ['redmaha1.jpg', 'Red Maharani Room interior'],
-        ['opium1.jpg', 'Opium Room at Garh Jaisal Haveli'],
-        ['opium2.jpg', 'Opium Room interior'],
-        ['opium-room.jpg', 'Opium Room at Garh Jaisal Haveli'],
-        ['purple-room.jpg', 'Sweet Purple Room at Garh Jaisal Haveli'],
-        ['purple1.jpg', 'Sweet Purple Room interior'],
-        ['purple2.jpg', 'Sweet Purple Room interior detail'],
-        ['purplet.jpg', 'Sweet Purple Room detail'],
-        ['risingroom.jpg', 'Rising Sun Room at Garh Jaisal Haveli'],
-        ['sun1.jpg', 'Rising Sun Room interior'],
-        ['sun2.jpg', 'Rising Sun Room interior'],
-        ['sunt1.jpg', 'Rising Sun Room detail'],
-        ['scarlet.jpg', 'Scarlet Room at Garh Jaisal Haveli'],
-        ['scar1.jpg', 'Scarlet Room interior'],
-        ['scar2.jpg', 'Scarlet Room detail'],
-        ['scar-t.jpg', 'Scarlet Room detail'],
-        ['green-room.jpg', 'Green Room at Garh Jaisal Haveli'],
-        ['green1.jpg', 'Green Room interior'],
-        ['green2.jpg', 'Green Room detail'],
-        ['greent.jpg', 'Green Room detail'],
-        ['rr3.jpg', 'BlueSky Room at Garh Jaisal Haveli'],
-        ['rr2.jpg', 'BlueSky Room interior']
-      ]
-    ],
-    'desert' => [
-      'eyebrow' => 'Desert',
-      'title' => 'Desert experiences',
-      'description' => 'Explore the desert camp, Swiss tent interiors and bathroom, evening programme, and the open-air Sleep Under the Stars experience.',
-      'images' => [
-        ['Desert_Camp/camp_from_above.jpeg', 'Desert camp viewed from above near Jaisalmer'],
-        ['Desert_Camp/camp_evening.jpeg', 'Evening at the desert camp near Jaisalmer'],
-        ['Desert_Camp/CampingInJsm.jpeg', 'Camping experience near Jaisalmer'],
-        ['Desert_Camp/tent_deluxe.jpeg', 'Deluxe tent accommodation at the desert camp near Jaisalmer'],
-        ['Desert_Camp/camp_dinner.jpeg', 'Dinner at the desert camp near Jaisalmer'],
-        ['Desert_Camp/Bathroom.jpeg', 'Bathroom inside a Swiss tent with a shower, basin and toilet'],
-        ['Desert_Camp/Outtent.jpeg', 'White Swiss-style tent exterior at the desert camp'],
-        ['Desert_Camp/Prog.jpeg', 'Musicians performing at an evening programme in the desert camp'],
-        ['Desert_Camp/Tent.jpeg', 'Double bed and patterned wall panels inside a Swiss tent'],
-        ['Desert_Camp/Tentout.jpeg', 'White tents with planted greenery outside the accommodation'],
-        ['Desert_Camp/tentout1.jpeg', 'A row of white desert tents at dusk'],
-        ['sleeping_under_stars/Tour_1.jpeg', 'Mattress and bedding set out in the desert beside a small tent'],
-        ['sleeping_under_stars/tour_2.jpeg', 'People gathered around a small desert campfire at night'],
-        ['sleeping_under_stars/tour_3.jpeg', 'Jeep parked beside a thatched shelter among the sand dunes'],
-        ['sleeping_under_stars/tour_4.jpeg', 'Traveller riding a camel across the desert dunes'],
-        ['sleeping_under_stars/tour_6.jpeg', 'Ripples across the sand dunes in the Jaisalmer desert'],
-        ['sleeping_under_stars/tour_7.jpeg', 'Mattress and patterned pillows set out on the sand'],
-        ['sleeping_under_stars/tour_8.jpeg', 'Jeep travelling over sandy ground with dunes in the background'],
-        ['sleeping_under_stars/tour_9.jpeg', 'Desert campfire, shelter and jeep at dusk'],
-        ['sleeping_under_stars/tour_10.jpeg', 'Fruit and sandwiches arranged on a patterned mat'],
-      ],
-      'cta' => [
-        'title' => 'Choosing an overnight desert stay?',
-        'text' => 'Compare the open-air Sleep Under the Stars experience with a Swiss Deluxe Tent stay, then confirm current availability and inclusions with the hotel.',
-        'label' => 'Compare overnight options',
-        'href' => 'camping.php',
-      ],
-    ],
-    'restaurant' => [
-      'eyebrow' => 'Restaurant',
-      'title' => 'Dining',
-      'description' => 'Dining spaces and rooftop restaurant views at Garh Jaisal Haveli.',
-      'images' => [
-        ['res1.jpg', 'Restaurant at Garh Jaisal Haveli'],
-        ['rest2.jpg', 'Dining space at Garh Jaisal Haveli'],
-        ['rest3.jpg', 'Rooftop dining at Garh Jaisal Haveli'],
-        ['rest4.jpg', 'Restaurant view at Garh Jaisal Haveli'],
-        ['rest5.jpg', 'Dining at Garh Jaisal Haveli']
-      ]
-    ]
-  ];
+  $sections = require __DIR__ . '/include/gallery-data.php';
 
   foreach ($sections as $id => $section):
   ?>
@@ -217,13 +123,13 @@ require __DIR__ . '/include/page-head.php';
           <p><?= htmlspecialchars($section['description'], ENT_QUOTES, 'UTF-8') ?></p>
         </div>
 
-        <div class="gallery-grid">
+        <p class="gallery-count" data-gallery-count role="status" aria-live="polite" aria-atomic="true">
+          <?= count($section['images']) ?> photos in this collection.
+        </p>
+        <div class="gallery-grid" id="gallery-grid-<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>">
           <?php foreach ($section['images'] as $image): ?>
-            <?php
-              $src = 'img/' . $image[0];
-              $alt = $image[1];
-            ?>
-            <figure class="gallery-item">
+            <?php $src = $image['src']; $alt = $image['alt']; ?>
+            <figure class="gallery-item gallery-item--<?= htmlspecialchars($image['crop'], ENT_QUOTES, 'UTF-8') ?>">
               <a href="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>" data-gallery-open aria-label="Open full-size image: <?= htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') ?>">
                 <img
                   src="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>"
@@ -237,6 +143,9 @@ require __DIR__ . '/include/page-head.php';
             </figure>
           <?php endforeach; ?>
         </div>
+        <button type="button" class="button button-light gallery-more" data-gallery-more aria-controls="gallery-grid-<?= htmlspecialchars($id, ENT_QUOTES, 'UTF-8') ?>" hidden>
+          Show more photos
+        </button>
         <?php if (!empty($section['cta'])): ?>
           <div class="gallery-section-cta">
             <div class="gallery-section-cta-copy">

@@ -46,7 +46,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 35 | Home and high-intent photography/performance pass | ✓ PR #84 merged the responsive art-directed hero and screenshot evidence; resized candidates remain review-only and production performance measurement is still owner-side |
 | 36 | Experience comparison and Trip shortlist visual polish | ✓ PR #85 merged at `b9b15e1db0ff8a440b7a6546775fc4d2f1f8b61f`; registry-backed overnight comparison and Escape/focus recovery; exact-head CI passed |
 | 37 | Restaurant identity and six first-party marketing templates | ✓ PR #86 merged at `113e75ab879057b780bde24ce9ec633999892dc6`; six guarded source masters, Canva workflow and restrained restaurant identity; operational facts remain owner-gated |
-| 38 | Restaurant menu navigation, dietary filter feedback and keyboard-accessible controls | ◐ current bulk batch: 44px targets, shared focus rings, in-page location semantics, screen-reader filter feedback and responsive regression coverage |
+| 38 | Restaurant menu navigation, dietary filter feedback and keyboard-accessible controls | ✓ PR #87 merged at `4b135980fb9e617313d9939d7601649637b2caaa`; exact-head checks, package, staging dry run and browser E2E passed; owner assistive-tech review remains |
+| 39 | Gallery curation, responsive image composition and progressive photo pagination | ◐ current PR: select 36 existing photos, add per-section six-at-a-time reveal, and guard inventory, no-JavaScript fallback, filters/lightbox and responsive overflow |
 
 ---
 
@@ -583,13 +584,22 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - PR-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127095), package preflight [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127092) and non-deploying Staging QA [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127080). Merge-head Browser E2E [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875) and [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666). No external cPanel staging or production deployment occurred.
 - Menu prices and contents, service hours, reservation/mail activation, public routes, canonicals, schema facts, GA4 IDs and production configuration were not changed. No live cPanel staging or production deployment occurred.
 
-## Sprint 38 — restaurant menu and dietary-filter accessibility (current batch)
+## Sprint 38 — restaurant menu and dietary-filter accessibility (PR #87 merged)
 
-**Commercial goal:** make the existing menu easier to navigate and filter with touch, keyboard and assistive technology, without changing the commercial content or reservation behaviour.
+**Commercial goal:** make the existing menu easier to navigate with touch, keyboard and assistive technology without changing menu facts or reservation behaviour.
 
-- Keep the vegetarian filter and menu category links at least 44px high and use the shared `--focus` token for a consistent 3px focus indicator.
-- Correct active category navigation to use `aria-current="location"` for in-page destinations.
-- Refresh only the `restaurant.php` `lastmod` value in `sitemap.xml` to `2026-10-16`, matching the source commit date; keep the sitemap URL allowlist and membership unchanged.
-- Add a polite live status message after dietary-filter changes, reporting the on/off state and matching dish/category counts across the full paginated menu. Preserve the booklet's active-page visibility; existing dish data and prices remain unchanged.
-- Add Playwright regression coverage for target dimensions, keyboard focus, location state, filter counts, status announcements and horizontal overflow at 320px, 390px and 1280px.
-- Exact-head PHP 7.4/8.2 Site Checks, strict image and sitemap checks, publication/security guards, package workflow, non-deploying Staging QA, Browser E2E and screenshot artifacts are required. Owner visual review and live-host verification remain separate.
+- PR #87 merged to `main` at `4b135980fb9e617313d9939d7601649637b2caaa`; exact PR-head `21bc78c7a3650c646567ca7efd8e4522105945b1`.
+- The vegetarian filter and category links use 44px targets, shared 3px focus, `aria-current="location"` and a polite full-menu result count. The status logic does not change which booklet page is active.
+- Exact-head Site Checks, package preflight, non-deploying Staging QA and Browser E2E passed. Visual contrast review and real assistive-technology/live-host review remain owner-side.
+- No menu, price, hours, reservation, route, canonical, schema or GA4 changes; no cPanel deployment.
+
+## Sprint 39 — curated Gallery and progressive photo pagination (current PR)
+
+**Commercial goal:** help guests scan a stronger, more intentional visual introduction to the haveli, rooms, desert experiences and dining instead of facing the full legacy photo wall at once.
+
+- Extract the current gallery data into `include/gallery-data.php` and curate 36 existing, repository-backed photos: 9 hotel, 12 rooms, 10 desert and 5 restaurant.
+- Apply the approved art-direction language as CSS crops only—architectural arch, 3:4 portrait and 21:9 landscape. Do not re-grade, resize, rename or delete originals; the dedicated overnight experience galleries keep their full curated source sets.
+- Progressive enhancement shows up to six photos per section with a clear “Show more” action; without JavaScript, all 36 remain available. Keep the existing category filters and native lightbox, and make the filter/pagination state keyboard-friendly.
+- Add a PHP inventory/source contract and Playwright coverage for server-rendered completeness, page-size counts, filtering, more-photo state, lightbox next/previous, and no horizontal overflow at each configured viewport.
+- Acceptance: PHP 7.4/8.2 lint, strict image and sitemap checks, publication/security/discovery guards, curated-gallery PHP guard, package preflight, non-deploying Staging QA and Browser E2E/page sheet on the exact PR head. No price, availability, booking, analytics, route or production behavior changes.
+

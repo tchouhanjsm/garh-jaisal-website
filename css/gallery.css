@@ -45,7 +45,7 @@
 .gallery-jump a{
   display:inline-flex;
   align-items:center;
-  min-height:40px;
+  min-height:44px;
   padding:0 16px;
   border:1px solid #cdbda9;
   border-radius:999px;
@@ -385,4 +385,48 @@
 @media (max-width:640px) {
   .gallery-section-cta { align-items:stretch; flex-direction:column; }
   .gallery-section-cta .button { align-self:flex-start; max-width:100%; white-space:normal; text-align:center; }
+}
+
+
+/* Sprint 39 — curated crops and progressive Gallery pagination. */
+.gallery-item[hidden] {
+  display: none !important;
+}
+.gallery-item--arch {
+  border-radius: 50% 50% 0 0 / 24% 24% 0 0;
+}
+.gallery-item--portrait {
+  aspect-ratio: 3 / 4;
+}
+.gallery-item--landscape {
+  aspect-ratio: 21 / 9;
+}
+.gallery-count {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: .875rem;
+  line-height: 1.5;
+}
+.gallery-more {
+  margin-top: 20px;
+}
+.gallery-item a:focus-visible,
+.gallery-filters button:focus-visible,
+.gallery-lightbox button:focus-visible,
+.gallery-more:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gallery-item img,
+  .gallery-item-label {
+    transition: none !important;
+  }
+}
+
+
+/* Component display declarations must not override the native hidden state. */
+.gallery-filters[hidden],
+.gallery-more[hidden] {
+  display: none !important;
 }
