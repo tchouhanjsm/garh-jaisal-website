@@ -78,6 +78,6 @@ These SVGs are design sources, not final campaign approvals. Canva remains the l
 ## Sprint 39 — curated Gallery and progressive photo reveal
 
 - The main Gallery uses the data contract in `include/gallery-data.php`: 36 existing photos grouped into hotel (7), rooms (14), desert (10) and restaurant (5). Keep the larger owner-provided source library in the dedicated experience pages.
-- Use the arch crop selectively for architecture/room anchors, with portrait and landscape variants where they preserve the subject. Crops are CSS-only; do not re-grade or modify originals without a side-by-side owner review.
+- Use the arch crop selectively for architecture/room anchors, with the approved 3:4 portrait and 21:9 landscape crops where they preserve the subject. Crops are CSS-only; do not re-grade or modify originals without a side-by-side owner review.
 - Reveal up to six photos per section initially and offer a clear keyboard-accessible “Show more” action. With JavaScript disabled, every curated photo remains visible. Existing category filters and the native lightbox continue to work.
 - The PHP/Playwright contract protects category counts, local source files, alt text, crop names, no-JavaScript completeness, filter/lightbox behaviour and responsive overflow. Inspect 320, 390, 768, 1280 and 1440px before owner approval.
