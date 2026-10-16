@@ -148,6 +148,11 @@ return [
             'Transport' => 'Jeep transport',
             'Return' => 'Following day',
         ],
+        'comparison_label' => 'Open-sky overnight',
+        'comparison_facts' => [
+            ['label' => 'Sleep setup', 'value' => 'Open-air, with a mattress and blankets.'],
+            ['label' => 'Bathroom', 'value' => 'Not the same setup as a Swiss Deluxe Tent; ask the hotel about the current arrangement before booking.'],
+        ],
         'timeline_label' => 'Typical sequence',
         'timeline_note' => 'The exact departure and return times vary by season and operating conditions. Confirm the final schedule with the hotel.',
         'timeline' => [
@@ -209,6 +214,11 @@ return [
             'Meals' => 'High tea, dinner and breakfast',
             'Evening' => 'Cultural programme and folk music',
             'Transport' => 'Jeep transport',
+        ],
+        'comparison_label' => 'Swiss tent overnight',
+        'comparison_facts' => [
+            ['label' => 'Sleep setup', 'value' => 'Swiss Deluxe Tent accommodation.'],
+            ['label' => 'Bathroom', 'value' => 'Attached bathroom with hot and cold shower.'],
         ],
         'facilities' => [
             'King-size bed',

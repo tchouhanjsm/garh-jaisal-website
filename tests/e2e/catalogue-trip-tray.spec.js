@@ -22,6 +22,13 @@ test('catalogue renders the reviewed product choices without unapproved prices',
     await expect(card).toContainText('Current price on request');
   }
   await expect(page.locator('#camp-compare-title')).toHaveText('Open sky or a Swiss tent?');
+  const campComparisons = page.locator('.catalogue-compare-card');
+  await expect(campComparisons).toHaveCount(2);
+  await expect(campComparisons.nth(0).locator('.catalogue-compare-fact[data-comparison-field="Duration"] dd')).toHaveText('1 night');
+  await expect(campComparisons.nth(0).locator('.catalogue-compare-fact[data-comparison-field="Sleep setup"] dd')).toHaveText('Open-air, with a mattress and blankets.');
+  await expect(campComparisons.nth(0).locator('.catalogue-compare-fact[data-comparison-field="Bathroom"] dd')).toContainText('Not the same setup as a Swiss Deluxe Tent');
+  await expect(campComparisons.nth(1).locator('.catalogue-compare-fact[data-comparison-field="Sleep setup"] dd')).toHaveText('Swiss Deluxe Tent accommodation.');
+  await expect(campComparisons.nth(1).locator('.catalogue-compare-fact[data-comparison-field="Bathroom"] dd')).toHaveText('Attached bathroom with hot and cold shower.');
   await expect(page.locator('#transport-compare-title')).toHaveText('Choose the journey you need.');
   await expect(page.locator('main')).not.toContainText('₹');
   await expect(page.locator('.product-card-planning-note')).toHaveCount(9);
@@ -45,6 +52,12 @@ test('Trip tray combines a room and a desert stay without collecting guest detai
   await page.goto('/swiss-tent-safari.php', { waitUntil: 'domcontentloaded' });
   await page.locator('[data-trip-add][data-trip-id="swiss-tent-safari"]').click();
   await expect(page.locator('[data-trip-count]')).toHaveText('2');
+  await page.locator('[data-trip-toggle]').click();
+  await expect(page.locator('[data-trip-panel]')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('[data-trip-panel]')).toBeHidden();
+  await expect(page.locator('[data-trip-toggle]')).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.locator('[data-trip-toggle]')).toBeFocused();
   await page.locator('[data-trip-toggle]').click();
   await expect(page.locator('[data-trip-panel]')).toBeVisible();
   await expect(page.locator('[data-trip-items]')).toContainText(roomName);

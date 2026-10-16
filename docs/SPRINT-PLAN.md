@@ -43,8 +43,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 32 | High-intent package discovery and guest-choice clarity | ✓ PR #81 merged; discovery hubs feed the existing session-only Trip shortlist and user-reviewed WhatsApp draft |
 | 33 | Brand foundation, contrast and shared component consistency | ✓ PR #82 merged; brand constitution, token contrast contract, bastion motif and shared 6px geometry |
 | 34 | Restaurant enquiry completion and conversion measurement | ◐ PR #83: accessible server validation, dining CTA/form intent events, direct-contact fallback retained; mail delivery remains owner-gated |
-| 35 | Home and high-intent photography/performance pass | ◐ keep image audit and candidates review-only until owner inspects variants; no runtime asset promotion in PR #83 |
-| 36 | Experience comparison and Trip shortlist visual polish | ◐ PR #83 extends the arch-photo treatment to catalogue and experience cards; preserve registry facts and session-only storage |
+| 35 | Home and high-intent photography/performance pass | ✓ PR #84 merged the responsive art-directed hero and screenshot evidence; resized candidates remain review-only and production performance measurement is still owner-side |
+| 36 | Experience comparison and Trip shortlist visual polish | ◐ current batch moves overnight comparison facts into the shared experience registry and adds Escape-to-close with focus recovery; session-only shortlist boundary retained |
 | 37 | Restaurant identity and six first-party marketing templates | Planned after restaurant operational facts and first visual review; Canva Brand Kit is the low-friction default |
 
 ---
@@ -549,7 +549,7 @@ Analytics distinguish `restaurant_enquiry_start` and `restaurant_request_attempt
 
 The visual pass extends the approved bastion motif and architectural photo crop to restaurant, catalogue and experience media. Do not promote responsive image variants into runtime until the owner reviews the review-sheet artifact. Do not enable server mail, add guest leads, publish new offers/prices/hours, or alter public routes/canonicals without confirmed facts and owner approval.
 
-## Sprint 35 — home hero art direction and screenshot evidence (PR #84 in review)
+## Sprint 35 — home hero art direction and screenshot evidence (PR #84 merged)
 
 **Commercial goal:** make the first home-page impression more representative of the rooftop/fort setting while reducing the selected desktop hero asset, with responsive visual evidence the owner can review.
 
@@ -559,3 +559,14 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Improve page-sheet reliability by waiting for same-origin images to load/decode before capturing; include a 768px sample for Home, Rooms, Catalogue, Car & City Tours, Rooftop Dining and Restaurant, while retaining 390/1280 coverage on every sitemap route.
 - Do not promote any generated 480/800/1200px review-only variant, regrade/crop source files, add fonts/libraries/video, or make performance claims about production. Owner must inspect 320/390/768/1280/1440 hero evidence and key pages before merge.
 - Exact-head acceptance: PHP lint 7.4/8.2, `php scripts/check-site.php --strict-images`, `php scripts/generate-sitemap.php --check`, existing security/SEO/publication guards, package preflight, non-deploying Staging QA, Browser E2E and screenshot/evidence artifacts. No external staging upload or production deployment by this PR owner/assistant.
+
+
+## Sprint 36 — experience comparison and session-only Trip tray polish (current batch)
+
+**Commercial goal:** make the two overnight choices easier to compare without inventing a benefit, while making the session-only shortlist easier to dismiss with a keyboard.
+
+- Store overnight card labels and comparison facts in `include/experience-data.php`; the catalogue renders duration and comparison rows from the shared registry rather than branching on a product slug.
+- Use a compact definition-list layout for duration, sleep setup and bathroom arrangements so the material difference between open-air sleeping and a Swiss Deluxe Tent is scannable on mobile and desktop.
+- Allow Escape to close the visible Trip tray and return keyboard focus to its trigger. Preserve the existing explicit Close button, remove controls, status announcements and editable WhatsApp draft.
+- Keep selection data tab-scoped in `sessionStorage`; add no guest details, server-side leads, prices, availability promises, booking confirmation, new dependencies or routes.
+- Exact-head acceptance: PHP 7.4/8.2 lint, strict image checks, sitemap/publication/security checks, package preflight, non-deploying Staging QA, Browser E2E and screenshot artifacts. Owner visual review and live-host testing remain separate.

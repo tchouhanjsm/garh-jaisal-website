@@ -395,6 +395,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!open && moveFocus) trigger.focus();
     };
 
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || panel.hidden) return;
+      event.preventDefault();
+      setPanelOpen(false, true);
+    });
+
     const updateOutboundWhatsApp = () => {
       if (!sendLink) return;
       const base = sendLink.dataset.whatsappBase || '';
