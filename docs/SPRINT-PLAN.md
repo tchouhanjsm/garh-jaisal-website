@@ -580,7 +580,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - PR #86 merged to `main` at `113e75ab879057b780bde24ce9ec633999892dc6`.
 - Six SVG composition masters and Canva workflow instructions are now in `marketing/templates/`; visible placeholders remain until the owner replaces and approves them.
 - Restaurant styling uses the approved Garnet/Night hero and restrained Garnet/Gold accents while keeping menu, information and enquiry surfaces light.
-- PR-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127095), package preflight [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127092) and non-deploying Staging QA [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127080). At the start of Sprint 38, merge-head Browser E2E was still running on [run 38855546341](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341); re-check exact-head status before owner review.
+- PR-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127095), package preflight [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127092) and non-deploying Staging QA [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127080). Merge-head Browser E2E [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875) and [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666). No external cPanel staging or production deployment occurred.
 - Menu prices and contents, service hours, reservation/mail activation, public routes, canonicals, schema facts, GA4 IDs and production configuration were not changed. No live cPanel staging or production deployment occurred.
 
 ## Sprint 38 — restaurant menu and dietary-filter accessibility (current batch)
@@ -589,6 +589,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 
 - Keep the vegetarian filter and menu category links at least 44px high and use the shared `--focus` token for a consistent 3px focus indicator.
 - Correct active category navigation to use `aria-current="location"` for in-page destinations.
+- Refresh only the `restaurant.php` `lastmod` value in `sitemap.xml` to `2026-10-16`, matching the source commit date; keep the sitemap URL allowlist and membership unchanged.
 - Add a polite live status message after dietary-filter changes, reporting whether the filter is on/off and the number of dishes/categories remaining. Existing dish data and prices remain unchanged.
 - Add Playwright regression coverage for target dimensions, keyboard focus, location state, filter counts, status announcements and horizontal overflow at 320px, 390px and 1280px.
 - Exact-head PHP 7.4/8.2 Site Checks, strict image and sitemap checks, publication/security guards, package workflow, non-deploying Staging QA, Browser E2E and screenshot artifacts are required. Owner visual review and live-host verification remain separate.

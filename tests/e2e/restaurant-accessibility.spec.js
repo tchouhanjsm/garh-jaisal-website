@@ -15,7 +15,7 @@ test('restaurant menu controls have usable targets, visible focus, correct locat
   const status = page.locator('[data-restaurant-menu-status]');
 
   await expect(menu).toBeVisible();
-  await expect(tabs).toHaveCount(await tabs.count());
+  expect(await tabs.count()).toBeGreaterThan(1);
   await expect(firstTab).toHaveAttribute('aria-current', 'location');
   await expect(status).toHaveAttribute('aria-live', 'polite');
   await expect(status).toHaveAttribute('aria-atomic', 'true');

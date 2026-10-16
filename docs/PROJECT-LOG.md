@@ -17,7 +17,7 @@
 | PR #86 merge-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546303) |
 | PR #86 merge-head cPanel package workflow (no deployment) | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546333) |
 | PR #86 merge-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546323) |
-| PR #86 merge-head Browser E2E | [IN PROGRESS at last check](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) |
+| PR #86 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
 | Owner review | Inspect menu controls/filter at 320px, 390px and 1280px, including focus rings and the active category; verify the new filter status with assistive technology where available. |
@@ -104,12 +104,13 @@
 
 - PR #86 merged on 2026-10-16 to `main` at `113e75ab879057b780bde24ce9ec633999892dc6`; no open PRs were present at the Sprint 38 branch start.
 - Six guarded SVG marketing masters, Canva workflow guidance, restrained restaurant styling, the template source contract, and Playwright regression checks are merged.
-- PR-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127095), package preflight [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127092), and non-deploying Staging QA [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127080). The merge-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546303), cPanel package workflow [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546333), and Staging QA dry run [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546323). Browser E2E [was still running at the last check](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341); refresh before owner review.
+- PR-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127095), package preflight [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127092), and non-deploying Staging QA [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127080). The merge-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546303), cPanel package workflow [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546333), Staging QA dry run [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546323), and Browser E2E [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341). Merge-head evidence: [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875), [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666).
 - No public URL, canonical, schema facts, menu data/prices, restaurant hours, reservation/mail activation or GA4 IDs changed. No external cPanel staging or production deployment occurred.
 
 ## Sprint 38 — restaurant menu accessibility and dietary-filter feedback (current PR)
 
 - Starting main SHA: `113e75ab879057b780bde24ce9ec633999892dc6`. No open PR existed at branch creation.
 - Bundle touch-target sizing, shared focus-token alignment, proper in-page current-location semantics and a polite dietary-filter results announcement into one restaurant UX slice with responsive Playwright regression coverage.
-- Expected changed surfaces: `css/restaurant.css`, `restaurant.js`, `restaurant.php`, new `tests/e2e/restaurant-accessibility.spec.js`, and the three project/brand documents.
+- Refresh the `restaurant.php` sitemap `lastmod` to `2026-10-16`, matching the new source commit date; no sitemap URL was added, removed or reordered.
+- Expected changed surfaces: `css/restaurant.css`, `restaurant.js`, `restaurant.php`, `sitemap.xml` (restaurant route lastmod only), new `tests/e2e/restaurant-accessibility.spec.js`, and the three project/brand documents.
 - This batch does not alter menu facts/prices, service hours, reservation/mail behavior, public routes/canonicals, schema or GA4 IDs. Exact-head workflows and artifacts are pending; owner visual and live-host review remain separate.
