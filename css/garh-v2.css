@@ -1926,7 +1926,7 @@ p{
 /* Opt-in quick-facts strip: only render facts that are verified in page data. */
 .at-a-glance{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(min(100%,10rem),1fr));
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,8rem),1fr));
   gap:var(--sp-2);
   padding:var(--sp-3);
   border:1px solid var(--line);
@@ -1951,6 +1951,17 @@ p{
   color:var(--ink);
   font-size:var(--fs-body);
 }
+.at-a-glance__item dt,
+.at-a-glance__item dd{
+  margin:0;
+}
+.at-a-glance__item dd{
+  line-height:1.4;
+}
+.at-a-glance-section{
+  padding-block:var(--sp-3);
+}
+
 
 /* Reusable CTA band; existing CTA blocks are not forcibly restyled. */
 .cta-band{
@@ -2888,4 +2899,42 @@ p{
     transition:none !important;
     animation:none !important;
   }
+}
+
+
+/* Sprint 40 — shared quick facts, using verified page data only. */
+.rooms-hero-summary{
+  border-color:var(--line);
+  border-radius:var(--radius);
+  background:#fff;
+  box-shadow:var(--shadow-sm);
+  backdrop-filter:none;
+}
+.rooms-hero-summary > .eyebrow{color:var(--muted)}
+.rooms-hero-summary .at-a-glance--stacked{
+  grid-template-columns:1fr;
+  gap:0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.rooms-hero-summary .at-a-glance__item{
+  display:grid;
+  grid-template-columns:minmax(5rem,.75fr) minmax(0,1fr);
+  align-items:center;
+  gap:14px;
+  padding:13px 0;
+  border-top:1px solid var(--line);
+  border-inline-start:0;
+}
+.rooms-hero-summary .at-a-glance__item:first-child{border-top:0}
+.rooms-hero-summary .at-a-glance__label{margin:0}
+.rooms-hero-summary .at-a-glance__value{font-size:.95rem;line-height:1.4}
+.catalogue-hero-facts{width:min(100%,46rem);margin-top:1.25rem}
+.catalogue-hero-facts .at-a-glance--hero{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:600px){
+  .catalogue-hero-facts{margin-top:1rem}
+  .catalogue-hero-facts .at-a-glance--hero{grid-template-columns:1fr}
 }

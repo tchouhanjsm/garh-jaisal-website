@@ -2,6 +2,7 @@
 $activePage = 'home';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $bookingUrl = $siteConfig['booking_url'];
+$rooms = require __DIR__ . '/include/rooms-data.php';
 ?>
 <!doctype html>
 <html lang="en">
@@ -79,6 +80,20 @@ require __DIR__ . '/include/page-head.php';
       </a>
     </div>
   </div>
+</section>
+
+<section class="site-shell at-a-glance-section home-quick-facts" aria-label="Quick facts about Garh Jaisal Haveli">
+  <?php
+  $atAGlance = [
+      'items' => [
+          ['label' => 'Location', 'value' => 'Inside Jaisalmer Fort'],
+          ['label' => 'Stay', 'value' => count($rooms) . ' heritage rooms'],
+          ['label' => 'Dining', 'value' => 'Rooftop restaurant'],
+          ['label' => 'Experiences', 'value' => 'Desert and guided city tours'],
+      ],
+  ];
+  require __DIR__ . '/include/ui/at-a-glance.php';
+  ?>
 </section>
 
 <section class="home-discovery" aria-label="Explore Garh Jaisal Haveli" data-story-reveal>
@@ -176,7 +191,6 @@ require __DIR__ . '/include/page-head.php';
 
   <section class="section home-rooms" id="rooms-preview" data-story-reveal aria-labelledby="rooms-preview-title">
     <?php
-    $rooms = require __DIR__ . '/include/rooms-data.php';
     $featuredRooms = array_slice($rooms, 0, 3);
     ?>
     <div class="site-shell">

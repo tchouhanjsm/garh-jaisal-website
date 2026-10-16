@@ -119,7 +119,20 @@ require __DIR__ . '/include/page-head.php';
         <a class="button button-primary" href="#trip-products">Explore the options</a>
         <a class="button button-light" href="contact.php">Ask the hotel</a>
       </div>
-      <p class="catalogue-hero-note">Inside Jaisalmer Fort · Desert experiences by enquiry · No booking is confirmed by adding an item</p>
+      <section class="catalogue-hero-facts" aria-label="Trip planning quick facts">
+        <?php
+        $atAGlance = [
+            'class' => 'at-a-glance at-a-glance--hero',
+            'items' => [
+                ['label' => 'Trip options', 'value' => 'Rooms, experiences, transport and rooftop dining'],
+                ['label' => 'Shortlist', 'value' => 'Stored in this browser tab'],
+                ['label' => 'Enquiry', 'value' => 'Review the WhatsApp draft before sending'],
+                ['label' => 'Booking status', 'value' => 'A shortlist is not a confirmed booking'],
+            ],
+        ];
+        require __DIR__ . '/include/ui/at-a-glance.php';
+        ?>
+      </section>
     </div>
   </section>
 

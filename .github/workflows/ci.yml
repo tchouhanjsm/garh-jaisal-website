@@ -57,6 +57,8 @@ jobs:
       
       - name: Verify curated Gallery inventory and progressive enhancement
         run: php tests/php/gallery-curation.php
+      - name: Verify shared quick-facts component contract
+        run: php tests/php/at-a-glance-contract.php
 
       - name: Verify experience discovery shortlist contract
         run: php tests/php/experience-discovery.php

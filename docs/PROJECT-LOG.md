@@ -7,10 +7,15 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-16 |
-| Current phase | Sprint 39 — curated Gallery and progressive photo pagination (current PR) |
+| Current phase | Sprint 40 — shared verified quick facts for Home, Rooms and Trip Planner (current PR) |
 | Base branch | `main` |
-| Baseline commit | `4b135980fb9e617313d9939d7601649637b2caaa` (verified `main` head after PR #87) |
-| Last merged PR | [#87 — improve restaurant menu accessibility and filtering](https://github.com/tchouhanjsm/garh-jaisal-website/pull/87) |
+| Baseline commit | `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3` (verified `main` merge commit for PR #88) |
+| Last merged PR | [#88 — curate Gallery and add progressive photo pagination](https://github.com/tchouhanjsm/garh-jaisal-website/pull/88) |
+| PR #88 merged | [Merged 2026-10-16](https://github.com/tchouhanjsm/garh-jaisal-website/pull/88) at `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`; review head `dfbaa2c556bea8bfaabfcdfdf6b2ae51b76a7204` |
+| PR #88 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38867401576) |
+| PR #88 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38867401608) |
+| PR #88 Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38867401517) — [evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38867401517/artifacts/12031996540) |
+| PR #88 Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38867401672) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38867401672/artifacts/12031774700); [evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38867401672/artifacts/12032530309) |
 | PR #87 exact-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38860894128) — head `21bc78c7a3650c646567ca7efd8e4522105945b1` |
 | PR #87 exact-head package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38860894116) |
 | PR #87 exact-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38860894207) |
@@ -24,8 +29,8 @@
 | PR #86 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Owner review | Inspect Gallery at 320px, 390px, 768px, 1280px and 1440px; compare crops, progressive reveal, filters and lightbox keyboard flow. |
-| Next action | Review the current Sprint 39 PR against the exact-head CI and screenshot sheet; owner retains merge and deployment authority. |
+| Owner review | Gallery Desert photo/caption mapping still needs owner approval; review Sprint 40 quick-facts presentation at 320px, 390px, 768px, 1280px and 1440px. |
+| Next action | Review the Sprint 40 quick-facts PR and responsive page sheet; owner retains merge and deployment authority. |
 ## Phase roadmap
 
 | Phase | Goal | Status |
@@ -118,7 +123,7 @@
 - Exact PR-head Site Checks, package preflight, non-deploying Staging QA and Browser E2E passed; [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38860894115/artifacts/12028694758) and [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38860894115/artifacts/12030090186) remain available.
 - Menu facts, pricing, service hours, URLs, canonicals, schema facts and GA4 IDs were not changed. No external cPanel staging or production deployment occurred.
 
-## Sprint 39 — curated Gallery and progressive photo pagination (current PR)
+## Sprint 39 — curated Gallery and progressive photo pagination (PR #88 merged)
 
 - Base: verified `main` SHA `4b135980fb9e617313d9939d7601649637b2caaa`; no open PRs existed before this batch.
 - Curate the current Gallery into 36 existing photos across hotel (9), rooms (12), desert (10) and restaurant (5); move source/alt/crop metadata into `include/gallery-data.php`.
@@ -127,4 +132,13 @@
 - No public route, canonical, schema fact, price, availability, booking flow, GA4 ID, image file or production dependency changes; implementation stops before merge or deployment.
 - Follow-up review coverage: the Browser E2E page sheet now adds Gallery full-page captures at 320, 390, 768, 1280 and 1440px, with all ten Desert photos expanded; a source/alt contact sheet and JSON inventory are produced alongside the screenshots.
 - Release evidence must distinguish automated responsive review from the owner’s final visual sign-off. Verify Desert Camp source subjects against the rendered alt captions before treating the visual-review item as fully owner-approved.
-- No merge, cPanel deployment, or production change is performed by this workflow.
+- PR #88 merged on 2026-10-16 at `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`. No cPanel deployment or production change occurred.
+
+
+## Sprint 40 — shared verified quick facts for high-intent pages (current PR)
+
+- Base: verified post-PR-88 main merge commit `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`.
+- Add an escaped, semantic `include/ui/at-a-glance.php` renderer and cover it with a PHP contract test. Use existing room registry data for the Home and Rooms room counts; keep facilities qualified as varying by room.
+- Apply the shared component to Home, Rooms and Trip Planner. Catalogue facts explain the browser-tab shortlist and reviewed WhatsApp draft without suggesting that an enquiry or shortlist is a confirmed booking.
+- Reuse existing tokens and CSS, keep the information card light, and run responsive E2E checks at 320, 390, 768, 1280 and 1440px.
+- No route, canonical, schema, booking destination, prices, availability, policies, analytics ID, server-side lead storage, or production dependency changes. Owner controls merge and deployment.

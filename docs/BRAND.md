@@ -81,3 +81,11 @@ These SVGs are design sources, not final campaign approvals. Canva remains the l
 - Use the arch crop selectively for architecture/room anchors, with the approved 3:4 portrait and 21:9 landscape crops where they preserve the subject. Crops are CSS-only; do not re-grade or modify originals without a side-by-side owner review.
 - Reveal up to six photos per section initially and offer a clear keyboard-accessible “Show more” action. With JavaScript disabled, every curated photo remains visible. Existing category filters and the native lightbox continue to work.
 - The PHP/Playwright contract protects category counts, local source files, alt text, crop names, no-JavaScript completeness, filter/lightbox behaviour and responsive overflow. Inspect 320, 390, 768, 1280 and 1440px before owner approval.
+
+
+## Sprint 40 — verified quick-facts blocks
+
+- Use the existing `.at-a-glance` tokenized card as a shared, semantic definition list; render facts only from approved page copy or current registries.
+- On Home, show the fort location, registry-backed room count, rooftop dining and available desert/city experience categories. On Rooms, derive the current room count and floor summary from `include/rooms-data.php`; state that facilities vary by room.
+- On Trip Planner, explain that options can be shortlisted in the browser tab, WhatsApp enquiries remain user-reviewed, and a shortlist does not confirm a booking.
+- Keep facts readable on a light surface, preserve visible focus/44px CTA rules, and review all five constitution widths (320, 390, 768, 1280, 1440px). No rate, availability, guest-review or policy claims are introduced.

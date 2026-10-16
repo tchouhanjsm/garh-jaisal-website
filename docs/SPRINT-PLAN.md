@@ -47,7 +47,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 36 | Experience comparison and Trip shortlist visual polish | ✓ PR #85 merged at `b9b15e1db0ff8a440b7a6546775fc4d2f1f8b61f`; registry-backed overnight comparison and Escape/focus recovery; exact-head CI passed |
 | 37 | Restaurant identity and six first-party marketing templates | ✓ PR #86 merged at `113e75ab879057b780bde24ce9ec633999892dc6`; six guarded source masters, Canva workflow and restrained restaurant identity; operational facts remain owner-gated |
 | 38 | Restaurant menu navigation, dietary filter feedback and keyboard-accessible controls | ✓ PR #87 merged at `4b135980fb9e617313d9939d7601649637b2caaa`; exact-head checks, package, staging dry run and browser E2E passed; owner assistive-tech review remains |
-| 39 | Gallery curation, responsive image composition and progressive photo pagination | ◐ current PR: select 36 existing photos, add per-section six-at-a-time reveal, and guard inventory, no-JavaScript fallback, filters/lightbox and responsive overflow |
+| 39 | Gallery curation, responsive image composition and progressive photo pagination | ✓ PR #88 merged at `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`; 36-photo selection, progressive reveal, responsive gallery evidence; owner photo/caption review remains |
+| 40 | Shared verified quick-facts component for Home, Rooms and Trip Planner | ◐ current PR: escaped semantic partial, registry-backed room count, explicit shortlist/enquiry/booking distinction, responsive regression tests |
 
 ---
 
@@ -593,7 +594,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Exact-head Site Checks, package preflight, non-deploying Staging QA and Browser E2E passed. Visual contrast review and real assistive-technology/live-host review remain owner-side.
 - No menu, price, hours, reservation, route, canonical, schema or GA4 changes; no cPanel deployment.
 
-## Sprint 39 — curated Gallery and progressive photo pagination (current PR)
+## Sprint 39 — curated Gallery and progressive photo pagination (PR #88 merged)
 
 **Commercial goal:** help guests scan a stronger, more intentional visual introduction to the haveli, rooms, desert experiences and dining instead of facing the full legacy photo wall at once.
 
@@ -603,3 +604,14 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Add a PHP inventory/source contract and Playwright coverage for server-rendered completeness, page-size counts, filtering, more-photo state, lightbox next/previous, and no horizontal overflow at each configured viewport.
 - Acceptance: PHP 7.4/8.2 lint, strict image and sitemap checks, publication/security/discovery guards, curated-gallery PHP guard, package preflight, non-deploying Staging QA and Browser E2E/page sheet on the exact PR head. No price, availability, booking, analytics, route or production behavior changes.
 
+
+
+## Sprint 40 — shared verified quick facts (current PR)
+
+**Commercial goal:** make the most important pre-booking context scannable without adding unsupported facts or distracting guests from the next useful action.
+
+- Add `include/ui/at-a-glance.php` as a reusable, escaped semantic definition-list component that ignores invalid and empty rows. Guard this contract in PHP 7.4/8.2 Site Checks.
+- Home shows verified location, registry-backed room count, rooftop dining and currently listed experience categories. Rooms reuses its existing registry and floor grouping for the count and floor summary; facilities are explicitly said to vary.
+- Trip Planner surfaces the available product categories, tab-scoped shortlist, user-reviewed WhatsApp draft and a plain statement that a shortlist is not a confirmed booking.
+- Reuse `.at-a-glance` tokens, keep information on a light surface, and assert exact rendered labels/values plus no horizontal overflow at 320, 390, 768, 1280 and 1440px.
+- Preserve all public URLs, canonicals, schemas, menu data, prices, booking URLs, enquiry behavior, both GA4 IDs and the no-server-side-lead boundary. Owner retains merge and deployment.
