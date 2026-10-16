@@ -44,8 +44,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 33 | Brand foundation, contrast and shared component consistency | ✓ PR #82 merged; brand constitution, token contrast contract, bastion motif and shared 6px geometry |
 | 34 | Restaurant enquiry completion and conversion measurement | ◐ PR #83: accessible server validation, dining CTA/form intent events, direct-contact fallback retained; mail delivery remains owner-gated |
 | 35 | Home and high-intent photography/performance pass | ✓ PR #84 merged the responsive art-directed hero and screenshot evidence; resized candidates remain review-only and production performance measurement is still owner-side |
-| 36 | Experience comparison and Trip shortlist visual polish | ◐ current batch moves overnight comparison facts into the shared experience registry and adds Escape-to-close with focus recovery; session-only shortlist boundary retained |
-| 37 | Restaurant identity and six first-party marketing templates | Planned after restaurant operational facts and first visual review; Canva Brand Kit is the low-friction default |
+| 36 | Experience comparison and Trip shortlist visual polish | ✓ PR #85 merged at `b9b15e1db0ff8a440b7a6546775fc4d2f1f8b61f`; registry-backed overnight comparison and Escape/focus recovery; exact-head CI passed |
+| 37 | Restaurant identity and six first-party marketing templates | ◐ current bulk batch: six guarded source masters, a repeatable Canva workflow, restrained restaurant styling and regression contracts; operational facts remain owner-gated |
 
 ---
 
@@ -561,7 +561,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Exact-head acceptance: PHP lint 7.4/8.2, `php scripts/check-site.php --strict-images`, `php scripts/generate-sitemap.php --check`, existing security/SEO/publication guards, package preflight, non-deploying Staging QA, Browser E2E and screenshot/evidence artifacts. No external staging upload or production deployment by this PR owner/assistant.
 
 
-## Sprint 36 — experience comparison and session-only Trip tray polish (current batch)
+## Sprint 36 — experience comparison and session-only Trip tray polish (PR #85 merged)
 
 **Commercial goal:** make the two overnight choices easier to compare without inventing a benefit, while making the session-only shortlist easier to dismiss with a keyboard.
 
@@ -570,3 +570,15 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Allow Escape to close the visible Trip tray and return keyboard focus to its trigger. Preserve the existing explicit Close button, remove controls, status announcements and editable WhatsApp draft.
 - Keep selection data tab-scoped in `sessionStorage`; add no guest details, server-side leads, prices, availability promises, booking confirmation, new dependencies or routes.
 - Exact-head acceptance: PHP 7.4/8.2 lint, strict image checks, sitemap/publication/security checks, package preflight, non-deploying Staging QA, Browser E2E and screenshot artifacts. Owner visual review and live-host testing remain separate.
+
+
+## Sprint 37 — restaurant identity and first-party marketing kit (current batch)
+
+**Commercial goal:** create a repeatable route from approved copy and photography to first-party ad/social/service artwork, while making dining more recognisable without reducing information readability.
+
+- Add six SVG composition masters in `marketing/templates/` at documented landscape, square and vertical sizes. The photo/copy placeholders remain conspicuous; a template is not publish-ready until every placeholder and claim is reviewed.
+- Document Canva as the low-friction workflow, including that imported SVG text/shapes may not remain individually editable. Keep existing fonts, wordmark, five-colour subset and 6px geometry.
+- Refine only restaurant CSS: a Garnet-to-Night emotional hero, restrained Garnet/Gold accents, architectural control/card geometry, and light menu/information/form cards. Preserve current name, menu data, contact destinations, request fallback and metadata.
+- Add a PHP-compatible source-contract checker for master count, dimensions, accessible descriptions, placeholders, palette and no external/script references; wire it into CI and add a Playwright styling/overflow regression.
+- Do not activate restaurant email, claim reservations, publish new menu prices/hours, create offers/review proof, add unapproved Instagram posts or QR destinations, add runtime dependencies, or change routes/canonicals/GA4 IDs.
+- Exact-head acceptance: PHP 7.4/8.2 lint; strict site/image, sitemap, publication, gallery, discovery, launch-hardening and staging-noindex checks; template contract; package preflight; non-deploying Staging QA; Browser E2E/page sheet. Owner visual review remains required.
