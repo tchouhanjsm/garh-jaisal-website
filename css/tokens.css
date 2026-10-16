@@ -54,7 +54,7 @@
   --shadow: 0 14px 34px rgba(20, 18, 43, 0.1);
   --accent: var(--saffron);
   --accent-hover: #963A08;
-  --focus: #1D4ED8;
+  --focus: #1d4ed8;
   --text-on-dark: #FFFFFF;
   --text-on-light: var(--ink);
 }
@@ -364,5 +364,77 @@ body .footer-bottom {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+}
+
+
+/* The Rooms hero includes a useful four-row facts panel. On small screens, keep
+   that information but present it as a compact two-column summary rather than
+   extending the photographic hero into a very tall stack. */
+@media (max-width: 760px) {
+  main .rooms-hero .rooms-hero-grid {
+    gap: 1.25rem;
+    padding-block: 1.75rem;
+  }
+
+  main .rooms-hero .rooms-hero-summary {
+    padding: 1rem;
+  }
+
+  main .rooms-hero .rooms-hero-summary > .eyebrow {
+    margin-block-end: 0.5rem;
+  }
+
+  main .rooms-hero .rooms-hero-summary .at-a-glance--stacked {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    column-gap: 0.875rem;
+    row-gap: 0;
+  }
+
+  main .rooms-hero .rooms-hero-summary .at-a-glance__item {
+    display: block;
+    min-width: 0;
+    padding-block: 0.625rem;
+    border-block-start: 1px solid var(--line);
+  }
+
+  main .rooms-hero .rooms-hero-summary .at-a-glance__item:nth-child(-n + 2) {
+    border-block-start: 0;
+  }
+
+  main .rooms-hero .rooms-hero-summary .at-a-glance__label {
+    margin: 0 0 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1.25;
+  }
+
+  main .rooms-hero .rooms-hero-summary .at-a-glance__value {
+    font-size: 0.8125rem;
+    line-height: 1.35;
+  }
+
+  main .rooms-hero .rooms-hero-actions {
+    gap: 0.625rem;
+    margin-block-start: 1rem;
+  }
+
+  main .rooms-hero p.rooms-hero-note {
+    margin-block-start: 0.75rem;
+  }
+}
+
+@media (max-width: 380px) {
+  main .rooms-hero .rooms-hero-grid {
+    gap: 1rem;
+    padding-block: 1.25rem;
+  }
+
+  main .rooms-hero .rooms-hero-summary {
+    padding: 0.875rem;
+  }
+
+  main .rooms-hero .rooms-hero-summary .at-a-glance--stacked {
+    column-gap: 0.625rem;
   }
 }
