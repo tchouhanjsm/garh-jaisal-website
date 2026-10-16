@@ -10,6 +10,8 @@ foreach ($rooms as $room) {
 }
 $roomCount = count($rooms);
 $floorCount = count($roomsByFloor);
+$roomFloorNames = array_map('strtolower', array_keys($roomsByFloor));
+$roomFloorSummary = $roomFloorNames ? ucfirst(implode(' and ', $roomFloorNames)) : 'See individual room details';
 ?>
 <!doctype html>
 <html lang="en">
@@ -95,18 +97,18 @@ require __DIR__ . '/include/page-head.php';
 
       <aside class="rooms-hero-summary" aria-label="Stay at a glance">
         <p class="eyebrow">Stay at a glance</p>
-        <div class="rooms-summary-stat">
-          <strong><?= (int) $roomCount ?></strong>
-          <span>Individually styled rooms</span>
-        </div>
-        <div class="rooms-summary-stat">
-          <strong><?= (int) $floorCount ?></strong>
-          <span>Floors to explore</span>
-        </div>
-        <div class="rooms-summary-stat">
-          <strong>Online</strong>
-          <span>Check current rates and availability</span>
-        </div>
+        <?php
+        $atAGlance = [
+            'class' => 'at-a-glance at-a-glance--stacked',
+            'items' => [
+                ['label' => 'Room selection', 'value' => $roomCount . ' individually styled rooms'],
+                ['label' => 'Floor layout', 'value' => $roomFloorSummary],
+                ['label' => 'Room facilities', 'value' => 'Vary by room'],
+                ['label' => 'Rates and availability', 'value' => 'Check current rates for your dates'],
+            ],
+        ];
+        require __DIR__ . '/include/ui/at-a-glance.php';
+        ?>
       </aside>
     </div>
   </section>
