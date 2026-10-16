@@ -54,6 +54,9 @@ jobs:
 
       - name: Verify experience gallery assets
         run: php tests/php/experience-gallery-assets.php
+      
+      - name: Verify curated Gallery inventory and progressive enhancement
+        run: php tests/php/gallery-curation.php
 
       - name: Verify experience discovery shortlist contract
         run: php tests/php/experience-discovery.php
