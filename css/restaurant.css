@@ -654,3 +654,31 @@
     margin:8px 8px 0;
   }
 }
+
+
+/* Sprint 37 — distinct dining identity while keeping information surfaces light. */
+.restaurant-page .restaurant-hero{
+  background:linear-gradient(132deg,var(--garnet) 0%,var(--night) 72%);
+}
+.restaurant-page .restaurant-feature-card{
+  border-top:3px solid var(--gold);
+  border-radius:var(--radius-card,6px);
+  background:var(--parchment);
+}
+.restaurant-page .restaurant-instagram-panel{
+  border-left:3px solid var(--garnet);
+  border-radius:var(--radius-card,6px);
+  background:var(--parchment);
+}
+.restaurant-page .restaurant-map-qr-card,
+.restaurant-page .restaurant-form-card,
+.restaurant-page .restaurant-notice{
+  border-radius:var(--radius-card,6px);
+}
+.restaurant-page .restaurant-form-card{background:var(--parchment);}
+.restaurant-page .restaurant-info-list article{border-left-color:var(--garnet);}
+.restaurant-page .restaurant-category h3{border-bottom-color:var(--gold);}
+.restaurant-page .restaurant-vegtoggle,
+.restaurant-page .restaurant-tabs a,
+.restaurant-page .restaurant-booklet-controls button,
+.restaurant-page .restaurant-diet{border-radius:var(--radius-control,6px);}

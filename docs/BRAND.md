@@ -59,3 +59,10 @@ Full logo redraw, additional logo lockups, font downloads, 60-photo shoot, video
 - Use the architectural crop selectively on the first restaurant gallery image, catalogue media and experience cards. Keep supporting photography rectangular where a crop would obscure useful context.
 - Server validation messages must be tied to their field with `aria-describedby`, mark invalid controls, preserve focus recovery and remain readable at mobile width.
 - Conversion events may record enquiry start and request attempt only; they must never include names, email addresses, phone numbers, preferred times, dates, number of guests or form/message content.
+
+
+## Sprint 37 — first-party marketing masters
+
+The first-party launch kit lives in `marketing/templates/`. It contains six SVG composition masters: house ad, partner ad, Instagram post, story cover, WhatsApp reply card and festival banner. Each canvas has an accessible title/description, uses the approved five-colour subset and shows edit-before-publishing placeholders. Sizes and usage instructions live in `marketing/templates/README.md`.
+
+These SVGs are design sources, not final campaign approvals. Canva remains the low-friction editing destination, but imported SVGs must be checked for editability; recreate text and image regions as separate elements when needed. Every factual or commercial statement remains subject to `docs/OWNER-FACTS.md` and owner approval. The restaurant page uses a restrained Garnet/Night emotional hero; menu, guest-information and request-form cards remain light. No restaurant mail, reservation or menu/pricing facts are activated by this visual batch.

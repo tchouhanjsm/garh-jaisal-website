@@ -7,19 +7,18 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-16 |
-| Current phase | Sprint 36 — overnight comparison clarity and Trip tray keyboard accessibility (PR #85 in review) |
+| Current phase | Sprint 37 — restaurant identity and six reusable marketing masters (current batch) |
 | Base branch | `main` |
-| Baseline commit | `fcb1604531a4fe7dfe74838013e5a252a149c8b2` (PR #84 merge commit) |
-| Last merged PR | [#84 — art-direct homepage hero for responsive performance](https://github.com/tchouhanjsm/garh-jaisal-website/pull/84) |
-| Main SHA `fcb1604531a4fe7dfe74838013e5a252a149c8b2` Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38847404002) |
-| Main SHA `fcb1604531a4fe7dfe74838013e5a252a149c8b2` package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38847404003) |
-| Main SHA `fcb1604531a4fe7dfe74838013e5a252a149c8b2` Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38847403970) |
-| PR #84 exact-head Browser E2E/page sheet | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38845914013) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38845914013/artifacts/12023791438); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38845914013/artifacts/12023512327) |
+| Baseline commit | `b9b15e1db0ff8a440b7a6546775fc4d2f1f8b61f` (verified main head after PR #85) |
+| Last merged PR | [#85 — make overnight experience comparison data-driven](https://github.com/tchouhanjsm/garh-jaisal-website/pull/85) |
+| PR #85 exact-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848897965) |
+| PR #85 exact-head package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848897972) |
+| PR #85 exact-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898064) |
+| PR #85 exact-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898092) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898092/artifacts/12023864764); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898092/artifacts/12023879611) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Owner review | Inspect the current homepage hero at 320/390/768/1280/1440px and the new overnight comparison at 390/768/1280px using the exact-head screenshot artifact. |
-| Next action | Review the Sprint 36 comparison and keyboard interaction on the exact PR head; use CI and screenshot artifacts for evidence. No live staging upload or production deployment. |
-
+| Owner review | Inspect the Sprint 37 restaurant treatment at 390px and 1280px and rebuild each template in the design editor to verify editability and remove all placeholders before campaign use. |
+| Next action | Review the six masters, responsive restaurant page and exact-head CI/page-sheet evidence in the open PR. Owner retains merge and deployment authority. |
 ## Phase roadmap
 
 | Phase | Goal | Status |
@@ -81,10 +80,19 @@
 - Acceptance remains exact-head PHP 7.4/8.2, strict images, sitemap, security/publication guards, package preflight, non-deploying Staging QA and Browser E2E. No local full-suite run or live cPanel verification is claimed; owner visual review and merge/deploy authority remain unchanged.
 
 
-## Sprint 36 — overnight comparison and Trip tray accessibility (current batch)
+## Sprint 36 — overnight comparison and Trip tray accessibility (PR #85 merged)
 
 - Base: verified `main` SHA `fcb1604531a4fe7dfe74838013e5a252a149c8b2`, the PR #84 merge commit; there were no open pull requests at branch creation.
 - The overnight comparison now reads its labels and sleep/bathroom facts from the shared experience registry. A source-level regression prevents returning to slug-specific comparison copy.
 - Escape closes the open Trip tray and returns focus to the visible trigger. Browser coverage checks this alongside the existing room-plus-desert shortlist and privacy-safe WhatsApp draft.
 - PR #84's exact-head Site Checks, package preflight, non-deploying Staging QA and Browser E2E passed; its [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38845914013/artifacts/12023791438) remains available for owner comparison. PR #84 main-push Browser E2E passed: https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38847403964
-- Current-batch exact-head checks are required before review. No live cPanel staging or production deployment is claimed; owner retains merge/deployment authority.
+- PR #85 final-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848897965), package preflight [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848897972), non-deploying Staging QA [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898064), and Browser E2E [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898092). The [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898092/artifacts/12023864764) and [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898092/artifacts/12023879611) are available. No live cPanel staging or production deployment occurred.
+
+
+## Sprint 37 — restaurant identity and first-party marketing masters (current batch)
+
+- Base: verified main SHA `b9b15e1db0ff8a440b7a6546775fc4d2f1f8b61f` after PR #85 merged; no open PRs were present when this batch started.
+- Add six fixed-size SVG composition masters plus a Canva-oriented workflow note; mark replacement photography and campaign-copy fields, and enforce master count/dimensions/palette/accessibility/source-safety in CI.
+- Apply restrained Garnet/Night emphasis to the restaurant hero and 6px geometry to controls/cards; preserve light menu, information and form surfaces and all current contact/booking fallbacks.
+- No changes to menu data, prices, hours, reservation/mail activation, public URLs, canonicals, schema facts, GA4 IDs or live host. Owner dependencies in `docs/OWNER-FACTS.md` remain unresolved.
+- Exact-head Site Checks, package preflight, non-deploying Staging QA, Browser E2E and screenshot evidence for this new PR are pending. Automated evidence is not owner visual approval.

@@ -78,6 +78,20 @@ jobs:
       - name: Verify brand contrast, tokens and motif asset
         run: php scripts/check-brand-contrast.php
 
+  marketing-template-contract:
+    name: marketing template source contract
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+      - name: Verify first-party marketing masters
+        run: php scripts/check-marketing-templates.php
+
   responsive-image-review:
     name: responsive image review
     runs-on: ubuntu-latest
