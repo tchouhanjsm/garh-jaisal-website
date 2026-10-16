@@ -9,8 +9,12 @@
 | Last updated | 2026-10-16 |
 | Current phase | Sprint 38 — restaurant menu accessibility and dietary-filter feedback (current batch) |
 | Base branch | `main` |
-| Baseline commit | `113e75ab879057b780bde24ce9ec633999892dc6` (verified `main` head after PR #86) |
-| Last merged PR | [#86 — add reusable restaurant marketing kit and identity](https://github.com/tchouhanjsm/garh-jaisal-website/pull/86) |
+| Baseline commit | `4b135980fb9e617313d9939d7601649637b2caaa` (verified `main` head after PR #87) |
+| Last merged PR | [#87 — improve restaurant menu accessibility and filtering](https://github.com/tchouhanjsm/garh-jaisal-website/pull/87) |
+| PR #87 exact-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38860894128) — head `21bc78c7a3650c646567ca7efd8e4522105945b1` |
+| PR #87 exact-head package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38860894116) |
+| PR #87 exact-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38860894207) |
+| PR #87 exact-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38860894115) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38860894115/artifacts/12028694758); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38860894115/artifacts/12030090186) |
 | PR #86 PR-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127095) |
 | PR #86 PR-head package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127092) |
 | PR #86 PR-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127080) |
@@ -20,8 +24,8 @@
 | PR #86 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Owner review | Inspect menu controls/filter at 320px, 390px and 1280px, including focus rings and the active category; verify the new filter status with assistive technology where available. |
-| Next action | Review PR #87 exact-head CI and page-sheet evidence after it completes; owner retains merge and deployment authority. |
+| Owner review | Inspect Gallery at 320px, 390px, 768px, 1280px and 1440px; compare crops, progressive reveal, filters and lightbox keyboard flow. |
+| Next action | Review the current Sprint 39 PR against the exact-head CI and screenshot sheet; owner retains merge and deployment authority. |
 ## Phase roadmap
 
 | Phase | Goal | Status |
@@ -107,10 +111,17 @@
 - PR-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127095), package preflight [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127092), and non-deploying Staging QA [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127080). The merge-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546303), cPanel package workflow [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546333), Staging QA dry run [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546323), and Browser E2E [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341). Merge-head evidence: [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875), [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666).
 - No public URL, canonical, schema facts, menu data/prices, restaurant hours, reservation/mail activation or GA4 IDs changed. No external cPanel staging or production deployment occurred.
 
-## Sprint 38 — restaurant menu accessibility and dietary-filter feedback (current PR)
+## Sprint 38 — restaurant menu accessibility and dietary-filter feedback (PR #87 merged)
 
-- Starting main SHA: `113e75ab879057b780bde24ce9ec633999892dc6`. No open PR existed at branch creation.
-- Bundle touch-target sizing, shared focus-token alignment, proper in-page current-location semantics and an accurate dietary-filter announcement into one restaurant UX slice. The count covers matching dishes/categories across paginated menu sections while preserving the booklet's active-page state.
-- Refresh the `restaurant.php` sitemap `lastmod` to `2026-10-16`, matching the new source commit date; no sitemap URL was added, removed or reordered.
-- Expected changed surfaces: `css/restaurant.css`, the runtime asset `js/restaurant.js`, `restaurant.php`, `sitemap.xml` (restaurant route lastmod only), new `tests/e2e/restaurant-accessibility.spec.js`, and the three project/brand documents.
-- This batch does not alter menu facts/prices, service hours, reservation/mail behavior, public routes/canonicals, schema or GA4 IDs. Verify required workflows and screenshot artifacts against the latest PR head; owner visual and live-host review remain separate.
+- PR #87 merged on 2026-10-16; merge commit `4b135980fb9e617313d9939d7601649637b2caaa`, tested PR head `21bc78c7a3650c646567ca7efd8e4522105945b1`.
+- The vegetarian filter and category links now provide 44px targets, the shared 3px focus token, correct `aria-current="location"` semantics, and full-menu filter status while preserving booklet pagination.
+- Exact PR-head Site Checks, package preflight, non-deploying Staging QA and Browser E2E passed; [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38860894115/artifacts/12028694758) and [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38860894115/artifacts/12030090186) remain available.
+- Menu facts, pricing, service hours, URLs, canonicals, schema facts and GA4 IDs were not changed. No external cPanel staging or production deployment occurred.
+
+## Sprint 39 — curated Gallery and progressive photo pagination (current PR)
+
+- Base: verified `main` SHA `4b135980fb9e617313d9939d7601649637b2caaa`; no open PRs existed before this batch.
+- Curate the current Gallery into 36 existing photos across hotel (7), rooms (14), desert (10) and restaurant (5); move source/alt/crop metadata into `include/gallery-data.php`.
+- Add six-at-a-time per-section reveal, responsive architectural/portrait/landscape treatments and stronger touch/focus behaviour while keeping the original full image files and dedicated experience galleries intact.
+- Add PHP registry checks and Playwright coverage for no-JavaScript completeness, counts, filtering, pagination, lightbox navigation and overflow at configured responsive widths.
+- No public route, canonical, schema fact, price, availability, booking flow, GA4 ID, image file or production dependency changes; implementation stops before merge or deployment.
