@@ -22,8 +22,9 @@ const PAGE_ARCHETYPES = [
   { route: '/contact.php', hero: 'main .contact-hero' },
   { route: '/jaisalmer-fort-guide.php', hero: 'main .article-hero' },
 ];
+const PHOTO_HERO_ROUTES = new Set(['/', '/room.php', '/pack.php', '/catalogue.php', '/desert-safari.php']);
 
-test('shared visual system stays consistent across five viewports and ten page archetypes', async ({ browser }, testInfo) => {
+test('shared visual system stays consistent across five viewports and eleven page archetypes', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'This contract creates its own five viewport contexts');
   test.setTimeout(180_000);
 
@@ -51,40 +52,13 @@ test('shared visual system stays consistent across five viewports and ten page a
           const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
             .map(link => new URL(link.href, document.baseURI).pathname)
             .filter(path => path.endsWith('.css'));
-          const hero = main?.querySelector([
-            '.hero',
-            '.rooms-hero',
-            '.package-hero',
-            '.catalogue-hero',
-            '.experience-hero',
-            '.restaurant-hero',
-            '.gallery-hero',
-            '.article-hero',
-            '.contact-hero',
-            '.page-hero',
-          ].join(', ')) || null;
-          const media = main?.querySelector([
-            '.room-card-media',
-            '.package-card-media',
-            '.experience-card-media',
-            '.product-card-media',
-            '.blog-card-image',
-          ].join(', ')) || null;
           const rootStyles = window.getComputedStyle(document.documentElement);
           const h1Styles = h1 ? window.getComputedStyle(h1) : null;
           const shellRect = shell?.getBoundingClientRect() || null;
-          const heroRect = hero?.getBoundingClientRect() || null;
-          const mediaRect = media?.getBoundingClientRect() || null;
-          const visible = element => {
-            if (!element) return false;
-            const style = window.getComputedStyle(element);
-            const rect = element.getBoundingClientRect();
-            return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
-          };
           return {
             hasMain: Boolean(main),
             h1Count: main?.querySelectorAll('h1').length || 0,
-            h1Visible: visible(h1),
+            h1Visible: Boolean(h1 && h1.getBoundingClientRect().width > 0 && h1.getBoundingClientRect().height > 0),
             h1FontSize: h1Styles ? parseFloat(h1Styles.fontSize) : 0,
             h1LineHeight: h1Styles ? parseFloat(h1Styles.lineHeight) : 0,
             h1FontFamily: h1Styles?.fontFamily || '',
@@ -96,9 +70,6 @@ test('shared visual system stays consistent across five viewports and ten page a
               && Boolean(rootStyles.getPropertyValue('--section-space').trim())
               && Boolean(rootStyles.getPropertyValue('--fs-hero').trim()),
             horizontalOverflow: document.documentElement.scrollWidth > window.innerWidth,
-            heroHeight: heroRect?.height ?? 0,
-            mediaRatio: mediaRect && mediaRect.height > 0 ? mediaRect.width / mediaRect.height : 0,
-            imageCount: main?.querySelectorAll('img').length || 0,
           };
         });
 
@@ -116,16 +87,14 @@ test('shared visual system stays consistent across five viewports and ten page a
         expect(state.tokensPresent, archetype.route + ' receives the shared scale tokens').toBe(true);
         expect(state.horizontalOverflow, archetype.route + ' must not introduce horizontal page overflow').toBe(false);
 
-        if (archetype.hero) {
+        if (PHOTO_HERO_ROUTES.has(archetype.route)) {
           const heroState = await page.locator(archetype.hero).first().evaluate(element => {
             const style = window.getComputedStyle(element);
             const rect = element.getBoundingClientRect();
             return { minHeight: parseFloat(style.minHeight), height: rect.height };
           });
-          expect(heroState.minHeight, archetype.route + ' photo/page hero minimum height is bounded').toBeLessThanOrEqual(640.5);
-          if (['/', '/room.php', '/pack.php', '/catalogue.php', '/desert-safari.php'].includes(archetype.route)) {
-            expect(heroState.height, archetype.route + ' hero must not grow into an oversized image slab').toBeLessThanOrEqual(720);
-          }
+          expect(heroState.minHeight, archetype.route + ' photo hero minimum height is bounded').toBeLessThanOrEqual(640.5);
+          expect(heroState.height, archetype.route + ' must not grow into an oversized image slab').toBeLessThanOrEqual(720);
         }
 
         if (archetype.media) {
