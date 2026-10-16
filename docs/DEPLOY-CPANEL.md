@@ -20,6 +20,7 @@ The package script uses only Python's standard library, selects Git-tracked runt
 2. Take a restorable backup of the site files and current `.htaccess`. Record the current canonical host/redirect behavior before replacing rules.
 3. Confirm that `include/site-config.local.php` exists on the server, remains untracked, and contains the real enquiry-recipient addresses and reCAPTCHA secret for the host. Do not copy `include/site-config.example.php` over it.
 4. Use a staging subdomain with a certificate covering that host. Confirm the configured `site_url` and reCAPTCHA key/allowed host match staging.
+5. On a full checkout that can read the server-only config, run `php scripts/check-runtime-config.php --strict`. This reports configuration readiness and the valid-recipient count without printing secret values or email addresses. If PHP CLI is unavailable on the host, run the equivalent preflight in a secure staging environment that loads that host's actual configuration; never paste secrets into CI logs or support tickets.
 5. From a full Git checkout, run:
 
    ```bash
@@ -29,6 +30,8 @@ The package script uses only Python's standard library, selects Git-tracked runt
    php scripts/generate-sitemap.php --check
    php scripts/check-experience-publication.php
    php scripts/check-launch-hardening.php
+   php scripts/check-runtime-config.php
+   php tests/php/runtime-config-validation.php
    npm install --no-save --package-lock=false @playwright/test@1.55.0
    npx playwright install chromium
    npm run test:e2e
