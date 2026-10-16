@@ -56,6 +56,16 @@ if (trim($emptyOutput) !== '') {
     $errors[] = 'invalid class / empty fact lists must not emit markup';
 }
 
+$atAGlance = [
+    'items' => 'not-an-array',
+];
+ob_start();
+require $component;
+$malformedItemsOutput = (string) ob_get_clean();
+if (trim($malformedItemsOutput) !== '') {
+    $errors[] = 'malformed item collections must not emit markup';
+}
+
 foreach ($errors as $error) {
     fwrite(STDERR, 'ERROR ' . $error . PHP_EOL);
 }
