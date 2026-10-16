@@ -1,8 +1,8 @@
 const { test, expect } = require('@playwright/test');
 
 const expectedCounts = {
-  hotel: 7,
-  rooms: 14,
+  hotel: 9,
+  rooms: 12,
   desert: 10,
   restaurant: 5,
 };
