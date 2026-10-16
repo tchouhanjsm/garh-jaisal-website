@@ -7,10 +7,11 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-16 |
-| Current phase | Sprint 40 — shared verified quick facts for Home, Rooms and Trip Planner (current PR) |
+| Current phase | Sprint 41 — critical-path loading for high-intent pages and Journal feature image (current PR) |
 | Base branch | `main` |
-| Baseline commit | `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3` (verified `main` merge commit for PR #88) |
-| Last merged PR | [#88 — curate Gallery and add progressive photo pagination](https://github.com/tchouhanjsm/garh-jaisal-website/pull/88) |
+| Baseline commit | `1d8b02b6d0188a041bc824e30cbcfe565b14686f` (verified `main` merge commit for PR #89) |
+| Last merged PR | [#89 — add verified quick facts to high-intent pages](https://github.com/tchouhanjsm/garh-jaisal-website/pull/89) |
+| PR #89 merged | Merged 2026-10-16 at `1d8b02b6d0188a041bc824e30cbcfe565b14686f`; verified starting point for Sprint 41 |
 | PR #88 merged | [Merged 2026-10-16](https://github.com/tchouhanjsm/garh-jaisal-website/pull/88) at `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`; review head `dfbaa2c556bea8bfaabfcdfdf6b2ae51b76a7204` |
 | PR #88 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38867401576) |
 | PR #88 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38867401608) |

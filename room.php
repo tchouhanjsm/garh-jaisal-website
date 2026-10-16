@@ -39,6 +39,9 @@ $page = [
     'title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort, including Sweet Purple, Rising Sun, Scarlet, Opium, Red Maharani, Green and BlueSky.',
     'path' => '/room.php',
+    'preload' => [
+        ['href' => '/img/optimized/v2/purple-room.webp', 'fetchpriority' => 'high'],
+    ],
     'og_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'og_description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort.',
     'og_image' => '/img/purple-room.jpg',
