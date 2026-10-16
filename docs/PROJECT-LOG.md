@@ -121,7 +121,7 @@
 ## Sprint 39 — curated Gallery and progressive photo pagination (current PR)
 
 - Base: verified `main` SHA `4b135980fb9e617313d9939d7601649637b2caaa`; no open PRs existed before this batch.
-- Curate the current Gallery into 36 existing photos across hotel (7), rooms (14), desert (10) and restaurant (5); move source/alt/crop metadata into `include/gallery-data.php`.
+- Curate the current Gallery into 36 existing photos across hotel (9), rooms (12), desert (10) and restaurant (5); move source/alt/crop metadata into `include/gallery-data.php`.
 - Add six-at-a-time per-section reveal, responsive architectural/portrait/landscape treatments and stronger touch/focus behaviour while keeping the original full image files and dedicated experience galleries intact.
 - Add PHP registry checks and Playwright coverage for no-JavaScript completeness, counts, filtering, pagination, lightbox navigation and overflow at configured responsive widths.
 - No public route, canonical, schema fact, price, availability, booking flow, GA4 ID, image file or production dependency changes; implementation stops before merge or deployment.
