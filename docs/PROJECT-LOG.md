@@ -125,3 +125,6 @@
 - Add six-at-a-time per-section reveal, responsive architectural/portrait/landscape treatments and stronger touch/focus behaviour while keeping the original full image files and dedicated experience galleries intact.
 - Add PHP registry checks and Playwright coverage for no-JavaScript completeness, counts, filtering, pagination, lightbox navigation and overflow at configured responsive widths.
 - No public route, canonical, schema fact, price, availability, booking flow, GA4 ID, image file or production dependency changes; implementation stops before merge or deployment.
+- Follow-up review coverage: the Browser E2E page sheet now adds Gallery full-page captures at 320, 390, 768, 1280 and 1440px, with all ten Desert photos expanded; a source/alt contact sheet and JSON inventory are produced alongside the screenshots.
+- Release evidence must distinguish automated responsive review from the owner’s final visual sign-off. Verify Desert Camp source subjects against the rendered alt captions before treating the visual-review item as fully owner-approved.
+- No merge, cPanel deployment, or production change is performed by this workflow.
