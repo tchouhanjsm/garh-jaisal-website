@@ -1303,7 +1303,8 @@ p{
   }
 
   .hero-content{
-    padding:120px 0 48px;
+    /* Keep the hero actions above the fixed mobile CTA dock at tablet widths. */
+    padding:120px 0 calc(48px + 58px);
   }
 
   .hero h1{

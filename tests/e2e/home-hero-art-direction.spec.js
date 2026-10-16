@@ -79,6 +79,14 @@ test('homepage hero art direction selects existing dimension-stable images withi
       await expect(page.getByRole('heading', { name: 'Stay inside Jaisalmer Fort.' })).toBeVisible();
       await expect(page.locator('.hero-content a.button-primary')).toBeVisible();
 
+      const heroActionsClear = await page.evaluate(() => {
+        const actions = document.querySelector('.hero-content .actions');
+        const dock = document.querySelector('.mobile-cta');
+        if (!actions || !dock || getComputedStyle(dock).display === 'none') return true;
+        return actions.getBoundingClientRect().bottom <= dock.getBoundingClientRect().top + 1;
+      });
+      expect(heroActionsClear, 'Hero actions must remain unobstructed above the fixed mobile CTA dock at ' + viewport.width + 'px').toBe(true);
+
       const horizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
       expect(horizontalOverflow, 'Homepage must not scroll horizontally at ' + viewport.width + 'px').toBe(false);
 
