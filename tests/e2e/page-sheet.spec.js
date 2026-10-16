@@ -163,6 +163,105 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
   const tabletRouteCount = routes.filter(route => TABLET_ROUTES.has(route)).length;
   expect(records.length).toBe(routes.length * 2 + tabletRouteCount);
 
+  // Produce a focused Gallery review set at every width in the brand constitution.
+  // Expand the Desert section so the full owner-provided photo selection is visible
+  // for subject/alt review, then capture the same responsive page at each viewport.
+  const galleryReviewViewports = [
+    { width: 320, height: 700, mobile: true },
+    { width: 390, height: 844, mobile: true },
+    { width: 768, height: 900, mobile: false },
+    { width: 1280, height: 800, mobile: false },
+    { width: 1440, height: 900, mobile: false },
+  ];
+  const galleryReviewRecords = [];
+  for (const viewport of galleryReviewViewports) {
+    const context = await browser.newContext({
+      baseURL: BASE_URL,
+      viewport: { width: viewport.width, height: viewport.height },
+      deviceScaleFactor: 1,
+      isMobile: viewport.mobile,
+      hasTouch: viewport.mobile,
+    });
+    const page = await context.newPage();
+    try {
+      const response = await page.goto('/gallery.php', { waitUntil: 'domcontentloaded', timeout: 20_000 });
+      expect(response, 'No HTTP response for Gallery at ' + viewport.width + 'px').not.toBeNull();
+      expect(response.status(), 'Unexpected Gallery status at ' + viewport.width + 'px').toBe(200);
+
+      const desert = page.locator('[data-gallery-category="desert"]');
+      const more = desert.locator('[data-gallery-more]');
+      if (await more.isVisible()) await more.click();
+      await expect(desert.locator('[data-gallery-open]')).toHaveCount(10);
+      await expect(desert.locator('.gallery-item:visible')).toHaveCount(10);
+
+      const desertAltAudit = await desert.locator('[data-gallery-open]').evaluateAll(anchors =>
+        anchors.map(anchor => ({
+          source: new URL(anchor.href, document.baseURI).pathname,
+          alt: anchor.querySelector('img')?.getAttribute('alt') || '',
+        }))
+      );
+      expect(desertAltAudit).toHaveLength(10);
+      expect(desertAltAudit.every(photo => photo.alt.trim().length > 0)).toBe(true);
+
+      await page.locator('img').evaluateAll(async images => {
+        const localImages = images.filter(img => {
+          try {
+            return new URL(img.currentSrc || img.src, document.baseURI).origin === window.location.origin;
+          } catch {
+            return false;
+          }
+        });
+        await Promise.all(localImages.map(img => {
+          img.loading = 'eager';
+          if (img.complete) return Promise.resolve();
+          return new Promise(resolve => {
+            img.addEventListener('load', resolve, { once: true });
+            img.addEventListener('error', resolve, { once: true });
+          });
+        }));
+        await Promise.all(localImages
+          .filter(img => img.complete && img.naturalWidth > 0 && typeof img.decode === 'function')
+          .map(img => img.decode().catch(() => undefined)));
+      });
+      await page.evaluate(() => {
+        document.documentElement.style.scrollBehavior = 'auto';
+        document.body.style.scrollBehavior = 'auto';
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      });
+      await page.waitForFunction(() => window.scrollY === 0);
+      await page.waitForTimeout(100);
+
+      const filename = 'gallery-review-' + viewport.width + '.jpg';
+      const screenshotPath = path.join(OUTPUT_DIR, filename);
+      await page.screenshot({
+        path: screenshotPath,
+        type: 'jpeg',
+        quality: 75,
+        fullPage: true,
+        animations: 'disabled',
+      });
+      galleryReviewRecords.push({ width: viewport.width, filename, screenshotPath, desertAltAudit });
+    } finally {
+      await context.close();
+    }
+  }
+
+  fs.writeFileSync(
+    path.join(OUTPUT_DIR, 'gallery-desert-alt-audit.json'),
+    JSON.stringify(galleryReviewRecords.map(record => ({
+      viewport: record.width,
+      desertPhotos: record.desertAltAudit,
+    })), null, 2) + '\\n'
+  );
+  fs.writeFileSync(
+    path.join(OUTPUT_DIR, 'gallery-review.html'),
+    '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+      '<title>Gallery responsive and Desert image-alt review</title></head><body><h1>Gallery review — expanded Desert section</h1>' +
+      '<p>Five viewport captures show all ten Desert photos expanded. The companion JSON records each source path and rendered alt text; compare the photos against the owner-provided originals before release.</p>' +
+      galleryReviewRecords.map(record => '<figure><h2>' + record.width + 'px</h2><a href="' + record.filename + '"><img src="' + record.filename + '" alt="Gallery page at ' + record.width + 'px with all Desert photos expanded" style="max-width:100%;height:auto"></a></figure>').join('\\n') +
+      '</body></html>\\n'
+  );
+
   const cards = routes.map(route => {
     const slug = routeSlug(route);
     const mobile = slug + '-390.jpg';
