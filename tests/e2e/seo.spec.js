@@ -223,8 +223,20 @@ test('Rooms page presents all registered rooms with useful comparison and bookin
   expect(response.status()).toBeLessThan(400);
 
   await expect(page.getByRole('heading', { level: 1, name: 'Rooms at Garh Jaisal Haveli.' })).toBeVisible();
-  await expect(page.locator('.rooms-hero-summary .rooms-summary-stat')).toHaveCount(3);
-  await expect(page.locator('.rooms-hero-summary')).toContainText('7');
+  const roomSummary = page.locator('.rooms-hero-summary');
+  const roomFacts = roomSummary.locator('dl.at-a-glance');
+  await expect(roomFacts).toBeVisible();
+  await expect(roomFacts.locator('.at-a-glance__item')).toHaveCount(4);
+  await expect(roomFacts.locator('dt')).toHaveText([
+    'Room selection',
+    'Floor layout',
+    'Room facilities',
+    'Rates and availability',
+  ]);
+  await expect(roomFacts.locator('dd').nth(0)).toHaveText('7 individually styled rooms');
+  await expect(roomFacts.locator('dd').nth(1)).toHaveText('Ground floor and first floor');
+  await expect(roomFacts.locator('dd').nth(2)).toHaveText('Vary by room');
+  await expect(roomFacts.locator('dd').nth(3)).toHaveText('Check current rates for your dates');
   await expect(page.locator('#room-directory')).toHaveCount(1);
   await expect(page.getByRole('heading', { level: 2, name: 'Choose the room that feels right.' })).toBeVisible();
 
