@@ -536,3 +536,60 @@
   outline: 3px solid var(--focus, #1d4ed8);
   outline-offset: 3px;
 }
+
+
+/* Print only the restaurant menu; reveal every booklet category even though
+   screen mode intentionally keeps one category visible at a time. */
+@media print {
+  body > * {
+    display: none !important;
+  }
+
+  body > main#main-content {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  main#main-content > section:not(.restaurant-menu) {
+    display: none !important;
+  }
+
+  .restaurant-menu-booklet .restaurant-tabs,
+  .restaurant-menu-booklet .restaurant-booklet-controls,
+  .restaurant-menu-head .restaurant-vegtoggle {
+    display: none !important;
+  }
+
+  .restaurant-menu-booklet.is-enhanced [data-menu-page],
+  .restaurant-menu-booklet.is-enhanced [data-menu-page]:not(.is-current-page) {
+    display: block !important;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+
+  .restaurant-menu-booklet.is-enhanced [data-menu-page] .restaurant-dish {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .restaurant-menu-booklet,
+  .restaurant-menu-booklet * {
+    color: #000 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .restaurant-menu {
+    border: 0 !important;
+    padding-block: 0 !important;
+  }
+
+  .restaurant-menu .site-shell {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}

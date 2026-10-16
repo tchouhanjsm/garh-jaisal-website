@@ -61,3 +61,23 @@ test.describe('Sprint 3A launch hardening', () => {
     expect(result.search).toBe('?error=send');
   });
 });
+
+
+test('mail endpoint rejects a missing CAPTCHA token before attempting delivery', async ({ page }) => {
+  await page.goto('/contact.php', { waitUntil: 'domcontentloaded' });
+  const csrfToken = await page.locator('input[name="csrf_token"]').inputValue();
+  const response = await page.request.post('/mail.php', {
+    maxRedirects: 0,
+    form: {
+      csrf_token: csrfToken,
+      name: 'Automated CAPTCHA check',
+      email: 'automated-test@example.test',
+      phone: '',
+      message: 'This test must not send an enquiry.',
+      // Intentionally omit g-recaptcha-response.
+    },
+  });
+
+  expect(response.status()).toBe(302);
+  expect(response.headers().location).toBe('contact.php?error=captcha');
+});
