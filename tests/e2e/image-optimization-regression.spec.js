@@ -107,6 +107,16 @@ test('approved WebP derivatives preserve dimensions, map to the same source phot
       }));
 
       for (const image of images) {
+        if (
+          route === '/'
+          && image.source === 'img/v2/facade.jpg'
+          && image.current === 'img/optimized/v2/fort-from-roof.webp'
+        ) {
+          // The desktop homepage art-directs to an existing landscape image.
+          // tests/e2e/home-hero-art-direction.spec.js verifies source and dimensions
+          // across mobile, tablet and desktop viewports.
+          continue;
+        }
         if (!sourceSet.has(image.source)) continue;
         const candidate = bySource.get(image.source);
         candidate.matchedUsages += 1;

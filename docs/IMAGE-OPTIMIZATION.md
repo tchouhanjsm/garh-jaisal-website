@@ -54,3 +54,9 @@ python scripts/build-responsive-image-review.py
 It writes source-preserving WebP review candidates for 480px, 800px and 1200px maximum widths under `artifacts/responsive-image-review/variants/`, plus an exact-byte JSON report and a side-by-side contact sheet. The same command runs in CI and uploads the `responsive-image-review` artifact. It never changes or deletes original photos and never adds a public runtime reference.
 
 The already accepted same-dimension derivatives remain the only image outputs enabled by the site's helper. Newly resized variants remain review-only until the owner checks them against the full-size photos; this avoids changing room/tour imagery or sharpness by filename assumption. The 6.14 MB tent photo is retained even though it is not part of the currently rendered 26-route payload audit; its other repository uses should be reviewed before changing its delivery path.
+
+## Sprint 35 — art-directed homepage hero and tracked-byte budgets (PR #84 in review)
+
+The homepage uses a portrait facade below 768px and the existing rooftop/fort panorama from 768px upward. Both alternatives use already-checked-in, same-dimension WebP derivatives and retain their separate intrinsic dimensions; the original source photos are unchanged. The panoramic derivative is 388,404 tracked bytes compared with 591,152 bytes for the portrait facade (202,748 bytes, about 34.3%, lower for the desktop/tablet hero selection).
+
+`tests/e2e/home-hero-art-direction.spec.js` locks source selection at 320, 390, 768, 1280 and 1440px, validates dimensions/loading and enforces 600 KiB / 400 KiB tracked-file ceilings. This is an asset-level regression guard, not a total homepage byte budget or a production/Core Web Vitals measurement. The separate resized 480/800/1200px candidate set remains review-only pending owner visual approval.

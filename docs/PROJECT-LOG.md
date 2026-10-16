@@ -6,19 +6,19 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-15 |
-| Current phase | Sprints 34–36 — restaurant enquiry accessibility, conversion measurement and visual consistency (PR #83) |
+| Last updated | 2026-10-16 |
+| Current phase | Sprint 35 — home hero art direction, asset budget and screenshot evidence (PR #84 in review) |
 | Base branch | `main` |
-| Baseline commit | `682e3364491fe5beefba712e2ad053afe9de2a64` (PR #82 merge commit) |
-| Last merged PR | [#82 — brand foundation and accessible UI](https://github.com/tchouhanjsm/garh-jaisal-website/pull/82) |
-| PR #82 main push Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38772639047) |
-| PR #82 main push package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38772639239) |
-| PR #82 main push Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38772639100) |
-| PR #82 main push Browser E2E/page sheet | Running when this batch started: [run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38772639078); refresh result/artifact links before owner approval |
+| Baseline commit | `44827e6575cd13c78316dc245d04a8e452b5ec4a` (PR #83 merge commit) |
+| Last merged PR | [#83 — restaurant enquiry and visual consistency](https://github.com/tchouhanjsm/garh-jaisal-website/pull/83) |
+| PR #83 main push Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38842194108) |
+| PR #83 main push package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38842194073) |
+| PR #83 main push Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38842194083) |
+| PR #83 main push Browser E2E/page sheet | In progress at PR #84 start: [run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38842194060) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Owner review | Inspect PR #80's Sleep Under the Stars and Swiss Tent Safari photos/captions and the main Gallery at 390px and 1280px. |
-| Next action | Review PR #82 page sheet when available; validate PR #83 restaurant form, CTA analytics and responsive visuals on its exact head. |
+| Owner review | Inspect PR #84's homepage hero at 320/390/768/1280/1440px; compare `/roof.php`, `/catalogue.php` and `/room.php` in its screenshot artifacts. |
+| Next action | Review PR #84 exact-head CI, hero screenshots and 390/768/1280 page sheet; decide on merge only after visual review. No live deployment. |
 
 ## Phase roadmap
 
@@ -71,3 +71,11 @@
 - PR #82 main Site Checks, package preflight and non-deploying Staging QA passed at `682e3364491fe5beefba712e2ad053afe9de2a64`; its Browser E2E/page sheet remained in progress at branch start.
 - PR #83 exact-head Site Checks, Browser E2E (including form validation), package preflight and non-deploying Staging QA are required before owner review. No merge or deployment by the implementation.
 - The first Browser E2E run isolated a focus-recovery race on rejected restaurant requests: the form returns to `#reserve`, and fragment restoration could override focus applied during `DOMContentLoaded`. Recovery is now scheduled after document loading; the exact-head browser workflow must confirm the fix before owner review.
+
+## Sprint 35 — responsive home hero and review evidence (PR #84 in review)
+
+- Based on main SHA `44827e6575cd13c78316dc245d04a8e452b5ec4a`. PR #83's local-Chromium inventory recorded about 2.20 MB of same-origin homepage transfer; this is not production, CDN or field Core Web Vitals evidence.
+- Use the existing portrait facade derivative below 768px and existing wide rooftop/fort panorama derivative from 768px upward. Exact tracked asset bytes are 591,152 and 388,404 respectively: a 202,748-byte (~34.3%) smaller desktop hero image; the tests enforce 600 KiB and 400 KiB per-image budgets.
+- The art-directed hero keeps explicit dimensions for the selected source, high fetch priority, existing headline/booking CTA, and existing metadata/URL architecture. Only checked-in, same-dimension derivatives are referenced; the 48 resized review candidates remain off runtime.
+- Browser tests verify five viewport selections, loading, dimensions, byte budgets, CTA visibility and no horizontal overflow. The page sheet also waits for local images to decode and adds a 768px review sample on high-intent routes.
+- Acceptance remains exact-head PHP 7.4/8.2, strict images, sitemap, security/publication guards, package preflight, non-deploying Staging QA and Browser E2E. No local full-suite run or live cPanel verification is claimed; owner visual review and merge/deploy authority remain unchanged.

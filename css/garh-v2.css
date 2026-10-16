@@ -323,6 +323,12 @@ p{
   inset:0;
 }
 
+.hero-media picture{
+  position:absolute;
+  inset:0;
+  display:block;
+}
+
 .hero-media img{
   width:100%;
   height:100%;
