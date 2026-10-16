@@ -7,10 +7,11 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-16 |
-| Current phase | Sprint 41 — critical-path loading for high-intent pages and Journal feature image (current PR) |
+| Current phase | Sprint 42 — site-wide typography, spacing, container and image-ratio normalization (current PR) |
 | Base branch | `main` |
-| Baseline commit | `1d8b02b6d0188a041bc824e30cbcfe565b14686f` (verified `main` merge commit for PR #89) |
-| Last merged PR | [#89 — add verified quick facts to high-intent pages](https://github.com/tchouhanjsm/garh-jaisal-website/pull/89) |
+| Baseline commit | `a256f22fe31b27a375876c28f3b433ccf009b36d` (verified `main` merge commit for PR #90) |
+| Last merged PR | [#90 — prioritize high-intent images and font loading](https://github.com/tchouhanjsm/garh-jaisal-website/pull/90) |
+| PR #90 merged | Merged 2026-10-16 at `a256f22fe31b27a375876c28f3b433ccf009b36d`; all four PR-head workflows passed before merge |
 | PR #89 merged | Merged 2026-10-16 at `1d8b02b6d0188a041bc824e30cbcfe565b14686f`; verified starting point for Sprint 41 |
 | PR #88 merged | [Merged 2026-10-16](https://github.com/tchouhanjsm/garh-jaisal-website/pull/88) at `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`; review head `dfbaa2c556bea8bfaabfcdfdf6b2ae51b76a7204` |
 | PR #88 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38867401576) |
@@ -30,8 +31,8 @@
 | PR #86 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Owner review | Review PR #90's critical-path changes and the exact-head 390px/1280px screenshot sheet; rerun Lighthouse on Home, Rooms and Trip Planner after the code checks pass. Historical Desert photo/caption mapping still needs owner approval. |
-| Next action | Finish exact-head Sprint 41 CI, then owner reviews PR #90. After merge, package the approved merged SHA, stage it manually, and complete route, mail/CAPTCHA, redirect/header and visual checks before any production release. |
+| Owner review | Inspect the Sprint 42 screenshot sheet first at 390px and 1280px; then spot-check layout boundaries at 320px, 768px and 1440px. Historical Desert photo/caption mapping still needs owner approval. |
+| Next action | Finish exact-head Sprint 42 CI and review Home, Rooms and Packages screenshots; owner retains merge and production deployment authority. The merged repository still needs separate owner-run cPanel staging and production release checks. |
 ## Phase roadmap
 
 | Phase | Goal | Status |

@@ -89,3 +89,12 @@ These SVGs are design sources, not final campaign approvals. Canva remains the l
 - On Home, show the fort location, registry-backed room count, rooftop dining and available desert/city experience categories. On Rooms, derive the current room count and floor summary from `include/rooms-data.php`; state that facilities vary by room.
 - On Trip Planner, explain that options can be shortlisted in the browser tab, WhatsApp enquiries remain user-reviewed, and a shortlist does not confirm a booking.
 - Keep facts readable on a light surface, preserve visible focus/44px CTA rules, and review all five constitution widths (320, 390, 768, 1280, 1440px). No rate, availability, guest-review or policy claims are introduced.
+
+
+## Sprint 42 — site-wide visual normalization
+
+- The existing \`css/tokens.css\` is the shared final cascade layer, loaded after a page's existing stylesheets. It owns the common type scale, page gutters, content measure, section rhythm, standard card/control radius and subtle shadow.
+- Keep expressive Source Serif 4 titles with a responsive cap; keep Inter/system body text around a 16px baseline with readable line-height. Use a single spacing scale instead of inventing per-page values.
+- Image-led heroes have a controlled responsive height. Repeated room, package, experience, product and Journal card media use a 16:10 frame; the main Gallery's portrait/ultrawide framing, inline editorial photography and existing room arch crops remain intentional exceptions.
+- The design-system regression checks Home, Rooms, Packages, Trip Planner, an experience detail, Dining, Gallery, Journal, Directions and Contact at 320, 390, 768, 1280 and 1440px. It checks horizontal overflow, the shared stylesheet order, H1 sizing and image/card geometry.
+- Do not use this shared layer to invent copy/facts, change booking/contact destinations, or overwrite an image mapping. Treat the CI screenshot sheet as a review aid, not a replacement for human visual review.

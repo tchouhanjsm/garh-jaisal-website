@@ -49,7 +49,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 38 | Restaurant menu navigation, dietary filter feedback and keyboard-accessible controls | ✓ PR #87 merged at `4b135980fb9e617313d9939d7601649637b2caaa`; exact-head checks, package, staging dry run and browser E2E passed; owner assistive-tech review remains |
 | 39 | Gallery curation, responsive image composition and progressive photo pagination | ✓ PR #88 merged at `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`; 36-photo selection, progressive reveal, responsive gallery evidence; owner photo/caption review remains |
 | 40 | Shared verified quick-facts component for Home, Rooms and Trip Planner | ✓ PR #89 merged: escaped semantic partial, registry-backed room count, clear shortlist/enquiry/booking distinction and responsive regression tests |
-| 41 | Critical-path loading and editorial featured content | ◐ current PR: non-render-blocking Google Fonts, viewport-scoped hero image preloads for Home/Rooms/Trip Planner, eager/preloaded Journal feature image, PHP and Playwright regression coverage |
+| 41 | Critical-path loading and editorial featured content | ✓ PR #90 merged at `a256f22fe31b27a375876c28f3b433ccf009b36d`; exact-head Site Checks, cPanel package preflight, Staging QA and Browser E2E passed; production Lighthouse recheck remains owner-side |
+| 42 | Site-wide typography, spacing, container and image-ratio normalization | ◐ current PR: consolidated token scale and last-loaded shared layout layer across page archetypes; 320/390/768/1280/1440px regression coverage |
 
 ---
 
