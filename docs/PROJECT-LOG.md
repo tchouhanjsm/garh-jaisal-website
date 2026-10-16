@@ -30,8 +30,8 @@
 | PR #86 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Owner review | Gallery Desert photo/caption mapping still needs owner approval; review Sprint 40 quick-facts presentation at 320px, 390px, 768px, 1280px and 1440px. |
-| Next action | Review the Sprint 40 quick-facts PR and responsive page sheet; owner retains merge and deployment authority. |
+| Owner review | Review PR #90's critical-path changes and the exact-head 390px/1280px screenshot sheet; rerun Lighthouse on Home, Rooms and Trip Planner after the code checks pass. Historical Desert photo/caption mapping still needs owner approval. |
+| Next action | Finish exact-head Sprint 41 CI, then owner reviews PR #90. After merge, package the approved merged SHA, stage it manually, and complete route, mail/CAPTCHA, redirect/header and visual checks before any production release. |
 ## Phase roadmap
 
 | Phase | Goal | Status |
