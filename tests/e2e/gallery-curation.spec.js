@@ -74,16 +74,23 @@ test('Gallery filters, six-photo reveal and keyboard-operable lightbox stay cohe
 
   const firstPhoto = rooms.locator('[data-gallery-open]').first();
   const firstAlt = await firstPhoto.locator('img').getAttribute('alt');
-  await firstPhoto.click();
+  await firstPhoto.focus();
+  await page.keyboard.press('Enter');
   const dialog = page.locator('.gallery-lightbox');
   await expect(dialog).toBeVisible();
   await expect(dialog.locator('[data-gallery-lightbox-image]')).toHaveAttribute('alt', firstAlt);
   const firstCaption = await dialog.locator('[data-gallery-lightbox-caption]').textContent();
-  await dialog.getByRole('button', { name: 'Next photo' }).click();
+  const nextPhoto = dialog.getByRole('button', { name: 'Next photo' });
+  await nextPhoto.focus();
+  await page.keyboard.press('Enter');
   await expect(dialog.locator('[data-gallery-lightbox-caption]')).not.toHaveText(firstCaption || '');
-  await dialog.getByRole('button', { name: 'Previous photo' }).click();
+  const previousPhoto = dialog.getByRole('button', { name: 'Previous photo' });
+  await previousPhoto.focus();
+  await page.keyboard.press('Enter');
   await expect(dialog.locator('[data-gallery-lightbox-caption]')).toHaveText(firstCaption || '');
-  await dialog.getByRole('button', { name: /Close/ }).click();
+  const closeButton = dialog.getByRole('button', { name: /Close/ });
+  await closeButton.focus();
+  await page.keyboard.press('Enter');
   await expect(dialog).toBeHidden();
 });
 
