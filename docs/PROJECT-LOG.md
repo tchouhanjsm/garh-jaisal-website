@@ -14,7 +14,7 @@
 | PR #83 main push Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38842194108) |
 | PR #83 main push package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38842194073) |
 | PR #83 main push Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38842194083) |
-| PR #83 main push Browser E2E/page sheet | In progress at PR #84 start: [run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38842194060) |
+| PR #83 main push Browser E2E/page sheet | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38842194060) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38842194060/artifacts/12021768175); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38842194060/artifacts/12021852880) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
 | Owner review | Inspect PR #84's homepage hero at 320/390/768/1280/1440px; compare `/roof.php`, `/catalogue.php` and `/room.php` in its screenshot artifacts. |
