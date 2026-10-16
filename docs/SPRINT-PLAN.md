@@ -598,7 +598,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 **Commercial goal:** help guests scan a stronger, more intentional visual introduction to the haveli, rooms, desert experiences and dining instead of facing the full legacy photo wall at once.
 
 - Extract the current gallery data into `include/gallery-data.php` and curate 36 existing, repository-backed photos: 7 hotel, 14 rooms, 10 desert and 5 restaurant.
-- Apply the approved art-direction language as CSS crops only—architectural arch, portrait and landscape. Do not re-grade, resize, rename or delete originals; the dedicated overnight experience galleries keep their full curated source sets.
+- Apply the approved art-direction language as CSS crops only—architectural arch, 3:4 portrait and 21:9 landscape. Do not re-grade, resize, rename or delete originals; the dedicated overnight experience galleries keep their full curated source sets.
 - Progressive enhancement shows up to six photos per section with a clear “Show more” action; without JavaScript, all 36 remain available. Keep the existing category filters and native lightbox, and make the filter/pagination state keyboard-friendly.
 - Add a PHP inventory/source contract and Playwright coverage for server-rendered completeness, page-size counts, filtering, more-photo state, lightbox next/previous, and no horizontal overflow at each configured viewport.
 - Acceptance: PHP 7.4/8.2 lint, strict image and sitemap checks, publication/security/discovery guards, curated-gallery PHP guard, package preflight, non-deploying Staging QA and Browser E2E/page sheet on the exact PR head. No price, availability, booking, analytics, route or production behavior changes.
