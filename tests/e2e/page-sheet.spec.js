@@ -258,10 +258,13 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
   const desertPhotos = galleryReviewRecords[0].desertAltAudit;
   const contactPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   try {
-    const contactCards = desertPhotos.map(photo =>
-      '<figure><img src="' + BASE_URL + escapeHtml(photo.source) + '" alt="' + escapeHtml(photo.alt) + '">' +
-      '<figcaption><strong>' + escapeHtml(photo.alt) + '</strong><small>' + escapeHtml(photo.source) + '</small></figcaption></figure>'
-    ).join('\n');
+    const contactCards = desertPhotos.map(photo => {
+      const sourcePath = path.join(REPOSITORY_ROOT, photo.source.replace(/^\\/+/, ''));
+      const mimeType = path.extname(sourcePath).toLowerCase() === '.png' ? 'image/png' : 'image/jpeg';
+      const dataUri = 'data:' + mimeType + ';base64,' + fs.readFileSync(sourcePath).toString('base64');
+      return '<figure><img src="' + dataUri + '" alt="' + escapeHtml(photo.alt) + '">' +
+        '<figcaption><strong>' + escapeHtml(photo.alt) + '</strong><small>' + escapeHtml(photo.source) + '</small></figcaption></figure>';
+    }).join('\n');
     await contactPage.setContent(
       '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
       '<title>Desert image and alt-text review</title><style>' +
@@ -275,17 +278,7 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
       '<div class="grid">' + contactCards + '</div></body></html>',
       { waitUntil: 'load' }
     );
-    await contactPage.locator('img').evaluateAll(async images => {
-      await Promise.all(images.map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise(resolve => {
-          const settle = () => resolve();
-          img.addEventListener('load', settle, { once: true });
-          img.addEventListener('error', settle, { once: true });
-          if (img.complete) settle();
-        });
-      }));
-    });
+    await contactPage.locator('img').evaluateAll(images => images.every(img => img.complete && img.naturalWidth > 0));
     await contactPage.screenshot({
       path: path.join(OUTPUT_DIR, 'gallery-desert-alt-contact-sheet.jpg'),
       type: 'jpeg',
