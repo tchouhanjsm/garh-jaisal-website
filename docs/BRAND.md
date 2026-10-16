@@ -66,3 +66,11 @@ Full logo redraw, additional logo lockups, font downloads, 60-photo shoot, video
 The first-party launch kit lives in `marketing/templates/`. It contains six SVG composition masters: house ad, partner ad, Instagram post, story cover, WhatsApp reply card and festival banner. Each canvas has an accessible title/description, uses the approved five-colour subset and shows edit-before-publishing placeholders. Sizes and usage instructions live in `marketing/templates/README.md`.
 
 These SVGs are design sources, not final campaign approvals. Canva remains the low-friction editing destination, but imported SVGs must be checked for editability; recreate text and image regions as separate elements when needed. Every factual or commercial statement remains subject to `docs/OWNER-FACTS.md` and owner approval. The restaurant page uses a restrained Garnet/Night emotional hero; menu, guest-information and request-form cards remain light. No restaurant mail, reservation or menu/pricing facts are activated by this visual batch.
+
+## Sprint 38 — accessible restaurant menu controls
+
+- Keep the dietary filter and menu category links at a minimum 44px target height so touch users can reliably activate them.
+- Use the shared `--focus` token for a consistent, high-visibility 3px keyboard focus ring; do not use pale parchment/sand as a focus indicator on light restaurant surfaces.
+- Menu category links are in-page locations, so the active link uses `aria-current="location"`, not `aria-current="page"`.
+- The dietary filter announces its current state and the count of visible dishes and categories through a polite status region. It remains a presentation filter only; no menu data or prices change.
+- Playwright covers target dimensions, keyboard focus, active location state, live filtering feedback and document overflow at 320px, 390px and 1280px. Owner visual and assistive-technology review remain necessary.
