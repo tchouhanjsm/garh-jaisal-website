@@ -253,6 +253,46 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
       desertPhotos: record.desertAltAudit,
     })), null, 2) + '\\n'
   );
+  const desertPhotos = galleryReviewRecords[0].desertAltAudit;
+  const contactPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  try {
+    const contactCards = desertPhotos.map(photo =>
+      '<figure><img src="' + BASE_URL + escapeHtml(photo.source) + '" alt="' + escapeHtml(photo.alt) + '">' +
+      '<figcaption><strong>' + escapeHtml(photo.alt) + '</strong><small>' + escapeHtml(photo.source) + '</small></figcaption></figure>'
+    ).join('\\n');
+    await contactPage.setContent(
+      '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+      '<title>Desert image and alt-text review</title><style>' +
+      'body{margin:0;padding:24px;font:16px/1.45 system-ui,sans-serif;background:#f7efe0;color:#211d1b}' +
+      'h1{margin-top:0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}' +
+      'figure{margin:0;padding:12px;background:#fff;border:1px solid #d8cbbb}' +
+      'img{display:block;width:100%;height:260px;object-fit:contain;background:#eee9df}' +
+      'figcaption{padding-top:10px;overflow-wrap:anywhere}small{display:block;margin-top:6px;color:#675c52}</style></head>' +
+      '<body><h1>Desert source-photo and alt-text review</h1>' +
+      '<p>All ten selected source images are shown with the exact alt text from the Gallery registry. Review subject-to-caption alignment before release.</p>' +
+      '<div class="grid">' + contactCards + '</div></body></html>',
+      { waitUntil: 'load' }
+    );
+    await contactPage.locator('img').evaluateAll(async images => {
+      await Promise.all(images.map(img => {
+        if (img.complete) return Promise.resolve();
+        return new Promise(resolve => {
+          img.addEventListener('load', resolve, { once: true });
+          img.addEventListener('error', resolve, { once: true });
+        });
+      }));
+    });
+    await contactPage.screenshot({
+      path: path.join(OUTPUT_DIR, 'gallery-desert-alt-contact-sheet.jpg'),
+      type: 'jpeg',
+      quality: 85,
+      fullPage: true,
+      animations: 'disabled',
+    });
+  } finally {
+    await contactPage.close();
+  }
+
   fs.writeFileSync(
     path.join(OUTPUT_DIR, 'gallery-review.html'),
     '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
