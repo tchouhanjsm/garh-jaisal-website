@@ -133,6 +133,7 @@ foreach ([
         '.gallery-item--arch',
         '.gallery-item--portrait',
         '.gallery-item--landscape',
+        'aspect-ratio: 21 / 9;',
         '.gallery-more:focus-visible',
     ],
 ] as $path => $markers) {
