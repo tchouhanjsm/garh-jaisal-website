@@ -47,6 +47,13 @@ test('Gallery filters, six-photo reveal and keyboard-operable lightbox stay cohe
     if (count > 6) {
       await expect(more).toBeVisible();
       await more.click();
+      const firstExpandedCount = Math.min(12, count);
+      await expect(section.locator('.gallery-item:visible')).toHaveCount(firstExpandedCount);
+      await expect(section.locator('[data-gallery-count]')).toHaveText('Showing ' + firstExpandedCount + ' of ' + count + ' curated photos.');
+      if (firstExpandedCount < count) {
+        await expect(more).toBeVisible();
+        await more.click();
+      }
       await expect(section.locator('.gallery-item:visible')).toHaveCount(count);
       await expect(more).toBeHidden();
       await expect(section.locator('[data-gallery-count]')).toHaveText('Showing ' + count + ' of ' + count + ' curated photos.');
