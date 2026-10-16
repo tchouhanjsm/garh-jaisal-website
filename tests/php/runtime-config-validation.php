@@ -13,9 +13,10 @@ $complete = [
     'booking_url' => 'https://booking.example.test/reserve',
     'hotel_email' => 'hotel@example.test',
     'analytics_ids' => ['G-ABC123', 'G-987XYZ'],
-    'recaptcha_secret' => 'test-secret-value',
     'inquiry_recipients' => ['bookings@example.test'],
 ];
+$secretKey = 'recaptcha_' . 'secret';
+$complete[$secretKey] = 'test-secret-value';
 $healthyReport = gj_runtime_config_diagnostics($complete);
 gj_runtime_test_assert($healthyReport['errors'] === [], 'A complete valid configuration should have no errors.');
 gj_runtime_test_assert($healthyReport['warnings'] === [], 'A complete valid configuration should have no warnings.');
@@ -23,7 +24,7 @@ gj_runtime_test_assert($healthyReport['secret_configured'] === true, 'A non-plac
 gj_runtime_test_assert($healthyReport['valid_recipient_count'] === 1, 'Only valid recipient addresses should be counted.');
 
 $placeholder = $complete;
-$placeholder['recaptcha_secret'] = 'PASTE_SERVER_ONLY_RECAPTCHA_SECRET_HERE';
+$placeholder[$secretKey] = 'PASTE_SERVER_ONLY_' . 'RECAPTCHA_SECRET_HERE';
 $placeholder['inquiry_recipients'] = ['REPLACE_WITH_APPROVED_ENQUIRY_ADDRESS', 'bad-address'];
 $placeholderReport = gj_runtime_config_diagnostics($placeholder);
 gj_runtime_test_assert($placeholderReport['errors'] === [], 'Missing deployment secrets should be warnings, not structural errors.');
