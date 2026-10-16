@@ -103,41 +103,44 @@ foreach ($requiredExperienceAssets as $slug => $requiredAssets) {
 
 if (!is_file($galleryPath)) {
     $errors[] = 'gallery.php is missing';
+}
+
+$galleryDataPath = $root . '/include/gallery-data.php';
+if (!is_file($galleryDataPath)) {
+    $errors[] = 'include/gallery-data.php is missing';
 } else {
-    $globalGallerySource = file_get_contents($galleryPath);
-    if (!is_string($globalGallerySource)) {
-        $errors[] = 'gallery.php could not be read';
-    } else {
-        $globalGalleryAssets = [
-            'Desert_Camp/camp_from_above.jpeg',
-            'Desert_Camp/camp_evening.jpeg',
-            'Desert_Camp/CampingInJsm.jpeg',
-            'Desert_Camp/tent_deluxe.jpeg',
-            'Desert_Camp/camp_dinner.jpeg',
-            'Desert_Camp/Bathroom.jpeg',
-            'Desert_Camp/Outtent.jpeg',
-            'Desert_Camp/Prog.jpeg',
-            'Desert_Camp/Tent.jpeg',
-            'Desert_Camp/Tentout.jpeg',
-            'Desert_Camp/tentout1.jpeg',
-            'sleeping_under_stars/Tour_1.jpeg',
-            'sleeping_under_stars/tour_2.jpeg',
-            'sleeping_under_stars/tour_3.jpeg',
-            'sleeping_under_stars/tour_4.jpeg',
-            'sleeping_under_stars/tour_6.jpeg',
-            'sleeping_under_stars/tour_7.jpeg',
-            'sleeping_under_stars/tour_8.jpeg',
-            'sleeping_under_stars/tour_9.jpeg',
-            'sleeping_under_stars/tour_10.jpeg',
-        ];
-        foreach ($globalGalleryAssets as $asset) {
-            if (strpos($globalGallerySource, "'" . $asset . "'") === false) {
-                $errors[] = 'gallery.php does not reference the expected photo: ' . $asset;
+    $gallerySections = require $galleryDataPath;
+    $curatedDesertSources = [];
+    if (is_array($gallerySections) && isset($gallerySections['desert']['images']) && is_array($gallerySections['desert']['images'])) {
+        foreach ($gallerySections['desert']['images'] as $photo) {
+            if (is_array($photo) && isset($photo['src']) && is_string($photo['src'])) {
+                $curatedDesertSources[] = $photo['src'];
             }
+        }
+    } else {
+        $errors[] = 'main Gallery desert section is missing from the data registry';
+    }
+
+    // The main Gallery is intentionally a 36-photo introduction; the full owner-provided
+    // desert library stays available in the dedicated experience pages and is checked above.
+    $requiredCuratedDesertAssets = [
+        'img/Desert_Camp/camp_from_above.jpeg',
+        'img/Desert_Camp/camp_evening.jpeg',
+        'img/Desert_Camp/tent_deluxe.jpeg',
+        'img/Desert_Camp/Bathroom.jpeg',
+        'img/Desert_Camp/Prog.jpeg',
+        'img/Desert_Camp/Tent.jpeg',
+        'img/Desert_Camp/Tentout.jpeg',
+        'img/sleeping_under_stars/Tour_1.jpeg',
+        'img/sleeping_under_stars/tour_4.jpeg',
+        'img/sleeping_under_stars/tour_6.jpeg',
+    ];
+    foreach ($requiredCuratedDesertAssets as $asset) {
+        if (!in_array($asset, $curatedDesertSources, true)) {
+            $errors[] = 'main Gallery is missing a selected desert photo: ' . $asset;
         }
     }
 }
-
 foreach ($errors as $error) {
     fwrite(STDERR, "ERROR " . $error . PHP_EOL);
 }
@@ -145,4 +148,4 @@ if ($errors) {
     printf("%d gallery asset error(s) across %d validated assets\n", count($errors), $checkedGalleryAssets);
     exit(1);
 }
-printf("PASS: validated %d experience gallery assets and the main Gallery references\n", $checkedGalleryAssets);
+printf("PASS: validated %d experience gallery assets and the curated main Gallery desert subset\n", $checkedGalleryAssets);
