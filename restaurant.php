@@ -361,6 +361,7 @@ require __DIR__ . '/include/page-head.php';
       </div>
 
       <div class="restaurant-menu-booklet" data-menu-booklet>
+        <p class="sr-only" data-restaurant-menu-status role="status" aria-live="polite" aria-atomic="true"></p>
         <nav class="restaurant-tabs" aria-label="Menu sections">
           <?php foreach ($menuCategories as $menuIndex => $category): ?>
             <a href="#<?= e(slugify($category)) ?>" data-menu-tab aria-controls="<?= e(slugify($category)) ?>" <?= $menuIndex === 0 ? 'aria-current="location"' : '' ?>><?= e($category) ?></a>

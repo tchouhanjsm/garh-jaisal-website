@@ -7,18 +7,21 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-16 |
-| Current phase | Sprint 37 — restaurant identity and six reusable marketing masters (current batch) |
+| Current phase | Sprint 38 — restaurant menu accessibility and dietary-filter feedback (current batch) |
 | Base branch | `main` |
-| Baseline commit | `b9b15e1db0ff8a440b7a6546775fc4d2f1f8b61f` (verified main head after PR #85) |
-| Last merged PR | [#85 — make overnight experience comparison data-driven](https://github.com/tchouhanjsm/garh-jaisal-website/pull/85) |
-| PR #85 exact-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848897965) |
-| PR #85 exact-head package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848897972) |
-| PR #85 exact-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898064) |
-| PR #85 exact-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898092) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898092/artifacts/12023864764); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898092/artifacts/12023879611) |
+| Baseline commit | `113e75ab879057b780bde24ce9ec633999892dc6` (verified `main` head after PR #86) |
+| Last merged PR | [#86 — add reusable restaurant marketing kit and identity](https://github.com/tchouhanjsm/garh-jaisal-website/pull/86) |
+| PR #86 PR-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127095) |
+| PR #86 PR-head package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127092) |
+| PR #86 PR-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127080) |
+| PR #86 merge-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546303) |
+| PR #86 merge-head cPanel package workflow (no deployment) | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546333) |
+| PR #86 merge-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546323) |
+| PR #86 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Owner review | Inspect the Sprint 37 restaurant treatment at 390px and 1280px and rebuild each template in the design editor to verify editability and remove all placeholders before campaign use. |
-| Next action | Review the six masters, responsive restaurant page and exact-head CI/page-sheet evidence in the open PR. Owner retains merge and deployment authority. |
+| Owner review | Inspect menu controls/filter at 320px, 390px and 1280px, including focus rings and the active category; verify the new filter status with assistive technology where available. |
+| Next action | Review PR #87 exact-head CI and page-sheet evidence after it completes; owner retains merge and deployment authority. |
 ## Phase roadmap
 
 | Phase | Goal | Status |
@@ -96,3 +99,18 @@
 - Apply restrained Garnet/Night emphasis to the restaurant hero and 6px geometry to controls/cards; preserve light menu, information and form surfaces and all current contact/booking fallbacks.
 - No changes to menu data, prices, hours, reservation/mail activation, public URLs, canonicals, schema facts, GA4 IDs or live host. Owner dependencies in `docs/OWNER-FACTS.md` remain unresolved.
 - Exact-head Site Checks, package preflight, non-deploying Staging QA, Browser E2E and screenshot evidence for this new PR are pending. Automated evidence is not owner visual approval.
+
+## Sprint 37 — restaurant identity and marketing kit (PR #86 merged)
+
+- PR #86 merged on 2026-10-16 to `main` at `113e75ab879057b780bde24ce9ec633999892dc6`; no open PRs were present at the Sprint 38 branch start.
+- Six guarded SVG marketing masters, Canva workflow guidance, restrained restaurant styling, the template source contract, and Playwright regression checks are merged.
+- PR-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127095), package preflight [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127092), and non-deploying Staging QA [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127080). The merge-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546303), cPanel package workflow [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546333), Staging QA dry run [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546323), and Browser E2E [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341). Merge-head evidence: [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875), [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666).
+- No public URL, canonical, schema facts, menu data/prices, restaurant hours, reservation/mail activation or GA4 IDs changed. No external cPanel staging or production deployment occurred.
+
+## Sprint 38 — restaurant menu accessibility and dietary-filter feedback (current PR)
+
+- Starting main SHA: `113e75ab879057b780bde24ce9ec633999892dc6`. No open PR existed at branch creation.
+- Bundle touch-target sizing, shared focus-token alignment, proper in-page current-location semantics and an accurate dietary-filter announcement into one restaurant UX slice. The count covers matching dishes/categories across paginated menu sections while preserving the booklet's active-page state.
+- Refresh the `restaurant.php` sitemap `lastmod` to `2026-10-16`, matching the new source commit date; no sitemap URL was added, removed or reordered.
+- Expected changed surfaces: `css/restaurant.css`, the runtime asset `js/restaurant.js`, `restaurant.php`, `sitemap.xml` (restaurant route lastmod only), new `tests/e2e/restaurant-accessibility.spec.js`, and the three project/brand documents.
+- This batch does not alter menu facts/prices, service hours, reservation/mail behavior, public routes/canonicals, schema or GA4 IDs. Verify required workflows and screenshot artifacts against the latest PR head; owner visual and live-host review remain separate.

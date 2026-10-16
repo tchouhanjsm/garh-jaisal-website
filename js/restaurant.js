@@ -56,12 +56,43 @@
 
   var vegToggle = document.querySelector('.restaurant-vegtoggle');
   if (vegToggle) {
+    var menuStatus = menuBooklet ? menuBooklet.querySelector('[data-restaurant-menu-status]') : null;
+
+    var updateMenuFilter = function (vegOnly) {
+      var matchingDishCount = 0;
+      var matchingCategoryCount = 0;
+
+      document.querySelectorAll('.restaurant-dish').forEach(function (dish) {
+        var matchesFilter = !vegOnly || dish.dataset.veg === '1';
+        dish.hidden = !matchesFilter;
+        if (matchesFilter) matchingDishCount += 1;
+      });
+
+      // The booklet owns each category's hidden state. Count matching entries
+      // across the full menu without revealing inactive pages or hiding pages.
+      document.querySelectorAll('.restaurant-category').forEach(function (category) {
+        var hasMatchingDish = Array.prototype.some.call(
+          category.querySelectorAll('.restaurant-dish'),
+          function (dish) {
+            return !vegOnly || dish.dataset.veg === '1';
+          }
+        );
+        if (hasMatchingDish) matchingCategoryCount += 1;
+      });
+
+      if (menuStatus) {
+        var dishLabel = matchingDishCount === 1 ? 'dish' : 'dishes';
+        var categoryLabel = matchingCategoryCount === 1 ? 'category' : 'categories';
+        menuStatus.textContent = (vegOnly ? 'Vegetarian filter on' : 'Vegetarian filter off')
+          + ': ' + matchingDishCount + ' matching ' + dishLabel
+          + ' across ' + matchingCategoryCount + ' menu ' + categoryLabel + '.';
+      }
+    };
+
     vegToggle.addEventListener('click', function () {
       var vegOnly = vegToggle.getAttribute('aria-pressed') !== 'true';
       vegToggle.setAttribute('aria-pressed', String(vegOnly));
-      document.querySelectorAll('.restaurant-dish').forEach(function (dish) {
-        dish.hidden = vegOnly && dish.dataset.veg !== '1';
-      });
+      updateMenuFilter(vegOnly);
     });
   }
 

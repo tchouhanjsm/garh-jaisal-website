@@ -45,7 +45,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 34 | Restaurant enquiry completion and conversion measurement | ◐ PR #83: accessible server validation, dining CTA/form intent events, direct-contact fallback retained; mail delivery remains owner-gated |
 | 35 | Home and high-intent photography/performance pass | ✓ PR #84 merged the responsive art-directed hero and screenshot evidence; resized candidates remain review-only and production performance measurement is still owner-side |
 | 36 | Experience comparison and Trip shortlist visual polish | ✓ PR #85 merged at `b9b15e1db0ff8a440b7a6546775fc4d2f1f8b61f`; registry-backed overnight comparison and Escape/focus recovery; exact-head CI passed |
-| 37 | Restaurant identity and six first-party marketing templates | ◐ current bulk batch: six guarded source masters, a repeatable Canva workflow, restrained restaurant styling and regression contracts; operational facts remain owner-gated |
+| 37 | Restaurant identity and six first-party marketing templates | ✓ PR #86 merged at `113e75ab879057b780bde24ce9ec633999892dc6`; six guarded source masters, Canva workflow and restrained restaurant identity; operational facts remain owner-gated |
+| 38 | Restaurant menu navigation, dietary filter feedback and keyboard-accessible controls | ◐ current bulk batch: 44px targets, shared focus rings, in-page location semantics, screen-reader filter feedback and responsive regression coverage |
 
 ---
 
@@ -572,13 +573,23 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Exact-head acceptance: PHP 7.4/8.2 lint, strict image checks, sitemap/publication/security checks, package preflight, non-deploying Staging QA, Browser E2E and screenshot artifacts. Owner visual review and live-host testing remain separate.
 
 
-## Sprint 37 — restaurant identity and first-party marketing kit (current batch)
+## Sprint 37 — restaurant identity and first-party marketing kit (PR #86 merged)
 
-**Commercial goal:** create a repeatable route from approved copy and photography to first-party ad/social/service artwork, while making dining more recognisable without reducing information readability.
+**Commercial goal:** create a repeatable route from approved copy and photography to first-party artwork, while making dining more recognisable without reducing information readability.
 
-- Add six SVG composition masters in `marketing/templates/` at documented landscape, square and vertical sizes. The photo/copy placeholders remain conspicuous; a template is not publish-ready until every placeholder and claim is reviewed.
-- Document Canva as the low-friction workflow, including that imported SVG text/shapes may not remain individually editable. Keep existing fonts, wordmark, five-colour subset and 6px geometry.
-- Refine only restaurant CSS: a Garnet-to-Night emotional hero, restrained Garnet/Gold accents, architectural control/card geometry, and light menu/information/form cards. Preserve current name, menu data, contact destinations, request fallback and metadata.
-- Add a PHP-compatible source-contract checker for master count, dimensions, accessible descriptions, placeholders, palette and no external/script references; wire it into CI and add a Playwright styling/overflow regression.
-- Do not activate restaurant email, claim reservations, publish new menu prices/hours, create offers/review proof, add unapproved Instagram posts or QR destinations, add runtime dependencies, or change routes/canonicals/GA4 IDs.
-- Exact-head acceptance: PHP 7.4/8.2 lint; strict site/image, sitemap, publication, gallery, discovery, launch-hardening and staging-noindex checks; template contract; package preflight; non-deploying Staging QA; Browser E2E/page sheet. Owner visual review remains required.
+- PR #86 merged to `main` at `113e75ab879057b780bde24ce9ec633999892dc6`.
+- Six SVG composition masters and Canva workflow instructions are now in `marketing/templates/`; visible placeholders remain until the owner replaces and approves them.
+- Restaurant styling uses the approved Garnet/Night hero and restrained Garnet/Gold accents while keeping menu, information and enquiry surfaces light.
+- PR-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127095), package preflight [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127092) and non-deploying Staging QA [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38853127080). Merge-head Browser E2E [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875) and [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666). No external cPanel staging or production deployment occurred.
+- Menu prices and contents, service hours, reservation/mail activation, public routes, canonicals, schema facts, GA4 IDs and production configuration were not changed. No live cPanel staging or production deployment occurred.
+
+## Sprint 38 — restaurant menu and dietary-filter accessibility (current batch)
+
+**Commercial goal:** make the existing menu easier to navigate and filter with touch, keyboard and assistive technology, without changing the commercial content or reservation behaviour.
+
+- Keep the vegetarian filter and menu category links at least 44px high and use the shared `--focus` token for a consistent 3px focus indicator.
+- Correct active category navigation to use `aria-current="location"` for in-page destinations.
+- Refresh only the `restaurant.php` `lastmod` value in `sitemap.xml` to `2026-10-16`, matching the source commit date; keep the sitemap URL allowlist and membership unchanged.
+- Add a polite live status message after dietary-filter changes, reporting the on/off state and matching dish/category counts across the full paginated menu. Preserve the booklet's active-page visibility; existing dish data and prices remain unchanged.
+- Add Playwright regression coverage for target dimensions, keyboard focus, location state, filter counts, status announcements and horizontal overflow at 320px, 390px and 1280px.
+- Exact-head PHP 7.4/8.2 Site Checks, strict image and sitemap checks, publication/security guards, package workflow, non-deploying Staging QA, Browser E2E and screenshot artifacts are required. Owner visual review and live-host verification remain separate.
