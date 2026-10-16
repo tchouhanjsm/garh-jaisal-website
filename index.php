@@ -14,10 +14,10 @@ $page = [
     'path' => '/',
     'og_title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
     'og_description' => 'Heritage rooms, rooftop views and desert experiences inside Jaisalmer Fort.',
-    'og_image' => '/img/v2/fort-from-roof.jpg',
+    'og_image' => '/img/v2/facade.jpg',
     'twitter_title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
     'twitter_description' => 'Heritage rooms, rooftop views and desert experiences inside Jaisalmer Fort.',
-    'twitter_image' => '/img/v2/fort-from-roof.jpg',
+    'twitter_image' => '/img/v2/facade.jpg',
     'css' => ['css/thar-sunset-story.css'],
     'schema' => [
         [
