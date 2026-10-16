@@ -423,3 +423,10 @@
     transition: none !important;
   }
 }
+
+
+/* Component display declarations must not override the native hidden state. */
+.gallery-filters[hidden],
+.gallery-more[hidden] {
+  display: none !important;
+}
