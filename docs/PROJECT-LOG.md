@@ -7,7 +7,7 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-16 |
-| Current phase | Sprint 38 — restaurant menu accessibility and dietary-filter feedback (current batch) |
+| Current phase | Sprint 39 — curated Gallery and progressive photo pagination (current PR) |
 | Base branch | `main` |
 | Baseline commit | `4b135980fb9e617313d9939d7601649637b2caaa` (verified `main` head after PR #87) |
 | Last merged PR | [#87 — improve restaurant menu accessibility and filtering](https://github.com/tchouhanjsm/garh-jaisal-website/pull/87) |
