@@ -13,6 +13,22 @@ test('restaurant menu controls have usable targets, visible focus, correct locat
   const secondTab = tabs.nth(1);
   const vegetarianToggle = page.getByRole('button', { name: 'Vegetarian only', exact: true });
   const status = page.locator('[data-restaurant-menu-status]');
+  const expectedFilterSummary = async vegetarianOnly => {
+    const counts = await page.evaluate(isVegetarianOnly => {
+      const categories = Array.from(document.querySelectorAll('.restaurant-category'));
+      const matches = dish => !isVegetarianOnly || dish.dataset.veg === '1';
+      const dishes = categories.flatMap(category => Array.from(category.querySelectorAll('.restaurant-dish')));
+      return {
+        dishes: dishes.filter(matches).length,
+        categories: categories.filter(category => Array.from(category.querySelectorAll('.restaurant-dish')).some(matches)).length,
+      };
+    }, vegetarianOnly);
+    const dishLabel = counts.dishes === 1 ? 'dish' : 'dishes';
+    const categoryLabel = counts.categories === 1 ? 'category' : 'categories';
+    return (vegetarianOnly ? 'Vegetarian filter on' : 'Vegetarian filter off')
+      + ': ' + counts.dishes + ' matching ' + dishLabel
+      + ' across ' + counts.categories + ' menu ' + categoryLabel + '.';
+  };
 
   await expect(menu).toBeVisible();
   expect(await tabs.count()).toBeGreaterThan(1);
@@ -62,10 +78,15 @@ test('restaurant menu controls have usable targets, visible focus, correct locat
   await secondTab.click();
   await expect(secondTab).toHaveAttribute('aria-current', 'location');
   await expect(menu.locator('[aria-current="page"]')).toHaveCount(0);
+  const activeSectionSelector = await secondTab.getAttribute('href');
+  const activeSection = page.locator(activeSectionSelector);
+  await expect(activeSection).toBeVisible();
 
   await vegetarianToggle.click();
   await expect(vegetarianToggle).toHaveAttribute('aria-pressed', 'true');
-  await expect(status).toHaveText(/^Vegetarian filter on: showing \d+ dish(?:es)? across \d+ categor(?:y|ies)\.$/);
+  await expect(status).toHaveText(await expectedFilterSummary(true));
+  await expect(secondTab).toHaveAttribute('aria-current', 'location');
+  await expect(activeSection).toBeVisible();
   const filteredDishes = await page.locator('.restaurant-dish:not([hidden])').evaluateAll(dishes =>
     dishes.every(dish => dish.dataset.veg === '1')
   );
@@ -75,7 +96,9 @@ test('restaurant menu controls have usable targets, visible focus, correct locat
 
   await vegetarianToggle.click();
   await expect(vegetarianToggle).toHaveAttribute('aria-pressed', 'false');
-  await expect(status).toHaveText(/^Vegetarian filter off: showing \d+ dish(?:es)? across \d+ categor(?:y|ies)\.$/);
+  await expect(status).toHaveText(await expectedFilterSummary(false));
+  await expect(secondTab).toHaveAttribute('aria-current', 'location');
+  await expect(activeSection).toBeVisible();
   await expect(page.locator('.restaurant-dish:not([hidden])')).toHaveCount(await page.locator('.restaurant-dish').count());
 
   const viewport = await page.evaluate(() => ({

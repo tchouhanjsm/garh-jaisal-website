@@ -110,7 +110,7 @@
 ## Sprint 38 — restaurant menu accessibility and dietary-filter feedback (current PR)
 
 - Starting main SHA: `113e75ab879057b780bde24ce9ec633999892dc6`. No open PR existed at branch creation.
-- Bundle touch-target sizing, shared focus-token alignment, proper in-page current-location semantics and a polite dietary-filter results announcement into one restaurant UX slice with responsive Playwright regression coverage.
+- Bundle touch-target sizing, shared focus-token alignment, proper in-page current-location semantics and an accurate dietary-filter announcement into one restaurant UX slice. The count covers matching dishes/categories across paginated menu sections while preserving the booklet's active-page state.
 - Refresh the `restaurant.php` sitemap `lastmod` to `2026-10-16`, matching the new source commit date; no sitemap URL was added, removed or reordered.
-- Expected changed surfaces: `css/restaurant.css`, `restaurant.js`, `restaurant.php`, `sitemap.xml` (restaurant route lastmod only), new `tests/e2e/restaurant-accessibility.spec.js`, and the three project/brand documents.
-- This batch does not alter menu facts/prices, service hours, reservation/mail behavior, public routes/canonicals, schema or GA4 IDs. Exact-head workflows and artifacts are pending; owner visual and live-host review remain separate.
+- Expected changed surfaces: `css/restaurant.css`, the runtime asset `js/restaurant.js`, `restaurant.php`, `sitemap.xml` (restaurant route lastmod only), new `tests/e2e/restaurant-accessibility.spec.js`, and the three project/brand documents.
+- This batch does not alter menu facts/prices, service hours, reservation/mail behavior, public routes/canonicals, schema or GA4 IDs. Verify required workflows and screenshot artifacts against the latest PR head; owner visual and live-host review remain separate.

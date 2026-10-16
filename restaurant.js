@@ -12,7 +12,7 @@
         tabs.forEach(function (tab) {
           var active = tab.getAttribute('href') === '#' + entry.target.id;
           tab.classList.toggle('is-active', active);
-          if (active) tab.setAttribute('aria-current', 'location');
+          if (active) tab.setAttribute('aria-current', 'page');
           else tab.removeAttribute('aria-current');
         });
       });
@@ -24,36 +24,17 @@
   }
 
   if (vegToggle) {
-    var menuStatus = document.querySelector('[data-restaurant-menu-status]');
-
-    var updateMenuFilter = function (vegOnly) {
-      var visibleDishCount = 0;
-      var visibleCategoryCount = 0;
-
-      document.querySelectorAll('.restaurant-dish').forEach(function (dish) {
-        dish.hidden = vegOnly && dish.dataset.veg !== '1';
-        if (!dish.hidden) visibleDishCount += 1;
-      });
-
-      document.querySelectorAll('.restaurant-category').forEach(function (category) {
-        var hasVisibleDishes = Boolean(category.querySelector('.restaurant-dish:not([hidden])'));
-        category.hidden = !hasVisibleDishes;
-        if (hasVisibleDishes) visibleCategoryCount += 1;
-      });
-
-      if (menuStatus) {
-        var dishLabel = visibleDishCount === 1 ? 'dish' : 'dishes';
-        var categoryLabel = visibleCategoryCount === 1 ? 'category' : 'categories';
-        menuStatus.textContent = (vegOnly ? 'Vegetarian filter on' : 'Vegetarian filter off')
-          + ': showing ' + visibleDishCount + ' ' + dishLabel
-          + ' across ' + visibleCategoryCount + ' ' + categoryLabel + '.';
-      }
-    };
-
     vegToggle.addEventListener('click', function () {
       var vegOnly = vegToggle.getAttribute('aria-pressed') !== 'true';
       vegToggle.setAttribute('aria-pressed', String(vegOnly));
-      updateMenuFilter(vegOnly);
+
+      document.querySelectorAll('.restaurant-dish').forEach(function (dish) {
+        dish.hidden = vegOnly && dish.dataset.veg !== '1';
+      });
+
+      document.querySelectorAll('.restaurant-category').forEach(function (category) {
+        category.hidden = !category.querySelector('.restaurant-dish:not([hidden])');
+      });
     });
   }
 

@@ -590,6 +590,6 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Keep the vegetarian filter and menu category links at least 44px high and use the shared `--focus` token for a consistent 3px focus indicator.
 - Correct active category navigation to use `aria-current="location"` for in-page destinations.
 - Refresh only the `restaurant.php` `lastmod` value in `sitemap.xml` to `2026-10-16`, matching the source commit date; keep the sitemap URL allowlist and membership unchanged.
-- Add a polite live status message after dietary-filter changes, reporting whether the filter is on/off and the number of dishes/categories remaining. Existing dish data and prices remain unchanged.
+- Add a polite live status message after dietary-filter changes, reporting the on/off state and matching dish/category counts across the full paginated menu. Preserve the booklet's active-page visibility; existing dish data and prices remain unchanged.
 - Add Playwright regression coverage for target dimensions, keyboard focus, location state, filter counts, status announcements and horizontal overflow at 320px, 390px and 1280px.
 - Exact-head PHP 7.4/8.2 Site Checks, strict image and sitemap checks, publication/security guards, package workflow, non-deploying Staging QA, Browser E2E and screenshot artifacts are required. Owner visual review and live-host verification remain separate.

@@ -72,5 +72,5 @@ These SVGs are design sources, not final campaign approvals. Canva remains the l
 - Keep the dietary filter and menu category links at a minimum 44px target height so touch users can reliably activate them.
 - Use the shared `--focus` token for a consistent, high-visibility 3px keyboard focus ring; do not use pale parchment/sand as a focus indicator on light restaurant surfaces.
 - Menu category links are in-page locations, so the active link uses `aria-current="location"`, not `aria-current="page"`.
-- The dietary filter announces its current state and the count of visible dishes and categories through a polite status region. It remains a presentation filter only; no menu data or prices change.
+- The dietary filter announces its state and matching dish/category counts across the full paginated menu through a polite status region. It must not override the booklet's active-page visibility; menu data and prices remain unchanged.
 - Playwright covers target dimensions, keyboard focus, active location state, live filtering feedback and document overflow at 320px, 390px and 1280px. Owner visual and assistive-technology review remain necessary.
