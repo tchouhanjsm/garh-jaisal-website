@@ -18,13 +18,16 @@ Options -Indexes
   RewriteCond %{HTTP_HOST} !^www\.hotelgarhjaisal\.com$ [NC]
   RewriteRule ^ https://www.hotelgarhjaisal.com%{REQUEST_URI} [R=301,L,NE]
 
+  # Keep one canonical homepage URL.
+  RewriteRule ^index\.php$ / [R=301,L,NC]
+
   # Never expose hidden files or the server-only local configuration.
   RewriteRule (^|/)\. - [F,L]
   RewriteRule ^include/site-config\.local\.php$ - [F,L,NC]
 </IfModule>
 
 <IfModule mod_authz_core.c>
-  <FilesMatch "(^\.|\.(?:bak|backup|log)$)">
+  <FilesMatch "(^\.|\.(?:bak|backup|log|md|py|json|map)$)">
     Require all denied
   </FilesMatch>
 </IfModule>
@@ -48,6 +51,11 @@ Options -Indexes
   ExpiresByType image/jpeg "access plus 1 month"
   ExpiresByType image/png "access plus 1 month"
   ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/avif "access plus 1 month"
+  ExpiresByType font/woff "access plus 1 month"
+  ExpiresByType font/woff2 "access plus 1 month"
+  ExpiresByType application/font-woff "access plus 1 month"
+  ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
   ExpiresByType image/svg+xml "access plus 1 month"
   ExpiresByType image/x-icon "access plus 1 month"
 </IfModule>
