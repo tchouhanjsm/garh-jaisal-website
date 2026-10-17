@@ -123,10 +123,12 @@ test('restaurant fallback call and WhatsApp intents route safely to both approve
   await page.goto('/restaurant.php?utm_source=google&utm_medium=cpc&utm_campaign=restaurant_cta&utm_content=dining&email=private%40example.com&topic=private', {
     waitUntil: 'domcontentloaded'
   });
-  const fallback = page.locator('.restaurant-reservation-unavailable');
-  await expect(fallback).toBeVisible();
+  const reservation = page.locator('.restaurant-reserve');
+  await expect(reservation.locator('form.restaurant-form')).toBeVisible();
 
-  await fallback.getByRole('link', { name: 'Call the hotel' }).click();
+  const callLink = reservation.locator('a[href^="tel:"]').first();
+  await expect(callLink).toBeVisible();
+  await callLink.click();
   let events = await readTrackedEvents(page);
   const call = expectRoutedOnce(events, 'click_to_call', '/restaurant.php', 'dining');
   expect(call.cta_label).toBe('call');
@@ -137,7 +139,9 @@ test('restaurant fallback call and WhatsApp intents route safely to both approve
   expect(call).not.toHaveProperty('email');
   expect(call).not.toHaveProperty('topic');
 
-  await fallback.getByRole('link', { name: 'Ask on WhatsApp' }).click();
+  const whatsappLink = reservation.locator('a[href^="https://wa.me/"]').first();
+  await expect(whatsappLink).toBeVisible();
+  await whatsappLink.click();
   events = await readTrackedEvents(page);
   const whatsapp = expectRoutedOnce(events, 'click_whatsapp', '/restaurant.php', 'dining');
   expect(whatsapp.cta_label).toBe('whatsapp');
