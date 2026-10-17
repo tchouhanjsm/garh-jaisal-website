@@ -724,6 +724,56 @@ body .footer-bottom {
 }
 
 
+/* Sprint 42 regression fix: at 381–760px, keep the Rooms hero from becoming
+   a full-screen stack. Two 44px+ actions share a row when their labels fit;
+   320px phones keep the safer stacked action layout above. */
+@media (min-width: 381px) and (max-width: 760px) {
+  main.thar-sunset-story--rooms .rooms-hero-grid {
+    gap: 1rem;
+    padding-block: 1.25rem;
+  }
+
+  main.thar-sunset-story--rooms .rooms-hero-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 0.625rem;
+    margin-block-start: 0.75rem;
+  }
+
+  main.thar-sunset-story--rooms .rooms-hero-actions .button {
+    width: auto;
+    flex: 1 1 calc(50% - 0.625rem);
+    min-width: 0;
+    min-height: 44px;
+    padding-inline: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  main.thar-sunset-story--rooms p.rooms-hero-note {
+    margin-block-start: 0.5rem;
+    line-height: 1.3;
+  }
+
+  main.thar-sunset-story--rooms .rooms-hero-summary {
+    padding: 0.875rem;
+  }
+
+  main.thar-sunset-story--rooms .rooms-hero-summary > .eyebrow {
+    margin-block-end: 0.375rem;
+  }
+
+  main.thar-sunset-story--rooms .rooms-hero-summary .at-a-glance__item {
+    padding-block: 0.5rem;
+  }
+
+  main.thar-sunset-story--rooms .rooms-hero-summary .at-a-glance__value {
+    font-size: 0.8rem;
+    line-height: 1.25;
+  }
+}
+
+
 /* Desktop/tablet Trip Planner: keep the four verified facts, but remove the
    oversized top/bottom padding inherited from the older hero stylesheet. */
 @media (min-width: 621px) {
