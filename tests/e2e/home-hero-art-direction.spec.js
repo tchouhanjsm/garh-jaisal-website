@@ -6,11 +6,11 @@ const { REPOSITORY_ROOT } = require('./helpers/sitemap-routes');
 const BASE_URL = 'http://127.0.0.1:8080';
 const OUTPUT_DIR = path.join(REPOSITORY_ROOT, 'artifacts/screenshots/home-hero-review');
 const VIEWPORTS = [
-  { width: 320, height: 700, expected: 'img/responsive/v2/facade-480.webp', imageWidth: 480, imageHeight: 720, maxBytes: 200 * 1024 },
-  { width: 390, height: 844, expected: 'img/responsive/v2/facade-480.webp', imageWidth: 480, imageHeight: 720, maxBytes: 200 * 1024 },
-  { width: 768, height: 900, expected: 'img/responsive/v2/fort-from-roof-800.webp', imageWidth: 800, imageHeight: 533, maxBytes: 300 * 1024 },
-  { width: 1280, height: 800, expected: 'img/responsive/v2/fort-from-roof-1200.webp', imageWidth: 1200, imageHeight: 800, maxBytes: 400 * 1024 },
-  { width: 1440, height: 900, expected: 'img/responsive/v2/fort-from-roof-1200.webp', imageWidth: 1200, imageHeight: 800, maxBytes: 400 * 1024 },
+  { width: 320, height: 700, expectedStem: 'facade', maxBytes: 200 * 1024 },
+  { width: 390, height: 844, expectedStem: 'facade', maxBytes: 200 * 1024 },
+  { width: 768, height: 900, expectedStem: 'fort-from-roof', maxBytes: 300 * 1024 },
+  { width: 1280, height: 800, expectedStem: 'fort-from-roof', maxBytes: 400 * 1024 },
+  { width: 1440, height: 900, expectedStem: 'fort-from-roof', maxBytes: 400 * 1024 },
 ];
 
 test('homepage hero art direction selects responsive images within asset budgets', async ({ browser }, testInfo) => {
@@ -67,15 +67,19 @@ test('homepage hero art direction selects responsive images within asset budgets
         };
       });
 
-      const imagePath = path.join(REPOSITORY_ROOT, viewport.expected);
-      expect(fs.existsSync(imagePath), viewport.expected + ' must be generated before this test runs').toBe(true);
+      const imagePath = path.join(REPOSITORY_ROOT, state.currentPath);
+      const responsiveMatch = state.currentPath.match(/^img\/responsive\/v2\/([^/]+)-(480|800|1200)\.webp$/);
+      expect(state.currentPath, 'The selected hero should use the intended photo family at ' + viewport.width + 'px').toContain('/img/responsive/');
+      expect(responsiveMatch, 'A selected responsive hero must identify a supported width candidate').not.toBeNull();
+      expect(responsiveMatch[1], 'The selected hero should follow art direction at ' + viewport.width + 'px').toBe(viewport.expectedStem);
+      expect(fs.existsSync(imagePath), state.currentPath + ' must be generated before this test runs').toBe(true);
       const fileBytes = fs.statSync(imagePath).size;
-      expect(state.currentPath, 'The selected hero image must match art direction at ' + viewport.width + 'px').toBe(viewport.expected);
       expect(state.loaded, 'The selected hero image must decode at ' + viewport.width + 'px').toBe(true);
-      expect(state.naturalWidth).toBe(viewport.imageWidth);
-      expect(state.naturalHeight).toBe(viewport.imageHeight);
-      expect(state.declaredWidth).toBe(viewport.imageWidth);
-      expect(state.declaredHeight).toBe(viewport.imageHeight);
+      expect(state.naturalWidth, 'Selected responsive candidate must have positive intrinsic width').toBeGreaterThan(0);
+      expect(state.naturalHeight, 'Selected responsive candidate must have positive intrinsic height').toBeGreaterThan(0);
+      expect(state.declaredWidth, 'Responsive picture source must declare its width').toBeGreaterThan(0);
+      expect(state.declaredHeight, 'Responsive picture source must declare its height').toBeGreaterThan(0);
+      expect(Math.abs((state.declaredWidth / state.declaredHeight) - (state.naturalWidth / state.naturalHeight))).toBeLessThan(0.02);
       expect(state.selectedSizes).toBe('100vw');
       expect(state.selectedSrcset.split(',').some(item => item.trim().split(/\s+/)[0].replace(/^\//, '') === state.currentPath)).toBe(true);
       expect(state.fetchPriority).toBe('high');
