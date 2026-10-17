@@ -166,3 +166,13 @@
 - Changed `book-rooms-in-jaisalmer.php` from `Article` to `WebPage` and added a visible breadcrumb plus matching `BreadcrumbList` schema.
 - Updated sitemap generation so `lastmod` incorporates the shared experience/editorial data file when a URL's content is driven by that registry, preventing stale timestamps after shared-data edits.
 - Broader image derivatives and `srcset`/`sizes`, external cPanel proof, SMTP delivery, owner-approved restaurant schedule/menu and privacy retention remain explicit release gates.
+
+
+## 2026-10-17 — Sprint 42 responsive follow-up in PR #91
+
+- The 320px browser contract identified an oversized Trip Planner hero. The existing responsive CSS was tightened only at widths up to 380px; button targets remain at least 44px and the four quick facts remain present.
+- Shortened the Trip Planner lead/fact copy to reduce mobile wrapping without relying on very small fact text.
+- Aligned the Trip Planner hero image with the existing optimized WebP already declared in its image preload. Browser E2E now checks that the preload path matches the browser-selected hero image at each configured viewport.
+- Added browser screenshot artifacts for Home, Rooms, Packages, Trip Planner, Dining and Gallery at 320px, 768px and 1440px. The established page sheet remains at 390px and 1280px.
+- The current-head CI result must be reviewed before merge. These are repository/browser checks only; they do not verify live cPanel behaviour or production delivery.
+- Owner release gates remain: external cPanel staging, actual CAPTCHA/mail delivery, approved menu/schedule/policy facts, and the access, backup, retention and privacy wording for private enquiry storage.
