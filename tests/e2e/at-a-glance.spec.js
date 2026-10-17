@@ -33,10 +33,10 @@ const pages = [
     route: '/catalogue.php',
     selector: '.catalogue-hero-facts',
     facts: [
-      ['Trip options', 'Rooms, experiences, transport and rooftop dining'],
-      ['Shortlist', 'Stored in this browser tab'],
-      ['Enquiry', 'Review the WhatsApp draft before sending'],
-      ['Booking status', 'A shortlist is not a confirmed booking'],
+      ['Trip options', 'Rooms, tours, transport and rooftop dining'],
+      ['Shortlist', 'Saved in this tab'],
+      ['Enquiry', 'Review the WhatsApp draft'],
+      ['Booking status', 'Enquiry only; not confirmed'],
     ],
   },
 ];
