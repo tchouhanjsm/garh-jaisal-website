@@ -19,7 +19,9 @@ require_once __DIR__ . '/include/lead-storage.php';
 
 /* Menu/prices are from the supplied restaurant design. Verify the live menu before staging. */
 $menuConfig = require __DIR__ . '/include/menu-data.php';
-$menu = $menuConfig['items'];
+$menuConfig = is_array($menuConfig) ? $menuConfig : [];
+$menu = isset($menuConfig['items']) && is_array($menuConfig['items']) ? $menuConfig['items'] : [];
+$menuCategories = array_keys($menu);
 $menuOwnerConfirmed = !empty($menuConfig['owner_confirmed']);
 
 
@@ -436,7 +438,7 @@ require __DIR__ . '/include/page-head.php';
 
         <div class="restaurant-booklet-controls" aria-label="Menu booklet controls">
           <button type="button" data-menu-previous disabled>← Previous</button>
-          <p data-menu-page-status aria-live="polite" role="status">Page 1 of <?= count($menuCategories) ?>: <?= e($menuCategories[0]) ?></p>
+          <p data-menu-page-status aria-live="polite" role="status">Page 1 of <?= count($menuCategories) ?>: <?= e($menuCategories[0] ?? 'Menu') ?></p>
           <button type="button" data-menu-next>Next →</button>
           <button type="button" data-menu-print>Print menu</button>
         </div>
