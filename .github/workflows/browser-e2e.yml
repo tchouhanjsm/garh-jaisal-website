@@ -70,20 +70,35 @@ jobs:
           if-no-files-found: warn
           retention-days: 7
 
-      - name: Upload screenshots, traces, HTML report, and audit inventories
+      - name: Upload curated visual and audit evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: browser-e2e-evidence-${{ github.run_number }}
           path: |
-            artifacts/screenshots/
-            artifacts/seo-inventory/
-            artifacts/performance-baseline/
-            artifacts/image-payload-audit/
-            artifacts/image-accessibility/
-            artifacts/page-layout-inventory/
-            artifacts/head-snapshot/
-            test-results/
-            playwright-report/
+            artifacts/screenshots/home-hero-review/*.jpg
+            artifacts/screenshots/responsive-spotchecks/*.png
+            artifacts/seo-inventory/**/*.json
+            artifacts/performance-baseline/**/*.json
+            artifacts/image-payload-audit/**/*.json
+            artifacts/image-accessibility/**/*.json
+            artifacts/page-layout-inventory/**/*.json
+            artifacts/head-snapshot/**/*.json
           if-no-files-found: warn
           retention-days: 14
+
+      # Successful runs already publish the standalone page sheet and curated
+      # screenshots. Upload only actionable Playwright failure files when needed;
+      # do not re-upload screenshot attachments or the duplicate HTML report.
+      - name: Upload Playwright failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-e2e-failure-diagnostics-${{ github.run_number }}
+          path: |
+            test-results/**/trace.zip
+            test-results/**/test-failed-*.png
+            test-results/**/video.webm
+            test-results/**/error-context.md
+          if-no-files-found: warn
+          retention-days: 7
