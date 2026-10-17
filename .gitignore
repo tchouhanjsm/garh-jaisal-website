@@ -11,5 +11,6 @@ node_modules/
 
 # Browser automation output (generated locally and in CI)
 artifacts/
+img/responsive/
 test-results/
 playwright-report/

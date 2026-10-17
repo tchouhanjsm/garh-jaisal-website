@@ -18,7 +18,7 @@ $productBookUrl = (string) ($product['book_url'] ?? '');
   <a class="product-card-media" href="<?= htmlspecialchars($productUrl, ENT_QUOTES, 'UTF-8') ?>">
     <img
       src="<?= htmlspecialchars($productImage, ENT_QUOTES, 'UTF-8') ?>"
-      <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($productImage) : '' ?>
+      <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($productImage, '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') : '' ?>
       alt="<?= htmlspecialchars($productAlt, ENT_QUOTES, 'UTF-8') ?>"
       loading="lazy"
       decoding="async"

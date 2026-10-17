@@ -127,7 +127,7 @@ require __DIR__ . '/page-head.php';
       <img
         src="<?= htmlspecialchars($experience['hero_image'], ENT_QUOTES, 'UTF-8') ?>"
         alt="<?= htmlspecialchars($experience['hero_alt'], ENT_QUOTES, 'UTF-8') ?>"
-        <?= gj_image_dimension_attributes($experience['hero_image']) ?>
+        <?= gj_image_dimension_attributes($experience['hero_image'], '100vw') ?>
         fetchpriority="high"
       >
       <div class="experience-hero-overlay"></div>
@@ -197,7 +197,7 @@ require __DIR__ . '/page-head.php';
             <figure class="experience-photo-card">
               <img
                 src="<?= htmlspecialchars($photo['src'], ENT_QUOTES, 'UTF-8') ?>"
-                <?= gj_image_dimension_attributes($photo['src']) ?>
+                <?= gj_image_dimension_attributes($photo['src'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
                 alt="<?= htmlspecialchars($photo['alt'], ENT_QUOTES, 'UTF-8') ?>"
                 loading="lazy"
                 decoding="async"
@@ -319,7 +319,7 @@ require __DIR__ . '/page-head.php';
             <article class="related-card">
               <a href="<?= htmlspecialchars($related['slug'], ENT_QUOTES, 'UTF-8') ?>.php">
                 <span class="related-card-image">
-                  <img src="<?= htmlspecialchars($related['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($related['hero_image']) ?> alt="<?= htmlspecialchars($related['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy">
+                  <img src="<?= htmlspecialchars($related['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($related['hero_image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($related['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy">
                 </span>
                 <span class="related-card-body">
                   <span class="related-card-kicker"><?= htmlspecialchars($related['eyebrow'], ENT_QUOTES, 'UTF-8') ?></span>

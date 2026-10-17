@@ -69,9 +69,9 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
           if (document.activeElement instanceof HTMLElement) {
             document.activeElement.blur();
           }
-          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+          window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
         });
-        await page.waitForFunction(() => window.scrollY === 0);
+        await page.waitForFunction(() => window.scrollY === 0, null, { timeout: 3000 });
 
         let offset = 0;
         let steps = 0;
@@ -134,7 +134,7 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
           }
           window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
         });
-        await page.waitForFunction(() => window.scrollY === 0);
+        await page.waitForFunction(() => window.scrollY === 0, null, { timeout: 3000 });
         await page.waitForTimeout(100);
 
         const filename = routeSlug(route) + '-' + viewport.width + '.jpg';
@@ -230,7 +230,7 @@ test('builds a full-page screenshot sheet at 390px and 1280px for every sitemap 
         document.body.style.scrollBehavior = 'auto';
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       });
-      await page.waitForFunction(() => window.scrollY === 0);
+      await page.waitForFunction(() => window.scrollY === 0, null, { timeout: 3000 });
       await page.waitForTimeout(100);
 
       const filename = 'gallery-review-' + viewport.width + '.jpg';

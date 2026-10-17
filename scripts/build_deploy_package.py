@@ -103,6 +103,59 @@ def select_runtime_paths(tracked_paths: list[str]) -> list[str]:
     return sorted(path for path in set(tracked_paths) if is_runtime_path(path))
 
 
+def get_generated_responsive_paths(root: Path = ROOT) -> list[str]:
+    """Select manifest-approved responsive variants; reject unlisted files and symlinks."""
+    manifest_path = root / "scripts" / "responsive-image-assets-manifest.json"
+    output_root = root / "img" / "responsive"
+    if not manifest_path.is_file():
+        raise PackageError("Responsive image asset manifest is missing.")
+    if not output_root.exists():
+        return []
+    if output_root.is_symlink() or not output_root.is_dir():
+        raise PackageError("Generated responsive image directory is missing or is a symlink.")
+
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        widths = manifest["target_widths"]
+        sources = manifest["sources"]
+    except (OSError, KeyError, TypeError, json.JSONDecodeError) as error:
+        raise PackageError("Responsive image manifest is invalid: " + str(error)) from error
+    if not isinstance(widths, list) or not widths or not isinstance(sources, list) or not sources:
+        raise PackageError("Responsive image manifest must define sources and target widths.")
+
+    allowed: set[str] = set()
+    for source in sources:
+        if not isinstance(source, str):
+            raise PackageError("Responsive image source paths must be strings.")
+        pure = PurePosixPath(source)
+        if (
+            pure.is_absolute() or len(pure.parts) < 2 or pure.parts[0] != "img"
+            or ".." in pure.parts or "\\" in source
+        ):
+            raise PackageError("Unsafe responsive image source path: " + source)
+        relative = pure.relative_to("img")
+        for width in widths:
+            if not isinstance(width, int) or isinstance(width, bool) or width < 1:
+                raise PackageError("Responsive image widths must be positive integers.")
+            generated = PurePosixPath(
+                "img", "responsive", relative.parent.as_posix(), f"{relative.stem}-{width}.webp"
+            )
+            allowed.add(generated.as_posix())
+
+    actual: list[str] = []
+    for item in output_root.rglob("*"):
+        if item.is_symlink():
+            raise PackageError("Symlinks are not allowed in generated responsive images: " + item.relative_to(root).as_posix())
+        if item.is_file():
+            relative = item.relative_to(root).as_posix()
+            if relative not in allowed:
+                raise PackageError("Unexpected generated responsive image path: " + relative)
+            if item.suffix.lower() != ".webp" or item.stat().st_size <= 0:
+                raise PackageError("Generated responsive image is empty or not WebP: " + relative)
+            actual.append(relative)
+    return sorted(actual)
+
+
 def sitemap_route_targets(sitemap_text: str) -> list[tuple[str, str]]:
     locations = re.findall(
         r"<loc>\s*(https?://[^<]+)\s*</loc>", sitemap_text, flags=re.IGNORECASE
@@ -164,7 +217,10 @@ def sha256_bytes(data: bytes) -> str:
 
 def build_deployment_package(root: Path, output_dir: Path) -> dict:
     ensure_tracked_worktree_clean(root)
-    selected = select_runtime_paths(get_tracked_paths(root))
+    generated_responsive_paths = get_generated_responsive_paths(root)
+    if not generated_responsive_paths:
+        raise PackageError("No generated responsive WebP assets found; run scripts/build-responsive-image-assets.py first.")
+    selected = sorted(set(select_runtime_paths(get_tracked_paths(root)) + generated_responsive_paths))
     sitemap_path = root / "sitemap.xml"
     if not sitemap_path.is_file():
         raise PackageError("sitemap.xml is missing.")
@@ -219,6 +275,7 @@ def build_deployment_package(root: Path, output_dir: Path) -> dict:
         "published_route_count": len(routes),
         "published_routes": [route or "/" for route, _ in routes],
         "file_count": len(entries),
+        "generated_responsive_image_count": len(generated_responsive_paths),
         "total_uncompressed_bytes": total_bytes,
         "excluded_server_only_or_development_files": [
             PRIVATE_CONFIG_PATH, EXAMPLE_CONFIG_PATH, ".git/", ".github/",
@@ -260,12 +317,16 @@ def main() -> int:
     try:
         if arguments.check:
             tracked = get_tracked_paths(ROOT)
-            selected = select_runtime_paths(tracked)
+            generated_responsive_paths = get_generated_responsive_paths(ROOT)
+            if not generated_responsive_paths:
+                raise PackageError("No generated responsive WebP assets found; run scripts/build-responsive-image-assets.py first.")
+            selected = sorted(set(select_runtime_paths(tracked) + generated_responsive_paths))
             sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
             routes = validate_package_paths(selected, sitemap)
             result = {
                 "status": "PASS", "mode": "check-only", "file_count": len(selected),
                 "published_route_count": len(routes),
+                "generated_responsive_image_count": len(generated_responsive_paths),
                 "total_uncompressed_bytes": sum((ROOT / path).stat().st_size for path in selected),
                 "local_config_tracked": False, "development_directories_excluded": True,
             }

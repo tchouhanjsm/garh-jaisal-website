@@ -109,8 +109,8 @@ test('approved WebP derivatives preserve dimensions, map to the same source phot
       for (const image of images) {
         if (
           route === '/'
-          && image.source === 'img/v2/facade.jpg'
-          && image.current === 'img/optimized/v2/fort-from-roof.webp'
+          && image.source === 'img/optimized/v2/facade.webp'
+          && image.current.startsWith('img/responsive/v2/fort-from-roof-')
         ) {
           // The desktop homepage art-directs to an existing landscape image.
           // tests/e2e/home-hero-art-direction.spec.js verifies source and dimensions
@@ -123,24 +123,34 @@ test('approved WebP derivatives preserve dimensions, map to the same source phot
         if (!candidate.derivativeExists) {
           continue;
         }
-        const hasExpectedSourceSet = image.srcset.split(',').some(item => {
-          const candidateUrl = item.trim().split(/\s+/)[0];
-          return localPath(candidateUrl, 'http://127.0.0.1:8080') === candidate.derivative;
-        });
-        if (!hasExpectedSourceSet) {
-          report.findings.push({ route, source: candidate.source, issue: 'optimized-srcset-missing', srcset: image.srcset });
-          continue;
-        }
-        if (image.current !== candidate.derivative) {
-          report.findings.push({ route, source: candidate.source, issue: 'browser-did-not-select-optimized-derivative', current: image.current, expected: candidate.derivative });
+        const responsiveSource = path.posix.relative('img', candidate.source);
+        const responsiveParsed = path.posix.parse(responsiveSource);
+        const responsivePrefix = path.posix.join('img', 'responsive', responsiveParsed.dir, responsiveParsed.name);
+        const responsiveCandidates = [480, 800, 1200].map(width => responsivePrefix + '-' + width + '.webp');
+        const srcsetPaths = image.srcset.split(',').map(item => localPath(item.trim().split(/\s+/)[0], 'http://127.0.0.1:8080'));
+        const responsiveSelected = responsiveCandidates.includes(image.current) && srcsetPaths.includes(image.current);
+        const legacySelected = image.current === candidate.derivative && srcsetPaths.includes(candidate.derivative);
+        if (!legacySelected && !responsiveSelected) {
+          report.findings.push({ route, source: candidate.source, issue: 'approved-srcset-candidate-not-selected', current: image.current, expectedLegacy: candidate.derivative, expectedResponsive: responsiveCandidates, srcset: image.srcset });
           continue;
         }
         candidate.optimizedUsages += 1;
         if (!(image.width > 0 && image.height > 0)) {
           report.findings.push({ route, source: candidate.source, issue: 'missing-positive-dimensions' });
         }
-        if (image.naturalWidth > 0 && (image.naturalWidth !== image.width || image.naturalHeight !== image.height)) {
-          report.findings.push({ route, source: candidate.source, issue: 'intrinsic-dimensions-do-not-match-declared', width: image.width, height: image.height, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight });
+        if (image.naturalWidth > 0 && image.naturalHeight > 0) {
+          const declaredRatio = image.width / image.height;
+          const intrinsicRatio = image.naturalWidth / image.naturalHeight;
+          if (Math.abs(declaredRatio - intrinsicRatio) > 0.02) {
+            report.findings.push({ route, source: candidate.source, issue: 'declared-aspect-ratio-mismatch', width: image.width, height: image.height, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight });
+          }
+        }
+        if (responsiveSelected) {
+          const selectedFile = path.join(root, image.current);
+          const selectedBytes = fs.existsSync(selectedFile) ? fs.statSync(selectedFile).size : 0;
+          if (!(selectedBytes > 0 && selectedBytes < candidate.sourceBytes)) {
+            report.findings.push({ route, source: candidate.source, issue: 'responsive-derivative-not-smaller-than-source', selected: image.current, selectedBytes, sourceBytes: candidate.sourceBytes });
+          }
         }
       }
       report.routesChecked += 1;

@@ -1,9 +1,13 @@
+import json
+import tempfile
 import unittest
+from pathlib import Path
 
 from scripts.build_deploy_package import (
     EXAMPLE_CONFIG_PATH,
     PackageError,
     PRIVATE_CONFIG_PATH,
+    get_generated_responsive_paths,
     select_runtime_paths,
     sitemap_route_targets,
     validate_package_paths,
@@ -81,6 +85,37 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
             sitemap_route_targets(
                 "<urlset><url><loc>https://www.hotelgarhjaisal.com/%2e%2e/secret.php</loc></url></urlset>"
             )
+
+    def test_generated_responsive_paths_are_selected_from_manifest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            output = root / "img" / "responsive" / "v2"
+            output.mkdir(parents=True)
+            (root / "scripts" / "responsive-image-assets-manifest.json").write_text(json.dumps({
+                "target_widths": [480, 800],
+                "sources": ["img/v2/facade.jpg"],
+            }), encoding="utf-8")
+            (output / "facade-480.webp").write_bytes(b"test-webp-480")
+            (output / "facade-800.webp").write_bytes(b"test-webp-800")
+            self.assertEqual(get_generated_responsive_paths(root), [
+                "img/responsive/v2/facade-480.webp",
+                "img/responsive/v2/facade-800.webp",
+            ])
+
+    def test_generated_responsive_paths_reject_unlisted_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            output = root / "img" / "responsive"
+            output.mkdir(parents=True)
+            (root / "scripts" / "responsive-image-assets-manifest.json").write_text(json.dumps({
+                "target_widths": [480],
+                "sources": ["img/facade.jpg"],
+            }), encoding="utf-8")
+            (output / "unlisted.webp").write_bytes(b"unlisted")
+            with self.assertRaisesRegex(PackageError, "Unexpected generated responsive image path"):
+                get_generated_responsive_paths(root)
 
     def test_nested_published_route_fails_closed(self):
         with self.assertRaisesRegex(PackageError, "Unexpected nested published route"):

@@ -35,13 +35,31 @@ $faqItems = [
     ['question' => "Do all rooms have the same facilities?", 'answer' => "No. Facilities vary by room; compare each room’s listed features before choosing."],
     ['question' => "Where can I find arrival instructions?", 'answer' => "The Directions page explains how to reach the fort and the final walk to the haveli."],
 ];
+$buildRoomHeroPreload = static function () {
+    $srcset = [];
+    foreach ([480, 800, 1200] as $candidateWidth) {
+        $candidate = '/img/responsive/v2/purple-room-' . $candidateWidth . '.webp';
+        if (is_file(__DIR__ . $candidate) && !is_link(__DIR__ . $candidate)) {
+            $srcset[] = $candidate . ' ' . $candidateWidth . 'w';
+        }
+    }
+
+    $descriptor = [
+        'href' => $srcset ? strtok($srcset[0], ' ') : '/img/optimized/v2/purple-room.webp',
+        'fetchpriority' => 'high',
+    ];
+    if ($srcset) {
+        $descriptor['imagesrcset'] = implode(', ', $srcset);
+        $descriptor['imagesizes'] = '100vw';
+    }
+    return $descriptor;
+};
+
 $page = [
     'title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort, including Sweet Purple, Rising Sun, Scarlet, Opium, Red Maharani, Green and BlueSky.',
     'path' => '/room.php',
-    'preload' => [
-        ['href' => '/img/optimized/v2/purple-room.webp', 'fetchpriority' => 'high'],
-    ],
+    'preload' => [$buildRoomHeroPreload()],
     'og_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'og_description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort.',
     'og_image' => '/img/purple-room.jpg',
@@ -80,7 +98,7 @@ require __DIR__ . '/include/page-head.php';
 
   <section class="page-hero page-hero--photo rooms-hero" aria-labelledby="rooms-page-title">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/optimized/v2/purple-room.webp" <?= gj_image_dimension_attributes('img/optimized/v2/purple-room.webp') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/optimized/v2/purple-room.webp" <?= gj_image_dimension_attributes('img/optimized/v2/purple-room.webp', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell rooms-hero-grid">
       <div class="rooms-hero-copy">
@@ -203,7 +221,7 @@ require __DIR__ . '/include/page-head.php';
           <div class="room-card-media">
             <img
               src="<?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>"
-              <?= gj_image_dimension_attributes($room['image']) ?>
+              <?= gj_image_dimension_attributes($room['image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
               alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>"
               loading="lazy"
             >

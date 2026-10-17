@@ -23,6 +23,9 @@ for (const route of routes) {
   test(`renders ${route} without horizontal overflow`, async ({ page }, testInfo) => {
     const pageErrors = [];
     page.on('pageerror', error => pageErrors.push(error.message));
+    // Smoke screenshots verify layout independently of third-party font availability.
+    await page.route('https://fonts.googleapis.com/**', route => route.abort());
+    await page.route('https://fonts.gstatic.com/**', route => route.abort());
 
     const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
     expect(response, `No HTTP response for ${route}`).not.toBeNull();
@@ -63,7 +66,7 @@ for (const route of routes) {
       fs.mkdirSync(screenshotDir, { recursive: true });
       const screenshotPath = path.join(screenshotDir, `${routeName}.jpg`);
   
-      await page.screenshot({ path: screenshotPath, type: 'jpeg', quality: 72, fullPage: true, animations: 'disabled' });
+      await page.screenshot({ path: screenshotPath, type: 'jpeg', quality: 72, fullPage: true, animations: 'disabled', timeout: 20_000 });
       await testInfo.attach(`screenshot-${routeName}`, {
         path: screenshotPath,
         contentType: 'image/jpeg',

@@ -4,7 +4,7 @@ if (!function_exists('gj_image_dimension_attributes')) {
      * Return dimensions for a trusted local image and advertise a same-dimension WebP derivative when safe.
      * Original paths remain the fallback; derivatives are used only when valid and smaller.
      */
-    function gj_image_dimension_attributes($source)
+    function gj_image_dimension_attributes($source, $responsiveSizes = null)
     {
         static $dimensionCache = [];
         static $deliveryCache = [];
@@ -34,6 +34,55 @@ if (!function_exists('gj_image_dimension_attributes')) {
 
         [$width, $height] = $dimensionCache[$source];
         $attributes = 'width="' . $width . '" height="' . $height . '"';
+
+        // Responsive candidates are opt-in per slot. The source photo is unchanged;
+        // only verified generated derivatives smaller than the fallback are advertised.
+        if (is_string($responsiveSizes) && trim($responsiveSizes) !== '') {
+            $responsiveRelative = substr($source, 4);
+            if (strncmp($responsiveRelative, 'optimized/', 10) === 0) {
+                $responsiveRelative = substr($responsiveRelative, 10);
+            }
+            $responsiveInfo = pathinfo($responsiveRelative);
+            $responsiveDirectory = ($responsiveInfo['dirname'] ?? '.') === '.'
+                ? ''
+                : $responsiveInfo['dirname'] . '/';
+            $responsiveSourceBytes = is_file($imagePath) ? @filesize($imagePath) : false;
+            $responsiveSrcset = [];
+
+            foreach ([480, 800, 1200] as $candidateWidth) {
+                if ($candidateWidth >= $width) {
+                    continue;
+                }
+                $candidateSource = 'img/responsive/' . $responsiveDirectory . $responsiveInfo['filename'] . '-' . $candidateWidth . '.webp';
+                $candidatePath = __DIR__ . '/../' . $candidateSource;
+                $candidateSize = is_file($candidatePath) && !is_link($candidatePath) ? @getimagesize($candidatePath) : false;
+                $candidateBytes = is_file($candidatePath) && !is_link($candidatePath) ? @filesize($candidatePath) : false;
+
+                if (
+                    !is_array($candidateSize)
+                    || !isset($candidateSize[0], $candidateSize[1], $candidateSize[2])
+                    || $candidateSize[0] !== $candidateWidth
+                    || $candidateSize[1] < 1
+                    || !defined('IMAGETYPE_WEBP')
+                    || $candidateSize[2] !== IMAGETYPE_WEBP
+                    || $candidateBytes === false
+                    || $responsiveSourceBytes === false
+                    || $candidateBytes <= 0
+                    || $candidateBytes >= $responsiveSourceBytes
+                    || abs(($candidateSize[0] / $candidateSize[1]) - ($width / $height)) > 0.02
+                ) {
+                    continue;
+                }
+
+                $responsiveSrcset[] = '/' . $candidateSource . ' ' . $candidateWidth . 'w';
+            }
+
+            if ($responsiveSrcset) {
+                return $attributes
+                    . ' srcset="' . htmlspecialchars(implode(', ', $responsiveSrcset), ENT_QUOTES, 'UTF-8') . '"'
+                    . ' sizes="' . htmlspecialchars(trim($responsiveSizes), ENT_QUOTES, 'UTF-8') . '"';
+            }
+        }
 
         if (!array_key_exists($source, $deliveryCache)) {
             $imagePath = __DIR__ . '/../' . $source;

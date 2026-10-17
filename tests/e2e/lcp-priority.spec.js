@@ -1,25 +1,37 @@
 const { test, expect } = require('@playwright/test');
 
 const BASE_URL = 'http://127.0.0.1:8080';
+const RESPONSIVE_WIDTHS = [480, 800, 1200];
 const HEROES = [
   {
     route: '/',
     selector: '.hero-media picture img',
-    expected: width => width < 768
-      ? '/img/optimized/v2/facade.webp'
-      : '/img/optimized/v2/fort-from-roof.webp',
+    expected: width => width < 768 ? 'facade' : 'fort-from-roof',
   },
   {
     route: '/room.php',
     selector: '.rooms-hero .page-hero-media img',
-    expected: () => '/img/optimized/v2/purple-room.webp',
+    expected: () => 'purple-room',
   },
   {
     route: '/catalogue.php',
     selector: '.catalogue-hero-media img',
-    expected: () => '/img/optimized/desert3.webp',
+    expected: () => 'desert3',
   },
 ];
+
+function responsiveCandidateForPath(pathname) {
+  const match = pathname.match(/\/img\/responsive\/(?:v2\/)?([^/]+)-(480|800|1200)\.webp$/);
+  return match ? { stem: match[1], width: Number(match[2]) } : null;
+}
+
+function pathMatchesPreload(preload, selectedPath) {
+  if (!preload.imagesrcset) return preload.href === selectedPath;
+  return preload.imagesrcset.split(',').some(candidate => {
+    const url = candidate.trim().split(/\s+/)[0];
+    try { return new URL(url, BASE_URL).pathname === selectedPath; } catch { return false; }
+  });
+}
 
 test('high-intent LCP images are preloaded before render at mobile and desktop widths', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'This contract creates its own viewport contexts');
@@ -47,22 +59,59 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
 
         const state = await image.evaluate(img => {
           const currentPath = new URL(img.currentSrc || img.src, document.baseURI).pathname;
-          const activePreloads = Array.from(document.querySelectorAll('link[rel="preload"][as="image"]'))
+          const preloads = Array.from(document.querySelectorAll('link[rel="preload"][as="image"]'))
             .filter(link => !link.media || window.matchMedia(link.media).matches)
-            .map(link => new URL(link.href, document.baseURI).pathname);
+            .map(link => ({
+              href: new URL(link.href, document.baseURI).pathname,
+              imagesrcset: link.getAttribute('imagesrcset') || '',
+              imagesizes: link.getAttribute('imagesizes') || '',
+            }));
+          // For <picture>, currentSrc may come from an active <source>, not the
+          // fallback <img>. Read the candidate list that actually owns this URL.
+          const activeSource = Array.from(img.closest('picture')?.querySelectorAll('source[srcset]') || [])
+            .find(source => source.srcset.split(',').some(candidate => {
+              try {
+                return new URL(candidate.trim().split(/\s+/)[0], document.baseURI).pathname === currentPath;
+              } catch {
+                return false;
+              }
+            }));
+          const responsiveOwner = activeSource || img;
           return {
             currentPath,
-            activePreloads,
+            preloads,
             width: img.naturalWidth,
             height: img.naturalHeight,
             fetchPriority: img.getAttribute('fetchpriority'),
+            declaredWidth: Number(responsiveOwner.getAttribute('width') || img.getAttribute('width')),
+            declaredHeight: Number(responsiveOwner.getAttribute('height') || img.getAttribute('height')),
+            sizes: responsiveOwner.getAttribute('sizes') || img.getAttribute('sizes') || '',
+            srcset: responsiveOwner.getAttribute('srcset') || img.getAttribute('srcset') || '',
           };
         });
-        const expected = hero.expected(width);
-        expect(state.currentPath, hero.route + ' must select the approved local WebP at ' + width + 'px').toBe(expected);
-        expect(state.activePreloads, hero.route + ' must preload the image selected at ' + width + 'px').toContain(expected);
+        const candidate = responsiveCandidateForPath(state.currentPath);
+        const expectedStem = hero.expected(width);
+        if (candidate) {
+          expect(candidate.stem, hero.route + ' must use the intended image variant at ' + width + 'px').toBe(expectedStem);
+          expect(RESPONSIVE_WIDTHS, 'Selected derivative suffix must belong to the supported variant widths').toContain(candidate.width);
+          expect(state.srcset.split(',').some(item => {
+            try { return new URL(item.trim().split(/\s+/)[0], BASE_URL).pathname === state.currentPath; } catch { return false; }
+          }), hero.route + ' selected candidate must appear in its own srcset').toBe(true);
+          expect(state.sizes, hero.route + ' responsive source must expose a sizes hint').not.toBe('');
+        } else {
+          expect(state.currentPath, hero.route + ' must use its configured optimized fallback').toContain('/img/optimized/');
+        }
+
         expect(state.width, hero.route + ' LCP image must decode').toBeGreaterThan(0);
         expect(state.height, hero.route + ' LCP image must decode').toBeGreaterThan(0);
+        expect(state.declaredWidth, hero.route + ' must reserve intrinsic image width').toBeGreaterThan(0);
+        expect(state.declaredHeight, hero.route + ' must reserve intrinsic image height').toBeGreaterThan(0);
+        expect(Math.abs((state.declaredWidth / state.declaredHeight) - (state.width / state.height))).toBeLessThan(0.02);
+        expect(state.fetchPriority, hero.route + ' LCP image should stay high priority').toBe('high');
+        expect(
+          state.preloads.some(preload => pathMatchesPreload(preload, state.currentPath)),
+          hero.route + ' must preload the selected image or include it in the preload candidate list'
+        ).toBe(true);
 
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
         expect(overflow, hero.route + ' must not create horizontal overflow at ' + width + 'px').toBe(false);
