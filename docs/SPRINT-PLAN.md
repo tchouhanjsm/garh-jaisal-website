@@ -657,4 +657,16 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Upload Playwright traces, failed-test screenshots, videos and error context only when a check fails. Do not upload the full HTML report or all test results on successful runs.
 - Keep public routes, runtime image choices, test coverage and page behaviour unchanged; no tests are skipped to shorten the workflow.
 - Acceptance: exact-head Browser E2E and restaurant-form validation finish within the job timeout; the compact evidence and page-sheet artifact upload successfully; Site Checks, package preflight and non-deploying Staging QA pass. Verify main-push CI after merge.
+- PR #94 merged on 2026-10-17 at `33b178fdfc40c9c498a857a92d04f5e49e71a3b3`, capping successful-run evidence uploads. The last full pre-PR-94 browser run reported 494 passed and one failure: Rooms hero height was 735.08px against the 720px ceiling; Sprint 45 addresses that release gate.
 - No cPanel upload or production deployment by this implementation.
+
+
+## Sprint 45 — Rooms hero mobile height regression (current PR)
+
+**Commercial goal:** keep Rooms discovery compact on common phone widths without removing context or shrinking the booking actions.
+
+- The last full browser run measured the Rooms photo hero at 735.08px on the 390px viewport, exceeding the existing 720px visual contract.
+- The prior flex-based action sizing still wrapped both CTAs vertically at 390px. Use a two-column grid for 381–760px while retaining the intentional stacked layout at 320px.
+- Keep both actions at least 44px high, keep all four quick facts visible, and preserve the existing hero photography and copy.
+- Extend the existing sitewide Playwright contract to assert the two actions share one row, remain inside the content rail and preserve touch-target size; the existing five-viewport hero-height assertion remains authoritative.
+- Acceptance: exact-head Site Checks, cPanel package preflight, non-deploying Staging QA, full Browser E2E and screenshot artifacts pass. No URL, metadata, menu facts, booking destination, analytics IDs or production deployment changes.
