@@ -50,7 +50,9 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 39 | Gallery curation, responsive image composition and progressive photo pagination | ✓ PR #88 merged at `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`; 36-photo selection, progressive reveal, responsive gallery evidence; owner photo/caption review remains |
 | 40 | Shared verified quick-facts component for Home, Rooms and Trip Planner | ✓ PR #89 merged: escaped semantic partial, registry-backed room count, clear shortlist/enquiry/booking distinction and responsive regression tests |
 | 41 | Critical-path loading and editorial featured content | ✓ PR #90 merged at `a256f22fe31b27a375876c28f3b433ccf009b36d`; exact-head Site Checks, cPanel package preflight, Staging QA and Browser E2E passed; production Lighthouse recheck remains owner-side |
-| 42 | Site-wide typography, spacing, container and image-ratio normalization | ◐ current PR: consolidated token scale and last-loaded shared layout layer across page archetypes; 320/390/768/1280/1440px regression coverage |
+| 42 | Site-wide typography, spacing, container and image-ratio normalization | ✓ PR #91 merged; shared normalization and 320/390/768/1280/1440px regression coverage |
+| 43 | Responsive image delivery and generated-asset package integrity | ✓ PR #93 merged; responsive variants/preloads and manifest-derived package gate; merge-head Browser E2E cancelled during oversized evidence upload |
+| 44 | Browser E2E evidence budget and release-gate reliability | ◐ new slice: retain the all-route page sheet, curated responsive screenshots and compact audit JSON on every run; upload traces/error screenshots only after failure |
 
 ---
 
@@ -629,7 +631,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - This work was merged in PR #90. Subsequent verification found one Trip Planner preload/source mismatch; the correction and browser regression guard are included in open PR #91.
 - Preload success alone is not a performance measurement; do not claim Core Web Vitals or Lighthouse gains without comparable measured runs.
 
-## Sprint 42 — site-wide layout normalization and guest-journey hardening (PR #91 open)
+## Sprint 42 — site-wide layout normalization and guest-journey hardening (PR #91 merged)
 
 **Commercial goal:** make every key page easier to scan, visually consistent and usable on mobile, while keeping booking/contact paths and operational statements truthful.
 
@@ -638,11 +640,21 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Keep the Trip Planner shortlist clearly separate from a confirmed booking. At 320px, the hero compacts without removing quick facts or reducing the 44px button minimum.
 - Extend browser evidence: eleven page archetypes at 320, 390, 768, 1280 and 1440px; the primary screenshot sheet remains 390px/1280px, with extra viewport captures at 320px/768px/1440px for Home, Rooms, Packages, Trip Planner, Dining and Gallery.
 - Browser E2E checks the Trip Planner's rendered hero path against its image preload to catch duplicate image downloads. Exact-head Site Checks, Browser E2E, deployment-package preflight and non-deploying Staging QA are required before the owner reviews the phase.
-- The PR is intentionally not merged or deployed by automation. External cPanel staging, real mail/CAPTCHA delivery, production PHP/Apache compatibility, and owner approval for menu/schedule/policy and enquiry-log privacy/retention remain release gates.
+- PR #91 is now merged into main. External cPanel staging, real mail/CAPTCHA delivery, production PHP/Apache compatibility, and owner approval for menu/schedule/policy and enquiry-log privacy/retention remain release gates.
 
-### Next evidence-led frontend batch — responsive image delivery
+### Sprint 43 — responsive image delivery and package integrity (PR #93 merged)
 
-- Audit the images actually selected by the browser on Home, Rooms, Packages, Trip Planner, Gallery and high-intent experience pages, recording source path, natural dimensions, selected candidate and transferred bytes at mobile and desktop widths.
-- Prefer existing approved optimized variants; use srcset/sizes and art-directed picture sources only where the source/crop has been reviewed. Preserve originals and do not promote review-only derivative candidates automatically.
-- Make preload path, media query, imagesrcset/imagesizes, and rendered currentSrc agree. Assert that below-the-fold images remain lazy, hero dimensions reserve space, and no unnecessary duplicate source is requested.
-- Review source/alt mapping and viewport screenshots before changing any crop. Deliver the image source contract, browser regression coverage, payload report and coherent page updates together in one PR.
+- PR #93 merged on 2026-10-17 at `3fe9073648f0b26f7384fdffd2dc12745f5e2da5`; its exact PR-head Site Checks, package preflight, non-deploying Staging QA and Browser E2E passed.
+- The PR adds generated responsive WebP candidates from the checked manifest, responsive `srcset`/`sizes` on selected high-intent images, matching hero preload candidates, and package gates that reject unlisted generated files/symlinks.
+- The merge-head Browser E2E run was cancelled while uploading its roughly 1.14 GB evidence bundle; reduce artifact duplication in Sprint 44. No cPanel upload or production deployment occurred.
+
+## Sprint 44 — Browser E2E evidence budget and release-gate reliability
+
+**Engineering goal:** finish the complete responsive browser suite and preserve review-quality evidence without spending the job time budget uploading duplicate screenshots and traces.
+
+- Keep the standalone `page-sheet` artifact for the all-route 390px/1280px screenshot sheet and selected 768px samples, plus expanded Gallery review captures.
+- On every run, upload only five-width homepage hero screenshots, the six-page responsive spotcheck set at 320px/768px/1440px, and JSON audit inventories. Do not upload the entire screenshots directory alongside duplicate copies from the HTML report and test results.
+- Upload Playwright traces, failed-test screenshots, videos and error context only when a check fails. Do not upload the full HTML report or all test results on successful runs.
+- Keep public routes, runtime image choices, test coverage and page behaviour unchanged; no tests are skipped to shorten the workflow.
+- Acceptance: exact-head Browser E2E and restaurant-form validation finish within the job timeout; the compact evidence and page-sheet artifact upload successfully; Site Checks, package preflight and non-deploying Staging QA pass. Verify main-push CI after merge.
+- No cPanel upload or production deployment by this implementation.

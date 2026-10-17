@@ -7,10 +7,15 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-17 |
-| Current phase | Sprint 43 — responsive image delivery, page layout stability and deployment payload integrity |
+| Current phase | Sprint 44 — Browser E2E evidence budget and release-gate reliability |
 | Base branch | `main` |
-| Baseline commit | `a4b7f1031ead7fcaca60174e47a3c6161449b24c` (verified `main` merge commit for PR #91) |
-| Last merged PR | [#91 — normalize site-wide layout and harden guest journeys](https://github.com/tchouhanjsm/garh-jaisal-website/pull/91) |
+| Baseline commit | `3fe9073648f0b26f7384fdffd2dc12745f5e2da5` (verified PR #93 merge commit, 2026-10-17) |
+| Last merged PR | [#93 — responsive image delivery and package-integrity gates](https://github.com/tchouhanjsm/garh-jaisal-website/pull/93) |
+| PR #93 PR-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39012551591) — exact head `cbf11bd2f84017561f1640c6acac40c04430e75d` |
+| PR #93 merge-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642234) |
+| PR #93 merge-head cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642162) |
+| PR #93 merge-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642158) |
+| PR #93 merge-head Browser E2E | [CANCELLED during evidence upload](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642303) — artifact upload reached about 1.14 GB and exhausted the 20-minute job window; PR-head Browser E2E passed. |
 | PR #90 merged | Merged 2026-10-16 at `a256f22fe31b27a375876c28f3b433ccf009b36d`; all four PR-head workflows passed before merge |
 | PR #89 merged | Merged 2026-10-16 at `1d8b02b6d0188a041bc824e30cbcfe565b14686f`; verified starting point for Sprint 41 |
 | PR #88 merged | [Merged 2026-10-16](https://github.com/tchouhanjsm/garh-jaisal-website/pull/88) at `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`; review head `dfbaa2c556bea8bfaabfcdfdf6b2ae51b76a7204` |
@@ -31,8 +36,8 @@
 | PR #86 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Owner review | Review the generated responsive-image sheet and five-width homepage hero screenshots; confirm image quality at 390px and 1280px first, then 320px, 768px and 1440px. Visual sign-off remains separate from CI. |
-| Next action | Finish exact-head Sprint 43 CI, review responsive asset evidence and confirm the cPanel package includes generated variants; owner retains merge and deployment authority. Real staging/production checks remain separate. |
+| Owner review | Review the generated responsive-image sheet and homepage-hero screenshots at 320px, 390px, 768px, 1280px and 1440px. Visual sign-off remains separate from CI. |
+| Next action | Reduce default browser-evidence duplication while preserving the complete page sheet, curated spotchecks and failure-only traces; require all checks, including merge-head Browser E2E, to pass. Owner retains merge/deployment authority; real cPanel verification remains separate. |
 ## 2026-10-17 — Backend audit remediation in existing PR #91
 
 - Kept changes in PR #91; no new PR, merge or deployment was performed.
@@ -41,16 +46,12 @@
 - Implemented in this PR: Rooms hero token/comment regression fix; sticky outer header; always-visible restaurant enquiry form with 30-minute preference, note, consent and unconfirmed status; private JSONL lead records with reference codes and per-IP/phone daily limits; contact lead persistence before mail; owner-gated menu prices; cPanel include-directory denial, index.php redirect, robots/cache updates; exclusions for five verified stale/documentation-only package files; optimized WebP Rooms hero; and first-pass metadata corrections. Exact-head CI is still the gate.
 - Last observed workflows before this follow-up: Site Checks, package preflight and non-deploying Staging QA passed at f216be5; Browser E2E failed the Rooms H1 floor. Exact-head checks for current changes are the merge gate.
 
-## Sprint 43 — Responsive image delivery and package integrity (in progress)
+## Sprint 43 — Responsive image delivery and package integrity (PR #93 merged)
 
-- Base: verified `main` merge SHA `a4b7f1031ead7fcaca60174e47a3c6161449b24c`, after PR #91 merged. Reused the already-committed Sprint 43 generator and 42-source manifest from `feature/sprint-43-responsive-image-delivery-20261017`; older image-audit branches are already ancestors of `main` and were not merged again.
-- Hardened manifest validation and output-path collision handling; `--check` now fully decodes every source; the configured byte-saving threshold is enforced; WebP derivatives preserve ICC profiles but do not copy EXIF/XMP metadata; originals stay untouched.
-- Integrated opt-in responsive `srcset`/`sizes` into the homepage hero (with viewport-aware matching preload candidates) and selected shared experience, editorial, room, catalogue and product-card images. Variant use is conditional on a generated file with valid WebP type, expected width, matching aspect ratio and smaller byte size; legacy fallback behavior remains.
-- Browser E2E and package jobs regenerate ignored `img/responsive/` outputs. Deployment packaging includes only generated candidates derived from the checked-in manifest and rejects unlisted generated files/symlinks. Generated binaries and visual-review artifacts are not committed.
-- Exact-head gates: PHP 7.4/8.2 Site Checks, responsive-image source/manifest review, browser image/layout/payload audits, deployment package tests/preflight, and Staging QA dry run. The last completed Browser E2E on head `0bf8bcfe61c0bd6b48fe25cfab9c035fe20982d9` ended with 491 passed, 2 failed, and 2 flaky. The two failures were an image-path assertion that stripped the leading slash but still expected `/img/...`, and a Rooms hero preload that did not include the responsive candidate selected by the browser. The flaky screenshot evidence showed a Gallery page-sheet scroll reset timing out and a homepage smoke screenshot waiting on remote web-font readiness. This follow-up corrects the path and preload contracts, uses a standards-based scroll reset with a bounded wait, and isolates the smoke screenshot from third-party font availability; all workflows must pass on the new exact head before merge. Human review of the generated image sheet and real cPanel verification remain release gates.
-- Follow-up on exact head `b79c24552d1e46ab5e19a7256b9a9afeff4a7383`: Site Checks, cPanel package preflight and the non-deploying Staging QA dry run passed; Browser E2E completed with 494 passed, 1 failed and 469 skipped. The remaining failure was in the test contract, not the homepage markup: the LCP assertion compared a selected desktop `<picture><source srcset>` candidate to the fallback `<img srcset>`. Updated the contract to inspect `srcset` and `sizes` on the picture source that contains the browser-selected `currentSrc`. Rerun all gates on the new exact head before merge. Evidence: [Browser E2E failure](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39009043440), [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39009043458), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39009043404), [Staging QA dry run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39009043589).
-- No merge, cPanel upload, live mail test or production deployment by this implementation.
-
+- PR #93 merged on 2026-10-17 at `3fe9073648f0b26f7384fdffd2dc12745f5e2da5`; responsive WebP generation, selected hero/card `srcset`/preloads, and manifest-derived cPanel package integrity are now on `main`.
+- The exact PR-head Browser E2E passed at `cbf11bd2f84017561f1640c6acac40c04430e75d`; Site Checks, cPanel package preflight and non-deploying Staging QA also passed on the merge head.
+- The additional `main` Browser E2E run was cancelled during artifact upload after the evidence bundle reached about 1.14 GB and exhausted the 20-minute job window. This is an evidence/CI runtime issue, not a test assertion failure; Sprint 44 reduces duplicate uploads while retaining the dedicated full-site page sheet, curated responsive spotchecks and failure-only trace/error artifacts.
+- Generated asset review and live cPanel MIME/cache/preload verification remain owner release gates; no cPanel upload or production deployment was performed.
 
 
 ## Phase roadmap
