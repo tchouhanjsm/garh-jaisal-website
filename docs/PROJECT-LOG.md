@@ -176,3 +176,13 @@
 - Added browser screenshot artifacts for Home, Rooms, Packages, Trip Planner, Dining and Gallery at 320px, 768px and 1440px. The established page sheet remains at 390px and 1280px.
 - The current-head CI result must be reviewed before merge. These are repository/browser checks only; they do not verify live cPanel behaviour or production delivery.
 - Owner release gates remain: external cPanel staging, actual CAPTCHA/mail delivery, approved menu/schedule/policy facts, and the access, backup, retention and privacy wording for private enquiry storage.
+
+
+## 2026-10-17 — Sprint 42 final responsive regression verification (PR #91)
+
+- The Rooms hero exceeded its 720px rendered-height contract at 390px. The 381–760px rule now reduces vertical stacking by placing the two primary actions on one row where space permits and tightening the facts panel. At 320px, actions remain stacked; all four quick facts remain present and action targets remain at least 44px.
+- Visual review of the resulting Home, Rooms, Packages, Trip Planner, Dining and Gallery screenshots confirmed the existing photographic subjects and approved art direction remain intact. The new Rooms 390px screenshot shows the hero below the 720px assertion threshold, readable facts and side-by-side actions.
+- Verified Browser E2E result on implementation SHA `75bf317fe9fb0491860bd5c88039daedbc8b2163`: **495 browser tests passed** (11.2 minutes) and the separate restaurant form-validation/analytics run passed **2 tests**. The Browser E2E run, Site Checks, non-deploying Staging QA and cPanel package preflight all concluded success on that exact SHA.
+- [Browser E2E run and evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39000426950), [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39000426956), [non-deploying Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39000426961), and [cPanel package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39000427072) are available for owner review.
+- Screenshot, trace, HTML-report and audit inventory uploads are available as the `page-sheet` and `browser-e2e-evidence-375` artifacts from the Browser E2E run. This evidence is from CI's local PHP server, not a claim that external cPanel staging or production was verified.
+- The remaining external release gates are unchanged: owner-reviewed cPanel staging, real CAPTCHA/mail delivery, owner confirmation of restaurant menu/schedule/policy facts, and explicit access/backup/retention/privacy decisions for private enquiry storage. No merge or deployment was performed.
