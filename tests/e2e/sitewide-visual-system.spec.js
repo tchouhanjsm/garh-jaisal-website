@@ -126,6 +126,27 @@ test('shared visual system stays consistent across five viewports and eleven pag
           expect(heroState.height, archetype.route + ' must not grow into an oversized image slab').toBeLessThanOrEqual(720);
         }
 
+        if (archetype.route === '/room.php' && viewport.width >= 381 && viewport.width <= 760) {
+          const actions = await page.locator('main .rooms-hero-actions').evaluate(container => {
+            const containerRect = container.getBoundingClientRect();
+            const buttons = Array.from(container.querySelectorAll('a.button'));
+            const rects = buttons.map(button => {
+              const rect = button.getBoundingClientRect();
+              return { top: rect.top, left: rect.left, right: rect.right, height: rect.height };
+            });
+            return {
+              count: rects.length,
+              rowDelta: rects.length === 2 ? Math.abs(rects[0].top - rects[1].top) : Number.POSITIVE_INFINITY,
+              minHeight: rects.length ? Math.min(...rects.map(rect => rect.height)) : 0,
+              withinContainer: rects.every(rect => rect.left >= containerRect.left - 1 && rect.right <= containerRect.right + 1),
+            };
+          });
+          expect(actions.count, 'Rooms must retain both hero actions at ' + viewport.width + 'px').toBe(2);
+          expect(actions.rowDelta, 'Rooms hero actions should share one row at ' + viewport.width + 'px').toBeLessThanOrEqual(1);
+          expect(actions.minHeight, 'Rooms hero actions must retain 44px targets').toBeGreaterThanOrEqual(44);
+          expect(actions.withinContainer, 'Rooms hero actions must not escape their content rail').toBe(true);
+        }
+
         if (archetype.media) {
           const media = page.locator(archetype.media).first();
           if (await media.count()) {
