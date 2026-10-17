@@ -37,6 +37,9 @@ test('server-rejected restaurant requests link each validation error to its fiel
   await form.locator('#date').fill('2020-01-01');
   await form.locator('#time').fill('');
   await form.locator('#guests').fill('0');
+  // Bypass the browser's maxlength constraint only for this synthetic request so
+  // the PHP validator receives 501 characters and its server-side guard is exercised.
+  await form.locator('#note').evaluate(element => element.removeAttribute('maxlength'));
   await form.locator('#note').fill('x'.repeat(501));
   await form.getByRole('button', { name: 'Request a table' }).click();
 
