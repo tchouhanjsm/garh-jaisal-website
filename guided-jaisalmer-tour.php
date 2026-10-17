@@ -23,13 +23,13 @@ $faqItems = [
 ];
 $page = [
     'title' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
-    'description' => 'Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.',
+    'description' => 'Explore Jaisalmer with half-day and full-day guided tours from Garh Jaisal Haveli, covering the Fort, havelis, markets and heritage areas.',
     'path' => '/guided-jaisalmer-tour.php',
     'og_title' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
-    'og_description' => 'Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.',
+    'og_description' => 'Explore Jaisalmer with half-day and full-day guided tours from Garh Jaisal Haveli, covering the Fort, havelis, markets and heritage areas.',
     'og_image' => '/img/v2/facade.jpg',
     'twitter_title' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
-    'twitter_description' => 'Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.',
+    'twitter_description' => 'Explore Jaisalmer with half-day and full-day guided tours from Garh Jaisal Haveli, covering the Fort, havelis, markets and heritage areas.',
     'twitter_image' => '/img/v2/facade.jpg',
     'css' => ['css/experiences.css'],
     'schema' => [
@@ -38,7 +38,7 @@ $page = [
             '@id' => $canonical . '#webpage',
             'url' => $canonical,
             'name' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
-            'description' => 'Explore Jaisalmer with a guided tour arranged from Garh Jaisal Haveli, with half-day and full-day options covering the fort, havelis, markets and heritage areas.',
+            'description' => 'Explore Jaisalmer with half-day and full-day guided tours from Garh Jaisal Haveli, covering the Fort, havelis, markets and heritage areas.',
             'isPartOf' => ['@id' => $siteUrl . '/#website'],
             'about' => ['@id' => $siteUrl . '/#hotel'],
             'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
