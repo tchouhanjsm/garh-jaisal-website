@@ -66,16 +66,27 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
               imagesrcset: link.getAttribute('imagesrcset') || '',
               imagesizes: link.getAttribute('imagesizes') || '',
             }));
+          // For <picture>, currentSrc may come from an active <source>, not the
+          // fallback <img>. Read the candidate list that actually owns this URL.
+          const activeSource = Array.from(img.closest('picture')?.querySelectorAll('source[srcset]') || [])
+            .find(source => source.srcset.split(',').some(candidate => {
+              try {
+                return new URL(candidate.trim().split(/\s+/)[0], document.baseURI).pathname === currentPath;
+              } catch {
+                return false;
+              }
+            }));
+          const responsiveOwner = activeSource || img;
           return {
             currentPath,
             preloads,
             width: img.naturalWidth,
             height: img.naturalHeight,
             fetchPriority: img.getAttribute('fetchpriority'),
-            declaredWidth: Number(img.getAttribute('width')),
-            declaredHeight: Number(img.getAttribute('height')),
-            sizes: img.getAttribute('sizes') || '',
-            srcset: img.getAttribute('srcset') || '',
+            declaredWidth: Number(responsiveOwner.getAttribute('width') || img.getAttribute('width')),
+            declaredHeight: Number(responsiveOwner.getAttribute('height') || img.getAttribute('height')),
+            sizes: responsiveOwner.getAttribute('sizes') || img.getAttribute('sizes') || '',
+            srcset: responsiveOwner.getAttribute('srcset') || img.getAttribute('srcset') || '',
           };
         });
         const candidate = responsiveCandidateForPath(state.currentPath);
