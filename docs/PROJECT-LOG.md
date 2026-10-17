@@ -197,3 +197,4 @@
 - Last full Browser E2E measured the Rooms hero at 735.08px on 390px; the contract ceiling is 720px.
 - Replaced the wrapping flex sizing with a two-column action grid for 381–760px; 320px remains stacked.
 - Added a regression assertion for same-row actions, 44px minimum targets and content-rail bounds.
+- Follow-up visual review found that, at a 320×700 viewport, the fixed mobile contact dock covered the bottom row of the Rooms quick-facts card. The small-screen Rooms hero now removes only the duplicated location/floor note and uses a shorter lead; browser coverage asserts that the full fact card clears the dock.
