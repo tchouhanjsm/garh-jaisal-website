@@ -24,6 +24,8 @@ $page = [
             'href' => '/img/optimized/v2/facade.webp',
             'media' => '(max-width: 767px)',
             'fetchpriority' => 'high',
+            'imagesrcset' => '/img/responsive/v2/facade-480.webp 480w, /img/responsive/v2/facade-800.webp 800w',
+            'imagesizes' => '100vw',
         ],
         [
             'href' => '/img/optimized/v2/fort-from-roof.webp',
@@ -49,6 +51,10 @@ $assert(
 $assert(
     strpos($html, 'href="/img/optimized/v2/fort-from-roof.webp" media="(min-width: 768px)" fetchpriority="high"') !== false,
     'The desktop image preload must include its validated media query and high priority.'
+);
+$assert(
+    strpos($html, 'imagesrcset="/img/responsive/v2/facade-480.webp 480w, /img/responsive/v2/facade-800.webp 800w" imagesizes="100vw"') !== false,
+    'Responsive image preloads must carry a candidate list and matching sizes.'
 );
 $assert(
     strpos($html, 'media="(max-width: 767px)" onload="alert(1)') === false,

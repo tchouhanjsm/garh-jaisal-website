@@ -124,6 +124,9 @@ jobs:
       - name: Install pinned image tooling
         run: python -m pip install Pillow==11.3.0
 
+      - name: Validate responsive image manifest and decode source images
+        run: python scripts/build-responsive-image-assets.py --check
+
       - name: Build responsive image review candidates
         run: python scripts/build-responsive-image-review.py
 

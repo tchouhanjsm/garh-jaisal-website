@@ -25,6 +25,12 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install pinned image tooling
+        run: python -m pip install Pillow==11.3.0
+
+      - name: Generate responsive assets before package preflight
+        run: python scripts/build-responsive-image-assets.py
+
       - name: Unit test package selection and safety gates
         run: python -m unittest discover --start-directory tests --pattern 'test_*.py' -v
 
@@ -44,6 +50,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      - name: Install pinned image tooling
+        run: python -m pip install Pillow==11.3.0
+
+      - name: Generate responsive WebP assets for the deployment archive
+        run: python scripts/build-responsive-image-assets.py
 
       - name: Build runtime ZIP and integrity manifest
         run: python scripts/build_deploy_package.py --output-dir artifacts/cpanel-deployment
