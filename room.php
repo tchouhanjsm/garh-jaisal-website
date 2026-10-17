@@ -106,8 +106,7 @@ require __DIR__ . '/include/page-head.php';
         <p class="eyebrow">Stay inside Jaisalmer Fort</p>
         <h1 id="rooms-page-title">Rooms at Garh Jaisal Haveli.</h1>
         <p class="rooms-hero-lede">
-          Find an individually styled heritage room, then check current rates
-          and availability through our booking system.
+          Choose a heritage room, then check current rates and availability.
         </p>
         <div class="rooms-hero-actions">
           <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check availability</a>

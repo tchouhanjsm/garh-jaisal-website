@@ -617,10 +617,11 @@ body .footer-bottom {
     font-size: 0.9rem;
   }
 
+  /* The same location/floor facts are repeated in the eyebrow and summary.
+     Hide only this redundant note on the smallest viewport so the complete
+     four-fact card stays above the fixed contact dock. */
   main.thar-sunset-story--rooms .rooms-hero p.rooms-hero-note {
-    margin-block-start: 0.5rem;
-    font-size: 0.75rem;
-    line-height: 1.3;
+    display: none;
   }
 
   main.thar-sunset-story--rooms .rooms-hero-summary {
@@ -724,9 +725,10 @@ body .footer-bottom {
 }
 
 
-/* Sprint 42 regression fix: at 381–760px, keep the Rooms hero from becoming
-   a full-screen stack. Two 44px+ actions share a row when their labels fit;
-   320px phones keep the safer stacked action layout above. */
+/* Sprint 45 regression fix: at 381–760px, place the two Rooms hero actions
+   in a guaranteed two-column row. The previous flex basis wrapped them at
+   390px, adding a full control-height to the hero. Targets stay >=44px; 320px
+   phones retain the intentional stacked action layout from the rule above. */
 @media (min-width: 381px) and (max-width: 760px) {
   main.thar-sunset-story--rooms .rooms-hero-grid {
     gap: 1rem;
@@ -734,20 +736,21 @@ body .footer-bottom {
   }
 
   main.thar-sunset-story--rooms .rooms-hero-actions {
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: stretch;
     gap: 0.625rem;
     margin-block-start: 0.75rem;
   }
 
   main.thar-sunset-story--rooms .rooms-hero-actions .button {
-    width: auto;
-    flex: 1 1 calc(50% - 0.625rem);
+    width: 100%;
     min-width: 0;
     min-height: 44px;
-    padding-inline: 0.75rem;
-    font-size: 0.9rem;
+    padding-inline: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.2;
+    text-align: center;
   }
 
   main.thar-sunset-story--rooms p.rooms-hero-note {

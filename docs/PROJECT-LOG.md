@@ -189,3 +189,12 @@
 - Added browser screenshot artifacts for Home, Rooms, Packages, Trip Planner, Dining and Gallery at 320px, 768px and 1440px. The established page sheet remains at 390px and 1280px.
 - The current-head CI result must be reviewed before merge. These are repository/browser checks only; they do not verify live cPanel behaviour or production delivery.
 - Owner release gates remain: external cPanel staging, actual CAPTCHA/mail delivery, approved menu/schedule/policy facts, and the access, backup, retention and privacy wording for private enquiry storage.
+
+
+## 2026-10-17 — Sprint 45 Rooms hero regression
+
+- Base: PR #94 merge commit `33b178fdfc40c9c498a857a92d04f5e49e71a3b3`.
+- Last full Browser E2E measured the Rooms hero at 735.08px on 390px; the contract ceiling is 720px.
+- Replaced the wrapping flex sizing with a two-column action grid for 381–760px; 320px remains stacked.
+- Added a regression assertion for same-row actions, 44px minimum targets and content-rail bounds.
+- Follow-up visual review found that, at a 320×700 viewport, the fixed mobile contact dock covered the bottom row of the Rooms quick-facts card. The small-screen Rooms hero now removes only the duplicated location/floor note and uses a shorter lead; browser coverage asserts that the full fact card clears the dock.
