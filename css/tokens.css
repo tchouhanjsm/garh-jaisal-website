@@ -482,13 +482,54 @@ body .footer-bottom {
 }
 
 @media (max-width: 380px) {
+  /* Protect the 320px layout: keep all four facts visible while trimming
+     only redundant vertical rhythm, not content or touch-target sizes. */
   main.thar-sunset-story--catalogue .catalogue-hero-content {
-    padding-block-start: 5.25rem;
+    padding-block: 3.75rem 0.75rem;
+  }
+
+  main.thar-sunset-story--catalogue .catalogue-hero h1 {
+    margin-block-end: 0.5rem;
+    font-size: 2.125rem;
+    line-height: 1.02;
+  }
+
+  main.thar-sunset-story--catalogue .catalogue-hero-content > p:not(.eyebrow) {
+    margin-block-end: 0.75rem;
+    font-size: 0.92rem;
+    line-height: 1.38;
+  }
+
+  main.thar-sunset-story--catalogue .catalogue-hero-content .actions {
+    gap: 0.5rem;
+  }
+
+  main.thar-sunset-story--catalogue .catalogue-hero-content .actions .button {
+    min-height: 44px;
+    padding-block: 0.625rem;
+  }
+
+  main.thar-sunset-story--catalogue .catalogue-hero-facts {
+    margin-block-start: 0.625rem;
   }
 
   main.thar-sunset-story--catalogue .catalogue-hero-facts .at-a-glance--hero {
-    padding: 0.625rem;
-    column-gap: 0.5rem;
+    padding: 0.5rem;
+    column-gap: 0.375rem;
+  }
+
+  main.thar-sunset-story--catalogue .catalogue-hero-facts .at-a-glance__item {
+    padding-block: 0.375rem;
+  }
+
+  main.thar-sunset-story--catalogue .catalogue-hero-facts .at-a-glance__label {
+    font-size: 0.66rem;
+    line-height: 1.1;
+  }
+
+  main.thar-sunset-story--catalogue .catalogue-hero-facts .at-a-glance__value {
+    font-size: 0.7rem;
+    line-height: 1.15;
   }
 }
 
