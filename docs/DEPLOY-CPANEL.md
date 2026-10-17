@@ -78,3 +78,9 @@ Restaurant menu records are in `include/menu-data.php`; prices remain hidden whi
 CI adds `php tests/php/lead-storage-validation.php`. Before a release, also verify the log path/permissions, actual owner notification and guest acknowledgement delivery, `/index.php` 301, `/include/*.php` 403, robots/redirect behavior, and cache headers on a real cPanel staging host. The repository staging workflow is non-deploying and is not proof of external-host behavior.
 
 The deployment package excludes `img/tent1.jpg`, root `restaurant.css`/`restaurant.js`, `thanx.png` and `css/owl.video.play.html`. These files remain in the repository; other image candidates are not deleted until references and owner visuals are reviewed.
+
+## Sprint 43 — responsive image delivery handoff
+
+The responsive variants in `img/responsive/` are generated during CI/package preparation and are intentionally absent from Git. Before uploading a locally assembled site, generate them with Python 3.12 and `Pillow==11.3.0`, then check the generated report and visual-review sheet. The cPanel package workflow performs this build and packages only manifest-approved outputs. The PHP runtime must be able to serve the WebP candidates from the generated directory; when a candidate is absent or fails the runtime type/dimension/aspect-ratio/byte checks, the helper falls back to the existing approved image. Do not delete the original source or optimized fallback assets during promotion.
+
+CI dry runs do not verify that generated files are served correctly from an actual cPanel staging host. Verify the deployed ZIP manifest and image requests (HTTP status, content type, selected responsive candidate, and preload alignment) on staging before production. Keep owner review of the generated image sheet and screenshots as a release gate.
