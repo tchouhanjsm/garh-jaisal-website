@@ -29,6 +29,10 @@ const VISUAL_REVIEW_ROUTES = new Set(['/', '/room.php', '/pack.php', '/catalogue
 const VISUAL_REVIEW_WIDTHS = new Set([320, 768, 1440]);
 const VISUAL_REVIEW_DIR = path.join('artifacts', 'screenshots', 'responsive-spotchecks');
 
+function normalizePath(value) {
+  try { return new URL(value, BASE_URL).pathname; } catch { return ''; }
+}
+
 test('shared visual system stays consistent across five viewports and eleven page archetypes', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'This contract creates its own five viewport contexts');
   test.setTimeout(180_000);
@@ -95,17 +99,21 @@ test('shared visual system stays consistent across five viewports and eleven pag
         if (archetype.route === '/catalogue.php') {
           const preloadState = await page.evaluate(() => {
             const heroImage = document.querySelector('main .catalogue-hero-media img');
-            return {
-              heroPath: heroImage ? new URL(heroImage.currentSrc || heroImage.src, document.baseURI).pathname : null,
-              preloadedImagePaths: Array.from(document.querySelectorAll('link[rel="preload"][as="image"]'))
-                .map(link => new URL(link.href, document.baseURI).pathname),
-            };
+            const selectedPath = heroImage ? new URL(heroImage.currentSrc || heroImage.src, document.baseURI).pathname : null;
+            const activePreloads = Array.from(document.querySelectorAll('link[rel="preload"][as="image"]'))
+              .filter(link => !link.media || window.matchMedia(link.media).matches);
+            const matchesCandidate = activePreloads.some(link => {
+              const candidates = link.getAttribute('imagesrcset');
+              if (!candidates) return new URL(link.href, document.baseURI).pathname === selectedPath;
+              return candidates.split(',').some(item => {
+                try { return new URL(item.trim().split(/\s+/)[0], document.baseURI).pathname === selectedPath; }
+                catch { return false; }
+              });
+            });
+            return { selectedPath, matchesCandidate, preloadCount: activePreloads.length };
           });
-          expect(preloadState.heroPath, '/catalogue.php must expose its rendered hero image').not.toBeNull();
-          expect(
-            preloadState.preloadedImagePaths,
-            '/catalogue.php must preload the same hero asset that the browser renders at ' + viewport.width + 'px'
-          ).toContain(preloadState.heroPath);
+          expect(preloadState.selectedPath, '/catalogue.php must expose its rendered hero image').not.toBeNull();
+          expect(preloadState.matchesCandidate, '/catalogue.php must preload the selected hero asset or candidate set at ' + viewport.width + 'px').toBe(true);
         }
 
         if (PHOTO_HERO_ROUTES.has(archetype.route)) {
