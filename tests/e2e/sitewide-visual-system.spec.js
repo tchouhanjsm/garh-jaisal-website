@@ -126,6 +126,18 @@ test('shared visual system stays consistent across five viewports and eleven pag
           expect(heroState.height, archetype.route + ' must not grow into an oversized image slab').toBeLessThanOrEqual(720);
         }
 
+        if (archetype.route === '/room.php' && viewport.width <= 380) {
+          const factsBounds = await page.locator('main .rooms-hero-summary').boundingBox();
+          const dockBounds = await page.locator('.mobile-cta').boundingBox();
+          expect(factsBounds, 'Rooms quick facts must be rendered at ' + viewport.width + 'px').not.toBeNull();
+          expect(dockBounds, 'The mobile booking dock must be rendered at ' + viewport.width + 'px').not.toBeNull();
+          expect(
+            factsBounds.y + factsBounds.height,
+            'At ' + viewport.width + 'px, all four Rooms facts must clear the fixed mobile booking dock'
+          ).toBeLessThanOrEqual(dockBounds.y + 1);
+          await expect(page.locator('main .rooms-hero-note')).toBeHidden();
+        }
+
         if (archetype.route === '/room.php' && viewport.width >= 381 && viewport.width <= 760) {
           const actions = await page.locator('main .rooms-hero-actions').evaluate(container => {
             const containerRect = container.getBoundingClientRect();
