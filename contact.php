@@ -138,7 +138,7 @@ $errorMessages = [
     'invalid' => 'Please check your name, email, and message, then try again.',
     'send' => 'We could not send your message. Please call or email the hotel instead.',
     'config' => 'The contact form is temporarily unavailable. Please call or email the hotel instead.',
-    'storage' => 'We could not securely record this enquiry. Please call or message the hotel instead.';
+    'storage' => 'We could not securely record this enquiry. Please call or message the hotel instead.',
 ];
 $errorMessage = $errorMessages[$errorKey] ?? '';
 
