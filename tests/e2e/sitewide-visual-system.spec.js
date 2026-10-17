@@ -1,4 +1,6 @@
 const { test, expect } = require('@playwright/test');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const BASE_URL = 'http://127.0.0.1:8080';
 const VIEWPORTS = [
@@ -23,6 +25,9 @@ const PAGE_ARCHETYPES = [
   { route: '/jaisalmer-fort-guide.php', hero: 'main .article-hero' },
 ];
 const PHOTO_HERO_ROUTES = new Set(['/', '/room.php', '/pack.php', '/catalogue.php', '/desert-safari.php']);
+const VISUAL_REVIEW_ROUTES = new Set(['/', '/room.php', '/pack.php', '/catalogue.php', '/restaurant.php', '/gallery.php']);
+const VISUAL_REVIEW_WIDTHS = new Set([320, 768, 1440]);
+const VISUAL_REVIEW_DIR = path.join('artifacts', 'screenshots', 'responsive-spotchecks');
 
 test('shared visual system stays consistent across five viewports and eleven page archetypes', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'This contract creates its own five viewport contexts');
@@ -87,6 +92,22 @@ test('shared visual system stays consistent across five viewports and eleven pag
         expect(state.tokensPresent, archetype.route + ' receives the shared scale tokens').toBe(true);
         expect(state.horizontalOverflow, archetype.route + ' must not introduce horizontal page overflow').toBe(false);
 
+        if (archetype.route === '/catalogue.php') {
+          const preloadState = await page.evaluate(() => {
+            const heroImage = document.querySelector('main .catalogue-hero-media img');
+            return {
+              heroPath: heroImage ? new URL(heroImage.currentSrc || heroImage.src, document.baseURI).pathname : null,
+              preloadedImagePaths: Array.from(document.querySelectorAll('link[rel="preload"][as="image"]'))
+                .map(link => new URL(link.href, document.baseURI).pathname),
+            };
+          });
+          expect(preloadState.heroPath, '/catalogue.php must expose its rendered hero image').not.toBeNull();
+          expect(
+            preloadState.preloadedImagePaths,
+            '/catalogue.php must preload the same hero asset that the browser renders at ' + viewport.width + 'px'
+          ).toContain(preloadState.heroPath);
+        }
+
         if (PHOTO_HERO_ROUTES.has(archetype.route)) {
           const heroState = await page.locator(archetype.hero).first().evaluate(element => {
             const style = window.getComputedStyle(element);
@@ -107,6 +128,21 @@ test('shared visual system stays consistent across five viewports and eleven pag
             expect(ratio, archetype.route + ' repeated card media should use a landscape frame').toBeGreaterThanOrEqual(1.4);
             expect(ratio, archetype.route + ' repeated card media should use a landscape frame').toBeLessThanOrEqual(1.8);
           }
+        }
+
+        if (VISUAL_REVIEW_ROUTES.has(archetype.route) && VISUAL_REVIEW_WIDTHS.has(viewport.width)) {
+          const hero = page.locator(archetype.hero).first();
+          const heroImage = hero.locator('img').first();
+          if (await heroImage.count()) {
+            await heroImage.evaluate(image => image.decode().catch(() => undefined));
+          }
+          fs.mkdirSync(VISUAL_REVIEW_DIR, { recursive: true });
+          const routeName = archetype.route === '/' ? 'home' : archetype.route.slice(1).replace(/\.php$/, '');
+          await page.screenshot({
+            path: path.join(VISUAL_REVIEW_DIR, routeName + '-' + viewport.width + '.png'),
+            fullPage: false,
+            animations: 'disabled',
+          });
         }
       }
     } finally {
