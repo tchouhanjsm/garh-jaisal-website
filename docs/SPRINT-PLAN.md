@@ -667,6 +667,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 
 - The last full browser run measured the Rooms photo hero at 735.08px on the 390px viewport, exceeding the existing 720px visual contract.
 - The prior flex-based action sizing still wrapped both CTAs vertically at 390px. Use a two-column grid for 381–760px while retaining the intentional stacked layout at 320px.
-- Keep both actions at least 44px high, keep all four quick facts visible, and preserve the existing hero photography and copy.
+- Keep both actions at least 44px high, keep all four quick facts visible, and preserve the existing hero photography.
+- At 320×700, ensure the full Rooms fact card clears the fixed mobile contact dock. Use shorter copy and hide only the redundant location/floor note at widths up to 380px; retain the eyebrow and all four facts.
 - Extend the existing sitewide Playwright contract to assert the two actions share one row, remain inside the content rail and preserve touch-target size; the existing five-viewport hero-height assertion remains authoritative.
 - Acceptance: exact-head Site Checks, cPanel package preflight, non-deploying Staging QA, full Browser E2E and screenshot artifacts pass. No URL, metadata, menu facts, booking destination, analytics IDs or production deployment changes.
