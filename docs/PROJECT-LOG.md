@@ -159,3 +159,10 @@
 - The new `docs/BACKEND-DEBUGGING-REMEDIATION-2026-10-17.md` tracks implemented, partial and owner-blocked findings separately.
 - Known limitations: no external cPanel/production deployment, no real mailbox delivery proof, no owner-approved restaurant schedule/menu/policy facts, and no broad responsive image derivative generation or deletion of heuristic orphan candidates.
 - Exact-head workflow results must be refreshed after the final commit; earlier success from a prior head is not evidence for current changes.
+
+## 2026-10-17 — Metadata/schema follow-up in PR #91
+
+- Completed the remaining metadata length warnings called out in the attached debugging report, including the Blog title, restaurant description, guided-tour description, shared experience records and shared editorial guide records.
+- Changed `book-rooms-in-jaisalmer.php` from `Article` to `WebPage` and added a visible breadcrumb plus matching `BreadcrumbList` schema.
+- Updated sitemap generation so `lastmod` incorporates the shared experience/editorial data file when a URL's content is driven by that registry, preventing stale timestamps after shared-data edits.
+- Broader image derivatives and `srcset`/`sizes`, external cPanel proof, SMTP delivery, owner-approved restaurant schedule/menu and privacy retention remain explicit release gates.

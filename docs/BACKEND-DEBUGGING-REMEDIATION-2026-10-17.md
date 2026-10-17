@@ -35,3 +35,10 @@ Delivery target: existing PR #91 only. No new PR was created; the PR has not bee
 7. Additional metadata/schema/content warnings from the audit are still open; do not invent opening hours, prices, ratings, policies, route inclusions or guide availability to close them.
 8. Self-hosted fonts remain deliberately deferred pending license and byte-size review.
 9. Refresh workflows on the final PR head before merge; previous-head pass results are not current-head evidence.
+
+## Second metadata/schema pass
+
+- Corrected the remaining audited title/description length warnings in shared experience/editorial registries and on Blog, guided-tour hub and restaurant pages.
+- Retyped `book-rooms-in-jaisalmer.php` from `Article` to `WebPage`; added a visible breadcrumb and matching structured breadcrumb. Canonical/schema URLs use the site URL from configuration.
+- The sitemap generator now considers shared experience/editorial registries when deriving `lastmod`, as well as the corresponding PHP route file. The committed sitemap reflects those source-file dates.
+- This closes the report's listed metadata and guide-schema gaps; responsive image-weight remediation remains partial.
