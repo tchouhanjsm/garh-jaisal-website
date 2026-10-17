@@ -617,3 +617,32 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Trip Planner surfaces the available product categories, tab-scoped shortlist, user-reviewed WhatsApp draft and a plain statement that a shortlist is not a confirmed booking.
 - Reuse `.at-a-glance` tokens, keep information on a light surface, and assert exact rendered labels/values plus no horizontal overflow at 320, 390, 768, 1280 and 1440px.
 - Preserve all public URLs, canonicals, schemas, menu data, prices, booking URLs, enquiry behavior, both GA4 IDs and the no-server-side-lead boundary. Owner retains merge and deployment.
+
+
+## Sprint 41 — critical-path loading improvements (PR #90 merged)
+
+**Commercial goal:** show high-intent page content quickly without changing guest-facing facts or replacing approved photography.
+
+- Keep Google Fonts non-render-blocking with a no-JavaScript fallback.
+- Use viewport-aware preloads on the Home hero and retain explicit priority for the actual above-the-fold image.
+- Preserve intrinsic image dimensions and real source photography.
+- This work was merged in PR #90. Subsequent verification found one Trip Planner preload/source mismatch; the correction and browser regression guard are included in open PR #91.
+- Preload success alone is not a performance measurement; do not claim Core Web Vitals or Lighthouse gains without comparable measured runs.
+
+## Sprint 42 — site-wide layout normalization and guest-journey hardening (PR #91 open)
+
+**Commercial goal:** make every key page easier to scan, visually consistent and usable on mobile, while keeping booking/contact paths and operational statements truthful.
+
+- Normalize typography, spacing, content rails, card geometry and photo-hero sizing through the existing token stylesheet, loaded after page-specific CSS.
+- Retain deliberate page-specific art direction for the Gallery, dining, rooms and architectural imagery; do not replace genuine photographs with generated imagery.
+- Keep the Trip Planner shortlist clearly separate from a confirmed booking. At 320px, the hero compacts without removing quick facts or reducing the 44px button minimum.
+- Extend browser evidence: eleven page archetypes at 320, 390, 768, 1280 and 1440px; the primary screenshot sheet remains 390px/1280px, with extra viewport captures at 320px/768px/1440px for Home, Rooms, Packages, Trip Planner, Dining and Gallery.
+- Browser E2E checks the Trip Planner's rendered hero path against its image preload to catch duplicate image downloads. Exact-head Site Checks, Browser E2E, deployment-package preflight and non-deploying Staging QA are required before the owner reviews the phase.
+- The PR is intentionally not merged or deployed by automation. External cPanel staging, real mail/CAPTCHA delivery, production PHP/Apache compatibility, and owner approval for menu/schedule/policy and enquiry-log privacy/retention remain release gates.
+
+### Next evidence-led frontend batch — responsive image delivery
+
+- Audit the images actually selected by the browser on Home, Rooms, Packages, Trip Planner, Gallery and high-intent experience pages, recording source path, natural dimensions, selected candidate and transferred bytes at mobile and desktop widths.
+- Prefer existing approved optimized variants; use srcset/sizes and art-directed picture sources only where the source/crop has been reviewed. Preserve originals and do not promote review-only derivative candidates automatically.
+- Make preload path, media query, imagesrcset/imagesizes, and rendered currentSrc agree. Assert that below-the-fold images remain lazy, hero dimensions reserve space, and no unnecessary duplicate source is requested.
+- Review source/alt mapping and viewport screenshots before changing any crop. Deliver the image source contract, browser regression coverage, payload report and coherent page updates together in one PR.
