@@ -83,7 +83,7 @@ class ResponsiveImageAssetTests(unittest.TestCase):
                 "target_widths": [320, 480],
                 "sources": ["img/same.jpg", "img/same.png"],
             }), encoding="utf-8")
-            with patch.object(assets, "ROOT", root), patch.object(assets, "MANIFEST_PATH", manifest_path):
+            with patch.object(assets, "ROOT", root), patch.object(assets, "OUTPUT_ROOT", root / "img" / "responsive"), patch.object(assets, "MANIFEST_PATH", manifest_path):
                 with self.assertRaisesRegex(ValueError, "collide"):
                     assets.load_manifest()
 
