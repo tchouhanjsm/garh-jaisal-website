@@ -309,7 +309,7 @@ $faqItems = [
 ];
 $page = [
     'title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
-    'description' => "Rajasthani food at " . $restaurant['name'] . ", the rooftop restaurant at Garh Jaisal Haveli inside Jaisalmer Fort.",
+    'description' => "Rooftop dining at " . $restaurant['name'] . " inside Jaisalmer Fort. Explore the menu preview and request a table; confirm current hours, dishes and prices with the hotel.",
     'path' => '/restaurant.php',
     'og_type' => 'website',
     'og_title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
