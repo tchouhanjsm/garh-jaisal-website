@@ -36,12 +36,12 @@ test('rooftop and restaurant entry points reach the contextual dining enquiry', 
   const restaurantResponse = await page.goto('/restaurant.php#reserve', { waitUntil: 'domcontentloaded' });
   expect(restaurantResponse).not.toBeNull();
   expect(restaurantResponse.status()).toBeLessThan(400);
-  const fallback = page.locator('#reserve .restaurant-reservation-unavailable');
-  await fallback.getByRole('link', { name: 'Send a dining enquiry', exact: true }).click();
+  await expect(page.locator('#reserve form.restaurant-form')).toBeVisible();
+  await page.locator('.restaurant-contact-help a[href="contact.php?topic=dining"]').click();
   await expectDiningEnquiry(page);
 });
 
-test('dining guidance and reservation fallbacks fit mobile and desktop viewports', async ({ page }) => {
+test('dining guidance, the active reservation form and direct-contact links fit mobile and desktop viewports', async ({ page }) => {
   const response = await page.goto('/restaurant.php#reserve', { waitUntil: 'domcontentloaded' });
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
@@ -52,22 +52,35 @@ test('dining guidance and reservation fallbacks fit mobile and desktop viewports
   await expect(hours).toContainText('Confirm for your preferred date and time');
   await expect(hours).not.toContainText(/7:30 am|10:30 am|12:30 pm|3:30 pm|7:00 pm|11:00 pm/i);
 
-  const actions = page.locator('#reserve .restaurant-reservation-actions');
-  await expect(actions.getByRole('link', { name: 'Call the hotel' })).toBeVisible();
-  await expect(actions.getByRole('link', { name: 'Ask on WhatsApp' })).toBeVisible();
-  await expect(actions.getByRole('link', { name: 'Send a dining enquiry' })).toBeVisible();
+  const reserve = page.locator('#reserve');
+  const form = reserve.locator('form.restaurant-form');
+  await expect(form).toBeVisible();
+  await expect(form.getByRole('button', { name: 'Request a table' })).toBeVisible();
 
-  const metrics = await page.evaluate(() => ({
-    viewport: window.innerWidth,
-    document: document.documentElement.scrollWidth,
-    actions: document.querySelector('#reserve .restaurant-reservation-actions').scrollWidth,
-    actionsClient: document.querySelector('#reserve .restaurant-reservation-actions').clientWidth,
-  }));
+  const callLink = reserve.locator('a[href^="tel:"]').first();
+  await expect(callLink).toBeVisible();
+  await expect(callLink).toHaveAttribute('href', /^tel:/);
+
+  const whatsappLink = reserve.locator('a[href^="https://wa.me/"]').first();
+  await expect(whatsappLink).toBeVisible();
+  await expect(whatsappLink).toHaveAttribute('target', '_blank');
+  await expect(whatsappLink).toHaveAttribute('rel', /noopener/);
+
+  const diningEnquiry = page.locator('.restaurant-contact-help a[href="contact.php?topic=dining"]');
+  await expect(diningEnquiry).toBeVisible();
+
+  const metrics = await page.evaluate(() => {
+    const reserveGrid = document.querySelector('#reserve .restaurant-reserve-grid');
+    return {
+      viewport: window.innerWidth,
+      document: document.documentElement.scrollWidth,
+      reserveGrid: reserveGrid.scrollWidth,
+      reserveGridClient: reserveGrid.clientWidth,
+    };
+  });
   expect(metrics.document, 'Restaurant page has no horizontal overflow').toBeLessThanOrEqual(metrics.viewport + 1);
-  expect(metrics.actions, 'Dining contact actions fit their container').toBeLessThanOrEqual(metrics.actionsClient + 1);
+  expect(metrics.reserveGrid, 'The reservation section fits its layout container').toBeLessThanOrEqual(metrics.reserveGridClient + 1);
 
-  for (const link of await actions.getByRole('link').all()) {
-    const box = await link.boundingBox();
-    expect(box?.height ?? 0, 'Dining contact links remain large enough to tap').toBeGreaterThanOrEqual(44);
-  }
+  const whatsappBox = await whatsappLink.boundingBox();
+  expect(whatsappBox?.height ?? 0, 'WhatsApp action remains large enough to tap').toBeGreaterThanOrEqual(44);
 });
