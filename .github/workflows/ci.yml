@@ -62,6 +62,8 @@ jobs:
 
       - name: Verify safe preloads and non-blocking fonts
         run: php tests/php/preload-contract.php
+      - name: Test image-dimension cache reuse
+        run: php tests/php/image-dimension-cache-contract.php
 
       - name: Verify experience discovery shortlist contract
         run: php tests/php/experience-discovery.php

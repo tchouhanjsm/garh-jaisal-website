@@ -54,7 +54,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 43 | Responsive image delivery and generated-asset package integrity | ✓ PR #93 merged; responsive variants/preloads and manifest-derived package gate; merge-head Browser E2E cancelled during oversized evidence upload |
 | 44 | Browser E2E evidence budget and release-gate reliability | ◐ new slice: retain the all-route page sheet, curated responsive screenshots and compact audit JSON on every run; upload traces/error screenshots only after failure |
 | 45 | Rooms hero mobile height and quick-facts clearance | ✓ PR #95 merged at `a20640d8e0e4c3a83f34ff21373828b1ec4e6c0e`; exact-main Site Checks, package preflight, Staging QA dry run and Browser E2E passed |
-| 46 | Owner visual-evidence review and cPanel staging readiness | ◐ Review PR #95 screenshot artifacts; keep resized image candidates unpromoted until owner approval; execute external staging gate only with owner-supplied staging URL and deployed SHA |
+| 46 | Owner visual-evidence review and cPanel staging readiness | ◐ Review approved screenshot artifacts and execute external staging only with owner-supplied staging URL and deployed SHA; production parity remains unresolved |
+| 47 | Arrival, transfer and dining claim accuracy | ◐ Remove unapproved transfer fares/time estimates and unconfirmed Home/rooftop meal-service implications; guard the responsive image helper's cached path and add PHP/browser regression coverage. Keep production deployment owner-controlled. |
 
 ---
 
@@ -688,3 +689,14 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Keep resized 480/800/1200px candidates out of runtime paths until a person approves full-size crop/sharpness and source mapping. The existing browser audit records selected `currentSrc`, natural/intrinsic dimensions, loading priority and visible/eager state; resource timing byte counts may be unavailable or zero.
 - The separate staging dispatch requires an owner-supplied HTTPS staging origin and exact deployed package SHA. Only that dispatch can test a real external host; confirm Apache/PHP behavior, responsive WebP MIME types, cache headers, preloads, CAPTCHA configuration and mail delivery without recording secret values.
 - Owner-blocked: staging URL/access, cPanel PHP version, real CAPTCHA/mail delivery, restaurant operating schedule/menu prices, approved privacy/controller/retention wording and booking cancellation terms.
+
+
+## Sprint 47 — arrival, transfer and dining claim accuracy
+
+**Commercial goal:** make the arrival decision trustworthy without implying that an unconfirmed transfer, fare, schedule, breakfast service or drink offering is guaranteed.
+
+- Directions keeps the established Fort Parking / fort-entrance walking facts and the existing contact/map/book paths, but directs guests to confirm current transfer route, vehicle, pickup point, fare and timing for their date.
+- Home and Rooftop Dining describe the setting without promising breakfast, an unverified drinks offering, or sunrise/all-day meal service; guests are told to confirm current dining service times and menu options.
+- Playwright checks rendered Directions copy for unapproved transfer fares/timing and verifies that both Home and Rooftop Dining keep service-time language qualified.
+- No new transport estimator, new public price, service-hour promise, booking behavior, URL, schema fact, analytics ID or production change is introduced.
+- Release gate remains external staging on the owner-supplied HTTPS origin and exact deployed SHA; confirm web server behavior, images, CAPTCHA and mail without exposing secrets.

@@ -17,8 +17,8 @@ if (!function_exists('gj_image_dimension_attributes')) {
             return '';
         }
 
+        $imagePath = __DIR__ . '/../' . $source;
         if (!array_key_exists($source, $dimensionCache)) {
-            $imagePath = __DIR__ . '/../' . $source;
             $size = is_file($imagePath) ? @getimagesize($imagePath) : false;
             $dimensionCache[$source] = (
                 is_array($size)
@@ -85,7 +85,6 @@ if (!function_exists('gj_image_dimension_attributes')) {
         }
 
         if (!array_key_exists($source, $deliveryCache)) {
-            $imagePath = __DIR__ . '/../' . $source;
             $relativeSource = substr($source, 4);
             $sourceInfo = pathinfo($relativeSource);
             $sourceDirectory = ($sourceInfo['dirname'] ?? '.') === '.'

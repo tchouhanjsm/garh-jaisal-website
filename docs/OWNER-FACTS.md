@@ -34,6 +34,7 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | 13 | Which researched Jaisalmer itinerary themes may become actual offerings? Approve each theme and confirm route/stops, duration, vehicle, guide, access/permissions, fees, inclusions and price | | Car & City Tours and future detail pages |
 | 14 | Which exact Instagram posts/reels should be embedded on the restaurant page? | NEEDS OWNER INPUT: profile URL is confirmed, but specific public post/reel URLs have not been supplied. Keep a lightweight profile link until direct URLs are approved. | `restaurant.php` |
 | 15 | Are the current restaurant menu items and prices still accurate? | NEEDS OWNER INPUT: menu data is being separated into `include/menu-data.php`; prices must remain hidden until live-menu approval. | `include/menu-data.php`, `restaurant.php` |
+| 16 | Current railway-station, airport and local rickshaw transfer fares and journey-time estimates | NEEDS OWNER INPUT: do not publish fixed fares or pickup/travel-time promises until the current route, provider, quote and timing are approved. Confirm details for the requested date. | `direction.php` and future transport enquiry/quote UI |
 
 
 ## Research-led tour ideas — not approved offers

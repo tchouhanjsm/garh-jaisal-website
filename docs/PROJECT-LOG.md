@@ -7,10 +7,10 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-17 |
-| Current phase | Sprint 46 — visual evidence review and owner-controlled staging readiness |
+| Current phase | Sprint 47 — arrival, transfer and dining claim accuracy |
 | Base branch | `main` |
-| Baseline commit | `a20640d8e0e4c3a83f34ff21373828b1ec4e6c0e` (verified PR #95 merge commit, 2026-10-17) |
-| Last merged PR | [#95 — keep Rooms hero and facts visible on mobile](https://github.com/tchouhanjsm/garh-jaisal-website/pull/95) |
+| Baseline commit | `7dd4a8bf4c70ea1e8f6cd9a0d5f6cb23daca0472` (verified PR #96 merge commit, 2026-10-17) |
+| Last merged PR | [#96 — reconcile Sprint 45 and staging readiness](https://github.com/tchouhanjsm/garh-jaisal-website/pull/96) |
 | PR #93 PR-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39012551591) — exact head `cbf11bd2f84017561f1640c6acac40c04430e75d` |
 | PR #93 merge-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642234) |
 | PR #93 merge-head cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642162) |
@@ -42,7 +42,11 @@
 | PR #95 exact-main Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163561) — local/non-deploying QA, not an external staging host |
 | PR #95 exact-main Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163625) — [page sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163625/artifacts/12101465112) (31,501,727 bytes); [curated evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163625/artifacts/12101400416) (11,103,398 bytes) |
 | Open pull requests | None verified at start of Sprint 46 |
-| Next action | Review visual evidence and prepare the owner-controlled cPanel staging gate. Keep newly resized image candidates review-only until explicit visual approval; verify real staging PHP/Apache, MIME/cache, CAPTCHA and mail without exposing secrets. Owner retains merge/deployment authority. |
+| PR #96 merge-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260519) — exact main `7dd4a8bf4c70ea1e8f6cd9a0d5f6cb23daca0472` |
+| PR #96 merge-head cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260531) — package generated for review, not uploaded |
+| PR #96 merge-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260546) — local/non-deploying, not an external staging host |
+| PR #96 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528/artifacts/12102915342) (31.5 MB); [curated evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528/artifacts/12101769369) (11.1 MB) |
+| Next action | Finish exact-head Browser E2E for PR #97 and inspect its screenshot artifacts. Keep external cPanel staging, CAPTCHA/mail, privacy/retention and owner-approved policy facts as separate release gates; no merge or deployment by implementation. |
 ## 2026-10-17 — Backend audit remediation in existing PR #91
 
 - Kept changes in PR #91; no new PR, merge or deployment was performed.
@@ -212,3 +216,12 @@
 - The earlier PR-head browser run on an intermediate commit was cancelled; the successful exact-main Browser E2E above is the authoritative post-merge check.
 - These CI/staging-dry-run workflows use the local PHP server and do not prove live cPanel Apache/PHP, MIME/cache, CAPTCHA or mail delivery.
 - No cPanel upload or production deployment occurred. New resized image candidates remain review-only until the owner approves visual quality and image-to-page mapping.
+
+
+## Sprint 47 — arrival, transfer and dining claim accuracy (implementation PR)
+
+- Verified base is PR #96 merge `7dd4a8bf4c70ea1e8f6cd9a0d5f6cb23daca0472`; no open PRs existed at branch start.
+- Directions now asks guests to confirm transfer route, vehicle, pickup point, current quote, timing and availability instead of publishing unverified fixed fares or pickup/journey-time estimates. The Fort Parking walk remains approximately 300 metres / 5–6 minutes; the fort entrance remains approximately 200 metres / 3–4 minutes.
+- Home and Rooftop Dining copy describe the setting without promising breakfast, an unverified drinks offering or unconfirmed sunrise/all-day meal service; both direct guests to confirm current service times and menu options.
+- Playwright guards Directions against removed transfer prices/timing and checks qualified Home and rooftop dining copy. Public URLs, booking destinations, map/contact links and analytics IDs are unchanged.
+- Production still serves older content than repository `main` at the time of review. No cPanel upload or production deployment was attempted; release parity must be checked on owner-controlled staging first.
