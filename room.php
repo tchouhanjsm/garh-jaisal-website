@@ -35,13 +35,31 @@ $faqItems = [
     ['question' => "Do all rooms have the same facilities?", 'answer' => "No. Facilities vary by room; compare each room’s listed features before choosing."],
     ['question' => "Where can I find arrival instructions?", 'answer' => "The Directions page explains how to reach the fort and the final walk to the haveli."],
 ];
+$buildRoomHeroPreload = static function () {
+    $srcset = [];
+    foreach ([480, 800, 1200] as $candidateWidth) {
+        $candidate = '/img/responsive/v2/purple-room-' . $candidateWidth . '.webp';
+        if (is_file(__DIR__ . $candidate) && !is_link(__DIR__ . $candidate)) {
+            $srcset[] = $candidate . ' ' . $candidateWidth . 'w';
+        }
+    }
+
+    $descriptor = [
+        'href' => $srcset ? strtok($srcset[0], ' ') : '/img/optimized/v2/purple-room.webp',
+        'fetchpriority' => 'high',
+    ];
+    if ($srcset) {
+        $descriptor['imagesrcset'] = implode(', ', $srcset);
+        $descriptor['imagesizes'] = '100vw';
+    }
+    return $descriptor;
+};
+
 $page = [
     'title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort, including Sweet Purple, Rising Sun, Scarlet, Opium, Red Maharani, Green and BlueSky.',
     'path' => '/room.php',
-    'preload' => [
-        ['href' => '/img/optimized/v2/purple-room.webp', 'fetchpriority' => 'high'],
-    ],
+    'preload' => [$buildRoomHeroPreload()],
     'og_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'og_description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort.',
     'og_image' => '/img/purple-room.jpg',

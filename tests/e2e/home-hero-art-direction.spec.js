@@ -69,7 +69,7 @@ test('homepage hero art direction selects responsive images within asset budgets
 
       const imagePath = path.join(REPOSITORY_ROOT, state.currentPath);
       const responsiveMatch = state.currentPath.match(/^img\/responsive\/v2\/([^/]+)-(480|800|1200)\.webp$/);
-      expect(state.currentPath, 'The selected hero should use the intended photo family at ' + viewport.width + 'px').toContain('/img/responsive/');
+      expect(state.currentPath, 'The selected hero should use the intended photo family at ' + viewport.width + 'px').toContain('img/responsive/');
       expect(responsiveMatch, 'A selected responsive hero must identify a supported width candidate').not.toBeNull();
       expect(responsiveMatch[1], 'The selected hero should follow art direction at ' + viewport.width + 'px').toBe(viewport.expectedStem);
       expect(fs.existsSync(imagePath), state.currentPath + ' must be generated before this test runs').toBe(true);
