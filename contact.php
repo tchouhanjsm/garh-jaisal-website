@@ -138,6 +138,7 @@ $errorMessages = [
     'invalid' => 'Please check your name, email, and message, then try again.',
     'send' => 'We could not send your message. Please call or email the hotel instead.',
     'config' => 'The contact form is temporarily unavailable. Please call or email the hotel instead.',
+    'storage' => 'We could not securely record this enquiry. Please call or message the hotel instead.';
 ];
 $errorMessage = $errorMessages[$errorKey] ?? '';
 
@@ -268,6 +269,9 @@ require __DIR__ . '/include/page-head.php';
           <div class="contact-field">
             <label for="message">Message</label>
             <textarea id="message" name="message" maxlength="2000" rows="6" required><?= htmlspecialchars($prefilledMessage, ENT_QUOTES, 'UTF-8') ?></textarea>
+          </div>
+          <div class="contact-field contact-consent">
+            <label for="consent"><input type="checkbox" id="consent" name="consent" value="1" required> I agree that the hotel may use these details to respond to my enquiry.</label>
           </div>
           <div class="hp-field" aria-hidden="true">
             <label for="website">Leave this field empty</label>
