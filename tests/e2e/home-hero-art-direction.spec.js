@@ -13,7 +13,7 @@ const VIEWPORTS = [
   { width: 1440, height: 900, expected: 'img/responsive/v2/fort-from-roof-1200.webp', imageWidth: 1200, imageHeight: 800, maxBytes: 400 * 1024 },
 ];
 
-test('homepage hero art direction selects existing dimension-stable images within asset budgets', async ({ browser }, testInfo) => {
+test('homepage hero art direction selects responsive images within asset budgets', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'The home hero review creates its own five viewport contexts');
   test.setTimeout(120_000);
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
@@ -42,7 +42,7 @@ test('homepage hero art direction selects existing dimension-stable images withi
         const pictureSources = Array.from(img.closest('picture')?.querySelectorAll('source[srcset]') || []);
         const activeSource = pictureSources.find(source => source.srcset.split(',').some(candidate => {
           try {
-            return new URL(candidate.trim().split(' ')[0], document.baseURI).pathname === current.pathname;
+            return new URL(candidate.trim().split(/\s+/)[0], document.baseURI).pathname === current.pathname;
           } catch {
             return false;
           }
@@ -67,14 +67,17 @@ test('homepage hero art direction selects existing dimension-stable images withi
         };
       });
 
-      const fileBytes = fs.statSync(path.join(REPOSITORY_ROOT, viewport.expected)).size;
-      expect(state.currentPath, 'The selected hero image must match the art direction at ' + viewport.width + 'px').toBe(viewport.expected);
+      const imagePath = path.join(REPOSITORY_ROOT, viewport.expected);
+      expect(fs.existsSync(imagePath), viewport.expected + ' must be generated before this test runs').toBe(true);
+      const fileBytes = fs.statSync(imagePath).size;
+      expect(state.currentPath, 'The selected hero image must match art direction at ' + viewport.width + 'px').toBe(viewport.expected);
       expect(state.loaded, 'The selected hero image must decode at ' + viewport.width + 'px').toBe(true);
       expect(state.naturalWidth).toBe(viewport.imageWidth);
       expect(state.naturalHeight).toBe(viewport.imageHeight);
+      expect(state.declaredWidth).toBe(viewport.imageWidth);
+      expect(state.declaredHeight).toBe(viewport.imageHeight);
       expect(state.selectedSizes).toBe('100vw');
       expect(state.selectedSrcset.split(',').some(item => item.trim().split(/\s+/)[0].replace(/^\//, '') === state.currentPath)).toBe(true);
-      expect(Math.abs((state.declaredWidth / state.declaredHeight) - (state.naturalWidth / state.naturalHeight))).toBeLessThan(0.02);
       expect(state.fetchPriority).toBe('high');
       expect(state.alt).toBe('');
       expect(state.ariaHidden).toBe('true');
@@ -84,7 +87,7 @@ test('homepage hero art direction selects existing dimension-stable images withi
 
       const heroActionsClear = await page.evaluate(() => {
         const actions = document.querySelector('.hero-content .actions');
-        const dock = document.querySelector('.mobile-cta');
+        const dock = document.querySelector('.mobile-action-dock');
         if (!actions || !dock || getComputedStyle(dock).display === 'none') return true;
         return actions.getBoundingClientRect().bottom <= dock.getBoundingClientRect().top + 1;
       });
