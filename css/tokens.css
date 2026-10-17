@@ -603,7 +603,7 @@ body .footer-bottom {
 }
 
 
-/* Sprint 42 follow-up: keep the Rooms photo hero within the shared height contract.
+/* Sprint 42 follow-up: keep the Rooms photo hero within the shared height contract. */
 @media (min-width: 761px) {
   main.thar-sunset-story--rooms > .rooms-hero.page-hero--photo {
     min-height: clamp(480px, 65vh, 640px);
@@ -674,7 +674,7 @@ body .footer-bottom {
   }
 
   main.thar-sunset-story--rooms .rooms-hero h1 {
-    font-size: clamp(2rem, 3.2vw, 2.5rem);
+    font-size: clamp(2.1rem, 3.2vw, 2.5rem);
   }
 
   main.thar-sunset-story--rooms .rooms-hero-summary .at-a-glance--stacked {
