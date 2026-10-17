@@ -5,7 +5,7 @@ $hotelPhone = $siteConfig['hotel_phone'];
 $hotelPhoneDisplay = $siteConfig['hotel_phone_display'];
 $whatsappUrl = $siteConfig['whatsapp_url'];
 $hotelEmail = $siteConfig['hotel_email'];
-$sendMail = getenv('GJ_RESTAURANT_MAIL_ENABLED') === '1';
+$showReservationForm = true; // Keep enquiry capture visible independently of email availability.
 
 $restaurant = [
     'name' => "Garh Jaisal's Kitchen",
@@ -15,6 +15,7 @@ $restaurant = [
 $googleMapsUrl = 'https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8';
 $googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.6918725708306!2d70.9117074793457!3d26.913272400000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3947bd9e89a679cf%3A0xd196c3f044898c10!2sGarh%20Jaisal's%20Kitchen!5e0!3m2!1sen!2sin!4v1791990366078!5m2!1sen!2sin";
 $instagramUrl = 'https://www.instagram.com/garhjaisal/';
+require_once __DIR__ . '/include/lead-storage.php';
 
 /* Menu/prices are from the supplied restaurant design. Verify the live menu before staging. */
 $menuConfig = require __DIR__ . '/include/menu-data.php';
@@ -40,6 +41,8 @@ $waLink = $whatsappUrl . '?text=' . rawurlencode(
 
 $errors = [];
 $sent = false;
+$reservationReference = '';
+$reservationEmailNotified = false;
 $old = [
     'name' => '',
     'email' => '',
@@ -47,6 +50,8 @@ $old = [
     'date' => '',
     'time' => '',
     'guests' => '2',
+    'note' => '',
+    'consent' => '',
 ];
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -91,39 +96,120 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($old['date'] === '' || $old['date'] < $today) {
         $errors['date'] = 'Choose today or a future date.';
     }
-    if (!preg_match('/^(?:[01][0-9]|2[0-3]):[0-5][0-9]$/D', $old['time'])) {
-        $errors['time'] = 'Enter a valid preferred time; the hotel will confirm availability.';
+    if (!preg_match('/^(?:[01][0-9]|2[0-3]):(?:00|30)$/D', $old['time'])) {
+        $errors['time'] = 'Choose a preferred time on the hour or half-hour.';
     }
     if ((int) $old['guests'] < 1 || (int) $old['guests'] > 20) {
         $errors['guests'] = 'Guests must be between 1 and 20.';
     }
+    if (strlen($old['note']) > 500) {
+        $errors['note'] = 'Keep the special note to 500 characters or fewer.';
+    }
+    if ($old['consent'] !== '1') {
+        $errors['consent'] = 'Please agree that the hotel may use these details to respond to your request.';
+    }
+
+    // Enforce only schedule values explicitly supplied by the owner in private config.
+    if ($old['date'] !== '' && $old['date'] >= $today) {
+        $requestedWeekday = (int) date('w', strtotime($old['date']));
+        $requestedWeekdayName = strtolower(date('l', strtotime($old['date'])));
+        $closedDays = $siteConfig['restaurant_closed_days'] ?? [];
+        if (!is_array($closedDays)) {
+            $closedDays = [];
+        }
+        $closedDaysNormalized = array_map(static function ($day) {
+            if (is_string($day)) {
+                $day = strtolower(trim($day));
+                return ctype_digit($day) ? (int) $day : $day;
+            }
+            return $day;
+        }, $closedDays);
+        if (in_array($requestedWeekday, $closedDaysNormalized, true)
+            || in_array($requestedWeekdayName, $closedDaysNormalized, true)) {
+            $errors['date'] = 'The restaurant is marked closed on that day. Choose another date or contact the hotel.';
+        }
+        $sameDayCutoff = max(0, (int) ($siteConfig['restaurant_same_day_cutoff_minutes'] ?? 0));
+        if ($old['date'] === $today && $sameDayCutoff > 0
+            && preg_match('/^(?:[01][0-9]|2[0-3]):(?:00|30)$/D', $old['time'])
+            && strtotime($old['date'] . ' ' . $old['time']) < time() + ($sameDayCutoff * 60)) {
+            $errors['time'] = 'That time is inside the same-day request cut-off. Please call or message the hotel.';
+        }
+    }
 
     if (!$errors) {
-        if (!$sendMail) {
-            $errors['form'] = 'Online table requests are not enabled yet. Please call or message us on WhatsApp.';
+        $leadResult = gj_store_lead(
+            'restaurant_reservation',
+            [
+                'name' => $old['name'],
+                'phone' => $phone,
+                'email' => $old['email'],
+                'requested_date' => $old['date'],
+                'requested_time' => $old['time'],
+                'guests' => (int) $old['guests'],
+                'note' => $old['note'],
+                'consent' => true,
+            ],
+            (string) ($_SERVER['REMOTE_ADDR'] ?? ''),
+            $phone,
+            ['max_per_ip' => 8, 'max_per_phone' => 3]
+        );
+
+        if (empty($leadResult['ok'])) {
+            $errors['form'] = ($leadResult['error'] ?? '') === 'rate_limited'
+                ? 'Too many requests have been received from this connection or number today. Please call or message the hotel.'
+                : 'We could not securely record the request. Please call or message the hotel so your enquiry is not lost.';
         } else {
-            $safeName = str_replace(["\r", "\n"], '', $old['name']);
-            $subject = 'Restaurant table request - ' . $safeName;
-            $body = "New table request\n\n"
+            $reservationReference = $leadResult['reference'];
+            $subject = 'Restaurant table enquiry [' . $reservationReference . ']';
+            $body = "A new restaurant table enquiry was recorded. This is not a confirmed booking.\n\n"
+                . "Reference: {$reservationReference}\n"
                 . "Name: {$old['name']}\n"
                 . "WhatsApp: {$phone}\n"
                 . "Email: " . ($old['email'] ?: '-') . "\n"
-                . "Date: {$old['date']}\n"
-                . "Time: {$old['time']}\n"
-                . "Guests: {$old['guests']}\n";
+                . "Preferred date: {$old['date']}\n"
+                . "Preferred time: {$old['time']}\n"
+                . "Guests: {$old['guests']}\n"
+                . "Special note: " . ($old['note'] !== '' ? $old['note'] : '-') . "\n\n"
+                . "Please confirm current service hours and availability directly with the guest.";
 
-            $headers = 'Content-Type: text/plain; charset=UTF-8';
-            if ($old['email'] !== '') {
-                $replyTo = str_replace(["\r", "\n"], '', $old['email']);
-                $headers .= "\r\nReply-To: {$replyTo}";
+            $recipients = array_values(array_filter((array) ($siteConfig['inquiry_recipients'] ?? []), static function ($address) {
+                return is_string($address) && !preg_match('/[\r\n]/', $address)
+                    && filter_var($address, FILTER_VALIDATE_EMAIL) !== false;
+            }));
+            if ($recipients === [] && filter_var($hotelEmail, FILTER_VALIDATE_EMAIL) !== false) {
+                $recipients = [$hotelEmail];
+            }
+            $headers = "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\n";
+            if (filter_var($hotelEmail, FILTER_VALIDATE_EMAIL) !== false && !preg_match('/[\r\n]/', $hotelEmail)) {
+                $headers .= 'From: ' . $hotelEmail . "\r\n";
+            }
+            if ($old['email'] !== '' && filter_var($old['email'], FILTER_VALIDATE_EMAIL) !== false) {
+                $headers .= 'Reply-To: ' . str_replace(["\r", "\n"], '', $old['email']) . "\r\n";
             }
 
-            $sent = @mail($hotelEmail, $subject, $body, $headers);
-            if ($sent) {
-                $_SESSION['gjk_csrf'] = bin2hex(random_bytes(16));
-            } else {
-                $errors['form'] = 'We could not send the request. Please call or message us on WhatsApp.';
+            foreach ($recipients as $recipient) {
+                if (@mail($recipient, $subject, $body, $headers)) {
+                    $reservationEmailNotified = true;
+                }
             }
+            gj_record_lead_event($reservationReference, $reservationEmailNotified ? 'owner_notification_sent' : 'owner_notification_failed');
+
+            if ($reservationEmailNotified && $old['email'] !== '' && filter_var($old['email'], FILTER_VALIDATE_EMAIL) !== false) {
+                $guestSubject = 'We received your table enquiry - ' . $reservationReference;
+                $guestBody = "Thank you for contacting Garh Jaisal's Kitchen.\n\n"
+                    . "Your enquiry reference is {$reservationReference}. This is not a confirmed booking. "
+                    . "The hotel must confirm current service hours and availability before the table is reserved.\n\n"
+                    . "For urgent confirmation, call {$hotelPhoneDisplay} or contact the hotel on WhatsApp.";
+                $guestHeaders = "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\n";
+                if (filter_var($hotelEmail, FILTER_VALIDATE_EMAIL) !== false) {
+                    $guestHeaders .= 'From: ' . $hotelEmail . "\r\n";
+                }
+                $guestSent = @mail($old['email'], $guestSubject, $guestBody, $guestHeaders);
+                gj_record_lead_event($reservationReference, $guestSent ? 'guest_acknowledgement_sent' : 'guest_acknowledgement_failed');
+            }
+
+            $sent = true;
+            $_SESSION['gjk_csrf'] = bin2hex(random_bytes(16));
         }
     }
 }
@@ -312,7 +398,7 @@ require __DIR__ . '/include/page-head.php';
           <p class="eyebrow">From the menu</p>
           <h2 id="featured-heading">Featured dishes.</h2>
         </div>
-        <p>Some of the dishes included in the current restaurant design.</p>
+        <p>Menu descriptions are a preview. Please contact the hotel to confirm the current dishes and prices.</p>
       </div>
 
       <div class="restaurant-feature-grid">
@@ -323,7 +409,7 @@ require __DIR__ . '/include/page-head.php';
             </span>
             <h3><?= e($dish['n']) ?></h3>
             <p><?= e($dish['d']) ?></p>
-            <span class="restaurant-price">₹<?= number_format($dish['p']) ?></span>
+            <?php if ($menuOwnerConfirmed): ?><span class="restaurant-price">₹<?= number_format($dish['p']) ?></span><?php else: ?><span class="restaurant-price">Price on request</span><?php endif; ?>
           </article>
         <?php endforeach; endforeach; ?>
       </div>
@@ -367,7 +453,7 @@ require __DIR__ . '/include/page-head.php';
                       <h4><?= e($dish['n']) ?></h4>
                       <p><?= e($dish['d']) ?></p>
                     </div>
-                    <span class="restaurant-price">₹<?= number_format($dish['p']) ?></span>
+                    <?php if ($menuOwnerConfirmed): ?><span class="restaurant-price">₹<?= number_format($dish['p']) ?></span><?php else: ?><span class="restaurant-price">Price on request</span><?php endif; ?>
                   </li>
                 <?php endforeach; ?>
               </ul>
@@ -446,10 +532,15 @@ require __DIR__ . '/include/page-head.php';
       <div class="restaurant-form-card">
         <?php if ($sent): ?>
           <div class="restaurant-notice" role="status">
-            <h3>Request sent.</h3>
-            <p>We will contact you to confirm the table.</p>
+            <h3>Request recorded.</h3>
+            <p>Your table enquiry reference is <strong><?= e($reservationReference) ?></strong>. This is not a confirmed booking; the hotel must confirm service hours and availability.</p>
+            <?php if ($reservationEmailNotified): ?>
+              <p>The hotel was notified by email. For urgent confirmation, call or message us on WhatsApp.</p>
+            <?php else: ?>
+              <p>Automated email notification could not be confirmed. Please call <a href="tel:<?= e($hotelPhone) ?>"><?= e($hotelPhoneDisplay) ?></a> or message the hotel on WhatsApp and quote your reference to make sure the request is seen.</p>
+            <?php endif; ?>
           </div>
-        <?php elseif (!$sendMail): ?>
+        <?php elseif (!$showReservationForm): ?>
           <div class="restaurant-notice restaurant-reservation-unavailable" aria-labelledby="reservation-unavailable-heading">
             <h3 id="reservation-unavailable-heading">Enquire about a table</h3>
             <p>Online table requests aren't available on this page right now. Please call or message the hotel to ask about table availability.</p>
@@ -474,7 +565,7 @@ require __DIR__ . '/include/page-head.php';
                 ['whatsapp', 'WhatsApp number *', 'tel', 'required autocomplete="tel" inputmode="tel"'],
                 ['email', 'Email', 'email', 'autocomplete="email"'],
                 ['date', 'Date *', 'date', 'required min="' . date('Y-m-d') . '" autocomplete="off"'],
-                ['time', 'Preferred time *', 'time', 'required autocomplete="off"'],
+                ['time', 'Preferred time *', 'time', 'required step="1800" min="00:00" max="23:30" autocomplete="off"'],
                 ['guests', 'Guests *', 'number', 'required min="1" max="20" inputmode="numeric" autocomplete="off"'],
             ];
             foreach ($fields as [$id, $label, $type, $attrs]):
@@ -497,7 +588,21 @@ require __DIR__ . '/include/page-head.php';
               </div>
             <?php endforeach; ?>
 
-            <p class="restaurant-policy">This is a request, not a confirmed booking. The hotel will contact you to confirm availability for your preferred date and time. For same-day enquiries, calling or WhatsApp may be quicker.</p>
+            <div class="restaurant-field <?= isset($errors['note']) ? 'has-error' : '' ?>">
+              <label for="note">Special note (optional)</label>
+              <textarea id="note" name="note" maxlength="500" rows="3" <?= isset($errors['note']) ? 'aria-invalid="true" aria-describedby="restaurant-error-note"' : 'aria-describedby="restaurant-note-help"' ?>><?= e($old['note']) ?></textarea>
+              <?php if (isset($errors['note'])): ?><small id="restaurant-error-note"><?= e($errors['note']) ?></small><?php else: ?><small id="restaurant-note-help">Up to 500 characters. Please do not include payment details.</small><?php endif; ?>
+            </div>
+
+            <div class="restaurant-field restaurant-consent <?= isset($errors['consent']) ? 'has-error' : '' ?>">
+              <label for="consent">
+                <input id="consent" name="consent" type="checkbox" value="1" required <?= $old['consent'] === '1' ? 'checked' : '' ?> <?= isset($errors['consent']) ? 'aria-invalid="true" aria-describedby="restaurant-error-consent"' : '' ?>>
+                I agree that the hotel may use these details to respond to my table enquiry.
+              </label>
+              <?php if (isset($errors['consent'])): ?><small id="restaurant-error-consent"><?= e($errors['consent']) ?></small><?php endif; ?>
+            </div>
+
+            <p class="restaurant-policy">Your request is not a confirmed booking. The hotel must confirm current service hours and availability before a table is reserved. If you need an immediate answer, call or message the hotel.</p>
             <button class="button button-primary" type="submit">Request a table</button>
           </form>
         <?php endif; ?>
