@@ -43,6 +43,20 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
         ):
             self.assertNotIn(development_path, selected)
 
+    def test_known_obsolete_and_documentation_only_assets_are_not_deployed(self):
+        selected = select_runtime_paths([
+            ".htaccess", "index.php", "robots.txt", "sitemap.xml",
+            "include/page-head.php", "include/site-config.php", "404.php",
+            "contact.php", "mail.php", "img/tent1.jpg", "restaurant.css",
+            "restaurant.js", "thanx.png", "css/owl.video.play.html",
+            "css/restaurant.css", "js/restaurant.js", "img/optimized/v2/purple-room.webp",
+        ])
+        for excluded in ("img/tent1.jpg", "restaurant.css", "restaurant.js", "thanx.png", "css/owl.video.play.html"):
+            self.assertNotIn(excluded, selected)
+        self.assertIn("css/restaurant.css", selected)
+        self.assertIn("js/restaurant.js", selected)
+        self.assertIn("img/optimized/v2/purple-room.webp", selected)
+
     def test_private_local_config_is_never_packageable(self):
         with self.assertRaisesRegex(PackageError, "must never be tracked"):
             select_runtime_paths([PRIVATE_CONFIG_PATH])

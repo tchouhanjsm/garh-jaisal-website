@@ -6,7 +6,7 @@ test('catalogue renders the reviewed product choices without unapproved prices',
   const response = await page.goto('/catalogue.php', { waitUntil: 'domcontentloaded' });
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
-  await expect(page).toHaveTitle('Jaisalmer Trip Planner | Rooms, Desert Stays, Tours & Transport');
+  await expect(page).toHaveTitle('Jaisalmer Trip Planner | Tours, Stays & Transport');
   await expect(page.locator('main h1')).toHaveText('Build a Jaisalmer trip around your stay.');
 
   const canonical = await page.locator('head link[rel="canonical"]').getAttribute('href');

@@ -2938,3 +2938,31 @@ p{
   .catalogue-hero-facts{margin-top:1rem}
   .catalogue-hero-facts .at-a-glance--hero{grid-template-columns:1fr}
 }
+
+/* Outer-header stickiness: the child nav cannot stick beyond its static parent. */
+header.site-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 100;
+}
+header.site-header > .nav-wrap {
+  position: relative;
+  inset-block-start: auto;
+  z-index: auto;
+}
+html { scroll-padding-top: 5rem; }
+
+.contact-consent > label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  line-height: 1.45;
+}
+.contact-consent input[type="checkbox"] {
+  flex: 0 0 auto;
+  width: 1.1rem;
+  min-width: 1.1rem;
+  min-height: 1.1rem;
+  height: 1.1rem;
+  margin: 0.2rem 0 0;
+}

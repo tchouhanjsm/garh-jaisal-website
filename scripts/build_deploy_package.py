@@ -31,6 +31,13 @@ REQUIRED_RUNTIME_FILES = {
 PRIVATE_CONFIG_PATH = "include/site-config.local.php"
 EXAMPLE_CONFIG_PATH = "include/site-config.example.php"
 NON_RUNTIME_ROOT_FILES = {"package.json", "playwright.config.js"}
+EXPLICIT_DEPLOY_EXCLUDES = {
+    "img/tent1.jpg",              # Large master used by documentation only.
+    "restaurant.css",             # Stale root copy; live site uses css/restaurant.css.
+    "restaurant.js",              # Stale root copy; live site uses js/restaurant.js.
+    "thanx.png",                  # Unreferenced legacy asset.
+    "css/owl.video.play.html",    # Stray artifact, not a stylesheet.
+}
 CANONICAL_HOST = "www.hotelgarhjaisal.com"
 ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
 
@@ -83,7 +90,7 @@ def is_runtime_path(path: str) -> bool:
         raise PackageError(
             PRIVATE_CONFIG_PATH + " must never be tracked; keep it server-only."
         )
-    if path == EXAMPLE_CONFIG_PATH or path in NON_RUNTIME_ROOT_FILES:
+    if path == EXAMPLE_CONFIG_PATH or path in NON_RUNTIME_ROOT_FILES or path in EXPLICIT_DEPLOY_EXCLUDES:
         return False
     if path in ROOT_RUNTIME_FILES:
         return True
@@ -133,7 +140,7 @@ def validate_package_paths(
 
     forbidden_prefixes = (
         ".git/", ".github/", ".agents/", ".claude/", "docs/", "scripts/",
-        "tests/", "node_modules/", "artifacts/",
+        "tests/", "node_modules/", "artifacts/", *sorted(EXPLICIT_DEPLOY_EXCLUDES), *sorted(EXPLICIT_DEPLOY_EXCLUDES),
     )
     forbidden_paths = sorted(
         path for path in selected

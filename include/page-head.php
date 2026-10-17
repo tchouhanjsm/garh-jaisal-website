@@ -171,10 +171,11 @@ $analyticsIds = array_values(array_unique(array_filter(
   <link href="<?= $htmlEscape($googleFontsHref) ?>" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="<?= $htmlEscape($googleFontsHref) ?>" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="css/garh-v2.css">
-  <link rel="stylesheet" href="css/tokens.css">
 <?php foreach ($extraStylesheets as $stylesheet): ?>
   <link rel="stylesheet" href="<?= $htmlEscape($stylesheet) ?>">
 <?php endforeach; ?>
+  <!-- Shared type, spacing and component normalization intentionally follows page CSS. -->
+  <link rel="stylesheet" href="css/tokens.css">
 <?php foreach ($preloads as $preload): ?>
 <?php if (is_array($preload) && isset($preload['href']) && is_string($preload['href']) && $preload['href'] !== ''): ?>
   <link rel="preload" as="image" href="<?= $htmlEscape($preloadAssetUrl($preload['href'])) ?>"<?php if (isset($preload['media']) && is_string($preload['media']) && preg_match('/^\((?:min|max)-width:\s*[1-9][0-9]*px\)$/D', trim($preload['media']))): ?> media="<?= $htmlEscape(trim($preload['media'])) ?>"<?php endif; ?><?php if (($preload['fetchpriority'] ?? '') === 'high'): ?> fetchpriority="high"<?php endif; ?><?php if (!empty($preload['imagesrcset'])): ?> imagesrcset="<?= $htmlEscape($preload['imagesrcset']) ?>"<?php endif; ?><?php if (!empty($preload['imagesizes'])): ?> imagesizes="<?= $htmlEscape($preload['imagesizes']) ?>"<?php endif; ?>>

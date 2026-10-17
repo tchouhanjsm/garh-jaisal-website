@@ -6,11 +6,12 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-16 |
-| Current phase | Sprint 41 — critical-path loading for high-intent pages and Journal feature image (current PR) |
+| Last updated | 2026-10-17 |
+| Current phase | Sprint 42 follow-up — site-wide layout and backend audit remediation in existing PR #91 |
 | Base branch | `main` |
-| Baseline commit | `1d8b02b6d0188a041bc824e30cbcfe565b14686f` (verified `main` merge commit for PR #89) |
-| Last merged PR | [#89 — add verified quick facts to high-intent pages](https://github.com/tchouhanjsm/garh-jaisal-website/pull/89) |
+| Baseline commit | `a256f22fe31b27a375876c28f3b433ccf009b36d` (verified `main` merge commit for PR #90) |
+| Last merged PR | [#90 — prioritize high-intent images and font loading](https://github.com/tchouhanjsm/garh-jaisal-website/pull/90) |
+| PR #90 merged | Merged 2026-10-16 at `a256f22fe31b27a375876c28f3b433ccf009b36d`; all four PR-head workflows passed before merge |
 | PR #89 merged | Merged 2026-10-16 at `1d8b02b6d0188a041bc824e30cbcfe565b14686f`; verified starting point for Sprint 41 |
 | PR #88 merged | [Merged 2026-10-16](https://github.com/tchouhanjsm/garh-jaisal-website/pull/88) at `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`; review head `dfbaa2c556bea8bfaabfcdfdf6b2ae51b76a7204` |
 | PR #88 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38867401576) |
@@ -30,8 +31,16 @@
 | PR #86 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Owner review | Review PR #90's critical-path changes and the exact-head 390px/1280px screenshot sheet; rerun Lighthouse on Home, Rooms and Trip Planner after the code checks pass. Historical Desert photo/caption mapping still needs owner approval. |
-| Next action | Finish exact-head Sprint 41 CI, then owner reviews PR #90. After merge, package the approved merged SHA, stage it manually, and complete route, mail/CAPTCHA, redirect/header and visual checks before any production release. |
+| Owner review | Inspect the Sprint 42 screenshot sheet first at 390px and 1280px; then spot-check layout boundaries at 320px, 768px and 1440px. Historical Desert photo/caption mapping still needs owner approval. |
+| Next action | Finish exact-head Sprint 42 CI and review Home, Rooms and Packages screenshots; owner retains merge and production deployment authority. The merged repository still needs separate owner-run cPanel staging and production release checks. |
+## 2026-10-17 — Backend audit remediation in existing PR #91
+
+- Kept changes in PR #91; no new PR, merge or deployment was performed.
+- Corrected the Rooms responsive title regression: the newly added shared layout block had an unterminated CSS comment, so the browser ignored the intended layout rules. The comment is closed and the 761–1000px H1 minimum now clears the 33px contract.
+- Made the outer site header sticky and reset nested navigation positioning; added browser coverage for Home, Rooms, Restaurant and Contact at 390px and 1280px.
+- Implemented in this PR: Rooms hero token/comment regression fix; sticky outer header; always-visible restaurant enquiry form with 30-minute preference, note, consent and unconfirmed status; private JSONL lead records with reference codes and per-IP/phone daily limits; contact lead persistence before mail; owner-gated menu prices; cPanel include-directory denial, index.php redirect, robots/cache updates; exclusions for five verified stale/documentation-only package files; optimized WebP Rooms hero; and first-pass metadata corrections. Exact-head CI is still the gate.
+- Last observed workflows before this follow-up: Site Checks, package preflight and non-deploying Staging QA passed at f216be5; Browser E2E failed the Rooms H1 floor. Exact-head checks for current changes are the merge gate.
+
 ## Phase roadmap
 
 | Phase | Goal | Status |
@@ -143,3 +152,27 @@
 - Apply the shared component to Home, Rooms and Trip Planner. Catalogue facts explain the browser-tab shortlist and reviewed WhatsApp draft without suggesting that an enquiry or shortlist is a confirmed booking.
 - Reuse existing tokens and CSS, keep the information card light, and run responsive E2E checks at 320, 390, 768, 1280 and 1440px.
 - No route, canonical, schema, booking destination, prices, availability, policies, analytics ID, server-side lead storage, or production dependency changes. Owner controls merge and deployment.
+
+## Backend audit remediation — delivered code scope (PR #91)
+
+- Source of findings: `Backend Debugging Report Pages, Images, Server Issues and Doc-vs-Site Gaps.md`, which audited main after PR #90. This remediation is intentionally kept in the already-open PR #91.
+- The new `docs/BACKEND-DEBUGGING-REMEDIATION-2026-10-17.md` tracks implemented, partial and owner-blocked findings separately.
+- Known limitations: no external cPanel/production deployment, no real mailbox delivery proof, no owner-approved restaurant schedule/menu/policy facts, and no broad responsive image derivative generation or deletion of heuristic orphan candidates.
+- Exact-head workflow results must be refreshed after the final commit; earlier success from a prior head is not evidence for current changes.
+
+## 2026-10-17 — Metadata/schema follow-up in PR #91
+
+- Completed the remaining metadata length warnings called out in the attached debugging report, including the Blog title, restaurant description, guided-tour description, shared experience records and shared editorial guide records.
+- Changed `book-rooms-in-jaisalmer.php` from `Article` to `WebPage` and added a visible breadcrumb plus matching `BreadcrumbList` schema.
+- Updated sitemap generation so `lastmod` incorporates the shared experience/editorial data file when a URL's content is driven by that registry, preventing stale timestamps after shared-data edits.
+- Broader image derivatives and `srcset`/`sizes`, external cPanel proof, SMTP delivery, owner-approved restaurant schedule/menu and privacy retention remain explicit release gates.
+
+
+## 2026-10-17 — Sprint 42 responsive follow-up in PR #91
+
+- The 320px browser contract identified an oversized Trip Planner hero. The existing responsive CSS was tightened only at widths up to 380px; button targets remain at least 44px and the four quick facts remain present.
+- Shortened the Trip Planner lead/fact copy to reduce mobile wrapping without relying on very small fact text.
+- Aligned the Trip Planner hero image with the existing optimized WebP already declared in its image preload. Browser E2E now checks that the preload path matches the browser-selected hero image at each configured viewport.
+- Added browser screenshot artifacts for Home, Rooms, Packages, Trip Planner, Dining and Gallery at 320px, 768px and 1440px. The established page sheet remains at 390px and 1280px.
+- The current-head CI result must be reviewed before merge. These are repository/browser checks only; they do not verify live cPanel behaviour or production delivery.
+- Owner release gates remain: external cPanel staging, actual CAPTCHA/mail delivery, approved menu/schedule/policy facts, and the access, backup, retention and privacy wording for private enquiry storage.

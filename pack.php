@@ -38,7 +38,7 @@ $faqItems = [
 ];
 $page = [
     'title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
-    'description' => 'Explore desert safari and guided Jaisalmer tour options arranged from Garh Jaisal Haveli, including camel safaris, overnight desert stays and half-day or full-day city tours.',
+    'description' => 'Explore desert safaris and guided Jaisalmer tours from Garh Jaisal Haveli, including camel safaris, overnight stays and half-day or full-day city tours.',
     'path' => '/pack.php',
     'og_title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
     'og_description' => 'Choose from desert safari experiences and guided Jaisalmer tours arranged from Garh Jaisal Haveli inside Jaisalmer Fort.',

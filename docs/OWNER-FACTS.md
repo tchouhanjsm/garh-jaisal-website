@@ -27,13 +27,13 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | 6 | Privacy: who is the data controller, which email handles requests | | `privacy.php` |
 | 7 | Check-in and check-out times, early-arrival access and luggage storage | NEEDS OWNER INPUT: confirm official times and whether early check-in or luggage storage can be arranged. Do not publish a specific time or promise before approval. | Rooms, Directions, schema |
 | 8 | Real guest reviews you may quote (text, first name, source, date) | | Home, Rooms |
-| 9 | Rooftop kitchen: opening hours, is a table booking by phone/WhatsApp only? | NEEDS OWNER INPUT: confirm current service hours and whether online table requests are enabled or guests should contact the hotel directly. Do not publish meal times or imply a table is reserved until approved. | Dining |
+| 9 | Rooftop kitchen: opening hours, closed days, last seating and same-day cut-off | NEEDS OWNER INPUT: the site is being changed to accept unconfirmed table enquiries. Supply actual service hours, closed days, last seating and cut-off values; the code must not infer a schedule. | Dining and server-only configuration |
 | 10 | Reception hours and late-arrival process (the site previously showed 7:00 AM to 10:30 PM: confirm) | NEEDS OWNER INPUT: confirm current reception hours and whether meet-and-assist or luggage help can be arranged outside those hours. Do not state a fixed advance-notice rule unless approved. | Directions |
 | 11 | Hosting: cPanel PHP version, can the repo be deployed through cPanel Git? | | Sprint 3 |
 | 12 | Photos missing for any page (list pages where you want new images) | Owner-provided Desert Camp photos are available in `img/Desert_Camp/`; continue to request page-specific images where the current library is insufficient. | Design |
 | 13 | Which researched Jaisalmer itinerary themes may become actual offerings? Approve each theme and confirm route/stops, duration, vehicle, guide, access/permissions, fees, inclusions and price | | Car & City Tours and future detail pages |
 | 14 | Which exact Instagram posts/reels should be embedded on the restaurant page? | NEEDS OWNER INPUT: profile URL is confirmed, but specific public post/reel URLs have not been supplied. Keep a lightweight profile link until direct URLs are approved. | `restaurant.php` |
-| 15 | Are the current restaurant menu items and prices still accurate? | NEEDS OWNER INPUT: the current `restaurant.php` menu data needs confirmation against the live menu before staging. | `restaurant.php` |
+| 15 | Are the current restaurant menu items and prices still accurate? | NEEDS OWNER INPUT: menu data is being separated into `include/menu-data.php`; prices must remain hidden until live-menu approval. | `include/menu-data.php`, `restaurant.php` |
 
 
 ## Research-led tour ideas — not approved offers
@@ -46,3 +46,16 @@ These are candidates for review, not a promise that Garh Jaisal Haveli currently
 - Kuldhara heritage and desert landscape visit.
 - Akal Wood Fossil Park or Desert National Park nature route (separate options; wildlife is never guaranteed).
 - Longewala War Memorial history excursion (visitor requirements and travel logistics must be verified).
+
+## Implementation notes (2026-10-17)
+
+- A restaurant request is an enquiry, not a confirmed table reservation. Do not label it as confirmed until the hotel checks availability.
+- Provide exact opening hours, closed days, last seating and same-day cut-off before configuring online requests. An empty closed-day list is not verified operating hours.
+- Private enquiry storage needs a confirmed operator-access method, backup/retention policy and approved privacy wording. Test real email delivery on staging.
+- Confirm the current menu items and prices before enabling public price display.
+
+## Backend remediation follow-up (2026-10-17)
+
+- Table requests produce a reference and remain unconfirmed until the hotel replies. Supply real restaurant hours, closed days, last seating, same-day cut-off and online party-size policy before configuring those constraints.
+- Confirm the public menu before enabling `include/menu-data.php` price display.
+- Approve the privacy/controller wording, the lead log operator, backup/retention requirements, and a staging mail test before production use.

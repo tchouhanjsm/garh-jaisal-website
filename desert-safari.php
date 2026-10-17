@@ -23,13 +23,13 @@ $faqItems = [
     ['question' => "How do I confirm the route and inclusions?", 'answer' => "Ask the hotel to confirm the current price, departure details, route, pickup arrangement, availability and exact inclusions for your date."],
 ];
 $page = [
-    'title' => 'Desert Safari in Jaisalmer | Camel Safari & Overnight Experiences',
+    'title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
     'description' => 'Explore desert safari options arranged from Garh Jaisal Haveli, including sunset camel safari, cultural evening, sleeping under the stars and Swiss tent stays.',
     'path' => '/desert-safari.php',
-    'og_title' => 'Desert Safari in Jaisalmer | Camel Safari & Overnight Experiences',
+    'og_title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
     'og_description' => 'Explore desert safari options arranged from Garh Jaisal Haveli, including sunset camel safari, cultural evening, sleeping under the stars and Swiss tent stays.',
     'og_image' => '/img/desert3.jpg',
-    'twitter_title' => 'Desert Safari in Jaisalmer | Camel Safari & Overnight Experiences',
+    'twitter_title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
     'twitter_description' => 'Explore desert safari options arranged from Garh Jaisal Haveli, including sunset camel safari, cultural evening, sleeping under the stars and Swiss tent stays.',
     'twitter_image' => '/img/desert3.jpg',
     'css' => ['css/experiences.css'],

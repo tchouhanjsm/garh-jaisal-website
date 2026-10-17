@@ -62,7 +62,7 @@ foreach ($products as $index => $product) {
     ];
 }
 $page = [
-    'title' => 'Jaisalmer Trip Planner | Rooms, Desert Stays, Tours & Transport',
+    'title' => 'Jaisalmer Trip Planner | Tours, Stays & Transport',
     'description' => 'Build a Jaisalmer trip around a Fort stay, desert experience, guided tour, car arrangement or rooftop dining. Shortlist options and enquire for current rates.',
     'path' => '/catalogue.php',
     'preload' => [
@@ -111,13 +111,13 @@ require __DIR__ . '/include/page-head.php';
 <main id="main-content" class="catalogue-page thar-sunset-story thar-sunset-story--catalogue" tabindex="-1">
   <section class="catalogue-hero" aria-labelledby="catalogue-title">
     <div class="catalogue-hero-media" aria-hidden="true">
-      <img src="img/desert3.jpg" <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes('img/desert3.jpg') : '' ?> alt="" fetchpriority="high" decoding="async">
+      <img src="img/optimized/desert3.webp" <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes('img/optimized/desert3.webp') : '' ?> alt="" fetchpriority="high" decoding="async">
     </div>
     <div class="catalogue-hero-overlay"></div>
     <div class="site-shell catalogue-hero-content">
       <p class="eyebrow">Thar Sunset · Plan in one place</p>
       <h1 id="catalogue-title">Build a Jaisalmer trip around your stay.</h1>
-      <p>Shortlist a room, desert evening or overnight camp, guided sightseeing, transport and rooftop dining. Send one enquiry to discuss the current rates and arrangements for your dates.</p>
+      <p>Shortlist rooms, desert experiences, guided tours, transport or rooftop dining. Ask us to confirm current rates and arrangements for your dates.</p>
       <div class="actions">
         <a class="button button-primary" href="#trip-products">Explore the options</a>
         <a class="button button-light" href="contact.php">Ask the hotel</a>
@@ -127,10 +127,10 @@ require __DIR__ . '/include/page-head.php';
         $atAGlance = [
             'class' => 'at-a-glance at-a-glance--hero',
             'items' => [
-                ['label' => 'Trip options', 'value' => 'Rooms, experiences, transport and rooftop dining'],
-                ['label' => 'Shortlist', 'value' => 'Stored in this browser tab'],
-                ['label' => 'Enquiry', 'value' => 'Review the WhatsApp draft before sending'],
-                ['label' => 'Booking status', 'value' => 'A shortlist is not a confirmed booking'],
+                ['label' => 'Trip options', 'value' => 'Rooms, tours, transport and rooftop dining'],
+                ['label' => 'Shortlist', 'value' => 'Saved in this tab'],
+                ['label' => 'Enquiry', 'value' => 'Review the WhatsApp draft'],
+                ['label' => 'Booking status', 'value' => 'Enquiry only; not confirmed'],
             ],
         ];
         require __DIR__ . '/include/ui/at-a-glance.php';

@@ -1,7 +1,5 @@
 User-agent: *
 Disallow: /mail.php
-Disallow: /thank-you.php
-Disallow: /tariff.php
 Disallow: /cgi-bin/
 
 Sitemap: https://www.hotelgarhjaisal.com/sitemap.xml

@@ -20,6 +20,7 @@ The package script uses only Python's standard library, selects Git-tracked runt
 2. Take a restorable backup of the site files and current `.htaccess`. Record the current canonical host/redirect behavior before replacing rules.
 3. Confirm that `include/site-config.local.php` exists on the server, remains untracked, and contains the real enquiry-recipient addresses and reCAPTCHA secret for the host. Do not copy `include/site-config.example.php` over it.
 4. Use a staging subdomain with a certificate covering that host. Confirm the configured `site_url` and reCAPTCHA key/allowed host match staging.
+5. On a full checkout that can read the server-only config, run `php scripts/check-runtime-config.php --strict`. This reports configuration readiness and the valid-recipient count without printing secret values or email addresses. If PHP CLI is unavailable on the host, run the equivalent preflight in a secure staging environment that loads that host's actual configuration; never paste secrets into CI logs or support tickets.
 5. From a full Git checkout, run:
 
    ```bash
@@ -29,6 +30,8 @@ The package script uses only Python's standard library, selects Git-tracked runt
    php scripts/generate-sitemap.php --check
    php scripts/check-experience-publication.php
    php scripts/check-launch-hardening.php
+   php scripts/check-runtime-config.php
+   php tests/php/runtime-config-validation.php
    npm install --no-save --package-lock=false @playwright/test@1.55.0
    npx playwright install chromium
    npm run test:e2e
@@ -49,3 +52,23 @@ The package script uses only Python's standard library, selects Git-tracked runt
 Production changes require owner approval after the staging checklist is signed off. Merge the reviewed PR, verify the merged commit is green, deploy using the owner-approved process, and repeat critical staging checks against production without sending test enquiries to guests.
 
 Create the `v1.0.0` release tag only after the owner has approved the merged commit and staging/release gate. Do not tag an unmerged PR head or deploy from this document.
+
+## Backend audit remediation follow-up
+
+PR #91 adds outer-header stickiness and a browser regression for Home, Rooms, Restaurant and Contact at mobile and desktop widths. Verify the new exact-head Browser E2E result and inspect screenshots before merge.
+
+Private lead storage, restaurant request settings and package hygiene are also being addressed inside the same PR. Do not treat the non-deploying Staging QA workflow as cPanel evidence. Before release, verify redirect/403/cache behaviour, writable private storage outside the document root, approved operating hours/cutoff values, live menu approval, and a dedicated staging email test.
+
+## Private lead storage and restaurant request configuration
+
+Public contact requests and restaurant table enquiries are recorded in `guest-enquiries.jsonl` outside the web document root before outbound email is attempted. The default directory is `gj-private-data` beside the document root. If the PHP user cannot write there on cPanel, set `GJ_LEAD_STORAGE_DIR` to an absolute writable directory outside the document root. The code rejects a directory inside the document root.
+
+The file uses JSON Lines, file locking, request references, restrictive permissions where supported and per-IP/per-phone daily limits. Raw IP addresses are not written into the request log; hashes are used for daily duplicate counting. The log does contain the submitted enquiry fields, so the owner must approve access, backups and a retention period and provide matching privacy-page wording.
+
+Restaurant requests are always enquiries, not confirmed bookings. Preferred time choices use 30-minute increments. Closed days and same-day cut-off are enforced only when the owner supplies actual values in server-only `include/site-config.local.php`: `restaurant_closed_days` (weekday numbers 0=Sunday through 6=Saturday or weekday names) and `restaurant_same_day_cutoff_minutes` (non-negative integer). Empty defaults do not imply verified opening hours.
+
+Restaurant menu records are in `include/menu-data.php`; prices remain hidden while `owner_confirmed` is false. The owner must compare dishes and prices with the live menu before enabling them.
+
+CI adds `php tests/php/lead-storage-validation.php`. Before a release, also verify the log path/permissions, actual owner notification and guest acknowledgement delivery, `/index.php` 301, `/include/*.php` 403, robots/redirect behavior, and cache headers on a real cPanel staging host. The repository staging workflow is non-deploying and is not proof of external-host behavior.
+
+The deployment package excludes `img/tent1.jpg`, root `restaurant.css`/`restaurant.js`, `thanx.png` and `css/owl.video.play.html`. These files remain in the repository; other image candidates are not deleted until references and owner visuals are reviewed.

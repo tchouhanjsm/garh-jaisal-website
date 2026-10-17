@@ -73,7 +73,7 @@ test('restaurant menu controls have usable targets, visible focus, correct locat
   const tabFocus = await focusStyle(firstTab);
   expect(tabFocus.width).toBe('3px');
   expect(tabFocus.color).toBe(filterFocus.color);
-  expect(tabFocus.token).toBe('#1d4ed8');
+  expect(tabFocus.token.toLowerCase()).toBe('#1d4ed8');
 
   await secondTab.click();
   await expect(secondTab).toHaveAttribute('aria-current', 'location');

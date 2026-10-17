@@ -2,19 +2,26 @@
 $activePage = 'rooms';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $bookingUrl = $siteConfig['booking_url'];
+$siteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $pageTitle = 'Staying inside Jaisalmer Fort | Garh Jaisal Haveli';
 $pageDescription = 'A practical guide to staying inside Jaisalmer Fort at Garh Jaisal Haveli: the walk from Fort Parking, rooftop meals, rooms, and desert trips.';
-$canonical = 'https://www.hotelgarhjaisal.com/book-rooms-in-jaisalmer.php';
+$canonical = $siteUrl . '/book-rooms-in-jaisalmer.php';
 $headline = 'Staying inside Jaisalmer Fort';
 ?>
 <!doctype html>
 <html lang="en">
 <?php
+require_once __DIR__ . '/include/schema.php';
+$breadcrumbs = [
+    ['label' => 'Home', 'href' => '/'],
+    ['label' => 'Staying inside Jaisalmer Fort'],
+];
+$breadcrumbSchema = gj_schema_breadcrumb_list($siteUrl, '/book-rooms-in-jaisalmer.php', $breadcrumbs);
 $page = [
     'title' => $pageTitle,
     'description' => $pageDescription,
     'path' => '/book-rooms-in-jaisalmer.php',
-    'og_type' => 'article',
+    'og_type' => 'website',
     'og_title' => $pageTitle,
     'og_description' => $pageDescription,
     'og_image' => '/img/v2/fort-from-roof.jpg',
@@ -24,16 +31,16 @@ $page = [
     'css' => ['css/guide.css'],
     'schema' => [
         [
-            '@type' => 'Article',
-            'headline' => 'Staying inside Jaisalmer Fort',
-            'datePublished' => '2026-10-02',
-            'dateModified' => '2026-10-15',
-            'image' => 'https://www.hotelgarhjaisal.com/img/v2/fort-from-roof.jpg',
-            'author' => ['@type' => 'Organization', 'name' => 'Hotel Garh Jaisal Haveli', 'url' => 'https://www.hotelgarhjaisal.com/'],
-            'publisher' => ['@id' => 'https://www.hotelgarhjaisal.com/#hotel'],
-            'mainEntityOfPage' => 'https://www.hotelgarhjaisal.com/book-rooms-in-jaisalmer.php',
-            'description' => 'A practical guide to staying inside Jaisalmer Fort at Garh Jaisal Haveli.',
+            '@type' => 'WebPage',
+            '@id' => $canonical . '#webpage',
+            'url' => $canonical,
+            'name' => $pageTitle,
+            'description' => $pageDescription,
+            'isPartOf' => ['@id' => $siteUrl . '/#website'],
+            'about' => ['@id' => $siteUrl . '/#hotel'],
+            'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
         ],
+        $breadcrumbSchema,
     ],
 ];
 require __DIR__ . '/include/page-head.php';
@@ -43,6 +50,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="guide-page" id="main-content" tabindex="-1">
   <section class="page-hero">
     <div class="site-shell page-hero-inner">
+      <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>
       <p class="eyebrow">Journal</p>
       <h1><?= htmlspecialchars($headline, ENT_QUOTES, 'UTF-8') ?></h1>
       <p class="guide-lede">Jaisalmer Fort is a living fort. Garh Jaisal Haveli sits inside it, at Fort Kotari Para, so the stay is among the lanes rather than outside the walls.</p>

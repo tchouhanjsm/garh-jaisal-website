@@ -1,6 +1,7 @@
 <?php
 $siteConfig = require __DIR__ . '/include/site-config.php';
 require_once __DIR__ . '/include/session.php';
+require_once __DIR__ . '/include/lead-storage.php';
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Location: contact.php');
@@ -24,7 +25,12 @@ $name = trim((string) ($_POST['name'] ?? ''));
 $email = trim((string) ($_POST['email'] ?? ''));
 $phone = trim((string) ($_POST['phone'] ?? ''));
 $message = trim((string) ($_POST['message'] ?? ''));
+$consent = trim((string) ($_POST['consent'] ?? ''));
 $captcha = trim((string) ($_POST['g-recaptcha-response'] ?? ''));
+if ($captcha === '') {
+    header('Location: contact.php?error=captcha');
+    exit;
+}
 
 $nameLength = function_exists('mb_strlen') ? mb_strlen($name, 'UTF-8') : strlen($name);
 $messageLength = function_exists('mb_strlen') ? mb_strlen($message, 'UTF-8') : strlen($message);
@@ -38,7 +44,8 @@ $valid = $name !== ''
     && strlen($phone) <= 20
     && ($phone === '' || preg_match('/^[0-9 +\-]+$/', $phone))
     && $message !== ''
-    && $messageLength <= 2000;
+    && $messageLength <= 2000
+    && $consent === '1';
 
 if (!$valid) {
     header('Location: contact.php?error=invalid');
@@ -55,7 +62,7 @@ if ($lastSubmission > 0 && ($now - $lastSubmission) < 30) {
 $_SESSION['contact_last_submission'] = $now;
 
 $secretKey = trim((string) ($siteConfig['recaptcha_secret'] ?? ''));
-if ($secretKey === '') {
+if ($secretKey === '' || preg_match('/(?:PASTE_|REPLACE_WITH_|CHANGE_ME|YOUR[_ -]?)/i', $secretKey)) {
     header('Location: contact.php?error=config');
     exit;
 }
@@ -78,16 +85,19 @@ $verifyContext = stream_context_create([
 $response = @file_get_contents($verifyUrl, false, $verifyContext);
 if (!is_string($response) && function_exists('curl_init')) {
     $handle = curl_init($verifyUrl);
-    curl_setopt_array($handle, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => $verifyPayload,
-        CURLOPT_CONNECTTIMEOUT => 4,
-        CURLOPT_TIMEOUT => 8,
-    ]);
-    $curlResponse = curl_exec($handle);
-    curl_close($handle);
-    $response = is_string($curlResponse) ? $curlResponse : false;
+    if ($handle !== false) {
+        curl_setopt_array($handle, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $verifyPayload,
+            CURLOPT_CONNECTTIMEOUT => 4,
+            CURLOPT_TIMEOUT => 8,
+        ]);
+        $curlResponse = curl_exec($handle);
+        $curlErrno = curl_errno($handle);
+        curl_close($handle);
+        $response = ($curlErrno === 0 && is_string($curlResponse)) ? $curlResponse : false;
+    }
 }
 $captchaData = is_string($response) ? json_decode($response) : null;
 $siteHost = strtolower((string) parse_url((string) ($siteConfig['site_url'] ?? ''), PHP_URL_HOST));
@@ -107,19 +117,35 @@ if (
     exit;
 }
 
+$leadResult = gj_store_lead(
+    'contact',
+    ['name' => $name, 'email' => $email, 'phone' => $phone, 'message' => $message, 'consent' => true],
+    (string) ($_SERVER['REMOTE_ADDR'] ?? ''),
+    $phone,
+    ['max_per_ip' => 10, 'max_per_phone' => 5]
+);
+if (empty($leadResult['ok'])) {
+    header('Location: contact.php?error=' . (($leadResult['error'] ?? '') === 'rate_limited' ? 'send' : 'storage'));
+    exit;
+}
+$leadReference = $leadResult['reference'];
+
 $recipients = array_values(array_filter((array) ($siteConfig['inquiry_recipients'] ?? []), static function ($value) {
     return is_string($value) && filter_var($value, FILTER_VALIDATE_EMAIL);
 }));
 if ($recipients === []) {
-    header('Location: contact.php?error=config');
-    exit;
+    $fallbackRecipient = trim((string) ($siteConfig['hotel_email'] ?? ''));
+    if ($fallbackRecipient !== '' && !preg_match('/[\r\n]/', $fallbackRecipient)
+        && filter_var($fallbackRecipient, FILTER_VALIDATE_EMAIL) !== false) {
+        $recipients = [$fallbackRecipient];
+    }
 }
 
 $emailTo = implode(', ', $recipients);
-$subject = 'Enquiry From Hotel Garh Jaisal';
+$subject = 'Enquiry [' . $leadReference . '] - Hotel Garh Jaisal';
 $replyTo = str_replace(["\r", "\n"], '', $email);
 
-$body = '';
+$body = '<p>Enquiry reference: ' . htmlspecialchars($leadReference, ENT_QUOTES, 'UTF-8') . '</p>';
 $body .= "<table border='2px' style='border-collapse:collapse; width:100%;'>";
 $body .= '<tr><td style="padding:5px;">Name</td><td style="padding:5px;">'
     . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . '</td></tr>';
@@ -140,19 +166,22 @@ $headers .= "Content-type:text/html;charset=UTF-8\r\n";
 $headers .= 'From: ' . str_replace(["\r", "\n"], '', $fromAddress) . "\r\n";
 $headers .= 'Reply-To: ' . $replyTo . "\r\n";
 
-try {
-    $sent = mail($emailTo, $subject, $body, $headers);
-} catch (Throwable $exception) {
-    error_log('Contact enquiry mail delivery failed.');
-    $sent = false;
+$sent = false;
+if ($recipients !== []) {
+    try {
+        $sent = mail($emailTo, $subject, $body, $headers) === true;
+    } catch (Throwable $exception) {
+        error_log('Contact enquiry mail delivery failed.');
+        $sent = false;
+    }
 }
-if ($sent !== true) {
-    header('Location: contact.php?error=send');
-    exit;
-}
+gj_record_lead_event($leadReference, $sent ? 'owner_notification_sent' : 'owner_notification_failed');
 
+// The enquiry has already been stored. Do not make the guest resubmit it because mail failed.
 session_regenerate_id(true);
 unset($_SESSION['contact_csrf']);
 $_SESSION['enquiry_received'] = true;
+$_SESSION['enquiry_reference'] = $leadReference;
+$_SESSION['enquiry_notification_sent'] = $sent;
 header('Location: thank-you.php');
 exit;

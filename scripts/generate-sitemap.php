@@ -13,6 +13,7 @@
 $root = dirname(__DIR__);
 $config = require $root . '/include/site-config.php';
 $experiences = require $root . '/include/experience-data.php';
+$editorialGuides = require $root . '/include/editorial-guides-data.php';
 $siteUrl = rtrim($config['site_url'] ?? '', '/');
 
 if ($siteUrl === '' || !preg_match('#^https://#i', $siteUrl)) {
@@ -95,41 +96,52 @@ foreach ($experiences as $slug => $experience) {
     $urls['/' . $slug . '.php'] = $priority;
 }
 
-$lastmodForSource = static function ($relativePath) use ($root) {
-    $filePath = $root . '/' . $relativePath;
-    if (!is_file($filePath)) {
-        fwrite(STDERR, 'ERROR cannot derive sitemap lastmod; source file is missing: ' . $relativePath . PHP_EOL);
-        exit(1);
-    }
+$lastmodForSource = static function ($relativePaths) use ($root) {
+    $relativePaths = is_array($relativePaths) ? array_values(array_unique($relativePaths)) : [$relativePaths];
     if (!function_exists('exec')) {
         fwrite(STDERR, "ERROR git lastmod generation requires the PHP CLI exec function and Git.\n");
         exit(1);
     }
-
-    $command = 'git -C ' . escapeshellarg($root)
-        . ' log -1 --format=%cs -- ' . escapeshellarg($relativePath);
-    $output = [];
-    $exitCode = 0;
-    exec($command, $output, $exitCode);
-    $date = trim(implode("\n", $output));
-
-    if (
-        $exitCode !== 0
-        || !preg_match('/^\d{4}-\d{2}-\d{2}$/D', $date)
-        || !checkdate((int) substr($date, 5, 2), (int) substr($date, 8, 2), (int) substr($date, 0, 4))
-    ) {
-        fwrite(STDERR, 'ERROR no trustworthy Git lastmod date for ' . $relativePath . PHP_EOL);
-        exit(1);
+    $dates = [];
+    foreach ($relativePaths as $relativePath) {
+        $filePath = $root . '/' . $relativePath;
+        if (!is_file($filePath)) {
+            fwrite(STDERR, 'ERROR cannot derive sitemap lastmod; source file is missing: ' . $relativePath . PHP_EOL);
+            exit(1);
+        }
+        $command = 'git -C ' . escapeshellarg($root)
+            . ' log -1 --format=%cs -- ' . escapeshellarg($relativePath);
+        $output = [];
+        $exitCode = 0;
+        exec($command, $output, $exitCode);
+        $date = trim(implode("\n", $output));
+        if (
+            $exitCode !== 0
+            || !preg_match('/^\d{4}-\d{2}-\d{2}$/D', $date)
+            || !checkdate((int) substr($date, 5, 2), (int) substr($date, 8, 2), (int) substr($date, 0, 4))
+        ) {
+            fwrite(STDERR, 'ERROR no trustworthy Git lastmod date for ' . $relativePath . PHP_EOL);
+            exit(1);
+        }
+        $dates[] = $date;
     }
-
-    return $date;
+    rsort($dates, SORT_STRING);
+    return $dates[0];
 };
 
 $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 $xml .= "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
 foreach ($urls as $path => $priority) {
     $sourceFile = $path === '/' ? 'index.php' : ltrim($path, '/');
-    $lastmod = $lastmodForSource($sourceFile);
+    $sourceFiles = [$sourceFile];
+    $routeSlug = $path === '/' ? '' : basename($path, '.php');
+    if (array_key_exists($routeSlug, $experiences)) {
+        $sourceFiles[] = 'include/experience-data.php';
+    }
+    if (array_key_exists($routeSlug, $editorialGuides)) {
+        $sourceFiles[] = 'include/editorial-guides-data.php';
+    }
+    $lastmod = $lastmodForSource($sourceFiles);
     $loc = htmlspecialchars($siteUrl . ($path === '/' ? '/' : $path), ENT_XML1 | ENT_QUOTES, 'UTF-8');
     $xml .= '  <url><loc>' . $loc . '</loc><lastmod>' . $lastmod . '</lastmod><priority>' . $priority . "</priority></url>\n";
 }

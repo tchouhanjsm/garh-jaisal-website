@@ -397,7 +397,7 @@ return [
     'jaisalmer-fort-guide' => [
         'slug' => 'jaisalmer-fort-guide',
         'title' => 'Jaisalmer Fort Guide | Staying Inside the Living Fort',
-        'description' => 'A practical Jaisalmer Fort guide from Garh Jaisal Haveli: arrival, walking inside the fort, guided tours, rooms, rooftop dining and combining the Fort with the desert.',
+        'description' => 'A Jaisalmer Fort guide from Garh Jaisal Haveli covering arrival, walks, guided tours, rooms, rooftop dining and desert plans.',
         'h1' => 'Jaisalmer Fort Guide',
         'eyebrow' => 'Jaisalmer Fort guide',
         'lede' => 'A practical Jaisalmer Fort guide from Garh Jaisal Haveli: arrival, walking inside the fort, guided tours, rooms, rooftop dining and combining the Fort with the desert.',
@@ -601,8 +601,8 @@ return [
     ],
     'desert-safari-guide' => [
         'slug' => 'desert-safari-guide',
-        'title' => 'Desert Safari in Jaisalmer: How to Choose an Experience | Garh Jaisal Haveli',
-        'description' => 'Understand the different desert safari options in Jaisalmer, from sunset camel rides to sleeping under the stars and Swiss tent stays, and choose one that fits your time.',
+        'title' => 'Jaisalmer Desert Safari Guide | Choose an Experience',
+        'description' => 'Compare Jaisalmer desert safari options, from sunset camel rides to sleeping under the stars and Swiss tent stays, and choose what fits your trip.',
         'h1' => 'Desert Safari in Jaisalmer: How to Choose an Experience',
         'eyebrow' => 'Desert safari guide',
         'lede' => 'Understand the different desert safari options in Jaisalmer, from sunset camel rides to sleeping under the stars and Swiss tent stays, and choose one that fits your time.',
@@ -1218,7 +1218,7 @@ return [
     'jaisalmer-honeymoon-guide' => [
         'slug' => 'jaisalmer-honeymoon-guide',
         'title' => 'Jaisalmer Honeymoon Guide | Fort Stay & Desert Night',
-        'description' => 'Plan a Jaisalmer honeymoon with a heritage stay inside the Fort, rooftop dining and a choice of sunset safari or overnight desert stay. Confirm details for your dates.',
+        'description' => 'Plan a Jaisalmer honeymoon with a heritage stay inside the Fort, rooftop dining and a sunset or overnight desert experience. Confirm arrangements for your dates.',
         'h1' => 'Plan a Jaisalmer Honeymoon Around a Fort Stay and Desert Night',
         'eyebrow' => 'Couples & honeymoon planning',
         'lede' => 'A heritage stay, a rooftop evening and the right desert experience can shape a memorable Jaisalmer trip. Use this guide to plan the pieces and confirm which arrangements are available for your dates.',
