@@ -16,7 +16,7 @@ $faqItems = [
 ];
 $page = [
     'title' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
-    'description' => 'Explore guided Jaisalmer city tours and enquire about car arrangements for arrival or a desert day with Garh Jaisal Haveli. Confirm current details directly with the hotel.',
+    'description' => 'Explore guided Jaisalmer city tours and enquire about car arrangements for arrival or a desert day. Confirm route, vehicle and availability directly with the hotel.',
     'path' => '/car-tours.php',
     'og_title' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
     'og_description' => 'Compare existing guided Jaisalmer tour options and enquire about car arrangements. Routes, prices and availability should be confirmed directly.',

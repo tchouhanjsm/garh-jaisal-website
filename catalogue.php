@@ -62,7 +62,7 @@ foreach ($products as $index => $product) {
     ];
 }
 $page = [
-    'title' => 'Jaisalmer Trip Planner | Rooms, Desert Stays, Tours & Transport',
+    'title' => 'Jaisalmer Trip Planner | Tours, Stays & Transport',
     'description' => 'Build a Jaisalmer trip around a Fort stay, desert experience, guided tour, car arrangement or rooftop dining. Shortlist options and enquire for current rates.',
     'path' => '/catalogue.php',
     'preload' => [
