@@ -523,13 +523,13 @@ body .footer-bottom {
   }
 
   main.thar-sunset-story--catalogue .catalogue-hero-facts .at-a-glance__label {
-    font-size: 0.66rem;
-    line-height: 1.1;
+    font-size: 0.7rem;
+    line-height: 1.15;
   }
 
   main.thar-sunset-story--catalogue .catalogue-hero-facts .at-a-glance__value {
-    font-size: 0.7rem;
-    line-height: 1.15;
+    font-size: 0.75rem;
+    line-height: 1.2;
   }
 }
 
