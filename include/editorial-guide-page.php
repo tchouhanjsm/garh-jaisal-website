@@ -162,7 +162,7 @@ require __DIR__ . '/page-head.php';
         <figure class="article-image">
           <img
             src="<?= $escapeGuide($guide['hero_image']) ?>"
-            <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($guide['hero_image']) : '' ?>
+            <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($guide['hero_image'], '(max-width: 768px) 100vw, 60vw') : '' ?>
             alt="<?= $escapeGuide($guide['hero_alt']) ?>"
             fetchpriority="high"
           >

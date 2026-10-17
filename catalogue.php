@@ -111,7 +111,7 @@ require __DIR__ . '/include/page-head.php';
 <main id="main-content" class="catalogue-page thar-sunset-story thar-sunset-story--catalogue" tabindex="-1">
   <section class="catalogue-hero" aria-labelledby="catalogue-title">
     <div class="catalogue-hero-media" aria-hidden="true">
-      <img src="img/optimized/desert3.webp" <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes('img/optimized/desert3.webp') : '' ?> alt="" fetchpriority="high" decoding="async">
+      <img src="img/optimized/desert3.webp" <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes('img/optimized/desert3.webp', '100vw') : '' ?> alt="" fetchpriority="high" decoding="async">
     </div>
     <div class="catalogue-hero-overlay"></div>
     <div class="site-shell catalogue-hero-content">
@@ -192,7 +192,7 @@ require __DIR__ . '/include/page-head.php';
           <article class="catalogue-compare-card">
             <img
               src="<?= htmlspecialchars($camp['hero_image'], ENT_QUOTES, 'UTF-8') ?>"
-              <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($camp['hero_image']) : '' ?>
+              <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($camp['hero_image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') : '' ?>
               alt="<?= htmlspecialchars($camp['hero_alt'], ENT_QUOTES, 'UTF-8') ?>"
               loading="lazy"
               decoding="async"

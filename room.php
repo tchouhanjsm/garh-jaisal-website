@@ -80,7 +80,7 @@ require __DIR__ . '/include/page-head.php';
 
   <section class="page-hero page-hero--photo rooms-hero" aria-labelledby="rooms-page-title">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/optimized/v2/purple-room.webp" <?= gj_image_dimension_attributes('img/optimized/v2/purple-room.webp') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/optimized/v2/purple-room.webp" <?= gj_image_dimension_attributes('img/optimized/v2/purple-room.webp', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell rooms-hero-grid">
       <div class="rooms-hero-copy">
@@ -203,7 +203,7 @@ require __DIR__ . '/include/page-head.php';
           <div class="room-card-media">
             <img
               src="<?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>"
-              <?= gj_image_dimension_attributes($room['image']) ?>
+              <?= gj_image_dimension_attributes($room['image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
               alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>"
               loading="lazy"
             >
