@@ -52,3 +52,9 @@ The package script uses only Python's standard library, selects Git-tracked runt
 Production changes require owner approval after the staging checklist is signed off. Merge the reviewed PR, verify the merged commit is green, deploy using the owner-approved process, and repeat critical staging checks against production without sending test enquiries to guests.
 
 Create the `v1.0.0` release tag only after the owner has approved the merged commit and staging/release gate. Do not tag an unmerged PR head or deploy from this document.
+
+## Backend audit remediation follow-up
+
+PR #91 adds outer-header stickiness and a browser regression for Home, Rooms, Restaurant and Contact at mobile and desktop widths. Verify the new exact-head Browser E2E result and inspect screenshots before merge.
+
+Private lead storage, restaurant request settings and package hygiene are also being addressed inside the same PR. Do not treat the non-deploying Staging QA workflow as cPanel evidence. Before release, verify redirect/403/cache behaviour, writable private storage outside the document root, approved operating hours/cutoff values, live menu approval, and a dedicated staging email test.

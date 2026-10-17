@@ -6,8 +6,8 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-16 |
-| Current phase | Sprint 42 — site-wide typography, spacing, container and image-ratio normalization (current PR) |
+| Last updated | 2026-10-17 |
+| Current phase | Sprint 42 follow-up — site-wide layout and backend audit remediation in existing PR #91 |
 | Base branch | `main` |
 | Baseline commit | `a256f22fe31b27a375876c28f3b433ccf009b36d` (verified `main` merge commit for PR #90) |
 | Last merged PR | [#90 — prioritize high-intent images and font loading](https://github.com/tchouhanjsm/garh-jaisal-website/pull/90) |
@@ -33,6 +33,14 @@
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
 | Owner review | Inspect the Sprint 42 screenshot sheet first at 390px and 1280px; then spot-check layout boundaries at 320px, 768px and 1440px. Historical Desert photo/caption mapping still needs owner approval. |
 | Next action | Finish exact-head Sprint 42 CI and review Home, Rooms and Packages screenshots; owner retains merge and production deployment authority. The merged repository still needs separate owner-run cPanel staging and production release checks. |
+## 2026-10-17 — Backend audit remediation in existing PR #91
+
+- Kept changes in PR #91; no new PR, merge or deployment was performed.
+- Corrected the Rooms responsive title regression: the newly added shared layout block had an unterminated CSS comment, so the browser ignored the intended layout rules. The comment is closed and the 761–1000px H1 minimum now clears the 33px contract.
+- Made the outer site header sticky and reset nested navigation positioning; added browser coverage for Home, Rooms, Restaurant and Contact at 390px and 1280px.
+- Backend audit follow-ups are being applied in this PR. Restaurant operating hours, closed days, cutoff policy, menu approval, private-log access/retention, real mail delivery and external staging are owner/release checks and must not be inferred.
+- Last observed workflows before this follow-up: Site Checks, package preflight and non-deploying Staging QA passed at f216be5; Browser E2E failed the Rooms H1 floor. Exact-head checks for current changes are the merge gate.
+
 ## Phase roadmap
 
 | Phase | Goal | Status |

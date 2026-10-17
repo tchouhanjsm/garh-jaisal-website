@@ -2938,3 +2938,16 @@ p{
   .catalogue-hero-facts{margin-top:1rem}
   .catalogue-hero-facts .at-a-glance--hero{grid-template-columns:1fr}
 }
+
+/* Outer-header stickiness: the child nav cannot stick beyond its static parent. */
+header.site-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 100;
+}
+header.site-header > .nav-wrap {
+  position: relative;
+  inset-block-start: auto;
+  z-index: auto;
+}
+html { scroll-padding-top: 5rem; }
