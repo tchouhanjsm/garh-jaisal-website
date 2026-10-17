@@ -289,6 +289,7 @@ def build() -> dict[str, Any]:
             "upscaling": False,
             "cropping": False,
             "originals_modified": False,
+            "exif_xmp_metadata_copied": False,
         },
         "summary": summary,
         "sources": rows,

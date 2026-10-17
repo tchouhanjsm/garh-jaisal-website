@@ -12,7 +12,7 @@ The **cPanel deployment package** workflow validates file selection on pull requ
 4. Inspect the manifest's file list and published-route count. The ZIP contains tracked runtime PHP pages, `.htaccess`, sitemap, robots rules, CSS, JavaScript, images and runtime includes. It excludes repository metadata, docs, tests, scripts, workflow files, package/test configuration, `include/site-config.example.php` and the server-only `include/site-config.local.php`.
 5. Preserve the existing server-only `include/site-config.local.php` and uploaded/server-managed files. Extract the reviewed archive into a **staging** document root only after making a restorable backup. Do not overwrite local server configuration with any package or example file.
 
-The package script uses only Python's standard library, selects Git-tracked runtime files, rejects a tracked `include/site-config.local.php`, validates sitemap-route coverage and emits a SHA-256 manifest. It refuses to create an archive from a dirty tracked worktree or non-main branch. This is packaging and validation—not a website build step, deployment action or approval to release.
+The package builder selects Git-tracked runtime files plus manifest-approved WebP candidates generated under ignored `img/responsive/`. Install the pinned Pillow version and run `python scripts/build-responsive-image-assets.py` before package preflight/build; the ZIP includes generated responsive variants and its SHA-256 manifest enumerates them. The generator preserves originals, never upscales or crops, strips EXIF/XMP metadata from derivatives, preserves color profiles, and writes a human-review sheet/report under ignored `artifacts/`. The builder rejects a tracked `include/site-config.local.php`, validates sitemap-route coverage and refuses to create an archive from a dirty tracked worktree or non-main branch. This is packaging and validation—not a deployment action or approval to release.
 
 ## Before staging
 
@@ -26,6 +26,8 @@ The package script uses only Python's standard library, selects Git-tracked runt
    ```bash
    php -v
    find . -type f -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l
+   python -m pip install Pillow==11.3.0
+   python scripts/build-responsive-image-assets.py
    php scripts/check-site.php --strict-images
    php scripts/generate-sitemap.php --check
    php scripts/check-experience-publication.php
@@ -38,6 +40,10 @@ The package script uses only Python's standard library, selects Git-tracked runt
    ```
 
    `scripts/generate-sitemap.php` needs a full Git history to derive `lastmod`; run it in a clone with history and commit the regenerated sitemap. The deployed runtime does not need Git.
+
+## Responsive image build inputs
+
+Responsive WebP files in `img/responsive/` are intentionally ignored generated assets, not committed binaries. The browser workflow builds them before E2E; the cPanel package workflow builds the same deterministic variants before package validation and archive creation. If generating locally, use Python 3.12 with `Pillow==11.3.0`, inspect `artifacts/responsive-image-assets/responsive-image-delivery-review.jpg`, and keep original image masters unchanged. The deployment ZIP must contain the manifest-approved generated variants selected by the package builder—not the build script, review reports, or arbitrary files copied into the generated directory.
 
 ## Staging deployment
 

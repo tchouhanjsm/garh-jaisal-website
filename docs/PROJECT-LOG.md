@@ -7,10 +7,10 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-17 |
-| Current phase | Sprint 42 follow-up — site-wide layout and backend audit remediation in existing PR #91 |
+| Current phase | Sprint 43 — responsive image delivery, page layout stability and deployment payload integrity |
 | Base branch | `main` |
-| Baseline commit | `a256f22fe31b27a375876c28f3b433ccf009b36d` (verified `main` merge commit for PR #90) |
-| Last merged PR | [#90 — prioritize high-intent images and font loading](https://github.com/tchouhanjsm/garh-jaisal-website/pull/90) |
+| Baseline commit | `a4b7f1031ead7fcaca60174e47a3c6161449b24c` (verified `main` merge commit for PR #91) |
+| Last merged PR | [#91 — normalize site-wide layout and harden guest journeys](https://github.com/tchouhanjsm/garh-jaisal-website/pull/91) |
 | PR #90 merged | Merged 2026-10-16 at `a256f22fe31b27a375876c28f3b433ccf009b36d`; all four PR-head workflows passed before merge |
 | PR #89 merged | Merged 2026-10-16 at `1d8b02b6d0188a041bc824e30cbcfe565b14686f`; verified starting point for Sprint 41 |
 | PR #88 merged | [Merged 2026-10-16](https://github.com/tchouhanjsm/garh-jaisal-website/pull/88) at `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`; review head `dfbaa2c556bea8bfaabfcdfdf6b2ae51b76a7204` |
@@ -31,8 +31,8 @@
 | PR #86 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666) |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
-| Owner review | Inspect the Sprint 42 screenshot sheet first at 390px and 1280px; then spot-check layout boundaries at 320px, 768px and 1440px. Historical Desert photo/caption mapping still needs owner approval. |
-| Next action | Finish exact-head Sprint 42 CI and review Home, Rooms and Packages screenshots; owner retains merge and production deployment authority. The merged repository still needs separate owner-run cPanel staging and production release checks. |
+| Owner review | Review the generated responsive-image sheet and five-width homepage hero screenshots; confirm image quality at 390px and 1280px first, then 320px, 768px and 1440px. Visual sign-off remains separate from CI. |
+| Next action | Finish exact-head Sprint 43 CI, review responsive asset evidence and confirm the cPanel package includes generated variants; owner retains merge and deployment authority. Real staging/production checks remain separate. |
 ## 2026-10-17 — Backend audit remediation in existing PR #91
 
 - Kept changes in PR #91; no new PR, merge or deployment was performed.
@@ -40,6 +40,15 @@
 - Made the outer site header sticky and reset nested navigation positioning; added browser coverage for Home, Rooms, Restaurant and Contact at 390px and 1280px.
 - Implemented in this PR: Rooms hero token/comment regression fix; sticky outer header; always-visible restaurant enquiry form with 30-minute preference, note, consent and unconfirmed status; private JSONL lead records with reference codes and per-IP/phone daily limits; contact lead persistence before mail; owner-gated menu prices; cPanel include-directory denial, index.php redirect, robots/cache updates; exclusions for five verified stale/documentation-only package files; optimized WebP Rooms hero; and first-pass metadata corrections. Exact-head CI is still the gate.
 - Last observed workflows before this follow-up: Site Checks, package preflight and non-deploying Staging QA passed at f216be5; Browser E2E failed the Rooms H1 floor. Exact-head checks for current changes are the merge gate.
+
+## Sprint 43 — Responsive image delivery and package integrity (in progress)
+
+- Base: verified `main` merge SHA `a4b7f1031ead7fcaca60174e47a3c6161449b24c`, after PR #91 merged. Reused the already-committed Sprint 43 generator and 43-source manifest from `feature/sprint-43-responsive-image-delivery-20261017`; older image-audit branches are already ancestors of `main` and were not merged again.
+- Hardened manifest validation and output-path collision handling; `--check` now fully decodes every source; the configured byte-saving threshold is enforced; WebP derivatives preserve ICC profiles but do not copy EXIF/XMP metadata; originals stay untouched.
+- Integrated opt-in responsive `srcset`/`sizes` into the homepage hero (with viewport-aware matching preload candidates) and selected shared experience, editorial, room, catalogue and product-card images. Variant use is conditional on a generated file with valid WebP type, expected width, matching aspect ratio and smaller byte size; legacy fallback behavior remains.
+- Browser E2E and package jobs regenerate ignored `img/responsive/` outputs. Deployment packaging includes only generated candidates derived from the checked-in manifest and rejects unlisted generated files/symlinks. Generated binaries and visual-review artifacts are not committed.
+- Exact-head gates: PHP 7.4/8.2 Site Checks, source/manifest check and generator tests, Browser E2E/five-width hero checks, image optimization/layout and payload audits, deployment package tests/preflight, and Staging QA dry run. Human review of the image sheet remains required.
+- No merge, cPanel upload, live mail test or production deployment by this implementation.
 
 ## Phase roadmap
 
