@@ -53,3 +53,9 @@ These are candidates for review, not a promise that Garh Jaisal Haveli currently
 - Provide exact opening hours, closed days, last seating and same-day cut-off before configuring online requests. An empty closed-day list is not verified operating hours.
 - Private enquiry storage needs a confirmed operator-access method, backup/retention policy and approved privacy wording. Test real email delivery on staging.
 - Confirm the current menu items and prices before enabling public price display.
+
+## Backend remediation follow-up (2026-10-17)
+
+- Table requests produce a reference and remain unconfirmed until the hotel replies. Supply real restaurant hours, closed days, last seating, same-day cut-off and online party-size policy before configuring those constraints.
+- Confirm the public menu before enabling `include/menu-data.php` price display.
+- Approve the privacy/controller wording, the lead log operator, backup/retention requirements, and a staging mail test before production use.

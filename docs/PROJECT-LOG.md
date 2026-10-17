@@ -38,7 +38,7 @@
 - Kept changes in PR #91; no new PR, merge or deployment was performed.
 - Corrected the Rooms responsive title regression: the newly added shared layout block had an unterminated CSS comment, so the browser ignored the intended layout rules. The comment is closed and the 761–1000px H1 minimum now clears the 33px contract.
 - Made the outer site header sticky and reset nested navigation positioning; added browser coverage for Home, Rooms, Restaurant and Contact at 390px and 1280px.
-- Backend audit follow-ups are being applied in this PR. Restaurant operating hours, closed days, cutoff policy, menu approval, private-log access/retention, real mail delivery and external staging are owner/release checks and must not be inferred.
+- Implemented in this PR: Rooms hero token/comment regression fix; sticky outer header; always-visible restaurant enquiry form with 30-minute preference, note, consent and unconfirmed status; private JSONL lead records with reference codes and per-IP/phone daily limits; contact lead persistence before mail; owner-gated menu prices; cPanel include-directory denial, index.php redirect, robots/cache updates; exclusions for five verified stale/documentation-only package files; optimized WebP Rooms hero; and first-pass metadata corrections. Exact-head CI is still the gate.
 - Last observed workflows before this follow-up: Site Checks, package preflight and non-deploying Staging QA passed at f216be5; Browser E2E failed the Rooms H1 floor. Exact-head checks for current changes are the merge gate.
 
 ## Phase roadmap
@@ -152,3 +152,10 @@
 - Apply the shared component to Home, Rooms and Trip Planner. Catalogue facts explain the browser-tab shortlist and reviewed WhatsApp draft without suggesting that an enquiry or shortlist is a confirmed booking.
 - Reuse existing tokens and CSS, keep the information card light, and run responsive E2E checks at 320, 390, 768, 1280 and 1440px.
 - No route, canonical, schema, booking destination, prices, availability, policies, analytics ID, server-side lead storage, or production dependency changes. Owner controls merge and deployment.
+
+## Backend audit remediation — delivered code scope (PR #91)
+
+- Source of findings: `Backend Debugging Report Pages, Images, Server Issues and Doc-vs-Site Gaps.md`, which audited main after PR #90. This remediation is intentionally kept in the already-open PR #91.
+- The new `docs/BACKEND-DEBUGGING-REMEDIATION-2026-10-17.md` tracks implemented, partial and owner-blocked findings separately.
+- Known limitations: no external cPanel/production deployment, no real mailbox delivery proof, no owner-approved restaurant schedule/menu/policy facts, and no broad responsive image derivative generation or deletion of heuristic orphan candidates.
+- Exact-head workflow results must be refreshed after the final commit; earlier success from a prior head is not evidence for current changes.
