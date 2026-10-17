@@ -2,6 +2,7 @@
 $siteConfig = require __DIR__ . '/include/site-config.php';
 require_once __DIR__ . '/include/session.php';
 require_once __DIR__ . '/include/lead-storage.php';
+require_once __DIR__ . '/include/enquiry-recipients.php';
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Location: contact.php');
@@ -130,16 +131,7 @@ if (empty($leadResult['ok'])) {
 }
 $leadReference = $leadResult['reference'];
 
-$recipients = array_values(array_filter((array) ($siteConfig['inquiry_recipients'] ?? []), static function ($value) {
-    return is_string($value) && filter_var($value, FILTER_VALIDATE_EMAIL);
-}));
-if ($recipients === []) {
-    $fallbackRecipient = trim((string) ($siteConfig['hotel_email'] ?? ''));
-    if ($fallbackRecipient !== '' && !preg_match('/[\r\n]/', $fallbackRecipient)
-        && filter_var($fallbackRecipient, FILTER_VALIDATE_EMAIL) !== false) {
-        $recipients = [$fallbackRecipient];
-    }
-}
+$recipients = gj_configured_enquiry_recipients($siteConfig);
 
 $emailTo = implode(', ', $recipients);
 $subject = 'Enquiry [' . $leadReference . '] - Hotel Garh Jaisal';

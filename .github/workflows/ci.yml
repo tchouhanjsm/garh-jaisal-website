@@ -80,6 +80,9 @@ jobs:
       - name: Test private lead storage and rate limiting
         run: php tests/php/lead-storage-validation.php
 
+      - name: Test explicit enquiry recipient isolation
+        run: php tests/php/enquiry-recipient-validation.php
+
       - name: Verify staging and non-production noindex behavior
         run: php tests/php/staging-noindex.php
 

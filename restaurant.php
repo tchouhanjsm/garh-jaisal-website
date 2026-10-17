@@ -16,6 +16,7 @@ $googleMapsUrl = 'https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8';
 $googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.6918725708306!2d70.9117074793457!3d26.913272400000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3947bd9e89a679cf%3A0xd196c3f044898c10!2sGarh%20Jaisal's%20Kitchen!5e0!3m2!1sen!2sin!4v1791990366078!5m2!1sen!2sin";
 $instagramUrl = 'https://www.instagram.com/garhjaisal/';
 require_once __DIR__ . '/include/lead-storage.php';
+require_once __DIR__ . '/include/enquiry-recipients.php';
 
 /* Menu/prices are from the supplied restaurant design. Verify the live menu before staging. */
 $menuConfig = require __DIR__ . '/include/menu-data.php';
@@ -174,13 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 . "Special note: " . ($old['note'] !== '' ? $old['note'] : '-') . "\n\n"
                 . "Please confirm current service hours and availability directly with the guest.";
 
-            $recipients = array_values(array_filter((array) ($siteConfig['inquiry_recipients'] ?? []), static function ($address) {
-                return is_string($address) && !preg_match('/[\r\n]/', $address)
-                    && filter_var($address, FILTER_VALIDATE_EMAIL) !== false;
-            }));
-            if ($recipients === [] && filter_var($hotelEmail, FILTER_VALIDATE_EMAIL) !== false) {
-                $recipients = [$hotelEmail];
-            }
+            $recipients = gj_configured_enquiry_recipients($siteConfig);
             $headers = "MIME-Version: 1.0\r\nContent-Type: text/plain; charset=UTF-8\r\n";
             if (filter_var($hotelEmail, FILTER_VALIDATE_EMAIL) !== false && !preg_match('/[\r\n]/', $hotelEmail)) {
                 $headers .= 'From: ' . $hotelEmail . "\r\n";

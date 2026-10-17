@@ -17,6 +17,15 @@ function gj_lead_storage_directory(): ?string
         }
         $candidate = $configured;
     } else {
+        // A sibling of a nested staging document root can still be public.
+        // Require an explicit private path instead of guessing under public_html.
+        $segments = explode('/', trim(str_replace(DIRECTORY_SEPARATOR, '/', $documentRoot), '/'));
+        $publicRootMarkers = ['public_html', 'public', 'htdocs', 'httpdocs', 'wwwroot', 'webroot', 'www'];
+        foreach ($segments as $index => $segment) {
+            if (in_array(strtolower($segment), $publicRootMarkers, true) && $index < count($segments) - 1) {
+                return null;
+            }
+        }
         $candidate = dirname($documentRoot) . DIRECTORY_SEPARATOR . 'gj-private-data';
     }
 

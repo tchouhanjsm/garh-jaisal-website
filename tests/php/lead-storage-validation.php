@@ -54,6 +54,18 @@ lead_test_assert(empty($unsafe['ok']) && ($unsafe['error'] ?? '') === 'storage_u
 lead_test_assert(!is_file($public . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . 'guest-enquiries.jsonl'), 'no public-root lead file is created');
 
 putenv('GJ_LEAD_STORAGE_DIR');
+$nestedDocumentRoot = $root . DIRECTORY_SEPARATOR . 'account' . DIRECTORY_SEPARATOR . 'public_html' . DIRECTORY_SEPARATOR . 'staging';
+if (!mkdir($nestedDocumentRoot, 0700, true)) {
+    fwrite(STDERR, "FAIL: nested staging test setup failed\n");
+    exit(1);
+}
+$_SERVER['DOCUMENT_ROOT'] = $nestedDocumentRoot;
+$nestedDefault = gj_lead_storage_directory();
+lead_test_assert($nestedDefault === null, 'nested staging roots under public web roots require an explicit private storage path');
+lead_test_assert(
+    !is_dir(dirname($nestedDocumentRoot) . DIRECTORY_SEPARATOR . 'gj-private-data'),
+    'nested staging must not create private lead storage inside the parent public_html directory'
+);
 @unlink($logPath);
 @rmdir($private);
 @rmdir($public . DIRECTORY_SEPARATOR . 'private');
