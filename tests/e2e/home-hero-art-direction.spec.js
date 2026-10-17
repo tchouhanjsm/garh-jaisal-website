@@ -6,11 +6,11 @@ const { REPOSITORY_ROOT } = require('./helpers/sitemap-routes');
 const BASE_URL = 'http://127.0.0.1:8080';
 const OUTPUT_DIR = path.join(REPOSITORY_ROOT, 'artifacts/screenshots/home-hero-review');
 const VIEWPORTS = [
-  { width: 320, height: 700, expected: 'img/optimized/v2/facade.webp', imageWidth: 1333, imageHeight: 2000, maxBytes: 600 * 1024 },
-  { width: 390, height: 844, expected: 'img/optimized/v2/facade.webp', imageWidth: 1333, imageHeight: 2000, maxBytes: 600 * 1024 },
-  { width: 768, height: 900, expected: 'img/optimized/v2/fort-from-roof.webp', imageWidth: 2000, imageHeight: 1333, maxBytes: 400 * 1024 },
-  { width: 1280, height: 800, expected: 'img/optimized/v2/fort-from-roof.webp', imageWidth: 2000, imageHeight: 1333, maxBytes: 400 * 1024 },
-  { width: 1440, height: 900, expected: 'img/optimized/v2/fort-from-roof.webp', imageWidth: 2000, imageHeight: 1333, maxBytes: 400 * 1024 },
+  { width: 320, height: 700, expected: 'img/responsive/v2/facade-480.webp', imageWidth: 480, imageHeight: 720, maxBytes: 200 * 1024 },
+  { width: 390, height: 844, expected: 'img/responsive/v2/facade-480.webp', imageWidth: 480, imageHeight: 720, maxBytes: 200 * 1024 },
+  { width: 768, height: 900, expected: 'img/responsive/v2/fort-from-roof-800.webp', imageWidth: 800, imageHeight: 533, maxBytes: 300 * 1024 },
+  { width: 1280, height: 800, expected: 'img/responsive/v2/fort-from-roof-1200.webp', imageWidth: 1200, imageHeight: 800, maxBytes: 400 * 1024 },
+  { width: 1440, height: 900, expected: 'img/responsive/v2/fort-from-roof-1200.webp', imageWidth: 1200, imageHeight: 800, maxBytes: 400 * 1024 },
 ];
 
 test('homepage hero art direction selects existing dimension-stable images within asset budgets', async ({ browser }, testInfo) => {
@@ -58,6 +58,8 @@ test('homepage hero art direction selects existing dimension-stable images withi
           naturalHeight: img.naturalHeight,
           declaredWidth: Number(dimensionNode.getAttribute('width')),
           declaredHeight: Number(dimensionNode.getAttribute('height')),
+          selectedSizes: dimensionNode.getAttribute('sizes'),
+          selectedSrcset: dimensionNode.getAttribute('srcset') || '',
           alt: img.getAttribute('alt'),
           ariaHidden: img.getAttribute('aria-hidden'),
           fetchPriority: img.getAttribute('fetchpriority'),
@@ -70,8 +72,9 @@ test('homepage hero art direction selects existing dimension-stable images withi
       expect(state.loaded, 'The selected hero image must decode at ' + viewport.width + 'px').toBe(true);
       expect(state.naturalWidth).toBe(viewport.imageWidth);
       expect(state.naturalHeight).toBe(viewport.imageHeight);
-      expect(state.declaredWidth).toBe(viewport.imageWidth);
-      expect(state.declaredHeight).toBe(viewport.imageHeight);
+      expect(state.selectedSizes).toBe('100vw');
+      expect(state.selectedSrcset.split(',').some(item => item.trim().split(/\s+/)[0].replace(/^\//, '') === state.currentPath)).toBe(true);
+      expect(Math.abs((state.declaredWidth / state.declaredHeight) - (state.naturalWidth / state.naturalHeight))).toBeLessThan(0.02);
       expect(state.fetchPriority).toBe('high');
       expect(state.alt).toBe('');
       expect(state.ariaHidden).toBe('true');

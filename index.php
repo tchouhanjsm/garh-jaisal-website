@@ -9,13 +9,32 @@ $rooms = require __DIR__ . '/include/rooms-data.php';
 <?php
 $schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $schemaPageUrl = $schemaSiteUrl . '/';
+$buildHeroPreload = static function ($stem, $media, $fallback) {
+    $srcset = [];
+    foreach ([480, 800, 1200] as $candidateWidth) {
+        $candidate = '/img/responsive/v2/' . $stem . '-' . $candidateWidth . '.webp';
+        if (is_file(__DIR__ . $candidate) && !is_link(__DIR__ . $candidate)) {
+            $srcset[] = $candidate . ' ' . $candidateWidth . 'w';
+        }
+    }
+    $descriptor = [
+        'href' => $srcset ? strtok($srcset[0], ' ') : $fallback,
+        'media' => $media,
+        'fetchpriority' => 'high',
+    ];
+    if ($srcset) {
+        $descriptor['imagesrcset'] = implode(', ', $srcset);
+        $descriptor['imagesizes'] = '100vw';
+    }
+    return $descriptor;
+};
 $page = [
     'title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
     'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Heritage rooms, rooftop views, dining and desert experiences in the heart of the living fort.',
     'path' => '/',
     'preload' => [
-        ['href' => '/img/optimized/v2/facade.webp', 'media' => '(max-width: 767px)', 'fetchpriority' => 'high'],
-        ['href' => '/img/optimized/v2/fort-from-roof.webp', 'media' => '(min-width: 768px)', 'fetchpriority' => 'high'],
+        $buildHeroPreload('facade', '(max-width: 767px)', '/img/optimized/v2/facade.webp'),
+        $buildHeroPreload('fort-from-roof', '(min-width: 768px)', '/img/optimized/v2/fort-from-roof.webp'),
     ],
     'og_title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
     'og_description' => 'Heritage rooms, rooftop views and desert experiences inside Jaisalmer Fort.',
@@ -46,12 +65,10 @@ require __DIR__ . '/include/page-head.php';
     <picture class="hero-picture">
       <source
         media="(min-width: 768px)"
-        srcset="img/optimized/v2/fort-from-roof.webp"
-        width="2000"
-        height="1333">
+        <?= gj_image_dimension_attributes('img/optimized/v2/fort-from-roof.webp', '100vw') ?>>
       <img
-        src="img/v2/facade.jpg"
-        <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?>
+        src="img/optimized/v2/facade.webp"
+        <?= gj_image_dimension_attributes('img/optimized/v2/facade.webp', '100vw') ?>
         alt=""
         aria-hidden="true"
         fetchpriority="high"
@@ -185,7 +202,7 @@ require __DIR__ . '/include/page-head.php';
 
     <div class="image-panel">
       <img
-        src="img/5.webp" <?= gj_image_dimension_attributes('img/5.webp') ?>
+        src="img/5.webp" <?= gj_image_dimension_attributes('img/5.webp', '(max-width: 800px) 100vw, 50vw') ?>
         alt="Carved sandstone architecture inside Garh Jaisal Haveli"
         loading="lazy">
     </div>
@@ -209,7 +226,7 @@ require __DIR__ . '/include/page-head.php';
           <article class="card home-room-card">
             <div class="card-image">
               <a class="home-room-card-image-link" href="<?= htmlspecialchars($roomDetailsUrl, ENT_QUOTES, 'UTF-8') ?>">
-                <img src="<?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($room['image']) ?> alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
+                <img src="<?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($room['image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
               </a>
             </div>
             <div class="card-body">
@@ -280,7 +297,7 @@ require __DIR__ . '/include/page-head.php';
       <article class="card">
         <div class="card-image">
           <img
-            src="img/desert7.jpg" <?= gj_image_dimension_attributes('img/desert7.jpg') ?>
+            src="img/desert7.jpg" <?= gj_image_dimension_attributes('img/desert7.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
             alt="Camel safari at sunset in the Thar Desert near Jaisalmer"
             loading="lazy">
         </div>
