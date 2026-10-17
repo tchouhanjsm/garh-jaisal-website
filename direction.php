@@ -92,7 +92,7 @@ require __DIR__ . '/include/page-head.php';
           <h2>How guests reach the haveli.</h2>
         </div>
         <p>
-          From Fort Parking, allow a 5–6 minute walk (roughly 300 metres). Typical door-to-door time from Jaisalmer Railway Station or the airport is about 5–20 minutes; the final part is on foot.
+          From Fort Parking, allow a 5–6 minute walk (roughly 300 metres). Travel time from the railway station or airport depends on your route and pickup arrangements; confirm the transfer plan for your date. The final stretch to the haveli is on foot through the fort lanes.
         </p>
       </div>
 
@@ -130,7 +130,7 @@ require __DIR__ . '/include/page-head.php';
         <div class="step">
           <span>01</span>
           <strong>Share your ETA</strong>
-          <span>Call or WhatsApp when you are on the way, or about 10 minutes before you reach the fort from the city centre.</span>
+          <span>Call or WhatsApp when you are on the way and share your expected arrival time.</span>
         </div>
         <div class="step">
           <span>02</span>
@@ -145,7 +145,7 @@ require __DIR__ . '/include/page-head.php';
         <div class="step">
           <span>04</span>
           <strong>Walk to the haveli</strong>
-          <span>A guided walk through the lanes to Garh Jaisal. From the city centre, the meeting point is just past the main gate.</span>
+          <span>Follow the route through the fort lanes to Garh Jaisal. Open the hotel's exact map pin if you need help finding the way.</span>
         </div>
       </div>
     </div>
@@ -158,21 +158,21 @@ require __DIR__ . '/include/page-head.php';
           <p class="eyebrow">Stations and the airport</p>
           <h2>Ways to reach Fort Parking.</h2>
         </div>
-        <p>These are the transfer notes already given for the hotel. Ask the team to confirm them for your arrival time.</p>
+        <p>Transfer options, fares and journey times vary by route, provider and date. Contact the hotel to confirm the pickup point, vehicle, current quote, timing and availability before arranging a transfer.</p>
       </div>
 
       <div class="travel-grid">
         <article class="travel-card">
           <h3>Railway station</h3>
-          <p>A rickshaw pickup is listed within 8 minutes of the train arriving, with about 12 minutes of travel in total. A rickshaw from the station is listed at about ₹300.</p>
+          <p>Ask the hotel whether a rickshaw or other pickup can be arranged from the railway station. Confirm the pickup point, fare, timing and availability for your date.</p>
         </article>
         <article class="travel-card">
           <h3>Jaisalmer airport</h3>
-          <p>A private sedan to Fort Parking is listed at about ₹1100 and about 20 minutes. Contact the hotel ahead of time to confirm availability and ask about assistance from the parking area.</p>
+          <p>Ask about a private sedan transfer to Fort Parking. Confirm the route, fare, pickup point and expected timing with the hotel before booking.</p>
         </article>
         <article class="travel-card">
           <h3>Inside the fort</h3>
-          <p>When a rickshaw is permitted, the ride from the parking area is listed at ₹120–₹150. During busy hours that option often is not available.</p>
+          <p>Cars cannot enter the fort. A rickshaw may be an option when local access rules permit it; confirm current access and fare, and plan for the final walk from Fort Parking.</p>
         </article>
       </div>
 
@@ -286,7 +286,7 @@ require __DIR__ . '/include/page-head.php';
       <?php
       $faq = [
           'items' => [
-              ['question' => 'Can my car enter the fort?', 'answer' => 'No. Park at Fort Parking. The hotel is about a 4 minute walk from there.'],
+              ['question' => 'Can my car enter the fort?', 'answer' => 'No. Park at Fort Parking. The haveli is roughly 300 metres away, a 5–6 minute walk; allow more time when the lanes are busy.'],
               ['question' => 'Can you meet me at the parking area?', 'answer' => 'Contact the hotel before travel with your expected arrival time and ask whether staff can meet you. Do not assume meet-and-assist is confirmed until the hotel replies.'],
               ['question' => 'Are rickshaws allowed inside?', 'answer' => 'Not during busy hours, about 8:00 AM–8:00 PM. Outside those times, rickshaws often go inside the fort.'],
               ['question' => 'Can I check in early or leave luggage before check-in?', 'answer' => 'Contact the hotel before travel to confirm check-in times, whether early check-in is available, and whether luggage storage can be arranged.'],
@@ -298,7 +298,7 @@ require __DIR__ . '/include/page-head.php';
               ]],
               ['question' => 'I am arriving late at night by train. What should I do?', 'answer' => 'Call or WhatsApp the hotel before travel with your expected arrival time. Confirm current reception hours and whether late-arrival assistance can be arranged; do not assume a late-night meet is confirmed until the team confirms it.'],
               ['question' => 'Can I get help with luggage at Fort Parking?', 'answer' => 'Call or WhatsApp before arrival to confirm what luggage assistance can be arranged at Fort Parking. Your driver can also call the hotel when you are close.'],
-              ['question' => 'Can I get a ride from the station or airport?', 'answer' => 'A rickshaw from the railway station is listed at about ₹300. A private sedan from the airport to Fort Parking is listed at about ₹1100. Call or WhatsApp to arrange it.'],
+              ['question' => 'Can I get a ride from the station or airport?', 'answer' => 'Ask the hotel about transfer options. Confirm the route, vehicle, pickup point, current quote, timing and availability for your date before travelling.'],
           ],
           'list_class' => 'faq-list',
       ];

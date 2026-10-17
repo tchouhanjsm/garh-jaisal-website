@@ -62,8 +62,8 @@ require __DIR__ . '/include/page-head.php';
       <p class="eyebrow">Rooftop dining</p>
       <h1>Rooftop dining at Garh Jaisal's Kitchen.</h1>
       <p>
-        Candlelight dinners on the terrace, with views of the havelis,
-        the royal palace, the lake, and the sunrise and sunset.
+        Candlelight dinners on the terrace, with views across the havelis,
+        the royal palace and lake as the light changes over the fort.
       </p>
       <div class="actions">
         <a class="button button-primary" href="restaurant.php#menu">View the menu</a>
@@ -104,7 +104,8 @@ require __DIR__ . '/include/page-head.php';
         <p>
           Garh Jaisal's Kitchen serves meals on the rooftop. The setting is
           meant for a candlelight dinner, with the city spread out around you:
-          havelis, the royal palace, the lake, and the sunrise and sunset.
+          havelis, the royal palace and the lake. Contact the hotel to confirm
+          current dining service times before visiting.
         </p>
         <p>
           The menu includes vegetarian, vegan, and non-vegetarian dishes. Visit
@@ -173,9 +174,9 @@ require __DIR__ . '/include/page-head.php';
             >
           </div>
           <div class="card-body">
-            <p class="card-kicker">Sunrise and sunset</p>
-            <h3>The day from the roof</h3>
-            <p>Stay for the sunrise or sunset while you eat above the fort.</p>
+            <p class="card-kicker">Views from the roof</p>
+            <h3>Light over the fort</h3>
+            <p>See the light change across the fort and city. Contact the hotel to confirm current dining service times before visiting.</p>
           </div>
         </article>
       </div>

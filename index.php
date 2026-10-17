@@ -181,7 +181,7 @@ require __DIR__ . '/include/page-head.php';
           <div>
             <h3>Rooftop views</h3>
             <p>
-              Enjoy breakfast, dinner and views across the Golden City.
+              Enjoy rooftop dining and views across the Golden City. Confirm current service times and menu options with the hotel before visiting.
             </p>
           </div>
         </article>
@@ -250,8 +250,9 @@ require __DIR__ . '/include/page-head.php';
       <h2 id="rooftop-dining-title">Meals with the fort around you.</h2>
 
       <p>
-        Come up to the rooftop for breakfast, dinner or a quiet drink while
-        the sandstone walls and rooftops of Jaisalmer stretch around you.
+        Visit the rooftop for dining and views across Jaisalmer's sandstone
+        rooftops. Contact the hotel to confirm current service times and menu
+        options before visiting.
       </p>
 
       <p>

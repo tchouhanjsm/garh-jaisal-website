@@ -19,6 +19,7 @@ test('Directions avoids unconfirmed check-in, reception and arrival promises', a
   await expect(arrivalFaq).toContainText('What if I arrive outside reception hours?');
   await expect(arrivalFaq).toContainText('Confirm current reception hours');
   await expect(arrivalFaq).toContainText('Confirm current service times, breakfast availability, and menu options');
+  await expect(arrivalFaq).toContainText('Confirm the route, vehicle, pickup point, current quote, timing and availability for your date before travelling.');
 
   const renderedCopy = await page.locator('main.arrival-page').innerText();
   for (const unconfirmedClaim of [
@@ -38,6 +39,13 @@ test('Directions avoids unconfirmed check-in, reception and arrival promises', a
     'Luggage help and a meet-and-assist at Fort Parking',
     'Meet-and-assist is available with prior notice',
     'Meet the team',
+    '₹300',
+    '₹1100',
+    '₹120–₹150',
+    'Typical door-to-door time',
+    'within 8 minutes of the train arriving',
+    'about 12 minutes of travel in total',
+    'about 20 minutes',
   ]) {
     expect(renderedCopy, 'Directions should not publish unconfirmed claim: ' + unconfirmedClaim)
       .not.toContain(unconfirmedClaim);
@@ -73,6 +81,16 @@ test('home and stay guides do not republish unconfirmed arrival promises', async
         .not.toMatch(claim.pattern);
     }
 
+    if (entry.path === '/') {
+      const rooftop = page.locator('section:has(#rooftop-dining-title)');
+      const rooftopCopy = await rooftop.innerText();
+      expect(renderedCopy, 'Home must not promise breakfast service in any section or card').not.toMatch(/\benjoy breakfast\b/i);
+      expect(renderedCopy, 'Home must not imply an unverified drinks offering in any section or card').not.toMatch(/quiet drink/i);
+      expect(rooftopCopy, 'Home rooftop section must not promise unconfirmed breakfast service').not.toMatch(/\bbreakfast\b/i);
+      expect(rooftopCopy, 'Home rooftop section must not imply an unverified drinks offering').not.toMatch(/quiet drink/i);
+      expect(rooftopCopy).toContain('current service times and menu options before visiting.');
+    }
+
     expect(
       await main.locator('a[href="contact.php?topic=arrival"]').count(),
       entry.label + ' offers a contextual arrival enquiry'
@@ -82,6 +100,22 @@ test('home and stay guides do not republish unconfirmed arrival promises', async
       entry.label + ' retains a link to the full arrival guide'
     ).toBeGreaterThan(0);
   }
+});
+
+test('rooftop dining copy does not imply unconfirmed sunrise or all-day meal service', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Rooftop dining copy is checked once on desktop-1280');
+
+  const response = await page.goto('/roof.php', { waitUntil: 'domcontentloaded' });
+  expect(response, 'Rooftop dining page must return an HTTP response').not.toBeNull();
+  expect(response.status(), 'Rooftop dining page must load successfully').toBeLessThan(400);
+
+  const rooftop = page.locator('main.roof-page');
+  const renderedCopy = await rooftop.innerText();
+  expect(renderedCopy).not.toMatch(/stay for the sunrise or sunset while you eat/i);
+  expect(renderedCopy).not.toMatch(/breakfast is available daily|breakfast service/i);
+  expect(renderedCopy).toContain('Contact the hotel to confirm current dining service times before visiting.');
+  await expect(rooftop.getByRole('link', { name: 'View the menu' })).toHaveAttribute('href', 'restaurant.php#menu');
+  await expect(rooftop.locator('.page-hero-inner').getByRole('link', { name: 'Contact the hotel' })).toHaveAttribute('href', 'contact.php?topic=dining');
 });
 
 test('arrival guidance remains within the viewport at mobile and desktop widths', async ({ page }) => {
