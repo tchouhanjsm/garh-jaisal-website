@@ -23,7 +23,6 @@ function expectRoutedOnce(events, eventName) {
 }
 
 test('server-rejected restaurant requests link each validation error to its field', async ({ page }, testInfo) => {
-  test.skip(process.env.GJ_RESTAURANT_MAIL_ENABLED !== '1', 'Run in a dedicated server with the gated restaurant form enabled.');
   test.skip(testInfo.project.name !== 'desktop-1280', 'Server-side validation runs once on desktop-1280');
 
   await page.goto('/restaurant.php?utm_source=google&email=private%40example.com#reserve', {
@@ -38,14 +37,17 @@ test('server-rejected restaurant requests link each validation error to its fiel
   await form.locator('#date').fill('2020-01-01');
   await form.locator('#time').fill('');
   await form.locator('#guests').fill('0');
+  await form.locator('#note').fill('x'.repeat(501));
   await form.getByRole('button', { name: 'Request a table' }).click();
 
   const checks = [
     ['name', 'Enter your name.'],
     ['whatsapp', 'Enter a valid WhatsApp number.'],
     ['date', 'Choose today or a future date.'],
-    ['time', 'Enter a valid preferred time; the hotel will confirm availability.'],
-    ['guests', 'Guests must be between 1 and 20.']
+    ['time', 'Choose a preferred time on the hour or half-hour.'],
+    ['guests', 'Guests must be between 1 and 20.'],
+    ['note', 'Keep the special note to 500 characters or fewer.'],
+    ['consent', 'Please agree that the hotel may use these details to respond to your request.']
   ];
   for (const [field, message] of checks) {
     const control = form.locator('#' + field);
@@ -60,6 +62,8 @@ test('server-rejected restaurant requests link each validation error to its fiel
   await expect(form.locator('#name')).toHaveAttribute('autocomplete', 'name');
   await expect(form.locator('#whatsapp')).toHaveAttribute('autocomplete', 'tel');
   await expect(form.locator('#email')).toHaveAttribute('autocomplete', 'email');
+  await expect(form.locator('#time')).toHaveAttribute('step', '1800');
+  await expect(form.locator('#note')).toHaveAttribute('maxlength', '500');
 });
 
 test('restaurant form start and submit attempt events exclude personal fields and never imply a sent booking', async ({ page }, testInfo) => {
