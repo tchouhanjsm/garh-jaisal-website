@@ -75,6 +75,9 @@ jobs:
       - name: Test runtime config validation and secret-safe diagnostics
         run: php tests/php/runtime-config-validation.php
 
+      - name: Test private lead storage and rate limiting
+        run: php tests/php/lead-storage-validation.php
+
       - name: Verify staging and non-production noindex behavior
         run: php tests/php/staging-noindex.php
 

@@ -19,6 +19,10 @@ $defaults = [
     'analytics_ids' => ['G-0C646S1FQ0', 'G-6S5PCEVXH4'],
     // Configure real recipients in site-config.local.php on the server.
     'inquiry_recipients' => [],
+    // Owner-confirmed weekday numbers (0=Sunday ... 6=Saturday) or weekday names.
+    'restaurant_closed_days' => [],
+    // Zero leaves same-day cut-off disabled until owner supplies a value in minutes.
+    'restaurant_same_day_cutoff_minutes' => 0,
 ];
 
 $local = __DIR__ . '/site-config.local.php';
