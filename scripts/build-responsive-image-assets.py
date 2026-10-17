@@ -45,19 +45,28 @@ def load_manifest() -> dict[str, Any]:
     if len(sources) != len(set(sources)):
         raise ValueError("sources must not contain duplicates")
 
+    output_paths: set[str] = set()
     for source in sources:
+        if not isinstance(source, str):
+            raise ValueError(f"Unsafe or unsupported source path: {source!r}")
         source_path = Path(source)
         if (
-            not isinstance(source, str)
-            or source_path.is_absolute()
+            source_path.is_absolute()
+            or len(source_path.parts) < 2
             or source_path.parts[0] != "img"
             or ".." in source_path.parts
+            or "\\" in source
             or source_path.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp", ".avif"}
         ):
             raise ValueError(f"Unsafe or unsupported source path: {source!r}")
         candidate = ROOT / source_path
         if not candidate.is_file() or candidate.is_symlink():
             raise FileNotFoundError(f"Manifest source is missing or is a symlink: {source}")
+        for width in widths:
+            generated = output_path(source, width).relative_to(ROOT).as_posix()
+            if generated in output_paths:
+                raise ValueError(f"Manifest sources collide on generated output path: {generated}")
+            output_paths.add(generated)
 
     if manifest.get("format") != "WEBP":
         raise ValueError("Only the reviewed WEBP format is currently supported")
@@ -69,11 +78,17 @@ def load_manifest() -> dict[str, Any]:
     return manifest
 
 
-def encode_variant(source_path: Path, destination: Path, target_width: int, quality: int, method: int) -> dict[str, Any]:
+def encode_variant(
+    source_path: Path,
+    destination: Path,
+    target_width: int,
+    quality: int,
+    method: int,
+    minimum_savings_percent: float,
+) -> dict[str, Any]:
     with Image.open(source_path) as opened:
         opened.load()
         original_size = opened.size
-        original_format = opened.format or source_path.suffix.lstrip(".").upper()
         if opened.width <= target_width:
             return {
                 "status": "skipped-no-upscale",
@@ -93,10 +108,11 @@ def encode_variant(source_path: Path, destination: Path, target_width: int, qual
             "method": method,
             "exact": True,
         }
-        for key in ("exif", "icc_profile", "xmp"):
-            value = opened.info.get(key)
-            if value:
-                options[key] = value
+        # Preserve color interpretation, but omit EXIF/XMP metadata that can
+        # contain device identifiers, GPS coordinates, or editorial history.
+        profile = opened.info.get("icc_profile")
+        if profile:
+            options["icc_profile"] = profile
         encoded = encoded.resize((target_width, target_height), Image.Resampling.LANCZOS)
         destination.parent.mkdir(parents=True, exist_ok=True)
         encoded.save(destination, **options)
@@ -114,9 +130,7 @@ def encode_variant(source_path: Path, destination: Path, target_width: int, qual
     variant_bytes = destination.stat().st_size
     saved_bytes = source_bytes - variant_bytes
     saved_percent = (saved_bytes / source_bytes * 100) if source_bytes else 0.0
-    minimum_savings = 5.0
-
-    if saved_bytes <= 0 or saved_percent < minimum_savings:
+    if saved_bytes <= 0 or saved_percent < minimum_savings_percent:
         destination.unlink(missing_ok=True)
         return {
             "status": "skipped-insufficient-savings",
@@ -203,7 +217,6 @@ def build() -> dict[str, Any]:
 
     rows: list[dict[str, Any]] = []
     generated_paths: list[str] = []
-    source_to_variants: dict[str, list[dict[str, Any]]] = {}
 
     for source_relative in manifest["sources"]:
         source = ROOT / source_relative
@@ -216,7 +229,7 @@ def build() -> dict[str, Any]:
         variants = []
         for width in widths:
             path = output_path(source_relative, width)
-            result = encode_variant(source, path, width, quality, method)
+            result = encode_variant(source, path, width, quality, method, minimum_savings)
             result.update({
                 "target_width": width,
                 "source_width": source_dimensions[0],
@@ -235,10 +248,21 @@ def build() -> dict[str, Any]:
             "variants": variants,
         }
         rows.append(row)
-        source_to_variants[source_relative] = variants
 
     if not generated_paths:
         raise RuntimeError("No responsive image asset passed the byte-saving gate")
+
+    required_hero_variants = {
+        f"img/responsive/v2/{stem}-{width}.webp"
+        for stem in ("facade", "fort-from-roof")
+        for width in widths
+    }
+    missing_hero_variants = sorted(required_hero_variants - set(generated_paths))
+    if missing_hero_variants:
+        raise RuntimeError(
+            "Required homepage hero responsive variants failed the savings/width gate: "
+            + ", ".join(missing_hero_variants)
+        )
 
     review_sheet = build_review_sheet(rows, widths)
     summary = {
@@ -284,10 +308,23 @@ def main() -> int:
     try:
         manifest = load_manifest()
         if args.check:
+            total_source_bytes = 0
+            for relative in manifest["sources"]:
+                source = ROOT / relative
+                # verify() validates the container; load() fully decodes the pixels.
+                with Image.open(source) as image:
+                    image.verify()
+                with Image.open(source) as image:
+                    image.load()
+                    if image.width < 1 or image.height < 1:
+                        raise ValueError(f"Source has invalid dimensions: {relative}")
+                total_source_bytes += source.stat().st_size
             print(json.dumps({
                 "status": "PASS",
                 "source_count": len(manifest["sources"]),
+                "source_bytes": total_source_bytes,
                 "target_widths": manifest["target_widths"],
+                "minimum_savings_percent": manifest["minimum_savings_percent"],
                 "manifest": MANIFEST_PATH.relative_to(ROOT).as_posix(),
                 "assets_generated": False,
             }, indent=2))
