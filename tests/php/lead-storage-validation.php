@@ -56,6 +56,7 @@ lead_test_assert(!is_file($public . DIRECTORY_SEPARATOR . 'private' . DIRECTORY_
 putenv('GJ_LEAD_STORAGE_DIR');
 @unlink($logPath);
 @rmdir($private);
+@rmdir($public . DIRECTORY_SEPARATOR . 'private');
 @rmdir($public);
 @rmdir($root);
 echo "PASS: private lead storage, reference codes, rate-limits and web-root rejection\n";

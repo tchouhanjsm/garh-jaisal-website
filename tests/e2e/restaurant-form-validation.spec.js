@@ -67,7 +67,6 @@ test('server-rejected restaurant requests link each validation error to its fiel
 });
 
 test('restaurant form start and submit attempt events exclude personal fields and never imply a sent booking', async ({ page }, testInfo) => {
-  test.skip(process.env.GJ_RESTAURANT_MAIL_ENABLED !== '1', 'Run in a dedicated server with the gated restaurant form enabled.');
   test.skip(testInfo.project.name !== 'desktop-1280', 'Restaurant form events run once on desktop-1280');
 
   await page.route('https://www.googletagmanager.com/**', route => route.abort());

@@ -140,7 +140,7 @@ def validate_package_paths(
 
     forbidden_prefixes = (
         ".git/", ".github/", ".agents/", ".claude/", "docs/", "scripts/",
-        "tests/", "node_modules/", "artifacts/", *sorted(EXPLICIT_DEPLOY_EXCLUDES),
+        "tests/", "node_modules/", "artifacts/", *sorted(EXPLICIT_DEPLOY_EXCLUDES), *sorted(EXPLICIT_DEPLOY_EXCLUDES),
     )
     forbidden_paths = sorted(
         path for path in selected
