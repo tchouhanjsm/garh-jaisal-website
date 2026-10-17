@@ -4,9 +4,18 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+import importlib.util
+import sys
+
 from PIL import Image
 
-from scripts import build_responsive_image_assets as assets
+SCRIPT_PATH = Path(__file__).resolve().parents[1] / "scripts" / "build-responsive-image-assets.py"
+SPEC = importlib.util.spec_from_file_location("build_responsive_image_assets", SCRIPT_PATH)
+if SPEC is None or SPEC.loader is None:
+    raise ImportError(f"Unable to load image asset generator from {SCRIPT_PATH}")
+assets = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = assets
+SPEC.loader.exec_module(assets)
 
 
 class ResponsiveImageAssetTests(unittest.TestCase):
