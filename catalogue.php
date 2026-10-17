@@ -47,6 +47,28 @@ foreach ($catalogueDefinitions as $definition) {
 }
 
 require_once __DIR__ . '/include/schema.php';
+$buildCatalogueHeroPreload = static function () {
+    $candidates = [];
+    foreach ([480, 800, 1200] as $width) {
+        $candidate = '/img/responsive/desert3-' . $width . '.webp';
+        $candidatePath = __DIR__ . $candidate;
+        if (is_file($candidatePath) && !is_link($candidatePath)) {
+            $imageInfo = @getimagesize($candidatePath);
+            if (is_array($imageInfo) && ($imageInfo[2] ?? null) === IMAGETYPE_WEBP && (int) ($imageInfo[0] ?? 0) === $width) {
+                $candidates[] = $candidate . ' ' . $width . 'w';
+            }
+        }
+    }
+    $preload = [
+        'href' => $candidates ? strtok($candidates[0], ' ') : '/img/optimized/desert3.webp',
+        'fetchpriority' => 'high',
+    ];
+    if ($candidates) {
+        $preload['imagesrcset'] = implode(', ', $candidates);
+        $preload['imagesizes'] = '100vw';
+    }
+    return $preload;
+};
 $faqItems = [
     ['question' => 'Can I combine a room stay with a desert experience?', 'answer' => 'Yes, you can add several options to your Trip shortlist and send one enquiry to discuss timing and arrangements. The hotel confirms current rates and availability for your dates.'],
     ['question' => 'Are the prices fixed on this page?', 'answer' => 'No prices are displayed here. Ask the hotel for the current rates, inclusions and availability for your travel dates.'],
@@ -65,9 +87,7 @@ $page = [
     'title' => 'Jaisalmer Trip Planner | Tours, Stays & Transport',
     'description' => 'Build a Jaisalmer trip around a Fort stay, desert experience, guided tour, car arrangement or rooftop dining. Shortlist options and enquire for current rates.',
     'path' => '/catalogue.php',
-    'preload' => [
-        ['href' => '/img/optimized/desert3.webp', 'fetchpriority' => 'high'],
-    ],
+    'preload' => [$buildCatalogueHeroPreload()],
     'og_image' => '/img/desert3.jpg',
     'og_image_alt' => 'Sand dunes in the Thar Desert near Jaisalmer',
     'css' => ['css/catalogue.css', 'css/thar-sunset-story.css'],
