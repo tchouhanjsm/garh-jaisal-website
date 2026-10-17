@@ -43,7 +43,7 @@
 
 ## Sprint 43 — Responsive image delivery and package integrity (in progress)
 
-- Base: verified `main` merge SHA `a4b7f1031ead7fcaca60174e47a3c6161449b24c`, after PR #91 merged. Reused the already-committed Sprint 43 generator and 43-source manifest from `feature/sprint-43-responsive-image-delivery-20261017`; older image-audit branches are already ancestors of `main` and were not merged again.
+- Base: verified `main` merge SHA `a4b7f1031ead7fcaca60174e47a3c6161449b24c`, after PR #91 merged. Reused the already-committed Sprint 43 generator and 42-source manifest from `feature/sprint-43-responsive-image-delivery-20261017`; older image-audit branches are already ancestors of `main` and were not merged again.
 - Hardened manifest validation and output-path collision handling; `--check` now fully decodes every source; the configured byte-saving threshold is enforced; WebP derivatives preserve ICC profiles but do not copy EXIF/XMP metadata; originals stay untouched.
 - Integrated opt-in responsive `srcset`/`sizes` into the homepage hero (with viewport-aware matching preload candidates) and selected shared experience, editorial, room, catalogue and product-card images. Variant use is conditional on a generated file with valid WebP type, expected width, matching aspect ratio and smaller byte size; legacy fallback behavior remains.
 - Browser E2E and package jobs regenerate ignored `img/responsive/` outputs. Deployment packaging includes only generated candidates derived from the checked-in manifest and rejects unlisted generated files/symlinks. Generated binaries and visual-review artifacts are not committed.
