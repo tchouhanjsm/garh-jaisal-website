@@ -53,6 +53,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 42 | Site-wide typography, spacing, container and image-ratio normalization | ✓ PR #91 merged; shared normalization and 320/390/768/1280/1440px regression coverage |
 | 43 | Responsive image delivery and generated-asset package integrity | ✓ PR #93 merged; responsive variants/preloads and manifest-derived package gate; merge-head Browser E2E cancelled during oversized evidence upload |
 | 44 | Browser E2E evidence budget and release-gate reliability | ◐ new slice: retain the all-route page sheet, curated responsive screenshots and compact audit JSON on every run; upload traces/error screenshots only after failure |
+| 45 | Rooms hero mobile height and quick-facts clearance | ✓ PR #95 merged at `a20640d8e0e4c3a83f34ff21373828b1ec4e6c0e`; exact-main Site Checks, package preflight, Staging QA dry run and Browser E2E passed |
+| 46 | Owner visual-evidence review and cPanel staging readiness | ◐ Review PR #95 screenshot artifacts; keep resized image candidates unpromoted until owner approval; execute external staging gate only with owner-supplied staging URL and deployed SHA |
 
 ---
 
@@ -671,3 +673,18 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - At 320×700, ensure the full Rooms fact card clears the fixed mobile contact dock. Use shorter copy and hide only the redundant location/floor note at widths up to 380px; retain the eyebrow and all four facts.
 - Extend the existing sitewide Playwright contract to assert the two actions share one row, remain inside the content rail and preserve touch-target size; the existing five-viewport hero-height assertion remains authoritative.
 - Acceptance: exact-head Site Checks, cPanel package preflight, non-deploying Staging QA, full Browser E2E and screenshot artifacts pass. No URL, metadata, menu facts, booking destination, analytics IDs or production deployment changes.
+
+
+## Sprint 45 — Rooms hero regression (PR #95 merged)
+
+- The 390px Rooms hero now lays out the two booking actions in a two-column grid; 320px retains the stacked actions while removing only the redundant location/floor note to keep all four facts above the mobile dock.
+- The exact-main run on `a20640d8e0e4c3a83f34ff21373828b1ec4e6c0e` passed Site Checks, package preflight, non-deploying Staging QA and Browser E2E. Review the [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163625/artifacts/12101465112) and [responsive audit evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163625/artifacts/12101400416) before visual sign-off.
+- Workflow success is not an external cPanel staging result. No staging upload or production deployment occurred.
+
+## Sprint 46 — visual evidence review and staging gate readiness
+
+- Reconcile the project snapshot to PR #95 and the verified `main` SHA; do not restart Sprint 45 or describe earlier intermediate-head cancellations as the final result.
+- Owner review should start with Rooms at 320px and 390px, then compare Home hero sources at 320/390/768/1280/1440px, and review Gallery/Desert Camp subject-to-caption matching before any new image is promoted.
+- Keep resized 480/800/1200px candidates out of runtime paths until a person approves full-size crop/sharpness and source mapping. The existing browser audit records selected `currentSrc`, natural/intrinsic dimensions, loading priority and visible/eager state; resource timing byte counts may be unavailable or zero.
+- The separate staging dispatch requires an owner-supplied HTTPS staging origin and exact deployed package SHA. Only that dispatch can test a real external host; confirm Apache/PHP behavior, responsive WebP MIME types, cache headers, preloads, CAPTCHA configuration and mail delivery without recording secret values.
+- Owner-blocked: staging URL/access, cPanel PHP version, real CAPTCHA/mail delivery, restaurant operating schedule/menu prices, approved privacy/controller/retention wording and booking cancellation terms.

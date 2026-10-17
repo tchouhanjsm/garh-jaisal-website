@@ -7,10 +7,10 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-17 |
-| Current phase | Sprint 44 — Browser E2E evidence budget and release-gate reliability |
+| Current phase | Sprint 46 — visual evidence review and owner-controlled staging readiness |
 | Base branch | `main` |
-| Baseline commit | `3fe9073648f0b26f7384fdffd2dc12745f5e2da5` (verified PR #93 merge commit, 2026-10-17) |
-| Last merged PR | [#93 — responsive image delivery and package-integrity gates](https://github.com/tchouhanjsm/garh-jaisal-website/pull/93) |
+| Baseline commit | `a20640d8e0e4c3a83f34ff21373828b1ec4e6c0e` (verified PR #95 merge commit, 2026-10-17) |
+| Last merged PR | [#95 — keep Rooms hero and facts visible on mobile](https://github.com/tchouhanjsm/garh-jaisal-website/pull/95) |
 | PR #93 PR-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39012551591) — exact head `cbf11bd2f84017561f1640c6acac40c04430e75d` |
 | PR #93 merge-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642234) |
 | PR #93 merge-head cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642162) |
@@ -37,7 +37,12 @@
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
 | Owner review | Review the generated responsive-image sheet and homepage-hero screenshots at 320px, 390px, 768px, 1280px and 1440px. Visual sign-off remains separate from CI. |
-| Next action | Reduce default browser-evidence duplication while preserving the complete page sheet, curated spotchecks and failure-only traces; require all checks, including merge-head Browser E2E, to pass. Owner retains merge/deployment authority; real cPanel verification remains separate. |
+| PR #95 exact-main Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163687) — `a20640d8e0e4c3a83f34ff21373828b1ec4e6c0e` |
+| PR #95 exact-main cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163492) — package built for review only; no upload |
+| PR #95 exact-main Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163561) — local/non-deploying QA, not an external staging host |
+| PR #95 exact-main Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163625) — [page sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163625/artifacts/12101465112) (31,501,727 bytes); [curated evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163625/artifacts/12101400416) (11,103,398 bytes) |
+| Open pull requests | None verified at start of Sprint 46 |
+| Next action | Review visual evidence and prepare the owner-controlled cPanel staging gate. Keep newly resized image candidates review-only until explicit visual approval; verify real staging PHP/Apache, MIME/cache, CAPTCHA and mail without exposing secrets. Owner retains merge/deployment authority. |
 ## 2026-10-17 — Backend audit remediation in existing PR #91
 
 - Kept changes in PR #91; no new PR, merge or deployment was performed.
@@ -198,3 +203,12 @@
 - Replaced the wrapping flex sizing with a two-column action grid for 381–760px; 320px remains stacked.
 - Added a regression assertion for same-row actions, 44px minimum targets and content-rail bounds.
 - Follow-up visual review found that, at a 320×700 viewport, the fixed mobile contact dock covered the bottom row of the Rooms quick-facts card. The small-screen Rooms hero now removes only the duplicated location/floor note and uses a shorter lead; browser coverage asserts that the full fact card clears the dock.
+
+
+## Sprint 45 — Rooms hero mobile regression (PR #95 merged)
+
+- PR #95 merged on 2026-10-17 at `a20640d8e0e4c3a83f34ff21373828b1ec4e6c0e`; its 390px two-column CTA layout and 320px quick-facts clearance guard are present on `main`.
+- Exact-main Site Checks, deployment-package preflight, non-deploying Staging QA dry run, and Browser E2E all passed on this SHA. The run produced a 31.5 MB page-sheet artifact and an 11.1 MB curated evidence artifact.
+- The earlier PR-head browser run on an intermediate commit was cancelled; the successful exact-main Browser E2E above is the authoritative post-merge check.
+- These CI/staging-dry-run workflows use the local PHP server and do not prove live cPanel Apache/PHP, MIME/cache, CAPTCHA or mail delivery.
+- No cPanel upload or production deployment occurred. New resized image candidates remain review-only until the owner approves visual quality and image-to-page mapping.
