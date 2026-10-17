@@ -2,7 +2,7 @@
 $activePage = 'blog';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $siteUrl = rtrim($siteConfig['site_url'], '/');
-$pageTitle = 'Jaisalmer Travel Guides | Fort, Desert & Itineraries | Garh Jaisal Haveli';
+$pageTitle = 'Jaisalmer Travel Guides | Garh Jaisal Haveli';
 $pageDescription = 'Explore practical Jaisalmer travel guides for the Fort, desert safaris, 2- and 3-day itineraries, honeymoon planning and arrival at Garh Jaisal Haveli.';
 $canonical = $siteUrl . '/blog.php';
 ?>
