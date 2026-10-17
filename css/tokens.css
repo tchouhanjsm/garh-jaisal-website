@@ -617,10 +617,11 @@ body .footer-bottom {
     font-size: 0.9rem;
   }
 
+  /* The same location/floor facts are repeated in the eyebrow and summary.
+     Hide only this redundant note on the smallest viewport so the complete
+     four-fact card stays above the fixed contact dock. */
   main.thar-sunset-story--rooms .rooms-hero p.rooms-hero-note {
-    margin-block-start: 0.5rem;
-    font-size: 0.75rem;
-    line-height: 1.3;
+    display: none;
   }
 
   main.thar-sunset-story--rooms .rooms-hero-summary {
