@@ -50,6 +50,10 @@
 - Exact-head gates: PHP 7.4/8.2 Site Checks, source/manifest check and generator tests, Browser E2E/five-width hero checks, image optimization/layout and payload audits, deployment package tests/preflight, and Staging QA dry run. Human review of the image sheet remains required.
 - No merge, cPanel upload, live mail test or production deployment by this implementation.
 
+
+- CI follow-up during review: the initial Browser E2E on `de966cf68410842390bad3f753296dc8c8713da0` exposed three stale responsive-image expectations: the homepage test hard-coded intrinsic dimensions that do not match Chromium's selected candidate at every viewport, the LCP test only allowed legacy WebP paths, and the Trip Planner preload test inspected `href` but ignored `imagesrcset`. These are being corrected as source-backed contracts; the exact latest head must finish all workflows before review approval.
+- Updated the Trip Planner hero preload to advertise only valid, existing manifest-generated candidates and fall back to `/img/optimized/desert3.webp` when no responsive candidate exists. This keeps the selected image and responsive preload candidate set aligned without assuming generated files exist on a developer/staging host.
+
 ## Phase roadmap
 
 | Phase | Goal | Status |
