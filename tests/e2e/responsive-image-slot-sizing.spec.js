@@ -20,6 +20,7 @@ const responsiveSlots = [
   { route: '/', selector: '.gallery-strip figure:nth-child(2) img[src="img/courtyard.jpg"]', sizes: '(max-width: 760px) 50vw, 28vw' },
   { route: '/', selector: '.gallery-strip figure:nth-child(3) img[src="img/recep1.jpg"]', sizes: '(max-width: 760px) 50vw, 28vw' },
   { route: '/', selector: '.gallery-strip figure:nth-child(4) img[src="img/s4.jpg"]', sizes: '(max-width: 760px) 50vw, 28vw' },
+  { route: '/', selector: '.gallery-strip figure:nth-child(5) img[src="img/big9.jpg"]', sizes: '(max-width: 760px) 50vw, 28vw' },
   { route: '/gallery.php', selector: '.gallery-hero img[src="img/v2/rooftop-dusk.jpg"]', sizes: '(max-width: 760px) 100vw, 45vw' },
   { route: '/direction.php', selector: '.page-hero img[src="img/v2/courtyard.jpg"]', sizes: '100vw' },
   { route: '/jaisalmer-fort-guide.php', selector: '.article-image img[src="img/j1.jpg"]', sizes: '(max-width: 768px) 100vw, 60vw' },

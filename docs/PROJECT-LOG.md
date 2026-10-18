@@ -7,10 +7,14 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-18 |
-| Current phase | Sprint 49 — full repository audit and image reuse remediation |
+| Current phase | Sprint 50 — final responsive image delivery and reproducible browser dependencies |
 | Base branch | `main` |
-| Verified main SHA | `1d08a3a4cae91f0b78f2d83957db22fd9d529550` (PR #99 merge commit, 2026-10-18) |
-| Latest merged PR | [#99 — reconcile website repository status after PR #98](https://github.com/tchouhanjsm/garh-jaisal-website/pull/99) |
+| Verified main SHA | `dc1d7653eecc61fec72489015340d61ae8e52386` (PR #101 merge commit, 2026-10-18) |
+| Latest merged PR | [#101 — audit repository backlog and reconcile delivery status](https://github.com/tchouhanjsm/garh-jaisal-website/pull/101) |
+| PR #100 image reuse remediation | Merged 2026-10-18 at `b51cbaed3a25af55f5294a5a1a7fe6e67657d6ba`; included in the green PR #101 merge-head run |
+| Current-main full Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39112583892) on `dc1d7653eecc61fec72489015340d61ae8e52386` |
+| Current-main Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39112583828) on `dc1d7653eecc61fec72489015340d61ae8e52386` |
+| Current-main package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39112583836) on `dc1d7653eecc61fec72489015340d61ae8e52386` |
 | PR #98 final PR head (historical) | `33f452253d0820370a3fd2d9d5d2c1907cfffb81` (separate from merge SHA) |
 | PR #99 merge-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179680) on verified main SHA |
 | PR #99 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179657) on verified main SHA |
@@ -56,8 +60,8 @@
 | PR #96 merge-head cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260531) — package generated for review, not uploaded |
 | PR #96 merge-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260546) — local/non-deploying, not an external staging host |
 | PR #96 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528/artifacts/12102915342) (31.5 MB); [curated evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528/artifacts/12101769369) (11.1 MB) |
-| Open PRs at audit baseline | [#100 — diversify repeated website image assignments](https://github.com/tchouhanjsm/garh-jaisal-website/pull/100); current PR-head CI is under remediation/revalidation. |
-| Next action | Finish PR #100 at its exact latest SHA, inspect image evidence, then address reproducible dependency locking and remaining image/accessibility/content backlog from `docs/FULL-REPOSITORY-AUDIT-2026-10-18.md`. |
+| Open PRs at audit baseline | Historical snapshot taken before PR #100 and PR #101 merged; both are now merged. |
+| Next action | PR #102 now combines responsive slot sizing, expanded candidate coverage, the full-resolution Gallery lightbox fix, the shared Car & City Tours breadcrumb/contrast correction, and a committed npm-generated Playwright lockfile (`npm ci` + `npm audit --audit-level=high`). Re-run and fix all checks on the latest combined head; image/caption visual approval and owner-only facts remain outstanding. |
 ## 2026-10-17 — Backend audit remediation in existing PR #91
 
 - Kept changes in PR #91; no new PR, merge or deployment was performed.

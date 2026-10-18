@@ -165,8 +165,7 @@ require __DIR__ . '/include/page-head.php';
         <img
           src="img/s9.jpg"
           alt="Traditional interior details at Garh Jaisal Haveli"
-          width="900"
-          height="1200"
+          <?= gj_image_dimension_attributes('img/s9.jpg', '(max-width: 1080px) 100vw, 50vw') ?>
           loading="lazy"
           decoding="async"
         >

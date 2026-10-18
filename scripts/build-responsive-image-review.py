@@ -36,15 +36,15 @@ SOURCES = (
     "img/v2/sitting-room.jpg",
     "img/5.webp",
     "img/j7.jpg",
+    "img/Desert_Camp/CampingInJsm.jpeg",
+    "img/j10.jpg",
+    "img/trans.jpg",
     "img/j1.jpg",
     "img/j2.jpg",
     "img/j4.jpg",
     "img/j8.jpg",
     "img/j9.jpg",
     "img/desert11.jpg",
-    "img/Desert_Camp/CampingInJsm.jpeg",
-    "img/j10.jpg",
-    "img/trans.jpg",
 )
 
 TILE_W = 320
