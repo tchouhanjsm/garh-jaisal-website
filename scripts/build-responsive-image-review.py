@@ -20,8 +20,8 @@ WIDTHS = (480, 800, 1200)
 QUALITY = 82
 METHOD = 6
 
-# The 16 original source files above 400,000 bytes at Sprint 3B inventory time.
-# Existing files under img/optimized are intentionally excluded.
+# Source images selected for responsive review, including large route-level payload candidates.
+# Originals remain untouched; the outputs are review-only and never public by this script.
 SOURCES = (
     "img/tent1.jpg",
     "img/v2/facade.jpg",
@@ -36,6 +36,12 @@ SOURCES = (
     "img/v2/sitting-room.jpg",
     "img/5.webp",
     "img/j7.jpg",
+    "img/j1.jpg",
+    "img/j2.jpg",
+    "img/j4.jpg",
+    "img/j8.jpg",
+    "img/j9.jpg",
+    "img/desert11.jpg",
     "img/Desert_Camp/CampingInJsm.jpeg",
     "img/j10.jpg",
     "img/trans.jpg",
