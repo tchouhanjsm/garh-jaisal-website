@@ -110,6 +110,7 @@ The audit reviewed all tracked Markdown documents in the repository tree:
 - `docs/SPRINT-PLAN.md`
 - `docs/STAGING-QA-CHECKLIST.md`
 - `docs/V2-MERGE-CHANGELOG.md`
+- `docs/V2-STATUS.md`
 - `marketing/templates/README.md`
 
 This inventory is a documentation and source-contract audit, not a claim that every production-host behavior or every image has been manually judged. Exact-head CI and screenshot evidence remain the proof for implementation changes.
