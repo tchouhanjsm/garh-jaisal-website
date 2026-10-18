@@ -17,6 +17,7 @@ const HEROES = [
     route: '/catalogue.php',
     selector: '.catalogue-hero-media img',
     expected: () => 'desert3',
+    approvedWebpFallback: '/img/2.webp',
   },
 ];
 
@@ -99,7 +100,12 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
           }), hero.route + ' selected candidate must appear in its own srcset').toBe(true);
           expect(state.sizes, hero.route + ' responsive source must expose a sizes hint').not.toBe('');
         } else {
-          expect(state.currentPath, hero.route + ' must use its configured optimized fallback').toContain('/img/optimized/');
+          if (hero.approvedWebpFallback) {
+            expect(state.currentPath, hero.route + ' must use its explicitly configured WebP fallback').toBe(hero.approvedWebpFallback);
+            expect(state.currentPath, hero.route + ' fallback must be a WebP image').toMatch(/\\.webp$/);
+          } else {
+            expect(state.currentPath, hero.route + ' must use its configured optimized fallback').toContain('/img/optimized/');
+          }
         }
 
         expect(state.width, hero.route + ' LCP image must decode').toBeGreaterThan(0);
