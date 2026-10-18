@@ -39,6 +39,12 @@ SOURCES = (
     "img/Desert_Camp/CampingInJsm.jpeg",
     "img/j10.jpg",
     "img/trans.jpg",
+    "img/j1.jpg",
+    "img/j2.jpg",
+    "img/j4.jpg",
+    "img/j8.jpg",
+    "img/j9.jpg",
+    "img/desert11.jpg",
 )
 
 TILE_W = 320
