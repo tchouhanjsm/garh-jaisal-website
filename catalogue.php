@@ -48,26 +48,7 @@ foreach ($catalogueDefinitions as $definition) {
 
 require_once __DIR__ . '/include/schema.php';
 $buildCatalogueHeroPreload = static function () {
-    $candidates = [];
-    foreach ([480, 800, 1200] as $width) {
-        $candidate = '/img/responsive/desert3-' . $width . '.webp';
-        $candidatePath = __DIR__ . $candidate;
-        if (is_file($candidatePath) && !is_link($candidatePath)) {
-            $imageInfo = @getimagesize($candidatePath);
-            if (is_array($imageInfo) && ($imageInfo[2] ?? null) === IMAGETYPE_WEBP && (int) ($imageInfo[0] ?? 0) === $width) {
-                $candidates[] = $candidate . ' ' . $width . 'w';
-            }
-        }
-    }
-    $preload = [
-        'href' => $candidates ? strtok($candidates[0], ' ') : '/img/optimized/desert3.webp',
-        'fetchpriority' => 'high',
-    ];
-    if ($candidates) {
-        $preload['imagesrcset'] = implode(', ', $candidates);
-        $preload['imagesizes'] = '100vw';
-    }
-    return $preload;
+    return ['href' => '/img/2.webp', 'fetchpriority' => 'high'];
 };
 $faqItems = [
     ['question' => 'Can I combine a room stay with a desert experience?', 'answer' => 'Yes, you can add several options to your Trip shortlist and send one enquiry to discuss timing and arrangements. The hotel confirms current rates and availability for your dates.'],
@@ -88,8 +69,8 @@ $page = [
     'description' => 'Build a Jaisalmer trip around a Fort stay, desert experience, guided tour, car arrangement or rooftop dining. Shortlist options and enquire for current rates.',
     'path' => '/catalogue.php',
     'preload' => [$buildCatalogueHeroPreload()],
-    'og_image' => '/img/desert3.jpg',
-    'og_image_alt' => 'Sand dunes in the Thar Desert near Jaisalmer',
+    'og_image' => '/img/2.webp',
+    'og_image_alt' => 'Panoramic view across Jaisalmer’s historic sandstone city',
     'css' => ['css/catalogue.css', 'css/thar-sunset-story.css'],
     'schema' => [
         [
@@ -131,7 +112,7 @@ require __DIR__ . '/include/page-head.php';
 <main id="main-content" class="catalogue-page thar-sunset-story thar-sunset-story--catalogue" tabindex="-1">
   <section class="catalogue-hero" aria-labelledby="catalogue-title">
     <div class="catalogue-hero-media" aria-hidden="true">
-      <img src="img/optimized/desert3.webp" <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes('img/optimized/desert3.webp', '100vw') : '' ?> alt="" fetchpriority="high" decoding="async">
+      <img src="img/2.webp" <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes('img/2.webp', '100vw') : '' ?> alt="" fetchpriority="high" decoding="async">
     </div>
     <div class="catalogue-hero-overlay"></div>
     <div class="site-shell catalogue-hero-content">
@@ -203,6 +184,8 @@ require __DIR__ . '/include/page-head.php';
           <?php
           $camp = $option['item'];
           $campSlug = $option['slug'];
+          $campImage = (string) ($camp['comparison_image'] ?? $camp['hero_image']);
+          $campImageAlt = (string) ($camp['comparison_image_alt'] ?? $camp['hero_alt']);
           $tripItem = [
               'id' => $campSlug,
               'title' => $camp['h1'],
@@ -211,9 +194,9 @@ require __DIR__ . '/include/page-head.php';
           ?>
           <article class="catalogue-compare-card">
             <img
-              src="<?= htmlspecialchars($camp['hero_image'], ENT_QUOTES, 'UTF-8') ?>"
-              <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($camp['hero_image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') : '' ?>
-              alt="<?= htmlspecialchars($camp['hero_alt'], ENT_QUOTES, 'UTF-8') ?>"
+              src="<?= htmlspecialchars($campImage, ENT_QUOTES, 'UTF-8') ?>"
+              <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($campImage, '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') : '' ?>
+              alt="<?= htmlspecialchars($campImageAlt, ENT_QUOTES, 'UTF-8') ?>"
               loading="lazy"
               decoding="async"
             >
