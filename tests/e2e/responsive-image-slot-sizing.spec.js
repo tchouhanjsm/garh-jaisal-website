@@ -3,7 +3,6 @@ const { test, expect } = require('@playwright/test');
 const BASE_URL = 'http://127.0.0.1:8080';
 const GALLERY_THUMB_SIZES = '(max-width: 500px) 100vw, (max-width: 760px) 50vw, (max-width: 1000px) 33vw, 25vw';
 const CARD_SIZES = '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw';
-const NARROW_CARD_SIZES = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw';
 
 const responsiveSlots = [
   { route: '/about.php', selector: '.intro-grid img[src="img/v2/courtyard.jpg"]', sizes: '(max-width: 1080px) 100vw, 50vw' },
@@ -16,7 +15,7 @@ const responsiveSlots = [
   { route: '/car-tours.php', selector: '.package-hero-media img[src="img/jcity.jpg"]', sizes: '100vw' },
   { route: '/car-tours.php', selector: '.experience-card-grid img[src="img/j10.jpg"]', sizes: CARD_SIZES },
   { route: '/', selector: '.home-experiences img[src="img/tent.jpg"]', sizes: '(max-width: 1080px) 100vw, 33vw' },
-  { route: '/', selector: '.gallery-strip figure:first-child img[src="img/jcity.jpg"]', sizes: '(max-width: 1080px) 100vw, 50vw' },
+  { route: '/', selector: '.gallery-strip figure:first-child img[src="img/jcity.jpg"]', sizes: '(max-width: 1080px) 100vw, 48vw' },
   { route: '/', selector: '.gallery-strip figure:nth-child(2) img[src="img/courtyard.jpg"]', sizes: '(max-width: 1080px) 50vw, 26vw' },
   { route: '/', selector: '.gallery-strip figure:nth-child(3) img[src="img/recep1.jpg"]', sizes: '(max-width: 1080px) 50vw, 26vw' },
   { route: '/', selector: '.gallery-strip figure:nth-child(4) img[src="img/s4.jpg"]', sizes: '(max-width: 1080px) 50vw, 26vw' },
