@@ -61,8 +61,8 @@ return [
         'title' => 'SUV and sedan arrangements',
         'description' => 'Ask about desert pickup and drop-off or intercity journeys across Rajasthan and Delhi. The route, vehicle, availability and quote are confirmed for each enquiry.',
         'url' => 'car-rental.php',
-        'image' => 'img/desert3.jpg',
-        'alt' => 'Sand dunes in the Thar Desert near Jaisalmer',
+        'image' => 'img/desert10.jpg',
+        'alt' => 'A jeep crossing open sand in the Thar Desert near Jaisalmer',
     ],
     [
         'id' => 'rooftop-dining',
