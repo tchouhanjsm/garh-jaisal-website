@@ -78,12 +78,49 @@ test('Gallery filters, six-photo reveal and keyboard-operable lightbox stay cohe
   await page.keyboard.press('Enter');
   const dialog = page.locator('.gallery-lightbox');
   await expect(dialog).toBeVisible();
-  await expect(dialog.locator('[data-gallery-lightbox-image]')).toHaveAttribute('alt', firstAlt);
+  const lightboxImage = dialog.locator('[data-gallery-lightbox-image]');
+  await expect(lightboxImage).toHaveAttribute('alt', firstAlt);
   const firstCaption = await dialog.locator('[data-gallery-lightbox-caption]').textContent();
+  const firstHref = await firstPhoto.getAttribute('href');
+  const firstDimensions = await firstPhoto.locator('img').evaluate((img) => ({
+    width: img.getAttribute('width'),
+    height: img.getAttribute('height'),
+  }));
+  const firstLightboxSource = await lightboxImage.evaluate((img) => ({
+    src: img.src,
+    currentSrc: img.currentSrc,
+    srcset: img.getAttribute('srcset'),
+    width: img.getAttribute('width'),
+    height: img.getAttribute('height'),
+  }));
+  expect(firstLightboxSource.src).toBe(new URL(firstHref, 'http://127.0.0.1:8080/gallery.php').href);
+  expect(firstLightboxSource.currentSrc).toBe(firstLightboxSource.src);
+  expect(firstLightboxSource.srcset).toBeNull();
+  expect(firstLightboxSource.width).toBe(firstDimensions.width);
+  expect(firstLightboxSource.height).toBe(firstDimensions.height);
+
   const nextPhoto = dialog.getByRole('button', { name: 'Next photo' });
   await nextPhoto.focus();
   await page.keyboard.press('Enter');
   await expect(dialog.locator('[data-gallery-lightbox-caption]')).not.toHaveText(firstCaption || '');
+  const nextLink = page.locator('[data-gallery-category="rooms"] [data-gallery-open]:visible').nth(1);
+  const nextHref = await nextLink.getAttribute('href');
+  const nextDimensions = await nextLink.locator('img').evaluate((img) => ({
+    width: img.getAttribute('width'),
+    height: img.getAttribute('height'),
+  }));
+  const nextLightboxSource = await lightboxImage.evaluate((img) => ({
+    src: img.src,
+    currentSrc: img.currentSrc,
+    srcset: img.getAttribute('srcset'),
+    width: img.getAttribute('width'),
+    height: img.getAttribute('height'),
+  }));
+  expect(nextLightboxSource.src).toBe(new URL(nextHref, 'http://127.0.0.1:8080/gallery.php').href);
+  expect(nextLightboxSource.currentSrc).toBe(nextLightboxSource.src);
+  expect(nextLightboxSource.srcset).toBeNull();
+  expect(nextLightboxSource.width).toBe(nextDimensions.width);
+  expect(nextLightboxSource.height).toBe(nextDimensions.height);
   const previousPhoto = dialog.getByRole('button', { name: 'Previous photo' });
   await previousPhoto.focus();
   await page.keyboard.press('Enter');
