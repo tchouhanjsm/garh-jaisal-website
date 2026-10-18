@@ -14,6 +14,12 @@ $faqItems = [
     ['question' => "Can the hotel arrange a car for arrival?", 'answer' => "The hotel can arrange a car for arrival or a desert day. Confirm the route, pickup arrangement and current price directly with the hotel."],
     ['question' => "How do I confirm timing and price?", 'answer' => "Contact the hotel with your travel date and intended route to confirm current availability, pickup details and price."],
 ];
+$breadcrumbs = [
+    ['label' => 'Home', 'href' => '/'],
+    ['label' => 'Packages', 'href' => '/pack.php'],
+    ['label' => 'Car & City Tours'],
+];
+$breadcrumbSchema = gj_schema_breadcrumb_list($siteUrl, '/car-tours.php', $breadcrumbs);
 $page = [
     'title' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
     'description' => 'Explore guided Jaisalmer city tours and enquire about car arrangements for arrival or a desert day. Confirm route, vehicle and availability directly with the hotel.',
@@ -37,15 +43,7 @@ $page = [
             'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
             'inLanguage' => 'en',
         ],
-        [
-            '@type' => 'BreadcrumbList',
-            '@id' => $canonical . '#breadcrumb',
-            'itemListElement' => [
-                ['@type' => 'ListItem', 'position' => 1, 'name' => 'Home', 'item' => $siteUrl . '/'],
-                ['@type' => 'ListItem', 'position' => 2, 'name' => 'Packages', 'item' => $siteUrl . '/pack.php'],
-                ['@type' => 'ListItem', 'position' => 3, 'name' => 'Car & City Tours', 'item' => $canonical],
-            ],
-        ],
+        $breadcrumbSchema,
     ],
 ];
 $page['schema'][] = gj_schema_faq($faqItems, $canonical);
@@ -54,13 +52,13 @@ require __DIR__ . '/include/page-head.php';
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 <main id="main-content" tabindex="-1">
-  <nav class="site-shell breadcrumb-nav" aria-label="Breadcrumb"><ol><li><a href="index.php">Home</a></li><li><a href="pack.php">Packages</a></li><li aria-current="page">Car &amp; City Tours</li></ol></nav>
   <section class="package-hero">
     <div class="package-hero-media">
       <img src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg', '100vw') ?> alt="View over Jaisalmer’s historic city from the fort edge" fetchpriority="high">
       <div class="package-hero-overlay"></div>
     </div>
     <div class="site-shell package-hero-content">
+      <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>
       <p class="eyebrow">Car &amp; City Tours</p>
       <h1>Explore Jaisalmer and plan your route.</h1>
       <p>Choose a guided walk inside Jaisalmer Fort, compare the half-day and full-day city tours, or enquire separately about SUV/sedan pickup, drop-off and intercity journeys across Rajasthan and Delhi. New themed routes remain ideas until the hotel confirms feasibility, access, transport, timings, inclusions and price.</p>
