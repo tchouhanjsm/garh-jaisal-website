@@ -365,3 +365,14 @@ The source menu registry is explicitly marked `owner_confirmed: false`, but the 
 ### Release posture
 
 **Repository CI is green; the website is not yet release-approved.** The production host was retrieved on 2026-10-18 and still served legacy Home/Directions copy, including fixed transfer fares and arrival-service promises no longer present in repository source. The next release step is an owner-managed staging deployment of the exact reviewed package, followed by manual mail/CAPTCHA, Apache/PHP, image/cache, booking/contact and screenshot checks. No cPanel upload, merge or production deploy is done by this review.
+
+
+---
+
+## Repository re-audit — 2026-10-18 after PR #99
+
+This dated review remains historical. The verified `main` baseline after PR #99 is `1d08a3a4cae91f0b78f2d83957db22fd9d529550`; all nine checks on that SHA passed. The authoritative current findings and implementation sequence are in [`docs/FULL-REPOSITORY-AUDIT-2026-10-18.md`](FULL-REPOSITORY-AUDIT-2026-10-18.md).
+
+The active follow-up is PR #100, which diversifies repeated photo assignments. Its first check run exposed two issues in the same batch: stale Git-derived sitemap `lastmod` values and a gallery contract that still required the cultural-program image after it was removed from the Swiss-tent accommodation gallery. The PR branch has been updated for both and must be revalidated at its latest SHA before merge.
+
+Still-open repository work includes a reproducible npm/Playwright lockfile, semantic visual review of image/caption/crop mappings, responsive image optimization, manual accessibility/visual review, and owner-approved commercial/privacy facts. The local CI dry-run does not prove external-host behavior. Hosting and deployment are outside the current ZIP/source delivery scope.
