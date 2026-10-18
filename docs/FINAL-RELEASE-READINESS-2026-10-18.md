@@ -2,39 +2,40 @@
 
 **Audit date:** 2026-10-18  
 **Repository:** https://github.com/tchouhanjsm/garh-jaisal-website  
-**Verified main SHA:** `dc1d7653eecc61fec72489015340d61ae8e52386`  
-**Latest merged PR:** [PR #101 — audit repository backlog and reconcile delivery status](https://github.com/tchouhanjsm/garh-jaisal-website/pull/101)  
-**Image reuse PR:** [PR #100 — merged](https://github.com/tchouhanjsm/garh-jaisal-website/pull/100) at `b51cbaed3a25af55f5294a5a1a7fe6e67657d6ba`
+**Verified main SHA:** `b7334ec9b0dea4aa3ba527e38725dd96131712a6`  
+**Latest merged PR:** [PR #104 — size existing responsive images by layout slot](https://github.com/tchouhanjsm/garh-jaisal-website/pull/104)  
+**Main-head Browser E2E:** [run 39128969413](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39128969413), triggered for the exact SHA above; it was still in progress at the time of this update.
 
-## Verified source baseline
+## Baseline and recent implementation
 
-All nine checks passed on current `main` at `dc1d7653eecc61fec72489015340d61ae8e52386`:
+PR #104 is merged to `main`. Recent merged work relevant to release readiness:
 
-| Check area | Result | Evidence |
-|---|---|---|
-| Browser E2E and page screenshots | PASS | [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39112583892) |
-| PHP 7.4 / PHP 8.2 site checks | PASS | [Site checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39112583828) |
-| Brand contrast and token contract | PASS | [Site checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39112583828) |
-| Marketing template source contract | PASS | [Site checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39112583828) |
-| Responsive image review | PASS | [Site checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39112583828) |
-| Package preflight | PASS | [Package checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39112583836) |
-| Non-deploying repository QA | PASS | [QA checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39112583831) |
+- **PR #100** diversified image assignments across editorial, room, package, tour and dining pages, while aligning hero/social image metadata.
+- **PR #102** added more manifest-driven responsive candidates, corrected the Gallery lightbox to use the selected full-resolution image, corrected the Car & City Tours breadcrumb, aligned responsive preloads and slot `sizes`, and added regression coverage.
+- **PR #103** committed the pinned `@playwright/test@1.64.1` dependency and npm-generated lockfile; CI now uses `npm ci` and `npm audit --audit-level=high`.
+- **PR #104** refined `sizes` hints on existing responsive image slots without changing original photography, crops, public URLs or room/photo mappings.
 
-These results prove the checked-in source and local CI harness at this SHA. They do not mean every public image has human-approved composition, every screen-reader/device combination has been tested, or actual external mail/configuration has been exercised.
+The exact-main Browser E2E workflow run `39128969413` checked out `b7334ec9b0dea4aa3ba527e38725dd96131712a6`. The following setup steps had succeeded at last inspection: pinned Pillow install, responsive asset generation, PHP setup, Node setup, `npm ci`, `npm audit --audit-level=high`, and Chromium installation. The full responsive Playwright run was in progress; the job had not yet produced a final conclusion or screenshot artifacts. No PASS claim is made for that incomplete run.
 
-## Remaining source work
+## Remaining release work (prioritized)
 
-1. **Responsive image delivery:** PR #100 diversified image assignments, but several high-payload Gallery, Journal, About, Rooms and tour photos still had no resized candidate or no slot-specific `sizes`. The current follow-up adds more reviewed source candidates and aligns the Journal featured-image preload with its actual responsive source selection.
-2. **Reproducible browser dependencies:** Playwright `@playwright/test@1.64.1` is pinned and the real npm-generated `package-lock.json` is committed on the active PR #102 branch. Its workflow uses `npm ci` plus `npm audit --audit-level=high`; exact-head checks must pass and the change must land on `main` before this item is closed.
-3. **Image correctness:** automated paths, alt and aspect-ratio contracts are useful, not a substitute for full-size image/caption judgement. Original sources remain unchanged.
-4. **Manual UX/accessibility:** automated browser tests do not replace manual keyboard/focus, reduced-motion, assistive-technology and device review. The active PR also adds a regression for the Car & City Tours shared breadcrumb, including readable hero contrast and removal of the unintended numbered list.
-5. **Owner-confirmed facts:** current menu items/prices/hours, booking/cancellation wording, privacy controller and data-retention details, check-in/reception facts, room-rate display, authentic guest reviews and certain tour/transfer details remain unresolved in `docs/OWNER-FACTS.md`. Keep public promises qualified and draft/policy pages unpublished until the owner supplies approved wording.
-6. **Lead/mail safety:** source contains validation, abuse controls and private lead storage, but production delivery/access/retention decisions cannot be inferred from CI. Do not write guest messages or secrets to public logs or test live guest mail.
+### P1 — Final verification on the exact source
+1. Wait for exact-main Browser E2E run `39128969413` to finish; inspect its result, screenshot/page-sheet artifact and curated visual evidence. If it fails, diagnose root cause and open a review PR; do not weaken test expectations to manufacture a pass.
+2. Confirm Site Checks, package preflight and responsive image review on the final source revision. Record each result against its exact SHA. The main-head Classic Commit Status endpoint currently reports no entries; use the GitHub Actions workflow runs and their head SHAs as the evidence.
+3. Build the PHP runtime ZIP only after preflight passes, then extract it to a clean directory and verify package contents, integrity manifest and sitemap-route asset coverage. The workflow package is a review artifact only—not a deployment.
 
-## Publication integrity
+### P2 — Human judgement not supplied by automated tests
+4. Review actual image subjects, captions, alt text, crops and source selection on page-sheet/contact-sheet evidence, including Home, Gallery, rooms, desert/tent, dining and editorial pages. Automated existence/shape checks do not prove semantic correctness.
+5. Conduct responsive review at 320, 390, 768, 1280 and 1440 CSS pixels; manually check keyboard/focus, sticky/floating CTA overlap, reduced motion, contrast and assistive-technology behavior. Automated CI is not a substitute for physical-device or screen-reader review.
+6. Review SEO copy intent, metadata uniqueness, schema parity, canonical routes, sitemap freshness, redirects and internal-link destinations after any source change. Keep the established public URLs intact.
 
-The restaurant menu remains gated while `include/menu-data.php` is not owner-confirmed or the approved registry is empty. A dining form is an enquiry, not a confirmed reservation. Do not invent opening hours, menu prices, policy terms, tour inclusions, awards, ratings, guest reviews or transport fares.
+### P1 — Explicit owner/configuration blockers
+7. Keep the restaurant menu gated until the owner confirms the current menu and prices. An online dining request remains an enquiry, not a confirmed reservation.
+8. Obtain approved booking/cancellation wording; privacy/data-controller contact and lead-log access/backup/retention policy; check-in/check-out and reception/late-arrival facts; room-rate display policy; authentic review permissions; exact tour inclusions/routes/prices; and current transfer prices/timings. Keep affected claims qualified or unpublished; do not infer missing facts.
+9. Verify production mail/CAPTCHA delivery, lead-storage access and retention, analytics receipt, host PHP compatibility and production performance only through the owner's separate operational process. Repository CI cannot prove those external behaviors.
 
-## Delivery boundary
+## Packaging and delivery boundary
 
-This is a source-repository readiness report. The target deliverable remains the complete PHP website source/ZIP. No merge, upload or external deployment is performed by this PR.
+The package workflow runs a manifest-based package-safety test and `scripts/build_deploy_package.py --check`. The main-branch workflow can build and publish a ZIP plus integrity manifest as a GitHub Actions artifact after preflight passes. That archive is meant for review; it is not a live deployment. Before final delivery, extract the archive and confirm the PHP source, runtime includes, CSS/JS, images, content data and required runtime files are present, while test tooling, private local config, credentials and development-only artifacts are excluded.
+
+This readiness report records source/CI state only. No merge, cPanel access, hosting mutation or external deployment is authorized or performed here.
