@@ -348,7 +348,7 @@ require __DIR__ . '/include/page-head.php';
       <article class="card">
         <div class="card-image">
           <img
-            src="img/tent.jpg" <?= gj_image_dimension_attributes('img/tent.jpg') ?>
+            src="img/tent.jpg" <?= gj_image_dimension_attributes('img/tent.jpg', '(max-width: 1080px) 100vw, 33vw') ?>
             alt="People sleeping under a starry desert sky in the Jaisalmer desert"
             loading="lazy">
         </div>
@@ -446,35 +446,35 @@ require __DIR__ . '/include/page-head.php';
 
       <figure>
         <img
-          src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg') ?>
+          src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg', '(max-width: 1080px) 100vw, 48vw') ?>
           alt="Jaisalmer city seen from the fort"
           loading="lazy">
       </figure>
 
       <figure>
         <img
-          src="img/courtyard.jpg" <?= gj_image_dimension_attributes('img/courtyard.jpg') ?>
+          src="img/courtyard.jpg" <?= gj_image_dimension_attributes('img/courtyard.jpg', '(max-width: 1080px) 50vw, 26vw') ?>
           alt="Carved sandstone hallway inside a heritage haveli"
           loading="lazy">
       </figure>
 
       <figure>
         <img
-          src="img/recep1.jpg" <?= gj_image_dimension_attributes('img/recep1.jpg') ?>
+          src="img/recep1.jpg" <?= gj_image_dimension_attributes('img/recep1.jpg', '(max-width: 1080px) 50vw, 26vw') ?>
           alt="Reception area with traditional furnishings at Garh Jaisal Haveli"
           loading="lazy">
       </figure>
 
       <figure>
         <img
-          src="img/s4.jpg" <?= gj_image_dimension_attributes('img/s4.jpg') ?>
+          src="img/s4.jpg" <?= gj_image_dimension_attributes('img/s4.jpg', '(max-width: 1080px) 50vw, 26vw') ?>
           alt="View across Jaisalmer from the rooftop"
           loading="lazy">
       </figure>
 
       <figure>
         <img
-          src="img/big9.jpg" <?= gj_image_dimension_attributes('img/big9.jpg') ?>
+          src="img/big9.jpg" <?= gj_image_dimension_attributes('img/big9.jpg', '(max-width: 1080px) 50vw, 26vw') ?>
           alt="A carved entrance in a historic sandstone building"
           loading="lazy">
       </figure>

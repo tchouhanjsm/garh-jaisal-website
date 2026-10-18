@@ -57,7 +57,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 46 | Owner visual-evidence review and cPanel staging readiness | ◐ Review approved screenshot artifacts and execute external staging only with owner-supplied staging URL and deployed SHA; production parity remains unresolved |
 | 47 | Arrival, transfer and dining claim accuracy | ✓ merged through PR #97; regression coverage guards unsupported transfer and dining claims. |
 | 48 | Restaurant menu publication guard and source reconciliation | ✓ merged through PR #98; unconfirmed dish names/descriptions/prices stay unpublished, and restaurant validation tolerates hosts without `mbstring`. |
-| 49 | Exact-head browser evidence and repository reproducibility | ◐ PR #99 merge-head Browser E2E and all other main checks passed at `1d08a3a4cae91f0b78f2d83957db22fd9d529550`; reproducible Playwright lockfile remains open. PR #100 image remediation must pass all checks on its latest head and receive semantic screenshot review. See `docs/FULL-REPOSITORY-AUDIT-2026-10-18.md`. |
+| 49 | Exact-head browser evidence and repository reproducibility | ✓ PRs #100 and #101 merged; all nine checks passed on current main `dc1d7653eecc61fec72489015340d61ae8e52386`. Responsive image delivery and committed Playwright lockfile remain follow-up work; see the post-merge disposition in the full audit. |
+| 50 | Responsive image delivery and reproducible browser dependencies | ◐ Extend generated 480/800/1200px candidates and CSS-aligned `sizes` hints to high-intent/gallery/editorial slots; align the Journal preload; fix full-resolution Gallery lightbox selection; correct Car & City Tours breadcrumb semantics/contrast; add slot, lightbox and breadcrumb regressions; pin Playwright with a committed npm-generated lockfile and `npm ci`/audit. Exact-head CI must pass before merge; owner-only facts and human sign-off remain separate. |
 
 ---
 
