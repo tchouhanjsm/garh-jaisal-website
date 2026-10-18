@@ -58,7 +58,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="gallery-page" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo gallery-hero">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
       <?php
@@ -133,7 +133,7 @@ require __DIR__ . '/include/page-head.php';
               <a href="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>" data-gallery-open aria-label="Open full-size image: <?= htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') ?>">
                 <img
                   src="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>"
-                  <?= gj_image_dimension_attributes($src) ?>
+                  <?= gj_image_dimension_attributes($src, '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
                   alt="<?= htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') ?>"
                   loading="lazy"
                   decoding="async"

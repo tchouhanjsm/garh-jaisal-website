@@ -153,17 +153,79 @@ test('Journal featured image is eager, dimension-stable and preloaded on desktop
       height: Number(img.getAttribute('height')),
       decodedWidth: img.naturalWidth,
       decodedHeight: img.naturalHeight,
+      srcset: img.getAttribute('srcset') || '',
+      sizes: img.getAttribute('sizes') || '',
       preloads: Array.from(document.querySelectorAll('link[rel="preload"][as="image"]'))
         .filter(link => !link.media || window.matchMedia(link.media).matches)
-        .map(link => new URL(link.href, document.baseURI).pathname),
+        .map(link => ({
+          href: new URL(link.href, document.baseURI).pathname,
+          srcset: link.getAttribute('imagesrcset') || '',
+          sizes: link.getAttribute('imagesizes') || '',
+        })),
     }));
-    expect(state.path).toBe('/img/j7.jpg');
-    expect(state.preloads).toContain(state.path);
+    expect(state.path).toMatch(/^\/img\/responsive\/j7-(480|800|1200)\.webp$/);
+    expect(state.srcset).not.toBe('');
+    expect(state.srcset.split(',').some(candidate => {
+      try { return new URL(candidate.trim().split(/\s+/)[0], BASE_URL).pathname === state.path; } catch { return false; }
+    })).toBe(true);
+    expect(state.sizes).toBe('(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw');
+    expect(state.preloads.some(preload =>
+      preload.srcset.split(',').some(candidate => {
+        try { return new URL(candidate.trim().split(/\s+/)[0], BASE_URL).pathname === state.path; } catch { return false; }
+      }) && preload.sizes === state.sizes
+    )).toBe(true);
     expect(state.width).toBeGreaterThan(0);
     expect(state.height).toBeGreaterThan(0);
-    expect(state.width).toBe(state.decodedWidth);
-    expect(state.height).toBe(state.decodedHeight);
+    expect(state.decodedWidth).toBeGreaterThan(0);
+    expect(state.decodedHeight).toBeGreaterThan(0);
+    expect(Math.abs((state.width / state.height) - (state.decodedWidth / state.decodedHeight))).toBeLessThan(0.02);
   } finally {
     await context.close();
+  }
+});
+
+
+test('high-intent page photography selects generated responsive candidates with sizes hints', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Responsive image delivery spotcheck creates its own viewport contexts');
+  test.setTimeout(120_000);
+  const cases = [
+    { route: '/about.php', selector: '.wide-feature .media img', expectedStem: 'big6' },
+    { route: '/blog.php', selector: '.blog-card--featured img', expectedStem: 'j7' },
+    { route: '/gallery.php', selector: '.gallery-grid img', expectedStem: 'facade' },
+    { route: '/car-tours.php', selector: '.experience-card img', expectedStem: 'j10' },
+  ];
+  for (const width of [390, 1280]) {
+    const context = await browser.newContext({ baseURL: BASE_URL, viewport: { width, height: width < 768 ? 844 : 800 }, deviceScaleFactor: 1, isMobile: width <= 390, hasTouch: width <= 390 });
+    const page = await context.newPage();
+    try {
+      for (const item of cases) {
+        const response = await page.goto(item.route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
+        expect(response, item.route + ' must respond at ' + width + 'px').not.toBeNull();
+        expect(response.status(), item.route + ' must return a successful response').toBeLessThan(400);
+        const image = page.locator(item.selector).first();
+        await image.scrollIntoViewIfNeeded();
+        await image.evaluate(img => img.decode());
+        const state = await image.evaluate(img => ({
+          path: new URL(img.currentSrc || img.src, document.baseURI).pathname,
+          srcset: img.getAttribute('srcset') || '',
+          sizes: img.getAttribute('sizes') || '',
+          width: Number(img.getAttribute('width')),
+          height: Number(img.getAttribute('height')),
+          naturalWidth: img.naturalWidth,
+          naturalHeight: img.naturalHeight,
+        }));
+        expect(state.path, item.route + ' should select a resized WebP candidate').toMatch(new RegExp('^/img/responsive/(?:v2/)?' + item.expectedStem + '-(480|800|1200)\\.webp$'));
+        expect(state.srcset, item.route + ' must publish a responsive candidate list').not.toBe('');
+        expect(state.srcset.split(',').some(candidate => {
+          try { return new URL(candidate.trim().split(/\s+/)[0], BASE_URL).pathname === state.path; } catch { return false; }
+        }), item.route + ' selected image must appear in srcset').toBe(true);
+        expect(state.sizes, item.route + ' must publish a sizes hint').not.toBe('');
+        expect(state.width).toBeGreaterThan(0);
+        expect(state.height).toBeGreaterThan(0);
+        expect(state.naturalWidth).toBeGreaterThan(0);
+        expect(state.naturalHeight).toBeGreaterThan(0);
+        expect(Math.abs((state.width / state.height) - (state.naturalWidth / state.naturalHeight))).toBeLessThan(0.02);
+      }
+    } finally { await context.close(); }
   }
 });
