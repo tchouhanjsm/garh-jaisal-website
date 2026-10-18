@@ -7,15 +7,15 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-18 |
-| Current phase | Sprint 49 — verified website state and browser evidence |
+| Current phase | Sprint 49 — full repository audit and image reuse remediation |
 | Base branch | `main` |
-| Verified main SHA | `e6f2b8094b845ef9a30fe7784c31bd142666cfa6` (PR #98 merge commit, 2026-10-18) |
-| Latest merged PR | [#98 — gate unapproved menu data and reconcile final release gates](https://github.com/tchouhanjsm/garh-jaisal-website/pull/98) |
-| PR #98 final PR head | `33f452253d0820370a3fd2d9d5d2c1907cfffb81` (separate from merge SHA) |
-| PR #98 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39092305671) on verified main SHA |
-| PR #98 Browser E2E | [IN PROGRESS at audit time](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39092305698); screenshot/evidence artifacts were not yet available |
-| PR #98 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39092305682) on verified main SHA |
-| PR #98 Staging QA workflow | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39092305685), local dry-smoke path only |
+| Verified main SHA | `1d08a3a4cae91f0b78f2d83957db22fd9d529550` (PR #99 merge commit, 2026-10-18) |
+| Latest merged PR | [#99 — reconcile website repository status after PR #98](https://github.com/tchouhanjsm/garh-jaisal-website/pull/99) |
+| PR #98 final PR head (historical) | `33f452253d0820370a3fd2d9d5d2c1907cfffb81` (separate from merge SHA) |
+| PR #99 merge-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179680) on verified main SHA |
+| PR #99 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179657) on verified main SHA |
+| PR #99 merge-head package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179660) on verified main SHA |
+| PR #99 merge-head Staging QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179737), local/non-deploying dry run only |
 | PR #93 PR-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39012551591) — exact head `cbf11bd2f84017561f1640c6acac40c04430e75d` |
 | PR #93 merge-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642234) |
 | PR #93 merge-head cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642162) |
@@ -56,8 +56,8 @@
 | PR #96 merge-head cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260531) — package generated for review, not uploaded |
 | PR #96 merge-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260546) — local/non-deploying, not an external staging host |
 | PR #96 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528/artifacts/12102915342) (31.5 MB); [curated evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528/artifacts/12101769369) (11.1 MB) |
-| Open PRs | None at Sprint 49 start. |
-| Next action | Obtain a completed exact-main Browser E2E run and inspect its screenshot artifacts; fix only verified website regressions. |
+| Open PRs at audit baseline | [#100 — diversify repeated website image assignments](https://github.com/tchouhanjsm/garh-jaisal-website/pull/100); current PR-head CI is under remediation/revalidation. |
+| Next action | Finish PR #100 at its exact latest SHA, inspect image evidence, then address reproducible dependency locking and remaining image/accessibility/content backlog from `docs/FULL-REPOSITORY-AUDIT-2026-10-18.md`. |
 ## 2026-10-17 — Backend audit remediation in existing PR #91
 
 - Kept changes in PR #91; no new PR, merge or deployment was performed.
@@ -255,3 +255,11 @@
 - Exact-main Site Checks and package preflight passed. Staging QA passed in local dry-smoke mode. Browser E2E remained in progress at the latest check, and no screenshot artifacts had been uploaded; visual QA is therefore not signed off.
 - Verified that `include/menu-data.php` stays `owner_confirmed: false` and `restaurant.php` has a pending-menu branch that directs guests to ask about the current menu; no sample menu records should be rendered while the flag is false.
 - The browser-test package still lacks a lockfile. Attempted to generate one using npm, but registry access from the current environment failed (`EAI_AGAIN`); no lockfile or unverified install-path change is being committed. Revisit this in a network-enabled environment and commit an actual npm-generated lockfile before switching workflows to `npm ci`.
+
+
+## 2026-10-18 — Full repository audit follow-up
+
+- Audited all tracked Markdown documents and cross-checked the current source registries, sitemap generator, CI workflows and image-gallery test contracts. Findings and priority order are recorded in `docs/FULL-REPOSITORY-AUDIT-2026-10-18.md`.
+- Main baseline remains `1d08a3a4cae91f0b78f2d83957db22fd9d529550`; all nine current-main checks passed. This does not imply external host behavior or manual visual/accessibility sign-off.
+- PR #100's first head exposed stale sitemap dates after source-registry edits and a gallery test that still required the Swiss-tent cultural-program image removed by the curation change. The PR branch has been updated to address both; latest-head checks must finish before review/merge.
+- Browser dependency reproducibility remains open: no committed npm lockfile and no declared Playwright dev dependency. Generate the lockfile only in a network-enabled environment, then verify `npm ci` before changing CI installation behavior.
