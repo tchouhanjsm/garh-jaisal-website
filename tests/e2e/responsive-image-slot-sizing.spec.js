@@ -64,7 +64,6 @@ test('responsive image candidates receive slot-accurate sizes hints', async ({ p
 
   await page.goto(BASE_URL + '/gallery.php', { waitUntil: 'domcontentloaded', timeout: 20_000 });
   for (const source of galleryResponsiveSources) {
-    const image = page.locator('.gallery-item img').filter({ has: page.locator('[src="' + source + '"]') });
     const exact = page.locator('.gallery-item img[src="' + source + '"]');
     await expect(exact, 'Gallery should render responsive source ' + source).toHaveCount(1);
     await expect(exact, 'Gallery thumbnail should use slot-aware sizes for ' + source).toHaveAttribute('sizes', GALLERY_THUMB_SIZES);
