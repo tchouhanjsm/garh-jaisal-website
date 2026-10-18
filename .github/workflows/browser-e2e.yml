@@ -47,8 +47,11 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install pinned Playwright test runner
-        run: npm install --no-save --package-lock=false @playwright/test@1.55.0
+      - name: Install locked Node dependencies
+        run: npm ci
+
+      - name: Check dependency advisories
+        run: npm audit --audit-level=high
 
       - name: Install Chromium and system dependencies
         run: npx playwright install --with-deps chromium
