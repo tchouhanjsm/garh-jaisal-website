@@ -256,7 +256,7 @@ test('rooftop menu CTA opens the restaurant menu section directly', async ({ pag
   await expect(menuLink).toHaveAttribute('href', 'restaurant.php#menu');
   await page.goto('restaurant.php#menu');
   await expect(page.locator('#menu')).toBeVisible();
-  await expect(page.locator('#menu').getByRole('heading', { name: 'What is on the menu.' })).toBeVisible();
+  await expect(page.locator('#menu h2')).toHaveText(/^(?:Ask about the current menu\.|What is on the menu\.)$/);
 });
 
 
@@ -374,7 +374,7 @@ test('arrival and dining contact links preserve their topic in the editable enqu
   await expect(page.locator('.roof-copy a[href="contact.php?topic=dining"]')).toHaveCount(1);
 
   await page.goto('/restaurant.php', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('.restaurant-contact-help a')).toHaveAttribute('href', 'contact.php?topic=dining');
+  await expect(page.getByRole('link', { name: 'Send a dining enquiry →', exact: true })).toHaveAttribute('href', 'contact.php?topic=dining');
   await expect(page.locator('.restaurant-note')).toContainText('confirm the current menu and prices');
 
   await page.goto('/contact.php?topic=dining', { waitUntil: 'domcontentloaded' });

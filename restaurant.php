@@ -312,7 +312,7 @@ $faqItems = [
 ];
 $page = [
     'title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
-    'description' => "Rooftop dining at " . $restaurant['name'] . " inside Jaisalmer Fort. Explore the menu preview and request a table; confirm current hours, dishes and prices with the hotel.",
+    'description' => "Rooftop dining at " . $restaurant['name'] . " inside Jaisalmer Fort. Ask the hotel about the current menu and request a table; confirm hours, dishes and prices before visiting.",
     'path' => '/restaurant.php',
     'og_type' => 'website',
     'og_title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
@@ -373,7 +373,7 @@ require __DIR__ . '/include/page-head.php';
         <p class="eyebrow">The kitchen</p>
         <h2>A simple menu with Rajasthani favourites.</h2>
       </div>
-      <p>Try dishes such as Laal Maas, Ker Sangri, Gatte ki Sabzi and Dal Baati Churma, alongside breads and desserts.</p>
+      <p>Ask the team about current Rajasthani dishes, preparation and dietary options for your visit. Menu details are confirmed directly with the hotel.</p>
     </div>
 
     <div class="site-shell restaurant-gallery-social">

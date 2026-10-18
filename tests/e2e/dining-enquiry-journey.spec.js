@@ -37,7 +37,7 @@ test('rooftop and restaurant entry points reach the contextual dining enquiry', 
   expect(restaurantResponse).not.toBeNull();
   expect(restaurantResponse.status()).toBeLessThan(400);
   await expect(page.locator('#reserve form.restaurant-form')).toBeVisible();
-  await page.locator('.restaurant-contact-help a[href="contact.php?topic=dining"]').click();
+  await page.getByRole('link', { name: 'Send a dining enquiry →', exact: true }).click();
   await expectDiningEnquiry(page);
 });
 
@@ -66,7 +66,7 @@ test('dining guidance, the active reservation form and direct-contact links fit 
   await expect(whatsappLink).toHaveAttribute('target', '_blank');
   await expect(whatsappLink).toHaveAttribute('rel', /noopener/);
 
-  const diningEnquiry = page.locator('.restaurant-contact-help a[href="contact.php?topic=dining"]');
+  const diningEnquiry = page.getByRole('link', { name: 'Send a dining enquiry →', exact: true });
   await expect(diningEnquiry).toBeVisible();
 
   const metrics = await page.evaluate(() => {
