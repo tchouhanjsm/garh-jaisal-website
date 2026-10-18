@@ -21,6 +21,12 @@ const responsiveSlots = [
   { route: '/', selector: '.gallery-strip figure:nth-child(3) img[src="img/recep1.jpg"]', sizes: '(max-width: 760px) 50vw, 28vw' },
   { route: '/', selector: '.gallery-strip figure:nth-child(4) img[src="img/s4.jpg"]', sizes: '(max-width: 760px) 50vw, 28vw' },
   { route: '/gallery.php', selector: '.gallery-hero img[src="img/v2/rooftop-dusk.jpg"]', sizes: '(max-width: 760px) 100vw, 45vw' },
+  { route: '/jaisalmer-fort-guide.php', selector: '.article-image img[src="img/j1.jpg"]', sizes: '(max-width: 768px) 100vw, 60vw' },
+  { route: '/jaisalmer-havelis-guide.php', selector: '.article-image img[src="img/j4.jpg"]', sizes: '(max-width: 768px) 100vw, 60vw' },
+  { route: '/jaisalmer-beyond-the-fort-guide.php', selector: '.article-image img[src="img/j8.jpg"]', sizes: '(max-width: 768px) 100vw, 60vw' },
+  { route: '/jaisalmer-markets-and-crafts-guide.php', selector: '.article-image img[src="img/j9.jpg"]', sizes: '(max-width: 768px) 100vw, 60vw' },
+  { route: '/full-day-jaisalmer-tour.php', selector: '.experience-hero-media img[src="img/j2.jpg"]', sizes: '100vw' },
+  { route: '/pack.php', selector: '.package-hero img[src="img/desert11.jpg"]', sizes: '100vw' },
 ];
 
 const galleryResponsiveSources = [
