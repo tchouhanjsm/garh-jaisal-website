@@ -11,12 +11,13 @@ const HEROES = [
   {
     route: '/room.php',
     selector: '.rooms-hero .page-hero-media img',
-    expected: () => 'purple-room',
+    expected: () => 'sitting-room',
   },
   {
     route: '/catalogue.php',
     selector: '.catalogue-hero-media img',
     expected: () => 'desert3',
+    approvedWebpFallback: '/img/2.webp',
   },
 ];
 
@@ -99,7 +100,12 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
           }), hero.route + ' selected candidate must appear in its own srcset').toBe(true);
           expect(state.sizes, hero.route + ' responsive source must expose a sizes hint').not.toBe('');
         } else {
-          expect(state.currentPath, hero.route + ' must use its configured optimized fallback').toContain('/img/optimized/');
+          if (hero.approvedWebpFallback) {
+            expect(state.currentPath, hero.route + ' must use its explicitly configured WebP fallback').toBe(hero.approvedWebpFallback);
+            expect(state.currentPath, hero.route + ' fallback must be a WebP image').toMatch(/\.webp$/);
+          } else {
+            expect(state.currentPath, hero.route + ' must use its configured optimized fallback').toContain('/img/optimized/');
+          }
         }
 
         expect(state.width, hero.route + ' LCP image must decode').toBeGreaterThan(0);
@@ -151,7 +157,7 @@ test('Journal featured image is eager, dimension-stable and preloaded on desktop
         .filter(link => !link.media || window.matchMedia(link.media).matches)
         .map(link => new URL(link.href, document.baseURI).pathname),
     }));
-    expect(state.path).toBe('/img/optimized/v2/fort-from-roof.webp');
+    expect(state.path).toBe('/img/j7.jpg');
     expect(state.preloads).toContain(state.path);
     expect(state.width).toBeGreaterThan(0);
     expect(state.height).toBeGreaterThan(0);

@@ -38,14 +38,14 @@ $faqItems = [
 $buildRoomHeroPreload = static function () {
     $srcset = [];
     foreach ([480, 800, 1200] as $candidateWidth) {
-        $candidate = '/img/responsive/v2/purple-room-' . $candidateWidth . '.webp';
+        $candidate = '/img/responsive/v2/sitting-room-' . $candidateWidth . '.webp';
         if (is_file(__DIR__ . $candidate) && !is_link(__DIR__ . $candidate)) {
             $srcset[] = $candidate . ' ' . $candidateWidth . 'w';
         }
     }
 
     $descriptor = [
-        'href' => $srcset ? strtok($srcset[0], ' ') : '/img/optimized/v2/purple-room.webp',
+        'href' => $srcset ? strtok($srcset[0], ' ') : '/img/optimized/v2/sitting-room.webp',
         'fetchpriority' => 'high',
     ];
     if ($srcset) {
@@ -62,10 +62,10 @@ $page = [
     'preload' => [$buildRoomHeroPreload()],
     'og_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'og_description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort.',
-    'og_image' => '/img/purple-room.jpg',
+    'og_image' => '/img/v2/sitting-room.jpg',
     'twitter_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'twitter_description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort.',
-    'twitter_image' => '/img/purple-room.jpg',
+    'twitter_image' => '/img/v2/sitting-room.jpg',
     'css' => ['css/thar-sunset-story.css'],
     'schema' => [
         [
@@ -98,7 +98,7 @@ require __DIR__ . '/include/page-head.php';
 
   <section class="page-hero page-hero--photo rooms-hero" aria-labelledby="rooms-page-title">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/optimized/v2/purple-room.webp" <?= gj_image_dimension_attributes('img/optimized/v2/purple-room.webp', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/optimized/v2/sitting-room.webp" <?= gj_image_dimension_attributes('img/optimized/v2/sitting-room.webp', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell rooms-hero-grid">
       <div class="rooms-hero-copy">

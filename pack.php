@@ -42,10 +42,10 @@ $page = [
     'path' => '/pack.php',
     'og_title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
     'og_description' => 'Choose from desert safari experiences and guided Jaisalmer tours arranged from Garh Jaisal Haveli inside Jaisalmer Fort.',
-    'og_image' => '/img/desert3.jpg',
+    'og_image' => '/img/desert11.jpg',
     'twitter_title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
     'twitter_description' => 'Choose from desert safari experiences and guided Jaisalmer tours arranged from Garh Jaisal Haveli inside Jaisalmer Fort.',
-    'twitter_image' => '/img/desert3.jpg',
+    'twitter_image' => '/img/desert11.jpg',
     'css' => ['css/packages.css', 'css/experiences.css', 'css/thar-sunset-story.css'],
     'schema' => [
         [
@@ -72,9 +72,9 @@ require __DIR__ . '/include/page-head.php';
   <section class="package-hero">
     <div class="package-hero-media">
       <img
-        src="img/desert3.jpg"
-        alt="Sand dunes in the Thar Desert near Jaisalmer"
-        <?= gj_image_dimension_attributes('img/desert3.jpg', '100vw') ?>
+        src="img/desert11.jpg"
+        alt="A camel rider travelling across sand dunes in the Thar Desert"
+        <?= gj_image_dimension_attributes('img/desert11.jpg', '100vw') ?>
         fetchpriority="high"
       >
       <div class="package-hero-overlay"></div>
@@ -229,7 +229,7 @@ require __DIR__ . '/include/page-head.php';
       <div class="experience-card-grid package-guide-grid">
         <article class="experience-card">
           <a href="jaisalmer-fort-guide.php">
-            <img src="img/v2/fort-from-roof.jpg" <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="Jaisalmer Fort viewed from a rooftop in the fort" loading="lazy" decoding="async">
+            <img src="img/j7.jpg" <?= gj_image_dimension_attributes('img/j7.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="Jaisalmer Fort rising above a public courtyard" loading="lazy" decoding="async">
             <div>
               <p class="experience-card-kicker">Fort &amp; arrival</p>
               <h3>Explore Jaisalmer Fort</h3>
@@ -240,7 +240,7 @@ require __DIR__ . '/include/page-head.php';
         </article>
         <article class="experience-card">
           <a href="desert-safari-guide.php">
-            <img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="Sand dunes in the Thar Desert near Jaisalmer" loading="lazy" decoding="async">
+            <img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="Camel riders travelling over the dunes near Jaisalmer" loading="lazy" decoding="async">
             <div>
               <p class="experience-card-kicker">Desert choices</p>
               <h3>Compare desert experiences</h3>
@@ -251,7 +251,7 @@ require __DIR__ . '/include/page-head.php';
         </article>
         <article class="experience-card">
           <a href="jaisalmer-2-day-itinerary.php">
-            <img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="Historic sandstone architecture inside Jaisalmer Fort" loading="lazy" decoding="async">
+            <img src="img/1.webp" <?= gj_image_dimension_attributes('img/1.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="Panoramic view across Jaisalmer&#x27;s sandstone city" loading="lazy" decoding="async">
             <div>
               <p class="experience-card-kicker">Short-stay planning</p>
               <h3>Plan two days in Jaisalmer</h3>

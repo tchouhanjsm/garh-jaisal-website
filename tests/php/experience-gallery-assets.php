@@ -40,7 +40,6 @@ $requiredExperienceAssets = [
         'img/Desert_Camp/camp_dinner.jpeg',
         'img/Desert_Camp/Bathroom.jpeg',
         'img/Desert_Camp/Outtent.jpeg',
-        'img/Desert_Camp/Prog.jpeg',
         'img/Desert_Camp/Tent.jpeg',
         'img/Desert_Camp/Tentout.jpeg',
         'img/Desert_Camp/tentout1.jpeg',

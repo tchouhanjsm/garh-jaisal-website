@@ -22,10 +22,10 @@ $page = [
     'og_type' => 'website',
     'og_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
     'og_description' => "Candlelight dinners and city views at Garh Jaisal's Kitchen, the rooftop restaurant inside Jaisalmer Fort.",
-    'og_image' => '/img/v2/fort-from-roof.jpg',
+    'og_image' => '/img/rest5.jpg',
     'twitter_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
     'twitter_description' => "Candlelight dinners and city views at Garh Jaisal's Kitchen, the rooftop restaurant inside Jaisalmer Fort.",
-    'twitter_image' => '/img/v2/fort-from-roof.jpg',
+    'twitter_image' => '/img/rest5.jpg',
     'css' => ['css/roof.css', 'css/thar-sunset-story.css'],
     'schema' => [
         [
@@ -56,7 +56,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="roof-page thar-sunset-story thar-sunset-story--dining" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/v2/fort-from-roof.jpg" <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/rest5.jpg" <?= gj_image_dimension_attributes('img/rest5.jpg') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Rooftop dining</p>
@@ -94,9 +94,9 @@ require __DIR__ . '/include/page-head.php';
 
       <div class="roof-banner">
         <img
-          src="img/v2/fort-from-roof.jpg"
-          alt="Rooftop table at dusk overlooking the lights of Jaisalmer"
-          <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?>
+          src="img/rest3.jpg"
+          alt="Rooftop dining area with views across Jaisalmer"
+          <?= gj_image_dimension_attributes('img/rest3.jpg') ?>
         >
       </div>
 

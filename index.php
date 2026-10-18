@@ -453,15 +453,15 @@ require __DIR__ . '/include/page-head.php';
 
       <figure>
         <img
-          src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?>
-          alt="Sandstone architecture at Garh Jaisal Haveli"
+          src="img/courtyard.jpg" <?= gj_image_dimension_attributes('img/courtyard.jpg') ?>
+          alt="Carved sandstone hallway inside a heritage haveli"
           loading="lazy">
       </figure>
 
       <figure>
         <img
-          src="img/v2/fort-from-roof.jpg" <?= gj_image_dimension_attributes('img/v2/fort-from-roof.jpg') ?>
-          alt="Rooftop view at Garh Jaisal Haveli"
+          src="img/recep1.jpg" <?= gj_image_dimension_attributes('img/recep1.jpg') ?>
+          alt="Reception area with traditional furnishings at Garh Jaisal Haveli"
           loading="lazy">
       </figure>
 
@@ -474,8 +474,8 @@ require __DIR__ . '/include/page-head.php';
 
       <figure>
         <img
-          src="img/j10.jpg" <?= gj_image_dimension_attributes('img/j10.jpg') ?>
-          alt="Jaisalmer sandstone architecture"
+          src="img/big9.jpg" <?= gj_image_dimension_attributes('img/big9.jpg') ?>
+          alt="A carved entrance in a historic sandstone building"
           loading="lazy">
       </figure>
 
