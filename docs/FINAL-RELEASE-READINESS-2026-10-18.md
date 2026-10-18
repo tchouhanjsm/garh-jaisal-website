@@ -2,34 +2,42 @@
 
 **Audit date:** 2026-10-18  
 **Repository:** https://github.com/tchouhanjsm/garh-jaisal-website  
-**Verified main SHA:** `e6f2b8094b845ef9a30fe7784c31bd142666cfa6`  
-**Latest merged PR:** [PR #98 — gate unapproved menu data and reconcile final release gates](https://github.com/tchouhanjsm/garh-jaisal-website/pull/98)  
-**PR #98 final head (not merge SHA):** `33f452253d0820370a3fd2d9d5d2c1907cfffb81`
+**Verified main SHA:** `1d08a3a4cae91f0b78f2d83957db22fd9d529550`  
+**Latest merged PR:** [PR #99 — reconcile website repository status after PR #98](https://github.com/tchouhanjsm/garh-jaisal-website/pull/99)  
+**Open image-remediation PR:** [PR #100](https://github.com/tchouhanjsm/garh-jaisal-website/pull/100)
 
-## Website-source status
+## Source and CI status
 
-PR #98 is merged. The restaurant page withholds unconfirmed menu categories, dish names, descriptions and prices while the owner-controlled menu flag is false or the approved registry is empty, and gives guests a direct-enquiry fallback. A dining form submission remains an enquiry, not a confirmed table reservation.
+All nine check runs on the verified `main` SHA completed successfully:
 
-## Exact-main workflow evidence
-
-| Workflow | Result | Evidence |
+| Check | Result | Evidence |
 |---|---|---|
-| Site Checks | PASS | [Run 39092305671](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39092305671) |
-| Browser E2E and screenshots | In progress at audit time | [Run 39092305698](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39092305698); no screenshots available at the time checked |
-| Deployment package preflight | PASS | [Run 39092305682](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39092305682) |
-| Staging QA workflow | PASS | [Run 39092305685](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39092305685); local dry-smoke path |
+| PHP 7.4 compatibility/site checks | PASS | [Site Checks run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179680) |
+| PHP 8.2 site checks | PASS | [Site Checks run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179680) |
+| Browser E2E and screenshots | PASS | [Browser E2E run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179657) |
+| Deployment package preflight | PASS | [Package run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179660) |
+| Non-deploying Staging QA | PASS | [QA run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179737) |
+| Brand contrast and token contract | PASS | [Site checks run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179680) |
+| Marketing template source contract | PASS | [Site checks run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179680) |
+| Responsive image review | PASS | [Site checks run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179680) |
+| Owner-reviewed package build check | PASS | [Package run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39097179660) |
 
-## Findings
+The Staging QA workflow is a local/non-deploying dry run. It does not prove behavior on an external host.
 
-- **Confirmed website guard:** keep the restaurant menu unpublished until owner confirmation. Do not publish sample menu content or create guessed prices/hours/policies.
-- **Browser evidence:** the main Browser E2E run was still executing the responsive test step; screenshot output had not yet been produced. Passing source checks is not visual approval.
-- **Dependency reproducibility:** `package.json` has no declared Playwright dependency or lockfile; workflows currently install Playwright `1.55.0` ad hoc. An npm lockfile must be generated and verified in a network-enabled environment before changing workflows to `npm ci`.
-- **Responsive baseline:** keep the existing 320px, 390px, 768px-selected, 1280px and 1440px checks. Fix genuine rendered defects rather than weakening assertions.
+## Open repository work
 
-## Scope boundary
+1. **PR #100 — image reuse remediation:** initial CI exposed stale `sitemap.xml` dates and an outdated gallery-test requirement after a photo was removed from the Swiss-tent accommodation gallery. Both are corrected on the PR branch; wait for every required check to finish on the latest head and inspect the visual evidence before merge.
+2. **Reproducible browser dependencies:** `package.json` currently has no declared Playwright dependency or committed lockfile. CI installs `@playwright/test@1.55.0` ad hoc. Generate a real npm lockfile in a network-enabled environment, verify it, and only then switch to `npm ci`.
+3. **Image correctness:** path and layout contracts do not prove the subject/crop matches its caption, page intent or alt text. Review actual rendered screenshots/contact sheets and keep hero preloads/social images aligned.
+4. **Responsive image optimization:** the reviewed 480/800/1200px derivative set remains review-only; audit source selection and transfer payload by route before approving replacements.
+5. **Manual UX/accessibility:** screenshot judgement, keyboard/focus, reduced motion, physical devices, contrast and assistive-technology review remain distinct from automated passes.
+6. **Owner-approved facts:** menu/prices/hours, booking/cancellation wording, privacy/data-controller/retention details, check-in/reception facts, guest reviews, room-rate display and certain tour/transfer details remain unresolved in `docs/OWNER-FACTS.md`. Keep affected claims qualified and draft pages unpublished until supplied.
+7. **Documentation truth:** the current baseline and outstanding work are reconciled in `docs/PROJECT-LOG.md` and `docs/FULL-REPOSITORY-AUDIT-2026-10-18.md`.
 
-This is a repository and website-code report. It does not assert that screenshot evidence was visually approved, nor claim that a remote website has changed. No deployment work or guest-facing fact changes are part of this batch.
+## Content safety
 
-## Next website engineering action
+The restaurant menu remains unpublished while `include/menu-data.php` is not owner-confirmed or the approved registry is empty. A dining form is an enquiry, not a confirmed reservation. Do not invent menu items, prices, hours, policies, awards, ratings, route inclusions or guide availability.
 
-Re-check [the exact-main Browser E2E run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39092305698), download and inspect its screenshot evidence when available, and generate a proper npm lockfile in a network-enabled environment. Then handle demonstrated UI defects with regression coverage.
+## Delivery boundary
+
+This report describes repository source and automated evidence. It does not claim that every image has been manually approved or that every external-host behavior has been tested. The current user instruction is to complete and deliver the PHP website source/ZIP; this audit does not perform hosting changes, staging deployment, production deployment or release tagging.
