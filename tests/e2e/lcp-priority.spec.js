@@ -168,7 +168,7 @@ test('Journal featured image is eager, dimension-stable and preloaded on desktop
     expect(state.srcset.split(',').some(candidate => {
       try { return new URL(candidate.trim().split(/\s+/)[0], BASE_URL).pathname === state.path; } catch { return false; }
     })).toBe(true);
-    expect(state.sizes).toBe('(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw');
+    expect(state.sizes).toBe('(max-width: 900px) 100vw, 60vw');
     expect(state.preloads.some(preload =>
       preload.srcset.split(',').some(candidate => {
         try { return new URL(candidate.trim().split(/\s+/)[0], BASE_URL).pathname === state.path; } catch { return false; }

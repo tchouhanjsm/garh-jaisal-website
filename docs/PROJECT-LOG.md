@@ -60,8 +60,8 @@
 | PR #96 merge-head cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260531) — package generated for review, not uploaded |
 | PR #96 merge-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260546) — local/non-deploying, not an external staging host |
 | PR #96 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528/artifacts/12102915342) (31.5 MB); [curated evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528/artifacts/12101769369) (11.1 MB) |
-| Open PRs at audit baseline | [#100 — diversify repeated website image assignments](https://github.com/tchouhanjsm/garh-jaisal-website/pull/100); current PR-head CI is under remediation/revalidation. |
-| Next action | Finish PR #100 at its exact latest SHA, inspect image evidence, then address reproducible dependency locking and remaining image/accessibility/content backlog from `docs/FULL-REPOSITORY-AUDIT-2026-10-18.md`. |
+| Open PRs at audit baseline | Historical snapshot taken before PR #100 and PR #101 merged; both are now merged. |
+| Next action | PR #102 extends responsive candidates and pins reproducible browser tooling; its generated lockfile must be committed from CI, then the temporary lockfile-artifact bootstrap must be removed and all final-head checks rerun. |
 ## 2026-10-17 — Backend audit remediation in existing PR #91
 
 - Kept changes in PR #91; no new PR, merge or deployment was performed.
