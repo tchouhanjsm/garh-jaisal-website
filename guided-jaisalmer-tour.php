@@ -27,10 +27,10 @@ $page = [
     'path' => '/guided-jaisalmer-tour.php',
     'og_title' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
     'og_description' => 'Explore Jaisalmer with half-day and full-day guided tours from Garh Jaisal Haveli, covering the Fort, havelis, markets and heritage areas.',
-    'og_image' => '/img/v2/facade.jpg',
+    'og_image' => '/img/j5.jpg',
     'twitter_title' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
     'twitter_description' => 'Explore Jaisalmer with half-day and full-day guided tours from Garh Jaisal Haveli, covering the Fort, havelis, markets and heritage areas.',
-    'twitter_image' => '/img/v2/facade.jpg',
+    'twitter_image' => '/img/j5.jpg',
     'css' => ['css/experiences.css'],
     'schema' => [
         [
@@ -62,7 +62,7 @@ require __DIR__ . '/include/page-head.php';
 <main id="main-content" tabindex="-1">
   <section class="experience-hero">
     <div class="experience-hero-media">
-      <img src="img/v2/facade.jpg" <?= gj_image_dimension_attributes('img/v2/facade.jpg') ?> alt="Historic architecture inside Jaisalmer Fort" fetchpriority="high">
+      <img src="img/j5.jpg" <?= gj_image_dimension_attributes('img/j5.jpg') ?> alt="Carved sandstone balconies on a historic Jaisalmer haveli" fetchpriority="high">
       <div class="experience-hero-overlay"></div>
     </div>
     <div class="site-shell experience-hero-content">
