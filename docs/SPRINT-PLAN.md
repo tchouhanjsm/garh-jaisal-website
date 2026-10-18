@@ -55,7 +55,9 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 44 | Browser E2E evidence budget and release-gate reliability | ✓ PR #94 merged; compact screenshot/audit evidence and failure-only diagnostics are in CI; current artifact links are recorded in the Project Log |
 | 45 | Rooms hero mobile height and quick-facts clearance | ✓ PR #95 merged at `a20640d8e0e4c3a83f34ff21373828b1ec4e6c0e`; exact-main Site Checks, package preflight, Staging QA dry run and Browser E2E passed |
 | 46 | Owner visual-evidence review and cPanel staging readiness | ◐ Review approved screenshot artifacts and execute external staging only with owner-supplied staging URL and deployed SHA; production parity remains unresolved |
-| 47 | Arrival, transfer and dining claim accuracy | ◐ Remove unapproved transfer fares/time estimates and unconfirmed Home/rooftop meal-service implications; guard the responsive image helper's cached path and add PHP/browser regression coverage. Keep production deployment owner-controlled. |
+| 47 | Arrival, transfer and dining claim accuracy | ✓ merged through PR #97; regression coverage guards unsupported transfer and dining claims. |
+| 48 | Restaurant menu publication guard and source reconciliation | ✓ merged through PR #98; unconfirmed dish names/descriptions/prices stay unpublished, and restaurant validation tolerates hosts without `mbstring`. |
+| 49 | Exact-head browser evidence and repository reproducibility | ◐ current-main Browser E2E is still running at audit time; screenshot evidence remains pending. Generate and verify a real Playwright lockfile before moving workflows to `npm ci`. |
 
 ---
 

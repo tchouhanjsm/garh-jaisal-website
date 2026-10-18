@@ -7,10 +7,15 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-18 |
-| Current phase | Sprint 48 — final release-readiness and launch blockers |
+| Current phase | Sprint 49 — verified website state and browser evidence |
 | Base branch | `main` |
-| Baseline commit | `1a385f3c2975c7308849335d412b31f295ea4fd0` (verified `main` merge commit for PR #97, 2026-10-17) |
-| Last merged PR | [#97 — harden arrival claims and responsive image cache](https://github.com/tchouhanjsm/garh-jaisal-website/pull/97) |
+| Verified main SHA | `e6f2b8094b845ef9a30fe7784c31bd142666cfa6` (PR #98 merge commit, 2026-10-18) |
+| Latest merged PR | [#98 — gate unapproved menu data and reconcile final release gates](https://github.com/tchouhanjsm/garh-jaisal-website/pull/98) |
+| PR #98 final PR head | `33f452253d0820370a3fd2d9d5d2c1907cfffb81` (separate from merge SHA) |
+| PR #98 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39092305671) on verified main SHA |
+| PR #98 Browser E2E | [IN PROGRESS at audit time](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39092305698); screenshot/evidence artifacts were not yet available |
+| PR #98 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39092305682) on verified main SHA |
+| PR #98 Staging QA workflow | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39092305685), local dry-smoke path only |
 | PR #93 PR-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39012551591) — exact head `cbf11bd2f84017561f1640c6acac40c04430e75d` |
 | PR #93 merge-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642234) |
 | PR #93 merge-head cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642162) |
@@ -51,7 +56,8 @@
 | PR #96 merge-head cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260531) — package generated for review, not uploaded |
 | PR #96 merge-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260546) — local/non-deploying, not an external staging host |
 | PR #96 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528/artifacts/12102915342) (31.5 MB); [curated evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528/artifacts/12101769369) (11.1 MB) |
-| Next action | Review the Sprint 48 PR and artifacts. Then owner deploys its exact merged package to an isolated HTTPS staging host, runs external staging QA, completes manual mail/CAPTCHA/Apache checks, approves policy/menu facts and visual evidence, and authorizes production release. No cPanel action has been performed. |
+| Open PRs | None at Sprint 49 start. |
+| Next action | Obtain a completed exact-main Browser E2E run and inspect its screenshot artifacts; fix only verified website regressions. |
 ## 2026-10-17 — Backend audit remediation in existing PR #91
 
 - Kept changes in PR #91; no new PR, merge or deployment was performed.
@@ -232,12 +238,20 @@
 - Production still serves older content than repository `main` at the time of review. No cPanel upload or production deployment was attempted; release parity must be checked on owner-controlled staging first.
 
 
-## 2026-10-18 — Final repository audit and release readiness
+## 2026-10-18 — Final repository audit and release readiness (pre-PR #98 historical record)
 
-- PR #97 merged into `main` at `1a385f3c2975c7308849335d412b31f295ea4fd0`. All four merge-head workflows passed: Site Checks, Browser E2E, deployment-package preflight and non-deploying Staging QA.
+- PR #97 merged into `main` at `1a385f3c2975c7308849335d412b31f295ea4fd0`. All four merge-head workflows passed on that previous SHA.
 - The prior 2026-10-16 review's PR #91 failure notes are historical. PR #91 and follow-up PRs #95/#97 are merged; the current main CI result supersedes the earlier red runs.
 - Sprint 48 prevents the repository's explicitly unconfirmed restaurant menu fixture from appearing in rendered HTML. The menu is shown only when the owner-controlled `owner_confirmed` flag is true and the registry contains items; until then guests can ask for current details through Contact or WhatsApp.
 - Added a fallback length check in the restaurant form so server validation does not fatally depend on PHP's optional `mbstring` extension.
 - The public production homepage and Directions page were checked on 2026-10-18 and remain on legacy content. This is a deployment-parity blocker; source changes merged to GitHub have not been released on the live host.
 - Owner / host blockers remain: HTTPS staging URL/access and exact package SHA; cPanel PHP/extensions/Apache behavior; actual reCAPTCHA and mail delivery; approved privacy and booking/cancellation wording; live restaurant menu and operating schedule; image-source/caption visual sign-off; analytics receipt and production performance review.
 - No merge, cPanel upload or production deployment was performed by this implementation.
+
+
+## Sprint 49 — verified state and browser evidence (2026-10-18)
+
+- Verified main is `e6f2b8094b845ef9a30fe7784c31bd142666cfa6`; PR #98's final PR head was `33f452253d0820370a3fd2d9d5d2c1907cfffb81`.
+- Exact-main Site Checks and package preflight passed. Staging QA passed in local dry-smoke mode. Browser E2E remained in progress at the latest check, and no screenshot artifacts had been uploaded; visual QA is therefore not signed off.
+- Verified that `include/menu-data.php` stays `owner_confirmed: false` and `restaurant.php` has a pending-menu branch that directs guests to ask about the current menu; no sample menu records should be rendered while the flag is false.
+- The browser-test package still lacks a lockfile. Attempted to generate one using npm, but registry access from the current environment failed (`EAI_AGAIN`); no lockfile or unverified install-path change is being committed. Revisit this in a network-enabled environment and commit an actual npm-generated lockfile before switching workflows to `npm ci`.
