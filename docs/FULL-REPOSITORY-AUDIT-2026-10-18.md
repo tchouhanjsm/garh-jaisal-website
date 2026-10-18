@@ -114,3 +114,12 @@ The audit reviewed all tracked Markdown documents in the repository tree:
 - `marketing/templates/README.md`
 
 This inventory is a documentation and source-contract audit, not a claim that every production-host behavior or every image has been manually judged. Exact-head CI and screenshot evidence remain the proof for implementation changes.
+
+
+## Post-merge delivery follow-up — 2026-10-18
+
+The historical audit baseline and observations above are preserved for traceability. PR #100 merged at `b51cbaed3a25af55f5294a5a1a7fe6e67657d6ba`; PR #101 merged at `dc1d7653eecc61fec72489015340d61ae8e52386`. All nine checks, including the full Browser E2E run, passed on that current-main commit ([Browser E2E evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39112583892), [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39112583828)).
+
+The next implementation batch extends manifest-driven responsive image candidates to Gallery/editorial/room/card assets that previously had no resized candidate; adds explicit sizes hints to About, Journal, Gallery, Home strip and Car & City Tours; and aligns the Journal featured-image preload and browser contract with the selected `currentSrc`. It also pins Playwright as a development dependency and bootstraps a lockfile from npm in CI. The generated lockfile must be committed from the artifact before the dependency work can be called complete; no synthetic lockfile is acceptable.
+
+Still not source-closeable: owner approval for menu/prices/hours, booking/cancellation terms, privacy/data-controller/lead retention, arrival/reception, authentic reviews and tour/transfer facts. Human full-resolution image/caption, device, assistive-technology and keyboard review should be recorded separately from automated checks. Do not mark these items done solely because a CI check is green.
