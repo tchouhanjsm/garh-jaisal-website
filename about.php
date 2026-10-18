@@ -100,7 +100,7 @@ require __DIR__ . '/include/page-head.php';
         <img
           src="img/v2/courtyard.jpg"
           alt="Courtyard balconies inside Garh Jaisal Haveli"
-          <?= gj_image_dimension_attributes('img/v2/courtyard.jpg', '(max-width: 1080px) 100vw, 50vw') ?>
+          <?= gj_image_dimension_attributes('img/v2/courtyard.jpg', '(max-width: 760px) 100vw, 50vw') ?>
           loading="lazy"
           decoding="async"
         >
@@ -151,7 +151,7 @@ require __DIR__ . '/include/page-head.php';
         <img
           src="img/big6.jpg"
           alt="Rooftop terrace at Garh Jaisal Haveli overlooking Jaisalmer Fort"
-          <?= gj_image_dimension_attributes('img/big6.jpg', '(max-width: 1080px) 100vw, 50vw') ?>
+          <?= gj_image_dimension_attributes('img/big6.jpg', '(max-width: 760px) 100vw, 50vw') ?>
           loading="lazy"
           decoding="async"
         >

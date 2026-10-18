@@ -58,7 +58,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="gallery-page" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo gallery-hero">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg', '(max-width: 760px) 100vw, 45vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
       <?php
