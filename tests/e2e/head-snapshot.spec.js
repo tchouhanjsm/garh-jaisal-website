@@ -155,7 +155,7 @@ function normalizeSocialImageValues(snapshot) {
   // preserving strict comparisons for tag presence/order and all other fields.
   const source = JSON.parse(JSON.stringify(snapshot));
   const sourceStrings = source.strings || [];
-  const imageKeys = new Set(['og:image', 'twitter:image']);
+  const imageKeys = new Set(['og:image', 'twitter:image', 'og:image:alt', 'twitter:image:alt']);
   const placeholder = '[reviewed social image asset]';
   const strings = [];
   const stringIndexes = new Map();
