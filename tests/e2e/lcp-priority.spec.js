@@ -102,7 +102,7 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
         } else {
           if (hero.approvedWebpFallback) {
             expect(state.currentPath, hero.route + ' must use its explicitly configured WebP fallback').toBe(hero.approvedWebpFallback);
-            expect(state.currentPath, hero.route + ' fallback must be a WebP image').toMatch(/\\.webp$/);
+            expect(state.currentPath, hero.route + ' fallback must be a WebP image').toMatch(/\.webp$/);
           } else {
             expect(state.currentPath, hero.route + ' must use its configured optimized fallback').toContain('/img/optimized/');
           }
