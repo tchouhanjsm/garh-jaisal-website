@@ -45,7 +45,7 @@ Check status, used for each command or CI run:
 These rely on role judgment or separate controlled/manual checks:
 
 - SEO copy quality: uniqueness, intent and usefulness of titles and descriptions.
-- Form, mail and security behavior (no automated tests yet).
+- Full end-to-end mail/CAPTCHA delivery and target-host security behavior remain unautomated. CI does cover form validation, CSRF/consent/honeypot checks, lead storage/rate limits, configuration diagnostics and non-delivering analytics semantics.
 - Live GA4 receipt, Realtime/DebugView validation, and custom-dimension setup (event wiring and data-layer routing are covered by Browser E2E).
 - Production performance, Lighthouse scoring and field Core Web Vitals (LCP, INP and CLS).
 - Visual correctness, physical-device coverage, contrast and screen-reader quality.

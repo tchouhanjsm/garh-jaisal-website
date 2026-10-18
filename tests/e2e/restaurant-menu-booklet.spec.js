@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-test('restaurant menu works as an accessible booklet and still supports vegetarian filtering', async ({ page }) => {
+test('restaurant only publishes approved menu content and keeps the booklet usable when enabled', async ({ page }) => {
   await page.addInitScript(() => {
     window.__restaurantPrintCalled = false;
     window.print = () => { window.__restaurantPrintCalled = true; };
@@ -10,6 +10,30 @@ test('restaurant menu works as an accessible booklet and still supports vegetari
   expect(response.status()).toBeLessThan(400);
 
   const booklet = page.locator('[data-menu-booklet]');
+  if (await booklet.count() === 0) {
+    const html = await page.content();
+    for (const unapprovedValue of [
+      'Starters',
+      'Laal Maas Tikka',
+      'Pyaaz Kachori',
+      'Dal Baati Churma',
+      'Price on request',
+    ]) {
+      expect(html, 'Unapproved menu content must not reach rendered HTML: ' + unapprovedValue)
+        .not.toContain(unapprovedValue);
+    }
+    await expect(page.locator('.restaurant-feature-card')).toHaveCount(0);
+    await expect(page.locator('#menu')).toContainText('We are confirming the current dishes, descriptions, prices and dietary options');
+    await expect(page.getByRole('link', { name: 'Ask about the current menu' }))
+      .toHaveAttribute('href', 'contact.php?topic=dining');
+    const dimensions = await page.evaluate(() => ({
+      viewport: window.innerWidth,
+      document: document.documentElement.scrollWidth,
+    }));
+    expect(dimensions.document, 'Pending-menu fallback must not cause horizontal overflow')
+      .toBeLessThanOrEqual(dimensions.viewport + 1);
+    return;
+  }
   await expect(booklet).toHaveClass(/is-enhanced/);
   await expect(booklet.locator('[data-menu-page]:visible')).toHaveCount(1);
   await expect(booklet.locator('[data-menu-page-status]')).toHaveText('Page 1 of 4: Starters');

@@ -52,7 +52,7 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 41 | Critical-path loading and editorial featured content | ✓ PR #90 merged at `a256f22fe31b27a375876c28f3b433ccf009b36d`; exact-head Site Checks, cPanel package preflight, Staging QA and Browser E2E passed; production Lighthouse recheck remains owner-side |
 | 42 | Site-wide typography, spacing, container and image-ratio normalization | ✓ PR #91 merged; shared normalization and 320/390/768/1280/1440px regression coverage |
 | 43 | Responsive image delivery and generated-asset package integrity | ✓ PR #93 merged; responsive variants/preloads and manifest-derived package gate; merge-head Browser E2E cancelled during oversized evidence upload |
-| 44 | Browser E2E evidence budget and release-gate reliability | ◐ new slice: retain the all-route page sheet, curated responsive screenshots and compact audit JSON on every run; upload traces/error screenshots only after failure |
+| 44 | Browser E2E evidence budget and release-gate reliability | ✓ PR #94 merged; compact screenshot/audit evidence and failure-only diagnostics are in CI; current artifact links are recorded in the Project Log |
 | 45 | Rooms hero mobile height and quick-facts clearance | ✓ PR #95 merged at `a20640d8e0e4c3a83f34ff21373828b1ec4e6c0e`; exact-main Site Checks, package preflight, Staging QA dry run and Browser E2E passed |
 | 46 | Owner visual-evidence review and cPanel staging readiness | ◐ Review approved screenshot artifacts and execute external staging only with owner-supplied staging URL and deployed SHA; production parity remains unresolved |
 | 47 | Arrival, transfer and dining claim accuracy | ◐ Remove unapproved transfer fares/time estimates and unconfirmed Home/rooftop meal-service implications; guard the responsive image helper's cached path and add PHP/browser regression coverage. Keep production deployment owner-controlled. |
@@ -198,7 +198,7 @@ Stop there: the owner merges.
 
 - Shared experience-detail CSS receives mobile-first overflow and alignment protections; regression checks exercise six live experience routes at 320px, 390px and 1280px.
 - `privacy.php` and `booking-policy.php` exist only as clearly labelled `noindex,follow` drafts, are not linked from navigation/footer, and are not added to the sitemap. They do not assert unapproved terms or privacy practices.
-- Browser E2E previously failed because the closed Gallery lightbox contained an image without a source or intrinsic dimensions. The placeholder now uses an existing image and the dimension helper; rerun full CI on the updated final head.
+- Historical blocker: Browser E2E failed because the closed Gallery lightbox contained an image without a source or intrinsic dimensions. The placeholder was replaced with an existing image and the dimension helper; subsequent merged CI runs supersede that failure.
 
 
 ### Sprint 3A launch hardening batch (2026-10-13)
@@ -349,7 +349,7 @@ Stop there: the owner merges.
 - Restaurant QR integration is a separate slice and must use the exact owner-verified Google Business Profile/Maps share URL.
 
 
-## Sprint 18 — licensed Desert Gallery and Swiss Tent Safari (PR #66 in review)
+## Sprint 18 — licensed Desert Gallery and Swiss Tent Safari (completed in PR #66, merged 2026-10-14)
 
 **Outcome:** give overnight-desert guests real owner-provided imagery, a clear list of tent facilities, and an accurate understanding of package inclusions before they enquire.
 
@@ -360,7 +360,7 @@ Stop there: the owner merges.
 - Required gates: PHP 7.4/8.2 Site Checks, strict image references, sitemap freshness, package preflight, full Browser E2E and 390px/1280px screenshot sheet. No production deploy or real staging test is authorized by this PR.
 
 
-## Sprint 19 — restaurant conversion: booklet, directions and social follow (PR #67 in review)
+## Sprint 19 — restaurant conversion: booklet, directions and social follow (completed in PR #67, merged 2026-10-14)
 
 **Outcome:** let guests browse the restaurant menu without a long scroll, find the correct Maps destination quickly, and discover the restaurant's social profile without slowing the page with third-party feed scripts.
 
@@ -396,7 +396,7 @@ Stop there: the owner merges.
 - Each page needs a distinct search intent, helpful original content, descriptive title/meta, one H1, appropriate FAQ schema only for visible Q&A, relevant internal links and a contextual direct-contact CTA. Do not invent reviews, rankings, prices, opening hours or service guarantees.
 - Add E2E coverage for sitemap/navigation reachability, internal links, metadata uniqueness, CTA journeys and responsive image crops. Use Search Console/GA4 after release to prioritize future content by impressions, clicks and enquiry intent.
 
-## Sprint 21 Batch 2 — editorial intent cluster (implementation in review)
+## Sprint 21 Batch 2 — editorial intent cluster (completed in PR #70, merged 2026-10-15)
 
 **Commercial goal:** turn high-intent non-brand planning searches into informed room, dining and desert enquiries without fragmenting the current guide cluster.
 
@@ -454,7 +454,7 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - Booking URLs/tokens, public routes, metadata/schema facts, copy, both GA4 IDs and operational claims stayed unchanged.
 - Post-merge Site Checks, package preflight, non-deploying Staging QA and Browser E2E passed. The screenshot sheet is [available here](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38704069260/artifacts/11958400378); the Staging QA run was a local dry run, not live cPanel validation.
 
-## Sprint 25 — Batch 1: source-backed Jaisalmer travel-guide cluster (PR in review)
+## Sprint 25 — Batch 1: source-backed Jaisalmer travel-guide cluster (completed in PR #74, merged 2026-10-15)
 
 **Commercial goal:** expand useful non-brand discovery, answer real pre-trip questions and connect readers to the hotel’s existing direct enquiry pathways without inventing operational facts.
 
@@ -474,7 +474,7 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 Owner-blocked items remain explicit: no fabricated prices, hours, capacity, reviews, policy terms, licensed-partner details or font assets.
 
 
-## Sprint 26 — Batch 1: shared editorial renderer consolidation (PR in review)
+## Sprint 26 — Batch 1: shared editorial renderer consolidation (completed in PR #75, merged 2026-10-15)
 
 **Commercial and engineering goal:** make future Journal work faster and more consistent without discarding existing high-intent content or its search contract.
 
@@ -485,7 +485,7 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - No new rates, timings, availability, reviews, policies or operational promises. Restaurant R1 and trust/calculator features remain owner-blocked; real staging and production remain owner-controlled.
 
 
-## Sprint 27 — Batch 1: contextual editorial enquiry handoff (PR in review)
+## Sprint 27 — Batch 1: contextual editorial enquiry handoff (completed in PR #76, merged 2026-10-15)
 
 **Commercial goal:** reduce steps between a guest reading a guide and sending a useful, correctly framed enquiry without creating new promises or a live booking system.
 
@@ -496,7 +496,7 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - R1 remains owner-blocked. No live slots, auto-confirmation, unapproved hours, rates, reviews or package facts are introduced. Real cPanel staging and production remain owner-controlled.
 
 
-### Sprint 28 acceptance gates
+### Sprint 28 acceptance gates (PR #77 merged 2026-10-15)
 
 - Four new guide routes use the shared renderer and carry official tourism sources; no fabricated restaurant menu, fee, opening time, guide, transport price, availability or operator credential is published.
 - Journal cards, canonical and BlogPosting output, three related links, contact handoffs and route-specific WhatsApp copy are verified by Browser E2E.
@@ -536,7 +536,7 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - Exact-head Site Checks, package preflight, non-deploying Staging QA and Browser E2E/page sheet passed on PR head `03c20b1dbf5c5053fc1898336c612778257e9a33`. Page sheet: [390px/1280px artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38753963491/artifacts/11982838456).
 - No external cPanel staging or production deployment occurred. Owner visual review of subjects/captions remains required.
 
-## Sprint 32 — high-intent package discovery and guest-choice clarity (current batch)
+## Sprint 32 — high-intent package discovery and guest-choice clarity (completed in PR #81, merged 2026-10-15)
 
 **Commercial goal:** help guests move between package categories, the useful detail pages and a clear enquiry next step without inventing prices/availability or creating a booking promise.
 
@@ -613,7 +613,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 
 
 
-## Sprint 40 — shared verified quick facts (current PR)
+## Sprint 40 — shared verified quick facts (completed in PR #89, merged 2026-10-16)
 
 **Commercial goal:** make the most important pre-booking context scannable without adding unsupported facts or distracting guests from the next useful action.
 
@@ -664,7 +664,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - No cPanel upload or production deployment by this implementation.
 
 
-## Sprint 45 — Rooms hero mobile height regression (current PR)
+## Sprint 45 — Rooms hero mobile height regression (original scope; completed in PR #95)
 
 **Commercial goal:** keep Rooms discovery compact on common phone widths without removing context or shrinking the booking actions.
 
@@ -699,4 +699,19 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Home and Rooftop Dining describe the setting without promising breakfast, an unverified drinks offering, or sunrise/all-day meal service; guests are told to confirm current dining service times and menu options.
 - Playwright checks rendered Directions copy for unapproved transfer fares/timing and verifies that both Home and Rooftop Dining keep service-time language qualified.
 - No new transport estimator, new public price, service-hour promise, booking behavior, URL, schema fact, analytics ID or production change is introduced.
+- PR #97 merged on 2026-10-17 at `1a385f3c2975c7308849335d412b31f295ea4fd0`. Exact merge-head Site Checks, Browser E2E, cPanel package preflight and non-deploying Staging QA all passed.
 - Release gate remains external staging on the owner-supplied HTTPS origin and exact deployed SHA; confirm web server behavior, images, CAPTCHA and mail without exposing secrets.
+
+
+## Sprint 48 — final release-readiness and launch blocker closure (2026-10-18)
+
+**Commercial goal:** prevent unverified commercial content from reaching guests, reconcile the actual roadmap with merged code, and turn the final release process into explicit, testable decisions.
+
+- Gate the restaurant dish list, descriptions, categories and prices as one publication unit. `include/menu-data.php` remains owner-unconfirmed; while that flag is false (or the menu is empty), render a helpful menu enquiry CTA instead of the sample data.
+- Keep the existing booklet and accessibility behavior under the owner-confirmed branch; Playwright tests the pending state now and continues to exercise the booklet when the registry is approved.
+- Avoid a fatal restaurant-form validation path when `mbstring` is unavailable on the actual PHP host.
+- Reconcile the Full Repository Review, Backend Remediation, Smart Check Matrix, Sprint Plan and Project Log with the merged PR #91/#95/#97 state. Historical findings remain in the log but no longer masquerade as current failures.
+- Exact-main baseline `1a385f3c2975c7308849335d412b31f295ea4fd0`: Site Checks, Browser E2E, package preflight and non-deploying Staging QA passed. The next PR must pass all four workflows again on its exact head and supply screenshot/evidence artifacts.
+- Release blockers that code cannot truthfully resolve: owner approval for current menu/prices/service hours, privacy controller/contact/data/retention wording and booking/cancellation terms; cPanel PHP and Apache compatibility; real CAPTCHA/mail delivery; external staging URL/access and staged-package SHA; image/crop and key-page screenshot sign-off; GA4 receipt and production performance evidence.
+- Current public production is still serving legacy Home/Directions markup, including transfer prices and meet-and-assist/reception promises removed from repo source. Treat production parity as unverified until an owner-managed staging deployment proves the reviewed package and the live host is explicitly released.
+- This sprint changes repository source/docs only; no cPanel upload, production deployment, owner-fact invention or public policy approval is implied.
