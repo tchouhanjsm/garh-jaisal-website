@@ -30,7 +30,7 @@ REQUIRED_RUNTIME_FILES = {
 }
 PRIVATE_CONFIG_PATH = "include/site-config.local.php"
 EXAMPLE_CONFIG_PATH = "include/site-config.example.php"
-NON_RUNTIME_ROOT_FILES = {"package.json", "playwright.config.js"}
+NON_RUNTIME_ROOT_FILES = {"package.json", "package-lock.json", "playwright.config.js"}
 EXPLICIT_DEPLOY_EXCLUDES = {
     "img/tent1.jpg",              # Large master used by documentation only.
     "restaurant.css",             # Stale root copy; live site uses css/restaurant.css.
@@ -198,7 +198,7 @@ def validate_package_paths(
     forbidden_paths = sorted(
         path for path in selected
         if path.startswith(forbidden_prefixes)
-        or path in {PRIVATE_CONFIG_PATH, EXAMPLE_CONFIG_PATH, "package.json", "playwright.config.js"}
+        or path in {PRIVATE_CONFIG_PATH, EXAMPLE_CONFIG_PATH, "package.json", "package-lock.json", "playwright.config.js"}
     )
     if forbidden_paths:
         raise PackageError("Non-runtime or private files selected: " + ", ".join(forbidden_paths))

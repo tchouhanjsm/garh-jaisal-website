@@ -31,7 +31,7 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
             "include/site-config.php", EXAMPLE_CONFIG_PATH, "css/garh-v2.css",
             "img/facade.webp", "js/garh-v2.js", "docs/DEPLOY-CPANEL.md",
             "scripts/check-site.php", "tests/e2e/site-smoke.spec.js",
-            ".github/workflows/ci.yml", "package.json", "playwright.config.js",
+            ".github/workflows/ci.yml", "package.json", "package-lock.json", "playwright.config.js",
         ]
         selected = select_runtime_paths(tracked)
         self.assertIn(".htaccess", selected)
@@ -43,7 +43,7 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
         for development_path in (
             "docs/DEPLOY-CPANEL.md", "scripts/check-site.php",
             "tests/e2e/site-smoke.spec.js", ".github/workflows/ci.yml",
-            "package.json", "playwright.config.js",
+            "package.json", "package-lock.json", "playwright.config.js",
         ):
             self.assertNotIn(development_path, selected)
 

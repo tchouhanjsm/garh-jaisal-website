@@ -4,5 +4,8 @@
   "description": "Browser smoke tests for the Garh Jaisal Haveli PHP website",
   "scripts": {
     "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.55.0"
   }
 }

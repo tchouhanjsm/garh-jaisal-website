@@ -47,8 +47,21 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Install pinned Playwright test runner
-        run: npm install --no-save --package-lock=false @playwright/test@1.55.0
+      - name: Generate a real npm lockfile for the pinned test dependency
+        run: npm install --package-lock-only --no-audit --no-fund
+
+      # Temporary bootstrap evidence: commit this generated lockfile in the follow-up
+      # commit, then remove this artifact step and leave npm ci as the only install.
+      - name: Export generated npm lockfile for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-lockfile-bootstrap-${{ github.run_number }}
+          path: package-lock.json
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Install locked browser test dependencies
+        run: npm ci --no-audit --no-fund
 
       - name: Install Chromium and system dependencies
         run: npx playwright install --with-deps chromium
