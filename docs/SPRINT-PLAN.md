@@ -57,7 +57,7 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 46 | Owner visual-evidence review and cPanel staging readiness | ◐ Review approved screenshot artifacts and execute external staging only with owner-supplied staging URL and deployed SHA; production parity remains unresolved |
 | 47 | Arrival, transfer and dining claim accuracy | ✓ merged through PR #97; regression coverage guards unsupported transfer and dining claims. |
 | 48 | Restaurant menu publication guard and source reconciliation | ✓ merged through PR #98; unconfirmed dish names/descriptions/prices stay unpublished, and restaurant validation tolerates hosts without `mbstring`. |
-| 49 | Exact-head browser evidence and repository reproducibility | ◐ current-main Browser E2E is still running at audit time; screenshot evidence remains pending. Generate and verify a real Playwright lockfile before moving workflows to `npm ci`. |
+| 49 | Exact-head browser evidence and repository reproducibility | ◐ PR #99 merge-head Browser E2E and all other main checks passed at `1d08a3a4cae91f0b78f2d83957db22fd9d529550`; reproducible Playwright lockfile remains open. PR #100 image remediation must pass all checks on its latest head and receive semantic screenshot review. See `docs/FULL-REPOSITORY-AUDIT-2026-10-18.md`. |
 
 ---
 
