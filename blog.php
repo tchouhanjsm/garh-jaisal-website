@@ -99,13 +99,13 @@ require __DIR__ . '/include/page-head.php';
         </article>
         <article class="blog-card">
           <a href="jaisalmer-beyond-the-fort-guide.php">
-            <div class="blog-card-image"><img src="img/j8.jpg" <?= gj_image_dimension_attributes('img/j8.jpg') ?> alt="Heritage buildings beside the water near Jaisalmer" loading="lazy"></div>
+            <div class="blog-card-image"><img src="img/j8.jpg" <?= gj_image_dimension_attributes('img/j8.jpg', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="Heritage buildings beside the water near Jaisalmer" loading="lazy"></div>
             <div class="blog-card-body"><p class="blog-card-meta">Places and day trips</p><h2>Beyond Jaisalmer Fort</h2><p>Consider Gadisar Lake, Bada Bagh and wider heritage landscapes without overloading the day.</p><span class="text-link">Explore beyond the Fort →</span></div>
           </a>
         </article>
         <article class="blog-card">
           <a href="jaisalmer-markets-and-crafts-guide.php">
-            <div class="blog-card-image"><img src="img/j9.jpg" <?= gj_image_dimension_attributes('img/j9.jpg') ?> alt="Colourful traditional puppets at a Jaisalmer market" loading="lazy"></div>
+            <div class="blog-card-image"><img src="img/j9.jpg" <?= gj_image_dimension_attributes('img/j9.jpg', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="Colourful traditional puppets at a Jaisalmer market" loading="lazy"></div>
             <div class="blog-card-body"><p class="blog-card-meta">Markets and crafts</p><h2>Jaisalmer Markets and Crafts</h2><p>Explore textiles, embroidery, leatherwork and jewellery with practical provenance questions.</p><span class="text-link">Discover local markets →</span></div>
           </a>
         </article>
