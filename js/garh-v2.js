@@ -361,7 +361,20 @@ document.addEventListener('DOMContentLoaded', () => {
       const link = activeImages[activeIndex];
       const thumbnail = link.querySelector('img');
       if (!thumbnail) return;
-      lightboxImage.src = thumbnail.currentSrc || thumbnail.src;
+      // The lightbox is a separate, full-size view. Clear the initial image's
+      // responsive candidates so they cannot override the newly selected photo.
+      lightboxImage.removeAttribute('srcset');
+      lightboxImage.removeAttribute('sizes');
+      const intrinsicWidth = Number(thumbnail.getAttribute('width'));
+      const intrinsicHeight = Number(thumbnail.getAttribute('height'));
+      if (intrinsicWidth > 0 && intrinsicHeight > 0) {
+        lightboxImage.setAttribute('width', String(intrinsicWidth));
+        lightboxImage.setAttribute('height', String(intrinsicHeight));
+      } else {
+        lightboxImage.removeAttribute('width');
+        lightboxImage.removeAttribute('height');
+      }
+      lightboxImage.src = link.href;
       lightboxImage.alt = thumbnail.alt;
       caption.textContent = thumbnail.alt;
       if (previous) previous.disabled = activeImages.length < 2;
