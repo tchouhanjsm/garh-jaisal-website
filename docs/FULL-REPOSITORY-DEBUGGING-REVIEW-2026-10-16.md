@@ -14,7 +14,7 @@
 
 ### Release posture
 
-**PR #91 should not merge while Browser E2E is red.** Its current CI run reports **4 failed browser cases, 484 passed, and 468 skipped**. Site Checks, the cPanel deployment-package check, and the non-deploying Staging QA job passed on the PR head. This is a focused, actionable blocker—not a reason to discard the overall CSS normalization effort.
+**Historical result as of 2026-10-16:** PR #91 was not merge-ready while Browser E2E was red; that run reported **4 failed browser cases, 484 passed, and 468 skipped**. This finding is superseded by the subsequent fixes and merged-main verification recorded in the revalidation section. Site Checks, the cPanel deployment-package check, and the non-deploying Staging QA job passed on the PR head. This is a focused, actionable blocker—not a reason to discard the overall CSS normalization effort.
 
 | Area | Evidence-based status | Consequence |
 |---|---|---|
@@ -225,7 +225,7 @@ The repository has `.gitignore` rules for local site config, Node dependencies a
 
 ---
 
-## Current Open PR #91 — Focused Review Notes
+## Historical Focused Review — PR #91 (state as of 2026-10-16)
 
 **PR:** [#91 — feat: normalize site-wide typography and layout rhythm](https://github.com/tchouhanjsm/garh-jaisal-website/pull/91)  
 **Head:** `e040786b0326b881d471a3a101b2031a685fa148`  
@@ -336,7 +336,7 @@ Before the release is called complete, also:
 
 ## Final Recommendation
 
-**Treat the current PR #91 as “changes required,” not merge-ready.** The broader direction—a shared visual system, registry-driven content, image optimization, PHP/site contracts and broad browser coverage—is sound in principle. The immediate gate is concrete: fix the Rooms hero geometry and case-sensitive focus-token assertion, then obtain an all-green exact-head run and perform the owner screenshot review. Keep production/cPanel claims separate from local CI evidence.
+**Disposition at the 2026-10-16 review point:** PR #91 required changes and was not merge-ready. The broader direction—a shared visual system, registry-driven content, image optimization, PHP/site contracts and broad browser coverage—was sound in principle. The Rooms hero geometry and case-sensitive focus-token assertion were resolved in later merged work. Production/cPanel proof remains separate from local CI evidence.
 
 
 ---

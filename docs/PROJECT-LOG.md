@@ -138,7 +138,7 @@
 - PR #85 final-head Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848897965), package preflight [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848897972), non-deploying Staging QA [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898064), and Browser E2E [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898092). The [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898092/artifacts/12023864764) and [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38848898092/artifacts/12023879611) are available. No live cPanel staging or production deployment occurred.
 
 
-## Sprint 37 — restaurant identity and first-party marketing masters (current batch)
+## Sprint 37 — restaurant identity and first-party marketing masters (completed in PR #86)
 
 - Base: verified main SHA `b9b15e1db0ff8a440b7a6546775fc4d2f1f8b61f` after PR #85 merged; no open PRs were present when this batch started.
 - Add six fixed-size SVG composition masters plus a Canva-oriented workflow note; mark replacement photography and campaign-copy fields, and enforce master count/dimensions/palette/accessibility/source-safety in CI.
@@ -172,7 +172,7 @@
 - PR #88 merged on 2026-10-16 at `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`. No cPanel deployment or production change occurred.
 
 
-## Sprint 40 — shared verified quick facts for high-intent pages (current PR)
+## Sprint 40 — shared verified quick facts for high-intent pages (completed in PR #89)
 
 - Base: verified post-PR-88 main merge commit `5a4a060ab6f74fbddb0fe3143f5929c7d155cab3`.
 - Add an escaped, semantic `include/ui/at-a-glance.php` renderer and cover it with a PHP contract test. Use existing room registry data for the Home and Rooms room counts; keep facilities qualified as varying by room.
@@ -182,7 +182,7 @@
 
 ## Backend audit remediation — delivered code scope (PR #91)
 
-- Source of findings: `Backend Debugging Report Pages, Images, Server Issues and Doc-vs-Site Gaps.md`, which audited main after PR #90. This remediation is intentionally kept in the already-open PR #91.
+- Historical source of findings: the backend debugging report audited main after PR #90. Its remediation landed in PR #91, merged on 2026-10-17; follow-up changes are recorded in the dated sections below.
 - The new `docs/BACKEND-DEBUGGING-REMEDIATION-2026-10-17.md` tracks implemented, partial and owner-blocked findings separately.
 - Known limitations: no external cPanel/production deployment, no real mailbox delivery proof, no owner-approved restaurant schedule/menu/policy facts, and no broad responsive image derivative generation or deletion of heuristic orphan candidates.
 - Exact-head workflow results must be refreshed after the final commit; earlier success from a prior head is not evidence for current changes.
