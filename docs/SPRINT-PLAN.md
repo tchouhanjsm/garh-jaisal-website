@@ -536,7 +536,7 @@ Owner-blocked items remain explicit: no fabricated prices, hours, capacity, revi
 - Exact-head Site Checks, package preflight, non-deploying Staging QA and Browser E2E/page sheet passed on PR head `03c20b1dbf5c5053fc1898336c612778257e9a33`. Page sheet: [390px/1280px artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38753963491/artifacts/11982838456).
 - No external cPanel staging or production deployment occurred. Owner visual review of subjects/captions remains required.
 
-## Sprint 32 — high-intent package discovery and guest-choice clarity (current batch)
+## Sprint 32 — high-intent package discovery and guest-choice clarity (completed in PR #81, merged 2026-10-15)
 
 **Commercial goal:** help guests move between package categories, the useful detail pages and a clear enquiry next step without inventing prices/availability or creating a booking promise.
 
@@ -613,7 +613,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 
 
 
-## Sprint 40 — shared verified quick facts (current PR)
+## Sprint 40 — shared verified quick facts (completed in PR #89, merged 2026-10-16)
 
 **Commercial goal:** make the most important pre-booking context scannable without adding unsupported facts or distracting guests from the next useful action.
 
@@ -699,4 +699,19 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Home and Rooftop Dining describe the setting without promising breakfast, an unverified drinks offering, or sunrise/all-day meal service; guests are told to confirm current dining service times and menu options.
 - Playwright checks rendered Directions copy for unapproved transfer fares/timing and verifies that both Home and Rooftop Dining keep service-time language qualified.
 - No new transport estimator, new public price, service-hour promise, booking behavior, URL, schema fact, analytics ID or production change is introduced.
+- PR #97 merged on 2026-10-17 at `1a385f3c2975c7308849335d412b31f295ea4fd0`. Exact merge-head Site Checks, Browser E2E, cPanel package preflight and non-deploying Staging QA all passed.
 - Release gate remains external staging on the owner-supplied HTTPS origin and exact deployed SHA; confirm web server behavior, images, CAPTCHA and mail without exposing secrets.
+
+
+## Sprint 48 — final release-readiness and launch blocker closure (2026-10-18)
+
+**Commercial goal:** prevent unverified commercial content from reaching guests, reconcile the actual roadmap with merged code, and turn the final release process into explicit, testable decisions.
+
+- Gate the restaurant dish list, descriptions, categories and prices as one publication unit. `include/menu-data.php` remains owner-unconfirmed; while that flag is false (or the menu is empty), render a helpful menu enquiry CTA instead of the sample data.
+- Keep the existing booklet and accessibility behavior under the owner-confirmed branch; Playwright tests the pending state now and continues to exercise the booklet when the registry is approved.
+- Avoid a fatal restaurant-form validation path when `mbstring` is unavailable on the actual PHP host.
+- Reconcile the Full Repository Review, Backend Remediation, Smart Check Matrix, Sprint Plan and Project Log with the merged PR #91/#95/#97 state. Historical findings remain in the log but no longer masquerade as current failures.
+- Exact-main baseline `1a385f3c2975c7308849335d412b31f295ea4fd0`: Site Checks, Browser E2E, package preflight and non-deploying Staging QA passed. The next PR must pass all four workflows again on its exact head and supply screenshot/evidence artifacts.
+- Release blockers that code cannot truthfully resolve: owner approval for current menu/prices/service hours, privacy controller/contact/data/retention wording and booking/cancellation terms; cPanel PHP and Apache compatibility; real CAPTCHA/mail delivery; external staging URL/access and staged-package SHA; image/crop and key-page screenshot sign-off; GA4 receipt and production performance evidence.
+- Current public production is still serving legacy Home/Directions markup, including transfer prices and meet-and-assist/reception promises removed from repo source. Treat production parity as unverified until an owner-managed staging deployment proves the reviewed package and the live host is explicitly released.
+- This sprint changes repository source/docs only; no cPanel upload, production deployment, owner-fact invention or public policy approval is implied.

@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 
 const CHECKED_PROJECTS = ['mobile-320', 'mobile-390', 'desktop-1280'];
 
-test('restaurant menu controls have usable targets, visible focus, correct location state and announced dietary filtering', async ({ page }, testInfo) => {
+test('restaurant menu controls or pending-menu fallback are accessible and responsive', async ({ page }, testInfo) => {
   test.skip(!CHECKED_PROJECTS.includes(testInfo.project.name), 'Restaurant menu accessibility is checked at 320px, 390px and 1280px.');
 
   await page.goto('/restaurant.php', { waitUntil: 'domcontentloaded' });
@@ -13,6 +13,21 @@ test('restaurant menu controls have usable targets, visible focus, correct locat
   const secondTab = tabs.nth(1);
   const vegetarianToggle = page.getByRole('button', { name: 'Vegetarian only', exact: true });
   const status = page.locator('[data-restaurant-menu-status]');
+
+  if (await menu.count() === 0) {
+    const pendingMenu = page.locator('#menu');
+    await expect(pendingMenu.getByRole('heading', { name: 'Ask about the current menu.' })).toBeVisible();
+    await expect(pendingMenu).toContainText('We are confirming the current dishes, descriptions, prices and dietary options');
+    await expect(pendingMenu.getByRole('link', { name: 'Ask about the current menu' }))
+      .toHaveAttribute('href', 'contact.php?topic=dining');
+    const dimensions = await page.evaluate(() => ({
+      width: document.documentElement.clientWidth,
+      documentWidth: document.documentElement.scrollWidth,
+    }));
+    expect(dimensions.documentWidth, 'Pending-menu fallback must not overflow horizontally')
+      .toBeLessThanOrEqual(dimensions.width + 1);
+    return;
+  }
   const expectedFilterSummary = async vegetarianOnly => {
     const counts = await page.evaluate(isVegetarianOnly => {
       const categories = Array.from(document.querySelectorAll('.restaurant-category'));

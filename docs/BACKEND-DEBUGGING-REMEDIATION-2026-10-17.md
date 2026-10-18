@@ -2,7 +2,7 @@
 
 Repository: `tchouhanjsm/garh-jaisal-website`
 
-Delivery target: existing PR #91 only. No new PR was created; the PR has not been merged and no production deployment occurred.
+Historical delivery target: PR #91, merged on 2026-10-17. This file records the implementation/remediation work at that time; its external-host release gates were not closed by merging.
 
 ## Implemented in code
 
@@ -42,3 +42,10 @@ Delivery target: existing PR #91 only. No new PR was created; the PR has not bee
 - Retyped `book-rooms-in-jaisalmer.php` from `Article` to `WebPage`; added a visible breadcrumb and matching structured breadcrumb. Canonical/schema URLs use the site URL from configuration.
 - The sitemap generator now considers shared experience/editorial registries when deriving `lastmod`, as well as the corresponding PHP route file. The committed sitemap reflects those source-file dates.
 - This closes the report's listed metadata and guide-schema gaps; responsive image-weight remediation remains partial.
+
+
+## Status reconciliation — 2026-10-18
+
+PR #91 and later follow-ups are merged. Current `main` is `1a385f3c2975c7308849335d412b31f295ea4fd0`; merge-head Site Checks, Browser E2E, cPanel package preflight and non-deploying Staging QA passed on 2026-10-17. The original PR #91 red-check notes are historical and must not be treated as the current CI result.
+
+A further content guard was added in Sprint 48 because the owner-unconfirmed menu registry still emitted dish names/descriptions even though numeric prices were hidden. The whole menu is now gated by owner confirmation. The website remains unreleased: current public production was observed serving legacy Home/Directions content, and no external cPanel staging URL/package SHA or owner-approved legal/menu/service facts have been supplied.

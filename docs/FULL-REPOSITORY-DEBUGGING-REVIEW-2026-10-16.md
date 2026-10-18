@@ -337,3 +337,31 @@ Before the release is called complete, also:
 ## Final Recommendation
 
 **Treat the current PR #91 as “changes required,” not merge-ready.** The broader direction—a shared visual system, registry-driven content, image optimization, PHP/site contracts and broad browser coverage—is sound in principle. The immediate gate is concrete: fix the Rooms hero geometry and case-sensitive focus-token assertion, then obtain an all-green exact-head run and perform the owner screenshot review. Keep production/cPanel claims separate from local CI evidence.
+
+
+---
+
+## Revalidation and disposition — 2026-10-18
+
+The PR #91 section above is a historical snapshot from 2026-10-16, not the current open-PR state. PR #91 merged on 2026-10-17; PR #95 fixed the Rooms hero regression and PR #97 hardened arrival/transfer/dining claims plus the cached responsive-image helper. Current `main` is `1a385f3c2975c7308849335d412b31f295ea4fd0`; no open PR existed at the start of Sprint 48.
+
+| Backlog item | Current disposition | Evidence / remaining work |
+|---|---|---|
+| R-01 Rooms hero geometry | **Resolved in repository CI** | PR #95 merged; current merge-head Browser E2E passed. Owner still needs to inspect full-size responsive screenshots rather than infer crop quality from pass status. |
+| R-02 focus token assertion | **Resolved in repository CI** | Current merge-head Browser E2E passed with focus-color and keyboard tests enabled. |
+| R-03 exact-head full CI | **PASS at current main** | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39049805415), [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39049805433), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39049805478), [Staging QA dry run](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39049805519). A new PR still needs its own exact-head pass. |
+| R-04 runtime configuration / contact delivery | **BLOCKED on external staging** | CI checks structure and failure handling; it cannot prove live host configuration, CAPTCHA hostname, SMTP/mail route, recipient receipt, filesystem permissions or backup/retention. |
+| R-05 external staging acceptance | **BLOCKED** | No owner-supplied HTTPS staging origin or deployed package SHA is available in this review. |
+| R-06 route-level image payload | **PARTIAL** | Responsive source selection, intrinsic sizes and image payload inventories exist in CI; production transfer sizes and source/preload/cache/MIME alignment remain unverified. Image/caption mapping still needs owner visual approval. |
+| R-07 CSS cascade and page archetypes | **PARTIAL** | Main Browser E2E passes responsive structural contracts. Physical devices, full screenshot judgement, assistive technology and contrast review remain human checks. |
+| R-08 reproducible browser dependencies | **OPEN, non-blocking for source merge** | Workflows pin Playwright `1.55.0` but `package.json` still has no declared dev dependency/lockfile. Continue as a separate tooling task; do not confuse a green run with lockfile reproducibility. |
+| R-09 policies and commercial facts | **OWNER BLOCKED** | Privacy/data-controller/retention language, cancellation/payment terms, actual menu contents/prices, restaurant hours and transport quotes must be supplied and approved; no facts are to be invented. |
+| R-10 registry/SEO parity | **PASS for repository checks; live parity NOT VERIFIED** | Publication/sitemap/metadata checks pass in CI. The public production Home and Directions pages still show legacy content, so an actual staging release must prove route/redirect/schema/content parity. |
+
+### New finding — unconfirmed menu content
+
+The source menu registry is explicitly marked `owner_confirmed: false`, but the page previously rendered its dish names and descriptions and replaced only numeric prices with “Price on request”. Those names/descriptions were therefore reaching the public HTML without owner approval. Sprint 48 gates the whole menu publication unit and asserts the fallback CTA and absence of fixture dish names in rendered HTML.
+
+### Release posture
+
+**Repository CI is green; the website is not yet release-approved.** The production host was retrieved on 2026-10-18 and still served legacy Home/Directions copy, including fixed transfer fares and arrival-service promises no longer present in repository source. The next release step is an owner-managed staging deployment of the exact reviewed package, followed by manual mail/CAPTCHA, Apache/PHP, image/cache, booking/contact and screenshot checks. No cPanel upload, merge or production deploy is done by this review.

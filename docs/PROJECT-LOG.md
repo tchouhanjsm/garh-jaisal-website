@@ -6,11 +6,11 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-17 |
-| Current phase | Sprint 47 — arrival, transfer and dining claim accuracy |
+| Last updated | 2026-10-18 |
+| Current phase | Sprint 48 — final release-readiness and launch blockers |
 | Base branch | `main` |
-| Baseline commit | `7dd4a8bf4c70ea1e8f6cd9a0d5f6cb23daca0472` (verified PR #96 merge commit, 2026-10-17) |
-| Last merged PR | [#96 — reconcile Sprint 45 and staging readiness](https://github.com/tchouhanjsm/garh-jaisal-website/pull/96) |
+| Baseline commit | `1a385f3c2975c7308849335d412b31f295ea4fd0` (verified `main` merge commit for PR #97, 2026-10-17) |
+| Last merged PR | [#97 — harden arrival claims and responsive image cache](https://github.com/tchouhanjsm/garh-jaisal-website/pull/97) |
 | PR #93 PR-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39012551591) — exact head `cbf11bd2f84017561f1640c6acac40c04430e75d` |
 | PR #93 merge-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642234) |
 | PR #93 merge-head cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39014642162) |
@@ -34,6 +34,11 @@
 | PR #86 merge-head cPanel package workflow (no deployment) | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546333) |
 | PR #86 merge-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546323) |
 | PR #86 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027655875); [evidence bundle](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/38855546341/artifacts/12027139666) |
+| PR #97 merge-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39049805415) — `1a385f3c2975c7308849335d412b31f295ea4fd0` |
+| PR #97 merge-head cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39049805478) — ZIP generated for review only; no upload |
+| PR #97 merge-head Staging QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39049805519) — local/non-deploying dry run, not an external host |
+| PR #97 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39049805433) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39049805433/artifacts/12107765818); [curated evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39049805433/artifacts/12106848479) |
+| Production parity | NOT VERIFIED / observed mismatch: public Home and Directions still show the legacy site; Directions includes transfer fares and arrival-service promises removed from repo main. External staging must be proven before production release. |
 | Production URL | https://www.hotelgarhjaisal.com |
 | Live-host evidence | No external cPanel staging or production deployment occurred. |
 | Owner review | Review the generated responsive-image sheet and homepage-hero screenshots at 320px, 390px, 768px, 1280px and 1440px. Visual sign-off remains separate from CI. |
@@ -41,12 +46,12 @@
 | PR #95 exact-main cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163492) — package built for review only; no upload |
 | PR #95 exact-main Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163561) — local/non-deploying QA, not an external staging host |
 | PR #95 exact-main Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163625) — [page sheet artifact](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163625/artifacts/12101465112) (31,501,727 bytes); [curated evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39032163625/artifacts/12101400416) (11,103,398 bytes) |
-| Open pull requests | None verified at start of Sprint 46 |
+| Open pull requests at Sprint 48 baseline | None on 2026-10-18 after PR #97 merged |
 | PR #96 merge-head Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260519) — exact main `7dd4a8bf4c70ea1e8f6cd9a0d5f6cb23daca0472` |
 | PR #96 merge-head cPanel package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260531) — package generated for review, not uploaded |
 | PR #96 merge-head Staging QA dry run | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260546) — local/non-deploying, not an external staging host |
 | PR #96 merge-head Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528) — [page sheet](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528/artifacts/12102915342) (31.5 MB); [curated evidence](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39036260528/artifacts/12101769369) (11.1 MB) |
-| Next action | Finish exact-head Browser E2E for PR #97 and inspect its screenshot artifacts. Keep external cPanel staging, CAPTCHA/mail, privacy/retention and owner-approved policy facts as separate release gates; no merge or deployment by implementation. |
+| Next action | Review the Sprint 48 PR and artifacts. Then owner deploys its exact merged package to an isolated HTTPS staging host, runs external staging QA, completes manual mail/CAPTCHA/Apache checks, approves policy/menu facts and visual evidence, and authorizes production release. No cPanel action has been performed. |
 ## 2026-10-17 — Backend audit remediation in existing PR #91
 
 - Kept changes in PR #91; no new PR, merge or deployment was performed.
@@ -225,3 +230,14 @@
 - Home and Rooftop Dining copy describe the setting without promising breakfast, an unverified drinks offering or unconfirmed sunrise/all-day meal service; both direct guests to confirm current service times and menu options.
 - Playwright guards Directions against removed transfer prices/timing and checks qualified Home and rooftop dining copy. Public URLs, booking destinations, map/contact links and analytics IDs are unchanged.
 - Production still serves older content than repository `main` at the time of review. No cPanel upload or production deployment was attempted; release parity must be checked on owner-controlled staging first.
+
+
+## 2026-10-18 — Final repository audit and release readiness
+
+- PR #97 merged into `main` at `1a385f3c2975c7308849335d412b31f295ea4fd0`. All four merge-head workflows passed: Site Checks, Browser E2E, deployment-package preflight and non-deploying Staging QA.
+- The prior 2026-10-16 review's PR #91 failure notes are historical. PR #91 and follow-up PRs #95/#97 are merged; the current main CI result supersedes the earlier red runs.
+- Sprint 48 prevents the repository's explicitly unconfirmed restaurant menu fixture from appearing in rendered HTML. The menu is shown only when the owner-controlled `owner_confirmed` flag is true and the registry contains items; until then guests can ask for current details through Contact or WhatsApp.
+- Added a fallback length check in the restaurant form so server validation does not fatally depend on PHP's optional `mbstring` extension.
+- The public production homepage and Directions page were checked on 2026-10-18 and remain on legacy content. This is a deployment-parity blocker; source changes merged to GitHub have not been released on the live host.
+- Owner / host blockers remain: HTTPS staging URL/access and exact package SHA; cPanel PHP/extensions/Apache behavior; actual reCAPTCHA and mail delivery; approved privacy and booking/cancellation wording; live restaurant menu and operating schedule; image-source/caption visual sign-off; analytics receipt and production performance review.
+- No merge, cPanel upload or production deployment was performed by this implementation.

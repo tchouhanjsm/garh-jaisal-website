@@ -86,7 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = preg_replace('/[^0-9+]/', '', $old['whatsapp']);
     $today = date('Y-m-d');
 
-    if ($old['name'] === '' || mb_strlen($old['name']) > 80) {
+    $nameLength = function_exists('mb_strlen') ? mb_strlen($old['name'], 'UTF-8') : strlen($old['name']);
+    if ($old['name'] === '' || $nameLength > 80) {
         $errors['name'] = 'Enter your name.';
     }
     if (!preg_match('/^\+?[0-9]{10,15}$/', $phone)) {
@@ -393,6 +394,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
+<?php if ($menuOwnerConfirmed && $menu !== []): ?>
   <section class="section restaurant-featured" aria-labelledby="featured-heading">
     <div class="site-shell">
       <div class="section-head">
@@ -467,6 +469,26 @@ require __DIR__ . '/include/page-head.php';
       </div>
     </div>
   </section>
+
+<?php else: ?>
+  <section id="menu" class="section restaurant-menu" aria-labelledby="menu-heading">
+    <div class="site-shell">
+      <div class="section-head restaurant-menu-head">
+        <div>
+          <p class="eyebrow">Menu update</p>
+          <h2 id="menu-heading">Ask about the current menu.</h2>
+        </div>
+      </div>
+      <p class="restaurant-note">We are confirming the current dishes, descriptions, prices and dietary options, so an unverified menu is not shown here. Contact the hotel for current details for your visit.</p>
+      <p class="restaurant-contact-help">
+        <a class="button button-primary" href="contact.php?topic=dining">Ask about the current menu</a>
+      </p>
+      <p class="restaurant-contact-help">
+        <a class="text-link" href="<?= e($waLink) ?>" target="_blank" rel="noopener">Ask on WhatsApp ↗</a>
+      </p>
+    </div>
+  </section>
+<?php endif; ?>
 
   <section class="section restaurant-info-section">
     <div class="site-shell restaurant-info-grid">
