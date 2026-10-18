@@ -375,7 +375,7 @@ test('arrival and dining contact links preserve their topic in the editable enqu
 
   await page.goto('/restaurant.php', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('link', { name: 'Send a dining enquiry →', exact: true })).toHaveAttribute('href', 'contact.php?topic=dining');
-  await expect(page.locator('.restaurant-note')).toContainText('confirm the current menu and prices');
+  await expect(page.locator('.restaurant-note')).toContainText('confirming the current dishes, descriptions, prices and dietary options');
 
   await page.goto('/contact.php?topic=dining', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.contact-topic-context')).toContainText('Rooftop dining');
