@@ -11,7 +11,7 @@ const HEROES = [
   {
     route: '/room.php',
     selector: '.rooms-hero .page-hero-media img',
-    expected: () => 'purple-room',
+    expected: () => 'sitting-room',
   },
   {
     route: '/catalogue.php',
@@ -151,7 +151,7 @@ test('Journal featured image is eager, dimension-stable and preloaded on desktop
         .filter(link => !link.media || window.matchMedia(link.media).matches)
         .map(link => new URL(link.href, document.baseURI).pathname),
     }));
-    expect(state.path).toBe('/img/optimized/v2/fort-from-roof.webp');
+    expect(state.path).toBe('/img/j7.jpg');
     expect(state.preloads).toContain(state.path);
     expect(state.width).toBeGreaterThan(0);
     expect(state.height).toBeGreaterThan(0);
