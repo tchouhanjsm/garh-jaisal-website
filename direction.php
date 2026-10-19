@@ -66,30 +66,73 @@ require __DIR__ . '/include/page-head.php';
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 
 <main class="arrival-page" id="main-content" tabindex="-1">
-  <section class="page-hero page-hero--photo">
+  <section class="page-hero page-hero--photo arrival-hero">
     <div class="page-hero-media" aria-hidden="true">
       <img src="img/v2/courtyard.jpg" <?= gj_image_dimension_attributes('img/v2/courtyard.jpg', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
-    <div class="site-shell page-hero-inner">
+    <div class="site-shell page-hero-inner arrival-hero-inner">
       <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>
-      <p class="eyebrow">Getting here</p>
-      <h1>Arrive inside Jaisalmer Fort.</h1>
-      <p>
-        Garh Jaisal Haveli is inside the fort. Cars stop at Fort Parking, then it is a short walk through the lanes. Contact the hotel before travel to ask whether arrival or luggage assistance can be arranged.
-      </p>
-      <div class="actions">
-        <a class="button button-primary" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>">Call <?= htmlspecialchars($hotelPhoneDisplay, ENT_QUOTES, 'UTF-8') ?></a>
-        <a class="button button-light" href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">WhatsApp the hotel</a>
+      <div class="arrival-hero-layout">
+        <div class="arrival-hero-copy">
+          <p class="eyebrow">Getting here</p>
+          <h1>Arrive inside Jaisalmer Fort.</h1>
+          <p>
+            Garh Jaisal Haveli is inside the fort. Cars stop at Fort Parking, then it is a short walk through the lanes. Contact the hotel before travel to ask whether arrival or luggage assistance can be arranged.
+          </p>
+          <div class="actions">
+            <a class="button button-primary" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>">Call <?= htmlspecialchars($hotelPhoneDisplay, ENT_QUOTES, 'UTF-8') ?></a>
+            <a class="button button-light" href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">WhatsApp the hotel</a>
+          </div>
+        </div>
+
+        <aside class="arrival-quick-card" aria-labelledby="arrival-quick-card-title">
+          <p class="eyebrow">Before you set out</p>
+          <h2 id="arrival-quick-card-title">Plan for the final walk.</h2>
+          <ul class="arrival-quick-list">
+            <li>
+              <span class="arrival-quick-number" aria-hidden="true">01</span>
+              <div>
+                <strong>Start at Fort Parking</strong>
+                <p>Cars cannot enter the fort, so plan to stop here.</p>
+              </div>
+            </li>
+            <li>
+              <span class="arrival-quick-number" aria-hidden="true">02</span>
+              <div>
+                <strong>Continue on foot</strong>
+                <p>The last stretch follows narrow fort lanes with uneven cobbles and short stair sections.</p>
+              </div>
+            </li>
+            <li>
+              <span class="arrival-quick-number" aria-hidden="true">03</span>
+              <div>
+                <strong>Confirm any help</strong>
+                <p>Call or WhatsApp ahead to ask what arrival or luggage assistance can be arranged.</p>
+              </div>
+            </li>
+          </ul>
+          <a class="button button-primary arrival-quick-map" href="<?= htmlspecialchars($hotelMapsUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Open exact hotel pin <span aria-hidden="true">↗</span></a>
+        </aside>
       </div>
     </div>
   </section>
+
+  <nav class="arrival-section-nav" aria-label="Directions page sections">
+    <div class="site-shell">
+      <a href="#arrival-overview-title">Quick directions</a>
+      <a href="#travel-options-title">Travel options</a>
+      <a href="#walking-access-title">Walking &amp; mobility</a>
+      <a href="#arrival-map-title">Map &amp; navigation</a>
+      <a href="#arrival-faq-title">FAQs</a>
+    </div>
+  </nav>
 
   <section class="section arrival-overview">
     <div class="site-shell">
       <div class="section-head">
         <div>
           <p class="eyebrow">The last stretch</p>
-          <h2>How guests reach the haveli.</h2>
+          <h2 id="arrival-overview-title">How guests reach the haveli.</h2>
         </div>
         <p>
           From Fort Parking, allow a 5–6 minute walk (roughly 300 metres). Travel time from the railway station or airport depends on your route and pickup arrangements; confirm the transfer plan for your date. The final stretch to the haveli is on foot through the fort lanes.
@@ -126,28 +169,28 @@ require __DIR__ . '/include/page-head.php';
         <p>Most guests find the short walk part of staying in the living fort.</p>
       </div>
 
-      <div class="steps">
-        <div class="step">
-          <span>01</span>
+      <ol class="steps arrival-route-steps" aria-label="Steps from Fort Parking to the hotel">
+        <li class="step">
+          <span class="arrival-route-number" aria-hidden="true">01</span>
           <strong>Share your ETA</strong>
-          <span>Call or WhatsApp when you are on the way and share your expected arrival time.</span>
-        </div>
-        <div class="step">
-          <span>02</span>
+          <p>Call or WhatsApp when you are on the way and share your expected arrival time.</p>
+        </li>
+        <li class="step">
+          <span class="arrival-route-number" aria-hidden="true">02</span>
           <strong>Stop at Fort Parking</strong>
-          <span>Cars cannot enter the fort. Use Fort Parking as the drop-off.</span>
-        </div>
-        <div class="step">
-          <span>03</span>
-          <strong>Ask about assistance</strong>
-          <span>Contact the hotel before travel to ask whether staff can meet you or help with luggage. Wait for confirmation before relying on any arrangement.</span>
-        </div>
-        <div class="step">
-          <span>04</span>
+          <p>Cars cannot enter the fort. Use Fort Parking as the drop-off point.</p>
+        </li>
+        <li class="step">
+          <span class="arrival-route-number" aria-hidden="true">03</span>
+          <strong>Confirm any assistance</strong>
+          <p>Ask the hotel whether staff can meet you or help with luggage. Wait for confirmation before relying on an arrangement.</p>
+        </li>
+        <li class="step">
+          <span class="arrival-route-number" aria-hidden="true">04</span>
           <strong>Walk to the haveli</strong>
-          <span>Follow the route through the fort lanes to Garh Jaisal. Open the hotel's exact map pin if you need help finding the way.</span>
-        </div>
-      </div>
+          <p>Follow the route through the fort lanes. Open the exact hotel pin if you need help finding the way.</p>
+        </li>
+      </ol>
     </div>
   </section>
 
@@ -156,7 +199,7 @@ require __DIR__ . '/include/page-head.php';
       <div class="section-head">
         <div>
           <p class="eyebrow">Stations and the airport</p>
-          <h2>Ways to reach Fort Parking.</h2>
+          <h2 id="travel-options-title">Ways to reach Fort Parking.</h2>
         </div>
         <p>Transfer options, fares and journey times vary by route, provider and date. Contact the hotel to confirm the pickup point, vehicle, current quote, timing and availability before arranging a transfer.</p>
       </div>
@@ -193,7 +236,7 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell arrival-split">
       <div>
         <p class="eyebrow">Walking in</p>
-        <h2>The route is cobbled, with two short stair sections.</h2>
+        <h2 id="walking-access-title">The route is cobbled, with two short stair sections.</h2>
         <p>The fort lanes are narrow and uneven in places. Contact the hotel before arrival to ask whether luggage or escort help can be arranged, and confirm any service hours in advance.</p>
       </div>
       <ul class="access-list">
@@ -280,7 +323,7 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell arrival-split">
       <div>
         <p class="eyebrow">Questions</p>
-        <h2>Before you set out.</h2>
+        <h2 id="arrival-faq-title">Before you set out.</h2>
         <p>If your train or flight changes, call, WhatsApp, or send a note through the <a href="contact.php?topic=arrival">arrival enquiry form</a>.</p>
       </div>
       <?php
