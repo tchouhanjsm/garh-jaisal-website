@@ -1,41 +1,58 @@
 # Website Repository Readiness — Garh Jaisal Haveli
 
-**Audit date:** 2026-10-18  
+**Audit date:** 2026-10-19  
 **Repository:** https://github.com/tchouhanjsm/garh-jaisal-website  
-**Verified main SHA:** `b7334ec9b0dea4aa3ba527e38725dd96131712a6`  
-**Latest merged PR:** [PR #104 — size existing responsive images by layout slot](https://github.com/tchouhanjsm/garh-jaisal-website/pull/104)  
-**Main-head Browser E2E:** [run 39128969413](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39128969413), triggered for the exact SHA above; it was still in progress at the time of this update.
+**Verified main SHA at this batch start:** `f810d79547a04c8fe3d5b84612eafdedf88545c0`  
+**Latest merged PR at this batch start:** [PR #105 — reconcile release status with PR #104 baseline](https://github.com/tchouhanjsm/garh-jaisal-website/pull/105)
 
-## Baseline and recent implementation
+## Exact-main baseline
 
-PR #104 is merged to `main`. Recent merged work relevant to release readiness:
+The following required site/release workflows passed on `f810d79547a04c8fe3d5b84612eafdedf88545c0` after PR #105 merged:
 
-- **PR #100** diversified image assignments across editorial, room, package, tour and dining pages, while aligning hero/social image metadata.
-- **PR #102** added more manifest-driven responsive candidates, corrected the Gallery lightbox to use the selected full-resolution image, corrected the Car & City Tours breadcrumb, aligned responsive preloads and slot `sizes`, and added regression coverage.
-- **PR #103** committed the pinned `@playwright/test@1.64.1` dependency and npm-generated lockfile; CI now uses `npm ci` and `npm audit --audit-level=high`.
-- **PR #104** refined `sizes` hints on existing responsive image slots without changing original photography, crops, public URLs or room/photo mappings.
+| Check | Result | Evidence |
+|---|---|---|
+| PHP 7.4/8.2 lint, strict site/source contracts, publication boundaries, sitemap freshness | PASS | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562365) |
+| Browser E2E, form validation and screenshot/evidence upload | PASS | [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562397) |
+| Responsive image manifest validation and review candidates | PASS | Included in [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562365) |
+| Runtime package safety tests and ZIP build | PASS | [Package workflow](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562358); review artifact only, no deployment |
+| Non-deploying staging QA dry run | PASS | [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562402); not evidence of behavior on an external host |
 
-The exact-main Browser E2E workflow run `39128969413` checked out `b7334ec9b0dea4aa3ba527e38725dd96131712a6`. The following setup steps had succeeded at last inspection: pinned Pillow install, responsive asset generation, PHP setup, Node setup, `npm ci`, `npm audit --audit-level=high`, and Chromium installation. The full responsive Playwright run was in progress; the job had not yet produced a final conclusion or screenshot artifacts. No PASS claim is made for that incomplete run.
+These results apply to that exact SHA. They establish a passing automated baseline, not full manual image/caption approval, real-device assistive-technology sign-off, external mail/CAPTCHA delivery or production-host compatibility.
 
-## Remaining release work (prioritized)
+## Merged source work
 
-### P1 — Final verification on the exact source
-1. Wait for exact-main Browser E2E run `39128969413` to finish; inspect its result, screenshot/page-sheet artifact and curated visual evidence. If it fails, diagnose root cause and open a review PR; do not weaken test expectations to manufacture a pass.
-2. Confirm Site Checks, package preflight and responsive image review on the final source revision. Record each result against its exact SHA. The main-head Classic Commit Status endpoint currently reports no entries; use the GitHub Actions workflow runs and their head SHAs as the evidence.
-3. Build the PHP runtime ZIP only after preflight passes, then extract it to a clean directory and verify package contents, integrity manifest and sitemap-route asset coverage. The workflow package is a review artifact only—not a deployment.
+- **PR #100:** diversified image assignments and aligned hero/social imagery with page content.
+- **PR #102:** broadened responsive image candidate coverage, aligned preload selection, fixed Gallery full-size lightbox behavior and corrected the Car & City Tours breadcrumb.
+- **PR #103:** pinned `@playwright/test@1.64.1`, committed the npm-generated lockfile, and moved browser CI to `npm ci` plus `npm audit --audit-level=high`.
+- **PR #104:** added layout-aware `sizes` values for existing responsive image slots.
+- **PR #105:** reconciled the prior release report and project snapshot with the then-current main baseline. This report was refreshed again after the PR #105 merge advanced `main` to `f810d795...`.
 
-### P2 — Human judgement not supplied by automated tests
-4. Review actual image subjects, captions, alt text, crops and source selection on page-sheet/contact-sheet evidence, including Home, Gallery, rooms, desert/tent, dining and editorial pages. Automated existence/shape checks do not prove semantic correctness.
-5. Conduct responsive review at 320, 390, 768, 1280 and 1440 CSS pixels; manually check keyboard/focus, sticky/floating CTA overlap, reduced motion, contrast and assistive-technology behavior. Automated CI is not a substitute for physical-device or screen-reader review.
-6. Review SEO copy intent, metadata uniqueness, schema parity, canonical routes, sitemap freshness, redirects and internal-link destinations after any source change. Keep the established public URLs intact.
+## Current implementation batch — Directions
 
-### P1 — Explicit owner/configuration blockers
-7. Keep the restaurant menu gated until the owner confirms the current menu and prices. An online dining request remains an enquiry, not a confirmed reservation.
-8. Obtain approved booking/cancellation wording; privacy/data-controller contact and lead-log access/backup/retention policy; check-in/check-out and reception/late-arrival facts; room-rate display policy; authentic review permissions; exact tour inclusions/routes/prices; and current transfer prices/timings. Keep affected claims qualified or unpublished; do not infer missing facts.
-9. Verify production mail/CAPTCHA delivery, lead-storage access and retention, analytics receipt, host PHP compatibility and production performance only through the owner's separate operational process. Repository CI cannot prove those external behaviors.
+Feature branch: `feat/directions-arrival-experience-20261019`, based on main SHA `f810d79547a04c8fe3d5b84612eafdedf88545c0`.
 
-## Packaging and delivery boundary
+The batch applies the useful UX structure from the supplied “Getting Here” concept to the existing `direction.php` route:
 
-The package workflow runs a manifest-based package-safety test and `scripts/build_deploy_package.py --check`. The main-branch workflow can build and publish a ZIP plus integrity manifest as a GitHub Actions artifact after preflight passes. That archive is meant for review; it is not a live deployment. Before final delivery, extract the archive and confirm the PHP source, runtime includes, CSS/JS, images, content data and required runtime files are present, while test tooling, private local config, credentials and development-only artifacts are excluded.
+1. An arrival-summary card in the hero with drop-off guidance, the final on-foot route and the existing exact hotel Maps pin.
+2. Accessible in-page section links for quick directions, travel options, walking/mobility, map and FAQs.
+3. A semantic ordered list for the four parking-to-door steps, with responsive card and number-marker styling.
+4. New Browser E2E coverage for link/anchor behavior, the route list and no horizontal overflow at 320, 390, 768, 1280 and 1440 CSS pixels.
 
-This readiness report records source/CI state only. No merge, cPanel access, hosting mutation or external deployment is authorized or performed here.
+The mockup's unverified prices, journey times, staff identity, check-in and reception promises, third-party stock photos, and nonexistent form endpoint are intentionally excluded. Existing public URL, page metadata, Google Maps/contact destinations and policy-accurate copy are preserved. The branch's own exact-head CI and screenshot review are the acceptance gate; do not infer success from the base branch checks.
+
+## Release work still outstanding
+
+### Code-verifiable
+- All required site checks, responsive-image checks, package preflight and Browser E2E must pass on the exact feature head after the Directions update.
+- Inspect the feature-head page-sheet and responsive screenshots. A structural test pass does not prove the page's visual quality or image/caption semantics.
+- Keep `sitemap.xml` freshness checked for route/source changes and verify package asset coverage if runtime assets are changed.
+
+### Human review and owner-dependent facts
+- Review rendered Directions and related page imagery/caption/alt-text mapping at mobile, tablet and desktop widths.
+- Manually assess keyboard/focus visibility, contrast, reduced motion, screen-reader behavior and CTA overlap.
+- Keep unapproved menu/prices/hours, booking/cancellation terms, privacy/data-controller and lead-retention details, check-in/reception promises, room-rate display, guest reviews, tour inclusions/pricing, and transfer fares/timings qualified or unpublished until approved by the owner.
+- Host-specific Apache rewrites, PHP version, CAPTCHA/mail delivery, analytics receipt and field performance require owner-controlled verification; repository CI cannot prove those behaviors.
+
+## Packaging boundary
+
+The package workflow produces a runtime-only PHP ZIP and integrity manifest as a review artifact. Before final delivery, ensure the tested archive matches the intended source commit, extracts cleanly, includes required PHP pages/includes/CSS/JS/images/content and excludes private configuration, credentials and development-only tooling. No hosting access, upload, merge or deployment is performed by this batch.

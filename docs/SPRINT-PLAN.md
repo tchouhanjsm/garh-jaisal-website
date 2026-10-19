@@ -58,7 +58,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 47 | Arrival, transfer and dining claim accuracy | ✓ merged through PR #97; regression coverage guards unsupported transfer and dining claims. |
 | 48 | Restaurant menu publication guard and source reconciliation | ✓ merged through PR #98; unconfirmed dish names/descriptions/prices stay unpublished, and restaurant validation tolerates hosts without `mbstring`. |
 | 49 | Exact-head browser evidence and repository reproducibility | ✓ PRs #100 and #101 merged; all nine checks passed on current main `dc1d7653eecc61fec72489015340d61ae8e52386`. Responsive image delivery and committed Playwright lockfile remain follow-up work; see the post-merge disposition in the full audit. |
-| 50 | Responsive image delivery and reproducible browser dependencies | ◐ Extend generated 480/800/1200px candidates and CSS-aligned `sizes` hints to high-intent/gallery/editorial slots; align the Journal preload; fix full-resolution Gallery lightbox selection; correct Car & City Tours breadcrumb semantics/contrast; add slot, lightbox and breadcrumb regressions; pin Playwright with a committed npm-generated lockfile and `npm ci`/audit. Exact-head CI must pass before merge; owner-only facts and human sign-off remain separate. |
+| 50 | Responsive image delivery and reproducible browser dependencies | ✓ PRs #102–#104 merged; candidate delivery, Gallery lightbox, breadcrumb fix, pinned Playwright lockfile and layout-aware `sizes` landed. Exact-main PHP/site checks, Browser E2E, package preflight/build and responsive-image review passed on `f810d79547a04c8fe3d5b84612eafdedf88545c0` after PR #105 merged. |
+| 51 | Directions arrival-journey UX refresh | ◐ Improve the hero with an arrival-summary card, add accessible in-page section navigation, style the parking-to-door steps as an ordered route, and add responsive Browser E2E coverage. Preserve `direction.php`, existing map/contact destinations and owner-confirmed copy; verify exact-head CI and screenshot evidence before review approval. |
 
 ---
 
@@ -718,3 +719,15 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Release blockers that code cannot truthfully resolve: owner approval for current menu/prices/service hours, privacy controller/contact/data/retention wording and booking/cancellation terms; cPanel PHP and Apache compatibility; real CAPTCHA/mail delivery; external staging URL/access and staged-package SHA; image/crop and key-page screenshot sign-off; GA4 receipt and production performance evidence.
 - Current public production is still serving legacy Home/Directions markup, including transfer prices and meet-and-assist/reception promises removed from repo source. Treat production parity as unverified until an owner-managed staging deployment proves the reviewed package and the live host is explicitly released.
 - This sprint changes repository source/docs only; no cPanel upload, production deployment, owner-fact invention or public policy approval is implied.
+
+
+## Sprint 51 — Directions arrival-journey UX refresh (2026-10-19)
+
+**Goal:** apply the strongest parts of the getting-here reference concept to the existing PHP Directions page without importing unsupported operations, rates or policies.
+
+- Add a compact arrival-essentials card in the photo hero, featuring the Fort Parking drop-off, the on-foot route, and a Maps link sourced from the current configured hotel pin.
+- Add a horizontally scrollable, keyboard-accessible section navigation for quick directions, transfer options, walking/mobility, map and FAQs.
+- Upgrade the parking-to-door route from generic tiles into an ordered list with responsive number markers, visible text and strong focus styles.
+- Add Playwright assertions for the arrival card, link destinations, anchors, route order and no horizontal overflow at 320, 390, 768, 1280 and 1440 CSS pixels.
+- Preserve all public URLs, metadata/schema, site-config phone/WhatsApp/Maps destinations and the current qualification for arrival assistance. Do not add fake route photography, named staff, made-up transfer fares, unsupported check-in/reception claims or an unimplemented form endpoint.
+- Acceptance gate: PHP 7.4/8.2 Site Checks, responsive asset/image review, package preflight and complete Browser E2E pass on the exact feature head. Owner visual/accessibility review remains separate. No merge or deployment is implied.
