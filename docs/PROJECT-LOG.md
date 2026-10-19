@@ -6,31 +6,42 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-18 |
-| Current phase | Sprint 51 — exact-main verification, final package validation and owner release gates |
+| Last updated | 2026-10-19 |
+| Current phase | Sprint 51 — Directions arrival-journey UX and responsive layout |
 | Base branch | `main` |
-| Verified main SHA | `b7334ec9b0dea4aa3ba527e38725dd96131712a6` (PR #104 merge commit, 2026-10-18) |
-| Latest merged PR | [#104 — size existing responsive images by layout slot](https://github.com/tchouhanjsm/garh-jaisal-website/pull/104) |
-| PR #102 | Merged before #103/#104; extended responsive candidates, preload alignment, Gallery full-size lightbox, Car & City Tours breadcrumb, plus source and browser regression contracts |
-| PR #103 | Merged; pins `@playwright/test@1.64.1`, commits the npm-generated `package-lock.json`, switches CI to `npm ci` and checks high-severity advisories |
-| PR #104 | Merged; sets CSS-layout-aware `sizes` on existing responsive image slots; originals, selected photography and public URLs remain unchanged |
-| Main-head Browser E2E | [Run 39128969413](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39128969413), exact SHA `b7334ec9b0dea4aa3ba527e38725dd96131712a6`; **IN PROGRESS at snapshot time**, do not treat as PASS |
-| Main-head setup steps | Pillow/image generation, PHP/Node setup, `npm ci`, `npm audit --audit-level=high` and Chromium installation were complete; the full responsive Playwright suite was running |
-| Main-head classic commit statuses | No entries reported by the combined-status endpoint; use exact-head Actions run evidence instead |
-| Open pull requests | No open PRs reported when checked after PR #104 merged |
-| Latest release readiness report | `docs/FINAL-RELEASE-READINESS-2026-10-18.md` (reconciled in this PR branch) |
+| Verified main SHA for this batch | `f810d79547a04c8fe3d5b84612eafdedf88545c0` (PR #105 merge commit) |
+| Latest merged PR at batch start | [#105 — reconcile release status with PR #104 baseline](https://github.com/tchouhanjsm/garh-jaisal-website/pull/105) |
+| Main Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562365) on `f810d79547a04c8fe3d5b84612eafdedf88545c0` |
+| Main Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562397) on the same SHA, with the current screenshot/evidence upload workflow |
+| Main package preflight/build | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562358) on the same SHA; review ZIP only, not deployment |
+| Main non-deploying Staging QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562402); local dry run, not external-host validation |
+| PR #102–#104 | Merged: responsive candidate coverage, full-size Gallery lightbox, breadcrumb correction, pinned Playwright lockfile/CI install, and CSS-aware responsive `sizes` |
+| PR #105 | Merged; reconciled the release-readiness report and project log but left the baseline snapshot at its pre-merge SHA, corrected in this batch |
+| Feature branch | `feat/directions-arrival-experience-20261019`, created from the verified main SHA above |
+| Feature validation | Site and Browser E2E checks must pass on the exact feature PR head; pending until the current branch is opened for review |
+
+## Current feature batch
+
+**Scope:** refine the PHP Directions journey using the user's getting-here reference concept while keeping the established site architecture and existing `direction.php` URL.
+
+- Add an arrival summary card in the hero with three steps, an exact hotel Maps pin, and truthful “ask to confirm” language for any assistance.
+- Add keyboard-accessible in-page jump links to directions, travel options, walking/mobility, map and FAQ sections.
+- Convert the four parking-to-door steps into an ordered list with distinct responsive route-step styling.
+- Add browser regression coverage for the new summary, Maps link, section anchors and 320/390/768/1280/1440px overflow.
+- Do not copy the reference mockup’s unsupported prices, timings, named staff, check-in promises, unverified service claims, fake photo URLs, or nonexistent form action.
+- No new server endpoint, runtime dependency, public URL, analytics identifier, business policy, hosting configuration or deployment behavior is introduced.
+
+**Acceptance criteria:** PHP 7.4/8.2 site checks, strict local-image/sitemap/publication contracts, package preflight, and the complete Playwright suite pass on the exact feature head. Review screenshots at mobile, tablet and desktop widths. No merge without the owner's explicit approval.
 
 ## Current release backlog
 
 | Priority | Item | Acceptance criteria | Status |
 |---|---|---|---|
-| P1 | Exact-main Browser E2E | Run `39128969413` completes on the recorded SHA; inspect failures and screenshots/page sheet; record conclusion and artifact links | In progress at snapshot time |
-| P1 | PHP/source/site checks | PHP 7.4/8.2 lint, strict image checks, source contracts, publication guards and sitemap check pass on the final SHA | Reverify for final candidate |
-| P1 | Runtime ZIP integrity | Package preflight passes; build review ZIP and manifest; extract cleanly and check all sitemap routes/local assets/runtime files | Pending final test gate |
-| P1 | Owner-only content facts | Approved details entered into `docs/OWNER-FACTS.md`; gates updated only with those facts | Blocked on owner input |
-| P2 | Image semantic review | Human confirms photo subject/caption/alt/crop alignment across representative page and viewport evidence | Manual review pending |
-| P2 | Responsive accessibility/UX | Review 320, 390, 768, 1280 and 1440 widths; keyboard/focus, contrast, reduced motion, sticky/floating CTAs and assistive technology | Manual review pending |
-| P2 | Operational integrations | Owner verifies mail/CAPTCHA, lead access/retention, analytics receipt, host PHP and production performance in the owner's environment | External owner verification pending |
+| P1 | Directions feature validation | Exact feature-head PHP/site checks, package preflight and Browser E2E all pass; inspect screenshot/page-sheet artifacts | Pending feature PR CI |
+| P1 | Public route and source integrity | Preserve `direction.php`, canonical metadata, configured contact links, Google Maps pin/embed and current arrival-policy safeguards | Protected by existing + new regression tests |
+| P2 | Visual and accessibility judgement | Review 320, 390, 768, 1280 and 1440 widths; keyboard/focus, contrast, reduced motion, CTA collision and screen-reader behavior | Manual owner review remains |
+| P2 | Owner-only business facts | Approved details entered in `docs/OWNER-FACTS.md`; gates updated only from those facts | Blocked on owner input |
+| P2 | Host/runtime behavior | Apache rewrites, actual host PHP version, CAPTCHA/mail, lead retention and analytics receipt verified in owner-controlled environment | External owner verification pending |
 
 ## Owner-blocked dependencies
 
