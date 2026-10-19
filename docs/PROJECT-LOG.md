@@ -30,6 +30,7 @@
 - Add browser regression coverage for the new summary, Maps link, section anchors and 320/390/768/1280/1440px overflow.
 - Do not copy the reference mockup’s unsupported prices, timings, named staff, check-in promises, unverified service claims, fake photo URLs, or nonexistent form action.
 - No new server endpoint, runtime dependency, public URL, analytics identifier, business policy, hosting configuration or deployment behavior is introduced.
+- Refresh `sitemap.xml` only for `/direction.php` to its latest Git-derived `lastmod` date (`2026-10-19`); `php scripts/generate-sitemap.php --check` remains the regression gate.
 
 **Acceptance criteria:** PHP 7.4/8.2 site checks, strict local-image/sitemap/publication contracts, package preflight, and the complete Playwright suite pass on the exact feature head. Review screenshots at mobile, tablet and desktop widths. No merge without the owner's explicit approval.
 
