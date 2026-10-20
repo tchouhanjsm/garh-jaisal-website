@@ -101,7 +101,7 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     let section = page.locator('#blog-section-list .section-editor').nth(0);
     await section.locator('[data-section-heading]').fill('Plan the Fort visit');
     await section.locator('[data-section-body]').fill('Start with the time available, confirm the arrangements for your date and leave enough room for walking through the historic lanes.');
-    await section.locator('[data-section-bullets]').fill('Confirm the meeting point\\nCheck current access arrangements');
+    await section.locator('[data-section-bullets]').fill('Confirm the meeting point\nCheck current access arrangements');
     await page.locator('#add-blog-section').click();
     section = page.locator('#blog-section-list .section-editor').nth(1);
     await section.locator('[data-section-heading]').fill('Before you travel');
