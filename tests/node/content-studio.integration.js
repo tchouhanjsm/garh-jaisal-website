@@ -28,6 +28,8 @@ const originalSitemap = fs.readFileSync(sitemapPath);
 const contentDirs = ['content/experiences', 'content/editorial', 'content/gallery'].map(p => path.join(ROOT, p));
 const existedDirectories = new Map(contentDirs.map(dir => [dir, fs.existsSync(dir)]));
 let galleryRecordPath = null;
+const ownedPaths = new Set();
+let sitemapTouched = false;
 let studio = null;
 let phpServer = null;
 let studioOutput = '';
@@ -109,6 +111,8 @@ function tourPayload(slug, status) {
 
 async function main() {
   noExistingFixtures();
+  for (const file of [...routeFiles, ...recordFiles]) ownedPaths.add(file);
+  sitemapTouched = true;
   studio = start(process.execPath, ['scripts/content-studio.js'], { CONTENT_STUDIO_PORT: String(STUDIO_PORT) }, s => { studioOutput += s; }, s => { studioErrors += s; });
   await waitFor(STUDIO_URL + '/api/status', studio, 'Content Studio');
 
@@ -196,6 +200,7 @@ async function main() {
   });
   assert.equal(result.response.status, 201, 'live Gallery entry should be created: ' + JSON.stringify(result.body));
   galleryRecordPath = path.join(galleryDir, result.body.id + '.json');
+  ownedPaths.add(galleryRecordPath);
   response = await fetch(PHP_URL + '/gallery.php');
   assert.equal(response.status, 200);
   html = await response.text();
@@ -218,10 +223,10 @@ main()
   .finally(() => {
     if (studio) studio.kill('SIGTERM');
     if (phpServer) phpServer.kill('SIGTERM');
-    for (const file of [...routeFiles, ...recordFiles, galleryRecordPath].filter(Boolean)) {
+    for (const file of ownedPaths) {
       try { if (fs.existsSync(file) && !fs.lstatSync(file).isSymbolicLink()) fs.unlinkSync(file); } catch (_) {}
     }
-    try { fs.writeFileSync(sitemapPath, originalSitemap); } catch (_) {}
+    try { if (sitemapTouched) fs.writeFileSync(sitemapPath, originalSitemap); } catch (_) {}
     for (const dir of contentDirs) {
       if (!existedDirectories.get(dir)) {
         try {
