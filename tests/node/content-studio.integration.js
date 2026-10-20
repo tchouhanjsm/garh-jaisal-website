@@ -137,8 +137,73 @@ function verifyContentStudioAuthoringUi() {
   process.stdout.write('PASS Content Studio UI script syntax and nontechnical guided authoring controls.\\n');
 }
 
+async function verifyOneClickLauncher() {
+  let output = '';
+  let errors = '';
+  const launcherFile = path.join(ROOT, 'tools/content-studio/Start Content Studio.command');
+  const child = start(
+    launcherFile,
+    [],
+    { CONTENT_STUDIO_PORT: String(STUDIO_PORT), CONTENT_PREVIEW_PORT: String(PHP_PORT) },
+    chunk => { output += chunk; },
+    chunk => { errors += chunk; },
+  );
+
+  async function waitForEndpoint(url, label) {
+    let lastError = 'no response';
+    for (let attempt = 0; attempt < 80; attempt++) {
+      if (child.exitCode !== null || child.signalCode !== null) {
+        throw new Error(label + ' stopped before ready.\n' + output + errors);
+      }
+      try {
+        const response = await fetch(url, { signal: AbortSignal.timeout(800) });
+        if (response.ok) return response;
+        lastError = 'HTTP ' + response.status;
+      } catch (error) {
+        lastError = error.message;
+      }
+      await sleep(100);
+    }
+    throw new Error(label + ' did not become ready: ' + lastError + '\n' + output + errors);
+  }
+
+  async function assertStopped(url, label) {
+    for (let attempt = 0; attempt < 30; attempt++) {
+      try {
+        await fetch(url, { signal: AbortSignal.timeout(300) });
+      } catch (_) {
+        return;
+      }
+      await sleep(100);
+    }
+    assert.fail(label + ' remained reachable after the launcher shut down.');
+  }
+
+  try {
+    const statusResponse = await waitForEndpoint(STUDIO_URL + '/api/status', 'Content Studio');
+    assert.equal(statusResponse.status, 200);
+    const previewResponse = await waitForEndpoint(PHP_URL + '/blog.php', 'PHP preview');
+    assert.equal(previewResponse.status, 200);
+    await sleep(150);
+    assert.match(output, /Garh Jaisal Content Studio is ready/, 'launcher should report that both services are ready');
+    assert.ok(output.includes(STUDIO_URL), 'launcher output should include the Content Studio address');
+    assert.ok(output.includes(PHP_URL), 'launcher output should include the PHP preview address');
+  } finally {
+    if (child.exitCode === null && child.signalCode === null) {
+      const exited = new Promise(resolve => child.once('exit', resolve));
+      child.kill('SIGTERM');
+      await Promise.race([exited, sleep(5000)]);
+    }
+  }
+
+  await assertStopped(STUDIO_URL + '/api/status', 'Content Studio');
+  await assertStopped(PHP_URL + '/blog.php', 'PHP preview');
+  process.stdout.write('PASS one-click launcher starts the local editor and preview, then stops both services.\n');
+}
+
 async function main() {
   verifyContentStudioAuthoringUi();
+  await verifyOneClickLauncher();
   noExistingFixtures();
   for (const file of [...routeFiles, ...recordFiles]) ownedPaths.add(file);
   sitemapTouched = true;

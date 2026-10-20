@@ -69,9 +69,10 @@ cleanup() {
 trap cleanup EXIT
 trap 'exit 130' INT TERM HUP
 
-(cd "$ROOT" && "$PHP_BIN" -S "${HOST}:${PREVIEW_PORT}" -t "$ROOT") >> "$PREVIEW_LOG" 2>&1 &
+cd "$ROOT"
+"$PHP_BIN" -S "${HOST}:${PREVIEW_PORT}" -t "$ROOT" >> "$PREVIEW_LOG" 2>&1 &
 PREVIEW_PID=$!
-(cd "$ROOT" && CONTENT_STUDIO_PORT="$STUDIO_PORT" "$NODE_BIN" scripts/content-studio.js) >> "$STUDIO_LOG" 2>&1 &
+CONTENT_STUDIO_PORT="$STUDIO_PORT" "$NODE_BIN" scripts/content-studio.js >> "$STUDIO_LOG" 2>&1 &
 STUDIO_PID=$!
 
 wait_for_url() {
