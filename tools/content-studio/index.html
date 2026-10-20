@@ -23,7 +23,7 @@
     <div>
       <p class="eyebrow">Garh Jaisal Haveli · Local authoring tool</p>
       <h1>Content Studio</h1>
-      <p class="lede">Use these guided forms to add a tour, write a travel guide or add Gallery photos. Fields marked * are required. Start with Draft while you review the details. Changes stay on this computer until they are reviewed and approved for the live website.</p>
+      <p class="lede">Use these guided forms to add a tour, write a travel guide or add Gallery photos. On a Mac, double-click <strong>tools/content-studio/Start Content Studio.command</strong> in your project folder to open this editor and its local PHP preview together. Fields marked * are required. Start with Draft while you review the details; changes stay on this computer until reviewed and approved for the live website.</p>
     </div>
     <aside class="local-note"><strong>Local-only by design</strong>Bound to 127.0.0.1. Changes are written into this Git working tree; review them and test the staging ZIP before production.</aside>
   </header>
@@ -150,10 +150,10 @@
   </section>
   <div class="result" id="optimize-result" role="status" aria-live="polite"></div>
   <div class="preview">
-    <div><label for="preview-base">Local PHP preview base URL</label><input id="preview-base" value="http://127.0.0.1:8080" placeholder="http://127.0.0.1:8080"><p class="hint">The Node editor runs on port 4173. If you also serve the PHP website locally, enter its base URL here to open newly created pages.</p></div>
+    <div><label for="preview-base">Local PHP preview base URL</label><input id="preview-base" value="http://127.0.0.1:8088" placeholder="http://127.0.0.1:8088"><p class="hint">The one-click launcher uses port 4173 for the editor and port 8088 for the PHP preview. If you use a different local PHP server, enter its base URL here.</p></div>
     <div class="note">Live = live in your local working tree only. Review in Git, validate the ZIP, and approve staging before production.</div>
   </div>
-  <p class="footnote">This editor is not a public admin page. It only listens on 127.0.0.1 and is not included in the cPanel runtime package. Keep uploads and content changes in Git and use the existing staging deployment workflow.</p>
+  <p class="footnote">This editor is not a public admin page. It only listens on 127.0.0.1 and is not included in the cPanel runtime package. The one-click launcher starts the local preview and editor together; keep its Terminal window open while working, and close that window to stop both services. Save work as Draft until the facts and photos are reviewed. Content changes still need Git review, CI and the approved staging process.</p>
 </main>
 <script>
 (function(){

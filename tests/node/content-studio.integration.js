@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { spawn } = require('node:child_process');
+const { spawn, spawnSync } = require('node:child_process');
 const vm = require('node:vm');
 
 const ROOT = path.resolve(__dirname, '../..');
@@ -111,6 +111,17 @@ function tourPayload(slug, status) {
 }
 
 function verifyContentStudioAuthoringUi() {
+  const launcherFile = path.join(ROOT, 'tools/content-studio/Start Content Studio.command');
+  assert.ok(fs.existsSync(launcherFile), 'one-click macOS launcher should be present');
+  const launcherSyntax = spawnSync('bash', ['-n', launcherFile], { encoding: 'utf8' });
+  assert.equal(launcherSyntax.status, 0, 'macOS launcher shell syntax should be valid: ' + launcherSyntax.stderr);
+  assert.ok((fs.statSync(launcherFile).mode & 0o111) !== 0, 'macOS launcher must be executable in Git');
+  const launcher = fs.readFileSync(launcherFile, 'utf8');
+  assert.match(launcher, /127\.0\.0\.1/, 'both local services must bind to loopback only');
+  assert.match(launcher, /Garh Jaisal Content Studio is ready/);
+  assert.match(launcher, /trap cleanup EXIT/, 'launcher must stop local services on exit');
+  assert.doesNotMatch(launcher, /0\.0\.0\.0/, 'launcher must not expose the local servers to the network');
+
   const file = path.join(ROOT, 'tools/content-studio/index.html');
   const html = fs.readFileSync(file, 'utf8');
   const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
@@ -126,8 +137,78 @@ function verifyContentStudioAuthoringUi() {
   process.stdout.write('PASS Content Studio UI script syntax and nontechnical guided authoring controls.\\n');
 }
 
+async function verifyOneClickLauncher() {
+  let output = '';
+  let errors = '';
+  const launcherFile = path.join(ROOT, 'tools/content-studio/Start Content Studio.command');
+  const child = start(
+    launcherFile,
+    [],
+    { CONTENT_STUDIO_PORT: String(STUDIO_PORT), CONTENT_PREVIEW_PORT: String(PHP_PORT) },
+    chunk => { output += chunk; },
+    chunk => { errors += chunk; },
+  );
+
+  async function waitForEndpoint(url, label) {
+    let lastError = 'no response';
+    for (let attempt = 0; attempt < 80; attempt++) {
+      if (child.exitCode !== null || child.signalCode !== null) {
+        throw new Error(label + ' stopped before ready.\n' + output + errors);
+      }
+      try {
+        const response = await fetch(url, { signal: AbortSignal.timeout(800) });
+        if (response.ok) return response;
+        lastError = 'HTTP ' + response.status;
+      } catch (error) {
+        lastError = error.message;
+      }
+      await sleep(100);
+    }
+    throw new Error(label + ' did not become ready: ' + lastError + '\n' + output + errors);
+  }
+
+  async function assertStopped(url, label) {
+    for (let attempt = 0; attempt < 30; attempt++) {
+      try {
+        await fetch(url, { signal: AbortSignal.timeout(300) });
+      } catch (_) {
+        return;
+      }
+      await sleep(100);
+    }
+    assert.fail(label + ' remained reachable after the launcher shut down.');
+  }
+
+  try {
+    const statusResponse = await waitForEndpoint(STUDIO_URL + '/api/status', 'Content Studio');
+    assert.equal(statusResponse.status, 200);
+    const previewResponse = await waitForEndpoint(PHP_URL + '/blog.php', 'PHP preview');
+    assert.equal(previewResponse.status, 200);
+    for (let attempt = 0; attempt < 30 && !output.includes('Garh Jaisal Content Studio is ready'); attempt++) {
+      await sleep(100);
+    }
+    assert.ok(
+      output.includes('Garh Jaisal Content Studio is ready'),
+      'launcher should report that both services are ready. stdout: ' + output + '\\nstderr: ' + errors,
+    );
+    assert.ok(output.includes(STUDIO_URL), 'launcher output should include the Content Studio address. stdout: ' + output);
+    assert.ok(output.includes(PHP_URL), 'launcher output should include the PHP preview address. stdout: ' + output);
+  } finally {
+    if (child.exitCode === null && child.signalCode === null) {
+      const exited = new Promise(resolve => child.once('exit', resolve));
+      child.kill('SIGTERM');
+      await Promise.race([exited, sleep(5000)]);
+    }
+  }
+
+  await assertStopped(STUDIO_URL + '/api/status', 'Content Studio');
+  await assertStopped(PHP_URL + '/blog.php', 'PHP preview');
+  process.stdout.write('PASS one-click launcher starts the local editor and preview, then stops both services.\n');
+}
+
 async function main() {
   verifyContentStudioAuthoringUi();
+  await verifyOneClickLauncher();
   noExistingFixtures();
   for (const file of [...routeFiles, ...recordFiles]) ownedPaths.add(file);
   sitemapTouched = true;

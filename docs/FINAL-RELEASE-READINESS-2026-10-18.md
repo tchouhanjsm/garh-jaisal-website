@@ -1,58 +1,43 @@
 # Website Repository Readiness — Garh Jaisal Haveli
 
-**Audit date:** 2026-10-19  
+**Snapshot refreshed:** 2026-10-20  
 **Repository:** https://github.com/tchouhanjsm/garh-jaisal-website  
-**Verified main SHA at this batch start:** `f810d79547a04c8fe3d5b84612eafdedf88545c0`  
-**Latest merged PR at this batch start:** [PR #105 — reconcile release status with PR #104 baseline](https://github.com/tchouhanjsm/garh-jaisal-website/pull/105)
+**Verified main SHA:** f753107e98947f29ee30b849c7aa2bd91330ea5f  
+**Latest merged PR:** [#108 — local Content Studio for site content](https://github.com/tchouhanjsm/garh-jaisal-website/pull/108)
 
-## Exact-main baseline
+## Exact-main automated baseline
 
-The following required site/release workflows passed on `f810d79547a04c8fe3d5b84612eafdedf88545c0` after PR #105 merged:
+The following workflows passed on the verified PR #108 merge SHA:
 
 | Check | Result | Evidence |
 |---|---|---|
-| PHP 7.4/8.2 lint, strict site/source contracts, publication boundaries, sitemap freshness | PASS | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562365) |
-| Browser E2E, form validation and screenshot/evidence upload | PASS | [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562397) |
-| Responsive image manifest validation and review candidates | PASS | Included in [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562365) |
-| Runtime package safety tests and ZIP build | PASS | [Package workflow](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562358); review artifact only, no deployment |
-| Non-deploying staging QA dry run | PASS | [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39132562402); not evidence of behavior on an external host |
+| PHP 7.4/8.2 lint, strict site/source contracts, publication boundaries and sitemap freshness | PASS | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39376817921) |
+| Runtime package selection, safety gates and package build | PASS | [cPanel package workflow](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39376817936); artifact only, no upload |
+| Non-deploying staging dry run | PASS | [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39376817926); not external-host evidence |
+| Full Chromium Browser E2E and screenshot/evidence artifacts | PASS | [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39376817949) |
 
-These results apply to that exact SHA. They establish a passing automated baseline, not full manual image/caption approval, real-device assistive-technology sign-off, external mail/CAPTCHA delivery or production-host compatibility.
+Passing CI is not proof of live Apache/.htaccess compatibility, actual cPanel PHP version, real CAPTCHA/mail delivery, GA4 receipt, guest-policy approval or production performance.
 
-## Merged source work
+## Recent merged implementation
 
-- **PR #100:** diversified image assignments and aligned hero/social imagery with page content.
-- **PR #102:** broadened responsive image candidate coverage, aligned preload selection, fixed Gallery full-size lightbox behavior and corrected the Car & City Tours breadcrumb.
-- **PR #103:** pinned `@playwright/test@1.64.1`, committed the npm-generated lockfile, and moved browser CI to `npm ci` plus `npm audit --audit-level=high`.
-- **PR #104:** added layout-aware `sizes` values for existing responsive image slots.
-- **PR #105:** reconciled the prior release report and project snapshot with the then-current main baseline. This report was refreshed again after the PR #105 merge advanced `main` to `f810d795...`.
-
-## Current implementation batch — Directions
-
-Feature branch: `feat/directions-arrival-experience-20261019`, based on main SHA `f810d79547a04c8fe3d5b84612eafdedf88545c0`.
-
-The batch applies the useful UX structure from the supplied “Getting Here” concept to the existing `direction.php` route:
-
-1. An arrival-summary card in the hero with drop-off guidance, the final on-foot route and the existing exact hotel Maps pin.
-2. Accessible in-page section links for quick directions, travel options, walking/mobility, map and FAQs.
-3. A semantic ordered list for the four parking-to-door steps, with responsive card and number-marker styling.
-4. New Browser E2E coverage for link/anchor behavior, the route list and no horizontal overflow at 320, 390, 768, 1280 and 1440 CSS pixels.
-
-The mockup's unverified prices, journey times, staff identity, check-in and reception promises, third-party stock photos, and nonexistent form endpoint are intentionally excluded. Existing public URL, page metadata, Google Maps/contact destinations and policy-accurate copy are preserved. The branch's own exact-head CI and screenshot review are the acceptance gate; do not infer success from the base branch checks.
+- **PR #106:** Directions arrival journey, route guidance and responsive layout.
+- **PR #107:** photo-led entry journeys and mobile actions.
+- **PR #108:** local Content Studio for tours, travel guides and Gallery images; JSON registry overlays; local upload validation; draft/live boundaries; responsive-image manifest integration; dynamic Blog archive; package inclusion of runtime content records. Browser E2E caught the Fort-guide lead-card regression; the feature was fixed and the merge-head suite passed.
+- **Current next phase:** Sprint 52, one-click local Content Studio startup and PHP preview. It improves operator workflow only; it does not turn the app into a public CMS or publish changes by itself.
 
 ## Release work still outstanding
 
 ### Code-verifiable
-- All required site checks, responsive-image checks, package preflight and Browser E2E must pass on the exact feature head after the Directions update.
-- Inspect the feature-head page-sheet and responsive screenshots. A structural test pass does not prove the page's visual quality or image/caption semantics.
-- Keep `sitemap.xml` freshness checked for route/source changes and verify package asset coverage if runtime assets are changed.
+- Required PHP/site checks, strict image and sitemap checks, deployment-package preflight and full Browser E2E must pass on each feature PR's exact head.
+- Review generated package manifest/ZIP and ensure it matches the exact approved source commit. Preserve server-side config and exclude local authoring tools, credentials, tests and development-only scripts.
+- Reconcile project snapshot and phase checklist after each merge; do not infer success from older SHAs or cancelled runs.
 
 ### Human review and owner-dependent facts
-- Review rendered Directions and related page imagery/caption/alt-text mapping at mobile, tablet and desktop widths.
-- Manually assess keyboard/focus visibility, contrast, reduced motion, screen-reader behavior and CTA overlap.
-- Keep unapproved menu/prices/hours, booking/cancellation terms, privacy/data-controller and lead-retention details, check-in/reception promises, room-rate display, guest reviews, tour inclusions/pricing, and transfer fares/timings qualified or unpublished until approved by the owner.
-- Host-specific Apache rewrites, PHP version, CAPTCHA/mail delivery, analytics receipt and field performance require owner-controlled verification; repository CI cannot prove those behaviors.
+- Review page-sheet/screenshots and photo subject/caption/alt text at 320, 390, 768, 1280 and 1440px. Human review remains separate from automated structural checks.
+- Confirm keyboard/focus visibility, contrast, reduced-motion behavior, CTA overlap, screen-reader behavior and real-device experience.
+- Do not publish unapproved menu/prices/hours, booking/cancellation terms, privacy/data-controller and lead-retention details, check-in/reception promises, room-rate display policy, guest reviews, tour inclusions/prices, transfer fares/timings or unsupported service claims.
+- Verify real host compatibility, HTTPS certificate/redirect behavior, Apache directives, configured PHP version, CAPTCHA/mail delivery, analytics receipt, cache/MIME behavior and runtime package extraction on owner-controlled staging.
 
-## Packaging boundary
+## Packaging and release boundary
 
-The package workflow produces a runtime-only PHP ZIP and integrity manifest as a review artifact. Before final delivery, ensure the tested archive matches the intended source commit, extracts cleanly, includes required PHP pages/includes/CSS/JS/images/content and excludes private configuration, credentials and development-only tooling. No hosting access, upload, merge or deployment is performed by this batch.
+The deployment-package workflow creates an archive and integrity manifest for owner review. It does not upload to cPanel. Use an owner-supplied HTTPS staging origin and exact package SHA for the external staging dispatch, review the staged result, and obtain explicit release approval before production deployment or release tagging. No cPanel access, staging upload or production deployment was performed by PR #108.
