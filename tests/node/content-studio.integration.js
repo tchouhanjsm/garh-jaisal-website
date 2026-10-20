@@ -37,7 +37,14 @@ let phpErrors = '';
 
 function noExistingFixtures() {
   for (const file of [...routeFiles, ...recordFiles]) {
-    assert.ok(!fs.existsSync(file) && !fs.isSymbolicLink(file), 'Refusing to overwrite fixture path: ' + path.relative(ROOT, file));
+    let occupied = false;
+    try {
+      fs.lstatSync(file);
+      occupied = true;
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
+    assert.ok(!occupied, 'Refusing to overwrite fixture path: ' + path.relative(ROOT, file));
   }
   if (fs.existsSync(galleryDir)) {
     for (const name of fs.readdirSync(galleryDir, { withFileTypes: true }).filter(x => x.name.startsWith(galleryPrefix))) {
