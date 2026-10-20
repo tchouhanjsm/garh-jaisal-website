@@ -184,10 +184,15 @@ async function verifyOneClickLauncher() {
     assert.equal(statusResponse.status, 200);
     const previewResponse = await waitForEndpoint(PHP_URL + '/blog.php', 'PHP preview');
     assert.equal(previewResponse.status, 200);
-    await sleep(150);
-    assert.match(output, /Garh Jaisal Content Studio is ready/, 'launcher should report that both services are ready');
-    assert.ok(output.includes(STUDIO_URL), 'launcher output should include the Content Studio address');
-    assert.ok(output.includes(PHP_URL), 'launcher output should include the PHP preview address');
+    for (let attempt = 0; attempt < 30 && !output.includes('Garh Jaisal Content Studio is ready'); attempt++) {
+      await sleep(100);
+    }
+    assert.ok(
+      output.includes('Garh Jaisal Content Studio is ready'),
+      'launcher should report that both services are ready. stdout: ' + output + '\\nstderr: ' + errors,
+    );
+    assert.ok(output.includes(STUDIO_URL), 'launcher output should include the Content Studio address. stdout: ' + output);
+    assert.ok(output.includes(PHP_URL), 'launcher output should include the PHP preview address. stdout: ' + output);
   } finally {
     if (child.exitCode === null && child.signalCode === null) {
       const exited = new Promise(resolve => child.once('exit', resolve));
