@@ -17,6 +17,7 @@
 | Main Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39376817949), including blog lead-card regression and guided Content Studio authoring checks |
 | Recent merged work | PR #106 Directions arrival journey; PR #107 photo-led entry/mobile actions; PR #108 local tour/blog/Gallery authoring |
 | Current feature branch | feat/content-studio-one-click-launch-20261020 |
+| Active PR | [#109 — one-click Content Studio startup](https://github.com/tchouhanjsm/garh-jaisal-website/pull/109); exact-head checks in progress |
 
 ## Current phase
 
@@ -32,7 +33,7 @@
 
 | Priority | Item | Acceptance criteria | Status |
 |---|---|---|---|
-| P1 | Sprint 52 launch workflow | One-click local startup, safe loopback binding, server readiness/error messages, clean shutdown, automated tests | In implementation PR |
+| P1 | Sprint 52 launch workflow | One-click local startup, safe loopback binding, server readiness/error messages, clean shutdown, automated tests | Open PR #109; exact-head Browser E2E pending |
 | P1 | External staging/runtime validation | Owner-provided HTTPS staging URL and deployed package SHA; Apache/PHP and runtime headers validated on host | Owner-controlled and pending |
 | P1 | Business-content approvals | Current menu/prices/hours, booking/cancellation, privacy/controller/retention, check-in/reception, room-rate policy and approved review copy | Blocked on owner facts |
 | P2 | Human visual/accessibility review | Inspect page sheet and key pages at 320/390/768/1280/1440px; keyboard/focus, contrast, reduced motion and real assistive-technology review | Manual review pending |
