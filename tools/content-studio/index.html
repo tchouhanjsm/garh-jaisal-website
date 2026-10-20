@@ -581,7 +581,10 @@
         await refresh();
         if(edit){activatePane('manage');show('manager-result',kind+': '+(data.pagePath||'saved record')+'. '+detail,true);}
       }catch(e){show(resultId,e.message,false);}
-      finally{button.disabled=false;button.textContent=resetLabels[managedType].submit;}
+      finally{
+        button.disabled=false;
+        button.textContent=editing&&editing.type===managedType?'Save changes':resetLabels[managedType].submit;
+      }
     });
   }
   attachForm('tour-form','/api/tours','tour-result','tours');
