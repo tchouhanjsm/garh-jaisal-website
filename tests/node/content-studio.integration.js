@@ -113,7 +113,7 @@ function tourPayload(slug, status) {
 function verifyContentStudioAuthoringUi() {
   const file = path.join(ROOT, 'tools/content-studio/index.html');
   const html = fs.readFileSync(file, 'utf8');
-  const scripts = [...html.matchAll(/<script\\b[^>]*>([\\s\\S]*?)<\\/script>/gi)];
+  const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];
   assert.ok(scripts.length > 0, 'Content Studio must include its browser interaction script');
   scripts.forEach((match, index) => {
     new vm.Script(match[1], { filename: 'tools/content-studio/index.html inline script ' + (index + 1) });
