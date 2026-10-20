@@ -731,3 +731,17 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Add Playwright assertions for the arrival card, link destinations, anchors, route order and no horizontal overflow at 320, 390, 768, 1280 and 1440 CSS pixels.
 - Preserve all public URLs, metadata/schema, site-config phone/WhatsApp/Maps destinations and the current qualification for arrival assistance. Do not add fake route photography, named staff, made-up transfer fares, unsupported check-in/reception claims or an unimplemented form endpoint.
 - Acceptance gate: PHP 7.4/8.2 Site Checks, responsive asset/image review, package preflight and complete Browser E2E pass on the exact feature head. Owner visual/accessibility review remains separate. No merge or deployment is implied.
+
+
+## Sprint 52 — one-click Content Studio startup and safe local preview (2026-10-20)
+
+**Goal:** let a non-web developer start the local tour/blog/Gallery authoring screen and a PHP page preview without manually opening two terminal sessions, while making the local-only and non-deploying boundaries unmistakable.
+
+- Add an executable macOS .command launcher in tools/content-studio/. A double-click starts the local PHP preview and Content Studio, checks server readiness, opens the browser and gives readable dependency/port errors.
+- Bind both services only to 127.0.0.1. Do not install software automatically, expose a public server, stop an unrelated process, add a CMS dependency, or deploy content.
+- Keep logs in the user's Library Logs folder; closing the launcher terminal sends termination signals to the two child servers. Existing services on either selected port cause a clear error rather than being overwritten.
+- Add CI for shell syntax, executable-bit/loopback assertions and cleanup expectations. Keep launcher files outside the cPanel runtime package.
+- Update the Content Studio UI, project log and release-readiness snapshot so the entry point and true current main/CI state are visible.
+- Acceptance: PHP 7.4/8.2 site checks, responsive image/sitemap/security/publication contracts, runtime package preflight, non-deploying Staging QA, full Browser E2E and screenshot/evidence artifacts pass on the exact feature head. After merge, confirm all four workflows on the exact merge SHA.
+- This phase improves local authoring ergonomics only. It does not provide a hosted CMS, Git commit/push automation or a public content editor. Existing operator review, GitHub CI, external staging sign-off and owner deployment approval remain required.
+

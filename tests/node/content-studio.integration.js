@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { spawn } = require('node:child_process');
+const { spawn, spawnSync } = require('node:child_process');
 const vm = require('node:vm');
 
 const ROOT = path.resolve(__dirname, '../..');
@@ -111,6 +111,17 @@ function tourPayload(slug, status) {
 }
 
 function verifyContentStudioAuthoringUi() {
+  const launcherFile = path.join(ROOT, 'tools/content-studio/Start Content Studio.command');
+  assert.ok(fs.existsSync(launcherFile), 'one-click macOS launcher should be present');
+  const launcherSyntax = spawnSync('bash', ['-n', launcherFile], { encoding: 'utf8' });
+  assert.equal(launcherSyntax.status, 0, 'macOS launcher shell syntax should be valid: ' + launcherSyntax.stderr);
+  assert.ok((fs.statSync(launcherFile).mode & 0o111) !== 0, 'macOS launcher must be executable in Git');
+  const launcher = fs.readFileSync(launcherFile, 'utf8');
+  assert.match(launcher, /127\.0\.0\.1/, 'both local services must bind to loopback only');
+  assert.match(launcher, /Garh Jaisal Content Studio is ready/);
+  assert.match(launcher, /trap cleanup EXIT/, 'launcher must stop local services on exit');
+  assert.doesNotMatch(launcher, /0\.0\.0\.0/, 'launcher must not expose the local servers to the network');
+
   const file = path.join(ROOT, 'tools/content-studio/index.html');
   const html = fs.readFileSync(file, 'utf8');
   const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)];

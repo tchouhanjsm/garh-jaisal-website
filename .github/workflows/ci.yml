@@ -44,6 +44,9 @@ jobs:
       - name: Check local Content Studio JavaScript syntax
         run: node --check scripts/content-studio.js
 
+      - name: Check one-click Content Studio launcher syntax
+        run: bash -n "tools/content-studio/Start Content Studio.command"
+
       - name: Exercise Content Studio live/draft publishing workflow
         run: node tests/node/content-studio.integration.js
 
