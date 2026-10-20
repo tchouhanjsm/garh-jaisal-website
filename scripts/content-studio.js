@@ -233,6 +233,7 @@ function createPage(type, slug, record, variable) {
   const files = ensureNewSlug(slug, type);
   const sitemapPath = path.join(ROOT, 'sitemap.xml');
   const oldSitemap = fs.readFileSync(sitemapPath);
+  assertContentDirectoryChain(path.dirname(files.record), true);
   let recordCreated = false;
   let routeCreated = false;
   try {
@@ -248,6 +249,41 @@ function createPage(type, slug, record, variable) {
     if (recordCreated) { try { fs.unlinkSync(files.record); } catch (_) {} }
     try { atomicWrite(sitemapPath, oldSitemap); } catch (_) {}
     throw error;
+  }
+}
+
+function assertContentDirectoryChain(targetDirectory, createMissing = false) {
+  const root = path.resolve(CONTENT_ROOT);
+  let rootStat;
+  try { rootStat = fs.lstatSync(root); }
+  catch (error) {
+    if (error.code !== 'ENOENT' || !createMissing) throw fail(400, 'The content/ directory is missing or unavailable.');
+    try { fs.mkdirSync(root); } catch (mkdirError) {
+      if (mkdirError.code !== 'EEXIST') throw fail(400, 'Could not create the local content/ directory.');
+    }
+    try { rootStat = fs.lstatSync(root); } catch (_) { throw fail(400, 'Could not verify the local content/ directory.'); }
+  }
+  if (!rootStat.isDirectory() || rootStat.isSymbolicLink()) throw fail(400, 'The content/ root must be a real local directory.');
+
+  const relative = path.relative(root, path.resolve(targetDirectory));
+  if (relative === '..' || relative.startsWith('..' + path.sep) || path.isAbsolute(relative)) {
+    throw fail(400, 'Content directory is outside content/.');
+  }
+  let current = root;
+  for (const part of relative.split(path.sep).filter(Boolean)) {
+    current = path.join(current, part);
+    let stat;
+    try { stat = fs.lstatSync(current); }
+    catch (error) {
+      if (error.code !== 'ENOENT' || !createMissing) throw fail(400, 'Content directory is missing or unavailable: ' + path.relative(ROOT, current));
+      try { fs.mkdirSync(current); }
+      catch (mkdirError) {
+        if (mkdirError.code !== 'EEXIST') throw fail(400, 'Could not create the local content directory: ' + path.relative(ROOT, current));
+      }
+      try { stat = fs.lstatSync(current); }
+      catch (_) { throw fail(400, 'Could not verify the local content directory: ' + path.relative(ROOT, current)); }
+    }
+    if (!stat.isDirectory() || stat.isSymbolicLink()) throw fail(400, 'Content paths cannot traverse a symbolic link: ' + path.relative(ROOT, current));
   }
 }
 
@@ -683,6 +719,7 @@ function createGallery(input, existingId = null) {
   const previousManaged = existingId ? readManagedRecord('gallery', existingId) : null;
   if (previousManaged && previousManaged.record.status === 'hidden') throw fail(409, 'This record uses Hidden status. Ask the operator to review it before editing.');
   const file = previousManaged ? previousManaged.files.record : path.join(CONTENT_ROOT, 'gallery', id + '.json');
+  assertContentDirectoryChain(path.dirname(file), true);
   const previous = previousManaged ? fs.readFileSync(file) : null;
   const manifestFile = path.join(ROOT, 'scripts', 'responsive-image-assets-manifest.json');
   const originalManifest = fs.readFileSync(manifestFile);
