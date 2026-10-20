@@ -221,9 +221,210 @@ function createPage(type, slug, record, variable) {
   }
 }
 
-function createTour(input) {
+function managedPaths(type, slug) {
+  const directories = { tours: 'experiences', blogs: 'editorial', gallery: 'gallery' };
+  if (!Object.prototype.hasOwnProperty.call(directories, type)) throw fail(404, 'Unknown Content Studio content type.');
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(slug || ''))) throw fail(400, 'Invalid content identifier.');
+  const record = path.join(CONTENT_ROOT, directories[type], slug + '.json');
+  return {
+    record,
+    route: type === 'gallery' ? null : path.join(ROOT, slug + '.php'),
+    directory: path.join(CONTENT_ROOT, directories[type]),
+  };
+}
+
+function readManagedRecord(type, slug) {
+  const files = managedPaths(type, slug);
+  let stat;
+  try { stat = fs.lstatSync(files.record); }
+  catch (error) {
+    if (error.code === 'ENOENT') throw fail(404, 'This Content Studio record does not exist.');
+    throw error;
+  }
+  if (!stat.isFile() || stat.isSymbolicLink()) throw fail(400, 'Content Studio records must be regular local files.');
+  let record;
+  try { record = JSON.parse(fs.readFileSync(files.record, 'utf8')); }
+  catch (_) { throw fail(422, 'This saved record is invalid JSON. Ask the operator to repair it before making changes.'); }
+  if (!record || typeof record !== 'object' || Array.isArray(record)) throw fail(422, 'This saved record has an invalid structure.');
+  const storedId = type === 'gallery' ? record.id : record.slug;
+  if (storedId !== slug) throw fail(422, 'The saved record identifier does not match its filename.');
+  if (!['draft', 'live', 'hidden'].includes(record.status)) throw fail(422, 'The saved record has an invalid publication state.');
+  return { files, record };
+}
+
+function safeManagedRoute(route) {
+  let stat;
+  try { stat = fs.lstatSync(route); }
+  catch (error) {
+    if (error.code === 'ENOENT') throw fail(409, 'The page route is missing. Do not rewrite it automatically; ask the operator to repair the route.');
+    throw error;
+  }
+  if (!stat.isFile() || stat.isSymbolicLink()) throw fail(409, 'The page route is not a regular file and cannot be changed safely.');
+}
+
+function verifyPublishableRecord(type, record) {
+  if (type === 'tours') {
+    if (!['desert', 'city'].includes(record.category)
+      || typeof record.h1 !== 'string' || typeof record.title !== 'string'
+      || typeof record.description !== 'string' || typeof record.summary !== 'string'
+      || !Array.isArray(record.timeline) || !record.timeline.length
+      || !record.at_a_glance || typeof record.at_a_glance !== 'object'
+      || !Array.isArray(record.included) || !Array.isArray(record.not_included)) {
+      throw fail(422, 'This tour is missing required fields and cannot be made Live.');
+    }
+    imagePath(record.hero_image);
+    textField(record.hero_alt, 'Hero image alternative text', 10, 240);
+    return;
+  }
+  if (type === 'blogs') {
+    if (typeof record.h1 !== 'string' || typeof record.title !== 'string'
+      || typeof record.description !== 'string' || !Array.isArray(record.toc)
+      || !Array.isArray(record.sections) || !record.sections.length
+      || !Array.isArray(record.sources) || !record.sources.length) {
+      throw fail(422, 'This blog guide is missing required fields and cannot be made Live.');
+    }
+    imagePath(record.hero_image);
+    textField(record.hero_alt, 'Hero image alternative text', 10, 240);
+    return;
+  }
+  if (type === 'gallery') {
+    const photo = record.image;
+    if (!['hotel', 'rooms', 'desert', 'restaurant'].includes(record.category)
+      || !photo || typeof photo !== 'object'
+      || !CROPS.includes(photo.crop)) {
+      throw fail(422, 'This Gallery entry is missing required fields and cannot be made Live.');
+    }
+    imagePath(photo.src);
+    textField(photo.alt, 'Alternative text', 10, 240);
+  }
+}
+
+function listManagedContent() {
+  const items = [];
+  for (const type of ['tours', 'blogs', 'gallery']) {
+    const folder = managedPaths(type, 'content-studio-placeholder').directory;
+    if (!fs.existsSync(folder)) continue;
+    const names = fs.readdirSync(folder).filter(name => name.endsWith('.json')).sort((a, b) => a.localeCompare(b));
+    for (const name of names) {
+      const slug = name.slice(0, -5);
+      try {
+        const { record } = readManagedRecord(type, slug);
+        const photo = type === 'gallery' ? record.image : null;
+        items.push({
+          type,
+          slug,
+          status: record.status,
+          title: type === 'gallery'
+            ? String(photo.caption || photo.alt || photo.src)
+            : String(record.h1 || record.title || slug),
+          detail: type === 'gallery'
+            ? String(record.category || 'Gallery') + ' · ' + String(photo.src || '')
+            : String(record.eyebrow || (type === 'tours' ? record.category : 'Travel guide')),
+          modified: String(record.date_modified || record.date_published || ''),
+          pagePath: type === 'gallery' ? '/gallery.php#' + encodeURIComponent(record.category) : '/' + slug + '.php',
+          invalid: false,
+        });
+      } catch (error) {
+        items.push({
+          type, slug, status: 'invalid', title: name,
+          detail: String(error.message || 'This record needs operator repair.'),
+          modified: '', pagePath: '', invalid: true,
+        });
+      }
+    }
+  }
+  const rank = status => status === 'draft' ? 0 : status === 'live' ? 1 : 2;
+  items.sort((a, b) => rank(a.status) - rank(b.status)
+    || a.type.localeCompare(b.type)
+    || a.title.localeCompare(b.title));
+  return { items };
+}
+
+function readManagedContent(type, slug) {
+  const { record } = readManagedRecord(type, slug);
+  return { type, slug, record };
+}
+
+function updateManagedPage(type, slug, record) {
+  const { files, record: previous } = readManagedRecord(type, slug);
+  if (type === 'gallery') throw fail(400, 'Gallery records do not use PHP page routes.');
+  safeManagedRoute(files.route);
+  const oldRecord = fs.readFileSync(files.record);
+  const sitemapPath = path.join(ROOT, 'sitemap.xml');
+  const oldSitemap = fs.readFileSync(sitemapPath);
+  if (type === 'blogs') {
+    record.date_published = previous.date_published || record.date_published || today();
+    record.date_display = previous.date_display || displayDate(record.date_published);
+    record.date_modified = today();
+  } else {
+    record.date_modified = today();
+  }
+  try {
+    atomicWrite(files.record, JSON.stringify(record, null, 2) + '\n');
+    const sitemapMessage = runSitemap();
+    return { slug, status: record.status, pagePath: '/' + slug + '.php', sitemapMessage, updated: true };
+  } catch (error) {
+    try { atomicWrite(files.record, oldRecord); } catch (_) {}
+    try { atomicWrite(sitemapPath, oldSitemap); } catch (_) {}
+    throw error;
+  }
+}
+
+function setManagedStatus(type, slug, nextStatus) {
+  const status = statusValue(nextStatus);
+  const { files, record } = readManagedRecord(type, slug);
+  if (record.status === 'hidden') throw fail(409, 'This record uses Hidden status. Ask the operator to review it before changing publication.');
+  if (record.status === status) return { type, slug, status, message: 'No publication-state change was needed.' };
+  if (status === 'live') verifyPublishableRecord(type, record);
+  if (type !== 'gallery') safeManagedRoute(files.route);
+  const oldRecord = fs.readFileSync(files.record);
+  const sitemapPath = path.join(ROOT, 'sitemap.xml');
+  const oldSitemap = type === 'gallery' ? null : fs.readFileSync(sitemapPath);
+  record.status = status;
+  if (type !== 'gallery') record.date_modified = today();
+  try {
+    atomicWrite(files.record, JSON.stringify(record, null, 2) + '\n');
+    const sitemapMessage = type === 'gallery' ? 'Gallery publication state updated.' : runSitemap();
+    return { type, slug, status, pagePath: type === 'gallery' ? '/gallery.php' : '/' + slug + '.php', sitemapMessage };
+  } catch (error) {
+    try { atomicWrite(files.record, oldRecord); } catch (_) {}
+    if (oldSitemap) { try { atomicWrite(sitemapPath, oldSitemap); } catch (_) {} }
+    throw error;
+  }
+}
+
+function deleteManagedDraft(type, slug) {
+  const { files, record } = readManagedRecord(type, slug);
+  if (record.status !== 'draft') throw fail(409, 'Only Draft content can be deleted. Set it to Draft first, then review the removal.');
+  if (type !== 'gallery') safeManagedRoute(files.route);
+  const oldRecord = fs.readFileSync(files.record);
+  const oldRoute = type === 'gallery' ? null : fs.readFileSync(files.route);
+  const sitemapPath = path.join(ROOT, 'sitemap.xml');
+  const oldSitemap = type === 'gallery' ? null : fs.readFileSync(sitemapPath);
+  let routeRemoved = false;
+  let recordRemoved = false;
+  try {
+    if (type !== 'gallery') {
+      fs.unlinkSync(files.route);
+      routeRemoved = true;
+    }
+    fs.unlinkSync(files.record);
+    recordRemoved = true;
+    if (type !== 'gallery') runSitemap();
+    return { type, slug, deleted: true, message: 'Draft removed from the local working tree. Source images are retained.' };
+  } catch (error) {
+    if (recordRemoved) { try { atomicWrite(files.record, oldRecord); } catch (_) {} }
+    if (routeRemoved && oldRoute) { try { atomicWrite(files.route, oldRoute); } catch (_) {} }
+    if (oldSitemap) { try { atomicWrite(sitemapPath, oldSitemap); } catch (_) {} }
+    throw error;
+  }
+}
+
+function createTour(input, existingSlug = null) {
   const h1 = textField(input.title, 'Tour name', 3, 120);
-  const slug = slugify(input.slug || h1);
+  const requestedSlug = slugify(input.slug || h1);
+  const slug = existingSlug || requestedSlug;
+  if (existingSlug && input.slug && requestedSlug !== existingSlug) throw fail(400, 'The URL slug cannot be changed in the editor because existing links may point to it.');
   const category = String(input.category || '');
   if (!['desert', 'city'].includes(category)) throw fail(400, 'Choose a desert or city tour category.');
   const durationType = String(input.durationType || '');
@@ -271,7 +472,8 @@ function createTour(input) {
     related: category === 'city' ? ['half-day-jaisalmer-tour', 'full-day-jaisalmer-tour'] : ['sleep-under-the-stars', 'swiss-tent-safari'],
     date_modified: date,
   };
-  return createPage('experiences', slug, record, 'experienceSlug');
+  updateImageManifest(heroImage);
+  return existingSlug ? updateManagedPage('tours', slug, record) : createPage('experiences', slug, record, 'experienceSlug');
 }
 
 function parseArticle(value) {
@@ -327,9 +529,11 @@ function parseSources(value) {
   });
 }
 
-function createBlog(input) {
+function createBlog(input, existingSlug = null) {
   const h1 = textField(input.h1, 'Article heading', 8, 160);
-  const slug = slugify(input.slug || h1);
+  const requestedSlug = slugify(input.slug || h1);
+  const slug = existingSlug || requestedSlug;
+  if (existingSlug && input.slug && requestedSlug !== existingSlug) throw fail(400, 'The URL slug cannot be changed in the editor because existing links may point to it.');
   const date = today();
   const eyebrow = textField(input.eyebrow || 'Jaisalmer travel guide', 'Guide category', 2, 80);
   const description = textField(input.description, 'SEO description', 40, 300);
@@ -360,16 +564,18 @@ function createBlog(input) {
     cta_secondary_label: 'Contact the hotel', cta_secondary_href: 'contact.php',
   };
   record.toc = record.sections.map(item => ({ id: item.id, label: item.heading }));
-  return createPage('editorial', slug, record, 'editorialGuideSlug');
+  updateImageManifest(heroImage);
+  return existingSlug ? updateManagedPage('blogs', slug, record) : createPage('editorial', slug, record, 'editorialGuideSlug');
 }
 
-function existingGallerySources() {
+function existingGallerySources(excludeId = null) {
   const sources = new Set();
   const php = fs.readFileSync(path.join(ROOT, 'include', 'gallery-data.php'), 'utf8');
   for (const match of php.matchAll(/'src'\s*=>\s*'([^']+)'/g)) sources.add(match[1]);
   const directory = path.join(CONTENT_ROOT, 'gallery');
   if (fs.existsSync(directory)) {
     for (const name of fs.readdirSync(directory).filter(name => name.endsWith('.json'))) {
+      if (excludeId && name === excludeId + '.json') continue;
       const entry = JSON.parse(fs.readFileSync(path.join(directory, name), 'utf8'));
       if (entry && entry.image && typeof entry.image.src === 'string') sources.add(entry.image.src);
     }
@@ -377,22 +583,31 @@ function existingGallerySources() {
   return sources;
 }
 
-function createGallery(input) {
+function createGallery(input, existingId = null) {
   const category = String(input.category || '');
   if (!CATEGORIES.includes(category)) throw fail(400, 'Choose one of the Gallery categories.');
   const src = imagePath(input.src);
-  if (existingGallerySources().has(src)) throw fail(409, 'That image is already in the Gallery.');
+  if (existingGallerySources(existingId).has(src)) throw fail(409, 'That image is already in the Gallery.');
   const alt = textField(input.alt, 'Alternative text', 10, 240);
   const caption = String(input.caption || alt).trim().slice(0, 240);
   const crop = String(input.crop || 'landscape');
   if (!CROPS.includes(crop)) throw fail(400, 'Choose a supported image crop.');
   const status = statusValue(input.status);
-  const id = slugify(category + '-' + path.parse(src).name + '-' + crypto.randomBytes(3).toString('hex'));
+  const id = existingId || slugify(category + '-' + path.parse(src).name + '-' + crypto.randomBytes(3).toString('hex'));
   const record = { id, category, status, image: { src, alt, caption, crop } };
-  atomicWrite(path.join(CONTENT_ROOT, 'gallery', id + '.json'), JSON.stringify(record, null, 2) + '\n');
+  const file = existingId ? readManagedRecord('gallery', existingId).files.record : path.join(CONTENT_ROOT, 'gallery', id + '.json');
+  const previous = existingId ? fs.readFileSync(file) : null;
+  updateImageManifest(src);
+  try {
+    atomicWrite(file, JSON.stringify(record, null, 2) + '\n');
+  } catch (error) {
+    if (previous) { try { atomicWrite(file, previous); } catch (_) {} }
+    throw error;
+  }
   return {
     id, status, category, src, pagePath: '/gallery.php',
-    message: status === 'live' ? 'Photo added to the local Gallery data. Review it in staging before production.' : 'Draft photo saved; it will not appear in the public Gallery yet.',
+    message: existingId ? 'Gallery entry updated in local files.' : status === 'live' ? 'Photo added to the local Gallery data. Review it in staging before production.' : 'Draft photo saved; it will not appear in the public Gallery yet.',
+    updated: Boolean(existingId),
   };
 }
 
@@ -461,6 +676,26 @@ const server = http.createServer(async (req, res) => {
       return respond(res, 200, 'text/html; charset=utf-8', fs.readFileSync(UI_PATH));
     }
     if (req.method === 'GET' && url.pathname === '/api/status') return respondJson(res, 200, statusPayload());
+    if (req.method === 'GET' && url.pathname === '/api/content') return respondJson(res, 200, listManagedContent());
+    const managedMatch = url.pathname.match(/^\/api\/content\/(tours|blogs|gallery)\/([a-z0-9]+(?:-[a-z0-9]+)*)(\/status)?$/);
+    if (managedMatch) {
+      const [, type, slug, statusPath] = managedMatch;
+      if (req.method === 'GET' && !statusPath) return respondJson(res, 200, readManagedContent(type, slug));
+      if (req.method === 'PUT' && !statusPath) {
+        const input = await readJson(req);
+        const result = type === 'tours'
+          ? createTour(input, slug)
+          : type === 'blogs'
+            ? createBlog(input, slug)
+            : createGallery(input, slug);
+        return respondJson(res, 200, result);
+      }
+      if (req.method === 'PATCH' && statusPath) {
+        const input = await readJson(req);
+        return respondJson(res, 200, setManagedStatus(type, slug, input.status));
+      }
+      if (req.method === 'DELETE' && !statusPath) return respondJson(res, 200, deleteManagedDraft(type, slug));
+    }
     if (req.method === 'POST' && url.pathname === '/api/upload') return respondJson(res, 201, await upload(req, url));
     if (req.method === 'POST' && url.pathname === '/api/tours') return respondJson(res, 201, createTour(await readJson(req)));
     if (req.method === 'POST' && url.pathname === '/api/blogs') return respondJson(res, 201, createBlog(await readJson(req)));
