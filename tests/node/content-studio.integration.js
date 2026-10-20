@@ -279,13 +279,13 @@ async function main() {
   const draftTourBytes = fs.readFileSync(recordFiles[1]);
   const hiddenTour = JSON.parse(draftTourBytes.toString('utf8'));
   hiddenTour.status = 'hidden';
-  fs.writeFileSync(recordFiles[1], JSON.stringify(hiddenTour, null, 2) + '\\n');
+  fs.writeFileSync(recordFiles[1], JSON.stringify(hiddenTour, null, 2) + '\n');
   result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1], 'PUT', updatedDraftTour);
   assert.equal(result.response.status, 409, 'a Hidden record must not be edited through the manager');
   fs.writeFileSync(recordFiles[1], draftTourBytes);
 
   const generatedDraftRoute = fs.readFileSync(routeFiles[1]);
-  fs.writeFileSync(routeFiles[1], Buffer.concat([generatedDraftRoute, Buffer.from('\\n// operator change\\n')]));
+  fs.writeFileSync(routeFiles[1], Buffer.concat([generatedDraftRoute, Buffer.from('\n// operator change\n')]));
   result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1] + '/status', 'PATCH', { status: 'live' });
   assert.equal(result.response.status, 409, 'publishing must not modify a route wrapper changed outside Content Studio');
   fs.writeFileSync(routeFiles[1], generatedDraftRoute);
