@@ -269,9 +269,6 @@ async function main() {
   response = await fetch(PHP_URL + '/' + slugs[1] + '.php');
   html = await response.text();
   assert.ok(html.includes('Updated Content Studio Draft Test Tour'), 'edited copy should render through the existing page');
-  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1], 'DELETE');
-  assert.equal(result.response.status, 409, 'a live record must never be deleted directly');
-
   result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1] + '/status', 'PATCH', { status: 'live' });
   assert.equal(result.response.status, 200, 'a valid draft should be publishable locally');
   sitemap = fs.readFileSync(sitemapPath, 'utf8');
@@ -279,6 +276,8 @@ async function main() {
   response = await fetch(PHP_URL + '/' + slugs[1] + '.php');
   html = await response.text();
   assert.doesNotMatch(html, /noindex,follow/, 'published tour should no longer be noindex');
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1], 'DELETE');
+  assert.equal(result.response.status, 409, 'a live record must never be deleted directly');
 
   result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1] + '/status', 'PATCH', { status: 'draft' });
   assert.equal(result.response.status, 200, 'a live record should be safely unpublishable');
