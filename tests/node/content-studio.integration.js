@@ -131,9 +131,14 @@ function verifyContentStudioAuthoringUi() {
   scripts.forEach((match, index) => {
     new vm.Script(match[1], { filename: 'tools/content-studio/index.html inline script ' + (index + 1) });
   });
-  for (const id of ['blog-section-list', 'tour-step-list', 'tour-faq-list', 'blog-source-list']) {
+  for (const id of ['blog-section-list', 'tour-step-list', 'tour-faq-list', 'blog-source-list', 'managed-content-list', 'refresh-content']) {
     assert.ok(html.includes('id="' + id + '"'), 'guided authoring control should exist: ' + id);
   }
+  assert.ok(html.includes('id="tab-manage"'), 'saved content manager tab should exist');
+  assert.ok(html.includes('data-record-key='), 'manager should render a stable per-record identifier');
+  assert.ok(html.includes("const method=edit?'PUT':'POST'"), 'the authoring forms should save edits back to the selected record');
+  assert.ok(html.includes("method:'PATCH'"), 'the manager should change publication state explicitly');
+  assert.ok(html.includes('Delete this Draft from the local working tree?'), 'deletion must require a confirmation');
   assert.ok(html.includes('Four steps to add content'), 'the editor should explain the workflow in plain language');
   assert.ok(html.includes('Live in local files — still not public'), 'the UI must state that saving does not publish to production');
   process.stdout.write('PASS Content Studio UI script syntax and nontechnical guided authoring controls.\\n');
