@@ -9,6 +9,12 @@ $catalogueDefinitions = require __DIR__ . '/include/catalogue-data.php';
 $experiences = require __DIR__ . '/include/experience-data.php';
 $rooms = require __DIR__ . '/include/rooms-data.php';
 $products = [];
+$listedExperienceSlugs = [];
+foreach ($catalogueDefinitions as $definition) {
+    if (($definition['source'] ?? '') === 'experience' && is_string($definition['slug'] ?? null)) {
+        $listedExperienceSlugs[$definition['slug']] = true;
+    }
+}
 
 foreach ($catalogueDefinitions as $definition) {
     $source = (string) ($definition['source'] ?? '');
@@ -41,6 +47,36 @@ foreach ($catalogueDefinitions as $definition) {
     }
 
     $message = 'Hello, I would like to enquire about ' . (string) ($product['title'] ?? 'this option')
+        . '. Please share the current price, availability and arrangements for my travel dates.';
+    $product['whatsapp_url'] = $whatsappUrl . '?text=' . rawurlencode($message);
+    $products[] = $product;
+}
+
+// New live non-hub experiences appear automatically. Existing reviewed catalogue
+// entries preserve their order and are not duplicated.
+foreach ($experiences as $slug => $experience) {
+    if (
+        !is_array($experience)
+        || ($experience['status'] ?? 'live') !== 'live'
+        || ($experience['duration_type'] ?? 'hub') === 'hub'
+        || isset($listedExperienceSlugs[$slug])
+        || !is_file(__DIR__ . '/' . $slug . '.php')
+    ) {
+        continue;
+    }
+    $product = [
+        'id' => $slug,
+        'source' => 'experience',
+        'slug' => $slug,
+        'category' => ($experience['category'] ?? '') === 'city' ? 'Guided sightseeing' : 'Desert experience',
+        'title' => (string) ($experience['h1'] ?? $experience['title'] ?? $slug),
+        'description' => (string) ($experience['summary'] ?? $experience['intro'] ?? $experience['description'] ?? ''),
+        'image' => (string) ($experience['hero_image'] ?? ''),
+        'alt' => (string) ($experience['hero_alt'] ?? ''),
+        'url' => $slug . '.php',
+        'duration' => (string) ($experience['at_a_glance']['Duration'] ?? ''),
+    ];
+    $message = 'Hello, I would like to enquire about ' . $product['title']
         . '. Please share the current price, availability and arrangements for my travel dates.';
     $product['whatsapp_url'] = $whatsappUrl . '?text=' . rawurlencode($message);
     $products[] = $product;

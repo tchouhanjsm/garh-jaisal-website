@@ -57,7 +57,17 @@ $staticPages = [
 
 $urls = [];
 foreach ($staticPages as $page) {
-    $urls[$page['path']] = $page['priority'];
+    $path = (string) $page['path'];
+    $routeSlug = $path === '/' ? '' : basename($path, '.php');
+    // A guide present in the static legacy allowlist is still governed by its registry status.
+    if (
+        $routeSlug !== ''
+        && isset($editorialGuides[$routeSlug])
+        && ($editorialGuides[$routeSlug]['status'] ?? 'live') !== 'live'
+    ) {
+        continue;
+    }
+    $urls[$path] = $page['priority'];
 }
 
 foreach ($experiences as $slug => $experience) {
@@ -94,6 +104,32 @@ foreach ($experiences as $slug => $experience) {
     ];
     $priority = $existingPriorities[$slug] ?? '0.7';
     $urls['/' . $slug . '.php'] = $priority;
+}
+
+// New live editorial guides are included automatically from the same registry
+// that renders their pages and archive cards.
+foreach ($editorialGuides as $slug => $guide) {
+    $status = $guide['status'] ?? 'live';
+    if (!in_array($status, ['live', 'draft', 'hidden'], true)) {
+        fwrite(STDERR, 'ERROR invalid editorial publication status: ' . (string) $slug . PHP_EOL);
+        exit(1);
+    }
+    if (!is_string($slug) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $slug)) {
+        fwrite(STDERR, "ERROR invalid editorial slug in editorial-guides-data.php" . PHP_EOL);
+        exit(1);
+    }
+    if (($guide['slug'] ?? null) !== $slug) {
+        fwrite(STDERR, 'ERROR editorial key/slug mismatch: ' . $slug . PHP_EOL);
+        exit(1);
+    }
+    if ($status !== 'live') {
+        continue;
+    }
+    if (!is_file($root . '/' . $slug . '.php')) {
+        fwrite(STDERR, 'ERROR live editorial guide has no page file: ' . $slug . '.php' . PHP_EOL);
+        exit(1);
+    }
+    $urls['/' . $slug . '.php'] = '0.7';
 }
 
 $lastmodForSource = static function ($relativePaths) use ($root) {
@@ -141,7 +177,44 @@ foreach ($urls as $path => $priority) {
     if (array_key_exists($routeSlug, $editorialGuides)) {
         $sourceFiles[] = 'include/editorial-guides-data.php';
     }
-    $lastmod = $lastmodForSource($sourceFiles);
+    if ($path === '/blog.php') {
+        $sourceFiles[] = 'include/editorial-guides-data.php';
+    } elseif ($path === '/gallery.php') {
+        $sourceFiles[] = 'include/gallery-data.php';
+    } elseif ($path === '/pack.php' || $path === '/catalogue.php') {
+        $sourceFiles[] = 'include/experience-data.php';
+    }
+
+    // Local Content Studio records have explicit dates so a generated sitemap is
+    // deterministic before their first Git commit.
+    $contentRecordPath = null;
+    if ($routeSlug !== '') {
+        foreach ([
+            'content/experiences/' . $routeSlug . '.json',
+            'content/editorial/' . $routeSlug . '.json',
+        ] as $candidate) {
+            if (is_file($root . '/' . $candidate) && !is_link($root . '/' . $candidate)) {
+                $contentRecordPath = $root . '/' . $candidate;
+                break;
+            }
+        }
+    }
+    $lastmod = null;
+    if ($contentRecordPath !== null) {
+        $contentRecord = json_decode((string) file_get_contents($contentRecordPath), true);
+        $contentDate = is_array($contentRecord)
+            ? (string) ($contentRecord['date_modified'] ?? $contentRecord['date_published'] ?? '')
+            : '';
+        if (
+            preg_match('/^\d{4}-\d{2}-\d{2}$/D', $contentDate)
+            && checkdate((int) substr($contentDate, 5, 2), (int) substr($contentDate, 8, 2), (int) substr($contentDate, 0, 4))
+        ) {
+            $lastmod = $contentDate;
+        }
+    }
+    if ($lastmod === null) {
+        $lastmod = $lastmodForSource($sourceFiles);
+    }
     $loc = htmlspecialchars($siteUrl . ($path === '/' ? '/' : $path), ENT_XML1 | ENT_QUOTES, 'UTF-8');
     $xml .= '  <url><loc>' . $loc . '</loc><lastmod>' . $lastmod . '</lastmod><priority>' . $priority . "</priority></url>\n";
 }

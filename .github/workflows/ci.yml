@@ -36,6 +36,14 @@ jobs:
       - name: Show PHP version
         run: php --version
 
+      - name: Set up Node.js for local Content Studio checks
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check local Content Studio JavaScript syntax
+        run: node --check scripts/content-studio.js
+
       - name: Lint PHP files
         shell: bash
         run: |
@@ -51,6 +59,9 @@ jobs:
 
       - name: Verify experience publication boundaries
         run: php scripts/check-experience-publication.php
+
+      - name: Verify Content Studio data overlays and publication states
+        run: php tests/php/content-studio-registry.php
 
       - name: Verify experience gallery assets
         run: php tests/php/experience-gallery-assets.php

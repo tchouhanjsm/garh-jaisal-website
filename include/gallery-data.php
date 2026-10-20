@@ -4,7 +4,7 @@
  * Keep the full owner-provided source library in the experience registry;
  * this is the deliberately smaller 36-photo introduction to those assets.
  */
-return [
+$gallerySections = [
     'hotel' => [
         'eyebrow' => 'Hotel',
         'title' => 'The haveli',
@@ -76,3 +76,44 @@ return [
         ],
     ],
 ];
+
+$studioRoot = dirname(__DIR__) . '/content/gallery';
+$studioFiles = is_dir($studioRoot) ? (glob($studioRoot . '/*.json') ?: []) : [];
+sort($studioFiles, SORT_STRING);
+$allowedCategories = ['hotel', 'rooms', 'desert', 'restaurant'];
+$allowedCrops = ['arch', 'landscape', 'portrait', 'standard'];
+$usedGallerySources = [];
+foreach ($gallerySections as $section) foreach (($section['images'] ?? []) as $photo) {
+    if (is_array($photo) && isset($photo['src']) && is_string($photo['src'])) $usedGallerySources[$photo['src']] = true;
+}
+foreach ($studioFiles as $studioFile) {
+    if (is_link($studioFile) || !is_file($studioFile)) throw new RuntimeException('Unsafe Content Studio gallery record: ' . basename($studioFile));
+    $record = json_decode((string) file_get_contents($studioFile), true);
+    $id = basename($studioFile, '.json');
+    $category = is_array($record) ? (string) ($record['category'] ?? '') : '';
+    $status = is_array($record) ? (string) ($record['status'] ?? '') : '';
+    $photo = is_array($record) ? ($record['image'] ?? null) : null;
+    $src = is_array($photo) ? (string) ($photo['src'] ?? '') : '';
+    $alt = is_array($photo) ? trim((string) ($photo['alt'] ?? '')) : '';
+    $crop = is_array($photo) ? (string) ($photo['crop'] ?? '') : '';
+    if (
+        !is_array($record) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $id)
+        || ($record['id'] ?? null) !== $id || !in_array($category, $allowedCategories, true)
+        || !in_array($status, ['live', 'draft', 'hidden'], true) || !is_array($photo)
+        || !preg_match('~^img/[A-Za-z0-9._/-]+\.(?:avif|jpe?g|png|webp)$~iD', $src)
+        || strpos($src, '..') !== false || strpos($src, chr(92)) !== false || $alt === ''
+        || !in_array($crop, $allowedCrops, true)
+    ) throw new RuntimeException('Invalid Content Studio gallery record: ' . $id);
+    $imagePath = dirname(__DIR__) . '/' . $src;
+    if (is_link($imagePath) || !is_file($imagePath)) throw new RuntimeException('Missing or unsafe Content Studio gallery image: ' . $src);
+    if (isset($usedGallerySources[$src])) throw new RuntimeException('Duplicate Gallery source path: ' . $src);
+    $usedGallerySources[$src] = true;
+    if ($status !== 'live') continue;
+    $gallerySections[$category]['images'][] = [
+        'src' => $src, 'alt' => $alt,
+        'caption' => trim((string) ($photo['caption'] ?? '')) !== '' ? trim((string) $photo['caption']) : $alt,
+        'crop' => $crop,
+    ];
+}
+return $gallerySections;
+

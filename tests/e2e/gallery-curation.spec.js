@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const expectedCounts = {
+const minimumCounts = {
   hotel: 9,
   rooms: 12,
   desert: 10,
@@ -20,13 +20,13 @@ test('Gallery keeps all curated photos available when JavaScript is disabled', a
   expect(response).not.toBeNull();
   expect(response.status()).toBe(200);
   await expect(page.getByRole('heading', { level: 1, name: 'See Garh Jaisal Haveli.' })).toBeVisible();
-  await expect(page.locator('[data-gallery-open]')).toHaveCount(36);
-  await expect(page.locator('[data-gallery-open]:visible')).toHaveCount(36);
+  expect(await page.locator('[data-gallery-open]').count()).toBeGreaterThanOrEqual(36);
+  expect(await page.locator('[data-gallery-open]:visible').count()).toBeGreaterThanOrEqual(36);
   await expect(page.locator('.gallery-filters')).toBeHidden();
   await expect(page.locator('[data-gallery-more]').first()).toBeHidden();
 
-  for (const [category, count] of Object.entries(expectedCounts)) {
-    await expect(page.locator('[data-gallery-category="' + category + '"] [data-gallery-open]')).toHaveCount(count);
+  for (const [category, minimum] of Object.entries(minimumCounts)) {
+    expect(await page.locator('[data-gallery-category="' + category + '"] [data-gallery-open]').count()).toBeGreaterThanOrEqual(minimum);
   }
   await context.close();
 });
@@ -37,10 +37,12 @@ test('Gallery filters, six-photo reveal and keyboard-operable lightbox stay cohe
   expect(response).not.toBeNull();
   expect(response.status()).toBe(200);
   await expect(page.locator('.gallery-filters')).toBeVisible();
-  await expect(page.locator('[data-gallery-open]')).toHaveCount(36);
+  expect(await page.locator('[data-gallery-open]').count()).toBeGreaterThanOrEqual(36);
 
-  for (const [category, count] of Object.entries(expectedCounts)) {
+  for (const [category, minimum] of Object.entries(minimumCounts)) {
     const section = page.locator('[data-gallery-category="' + category + '"]');
+    const count = await section.locator('[data-gallery-open]').count();
+    expect(count).toBeGreaterThanOrEqual(minimum);
     await expect(section.locator('.gallery-item:visible')).toHaveCount(Math.min(6, count));
     await expect(section.locator('[data-gallery-count]')).toHaveText('Showing ' + Math.min(6, count) + ' of ' + count + ' curated photos.');
     const more = section.locator('[data-gallery-more]');

@@ -5,6 +5,7 @@ $siteUrl = rtrim($siteConfig['site_url'], '/');
 $pageTitle = 'Jaisalmer Travel Guides | Garh Jaisal Haveli';
 $pageDescription = 'Explore practical Jaisalmer travel guides for the Fort, desert safaris, 2- and 3-day itineraries, honeymoon planning and arrival at Garh Jaisal Haveli.';
 $canonical = $siteUrl . '/blog.php';
+$editorialGuides = require __DIR__ . '/include/editorial-guides-data.php';
 $buildResponsivePreload = static function ($imageStem, $sizes, $fallback) {
     $srcset = [];
     foreach ([480, 800, 1200] as $candidateWidth) {
@@ -79,54 +80,78 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell">
       <div class="section-head"><div><p class="eyebrow">Start with the useful stuff</p><h2>Guides written around an actual stay.</h2></div><p>These guides use the hotel's current guest information and are designed to answer practical questions before you arrive. Time-sensitive details should always be confirmed for your travel date.</p></div>
       <div class="blog-grid">
-        <article class="blog-card blog-card--featured"><a href="jaisalmer-fort-guide.php"><div class="blog-card-image"><img src="img/j7.jpg" <?= gj_image_dimension_attributes('img/j7.jpg', '(max-width: 900px) 100vw, 60vw') ?> alt="Jaisalmer Fort and a public courtyard from street level" loading="eager" decoding="async"></div><div class="blog-card-body"><p class="blog-card-meta">Jaisalmer Fort</p><h2>Jaisalmer Fort Guide</h2><p>Arrival, walking inside the Fort, guided sightseeing, rooms, rooftop dining and combining the Fort with the desert.</p><span class="text-link">Read the guide →</span></div></a></article>
-        <article class="blog-card"><a href="desert-safari-guide.php"><div class="blog-card-image"><img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="Camel riders travelling over dunes near Jaisalmer" loading="lazy"></div><div class="blog-card-body"><p class="blog-card-meta">Desert safari</p><h2>How to Choose a Jaisalmer Desert Safari</h2><p>Compare sunset, cultural and overnight options by time, camel ride and sleeping arrangement.</p><span class="text-link">Read the guide →</span></div></a></article>
-        <article class="blog-card"><a href="jaisalmer-2-day-itinerary.php"><div class="blog-card-image"><img src="img/1.webp" <?= gj_image_dimension_attributes('img/1.webp', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="Panoramic view across Jaisalmer&#x27;s sandstone city" loading="lazy"></div><div class="blog-card-body"><p class="blog-card-meta">Itinerary</p><h2>Jaisalmer 2-Day Itinerary</h2><p>A practical plan for combining the Fort, guided sightseeing, rooftop dining and a desert experience.</p><span class="text-link">See the itinerary →</span></div></a></article>
-        <article class="blog-card"><a href="jaisalmer-3-day-itinerary.php"><div class="blog-card-image"><img src="img/s4.jpg" <?= gj_image_dimension_attributes('img/s4.jpg', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="Jaisalmer&#x27;s old city illuminated after dark" loading="lazy"></div><div class="blog-card-body"><p class="blog-card-meta">Three-day itinerary</p><h2>Jaisalmer in 3 Days: Fort, Heritage &amp; Desert</h2><p>A flexible three-day plan with a Fort stay, guided heritage sightseeing and a choice of same-evening or overnight desert experience.</p><span class="text-link">Explore the 3-day plan →</span></div></a></article>
-        <article class="blog-card"><a href="jaisalmer-honeymoon-guide.php"><div class="blog-card-image"><img src="img/big6.jpg" <?= gj_image_dimension_attributes('img/big6.jpg', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="Rooftop dining terrace at a sandstone heritage hotel" loading="lazy"></div><div class="blog-card-body"><p class="blog-card-meta">Couples &amp; honeymoon</p><h2>Jaisalmer Honeymoon Guide</h2><p>Plan a heritage stay, ask about rooftop dining and choose a desert experience without assuming everything is one fixed package.</p><span class="text-link">Plan a couples’ escape →</span></div></a></article>
-        <article class="blog-card"><a href="book-rooms-in-jaisalmer.php"><div class="blog-card-body"><p class="blog-card-meta">Staying inside the Fort</p><h2>Staying inside Jaisalmer Fort</h2><p>The last part of the journey is on foot, and a room, a rooftop meal and a desert night can fit together into one stay.</p><span class="text-link">Read the stay guide →</span></div></a></article>
-        <article class="blog-card">
-          <a href="best-time-to-visit-jaisalmer.php">
-            <div class="blog-card-image"><img src="img/6.webp" <?= gj_image_dimension_attributes('img/6.webp', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="Rooftop seating with views over Jaisalmer" loading="lazy"></div>
-            <div class="blog-card-body"><p class="blog-card-meta">When to visit</p><h2>Best Time to Visit Jaisalmer</h2><p>Compare seasons, outdoor comfort and the details to check before settling on travel dates.</p><span class="text-link">Choose your season →</span></div>
-          </a>
-        </article>
-        <article class="blog-card">
-          <a href="how-to-reach-jaisalmer.php">
-            <div class="blog-card-image"><img src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="View over Jaisalmer&#x27;s historic city from the fort edge" loading="lazy"></div>
-            <div class="blog-card-body"><p class="blog-card-meta">Arrival guide</p><h2>How to Reach Jaisalmer</h2><p>Plan the air, rail or road journey, then prepare for the final walk inside Jaisalmer Fort.</p><span class="text-link">Plan your arrival →</span></div>
-          </a>
-        </article>
-        <article class="blog-card">
-          <a href="jaisalmer-desert-safari-packing-list.php">
-            <div class="blog-card-image"><img src="img/desert10.jpg" <?= gj_image_dimension_attributes('img/desert10.jpg', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="Jeep crossing open sand on a desert route" loading="lazy"></div>
-            <div class="blog-card-body"><p class="blog-card-meta">Desert checklist</p><h2>What to Pack for a Desert Safari</h2><p>A practical checklist for clothing, footwear, personal essentials and what to confirm for an overnight stay.</p><span class="text-link">Prepare for the desert →</span></div>
-          </a>
-        </article>
-        <article class="blog-card">
-          <a href="jaisalmer-havelis-guide.php">
-            <div class="blog-card-image"><img src="img/j5.jpg" <?= gj_image_dimension_attributes('img/j5.jpg', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="Intricate sandstone balconies on a Jaisalmer haveli" loading="lazy"></div>
-            <div class="blog-card-body"><p class="blog-card-meta">Architecture</p><h2>Jaisalmer Havelis: Sandstone Architecture</h2><p>Read the facades, notice the craftsmanship and plan a respectful heritage walk.</p><span class="text-link">Explore the havelis →</span></div>
-          </a>
-        </article>
-        <article class="blog-card">
-          <a href="jaisalmer-food-guide.php">
-            <div class="blog-card-image"><img src="img/Desert_Camp/camp_dinner.jpeg" <?= gj_image_dimension_attributes('img/Desert_Camp/camp_dinner.jpeg', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="A meal spread served at a desert camp near Jaisalmer" loading="lazy"></div>
-            <div class="blog-card-body"><p class="blog-card-meta">Food and culture</p><h2>A Food Lover’s Guide to Jaisalmer</h2><p>Recognise regional dishes and learn what to ask before ordering or choosing a menu.</p><span class="text-link">Explore Rajasthani food →</span></div>
-          </a>
-        </article>
-        <article class="blog-card">
-          <a href="jaisalmer-beyond-the-fort-guide.php">
-            <div class="blog-card-image"><img src="img/j8.jpg" <?= gj_image_dimension_attributes('img/j8.jpg', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="Heritage buildings beside the water near Jaisalmer" loading="lazy"></div>
-            <div class="blog-card-body"><p class="blog-card-meta">Places and day trips</p><h2>Beyond Jaisalmer Fort</h2><p>Consider Gadisar Lake, Bada Bagh and wider heritage landscapes without overloading the day.</p><span class="text-link">Explore beyond the Fort →</span></div>
-          </a>
-        </article>
-        <article class="blog-card">
-          <a href="jaisalmer-markets-and-crafts-guide.php">
-            <div class="blog-card-image"><img src="img/j9.jpg" <?= gj_image_dimension_attributes('img/j9.jpg', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="Colourful traditional puppets at a Jaisalmer market" loading="lazy"></div>
-            <div class="blog-card-body"><p class="blog-card-meta">Markets and crafts</p><h2>Jaisalmer Markets and Crafts</h2><p>Explore textiles, embroidery, leatherwork and jewellery with practical provenance questions.</p><span class="text-link">Discover local markets →</span></div>
-          </a>
-        </article>
+        <?php
+        $defaultArchiveTitles = [
+            'jaisalmer-fort-guide' => 'Jaisalmer Fort Guide',
+            'desert-safari-guide' => 'How to Choose a Jaisalmer Desert Safari',
+            'jaisalmer-2-day-itinerary' => 'Jaisalmer 2-Day Itinerary',
+            'jaisalmer-3-day-itinerary' => 'Jaisalmer in 3 Days: Fort, Heritage & Desert',
+            'jaisalmer-honeymoon-guide' => 'Jaisalmer Honeymoon Guide',
+            'best-time-to-visit-jaisalmer' => 'Best Time to Visit Jaisalmer',
+            'how-to-reach-jaisalmer' => 'How to Reach Jaisalmer',
+            'jaisalmer-desert-safari-packing-list' => 'What to Pack for a Desert Safari',
+            'jaisalmer-havelis-guide' => 'Jaisalmer Havelis: Sandstone Architecture',
+            'jaisalmer-food-guide' => 'A Food Lover’s Guide to Jaisalmer',
+            'jaisalmer-beyond-the-fort-guide' => 'Beyond Jaisalmer Fort',
+            'jaisalmer-markets-and-crafts-guide' => 'Jaisalmer Markets and Crafts',
+        ];
+        $defaultArchiveImages = [
+            'jaisalmer-fort-guide' => 'img/j7.jpg',
+            'desert-safari-guide' => 'img/desert3.jpg',
+            'jaisalmer-2-day-itinerary' => 'img/1.webp',
+            'jaisalmer-3-day-itinerary' => 'img/s4.jpg',
+            'jaisalmer-honeymoon-guide' => 'img/big6.jpg',
+            'best-time-to-visit-jaisalmer' => 'img/6.webp',
+            'how-to-reach-jaisalmer' => 'img/jcity.jpg',
+            'jaisalmer-desert-safari-packing-list' => 'img/desert10.jpg',
+            'jaisalmer-havelis-guide' => 'img/j5.jpg',
+            'jaisalmer-food-guide' => 'img/Desert_Camp/camp_dinner.jpeg',
+            'jaisalmer-beyond-the-fort-guide' => 'img/j8.jpg',
+            'jaisalmer-markets-and-crafts-guide' => 'img/j9.jpg',
+        ];
+        $defaultArchiveImageAlts = [
+            'jaisalmer-fort-guide' => 'Jaisalmer Fort and a public courtyard from street level',
+            'desert-safari-guide' => 'Camel riders travelling over dunes near Jaisalmer',
+            'jaisalmer-2-day-itinerary' => 'Panoramic view across Jaisalmer’s sandstone city',
+            'jaisalmer-3-day-itinerary' => 'Jaisalmer’s old city illuminated after dark',
+            'jaisalmer-honeymoon-guide' => 'Rooftop dining terrace at a sandstone heritage hotel',
+            'best-time-to-visit-jaisalmer' => 'Rooftop seating with views over Jaisalmer',
+            'how-to-reach-jaisalmer' => 'View over Jaisalmer’s historic city from the fort edge',
+            'jaisalmer-desert-safari-packing-list' => 'Jeep crossing open sand on a desert route',
+            'jaisalmer-havelis-guide' => 'Intricate sandstone balconies on a Jaisalmer haveli',
+            'jaisalmer-food-guide' => 'A meal spread served at a desert camp near Jaisalmer',
+            'jaisalmer-beyond-the-fort-guide' => 'Heritage buildings beside the water near Jaisalmer',
+            'jaisalmer-markets-and-crafts-guide' => 'Colourful traditional puppets at a Jaisalmer market',
+        ];
+        $archiveGuides = array_filter($editorialGuides, static function ($guide) {
+            return is_array($guide) && ($guide['status'] ?? 'live') === 'live';
+        });
+        foreach ($archiveGuides as $guide):
+            $slug = (string) ($guide['slug'] ?? '');
+            $cardTitle = (string) ($guide['archive_title'] ?? $defaultArchiveTitles[$slug] ?? $guide['h1'] ?? $guide['title'] ?? 'Jaisalmer travel guide');
+            $cardDescription = (string) ($guide['archive_description'] ?? $guide['description'] ?? '');
+            $cardCategory = (string) ($guide['archive_category'] ?? $guide['eyebrow'] ?? 'Travel guide');
+            $cardImage = (string) ($guide['archive_image'] ?? $defaultArchiveImages[$slug] ?? $guide['hero_image'] ?? '');
+            $cardImageAlt = (string) ($guide['archive_image_alt'] ?? $defaultArchiveImageAlts[$slug] ?? $guide['hero_alt'] ?? '');
+            if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $slug)) continue;
+        ?>
+          <article class="blog-card">
+            <a href="<?= htmlspecialchars($slug . '.php', ENT_QUOTES, 'UTF-8') ?>">
+              <?php if ($cardImage !== ''): ?>
+                <div class="blog-card-image"><img src="<?= htmlspecialchars($cardImage, ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($cardImage, '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($cardImageAlt, ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async"></div>
+              <?php endif; ?>
+              <div class="blog-card-body">
+                <p class="blog-card-meta"><?= htmlspecialchars($cardCategory, ENT_QUOTES, 'UTF-8') ?></p>
+                <h2><?= htmlspecialchars($cardTitle, ENT_QUOTES, 'UTF-8') ?></h2>
+                <p><?= htmlspecialchars($cardDescription, ENT_QUOTES, 'UTF-8') ?></p>
+                <span class="text-link">Read the guide →</span>
+              </div>
+            </a>
+          </article>
+        <?php endforeach; ?>
+        <article class="blog-card"><a href="book-rooms-in-jaisalmer.php">
+          <div class="blog-card-body"><p class="blog-card-meta">Staying inside the Fort</p><h2>Staying inside Jaisalmer Fort</h2><p>The last part of the journey is on foot, and a room, a rooftop meal and a desert night can fit together into one stay.</p><span class="text-link">Read the stay guide →</span></div>
+        </a></article>
       </div>
     </div>
   </section>

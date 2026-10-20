@@ -5,7 +5,7 @@
  * Keep operator-specific prices, schedules, inclusions and availability out of
  * this editorial data. Operational facts belong in the owner-approved registries.
  */
-return [
+$editorialGuides = [
     'best-time-to-visit-jaisalmer' => [
         'slug' => 'best-time-to-visit-jaisalmer',
         'title' => 'Best Time to Visit Jaisalmer | Seasons & Trip Planning',
@@ -1820,3 +1820,26 @@ return [
         'cta_secondary_href' => 'contact.php?topic=heritage-havelis'
     ]
 ];
+
+$studioRoot = dirname(__DIR__) . '/content/editorial';
+$studioFiles = is_dir($studioRoot) ? (glob($studioRoot . '/*.json') ?: []) : [];
+sort($studioFiles, SORT_STRING);
+foreach ($studioFiles as $studioFile) {
+    if (is_link($studioFile) || !is_file($studioFile)) throw new RuntimeException('Unsafe Content Studio editorial record: ' . basename($studioFile));
+    $record = json_decode((string) file_get_contents($studioFile), true);
+    $slug = basename($studioFile, '.json');
+    if (
+        !is_array($record) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $slug)
+        || ($record['slug'] ?? null) !== $slug
+        || !in_array(($record['status'] ?? ''), ['live', 'draft', 'hidden'], true)
+        || !is_string($record['title'] ?? null) || !is_string($record['description'] ?? null)
+        || !is_string($record['h1'] ?? null) || !is_string($record['hero_image'] ?? null)
+        || !is_string($record['hero_alt'] ?? null) || !is_array($record['toc'] ?? null)
+        || !is_array($record['sections'] ?? null) || !is_array($record['sources'] ?? null)
+        || !is_array($record['related'] ?? null)
+    ) throw new RuntimeException('Invalid Content Studio editorial record: ' . $slug);
+    if (array_key_exists($slug, $editorialGuides)) throw new RuntimeException('Duplicate editorial slug in Content Studio registry: ' . $slug);
+    $editorialGuides[$slug] = $record;
+}
+return $editorialGuides;
+

@@ -12,7 +12,7 @@
  * fixed schedule.
  */
 
-return [
+$experiences = [
     'desert-safari' => [
         'slug' => 'desert-safari',
         'category' => 'desert',
@@ -588,3 +588,27 @@ return [
         'related' => [],
     ],
 ];
+
+$studioRoot = dirname(__DIR__) . '/content/experiences';
+$studioFiles = is_dir($studioRoot) ? (glob($studioRoot . '/*.json') ?: []) : [];
+sort($studioFiles, SORT_STRING);
+foreach ($studioFiles as $studioFile) {
+    if (is_link($studioFile) || !is_file($studioFile)) throw new RuntimeException('Unsafe Content Studio experience record: ' . basename($studioFile));
+    $record = json_decode((string) file_get_contents($studioFile), true);
+    $slug = basename($studioFile, '.json');
+    if (
+        !is_array($record) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $slug)
+        || ($record['slug'] ?? null) !== $slug
+        || !in_array(($record['status'] ?? ''), ['live', 'draft', 'hidden'], true)
+        || !in_array(($record['category'] ?? ''), ['desert', 'city'], true)
+        || !is_string($record['title'] ?? null) || !is_string($record['description'] ?? null)
+        || !is_string($record['h1'] ?? null) || !is_string($record['hero_image'] ?? null)
+        || !is_string($record['hero_alt'] ?? null) || !is_string($record['summary'] ?? null)
+        || !is_array($record['at_a_glance'] ?? null) || !is_array($record['timeline'] ?? null)
+        || !is_array($record['included'] ?? null) || !is_array($record['not_included'] ?? null)
+    ) throw new RuntimeException('Invalid Content Studio experience record: ' . $slug);
+    if (array_key_exists($slug, $experiences)) throw new RuntimeException('Duplicate experience slug in Content Studio registry: ' . $slug);
+    $experiences[$slug] = $record;
+}
+return $experiences;
+
