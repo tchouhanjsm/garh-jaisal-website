@@ -305,9 +305,11 @@ function verifyPublishableRecord(type, record) {
       || !Array.isArray(record.toc) || !record.toc.length
       || !Array.isArray(record.sections) || !record.sections.length
       || record.sections.some(section => !section || typeof section.heading !== 'string' || section.heading.trim().length < 2
-        || !Array.isArray(section.paragraphs) || (!section.paragraphs.length && !Array.isArray(section.items))
+        || !Array.isArray(section.paragraphs) || !Array.isArray(section.items)
+        || (!section.paragraphs.some(paragraph => typeof paragraph === 'string' && paragraph.trim())
+          && !section.items.some(item => typeof item === 'string' && item.trim()))
         || section.paragraphs.some(paragraph => typeof paragraph !== 'string' || !paragraph.trim())
-        || !Array.isArray(section.items) || section.items.some(item => typeof item !== 'string' || !item.trim()))
+        || section.items.some(item => typeof item !== 'string' || !item.trim()))
       || !Array.isArray(record.sources) || !record.sources.length
       || record.sources.some(source => {
         if (!source || typeof source.label !== 'string' || !source.label.trim() || typeof source.url !== 'string') return true;
@@ -424,17 +426,24 @@ function setManagedStatus(type, slug, nextStatus) {
   const oldRecord = fs.readFileSync(files.record);
   const sitemapPath = path.join(ROOT, 'sitemap.xml');
   const oldSitemap = type === 'gallery' ? null : fs.readFileSync(sitemapPath);
-  record.status = status;
-  if (type !== 'gallery') record.date_modified = today();
-  try {
-    atomicWrite(files.record, JSON.stringify(record, null, 2) + '\n');
-    const sitemapMessage = type === 'gallery' ? 'Gallery publication state updated.' : runSitemap();
-    return { type, slug, status, pagePath: type === 'gallery' ? '/gallery.php' : '/' + slug + '.php', sitemapMessage };
-  } catch (error) {
-    try { atomicWrite(files.record, oldRecord); } catch (_) {}
-    if (oldSitemap) { try { atomicWrite(sitemapPath, oldSitemap); } catch (_) {} }
-    throw error;
-  }
+
+  const changeState = () => {
+    record.status = status;
+    if (type !== 'gallery') record.date_modified = today();
+    try {
+      atomicWrite(files.record, JSON.stringify(record, null, 2) + '\n');
+      const sitemapMessage = type === 'gallery' ? 'Gallery publication state updated.' : runSitemap();
+      return { type, slug, status, pagePath: type === 'gallery' ? '/gallery.php' : '/' + slug + '.php', sitemapMessage };
+    } catch (error) {
+      try { atomicWrite(files.record, oldRecord); } catch (_) {}
+      if (oldSitemap) { try { atomicWrite(sitemapPath, oldSitemap); } catch (_) {} }
+      throw error;
+    }
+  };
+
+  if (status !== 'live') return changeState();
+  const source = type === 'gallery' ? record.image.src : record.hero_image;
+  return withManifestSource(source, changeState);
 }
 
 function deleteManagedDraft(type, slug) {
