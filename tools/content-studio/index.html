@@ -260,6 +260,7 @@
     const grid=document.createElement('div');grid.className='grid';card.appendChild(grid);
     for(const field of config.fields){
       const control=field.tag==='textarea'?makeTextarea(field.minLength,field.maxLength,field.placeholder):makeInput(field.type||'text',field.minLength,field.maxLength,field.placeholder);
+      control.required=field.required!==false;
       control.dataset.key=field.key;grid.appendChild(makeField(field.label,control,field.full!==false,field.hint||''));
     }
     const remove=document.createElement('button');remove.type='button';remove.className='remove-section';remove.textContent='Remove';
@@ -272,7 +273,8 @@
     for(const [index,card] of cards.entries()){
       card.querySelector('legend').textContent=config.label+' '+(index+1);
       const values=config.fields.map(field=>card.querySelector('[data-key="'+field.key+'"]').value.trim());
-      if(values.every(Boolean)){
+      const requiredValues=config.fields.map((field,fieldIndex)=>field.required===false?null:values[fieldIndex]).filter(value=>value!==null);
+      if(requiredValues.every(Boolean)){
         const escaped=values.map(value=>value.replace(/\|/g,'/'));
         lines.push(config.serialize(escaped));
       }else if(config.kind==='tour-faq'&&values.every(value=>!value)){
@@ -292,7 +294,7 @@
     fields:[{key:'question',label:'Guest question *',minLength:5,maxLength:180,placeholder:'e.g. What should I bring?'},{key:'answer',label:'Verified answer *',tag:'textarea',minLength:5,maxLength:500,placeholder:'Give a clear answer; state what still needs confirmation.'}],
     serialize:v=>v[0]+' | '+v[1]};
   const blogSourceConfig={kind:'blog-source',label:'Source',listId:'blog-source-list',hiddenId:'blog-sources',buttonId:'blog-add-source',buttonLabel:'+ Add source',keepOne:true,max:20,
-    fields:[{key:'label',label:'Source name *',minLength:2,maxLength:120,placeholder:'e.g. Official tourism guidance'},{key:'url',label:'HTTPS web address *',type:'url',minLength:8,maxLength:500,placeholder:'https://example.gov.in/'},{key:'note',label:'Why this source is useful (optional)',minLength:0,maxLength:300,placeholder:'Optional note about the fact it supports.',full:true,tag:'textarea'}],
+    fields:[{key:'label',label:'Source name *',minLength:2,maxLength:120,placeholder:'e.g. Official tourism guidance'},{key:'url',label:'HTTPS web address *',type:'url',minLength:8,maxLength:500,placeholder:'https://example.gov.in/'},{key:'note',label:'Why this source is useful (optional)',minLength:0,maxLength:300,placeholder:'Optional note about the fact it supports.',full:true,tag:'textarea',required:false}],
     serialize:v=>v[0]+' | '+v[1]+(v[2]?' | '+v[2]:'')};
   function resetSimpleRows(config){const list=document.getElementById(config.listId);list.replaceChildren();if(config.keepOne)addSimpleRow(config);else syncSimpleRows(config);}
   document.getElementById('tour-add-step').addEventListener('click',()=>addSimpleRow(tourStepConfig));
