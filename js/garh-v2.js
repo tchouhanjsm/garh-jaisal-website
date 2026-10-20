@@ -7,6 +7,65 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
   }
 
+  // The fixed mobile action dock can cover the Directions arrival essentials card.
+  // Suppress it only while its viewport strip would obscure that card; the hero's
+  // Call, WhatsApp and Maps actions remain available, and the dock returns afterwards.
+  const arrivalQuickCard = document.querySelector('.arrival-quick-card');
+  const mobileCtaDock = document.querySelector('.mobile-cta');
+  if (arrivalQuickCard && mobileCtaDock) {
+    const compactViewport = window.matchMedia('(max-width: 1080px)');
+    let dockHeight = Math.max(58, mobileCtaDock.getBoundingClientRect().height);
+    let dockUpdateFrame = 0;
+
+    const clearArrivalDockSuppression = () => {
+      mobileCtaDock.classList.remove('is-suppressed-by-arrival-card');
+      mobileCtaDock.removeAttribute('aria-hidden');
+      mobileCtaDock.removeAttribute('inert');
+    };
+
+    const updateArrivalDockSuppression = () => {
+      dockUpdateFrame = 0;
+      if (!compactViewport.matches || mobileCtaDock.contains(document.activeElement)) {
+        clearArrivalDockSuppression();
+        return;
+      }
+
+      const dockBounds = mobileCtaDock.getBoundingClientRect();
+      if (dockBounds.height > 0) dockHeight = dockBounds.height;
+
+      const cardBounds = arrivalQuickCard.getBoundingClientRect();
+      const dockTop = Math.max(0, window.innerHeight - dockHeight);
+      const overlapsDock = cardBounds.left < window.innerWidth &&
+        cardBounds.right > 0 &&
+        cardBounds.top < window.innerHeight &&
+        cardBounds.bottom > dockTop;
+
+      if (overlapsDock) {
+        mobileCtaDock.classList.add('is-suppressed-by-arrival-card');
+        mobileCtaDock.setAttribute('aria-hidden', 'true');
+        mobileCtaDock.setAttribute('inert', '');
+      } else {
+        clearArrivalDockSuppression();
+      }
+    };
+
+    const scheduleArrivalDockUpdate = () => {
+      if (dockUpdateFrame !== 0) return;
+      dockUpdateFrame = window.requestAnimationFrame(updateArrivalDockSuppression);
+    };
+
+    window.addEventListener('scroll', scheduleArrivalDockUpdate, { passive: true });
+    window.addEventListener('resize', scheduleArrivalDockUpdate, { passive: true });
+    document.addEventListener('focusin', scheduleArrivalDockUpdate);
+    document.addEventListener('focusout', scheduleArrivalDockUpdate);
+    if (typeof compactViewport.addEventListener === 'function') {
+      compactViewport.addEventListener('change', scheduleArrivalDockUpdate);
+    } else if (typeof compactViewport.addListener === 'function') {
+      compactViewport.addListener(scheduleArrivalDockUpdate);
+    }
+    updateArrivalDockSuppression();
+  }
+
   // Measure booking and contact intent without treating a click or form interaction
   // as a completed booking or submitted enquiry. Destination IDs come from site-config.php.
   const analyticsConfig = window.gjAnalyticsConfig && typeof window.gjAnalyticsConfig === 'object'

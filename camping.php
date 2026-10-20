@@ -54,9 +54,18 @@ require __DIR__ . '/include/page-head.php';
 
 <main id="main-content" tabindex="-1">
   <nav class="section" aria-label="Breadcrumb"><div class="site-shell"><a href="desert-safari.php">← Desert Tours</a></div></nav>
-  <section class="page-hero">
+  <section class="page-hero page-hero--photo camping-page-hero">
+    <div class="page-hero-media" aria-hidden="true">
+      <img
+        src="img/Desert_Camp/camp_evening.jpeg"
+        <?= gj_image_dimension_attributes('img/Desert_Camp/camp_evening.jpeg', '100vw') ?>
+        alt=""
+        fetchpriority="high"
+        decoding="async">
+    </div>
     <div class="site-shell page-hero-inner">
-      <h1>Camping</h1>
+      <p class="eyebrow">Desert overnight experiences</p>
+      <h1>Choose how you spend the night in the desert.</h1>
       <p>
         Camping at this hotel means Sleep Under the Stars and the overnight
         safari in a Swiss tent.
@@ -64,12 +73,54 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section">
+  <section class="section camping-options" aria-labelledby="camping-options-title">
     <div class="site-shell">
-      <p><a class="button button-primary" href="sleep-under-the-stars.php">Sleep Under the Stars</a></p>
-      <p><a class="button button-outline" href="swiss-tent-safari.php">Overnight Safari in a Swiss Tent</a></p>
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Compare the stays</p>
+          <h2 id="camping-options-title">Two different ways to sleep in the Thar.</h2>
+        </div>
+        <p>Compare the open-sky experience with a tented stay, then confirm the exact setup, inclusions and current availability for your date.</p>
+      </div>
+
+      <div class="camping-option-grid">
+        <article class="camping-option-card">
+          <div class="camping-option-media">
+            <img
+              src="img/sleeping_under_stars/Tour_1.jpeg"
+              <?= gj_image_dimension_attributes('img/sleeping_under_stars/Tour_1.jpeg', '(max-width: 760px) 100vw, 50vw') ?>
+              alt="Mattress and bedding set out in the desert beside a small tent"
+              loading="lazy"
+              decoding="async">
+          </div>
+          <div class="camping-option-copy">
+            <p class="eyebrow">Open-sky overnight</p>
+            <h3>Sleep Under the Stars</h3>
+            <p>An open-air overnight experience in the desert. Ask the hotel to confirm the sleeping setup, weather plan, inclusions and current availability before booking.</p>
+            <a class="button button-primary" href="sleep-under-the-stars.php">Explore Sleep Under the Stars</a>
+          </div>
+        </article>
+
+        <article class="camping-option-card">
+          <div class="camping-option-media">
+            <img
+              src="img/Desert_Camp/tent_deluxe.jpeg"
+              <?= gj_image_dimension_attributes('img/Desert_Camp/tent_deluxe.jpeg', '(max-width: 760px) 100vw, 50vw') ?>
+              alt="Deluxe tent accommodation at the desert camp near Jaisalmer"
+              loading="lazy"
+              decoding="async">
+          </div>
+          <div class="camping-option-copy">
+            <p class="eyebrow">Tented overnight</p>
+            <h3>Overnight Safari in a Swiss Tent</h3>
+            <p>A stay in tented accommodation. Confirm the tent category, meals, transfers and current price with the hotel for your travel date.</p>
+            <a class="button button-primary" href="swiss-tent-safari.php">Explore Swiss Tent Safari</a>
+          </div>
+        </article>
+      </div>
+
       <div class="package-note">
-        <p>Ask the hotel for the <a href="contact.php">current price</a>.</p>
+        <p>Prices and date-specific arrangements need confirmation. <a href="contact.php">Ask the hotel for the current price</a>.</p>
       </div>
     </div>
   </section>

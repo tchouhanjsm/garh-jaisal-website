@@ -59,7 +59,15 @@ require __DIR__ . '/include/page-head.php';
 
 <main id="main-content" tabindex="-1">
   <nav class="section" aria-label="Breadcrumb"><div class="site-shell"><a href="car-tours.php">← Car &amp; City Tours</a></div></nav>
-  <section class="page-hero tour-detail-hero">
+  <section class="page-hero page-hero--photo tour-detail-hero">
+    <div class="page-hero-media" aria-hidden="true">
+      <img
+        src="img/1.webp"
+        <?= gj_image_dimension_attributes('img/1.webp', '100vw') ?>
+        alt=""
+        fetchpriority="high"
+        decoding="async">
+    </div>
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Guided Fort walk</p>
       <h1>A walk through Jaisalmer Fort</h1>
