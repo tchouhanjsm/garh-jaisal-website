@@ -742,6 +742,21 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Keep logs in the user's Library Logs folder; closing the launcher terminal sends termination signals to the two child servers. Existing services on either selected port cause a clear error rather than being overwritten.
 - Add CI for shell syntax, executable-bit/loopback assertions and cleanup expectations. Keep launcher files outside the cPanel runtime package.
 - Update the Content Studio UI, project log and release-readiness snapshot so the entry point and true current main/CI state are visible.
-- Acceptance: PHP 7.4/8.2 site checks, responsive image/sitemap/security/publication contracts, runtime package preflight, non-deploying Staging QA, full Browser E2E and screenshot/evidence artifacts pass on the exact feature head. After merge, confirm all four workflows on the exact merge SHA.
-- This phase improves local authoring ergonomics only. It does not provide a hosted CMS, Git commit/push automation or a public content editor. Existing operator review, GitHub CI, external staging sign-off and owner deployment approval remain required.
+- PR #109 merged on 2026-10-20 at ed75f9856e9e84b6c483ce637b28fba0f409066c. Site Checks [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39393437203), package [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39393437165), non-deploying Staging QA [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39393437166), Browser E2E [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39393437265) on the same merge SHA.
+- The executable macOS launcher defaults to ports 4173/8088, binds both servers to 127.0.0.1 and is excluded from the cPanel runtime package.
+- This phase improved operator-side local startup only. It did not create a hosted CMS or deployment mechanism. External staging sign-off and owner deployment approval remain required.
+
+## Sprint 53 — saved Content Studio management (2026-10-20)
+
+**Goal:** close the Draft-first workflow gap so a non-web developer can return to saved Content Studio records and manage their lifecycle without editing JSON manually.
+
+- Add a Manage saved content screen with per-record Edit, Publish locally, Set to Draft and draft-only Delete actions for tours, blog guides and Gallery entries.
+- Reuse the existing guided forms. Keep public slugs immutable, preserve blog publication date and operator-customized fields, and render saved record values into the form repeaters.
+- Restrict management to JSON overlays created by Content Studio. Existing legacy PHP registry entries and Hidden records remain read-only.
+- Before changing a page state or deleting it, verify that its route file is still the generated Content Studio wrapper. Do not replace an externally modified route.
+- Publishing validates required structure and local image paths, updates the responsive-image manifest and sitemap atomically where applicable. Failed transitions roll back content, sitemap and manifest changes.
+- Delete only records in Draft state; remove its generated wrapper and JSON record, but never delete the source image. Preserve draft noindex and sitemap exclusion.
+- Add Node integration tests and Browser E2E coverage for list/read/edit/publish/unpublish/delete, legacy/hidden protections, route tampering and symlink safety.
+- Exact-head acceptance: PHP 7.4/8.2 Site Checks, responsive-image review, package preflight, non-deploying Staging QA, full Browser E2E and screenshot/evidence artifacts. PR #110 is open; verification is pending until all four workflows pass on the exact head.
+- No cPanel access, staging upload, merge or production deployment is part of this phase.
 
