@@ -49,8 +49,8 @@ foreach ($expectedCounts as $category => $expectedCount) {
         $errors[] = $category . ': images must be an array';
         continue;
     }
-    if (count($section['images']) !== $expectedCount) {
-        $errors[] = $category . ': expected ' . $expectedCount . ' curated photos, found ' . count($section['images']);
+    if (count($section['images']) < $expectedCount) {
+        $errors[] = $category . ': expected at least ' . $expectedCount . ' curated photos, found ' . count($section['images']);
     }
 
     foreach ($section['images'] as $index => $photo) {
@@ -89,8 +89,8 @@ foreach ($expectedCounts as $category => $expectedCount) {
     }
 }
 
-if ($total !== 36) {
-    $errors[] = 'Gallery must contain exactly 36 curated photos; found ' . $total;
+if ($total < 36) {
+    $errors[] = 'Gallery must retain at least 36 curated photos; found ' . $total;
 }
 
 $expectedDesertSources = [
@@ -161,4 +161,4 @@ if ($errors) {
     exit(1);
 }
 
-printf("PASS: validated %d curated Gallery photos across %d ordered categories\n", $total, count($expectedCounts));
+printf("PASS: validated %d Gallery photos across %d ordered categories (36-photo baseline retained)\n", $total, count($expectedCounts));

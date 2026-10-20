@@ -18,7 +18,7 @@ from urllib.parse import unquote, urlsplit
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-RUNTIME_DIRECTORIES = {"css", "img", "include", "js"}
+RUNTIME_DIRECTORIES = {"content", "css", "img", "include", "js"}
 ROOT_RUNTIME_FILES = {".htaccess", "robots.txt", "sitemap.xml"}
 ROOT_RUNTIME_SUFFIXES = {
     ".php", ".css", ".js", ".png", ".jpg", ".jpeg", ".webp", ".gif",
