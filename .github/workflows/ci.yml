@@ -44,6 +44,9 @@ jobs:
       - name: Check local Content Studio JavaScript syntax
         run: node --check scripts/content-studio.js
 
+      - name: Exercise Content Studio live/draft publishing workflow
+        run: node tests/node/content-studio.integration.js
+
       - name: Lint PHP files
         shell: bash
         run: |
