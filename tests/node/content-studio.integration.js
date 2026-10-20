@@ -373,9 +373,9 @@ async function main() {
   assert.equal(response.status, 200);
   html = await response.text();
   assert.ok(html.includes('src="' + gallerySrc + '"'), 'new Gallery image should render on the existing Gallery route');
-  result = await requestJson(STUDIO_URL + '/api/content', 'GET');
-  assert.ok(result.body.items.some(item => item.type === 'gallery' && item.slug === result.body.items.find(x => x.type === 'gallery' && x.slug === path.basename(galleryRecordPath, '.json'))?.slug));
   const galleryId = path.basename(galleryRecordPath, '.json');
+  result = await requestJson(STUDIO_URL + '/api/content', 'GET');
+  assert.ok(result.body.items.some(item => item.type === 'gallery' && item.slug === galleryId && item.status === 'live'));
   result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId, 'PUT', {
     category: 'hotel', status: 'live', src: gallerySrc,
     alt: 'An updated temporary additional image for Content Studio integration testing',
