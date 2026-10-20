@@ -676,6 +676,20 @@ function updateImageManifest(src) {
   }
 }
 
+function withManifestSource(src, action) {
+  const file = path.join(ROOT, 'scripts', 'responsive-image-assets-manifest.json');
+  const original = fs.readFileSync(file);
+  try {
+    updateImageManifest(src);
+    return action();
+  } catch (error) {
+    try {
+      if (!fs.readFileSync(file).equals(original)) atomicWrite(file, original);
+    } catch (_) {}
+    throw error;
+  }
+}
+
 async function upload(req, url) {
   const originalName = path.basename(url.searchParams.get('filename') || 'upload.jpg');
   const ext = path.extname(originalName).toLowerCase();
