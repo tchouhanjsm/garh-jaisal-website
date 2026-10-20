@@ -2966,3 +2966,11 @@ html { scroll-padding-top: 5rem; }
   height: 1.1rem;
   margin: 0.2rem 0 0;
 }
+
+
+/* Keep the fixed mobile actions out of the Directions arrival summary while it is underneath the dock. */
+@media (max-width: 1080px) {
+  .mobile-cta.is-suppressed-by-arrival-card {
+    display: none !important;
+  }
+}

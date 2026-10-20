@@ -61,6 +61,65 @@ test('Directions hero, route cards and section navigation remain usable at key v
     expect(dimensions.document, 'Directions must not overflow horizontally at ' + dimensions.viewport + 'px')
       .toBeLessThanOrEqual(dimensions.viewport + 1);
 
+    await page.waitForFunction(() => {
+      const card = document.querySelector('.arrival-quick-card');
+      const dock = document.querySelector('.mobile-cta');
+      if (!card || !dock) return false;
+      const compact = window.matchMedia('(max-width: 1080px)').matches;
+      const cardBounds = card.getBoundingClientRect();
+      const dockHeight = Math.max(58, Number.parseFloat(window.getComputedStyle(dock).height) || 0);
+      const overlapsDock = compact &&
+        cardBounds.left < window.innerWidth &&
+        cardBounds.right > 0 &&
+        cardBounds.top < window.innerHeight &&
+        cardBounds.bottom > Math.max(0, window.innerHeight - dockHeight);
+      const shouldSuppress = overlapsDock && !dock.contains(document.activeElement);
+      return dock.classList.contains('is-suppressed-by-arrival-card') === shouldSuppress;
+    });
+
+    const dockState = await page.evaluate(() => {
+      const dock = document.querySelector('.mobile-cta');
+      const cardBounds = document.querySelector('.arrival-quick-card').getBoundingClientRect();
+      const compact = window.matchMedia('(max-width: 1080px)').matches;
+      const dockHeight = Math.max(58, Number.parseFloat(window.getComputedStyle(dock).height) || 0);
+      return {
+        compact,
+        overlapsDock: compact &&
+          cardBounds.left < window.innerWidth &&
+          cardBounds.right > 0 &&
+          cardBounds.top < window.innerHeight &&
+          cardBounds.bottom > Math.max(0, window.innerHeight - dockHeight),
+        suppressed: dock.classList.contains('is-suppressed-by-arrival-card'),
+        display: window.getComputedStyle(dock).display,
+        ariaHidden: dock.getAttribute('aria-hidden'),
+        inert: dock.hasAttribute('inert'),
+      };
+    });
+
+    if (dockState.compact && dockState.overlapsDock) {
+      expect(dockState.suppressed, 'the fixed dock must not cover the Directions essentials card').toBe(true);
+      expect(dockState.display).toBe('none');
+      expect(dockState.ariaHidden).toBe('true');
+      expect(dockState.inert).toBe(true);
+      const targetScroll = await page.evaluate(() => {
+        const card = document.querySelector('.arrival-quick-card');
+        const dock = document.querySelector('.mobile-cta');
+        const dockHeight = Math.max(58, dock.getBoundingClientRect().height);
+        return Math.max(0, window.scrollY + card.getBoundingClientRect().bottom -
+          (window.innerHeight - dockHeight) + 8);
+      });
+      await page.evaluate((top) => {
+        document.documentElement.style.scrollBehavior = 'auto';
+        window.scrollTo(0, top);
+      }, targetScroll);
+      await expect(page.locator('.mobile-cta')).toHaveCSS('display', 'grid');
+      await expect(page.locator('.mobile-cta')).not.toHaveAttribute('aria-hidden', 'true');
+    } else if (dockState.compact) {
+      expect(dockState.suppressed).toBe(false);
+      expect(dockState.ariaHidden).toBeNull();
+      expect(dockState.inert).toBe(false);
+    }
+
     await expect(page.locator('.arrival-quick-card')).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Directions page sections' })).toBeVisible();
     await expect(page.locator('.arrival-route-steps > li')).toHaveCount(4);

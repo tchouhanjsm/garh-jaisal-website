@@ -220,7 +220,7 @@ $e = static function ($value) {
 </header>
 
 <?php if ($activePage !== 'contact'): ?>
-<div class="contact-dock" aria-label="Contact Garh Jaisal">
+<nav class="contact-dock" aria-label="Contact Garh Jaisal">
   <a
     class="contact-dock-item"
     href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>"
@@ -240,11 +240,11 @@ $e = static function ($value) {
     <img src="img/whatsapp.png" alt="" width="22" height="22">
     <span>WhatsApp</span>
   </a>
-</div>
+</nav>
 
-<div class="mobile-cta" aria-label="Quick contact actions">
+<nav class="mobile-cta" aria-label="Quick contact actions">
   <a href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>" class="mobile-cta-contact">Call</a>
   <a href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mobile-cta-whatsapp">WhatsApp</a>
   <a href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mobile-cta-book">Book Now</a>
-</div>
+</nav>
 <?php endif; ?>
