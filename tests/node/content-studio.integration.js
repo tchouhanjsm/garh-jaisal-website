@@ -26,6 +26,8 @@ const galleryDir = path.join(ROOT, 'content/gallery');
 const galleryPrefix = 'content-studio-ci-photo-';
 const sitemapPath = path.join(ROOT, 'sitemap.xml');
 const originalSitemap = fs.readFileSync(sitemapPath);
+const responsiveManifestPath = path.join(ROOT, 'scripts/responsive-image-assets-manifest.json');
+const originalResponsiveManifest = fs.readFileSync(responsiveManifestPath);
 const contentDirs = ['content/experiences', 'content/editorial', 'content/gallery'].map(p => path.join(ROOT, p));
 const existedDirectories = new Map(contentDirs.map(dir => [dir, fs.existsSync(dir)]));
 let galleryRecordPath = null;
@@ -250,6 +252,48 @@ async function main() {
   html = await response.text();
   assert.match(html, /noindex,follow/, 'draft route must remain noindex');
 
+  // Management lists only Content Studio JSON overlays; it must not edit legacy PHP registry entries.
+  result = await requestJson(STUDIO_URL + '/api/content', 'GET');
+  assert.equal(result.response.status, 200);
+  assert.ok(result.body.items.some(item => item.type === 'tours' && item.slug === slugs[1] && item.status === 'draft'));
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1], 'GET');
+  assert.equal(result.response.status, 200);
+  assert.equal(result.body.record.slug, slugs[1]);
+  result = await requestJson(STUDIO_URL + '/api/content/tours/longewala-tour', 'GET');
+  assert.equal(result.response.status, 404, 'a legacy PHP registry entry must not be editable through the JSON-overlay manager');
+
+  const updatedDraftTour = { ...tourPayload(slugs[1], 'draft'), title: 'Updated Content Studio Draft Test Tour', summary: 'An edited draft summary for validating safe content management updates.' };
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1], 'PUT', updatedDraftTour);
+  assert.equal(result.response.status, 200, 'existing draft tour should be editable');
+  assert.equal(JSON.parse(fs.readFileSync(recordFiles[1], 'utf8')).h1, 'Updated Content Studio Draft Test Tour');
+  response = await fetch(PHP_URL + '/' + slugs[1] + '.php');
+  html = await response.text();
+  assert.ok(html.includes('Updated Content Studio Draft Test Tour'), 'edited copy should render through the existing page');
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1], 'DELETE');
+  assert.equal(result.response.status, 409, 'a live record must never be deleted directly');
+
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1] + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 200, 'a valid draft should be publishable locally');
+  sitemap = fs.readFileSync(sitemapPath, 'utf8');
+  assert.ok(sitemap.includes('/' + slugs[1] + '.php</loc>'), 'publishing should add the route to the sitemap');
+  response = await fetch(PHP_URL + '/' + slugs[1] + '.php');
+  html = await response.text();
+  assert.doesNotMatch(html, /noindex,follow/, 'published tour should no longer be noindex');
+
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1] + '/status', 'PATCH', { status: 'draft' });
+  assert.equal(result.response.status, 200, 'a live record should be safely unpublishable');
+  sitemap = fs.readFileSync(sitemapPath, 'utf8');
+  assert.ok(!sitemap.includes('/' + slugs[1] + '.php</loc>'), 'unpublishing should remove the route from the sitemap');
+  response = await fetch(PHP_URL + '/' + slugs[1] + '.php');
+  html = await response.text();
+  assert.match(html, /noindex,follow/, 'unpublished route should become noindex');
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1], 'DELETE');
+  assert.equal(result.response.status, 200, 'a Draft may be deleted after it is unpublished');
+  assert.ok(!fs.existsSync(routeFiles[1]));
+  assert.ok(!fs.existsSync(recordFiles[1]));
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1], 'DELETE');
+  assert.equal(result.response.status, 404, 'deleted records should not be addressable again');
+
   // Live blog: route, structured article content, archive card and sitemap must agree.
   const blog = {
     h1: 'Content Studio Integration Test Guide', slug: slugs[2], status: 'live',
@@ -280,6 +324,31 @@ async function main() {
   assert.ok(html.includes('Content Studio Integration Test Guide'), 'article content should render');
   assert.ok(html.includes('BlogPosting'), 'article structured data should render');
 
+  const originalPublishedDate = JSON.parse(fs.readFileSync(recordFiles[2], 'utf8')).date_published;
+  const editedBlog = { ...blog, h1: 'Content Studio Integration Test Guide Revised', seoTitle: 'Content Studio Integration Test Guide Revised', cardTitle: 'Content Studio Revised Archive Card' };
+  result = await requestJson(STUDIO_URL + '/api/content/blogs/' + slugs[2], 'PUT', editedBlog);
+  assert.equal(result.response.status, 200, 'existing blog guide should be editable');
+  const updatedBlogRecord = JSON.parse(fs.readFileSync(recordFiles[2], 'utf8'));
+  assert.equal(updatedBlogRecord.h1, 'Content Studio Integration Test Guide Revised');
+  assert.equal(updatedBlogRecord.date_published, originalPublishedDate, 'editing must preserve the original publication date');
+  response = await fetch(PHP_URL + '/blog.php');
+  html = await response.text();
+  assert.ok(html.includes('Content Studio Revised Archive Card'), 'edited title should update the Blog archive card');
+  response = await fetch(PHP_URL + '/' + slugs[2] + '.php');
+  html = await response.text();
+  assert.ok(html.includes('Content Studio Integration Test Guide Revised'), 'edited article should render');
+  result = await requestJson(STUDIO_URL + '/api/content/blogs/' + slugs[2] + '/status', 'PATCH', { status: 'draft' });
+  assert.equal(result.response.status, 200);
+  sitemap = fs.readFileSync(sitemapPath, 'utf8');
+  assert.ok(!sitemap.includes('/' + slugs[2] + '.php</loc>'), 'unpublishing an article should remove it from the sitemap');
+  response = await fetch(PHP_URL + '/' + slugs[2] + '.php');
+  html = await response.text();
+  assert.match(html, /noindex,follow/, 'unpublished article should become noindex');
+  result = await requestJson(STUDIO_URL + '/api/content/blogs/' + slugs[2], 'DELETE');
+  assert.equal(result.response.status, 200);
+  assert.ok(!fs.existsSync(routeFiles[2]));
+  assert.ok(!fs.existsSync(recordFiles[2]));
+
   // A Gallery addition uses a local, previously uncurated source and renders on the existing Gallery route.
   const gallerySourcePhp = fs.readFileSync(path.join(ROOT, 'include/gallery-data.php'), 'utf8');
   const used = new Set([...gallerySourcePhp.matchAll(/'src'\s*=>\s*'([^']+)'/g)].map(m => m[1]));
@@ -304,6 +373,29 @@ async function main() {
   assert.equal(response.status, 200);
   html = await response.text();
   assert.ok(html.includes('src="' + gallerySrc + '"'), 'new Gallery image should render on the existing Gallery route');
+  result = await requestJson(STUDIO_URL + '/api/content', 'GET');
+  assert.ok(result.body.items.some(item => item.type === 'gallery' && item.slug === result.body.items.find(x => x.type === 'gallery' && x.slug === path.basename(galleryRecordPath, '.json'))?.slug));
+  const galleryId = path.basename(galleryRecordPath, '.json');
+  result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId, 'PUT', {
+    category: 'hotel', status: 'live', src: gallerySrc,
+    alt: 'An updated temporary additional image for Content Studio integration testing',
+    caption: 'Updated temporary CI verification photo', crop: 'portrait',
+  });
+  assert.equal(result.response.status, 200, 'Gallery metadata should be editable');
+  let galleryRecord = JSON.parse(fs.readFileSync(galleryRecordPath, 'utf8'));
+  assert.equal(galleryRecord.image.alt, 'An updated temporary additional image for Content Studio integration testing');
+  assert.equal(galleryRecord.image.crop, 'portrait');
+  result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId + '/status', 'PATCH', { status: 'draft' });
+  assert.equal(result.response.status, 200, 'Gallery entries can be unpublished without removing the source image');
+  galleryRecord = JSON.parse(fs.readFileSync(galleryRecordPath, 'utf8'));
+  assert.equal(galleryRecord.status, 'draft');
+  response = await fetch(PHP_URL + '/gallery.php');
+  html = await response.text();
+  assert.ok(!html.includes('src="' + gallerySrc + '"'), 'Draft Gallery entries should not appear on the public Gallery route');
+  result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId, 'DELETE');
+  assert.equal(result.response.status, 200, 'Draft Gallery entries can be removed');
+  assert.ok(!fs.existsSync(galleryRecordPath));
+  assert.ok(fs.existsSync(path.join(ROOT, gallerySrc)), 'deleting a Gallery record must retain its source image');
 
   // Upload signature guard: a fake JPG is rejected before any file is written.
   const badUpload = await fetch(STUDIO_URL + '/api/upload?filename=not-a-real-photo.jpg', {
@@ -326,6 +418,11 @@ main()
       try { if (fs.existsSync(file) && !fs.lstatSync(file).isSymbolicLink()) fs.unlinkSync(file); } catch (_) {}
     }
     try { if (sitemapTouched) fs.writeFileSync(sitemapPath, originalSitemap); } catch (_) {}
+    try {
+      if (!fs.readFileSync(responsiveManifestPath).equals(originalResponsiveManifest)) {
+        fs.writeFileSync(responsiveManifestPath, originalResponsiveManifest);
+      }
+    } catch (_) {}
     for (const dir of contentDirs) {
       if (!existedDirectories.get(dir)) {
         try {
