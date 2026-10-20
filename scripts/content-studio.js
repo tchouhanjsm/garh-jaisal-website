@@ -154,6 +154,35 @@ function displayDate(iso) {
   }).format(new Date(iso + 'T00:00:00Z'));
 }
 
+function assertImageDirectoryChain(targetDirectory, createMissing = false) {
+  const root = path.resolve(IMAGE_ROOT);
+  let rootStat;
+  try { rootStat = fs.lstatSync(root); }
+  catch (error) { throw fail(400, 'The img/ directory is missing or unavailable.'); }
+  if (!rootStat.isDirectory() || rootStat.isSymbolicLink()) throw fail(400, 'The img/ root must be a real local directory.');
+
+  const relative = path.relative(root, path.resolve(targetDirectory));
+  if (relative === '..' || relative.startsWith('..' + path.sep) || path.isAbsolute(relative)) {
+    throw fail(400, 'Image directory is outside img/.');
+  }
+  let current = root;
+  for (const part of relative.split(path.sep).filter(Boolean)) {
+    current = path.join(current, part);
+    let stat;
+    try { stat = fs.lstatSync(current); }
+    catch (error) {
+      if (error.code !== 'ENOENT' || !createMissing) throw fail(400, 'Image directory is missing or unavailable: ' + path.relative(ROOT, current));
+      try { fs.mkdirSync(current); }
+      catch (mkdirError) {
+        if (mkdirError.code !== 'EEXIST') throw fail(400, 'Could not create the local image directory: ' + path.relative(ROOT, current));
+      }
+      try { stat = fs.lstatSync(current); }
+      catch (_) { throw fail(400, 'Could not verify the local image directory: ' + path.relative(ROOT, current)); }
+    }
+    if (!stat.isDirectory() || stat.isSymbolicLink()) throw fail(400, 'Image paths cannot traverse a symbolic link: ' + path.relative(ROOT, current));
+  }
+}
+
 function imagePath(value) {
   const src = typeof value === 'string' ? value.trim() : '';
   if (!/^img\/[A-Za-z0-9._/-]+\.(?:avif|jpe?g|png|webp)$/i.test(src) || src.includes('..') || src.includes('\\')) {
@@ -162,6 +191,7 @@ function imagePath(value) {
   const full = path.resolve(ROOT, src);
   const prefix = path.resolve(IMAGE_ROOT) + path.sep;
   if (!full.startsWith(prefix)) throw fail(400, 'Image path is outside img/.');
+  assertImageDirectoryChain(path.dirname(full));
   try {
     const st = fs.lstatSync(full);
     if (!st.isFile() || st.isSymbolicLink()) throw fail(400, 'Image must be a regular local file.');
@@ -711,7 +741,7 @@ async function upload(req, url) {
   if (buffer.length < 16 || !type.signature(buffer)) throw fail(400, 'The uploaded file signature does not match its image type.');
   const name = slugify(path.parse(originalName).name).slice(0, 64) || 'photo';
   const folder = path.join(IMAGE_ROOT, 'content-studio');
-  fs.mkdirSync(folder, { recursive: true });
+  assertImageDirectoryChain(folder, true);
   const filename = Date.now().toString(36) + '-' + crypto.randomBytes(4).toString('hex') + '-' + name + ext;
   const full = path.join(folder, filename);
   const src = 'img/content-studio/' + filename;
