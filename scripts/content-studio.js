@@ -235,6 +235,17 @@ function managedPaths(type, slug) {
 
 function readManagedRecord(type, slug) {
   const files = managedPaths(type, slug);
+  for (const directory of [CONTENT_ROOT, files.directory]) {
+    try {
+      const directoryStat = fs.lstatSync(directory);
+      if (!directoryStat.isDirectory() || directoryStat.isSymbolicLink()) {
+        throw fail(400, 'Content Studio data directories must be real local directories.');
+      }
+    } catch (error) {
+      if (error.statusCode) throw error;
+      if (error.code !== 'ENOENT') throw error;
+    }
+  }
   let stat;
   try { stat = fs.lstatSync(files.record); }
   catch (error) {
@@ -252,7 +263,7 @@ function readManagedRecord(type, slug) {
   return { files, record };
 }
 
-function safeManagedRoute(route) {
+function safeManagedRoute(route, type, slug) {
   let stat;
   try { stat = fs.lstatSync(route); }
   catch (error) {
@@ -260,16 +271,26 @@ function safeManagedRoute(route) {
     throw error;
   }
   if (!stat.isFile() || stat.isSymbolicLink()) throw fail(409, 'The page route is not a regular file and cannot be changed safely.');
+  const variable = type === 'tours' ? 'experienceSlug' : 'editorialGuideSlug';
+  if (fs.readFileSync(route, 'utf8') !== wrapper(variable, slug)) {
+    throw fail(409, 'This page route no longer matches the generated Content Studio wrapper. Ask the operator to review it before editing or deleting this record.');
+  }
 }
 
 function verifyPublishableRecord(type, record) {
   if (type === 'tours') {
     if (!['desert', 'city'].includes(record.category)
-      || typeof record.h1 !== 'string' || typeof record.title !== 'string'
-      || typeof record.description !== 'string' || typeof record.summary !== 'string'
+      || typeof record.h1 !== 'string' || record.h1.trim().length < 3
+      || typeof record.title !== 'string' || record.title.trim().length < 8
+      || typeof record.description !== 'string' || record.description.trim().length < 40
+      || typeof record.summary !== 'string' || record.summary.trim().length < 20
       || !Array.isArray(record.timeline) || !record.timeline.length
-      || !record.at_a_glance || typeof record.at_a_glance !== 'object'
-      || !Array.isArray(record.included) || !Array.isArray(record.not_included)) {
+      || record.timeline.some(step => !step || typeof step.title !== 'string' || step.title.trim().length < 2
+        || typeof step.text !== 'string' || step.text.trim().length < 4)
+      || !record.at_a_glance || typeof record.at_a_glance !== 'object' || Array.isArray(record.at_a_glance)
+      || !Array.isArray(record.included) || !Array.isArray(record.not_included)
+      || !Array.isArray(record.faq) || record.faq.some(item => !item || typeof item.question !== 'string' || item.question.trim().length < 5
+        || typeof item.answer !== 'string' || item.answer.trim().length < 5)) {
       throw fail(422, 'This tour is missing required fields and cannot be made Live.');
     }
     imagePath(record.hero_image);
@@ -277,10 +298,21 @@ function verifyPublishableRecord(type, record) {
     return;
   }
   if (type === 'blogs') {
-    if (typeof record.h1 !== 'string' || typeof record.title !== 'string'
-      || typeof record.description !== 'string' || !Array.isArray(record.toc)
+    if (typeof record.h1 !== 'string' || record.h1.trim().length < 8
+      || typeof record.title !== 'string' || record.title.trim().length < 8
+      || typeof record.description !== 'string' || record.description.trim().length < 40
+      || typeof record.lede !== 'string' || record.lede.trim().length < 30
+      || !Array.isArray(record.toc) || !record.toc.length
       || !Array.isArray(record.sections) || !record.sections.length
-      || !Array.isArray(record.sources) || !record.sources.length) {
+      || record.sections.some(section => !section || typeof section.heading !== 'string' || section.heading.trim().length < 2
+        || !Array.isArray(section.paragraphs) || (!section.paragraphs.length && !Array.isArray(section.items))
+        || section.paragraphs.some(paragraph => typeof paragraph !== 'string' || !paragraph.trim())
+        || !Array.isArray(section.items) || section.items.some(item => typeof item !== 'string' || !item.trim()))
+      || !Array.isArray(record.sources) || !record.sources.length
+      || record.sources.some(source => {
+        if (!source || typeof source.label !== 'string' || !source.label.trim() || typeof source.url !== 'string') return true;
+        try { return new URL(source.url).protocol !== 'https:'; } catch (_) { return true; }
+      })) {
       throw fail(422, 'This blog guide is missing required fields and cannot be made Live.');
     }
     imagePath(record.hero_image);
@@ -347,8 +379,20 @@ function readManagedContent(type, slug) {
 
 function updateManagedPage(type, slug, record) {
   const { files, record: previous } = readManagedRecord(type, slug);
+  if (previous.status === 'hidden') throw fail(409, 'This record uses Hidden status. Ask the operator to review it before editing.');
   if (type === 'gallery') throw fail(400, 'Gallery records do not use PHP page routes.');
-  safeManagedRoute(files.route);
+  safeManagedRoute(files.route, type, slug);
+  // Preserve fields the form does not expose, including operator-customized ordering and related links.
+  record = { ...previous, ...record };
+  if (type === 'tours') {
+    for (const key of ['parent', 'order', 'timeline_label', 'related']) {
+      if (previous[key] !== undefined) record[key] = previous[key];
+    }
+  } else if (type === 'blogs') {
+    for (const key of ['related', 'cta_eyebrow', 'cta_primary_label', 'cta_primary_href', 'cta_secondary_label', 'cta_secondary_href']) {
+      if (previous[key] !== undefined) record[key] = previous[key];
+    }
+  }
   const oldRecord = fs.readFileSync(files.record);
   const sitemapPath = path.join(ROOT, 'sitemap.xml');
   const oldSitemap = fs.readFileSync(sitemapPath);
@@ -376,7 +420,7 @@ function setManagedStatus(type, slug, nextStatus) {
   if (record.status === 'hidden') throw fail(409, 'This record uses Hidden status. Ask the operator to review it before changing publication.');
   if (record.status === status) return { type, slug, status, message: 'No publication-state change was needed.' };
   if (status === 'live') verifyPublishableRecord(type, record);
-  if (type !== 'gallery') safeManagedRoute(files.route);
+  if (type !== 'gallery') safeManagedRoute(files.route, type, slug);
   const oldRecord = fs.readFileSync(files.record);
   const sitemapPath = path.join(ROOT, 'sitemap.xml');
   const oldSitemap = type === 'gallery' ? null : fs.readFileSync(sitemapPath);
@@ -396,7 +440,7 @@ function setManagedStatus(type, slug, nextStatus) {
 function deleteManagedDraft(type, slug) {
   const { files, record } = readManagedRecord(type, slug);
   if (record.status !== 'draft') throw fail(409, 'Only Draft content can be deleted. Set it to Draft first, then review the removal.');
-  if (type !== 'gallery') safeManagedRoute(files.route);
+  if (type !== 'gallery') safeManagedRoute(files.route, type, slug);
   const oldRecord = fs.readFileSync(files.record);
   const oldRoute = type === 'gallery' ? null : fs.readFileSync(files.route);
   const sitemapPath = path.join(ROOT, 'sitemap.xml');
@@ -472,8 +516,9 @@ function createTour(input, existingSlug = null) {
     related: category === 'city' ? ['half-day-jaisalmer-tour', 'full-day-jaisalmer-tour'] : ['sleep-under-the-stars', 'swiss-tent-safari'],
     date_modified: date,
   };
-  updateImageManifest(heroImage);
-  return existingSlug ? updateManagedPage('tours', slug, record) : createPage('experiences', slug, record, 'experienceSlug');
+  return withManifestSource(heroImage, () => existingSlug
+    ? updateManagedPage('tours', slug, record)
+    : createPage('experiences', slug, record, 'experienceSlug'));
 }
 
 function parseArticle(value) {
@@ -564,8 +609,9 @@ function createBlog(input, existingSlug = null) {
     cta_secondary_label: 'Contact the hotel', cta_secondary_href: 'contact.php',
   };
   record.toc = record.sections.map(item => ({ id: item.id, label: item.heading }));
-  updateImageManifest(heroImage);
-  return existingSlug ? updateManagedPage('blogs', slug, record) : createPage('editorial', slug, record, 'editorialGuideSlug');
+  return withManifestSource(heroImage, () => existingSlug
+    ? updateManagedPage('blogs', slug, record)
+    : createPage('editorial', slug, record, 'editorialGuideSlug'));
 }
 
 function existingGallerySources(excludeId = null) {
@@ -595,13 +641,21 @@ function createGallery(input, existingId = null) {
   const status = statusValue(input.status);
   const id = existingId || slugify(category + '-' + path.parse(src).name + '-' + crypto.randomBytes(3).toString('hex'));
   const record = { id, category, status, image: { src, alt, caption, crop } };
-  const file = existingId ? readManagedRecord('gallery', existingId).files.record : path.join(CONTENT_ROOT, 'gallery', id + '.json');
-  const previous = existingId ? fs.readFileSync(file) : null;
-  updateImageManifest(src);
+  const previousManaged = existingId ? readManagedRecord('gallery', existingId) : null;
+  if (previousManaged && previousManaged.record.status === 'hidden') throw fail(409, 'This record uses Hidden status. Ask the operator to review it before editing.');
+  const file = previousManaged ? previousManaged.files.record : path.join(CONTENT_ROOT, 'gallery', id + '.json');
+  const previous = previousManaged ? fs.readFileSync(file) : null;
+  const manifestFile = path.join(ROOT, 'scripts', 'responsive-image-assets-manifest.json');
+  const originalManifest = fs.readFileSync(manifestFile);
   try {
-    atomicWrite(file, JSON.stringify(record, null, 2) + '\n');
+    updateImageManifest(src);
+    const safeRecord = previousManaged
+      ? { ...previousManaged.record, ...record, image: { ...previousManaged.record.image, ...record.image } }
+      : record;
+    atomicWrite(file, JSON.stringify(safeRecord, null, 2) + '\n');
   } catch (error) {
     if (previous) { try { atomicWrite(file, previous); } catch (_) {} }
+    try { atomicWrite(manifestFile, originalManifest); } catch (_) {}
     throw error;
   }
   return {
