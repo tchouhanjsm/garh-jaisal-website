@@ -126,8 +126,15 @@ require __DIR__ . '/include/page-head.php';
         $archiveGuides = array_filter($editorialGuides, static function ($guide) {
             return is_array($guide) && ($guide['status'] ?? 'live') === 'live';
         });
+        // Preserve the established Fort-guide lead card and first viewport/LCP image.
+        $featuredGuide = $archiveGuides['jaisalmer-fort-guide'] ?? null;
+        if (is_array($featuredGuide)) {
+            unset($archiveGuides['jaisalmer-fort-guide']);
+            $archiveGuides = ['jaisalmer-fort-guide' => $featuredGuide] + $archiveGuides;
+        }
         foreach ($archiveGuides as $guide):
             $slug = (string) ($guide['slug'] ?? '');
+            $isFeatured = $slug === 'jaisalmer-fort-guide';
             $cardTitle = (string) ($guide['archive_title'] ?? $defaultArchiveTitles[$slug] ?? $guide['h1'] ?? $guide['title'] ?? 'Jaisalmer travel guide');
             $cardDescription = (string) ($guide['archive_description'] ?? $guide['description'] ?? '');
             $cardCategory = (string) ($guide['archive_category'] ?? $guide['eyebrow'] ?? 'Travel guide');
@@ -135,10 +142,11 @@ require __DIR__ . '/include/page-head.php';
             $cardImageAlt = (string) ($guide['archive_image_alt'] ?? $defaultArchiveImageAlts[$slug] ?? $guide['hero_alt'] ?? '');
             if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $slug)) continue;
         ?>
-          <article class="blog-card">
+          <article class="blog-card<?= $isFeatured ? ' blog-card--featured' : '' ?>">
             <a href="<?= htmlspecialchars($slug . '.php', ENT_QUOTES, 'UTF-8') ?>">
               <?php if ($cardImage !== ''): ?>
-                <div class="blog-card-image"><img src="<?= htmlspecialchars($cardImage, ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($cardImage, '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($cardImageAlt, ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async"></div>
+                <?php $cardImageSizes = $isFeatured ? '(max-width: 900px) 100vw, 60vw' : '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw'; ?>
+                <div class="blog-card-image"><img src="<?= htmlspecialchars($cardImage, ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($cardImage, $cardImageSizes) ?> alt="<?= htmlspecialchars($cardImageAlt, ENT_QUOTES, 'UTF-8') ?>" loading="<?= $isFeatured ? 'eager' : 'lazy' ?>" decoding="async"<?= $isFeatured ? ' fetchpriority="high"' : '' ?>></div>
               <?php endif; ?>
               <div class="blog-card-body">
                 <p class="blog-card-meta"><?= htmlspecialchars($cardCategory, ENT_QUOTES, 'UTF-8') ?></p>
