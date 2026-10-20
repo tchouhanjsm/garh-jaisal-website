@@ -274,6 +274,22 @@ async function main() {
   response = await fetch(PHP_URL + '/' + slugs[1] + '.php');
   html = await response.text();
   assert.ok(html.includes('Updated Content Studio Draft Test Tour'), 'edited copy should render through the existing page');
+
+  // Hidden records and externally modified route wrappers are read-only through the manager.
+  const draftTourBytes = fs.readFileSync(recordFiles[1]);
+  const hiddenTour = JSON.parse(draftTourBytes.toString('utf8'));
+  hiddenTour.status = 'hidden';
+  fs.writeFileSync(recordFiles[1], JSON.stringify(hiddenTour, null, 2) + '\\n');
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1], 'PUT', updatedDraftTour);
+  assert.equal(result.response.status, 409, 'a Hidden record must not be edited through the manager');
+  fs.writeFileSync(recordFiles[1], draftTourBytes);
+
+  const generatedDraftRoute = fs.readFileSync(routeFiles[1]);
+  fs.writeFileSync(routeFiles[1], Buffer.concat([generatedDraftRoute, Buffer.from('\\n// operator change\\n')]));
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1] + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 409, 'publishing must not modify a route wrapper changed outside Content Studio');
+  fs.writeFileSync(routeFiles[1], generatedDraftRoute);
+
   result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1] + '/status', 'PATCH', { status: 'live' });
   assert.equal(result.response.status, 200, 'a valid draft should be publishable locally');
   sitemap = fs.readFileSync(sitemapPath, 'utf8');
@@ -406,6 +422,20 @@ async function main() {
     method: 'POST', headers: { 'Content-Type': 'image/jpeg' }, body: Buffer.from('this is not a JPEG image'),
   });
   assert.equal(badUpload.status, 400, 'invalid image bytes should be rejected');
+
+  // A symlinked image directory must be rejected even if the final image file exists behind it.
+  const unsafeImageLink = path.join(ROOT, 'img/content-studio-ci-symlink');
+  assert.ok(!fs.existsSync(unsafeImageLink), 'refusing to overwrite a pre-existing image-path safety fixture');
+  fs.symlinkSync(path.join(ROOT, 'img/Desert_Camp'), unsafeImageLink, 'dir');
+  try {
+    const symlinkImage = await requestJson(STUDIO_URL + '/api/gallery', 'POST', {
+      category: 'hotel', status: 'draft', src: 'img/content-studio-ci-symlink/Tent.jpeg',
+      alt: 'A test path that traverses a symlinked image directory', crop: 'landscape',
+    });
+    assert.equal(symlinkImage.response.status, 400, 'symlinked image directories must not be accepted');
+  } finally {
+    try { if (fs.lstatSync(unsafeImageLink).isSymbolicLink()) fs.unlinkSync(unsafeImageLink); } catch (_) {}
+  }
 }
 
 main()
