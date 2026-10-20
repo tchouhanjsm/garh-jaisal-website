@@ -178,8 +178,18 @@
 <script>
 (function(){
   const tabs=Array.from(document.querySelectorAll('[role="tab"][data-pane]'));
+  let editing=null;
+  function activatePane(pane){
+    tabs.forEach(tab=>{
+      const selected=tab.dataset.pane===pane;
+      tab.setAttribute('aria-selected',selected?'true':'false');
+      document.getElementById('pane-'+tab.dataset.pane).classList.toggle('active',selected);
+    });
+  }
   tabs.forEach(tab=>tab.addEventListener('click',()=>{
-    tabs.forEach(other=>{const selected=other===tab;other.setAttribute('aria-selected',selected?'true':'false');document.getElementById('pane-'+other.dataset.pane).classList.toggle('active',selected);});
+    if(editing)return;
+    activatePane(tab.dataset.pane);
+    if(tab.dataset.pane==='manage')refreshManagedContent();
   }));
   function show(id,message,good,link){
     const el=document.getElementById(id);el.replaceChildren();el.className='result visible '+(good?'good':'bad');
@@ -195,13 +205,14 @@
       }
       const invalid=data.tours.invalid+data.blogs.invalid+data.gallery.invalid;
       line.textContent=data.message+(invalid?' Warning: '+invalid+' existing record(s) contain invalid JSON.':'');
+      await refreshManagedContent();
     }catch(e){line.textContent=e.message;}
   }
   function slugify(v){return String(v||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80).replace(/-+$/g,'');}
   function slugAssist(titleId,slugId){
     const title=document.getElementById(titleId),slug=document.getElementById(slugId);let changed=false;
     slug.addEventListener('input',()=>{changed=slug.value.trim()!=='';});
-    title.addEventListener('input',()=>{if(!changed||!slug.value.trim())slug.value=slugify(title.value);});
+    title.addEventListener('input',()=>{if(!slug.readOnly&&(!changed||!slug.value.trim()))slug.value=slugify(title.value);});
   }
   slugAssist('tour-title','tour-slug');slugAssist('blog-h1','blog-slug');
 
@@ -321,6 +332,214 @@
   document.getElementById('tour-add-faq').addEventListener('click',()=>addSimpleRow(tourFaqConfig));
   document.getElementById('blog-add-source').addEventListener('click',()=>addSimpleRow(blogSourceConfig));
   addSimpleRow(tourStepConfig);addSimpleRow(blogSourceConfig);
+  const resetLabels={
+    tours:{heading:'New tour or experience',submit:'Validate and save tour'},
+    blogs:{heading:'New blog or travel guide',submit:'Validate and save blog'},
+    gallery:{heading:'Add Gallery photos',submit:'Validate and add photo'},
+  };
+  const formIds={tours:'tour-form',blogs:'blog-form',gallery:'gallery-form'};
+  const paneIds={tours:'tour',blogs:'blog',gallery:'gallery'};
+  const labelIds={tours:'tour-form-heading',blogs:'blog-form-heading',gallery:'gallery-form-heading'};
+  const submitIds={tours:'tour-submit',blogs:'blog-submit',gallery:'gallery-submit'};
+  const managedList=document.getElementById('managed-content-list');
+
+  async function refreshManagedContent(){
+    try{
+      const response=await fetch('/api/content',{cache:'no-store'});
+      const data=await response.json();if(!response.ok)throw new Error(data.error||'Saved content could not be loaded.');
+      renderManagedContent(data.items||[]);
+      return data.items||[];
+    }catch(error){
+      managedList.replaceChildren();
+      const note=document.createElement('p');note.className='empty-records';note.textContent='Saved content could not be loaded: '+error.message;
+      managedList.appendChild(note);return [];
+    }
+  }
+
+  function appendAction(container,label,action,item,disabled=false,danger=false){
+    const button=document.createElement('button');button.type='button';button.textContent=label;
+    button.dataset.action=action;button.dataset.type=item.type;button.dataset.slug=item.slug;
+    button.disabled=disabled;if(danger)button.classList.add('danger');
+    container.appendChild(button);return button;
+  }
+
+  function renderManagedContent(items){
+    managedList.replaceChildren();
+    if(!items.length){
+      const note=document.createElement('p');note.className='empty-records';
+      note.textContent='No Content Studio records yet. Add a tour, travel guide or Gallery photo first; saved records will appear here so you can revise them later.';
+      managedList.appendChild(note);return;
+    }
+    for(const item of items){
+      const card=document.createElement('article');card.className='content-record';card.dataset.recordKey=item.type+':'+item.slug;
+      const details=document.createElement('div');
+      const kicker=document.createElement('div');kicker.className='record-kicker';
+      const kind=document.createElement('span');kind.className='record-type';kind.textContent=item.type==='tours'?'Tour':item.type==='blogs'?'Blog guide':'Gallery photo';
+      const status=document.createElement('span');status.className='record-status '+String(item.status||'invalid');status.textContent=String(item.status||'invalid').toUpperCase();
+      kicker.append(kind,status);details.appendChild(kicker);
+      const title=document.createElement('h3');title.textContent=item.title||item.slug;details.appendChild(title);
+      const detail=document.createElement('p');detail.textContent=(item.detail||'')+(item.slug?' · '+item.slug:'');details.appendChild(detail);
+      if(item.modified){const modified=document.createElement('p');modified.textContent='Last modified: '+item.modified;details.appendChild(modified);}
+      card.appendChild(details);
+      const actions=document.createElement('div');actions.className='record-actions';
+      const manageable=!item.invalid&&(item.status==='draft'||item.status==='live');
+      if(manageable){
+        appendAction(actions,'Edit','edit',item);
+        if(item.status==='draft'){
+          appendAction(actions,'Publish locally','publish',item);
+          appendAction(actions,'Delete draft','delete',item,false,true);
+        }else{
+          appendAction(actions,'Set to Draft','unpublish',item);
+        }
+      }else{
+        const locked=document.createElement('p');locked.className='hint';locked.textContent='Read-only until an operator reviews this record.';actions.appendChild(locked);
+      }
+      card.appendChild(actions);managedList.appendChild(card);
+    }
+  }
+
+  function setField(form,name,value){
+    const control=form.elements.namedItem(name);
+    if(control)control.value=value===null||value===undefined?'':String(value);
+  }
+
+  function setSimpleRows(config,values,readFields){
+    resetSimpleRows(config);
+    const list=document.getElementById(config.listId);
+    values.forEach((value,index)=>{
+      const card=list.querySelectorAll('.section-editor')[index]||addSimpleRow(config);
+      const mapped=readFields(value);
+      for(const [key,val] of Object.entries(mapped)){
+        const control=card.querySelector('[data-key="'+key+'"]');if(control)control.value=val===null||val===undefined?'':String(val);
+      }
+    });
+    syncSimpleRows(config);
+  }
+
+  function populateTour(record){
+    const form=document.getElementById('tour-form');form.reset();
+    const glance=record.at_a_glance||{};
+    const fields={
+      title:record.h1,slug:record.slug,category:record.category,status:record.status,
+      durationType:record.duration_type,menuLabel:record.menu_label,seoTitle:record.title,
+      description:record.description,summary:record.summary,eyebrow:record.eyebrow,bestFor:record.best_for,
+      heroImage:record.hero_image,heroAlt:record.hero_alt,durationLabel:glance.Duration,
+      overnight:glance.Overnight,camelRide:glance['Camel ride'],meals:glance.Meals,
+      transport:glance.Transport,returnPlan:glance.Return,timelineNote:record.timeline_note,
+      included:(record.included||[]).join('\n'),excluded:(record.not_included||[]).join('\n'),
+      beforeBook:record.before_book,
+    };
+    for(const [name,value] of Object.entries(fields))setField(form,name,value);
+    setSimpleRows(tourStepConfig,record.timeline||[],row=>({title:row.title,description:row.text}));
+    setSimpleRows(tourFaqConfig,record.faq||[],row=>({question:row.question,answer:row.answer}));
+    document.getElementById('tour-hero-upload-status').textContent='Existing photo retained. Choose a new photo only to replace it.';
+  }
+
+  function populateBlog(record){
+    const form=document.getElementById('blog-form');form.reset();
+    const fields={
+      h1:record.h1,slug:record.slug,status:record.status,seoTitle:record.title,
+      description:record.description,lede:record.lede,eyebrow:record.eyebrow,
+      heroImage:record.hero_image,heroAlt:record.hero_alt,cardTitle:record.archive_title,
+      cardDescription:record.archive_description,ctaTitle:record.cta_title,ctaText:record.cta_text,
+    };
+    for(const [name,value] of Object.entries(fields))setField(form,name,value);
+    resetBlogSections();
+    const sections=record.sections||[];
+    sections.forEach((section,index)=>{
+      const card=sectionList.querySelectorAll('.section-editor')[index]||addBlogSection();
+      card.querySelector('[data-section-heading]').value=section.heading||'';
+      card.querySelector('[data-section-body]').value=(section.paragraphs||[]).join('\n\n');
+      card.querySelector('[data-section-bullets]').value=(section.items||[]).join('\n');
+    });
+    syncBlogSections();
+    setSimpleRows(blogSourceConfig,record.sources||[],source=>({label:source.label,url:source.url,note:source.note}));
+    document.getElementById('blog-hero-upload-status').textContent='Existing photo retained. Choose a new photo only to replace it.';
+  }
+
+  function populateGallery(record){
+    const form=document.getElementById('gallery-form');form.reset();
+    const photo=record.image||{};
+    for(const [name,value] of Object.entries({
+      category:record.category,status:record.status,src:photo.src,alt:photo.alt,caption:photo.caption,crop:photo.crop,
+    }))setField(form,name,value);
+    document.getElementById('gallery-upload-status').textContent='Existing photo retained. Choose a new photo only to replace it.';
+  }
+
+  function clearEditMode(){
+    if(!editing)return;
+    const current=editing;const form=document.getElementById(formIds[current.type]);
+    const slugField=form.elements.namedItem('slug');if(slugField)slugField.readOnly=false;
+    document.getElementById(labelIds[current.type]).textContent=resetLabels[current.type].heading;
+    document.getElementById(submitIds[current.type]).textContent=resetLabels[current.type].submit;
+    const cancel=form.querySelector('[data-cancel-edit]');if(cancel)cancel.remove();
+    editing=null;
+    tabs.forEach(tab=>{tab.disabled=false;});
+  }
+
+  function resetAuthorForm(type){
+    const form=document.getElementById(formIds[type]);form.reset();
+    const slugField=form.elements.namedItem('slug');
+    if(slugField){slugField.value='';slugField.dispatchEvent(new Event('input',{bubbles:true}));}
+    if(type==='tours'){resetSimpleRows(tourStepConfig);resetSimpleRows(tourFaqConfig);document.getElementById('tour-hero-upload-status').textContent='Choose a photo or enter an existing img/ path.';}
+    if(type==='blogs'){resetBlogSections();resetSimpleRows(blogSourceConfig);document.getElementById('blog-hero-upload-status').textContent='Choose a photo or enter an existing img/ path.';}
+    if(type==='gallery')document.getElementById('gallery-upload-status').textContent='Choose a photo or enter an existing img/ path.';
+  }
+
+  async function startEdit(type,slug){
+    const response=await fetch('/api/content/'+type+'/'+encodeURIComponent(slug),{cache:'no-store'});
+    const data=await response.json();if(!response.ok)throw new Error(data.error||'Record could not be opened.');
+    if(type==='tours')populateTour(data.record);
+    else if(type==='blogs')populateBlog(data.record);
+    else populateGallery(data.record);
+    editing={type,slug};
+    activatePane(paneIds[type]);
+    tabs.forEach(tab=>{tab.disabled=tab.dataset.pane!==paneIds[type];});
+    document.getElementById(labelIds[type]).textContent='Edit saved '+(type==='tours'?'tour':type==='blogs'?'blog guide':'Gallery photo');
+    document.getElementById(submitIds[type]).textContent='Save changes';
+    const form=document.getElementById(formIds[type]);
+    const slugField=form.elements.namedItem('slug');if(slugField)slugField.readOnly=true;
+    const cancel=document.createElement('button');cancel.type='button';cancel.textContent='Cancel editing';cancel.dataset.cancelEdit='true';
+    cancel.addEventListener('click',()=>{
+      resetAuthorForm(type);clearEditMode();activatePane('manage');refreshManagedContent();
+    });
+    document.getElementById(submitIds[type]).insertAdjacentElement('afterend',cancel);
+  }
+
+  async function handleManagedAction(event){
+    const button=event.target.closest('button[data-action]');if(!button||editing)return;
+    const {action,type,slug}=button.dataset;
+    if(action==='edit'){
+      button.disabled=true;
+      try{await startEdit(type,slug);}
+      catch(error){show('manager-result',error.message,false);}
+      finally{button.disabled=false;}
+      return;
+    }
+    if(action==='delete'&&!window.confirm('Delete this Draft from the local working tree? Its page route and content record will be removed; source images are retained.'))return;
+    if(action==='publish'&&!window.confirm('Mark this record Live in the local working tree? It can enter local listings and the sitemap, but nothing is deployed.'))return;
+    if(action==='unpublish'&&!window.confirm('Set this record to Draft? It will be removed from local public listings and sitemap, but its local page remains noindex until deleted.'))return;
+    button.disabled=true;
+    try{
+      let response;
+      if(action==='delete'){
+        response=await fetch('/api/content/'+type+'/'+encodeURIComponent(slug),{method:'DELETE'});
+      }else{
+        const status=action==='publish'?'live':'draft';
+        response=await fetch('/api/content/'+type+'/'+encodeURIComponent(slug)+'/status',{
+          method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status}),
+        });
+      }
+      const data=await response.json();if(!response.ok)throw new Error(data.error||'Saved content could not be changed.');
+      await refresh();
+      show('manager-result',data.message||data.sitemapMessage||(action==='publish'?'Record marked Live locally.':action==='unpublish'?'Record set to Draft.':'Draft deleted.'),true);
+    }catch(error){show('manager-result',error.message,false);}
+    finally{button.disabled=false;}
+  }
+
+  managedList.addEventListener('click',handleManagedAction);
+  document.getElementById('refresh-content').addEventListener('click',refreshManagedContent);
+
   document.querySelectorAll('input[type="file"][data-upload-target]').forEach(input=>input.addEventListener('change',async()=>{
     const file=input.files&&input.files[0];if(!file)return;
     const statusId=input.id.replace('-upload','-upload-status');const status=document.getElementById(statusId);status.textContent='Uploading and validating the image…';
@@ -330,7 +549,7 @@
       document.getElementById(input.dataset.uploadTarget).value=data.src;status.textContent=data.message+' Path: '+data.src;
     }catch(e){status.textContent=e.message;}
   }));
-  async function attachForm(formId,endpoint,resultId){
+  async function attachForm(formId,endpoint,resultId,managedType){
     const form=document.getElementById(formId);
     form.addEventListener('submit',async event=>{
       event.preventDefault();
@@ -338,12 +557,17 @@
       if(formId==='tour-form'){syncSimpleRows(tourStepConfig);syncSimpleRows(tourFaqConfig);}
       if(formId==='blog-form')syncSimpleRows(blogSourceConfig);
       if(!form.reportValidity())return;
-      const button=form.querySelector('button[type="submit"]');button.disabled=true;const original=button.textContent;button.textContent='Validating…';
+      const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent='Validating…';
       const values=Object.fromEntries(new FormData(form).entries());
+      const edit=editing&&editing.type===managedType?editing:null;
+      const target=edit?'/api/content/'+managedType+'/'+encodeURIComponent(edit.slug):endpoint;
+      const method=edit?'PUT':'POST';
       try{
-        const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(values)});
+        const res=await fetch(target,{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(values)});
         const data=await res.json();if(!res.ok)throw new Error(data.error||'Content could not be saved');
-        const kind=values.status==='draft'?'Draft created':'Local live record created';
+        const kind=edit
+          ? (values.status==='draft'?'Draft updated':'Local live record updated')
+          : (values.status==='draft'?'Draft created':'Local live record created');
         const detail=data.sitemapMessage||data.message||'Review the saved files in Git.';
         let link=null;
         const base=document.getElementById('preview-base').value.trim().replace(/\/+$/,'');
@@ -351,20 +575,18 @@
           const path=formId==='gallery-form'?'/gallery.php#'+encodeURIComponent(values.category):data.pagePath;
           link={href:base+path,label:formId==='gallery-form'?'Open local Gallery preview (if PHP is running)':'Open local PHP preview (if PHP is running)'};
         }
-        show(resultId,kind+': '+data.pagePath+'. '+detail,true,link);
-        form.reset();
-        if(formId==='blog-form'){resetBlogSections();resetSimpleRows(blogSourceConfig);}
-        if(formId==='tour-form'){resetSimpleRows(tourStepConfig);resetSimpleRows(tourFaqConfig);document.getElementById('tour-hero-upload-status').textContent='Choose a photo or enter an existing img/ path.';}
-        if(formId==='blog-form')document.getElementById('blog-hero-upload-status').textContent='Choose a photo or enter an existing img/ path.';
-        if(formId==='gallery-form')document.getElementById('gallery-upload-status').textContent='Choose a photo or enter an existing img/ path.';
+        show(resultId,kind+': '+(data.pagePath||'saved record')+'. '+detail,true,link);
+        resetAuthorForm(managedType);
+        if(edit)clearEditMode();
         await refresh();
+        if(edit){activatePane('manage');show('manager-result',kind+': '+(data.pagePath||'saved record')+'. '+detail,true);}
       }catch(e){show(resultId,e.message,false);}
-      finally{button.disabled=false;button.textContent=original;}
+      finally{button.disabled=false;button.textContent=resetLabels[managedType].submit;}
     });
   }
-  attachForm('tour-form','/api/tours','tour-result');
-  attachForm('blog-form','/api/blogs','blog-result');
-  attachForm('gallery-form','/api/gallery','gallery-result');
+  attachForm('tour-form','/api/tours','tour-result','tours');
+  attachForm('blog-form','/api/blogs','blog-result','blogs');
+  attachForm('gallery-form','/api/gallery','gallery-result','gallery');
   const optimize=document.getElementById('optimize-button');
   optimize.addEventListener('click',async()=>{
     optimize.disabled=true;const original=optimize.textContent;optimize.textContent='Building variants…';
