@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
+const vm = require('node:vm');
 
 const ROOT = path.resolve(__dirname, '../..');
 const STUDIO_PORT = 43000 + (process.pid % 10000);
@@ -109,7 +110,24 @@ function tourPayload(slug, status) {
   };
 }
 
+function verifyContentStudioAuthoringUi() {
+  const file = path.join(ROOT, 'tools/content-studio/index.html');
+  const html = fs.readFileSync(file, 'utf8');
+  const scripts = [...html.matchAll(/<script\\b[^>]*>([\\s\\S]*?)<\\/script>/gi)];
+  assert.ok(scripts.length > 0, 'Content Studio must include its browser interaction script');
+  scripts.forEach((match, index) => {
+    new vm.Script(match[1], { filename: 'tools/content-studio/index.html inline script ' + (index + 1) });
+  });
+  for (const id of ['blog-section-list', 'tour-step-list', 'tour-faq-list', 'blog-source-list']) {
+    assert.ok(html.includes('id="' + id + '"'), 'guided authoring control should exist: ' + id);
+  }
+  assert.ok(html.includes('Four steps to add content'), 'the editor should explain the workflow in plain language');
+  assert.ok(html.includes('Live in local files — still not public'), 'the UI must state that saving does not publish to production');
+  process.stdout.write('PASS Content Studio UI script syntax and nontechnical guided authoring controls.\\n');
+}
+
 async function main() {
+  verifyContentStudioAuthoringUi();
   noExistingFixtures();
   for (const file of [...routeFiles, ...recordFiles]) ownedPaths.add(file);
   sitemapTouched = true;
