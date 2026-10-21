@@ -144,7 +144,8 @@ function verifyV2TemplateAndAssetRegistry() {
     assert.throws(() => api.assertApprovedStylesheet(unapproved), /not approved/);
   }
   assert.throws(() => api.getTemplateContract('arbitrary-php'), /supported page template/);
-  assert.throws(() => api.validateRouteForTemplate('same-route', 'experience-detail'), /already exists/);
+  assert.throws(() => api.validateRouteForTemplate('pack', 'experience-detail'), /already exists/);
+  assert.throws(() => api.validateRouteForTemplate('../unsafe-route', 'experience-detail'), /route slug/);
   const symlinkCandidate = path.join(ROOT, '.content-studio-v2-test-link');
   assert.ok(!fs.existsSync(symlinkCandidate), 'symlink fixture must be safe and unused');
   try {
