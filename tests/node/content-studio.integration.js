@@ -206,7 +206,9 @@ function verifyContentStudioAuthoringUi() {
   assert.ok(html.includes("method:'PATCH'"), 'the manager should change publication state explicitly');
   assert.ok(html.includes('Delete this Draft from the local working tree?'), 'deletion must require a confirmation');
   assert.ok(html.includes('Four steps to add content'), 'the editor should explain the workflow in plain language');
-  assert.ok(html.includes('Live in local files — still not public'), 'the UI must state that saving does not publish to production');
+  assert.ok(html.includes('Live locally — never public by itself'), 'the UI must state that publication is local-only');
+  assert.ok(html.includes('Preview PHP-rendered draft'), 'tour and blog authoring must expose the actual PHP-rendered preview');
+  assert.ok(html.includes('Approved for release'), 'the UI must explain release approval separately from publication');
   process.stdout.write('PASS Content Studio UI script syntax and nontechnical guided authoring controls.\\n');
 }
 
@@ -523,9 +525,20 @@ async function main() {
   ownedPaths.add(galleryRecordPath);
   let galleryDraftRecord = JSON.parse(fs.readFileSync(galleryRecordPath, 'utf8'));
   assert.equal(galleryDraftRecord.status, 'draft');
-  result = await requestJson(STUDIO_URL + '/api/content/gallery/' + result.body.id + '/status', 'PATCH', { status: 'live' });
-  assert.equal(result.response.status, 409, 'Gallery draft must not bypass review approval');
   const galleryId = path.basename(galleryRecordPath, '.json');
+  result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 409, 'Gallery draft must not bypass review approval');
+  result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId, 'PUT', {
+    category: 'hotel', status: 'live', src: gallerySrc,
+    alt: 'Attempt to bypass Gallery review using the edit endpoint',
+    caption: 'Must remain a Draft', crop: 'landscape',
+  });
+  assert.equal(result.response.status, 409, 'editing a Gallery Draft must not bypass release approval');
+  galleryDraftRecord = JSON.parse(fs.readFileSync(galleryRecordPath, 'utf8'));
+  assert.equal(galleryDraftRecord.status, 'draft', 'rejected Gallery edit must leave the stored publication state unchanged');
+  result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 409, 'rejected Gallery edit must not mark content Live');
+
   await transitionReview('gallery', galleryId, 'ready_for_review');
   await transitionReview('gallery', galleryId, 'approved_for_release');
   result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId + '/status', 'PATCH', { status: 'live' });

@@ -933,7 +933,7 @@ function createGallery(input, existingId = null) {
   const previousManaged = existingId ? readManagedRecord('gallery', existingId) : null;
   if (!existingId && status === 'live') throw fail(409, 'New Gallery entries must be Draft, Ready for review, and Approved for release before they can be made Live locally.');
   if (previousManaged && previousManaged.record.status === 'hidden') throw fail(409, 'This record uses Hidden status. Ask the operator to review it before editing.');
-  if (previousManaged && previousManaged.record.status === 'live' && status === 'live') throw fail(409, 'Set this Gallery entry to Draft before editing it, then submit the change for review again.');
+  if (previousManaged && status === 'live') throw fail(409, 'Save Gallery edits as Draft, mark them Ready for review, and Approve for release before making them Live locally.');
   const record = { id, category, status, review_status: 'draft', image: { src, alt, caption, crop } };
   const file = previousManaged ? previousManaged.files.record : path.join(CONTENT_ROOT, 'gallery', id + '.json');
   assertContentDirectoryChain(path.dirname(file), true);
