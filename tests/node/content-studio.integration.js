@@ -112,6 +112,54 @@ function tourPayload(slug, status) {
   };
 }
 
+
+function verifyV2TemplateAndAssetRegistry() {
+  const file = path.join(ROOT, 'scripts/content-studio.js');
+  const source = fs.readFileSync(file, 'utf8');
+  const registryStart = source.indexOf('const PAGE_TEMPLATE_REGISTRY');
+  const failStart = source.indexOf('function fail(statusCode, message)');
+  assert.ok(registryStart >= 0 && failStart > registryStart, 'template registry should be declared before request handlers');
+  const registrySource = source.slice(registryStart, failStart);
+  const sandbox = { Object, Set, path, fs, ROOT, require: moduleName => { if (moduleName === 'node:path') return path; if (moduleName === 'node:fs') return fs; throw new Error('Unexpected registry test dependency: ' + moduleName); } };
+  const exported = 'result = { PAGE_TEMPLATE_REGISTRY, STUDIO_MANAGED_PAGE_REGISTRY, APPROVED_STYLESHEET_PATHS, assertRegularRepoFile, assertApprovedStylesheet, getTemplateContract, validateRouteForTemplate, validateTemplateRegistry };';
+  const compile = new vm.Script(registrySource + String.fromCharCode(10) + exported);
+  vm.createContext(sandbox);
+  compile.runInContext(sandbox, { timeout: 2000 });
+  const api = sandbox.result;
+  const registry = api.PAGE_TEMPLATE_REGISTRY;
+  const result = { templateCount: Object.keys(registry).length, managedPageCount: Object.keys(api.STUDIO_MANAGED_PAGE_REGISTRY).length };
+  for (const templateId of Object.keys(registry)) {
+    const contract = api.getTemplateContract(templateId);
+    assert.ok(contract.renderer.endsWith('.php'), 'registered renderers must remain PHP templates');
+  }
+  assert.equal(result.templateCount, 2, 'only explicit renderer-backed templates should be available');
+  assert.equal(result.managedPageCount, 4, 'known routes should be registered for supported-field editing');
+  assert.deepEqual(Array.from(api.getTemplateContract('experience-detail').stylesheetPaths), ['css/garh-v2.css', 'css/experiences.css', 'css/thar-sunset-story.css']);
+  assert.deepEqual(Array.from(api.getTemplateContract('editorial-guide').stylesheetPaths), ['css/garh-v2.css', 'css/article.css', 'css/thar-sunset-story.css']);
+  for (const unsafe of ['../include/page-head.php', '/etc/passwd', 'css/../../index.php', 'css\\garh-v2.css']) {
+    assert.throws(() => api.assertRegularRepoFile(unsafe, 'Test path'), /normalized repository-relative path/);
+  }
+  assert.throws(() => api.assertApprovedStylesheet('https://example.com/evil.css'), /not approved/);
+  for (const unapproved of ['css/secret.css', 'index.php', 'https://example.com/remote.css']) {
+    assert.throws(() => api.assertApprovedStylesheet(unapproved), /not approved/);
+  }
+  assert.throws(() => api.getTemplateContract('arbitrary-php'), /supported page template/);
+  assert.throws(() => api.validateRouteForTemplate('pack', 'experience-detail'), /already exists/);
+  assert.throws(() => api.validateRouteForTemplate('../unsafe-route', 'experience-detail'), /route slug/);
+  const symlinkCandidate = path.join(ROOT, '.content-studio-v2-test-link');
+  assert.ok(!fs.existsSync(symlinkCandidate), 'symlink fixture must be safe and unused');
+  try {
+    fs.symlinkSync(path.join(ROOT, 'include', 'page-head.php'), symlinkCandidate);
+    assert.throws(() => api.assertRegularRepoFile('.content-studio-v2-test-link', 'Test path'), /symbolic link/);
+  } finally { try { fs.unlinkSync(symlinkCandidate); } catch (_) {} }
+  const linkDirCandidate = path.join(ROOT, '.content-studio-v2-test-dir-link');
+  assert.ok(!fs.existsSync(linkDirCandidate), 'directory symlink fixture must be safe and unused');
+  try {
+    fs.symlinkSync(path.join(ROOT, 'include'), linkDirCandidate, 'dir');
+    assert.throws(() => api.assertRegularRepoFile('.content-studio-v2-test-dir-link/page-head.php', 'Test path'), /symbolic link/);
+  } finally { try { fs.unlinkSync(linkDirCandidate); } catch (_) {} }
+}
+
 function verifyContentStudioAuthoringUi() {
   const launcherFile = path.join(ROOT, 'tools/content-studio/Start Content Studio.command');
   assert.ok(fs.existsSync(launcherFile), 'one-click macOS launcher should be present');
@@ -214,6 +262,7 @@ async function verifyOneClickLauncher() {
 }
 
 async function main() {
+  verifyV2TemplateAndAssetRegistry();
   verifyContentStudioAuthoringUi();
   await verifyOneClickLauncher();
   noExistingFixtures();

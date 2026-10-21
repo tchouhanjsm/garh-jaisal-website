@@ -26,6 +26,141 @@ const IMAGE_TYPES = {
 const CATEGORIES = ['hotel', 'rooms', 'desert', 'restaurant'];
 const CROPS = ['arch', 'landscape', 'portrait', 'standard'];
 
+// Approved render contracts for Content Studio V2.
+// This registry is deliberately data-only: staff select a template, never a PHP or CSS path.
+const PAGE_TEMPLATE_REGISTRY = Object.freeze({
+  'experience-detail': Object.freeze({
+    id: 'experience-detail', label: 'Tour or experience', renderer: 'include/experience-page.php',
+    routePattern: '/{slug}.php', recordDirectory: 'content/experiences',
+    stylesheetPaths: Object.freeze(['css/garh-v2.css', 'css/experiences.css', 'css/thar-sunset-story.css']),
+    sharedIncludes: Object.freeze(['include/page-head.php', 'include/header-v2.php', 'include/footer-v2.php']),
+    requiredFields: Object.freeze(['title', 'description', 'h1', 'hero_image', 'hero_alt', 'summary']),
+    recordType: 'tour'
+  }),
+  'editorial-guide': Object.freeze({
+    id: 'editorial-guide', label: 'Blog or travel guide', renderer: 'include/editorial-guide-page.php',
+    routePattern: '/{slug}.php', recordDirectory: 'content/editorial',
+    stylesheetPaths: Object.freeze(['css/garh-v2.css', 'css/article.css', 'css/thar-sunset-story.css']),
+    sharedIncludes: Object.freeze(['include/page-head.php', 'include/header-v2.php', 'include/footer-v2.php']),
+    requiredFields: Object.freeze(['title', 'description', 'h1', 'hero_image', 'hero_alt', 'lede', 'sections', 'sources']),
+    recordType: 'blog'
+  })
+});
+const STUDIO_MANAGED_PAGE_REGISTRY = Object.freeze({
+  '/pack.php': Object.freeze({ label: 'Tours and experiences', templateId: 'marketing-hub', editableFields: Object.freeze(['title', 'description']) }),
+  '/blog.php': Object.freeze({ label: 'Journal index', templateId: 'editorial-index', editableFields: Object.freeze(['title', 'description']) }),
+  '/gallery.php': Object.freeze({ label: 'Photo gallery', templateId: 'gallery', editableFields: Object.freeze(['title', 'description']) }),
+  '/tariff.php': Object.freeze({ label: 'Rates and tariffs', templateId: 'rates', editableFields: Object.freeze([]) })
+});
+const APPROVED_STYLESHEET_PATHS = new Set([
+  'css/article.css',
+  'css/booking.css',
+  'css/contact.css',
+  'css/directions.css',
+  'css/editorial-index.css',
+  'css/experiences.css',
+  'css/gallery.css',
+  'css/garh-v2.css',
+  'css/packages.css',
+  'css/restaurant.css',
+  'css/rooms.css',
+  'css/tariff.css',
+  'css/thar-sunset-story.css'
+]);
+
+function registryError(message) {
+  const error = new Error(message);
+  error.code = 'CONTENT_STUDIO_REGISTRY_INVALID';
+  return error;
+}
+
+function isInsideRoot(candidate) {
+  const relative = path.relative(ROOT, candidate);
+  return relative !== '..' && !relative.startsWith('..' + path.sep) && !path.isAbsolute(relative);
+}
+
+function assertRegularRepoFile(relativePath, label) {
+  if (typeof relativePath !== 'string' || !relativePath || path.isAbsolute(relativePath) || relativePath.includes('\\') || relativePath.split(/[\\/]+/).some(part => part === '..' || part === '.')) {
+    throw registryError((label || 'Path') + ' must be a normalized repository-relative path.');
+  }
+  const absolute = path.resolve(ROOT, relativePath);
+  if (!isInsideRoot(absolute)) throw registryError((label || 'Path') + ' is outside the repository.');
+  let cursor = ROOT;
+  for (const part of path.relative(ROOT, absolute).split(path.sep)) {
+    cursor = path.join(cursor, part);
+    let stat;
+    try { stat = fs.lstatSync(cursor); }
+    catch (_) { throw registryError((label || 'Path') + ' does not exist: ' + relativePath); }
+    if (stat.isSymbolicLink()) throw registryError((label || 'Path') + ' cannot traverse a symbolic link: ' + relativePath);
+    if (cursor !== absolute && !stat.isDirectory()) throw registryError((label || 'Path') + ' traverses a non-directory: ' + relativePath);
+  }
+  let finalStat;
+  try { finalStat = fs.lstatSync(absolute); } catch (_) { throw registryError((label || 'Path') + ' does not exist: ' + relativePath); }
+  if (!finalStat.isFile() || finalStat.isSymbolicLink()) throw registryError((label || 'Path') + ' must be a regular file: ' + relativePath);
+  return absolute;
+}
+
+function assertApprovedStylesheet(relativePath) {
+  if (!APPROVED_STYLESHEET_PATHS.has(relativePath)) {
+    throw registryError('Stylesheet is not approved for Content Studio templates: ' + String(relativePath));
+  }
+  return assertRegularRepoFile(relativePath, 'Stylesheet');
+}
+
+function getTemplateContract(templateId) {
+  const template = PAGE_TEMPLATE_REGISTRY[templateId];
+  if (!template) throw registryError('Choose a supported page template.');
+  for (const includePath of template.sharedIncludes) assertRegularRepoFile(includePath, 'Shared include');
+  for (const stylesheet of template.stylesheetPaths) assertApprovedStylesheet(stylesheet);
+  if (template.recordType === 'blog') {
+    const guideRegistryPath = assertRegularRepoFile('include/editorial-guides-data.php', 'Editorial content registry');
+    const guideRegistrySource = fs.readFileSync(guideRegistryPath, 'utf8');
+    const declaredStylesheets = [...guideRegistrySource.matchAll(/'css'\s*=>\s*\[([\s\S]*?)\]/g)]
+      .flatMap(entry => [...entry[1].matchAll(/'([^']+\\.css)'/g)].map(match => match[1]));
+    declaredStylesheets.push('css/article.css', 'css/thar-sunset-story.css');
+    for (const stylesheet of [...new Set(declaredStylesheets)]) {
+      if (typeof stylesheet !== 'string' || !stylesheet.startsWith('css/')) {
+        throw registryError('Editorial stylesheet dependencies must be approved repository-relative CSS paths.');
+      }
+      assertApprovedStylesheet(stylesheet);
+    }
+  }
+  assertRegularRepoFile(template.renderer, 'Template renderer');
+  return template;
+}
+
+function validateRouteForTemplate(slug, templateId) {
+  const template = getTemplateContract(templateId);
+  if (typeof slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+    throw registryError('Use a route slug made from lowercase letters, digits and hyphens.');
+  }
+  const routeRelative = slug + '.php';
+  const routeAbsolute = path.resolve(ROOT, routeRelative);
+  if (!isInsideRoot(routeAbsolute)) throw registryError('Route is outside the repository.');
+  if (fs.existsSync(routeAbsolute) || fs.existsSync(path.join(ROOT, template.recordDirectory, slug + '.json')) || Object.prototype.hasOwnProperty.call(PAGE_TEMPLATE_REGISTRY, slug)) {
+    throw registryError('That route or content record already exists. Existing routes are never overwritten.');
+  }
+  return { route: routeRelative, renderer: template.renderer, stylesheets: [...template.stylesheetPaths] };
+}
+
+function validateTemplateRegistry() {
+  const seen = new Set();
+  for (const [id, template] of Object.entries(PAGE_TEMPLATE_REGISTRY)) {
+    if (id !== template.id) throw registryError('Template registry key does not match its ID: ' + id);
+    if (seen.has(template.routePattern + ':' + template.recordDirectory)) throw registryError('Duplicate template record mapping: ' + id);
+    seen.add(template.routePattern + ':' + template.recordDirectory);
+    getTemplateContract(id);
+  }
+  for (const [route, page] of Object.entries(STUDIO_MANAGED_PAGE_REGISTRY)) {
+    if (!/^\/[a-z0-9-]+\.php$/.test(route)) throw registryError('Managed page routes must be fixed root PHP routes.');
+    if (!/^[a-z][a-z0-9-]*$/.test(page.templateId)) throw registryError('Managed page template identifier is invalid for ' + route);
+    for (const field of page.editableFields) {
+      if (!/^[a-z][a-z0-9_]*$/.test(field)) throw registryError('Managed page editable field is invalid for ' + route);
+    }
+  }
+  return { templateCount: Object.keys(PAGE_TEMPLATE_REGISTRY).length, managedPageCount: Object.keys(STUDIO_MANAGED_PAGE_REGISTRY).length };
+}
+
 function fail(statusCode, message) {
   const error = new Error(message);
   error.statusCode = statusCode;
@@ -819,7 +954,8 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) {
       return respond(res, 200, 'text/html; charset=utf-8', fs.readFileSync(UI_PATH));
     }
-    if (req.method === 'GET' && url.pathname === '/api/status') return respondJson(res, 200, statusPayload());
+    if (req.method === 'GET' && url.pathname === '/api/status') return respondJson(res, 200, { ...statusPayload(), v2Registry: validateTemplateRegistry() });
+    if (req.method === 'GET' && url.pathname === '/api/templates') return respondJson(res, 200, { templates: Object.keys(PAGE_TEMPLATE_REGISTRY).map(id => { const item = getTemplateContract(id); return { id: item.id, label: item.label, routePattern: item.routePattern, stylesheetPaths: [...item.stylesheetPaths], requiredFields: [...item.requiredFields], recordType: item.recordType }; }), managedPages: Object.entries(STUDIO_MANAGED_PAGE_REGISTRY).map(([route, page]) => ({ route, label: page.label, templateId: page.templateId, editableFields: [...page.editableFields] })) });
     if (req.method === 'GET' && url.pathname === '/api/content') return respondJson(res, 200, listManagedContent());
     const managedMatch = url.pathname.match(/^\/api\/content\/(tours|blogs|gallery)\/([a-z0-9]+(?:-[a-z0-9]+)*)(\/status)?$/);
     if (managedMatch) {
