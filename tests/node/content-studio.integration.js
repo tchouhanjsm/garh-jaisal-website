@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { spawn, spawnSync } = require('node:child_process');
+const http = require('node:http');
 const vm = require('node:vm');
 
 const ROOT = path.resolve(__dirname, '../..');
@@ -99,9 +100,26 @@ async function requestJson(url, method, payload) {
   return { response, body };
 }
 
+async function transitionReview(type, slug, reviewStatus) {
+  const result = await requestJson(STUDIO_URL + '/api/content/' + type + '/' + slug + '/review', 'PATCH', { reviewStatus });
+  assert.equal(result.response.status, 200, 'review transition to ' + reviewStatus + ' should succeed: ' + JSON.stringify(result.body));
+  return result;
+}
+
+function requestStatusWithHost(url, host) {
+  return new Promise((resolve, reject) => {
+    const request = http.request(url, { headers: { Host: host } }, response => {
+      response.resume();
+      resolve({ statusCode: response.statusCode });
+    });
+    request.on('error', reject);
+    request.end();
+  });
+}
+
 function tourPayload(slug, status) {
   return {
-    title: status === 'draft' ? 'Content Studio Draft Test Tour' : 'Content Studio Integration Test Tour',
+    title: slug === slugs[0] ? 'Content Studio Integration Test Tour' : 'Content Studio Draft Test Tour',
     slug, category: 'city', durationType: 'half-day', status,
     description: 'A temporary test-only tour that validates the new content publishing workflow.',
     summary: 'Temporary tour used to validate the current content authoring pipeline.',
@@ -274,16 +292,63 @@ async function main() {
   phpServer = start('php', ['-S', '127.0.0.1:' + PHP_PORT, '-t', ROOT], {}, s => { phpOutput += s; }, s => { phpErrors += s; });
   await waitFor(PHP_URL + '/blog.php', phpServer, 'PHP preview server');
 
-  // Live tour: data record, route wrapper, sitemap membership, route rendering and Trip Planner discovery.
-  let result = await requestJson(STUDIO_URL + '/api/tours', 'POST', tourPayload(slugs[0], 'live'));
-  assert.equal(result.response.status, 201, 'live tour should be created: ' + JSON.stringify(result.body));
-  assert.ok(fs.existsSync(routeFiles[0]), 'tour route wrapper should exist');
-  assert.equal(JSON.parse(fs.readFileSync(recordFiles[0], 'utf8')).status, 'live');
-  let sitemap = fs.readFileSync(sitemapPath, 'utf8');
-  assert.ok(sitemap.includes('/' + slugs[0] + '.php</loc>'), 'live tour should appear in sitemap');
-  let response = await fetch(PHP_URL + '/' + slugs[0] + '.php');
-  assert.equal(response.status, 200, 'new tour should render through the shared PHP renderer');
+  // The new preview route renders an unsaved, token-bound draft through the real PHP experience template.
+  let result = await requestJson(STUDIO_URL + '/api/preview', 'POST', { type: 'tours', payload: tourPayload('temporary-preview-input', 'draft') });
+  assert.equal(result.response.status, 201, 'a PHP-rendered draft preview should be created: ' + JSON.stringify(result.body));
+  assert.match(result.body.pagePath, /^\/tools\/content-studio\/preview\.php\?type=tours&token=[a-f0-9]{24}$/);
+  const previewToken = result.body.token;
+  const previewSlug = 'content-studio-preview-' + previewToken;
+  const previewRecordPath = path.join(ROOT, 'content/experiences/' + previewSlug + '.json');
+  ownedPaths.add(previewRecordPath);
+  assert.ok(fs.existsSync(previewRecordPath), 'preview should create an ephemeral record without writing a PHP wrapper');
+  assert.ok(!fs.existsSync(path.join(ROOT, previewSlug + '.php')), 'preview must not create a public route wrapper');
+  assert.ok(!fs.readFileSync(sitemapPath, 'utf8').includes('/' + previewSlug + '.php</loc>'), 'preview must not modify sitemap membership');
+  let response = await fetch(PHP_URL + result.body.pagePath);
+  assert.equal(response.status, 200, 'preview route should return a rendered PHP page');
   let html = await response.text();
+  assert.ok(html.includes('Content Studio Draft Test Tour'), 'preview should render form data through the existing experience renderer');
+  assert.match(html, /noindex,follow/, 'preview must be non-indexable');
+  const foreignHostPreview = await requestStatusWithHost(PHP_URL + result.body.pagePath, 'example.com');
+  assert.equal(foreignHostPreview.statusCode, 404, 'preview route must reject requests with a non-local Host header');
+  let managedResponse = await requestJson(STUDIO_URL + '/api/content', 'GET');
+  assert.ok(!managedResponse.body.items.some(item => item.slug === previewSlug), 'ephemeral preview records must not appear in content manager');
+  let cleanupResponse = await requestJson(STUDIO_URL + '/api/preview/cleanup', 'POST', { token: previewToken });
+  assert.equal(cleanupResponse.response.status, 200);
+  assert.equal(cleanupResponse.body.removed, true);
+  assert.ok(!fs.existsSync(previewRecordPath), 'preview cleanup should remove only its token-matched JSON record');
+  response = await fetch(PHP_URL + result.body.pagePath);
+  assert.equal(response.status, 404, 'a closed preview token must no longer render');
+  cleanupResponse = await requestJson(STUDIO_URL + '/api/preview/cleanup', 'POST', { token: '../etc/passwd' });
+  assert.equal(cleanupResponse.response.status, 200, 'invalid cleanup tokens must not reach filesystem paths');
+  assert.equal(cleanupResponse.body.removed, false);
+
+  // New records cannot bypass the review workflow by being created directly as Live.
+  result = await requestJson(STUDIO_URL + '/api/tours', 'POST', tourPayload(slugs[0], 'live'));
+  assert.equal(result.response.status, 409, 'a new tour must not skip Draft, Ready for review and Approved for release');
+  assert.ok(!fs.existsSync(routeFiles[0]), 'rejected direct-Live creation must not write a route');
+
+  // Tour: Draft record, explicit review/approval, then local publication through the real renderer.
+  result = await requestJson(STUDIO_URL + '/api/tours', 'POST', tourPayload(slugs[0], 'draft'));
+  assert.equal(result.response.status, 201, 'tour draft should be created: ' + JSON.stringify(result.body));
+  assert.ok(fs.existsSync(routeFiles[0]), 'tour route wrapper should exist');
+  assert.equal(JSON.parse(fs.readFileSync(recordFiles[0], 'utf8')).status, 'draft');
+  assert.equal(JSON.parse(fs.readFileSync(recordFiles[0], 'utf8')).review_status, 'draft');
+  let sitemap = fs.readFileSync(sitemapPath, 'utf8');
+  assert.ok(!sitemap.includes('/' + slugs[0] + '.php</loc>'), 'a newly saved draft must not appear in sitemap');
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[0] + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 409, 'Draft must not be made Live before release approval');
+  await transitionReview('tours', slugs[0], 'ready_for_review');
+  assert.equal(JSON.parse(fs.readFileSync(recordFiles[0], 'utf8')).status, 'draft', 'Ready for review must not publish content');
+  await transitionReview('tours', slugs[0], 'approved_for_release');
+  assert.ok(!fs.readFileSync(sitemapPath, 'utf8').includes('/' + slugs[0] + '.php</loc>'), 'approval alone must not change the sitemap');
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[0] + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 200, 'approved tour can be marked Live in the local working tree');
+  assert.ok(JSON.parse(fs.readFileSync(recordFiles[0], 'utf8')).review_status === 'approved_for_release');
+  sitemap = fs.readFileSync(sitemapPath, 'utf8');
+  assert.ok(sitemap.includes('/' + slugs[0] + '.php</loc>'), 'live tour should appear in sitemap');
+  response = await fetch(PHP_URL + '/' + slugs[0] + '.php');
+  assert.equal(response.status, 200, 'new tour should render through the shared PHP renderer');
+  html = await response.text();
   assert.ok(html.includes('Content Studio Integration Test Tour'), 'tour H1 should render');
   response = await fetch(PHP_URL + '/catalogue.php');
   assert.equal(response.status, 200);
@@ -333,6 +398,8 @@ async function main() {
   assert.equal(result.response.status, 409, 'a Hidden record must not be edited through the manager');
   fs.writeFileSync(recordFiles[1], draftTourBytes);
 
+  await transitionReview('tours', slugs[1], 'ready_for_review');
+  await transitionReview('tours', slugs[1], 'approved_for_release');
   const generatedDraftRoute = fs.readFileSync(routeFiles[1]);
   fs.writeFileSync(routeFiles[1], Buffer.concat([generatedDraftRoute, Buffer.from('\n// operator change\n')]));
   result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1] + '/status', 'PATCH', { status: 'live' });
@@ -365,7 +432,7 @@ async function main() {
 
   // Live blog: route, structured article content, archive card and sitemap must agree.
   const blog = {
-    h1: 'Content Studio Integration Test Guide', slug: slugs[2], status: 'live',
+    h1: 'Content Studio Integration Test Guide', slug: slugs[2], status: 'draft',
     seoTitle: 'Content Studio Integration Test Guide',
     description: 'A temporary guide that validates blog creation, archive discovery and sitemap publication.',
     lede: 'This is temporary test content used to exercise the new authoring flow end to end.',
@@ -378,10 +445,16 @@ async function main() {
     sources: 'Official Rajasthan Tourism | https://www.tourism.rajasthan.gov.in/ | Temporary integration test source.',
   };
   result = await requestJson(STUDIO_URL + '/api/blogs', 'POST', blog);
-  assert.equal(result.response.status, 201, 'live blog should be created: ' + JSON.stringify(result.body));
+  assert.equal(result.response.status, 201, 'blog draft should be created: ' + JSON.stringify(result.body));
   assert.ok(fs.existsSync(routeFiles[2]));
   sitemap = fs.readFileSync(sitemapPath, 'utf8');
-  assert.ok(sitemap.includes('/' + slugs[2] + '.php</loc>'), 'live blog should appear in sitemap');
+  assert.ok(!sitemap.includes('/' + slugs[2] + '.php</loc>'), 'a blog draft must not appear in sitemap');
+  await transitionReview('blogs', slugs[2], 'ready_for_review');
+  await transitionReview('blogs', slugs[2], 'approved_for_release');
+  result = await requestJson(STUDIO_URL + '/api/content/blogs/' + slugs[2] + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 200, 'approved blog can be made Live locally');
+  sitemap = fs.readFileSync(sitemapPath, 'utf8');
+  assert.ok(sitemap.includes('/' + slugs[2] + '.php</loc>'), 'approved blog should appear in sitemap');
   response = await fetch(PHP_URL + '/blog.php');
   assert.equal(response.status, 200);
   html = await response.text();
@@ -400,12 +473,22 @@ async function main() {
   const updatedBlogRecord = JSON.parse(fs.readFileSync(recordFiles[2], 'utf8'));
   assert.equal(updatedBlogRecord.h1, 'Content Studio Integration Test Guide Revised');
   assert.equal(updatedBlogRecord.date_published, originalPublishedDate, 'editing must preserve the original publication date');
+  assert.equal(updatedBlogRecord.status, 'draft', 'editing a previously live blog must save it back to Draft');
+  assert.equal(updatedBlogRecord.review_status, 'draft', 'editing content must reset its review approval');
   response = await fetch(PHP_URL + '/blog.php');
   html = await response.text();
-  assert.ok(html.includes('Content Studio Revised Archive Card'), 'edited title should update the Blog archive card');
+  assert.ok(!html.includes('Content Studio Revised Archive Card'), 'edited draft must not appear in the Blog archive before re-approval');
   response = await fetch(PHP_URL + '/' + slugs[2] + '.php');
   html = await response.text();
-  assert.ok(html.includes('Content Studio Integration Test Guide Revised'), 'edited article should render');
+  assert.ok(html.includes('Content Studio Integration Test Guide Revised'), 'edited article should render through the PHP renderer');
+  assert.match(html, /noindex,follow/, 'edited draft must be noindex until released');
+  await transitionReview('blogs', slugs[2], 'ready_for_review');
+  await transitionReview('blogs', slugs[2], 'approved_for_release');
+  result = await requestJson(STUDIO_URL + '/api/content/blogs/' + slugs[2] + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 200, 'edited blog can be republished only after re-approval');
+  response = await fetch(PHP_URL + '/blog.php');
+  html = await response.text();
+  assert.ok(html.includes('Content Studio Revised Archive Card'), 'approved edited title should update the Blog archive card');
   result = await requestJson(STUDIO_URL + '/api/content/blogs/' + slugs[2] + '/status', 'PATCH', { status: 'draft' });
   assert.equal(result.response.status, 200);
   sitemap = fs.readFileSync(sitemapPath, 'utf8');
@@ -431,29 +514,48 @@ async function main() {
   const gallerySrc = candidates.find(candidate => fs.existsSync(path.join(ROOT, candidate)) && !used.has(candidate) && !fs.lstatSync(path.join(ROOT, candidate)).isSymbolicLink());
   assert.ok(gallerySrc, 'an existing unused Gallery image should be available for the test');
   result = await requestJson(STUDIO_URL + '/api/gallery', 'POST', {
-    category: 'hotel', status: 'live', src: gallerySrc,
+    category: 'hotel', status: 'draft', src: gallerySrc,
     alt: 'A temporary additional image for Content Studio integration testing',
     caption: 'Temporary CI verification photo', crop: 'landscape',
   });
-  assert.equal(result.response.status, 201, 'live Gallery entry should be created: ' + JSON.stringify(result.body));
+  assert.equal(result.response.status, 201, 'Gallery draft should be created: ' + JSON.stringify(result.body));
   galleryRecordPath = path.join(galleryDir, result.body.id + '.json');
   ownedPaths.add(galleryRecordPath);
+  let galleryDraftRecord = JSON.parse(fs.readFileSync(galleryRecordPath, 'utf8'));
+  assert.equal(galleryDraftRecord.status, 'draft');
+  result = await requestJson(STUDIO_URL + '/api/content/gallery/' + result.body.id + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 409, 'Gallery draft must not bypass review approval');
+  const galleryId = path.basename(galleryRecordPath, '.json');
+  await transitionReview('gallery', galleryId, 'ready_for_review');
+  await transitionReview('gallery', galleryId, 'approved_for_release');
+  result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 200, 'approved Gallery entry can be made Live locally');
   response = await fetch(PHP_URL + '/gallery.php');
   assert.equal(response.status, 200);
   html = await response.text();
   assert.ok(html.includes('src="' + gallerySrc + '"'), 'new Gallery image should render on the existing Gallery route');
-  const galleryId = path.basename(galleryRecordPath, '.json');
   result = await requestJson(STUDIO_URL + '/api/content', 'GET');
   assert.ok(result.body.items.some(item => item.type === 'gallery' && item.slug === galleryId && item.status === 'live'));
   result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId, 'PUT', {
-    category: 'hotel', status: 'live', src: gallerySrc,
+    category: 'hotel', status: 'draft', src: gallerySrc,
     alt: 'An updated temporary additional image for Content Studio integration testing',
     caption: 'Updated temporary CI verification photo', crop: 'portrait',
   });
-  assert.equal(result.response.status, 200, 'Gallery metadata should be editable');
+  assert.equal(result.response.status, 200, 'editing Live Gallery content must move it back to Draft');
   let galleryRecord = JSON.parse(fs.readFileSync(galleryRecordPath, 'utf8'));
   assert.equal(galleryRecord.image.alt, 'An updated temporary additional image for Content Studio integration testing');
   assert.equal(galleryRecord.image.crop, 'portrait');
+  assert.equal(galleryRecord.status, 'draft');
+  assert.equal(galleryRecord.review_status, 'draft');
+  response = await fetch(PHP_URL + '/gallery.php');
+  html = await response.text();
+  assert.ok(!html.includes('src="' + gallerySrc + '"'), 'edited Gallery draft must not appear before review');
+  await transitionReview('gallery', galleryId, 'ready_for_review');
+  await transitionReview('gallery', galleryId, 'approved_for_release');
+  result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 200, 'edited Gallery metadata can be published after re-approval');
+  assert.equal(JSON.parse(fs.readFileSync(galleryRecordPath, 'utf8')).status, 'live');
+  assert.equal(JSON.parse(fs.readFileSync(galleryRecordPath, 'utf8')).image.crop, 'portrait');
   result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId + '/status', 'PATCH', { status: 'draft' });
   assert.equal(result.response.status, 200, 'Gallery entries can be unpublished without removing the source image');
   galleryRecord = JSON.parse(fs.readFileSync(galleryRecordPath, 'utf8'));
