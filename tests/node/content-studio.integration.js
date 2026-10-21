@@ -129,7 +129,7 @@ function verifyV2TemplateAndAssetRegistry() {
   assert.equal(result.templateCount, 2, 'only explicit renderer-backed templates should be available');
   assert.equal(result.managedPageCount, 4, 'known routes should be registered for supported-field editing');
   assert.deepEqual(Array.from(api.getTemplateContract('experience-detail').stylesheetPaths), ['css/garh-v2.css', 'css/experiences.css', 'css/thar-sunset-story.css']);
-  assert.deepEqual(Array.from(api.getTemplateContract('editorial-guide').stylesheetPaths), ['css/garh-v2.css', 'css/guide.css']);
+  assert.deepEqual(Array.from(api.getTemplateContract('editorial-guide').stylesheetPaths), ['css/garh-v2.css', 'css/article.css', 'css/thar-sunset-story.css']);
   for (const unsafe of ['../include/page-head.php', '/etc/passwd', 'css/../../index.php', 'css\\garh-v2.css', 'https://example.com/evil.css']) {
     assert.throws(() => api.assertRegularRepoFile(unsafe, 'Test path'), /normalized repository-relative path/);
   }
@@ -254,7 +254,6 @@ async function verifyOneClickLauncher() {
 }
 
 async function main() {
-  verifyV2TemplateAndAssetRegistry();
   verifyV2TemplateAndAssetRegistry();
   verifyContentStudioAuthoringUi();
   await verifyOneClickLauncher();
