@@ -135,7 +135,7 @@ function verifyContentStudioAuthoringUi() {
     assert.ok(html.includes('id="' + id + '"'), 'guided authoring control should exist: ' + id);
   }
   assert.ok(html.includes('id="tab-manage"'), 'saved content manager tab should exist');
-  assert.ok(html.includes('data-record-key='), 'manager should render a stable per-record identifier');
+  assert.ok(html.includes('card.dataset.recordKey='), 'manager should assign a stable data-record-key identifier to each rendered record');
   assert.ok(html.includes("const method=edit?'PUT':'POST'"), 'the authoring forms should save edits back to the selected record');
   assert.ok(html.includes("method:'PATCH'"), 'the manager should change publication state explicitly');
   assert.ok(html.includes('Delete this Draft from the local working tree?'), 'deletion must require a confirmation');
