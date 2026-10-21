@@ -54,18 +54,18 @@ const STUDIO_MANAGED_PAGE_REGISTRY = Object.freeze({
 });
 const APPROVED_STYLESHEET_PATHS = new Set([
   'css/article.css',
-  'css/garh-v2.css',
-  'css/experiences.css',
-  'css/thar-sunset-story.css',
+  'css/booking.css',
+  'css/contact.css',
+  'css/directions.css',
   'css/editorial-index.css',
+  'css/experiences.css',
   'css/gallery.css',
+  'css/garh-v2.css',
   'css/packages.css',
   'css/restaurant.css',
   'css/rooms.css',
-  'css/directions.css',
-  'css/booking.css',
-  'css/contact.css',
-  'css/tariff.css'
+  'css/tariff.css',
+  'css/thar-sunset-story.css'
 ]);
 
 function registryError(message) {
@@ -116,7 +116,12 @@ function getTemplateContract(templateId) {
     const guideData = require(path.join(ROOT, 'include', 'editorial-guides-data.php'));
     for (const record of Object.values(guideData)) {
       const dependencies = Array.isArray(record.css) ? record.css : ['css/article.css', 'css/thar-sunset-story.css'];
-      for (const stylesheet of dependencies) assertApprovedStylesheet(stylesheet);
+      for (const stylesheet of dependencies) {
+        if (typeof stylesheet !== 'string' || !stylesheet.startsWith('css/')) {
+          throw registryError('Editorial stylesheet dependencies must be approved repository-relative CSS paths.');
+        }
+        assertApprovedStylesheet(stylesheet);
+      }
     }
   }
   assertRegularRepoFile(template.renderer, 'Template renderer');
