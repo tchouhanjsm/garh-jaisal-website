@@ -115,7 +115,7 @@ function getTemplateContract(templateId) {
   if (template.recordType === 'blog') {
     const guideRegistryPath = assertRegularRepoFile('include/editorial-guides-data.php', 'Editorial content registry');
     const guideRegistrySource = fs.readFileSync(guideRegistryPath, 'utf8');
-    const declaredStylesheets = [...guideRegistrySource.matchAll(/'css'\\s*=>\\s*\\[([\\s\\S]*?)\\]/g)]
+    const declaredStylesheets = [...guideRegistrySource.matchAll(/'css'\s*=>\s*\[([\s\S]*?)\]/g)]
       .flatMap(entry => [...entry[1].matchAll(/'([^']+\\.css)'/g)].map(match => match[1]));
     declaredStylesheets.push('css/article.css', 'css/thar-sunset-story.css');
     for (const stylesheet of [...new Set(declaredStylesheets)]) {
