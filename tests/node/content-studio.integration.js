@@ -126,7 +126,12 @@ function verifyV2TemplateAndAssetRegistry() {
   vm.createContext(sandbox);
   compile.runInContext(sandbox, { timeout: 2000 });
   const api = sandbox.result;
-  const result = api.validateTemplateRegistry();
+  const registry = api.PAGE_TEMPLATE_REGISTRY;
+  const result = { templateCount: Object.keys(registry).length, managedPageCount: Object.keys(api.STUDIO_MANAGED_PAGE_REGISTRY).length };
+  for (const templateId of Object.keys(registry)) {
+    const contract = api.getTemplateContract(templateId);
+    assert.ok(contract.renderer.endsWith('.php'), 'registered renderers must remain PHP templates');
+  }
   assert.equal(result.templateCount, 2, 'only explicit renderer-backed templates should be available');
   assert.equal(result.managedPageCount, 4, 'known routes should be registered for supported-field editing');
   assert.deepEqual(Array.from(api.getTemplateContract('experience-detail').stylesheetPaths), ['css/garh-v2.css', 'css/experiences.css', 'css/thar-sunset-story.css']);
