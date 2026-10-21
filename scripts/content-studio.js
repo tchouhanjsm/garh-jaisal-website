@@ -32,7 +32,7 @@ const PAGE_TEMPLATE_REGISTRY = Object.freeze({
   'experience-detail': Object.freeze({
     id: 'experience-detail', label: 'Tour or experience', renderer: 'include/experience-page.php',
     routePattern: '/{slug}.php', recordDirectory: 'content/experiences',
-    stylesheetPaths: Object.freeze(['css/experiences.css', 'css/thar-sunset-story.css']),
+    stylesheetPaths: Object.freeze(['css/garh-v2.css', 'css/experiences.css', 'css/thar-sunset-story.css']),
     sharedIncludes: Object.freeze(['include/page-head.php', 'include/header-v2.php', 'include/footer-v2.php']),
     requiredFields: Object.freeze(['title', 'description', 'h1', 'hero_image', 'hero_alt', 'summary']),
     recordType: 'tour'
@@ -40,7 +40,7 @@ const PAGE_TEMPLATE_REGISTRY = Object.freeze({
   'editorial-guide': Object.freeze({
     id: 'editorial-guide', label: 'Blog or travel guide', renderer: 'include/editorial-guide-page.php',
     routePattern: '/{slug}.php', recordDirectory: 'content/editorial',
-    stylesheetPaths: Object.freeze(['css/editorial-guides.css']),
+    stylesheetPaths: Object.freeze(['css/garh-v2.css', 'css/guide.css']),
     sharedIncludes: Object.freeze(['include/page-head.php', 'include/header-v2.php', 'include/footer-v2.php']),
     requiredFields: Object.freeze(['title', 'description', 'h1', 'hero_image', 'hero_alt', 'lede', 'sections', 'sources']),
     recordType: 'blog'
@@ -71,7 +71,7 @@ function isInsideRoot(candidate) {
 }
 
 function assertRegularRepoFile(relativePath, label) {
-  if (typeof relativePath !== 'string' || !relativePath || path.isAbsolute(relativePath) || relativePath.includes('\\\\\\\\') || relativePath.split(/[\\/]+/).some(part => part === '..' || part === '.')) {
+  if (typeof relativePath !== 'string' || !relativePath || path.isAbsolute(relativePath) || relativePath.includes('\\\\') || relativePath.split(/[\\\\/]+/).some(part => part === '..' || part === '.')) {
     throw registryError((label || 'Path') + ' must be a normalized repository-relative path.');
   }
   const absolute = path.resolve(ROOT, relativePath);
