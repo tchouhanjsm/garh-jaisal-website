@@ -103,12 +103,11 @@ function getTemplateContract(templateId) {
   if (!template) throw registryError('Choose a supported page template.');
   for (const includePath of template.sharedIncludes) assertRegularRepoFile(includePath, 'Shared include');
   for (const stylesheet of template.stylesheetPaths) assertApprovedStylesheet(stylesheet);
-  for (const optionalField of ['css']) {
-    if (template.recordType === 'blog' && optionalField === 'css') {
-      const guideData = require(path.join(ROOT, 'include', 'editorial-guides-data.php'));
-      for (const record of Object.values(guideData)) {
-        for (const stylesheet of (Array.isArray(record.css) ? record.css : [])) assertApprovedStylesheet(stylesheet);
-      }
+  if (template.recordType === 'blog') {
+    const guideData = require(path.join(ROOT, 'include', 'editorial-guides-data.php'));
+    for (const record of Object.values(guideData)) {
+      const dependencies = Array.isArray(record.css) ? record.css : ['css/article.css', 'css/thar-sunset-story.css'];
+      for (const stylesheet of dependencies) assertApprovedStylesheet(stylesheet);
     }
   }
   assertRegularRepoFile(template.renderer, 'Template renderer');
