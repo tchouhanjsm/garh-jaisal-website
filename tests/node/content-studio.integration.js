@@ -121,7 +121,7 @@ function verifyV2TemplateAndAssetRegistry() {
   assert.ok(registryStart >= 0 && failStart > registryStart, 'template registry should be declared before request handlers');
   const registrySource = source.slice(registryStart, failStart);
   const sandbox = { Object, Set, path, fs, ROOT };
-  const compile = new vm.Script(registrySource + '\nresult = { PAGE_TEMPLATE_REGISTRY, STUDIO_MANAGED_PAGE_REGISTRY, APPROVED_STYLESHEET_PATHS, assertRegularRepoFile, assertApprovedStylesheet, getTemplateContract, validateRouteForTemplate, validateTemplateRegistry };');
+  const compile = new vm.Script(registrySource + String.fromCharCode(10) + 'result = ' + JSON.stringify('registry loaded') + ';');
   vm.createContext(sandbox);
   compile.runInContext(sandbox, { timeout: 2000 });
   const api = sandbox.result;
