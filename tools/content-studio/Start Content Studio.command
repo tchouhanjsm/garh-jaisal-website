@@ -9,8 +9,7 @@ ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 HOST="127.0.0.1"
 STUDIO_PORT="${CONTENT_STUDIO_PORT:-4173}"
 PREVIEW_PORT="${CONTENT_PREVIEW_PORT:-8088}"
-STUDIO_URL="http://${HOST}:${STUDIO_PORT}"
-PREVIEW_URL="http://${HOST}:${PREVIEW_PORT}"
+REQUESTED_STUDIO_PORT="$STUDIO_PORT"
 LOG_DIR="${HOME}/Library/Logs/GarhJaisalContentStudio"
 STUDIO_LOG="${LOG_DIR}/content-studio.log"
 PREVIEW_LOG="${LOG_DIR}/php-preview.log"
@@ -43,13 +42,44 @@ fi
 command -v curl >/dev/null 2>&1 || fail "curl is missing; this macOS launcher uses it only to check local server readiness."
 command -v lsof >/dev/null 2>&1 || fail "lsof is missing; this launcher uses it to avoid stopping or replacing another local service."
 
-for port in "$STUDIO_PORT" "$PREVIEW_PORT"; do
+validate_port() {
+  local port="$1"
   [[ "$port" =~ ^[0-9]{1,5}$ ]] || fail "Invalid local port: $port"
   (( port > 0 && port < 65536 )) || fail "Invalid local port: $port"
-  if lsof -nP -iTCP:"$port" -sTCP:LISTEN >/dev/null 2>&1; then
-    fail "Local port $port is already in use. Close the previous Content Studio/preview window and try again. No existing service was changed."
-  fi
-done
+}
+
+choose_available_port() {
+  local label="$1"
+  local candidate="$2"
+  local reserved="${3:-}"
+  local attempts=0
+
+  validate_port "$candidate"
+  while (( attempts < 100 )); do
+    if [[ "$candidate" != "$reserved" ]] && ! lsof -nP -iTCP:"$candidate" -sTCP:LISTEN >/dev/null 2>&1; then
+      printf '%s\n' "$candidate"
+      return 0
+    fi
+    candidate=$((candidate + 1))
+    attempts=$((attempts + 1))
+    (( candidate < 65536 )) || break
+  done
+
+  fail "Could not find an available $label port within 100 ports starting at $2. Set CONTENT_STUDIO_PORT or CONTENT_PREVIEW_PORT to a free port and retry."
+}
+
+validate_port "$PREVIEW_PORT"
+if lsof -nP -iTCP:"$PREVIEW_PORT" -sTCP:LISTEN >/dev/null 2>&1; then
+  fail "Local PHP preview port $PREVIEW_PORT is already in use. No existing service was changed. Stop or reconfigure that service, or set CONTENT_PREVIEW_PORT to a free port and update the Studio preview URL to match."
+fi
+
+STUDIO_PORT="$(choose_available_port "Content Studio" "$STUDIO_PORT" "$PREVIEW_PORT")"
+STUDIO_URL="http://${HOST}:${STUDIO_PORT}"
+PREVIEW_URL="http://${HOST}:${PREVIEW_PORT}"
+
+if [[ "$STUDIO_PORT" != "$REQUESTED_STUDIO_PORT" ]]; then
+  printf 'Port %s is occupied; Content Studio will use %s instead. No existing service was changed.\n' "$REQUESTED_STUDIO_PORT" "$STUDIO_PORT"
+fi
 
 mkdir -p "$LOG_DIR"
 : > "$STUDIO_LOG"
@@ -80,6 +110,8 @@ wait_for_url() {
   local pid="$2"
   local label="$3"
   local log="$4"
+  local expected="${5:-}"
+  local response
   local attempt
 
   for attempt in {1..40}; do
@@ -88,19 +120,24 @@ wait_for_url() {
       tail -n 30 "$log" >&2 || true
       return 1
     fi
-    if curl --silent --show-error --fail --max-time 1 "$url" >/dev/null 2>&1; then
-      return 0
+    if response="$(curl --silent --fail --max-time 1 "$url" 2>/dev/null)"; then
+      if [[ -z "$expected" || "$response" == *"$expected"* ]]; then
+        return 0
+      fi
     fi
     sleep 0.25
   done
 
+  if [[ -n "$expected" ]]; then
+    printf '\nERROR: %s did not return the expected service identity (%s). The port may be serving a different application.\n' "$label" "$expected" >&2
+  fi
   printf '\nERROR: %s did not become ready. Recent log output:\n' "$label" >&2
   tail -n 30 "$log" >&2 || true
   return 1
 }
 
 wait_for_url "${PREVIEW_URL}/blog.php" "$PREVIEW_PID" "Local PHP preview" "$PREVIEW_LOG" || exit 1
-wait_for_url "${STUDIO_URL}/api/status" "$STUDIO_PID" "Content Studio" "$STUDIO_LOG" || exit 1
+wait_for_url "${STUDIO_URL}/api/status" "$STUDIO_PID" "Content Studio" "$STUDIO_LOG" "Local authoring only." || exit 1
 
 printf '\nGarh Jaisal Content Studio is ready.\n'
 printf 'Editor:  %s\n' "$STUDIO_URL"
