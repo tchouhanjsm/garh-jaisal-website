@@ -53,10 +53,19 @@ const STUDIO_MANAGED_PAGE_REGISTRY = Object.freeze({
   '/tariff.php': Object.freeze({ label: 'Rates and tariffs', templateId: 'rates', editableFields: Object.freeze([]) })
 });
 const APPROVED_STYLESHEET_PATHS = new Set([
-  'css/garh-v2.css', 'css/experiences.css', 'css/thar-sunset-story.css',
-  'css/editorial-guides.css', 'css/editorial-index.css', 'css/gallery.css',
-  'css/packages.css', 'css/restaurant.css', 'css/rooms.css', 'css/directions.css',
-  'css/booking.css', 'css/contact.css', 'css/tariff.css'
+  'css/article.css',
+  'css/garh-v2.css',
+  'css/experiences.css',
+  'css/thar-sunset-story.css',
+  'css/editorial-index.css',
+  'css/gallery.css',
+  'css/packages.css',
+  'css/restaurant.css',
+  'css/rooms.css',
+  'css/directions.css',
+  'css/booking.css',
+  'css/contact.css',
+  'css/tariff.css'
 ]);
 
 function registryError(message) {
