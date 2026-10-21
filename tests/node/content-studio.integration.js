@@ -136,9 +136,10 @@ function verifyV2TemplateAndAssetRegistry() {
   assert.equal(result.managedPageCount, 4, 'known routes should be registered for supported-field editing');
   assert.deepEqual(Array.from(api.getTemplateContract('experience-detail').stylesheetPaths), ['css/garh-v2.css', 'css/experiences.css', 'css/thar-sunset-story.css']);
   assert.deepEqual(Array.from(api.getTemplateContract('editorial-guide').stylesheetPaths), ['css/garh-v2.css', 'css/article.css', 'css/thar-sunset-story.css']);
-  for (const unsafe of ['../include/page-head.php', '/etc/passwd', 'css/../../index.php', 'css\\garh-v2.css', 'https://example.com/evil.css']) {
+  for (const unsafe of ['../include/page-head.php', '/etc/passwd', 'css/../../index.php', 'css\\garh-v2.css']) {
     assert.throws(() => api.assertRegularRepoFile(unsafe, 'Test path'), /normalized repository-relative path/);
   }
+  assert.throws(() => api.assertApprovedStylesheet('https://example.com/evil.css'), /not approved/);
   for (const unapproved of ['css/secret.css', 'index.php', 'https://example.com/remote.css']) {
     assert.throws(() => api.assertApprovedStylesheet(unapproved), /not approved/);
   }
