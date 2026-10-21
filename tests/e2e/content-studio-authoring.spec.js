@@ -13,6 +13,27 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
   const suffix = String(process.pid);
   const tourSlug = 'content-studio-ui-tour-' + suffix;
   const blogSlug = 'content-studio-ui-blog-' + suffix;
+  const sitemapPath = path.join(root, 'sitemap.xml');
+  const originalSitemap = fs.readFileSync(sitemapPath);
+  const manifestPath = path.join(root, 'scripts/responsive-image-assets-manifest.json');
+  const originalManifest = fs.readFileSync(manifestPath);
+  const phpPreview = 'http://127.0.0.1:8080';
+  let galleryRecordPath = null;
+  const galleryFolder = path.join(root, 'content/gallery');
+  const gallerySourcePhp = fs.readFileSync(path.join(root, 'include/gallery-data.php'), 'utf8');
+  const usedGallerySources = new Set([...gallerySourcePhp.matchAll(/'src'\\s*=>\\s*'([^']+)'/g)].map(match => match[1]));
+  if (fs.existsSync(galleryFolder)) {
+    for (const name of fs.readdirSync(galleryFolder).filter(name => name.endsWith('.json'))) {
+      const record = JSON.parse(fs.readFileSync(path.join(galleryFolder, name), 'utf8'));
+      if (record.image && typeof record.image.src === 'string') usedGallerySources.add(record.image.src);
+    }
+  }
+  const gallerySource = ['img/desert12.jpg', 'img/s9.jpg', 'img/j2.jpg', 'img/j6.jpg'].find(src => {
+    const file = path.join(root, src);
+    try { return fs.lstatSync(file).isFile() && !fs.lstatSync(file).isSymbolicLink() && !usedGallerySources.has(src); }
+    catch (_) { return false; }
+  });
+  if (!gallerySource) throw new Error('No safe unused Gallery source is available for the Content Studio manager test.');
   const ownedPaths = [
     path.join(root, tourSlug + '.php'),
     path.join(root, 'content/experiences/' + tourSlug + '.json'),
@@ -25,6 +46,7 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
 
   let output = '';
   let errors = '';
+  page.on('dialog', dialog => dialog.accept());
   const server = spawn(process.execPath, ['scripts/content-studio.js'], {
     cwd: root,
     env: { ...process.env, CONTENT_STUDIO_PORT: String(port) },
@@ -130,7 +152,99 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await expect(page.locator('#blog-result')).toContainText('Draft created');
     expect(fs.existsSync(ownedPaths[2])).toBeTruthy();
     expect(fs.existsSync(ownedPaths[3])).toBeTruthy();
-    expect(fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8')).not.toContain('/' + blogSlug + '.php</loc>');
+    expect(fs.readFileSync(sitemapPath, 'utf8')).not.toContain('/' + blogSlug + '.php</loc>');
+
+    // Create a Gallery draft, then verify every content type can be managed from the same screen.
+    await page.getByRole('tab', { name: 'Add Gallery photos' }).click();
+    await page.locator('#gallery-src').fill(gallerySource);
+    await page.locator('#gallery-alt').fill('Browser UI test image showing a Jaisalmer heritage property');
+    await page.locator('#gallery-caption').fill('Browser UI test Gallery caption');
+    const galleryRequestPromise = page.waitForRequest(request => request.url() === studioUrl + '/api/gallery' && request.method() === 'POST');
+    const galleryResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/gallery' && response.request().method() === 'POST');
+    await page.getByRole('button', { name: 'Validate and add photo' }).click();
+    const [galleryRequest, galleryResponse] = await Promise.all([galleryRequestPromise, galleryResponsePromise]);
+    expect(galleryResponse.status()).toBe(201);
+    const galleryPayload = galleryRequest.postDataJSON();
+    expect(galleryPayload.status).toBe('draft');
+    const galleryResult = await galleryResponse.json();
+    galleryRecordPath = path.join(galleryFolder, galleryResult.id + '.json');
+    ownedPaths.push(galleryRecordPath);
+    expect(fs.existsSync(galleryRecordPath)).toBeTruthy();
+
+    // Tour: reopen the saved draft, edit it, publish locally, unpublish, then delete.
+    await page.getByRole('tab', { name: 'Manage saved content' }).click();
+    let tourCard = page.locator('.content-record[data-record-key="tours:' + tourSlug + '"]');
+    await expect(tourCard).toContainText('DRAFT');
+    await tourCard.getByRole('button', { name: 'Edit' }).click();
+    await page.locator('#tour-title').fill('Browser UI test tour revised');
+    await page.locator('#tour-summary').fill('A revised summary used to validate editing a saved Content Studio draft record.');
+    const updateTourResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/tours/' + tourSlug && response.request().method() === 'PUT');
+    await page.getByRole('button', { name: 'Save changes' }).click();
+    expect((await updateTourResponsePromise).status()).toBe(200);
+    tourCard = page.locator('.content-record[data-record-key="tours:' + tourSlug + '"]');
+    await expect(tourCard).toContainText('Browser UI test tour revised');
+    const publishTourResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/tours/' + tourSlug + '/status' && response.request().method() === 'PATCH');
+    await tourCard.getByRole('button', { name: 'Publish locally' }).click();
+    expect((await publishTourResponsePromise).status()).toBe(200);
+    await expect(tourCard).toContainText('LIVE');
+    expect(fs.readFileSync(sitemapPath, 'utf8')).toContain('/' + tourSlug + '.php</loc>');
+    const localTourResponse = await fetch(phpPreview + '/' + tourSlug + '.php');
+    expect(localTourResponse.status).toBe(200);
+    expect(await localTourResponse.text()).not.toMatch(/noindex,follow/);
+    const unpublishTourResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/tours/' + tourSlug + '/status' && response.request().method() === 'PATCH');
+    await tourCard.getByRole('button', { name: 'Set to Draft' }).click();
+    expect((await unpublishTourResponsePromise).status()).toBe(200);
+    await expect(tourCard).toContainText('DRAFT');
+    expect(fs.readFileSync(sitemapPath, 'utf8')).not.toContain('/' + tourSlug + '.php</loc>');
+    const draftTourResponse = await fetch(phpPreview + '/' + tourSlug + '.php');
+    expect(await draftTourResponse.text()).toMatch(/noindex,follow/);
+    const deleteTourResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/tours/' + tourSlug && response.request().method() === 'DELETE');
+    await tourCard.getByRole('button', { name: 'Delete draft' }).click();
+    expect((await deleteTourResponsePromise).status()).toBe(200);
+    await expect(page.locator('.content-record[data-record-key="tours:' + tourSlug + '"]')).toHaveCount(0);
+    expect(fs.existsSync(ownedPaths[0])).toBeFalsy();
+    expect(fs.existsSync(ownedPaths[1])).toBeFalsy();
+
+    // Blog: the manager can reopen sections/sources, save edits, and safely remove a draft.
+    let blogCard = page.locator('.content-record[data-record-key="blogs:' + blogSlug + '"]');
+    await blogCard.getByRole('button', { name: 'Edit' }).click();
+    await page.locator('#blog-h1').fill('Browser UI test travel guide revised');
+    await page.locator('#blog-card-title').fill('Browser UI revised blog card');
+    const updateBlogResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/blogs/' + blogSlug && response.request().method() === 'PUT');
+    await page.getByRole('button', { name: 'Save changes' }).click();
+    expect((await updateBlogResponsePromise).status()).toBe(200);
+    blogCard = page.locator('.content-record[data-record-key="blogs:' + blogSlug + '"]');
+    await expect(blogCard).toContainText('Browser UI test travel guide revised');
+    const deleteBlogResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/blogs/' + blogSlug && response.request().method() === 'DELETE');
+    await blogCard.getByRole('button', { name: 'Delete draft' }).click();
+    expect((await deleteBlogResponsePromise).status()).toBe(200);
+    await expect(page.locator('.content-record[data-record-key="blogs:' + blogSlug + '"]')).toHaveCount(0);
+
+    // Gallery: edit metadata, publish, unpublish and delete the Draft record without deleting its source image.
+    const galleryId = galleryResult.id;
+    let galleryCard = page.locator('.content-record[data-record-key="gallery:' + galleryId + '"]');
+    await galleryCard.getByRole('button', { name: 'Edit' }).click();
+    await page.locator('#gallery-alt').fill('Browser UI updated description of a Jaisalmer heritage property');
+    await page.locator('#gallery-caption').fill('Browser UI updated Gallery caption');
+    const updateGalleryResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/gallery/' + galleryId && response.request().method() === 'PUT');
+    await page.getByRole('button', { name: 'Save changes' }).click();
+    expect((await updateGalleryResponsePromise).status()).toBe(200);
+    galleryCard = page.locator('.content-record[data-record-key="gallery:' + galleryId + '"]');
+    await expect(galleryCard).toContainText('Browser UI updated Gallery caption');
+    const publishGalleryResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/gallery/' + galleryId + '/status' && response.request().method() === 'PATCH');
+    await galleryCard.getByRole('button', { name: 'Publish locally' }).click();
+    expect((await publishGalleryResponsePromise).status()).toBe(200);
+    await expect(galleryCard).toContainText('LIVE');
+    const unpublishGalleryResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/gallery/' + galleryId + '/status' && response.request().method() === 'PATCH');
+    await galleryCard.getByRole('button', { name: 'Set to Draft' }).click();
+    expect((await unpublishGalleryResponsePromise).status()).toBe(200);
+    await expect(galleryCard).toContainText('DRAFT');
+    const deleteGalleryResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/gallery/' + galleryId && response.request().method() === 'DELETE');
+    await galleryCard.getByRole('button', { name: 'Delete draft' }).click();
+    expect((await deleteGalleryResponsePromise).status()).toBe(200);
+    await expect(page.locator('.content-record[data-record-key="gallery:' + galleryId + '"]')).toHaveCount(0);
+    expect(fs.existsSync(galleryRecordPath)).toBeFalsy();
+    expect(fs.existsSync(path.join(root, gallerySource))).toBeTruthy();
   } finally {
     if (server.exitCode === null) {
       server.kill('SIGTERM');
@@ -140,7 +254,13 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
       ]);
     }
     for (const file of ownedPaths) {
-      try { if (fs.existsSync(file)) fs.unlinkSync(file); } catch (_) {}
+      try { if (fs.existsSync(file) && !fs.lstatSync(file).isSymbolicLink()) fs.unlinkSync(file); } catch (_) {}
     }
+    try {
+      if (!fs.readFileSync(sitemapPath).equals(originalSitemap)) fs.writeFileSync(sitemapPath, originalSitemap);
+    } catch (_) {}
+    try {
+      if (!fs.readFileSync(manifestPath).equals(originalManifest)) fs.writeFileSync(manifestPath, originalManifest);
+    } catch (_) {}
   }
 });
