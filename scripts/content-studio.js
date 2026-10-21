@@ -113,15 +113,16 @@ function getTemplateContract(templateId) {
   for (const includePath of template.sharedIncludes) assertRegularRepoFile(includePath, 'Shared include');
   for (const stylesheet of template.stylesheetPaths) assertApprovedStylesheet(stylesheet);
   if (template.recordType === 'blog') {
-    const guideData = require(path.join(ROOT, 'include', 'editorial-guides-data.php'));
-    for (const record of Object.values(guideData)) {
-      const dependencies = Array.isArray(record.css) ? record.css : ['css/article.css', 'css/thar-sunset-story.css'];
-      for (const stylesheet of dependencies) {
-        if (typeof stylesheet !== 'string' || !stylesheet.startsWith('css/')) {
-          throw registryError('Editorial stylesheet dependencies must be approved repository-relative CSS paths.');
-        }
-        assertApprovedStylesheet(stylesheet);
+    const guideRegistryPath = assertRegularRepoFile('include/editorial-guides-data.php', 'Editorial content registry');
+    const guideRegistrySource = fs.readFileSync(guideRegistryPath, 'utf8');
+    const declaredStylesheets = [...guideRegistrySource.matchAll(/'css'\\s*=>\\s*\\[([\\s\\S]*?)\\]/g)]
+      .flatMap(entry => [...entry[1].matchAll(/'([^']+\\.css)'/g)].map(match => match[1]));
+    declaredStylesheets.push('css/article.css', 'css/thar-sunset-story.css');
+    for (const stylesheet of [...new Set(declaredStylesheets)]) {
+      if (typeof stylesheet !== 'string' || !stylesheet.startsWith('css/')) {
+        throw registryError('Editorial stylesheet dependencies must be approved repository-relative CSS paths.');
       }
+      assertApprovedStylesheet(stylesheet);
     }
   }
   assertRegularRepoFile(template.renderer, 'Template renderer');
