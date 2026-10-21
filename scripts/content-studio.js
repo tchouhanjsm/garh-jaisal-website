@@ -40,7 +40,7 @@ const PAGE_TEMPLATE_REGISTRY = Object.freeze({
   'editorial-guide': Object.freeze({
     id: 'editorial-guide', label: 'Blog or travel guide', renderer: 'include/editorial-guide-page.php',
     routePattern: '/{slug}.php', recordDirectory: 'content/editorial',
-    stylesheetPaths: Object.freeze(['css/garh-v2.css', 'css/guide.css']),
+    stylesheetPaths: Object.freeze(['css/garh-v2.css', 'css/article.css', 'css/thar-sunset-story.css']),
     sharedIncludes: Object.freeze(['include/page-head.php', 'include/header-v2.php', 'include/footer-v2.php']),
     requiredFields: Object.freeze(['title', 'description', 'h1', 'hero_image', 'hero_alt', 'lede', 'sections', 'sources']),
     recordType: 'blog'
@@ -71,7 +71,7 @@ function isInsideRoot(candidate) {
 }
 
 function assertRegularRepoFile(relativePath, label) {
-  if (typeof relativePath !== 'string' || !relativePath || path.isAbsolute(relativePath) || relativePath.includes('\\\\') || relativePath.split(/[\\\\/]+/).some(part => part === '..' || part === '.')) {
+  if (typeof relativePath !== 'string' || !relativePath || path.isAbsolute(relativePath) || relativePath.includes('\\') || relativePath.split(/[\\/]+/).some(part => part === '..' || part === '.')) {
     throw registryError((label || 'Path') + ' must be a normalized repository-relative path.');
   }
   const absolute = path.resolve(ROOT, relativePath);
@@ -103,6 +103,14 @@ function getTemplateContract(templateId) {
   if (!template) throw registryError('Choose a supported page template.');
   for (const includePath of template.sharedIncludes) assertRegularRepoFile(includePath, 'Shared include');
   for (const stylesheet of template.stylesheetPaths) assertApprovedStylesheet(stylesheet);
+  for (const optionalField of ['css']) {
+    if (template.recordType === 'blog' && optionalField === 'css') {
+      const guideData = require(path.join(ROOT, 'include', 'editorial-guides-data.php'));
+      for (const record of Object.values(guideData)) {
+        for (const stylesheet of (Array.isArray(record.css) ? record.css : [])) assertApprovedStylesheet(stylesheet);
+      }
+    }
+  }
   assertRegularRepoFile(template.renderer, 'Template renderer');
   return template;
 }
