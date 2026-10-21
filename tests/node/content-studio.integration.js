@@ -506,3 +506,39 @@ main()
       }
     }
   });
+function verifyV2TemplateAndAssetRegistry() {
+  const file = path.join(ROOT, 'scripts/content-studio.js');
+  const source = fs.readFileSync(file, 'utf8');
+  const registryStart = source.indexOf('const PAGE_TEMPLATE_REGISTRY');
+  const failStart = source.indexOf('function fail(statusCode, message)');
+  assert.ok(registryStart >= 0 && failStart > registryStart, 'template registry should be declared before request handlers');
+  const registrySource = source.slice(registryStart, failStart);
+  const sandbox = { Object, Set, path, fs, ROOT };
+  const compile = new vm.Script(registrySource + '\\nresult = { PAGE_TEMPLATE_REGISTRY, STUDIO_MANAGED_PAGE_REGISTRY, APPROVED_STYLESHEET_PATHS, assertRegularRepoFile, assertApprovedStylesheet, getTemplateContract, validateRouteForTemplate, validateTemplateRegistry };');
+  vm.createContext(sandbox);
+  compile.runInContext(sandbox, { timeout: 2000 });
+  const api = sandbox.result;
+  const result = api.validateTemplateRegistry();
+  assert.equal(result.templateCount, 2, 'only explicit renderer-backed templates should be available');
+  assert.equal(result.managedPageCount, 4, 'known routes should be registered for supported-field editing');
+  assert.equal(api.getTemplateContract('experience-detail').renderer, 'include/experience-page.php');
+  assert.deepEqual(Array.from(api.getTemplateContract('experience-detail').stylesheetPaths), ['css/experiences.css', 'css/thar-sunset-story.css']);
+  assert.equal(api.getTemplateContract('editorial-guide').renderer, 'include/editorial-guide-page.php');
+  for (const unsafe of ['../include/page-head.php', '/etc/passwd', 'css/../../index.php', 'css\\\\garh-v2.css', 'https://example.com/evil.css']) {
+    assert.throws(() => api.assertRegularRepoFile(unsafe, 'Test path'), /normalized repository-relative path/);
+  }
+  for (const unapproved of ['css/secret.css', 'index.php', 'https://example.com/remote.css']) {
+    assert.throws(() => api.assertApprovedStylesheet(unapproved), /not approved/);
+  }
+  assert.throws(() => api.getTemplateContract('arbitrary-php'), /supported page template/);
+  assert.throws(() => api.validateRouteForTemplate('same-route', 'experience-detail'), /already exists/);
+  const symlinkCandidate = path.join(ROOT, '.content-studio-v2-test-link');
+  assert.ok(!fs.existsSync(symlinkCandidate), 'symlink fixture must be safe and unused');
+  try {
+    fs.symlinkSync(path.join(ROOT, 'include', 'page-head.php'), symlinkCandidate);
+    assert.throws(() => api.assertRegularRepoFile('.content-studio-v2-test-link', 'Test path'), /symbolic link/);
+  } finally {
+    try { fs.unlinkSync(symlinkCandidate); } catch (_) {}
+  }
+}
+
