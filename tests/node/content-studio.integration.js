@@ -120,7 +120,7 @@ function verifyV2TemplateAndAssetRegistry() {
   const failStart = source.indexOf('function fail(statusCode, message)');
   assert.ok(registryStart >= 0 && failStart > registryStart, 'template registry should be declared before request handlers');
   const registrySource = source.slice(registryStart, failStart);
-  const sandbox = { Object, Set, path, fs, ROOT, require };
+  const sandbox = { Object, Set, path, fs, ROOT, require: moduleName => { if (moduleName === 'node:path') return path; if (moduleName === 'node:fs') return fs; throw new Error('Unexpected registry test dependency: ' + moduleName); } };
   const exported = 'result = { PAGE_TEMPLATE_REGISTRY, STUDIO_MANAGED_PAGE_REGISTRY, APPROVED_STYLESHEET_PATHS, assertRegularRepoFile, assertApprovedStylesheet, getTemplateContract, validateRouteForTemplate, validateTemplateRegistry };';
   const compile = new vm.Script(registrySource + String.fromCharCode(10) + exported);
   vm.createContext(sandbox);
