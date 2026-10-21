@@ -71,7 +71,7 @@ function isInsideRoot(candidate) {
 }
 
 function assertRegularRepoFile(relativePath, label) {
-  if (typeof relativePath !== 'string' || !relativePath || path.isAbsolute(relativePath) || relativePath.includes('\\\\') || relativePath.split('/').some(part => part === '..' || part === '.')) {
+  if (typeof relativePath !== 'string' || !relativePath || path.isAbsolute(relativePath) || relativePath.includes('\\\\\\\\') || relativePath.split(/[\\/]+/).some(part => part === '..' || part === '.')) {
     throw registryError((label || 'Path') + ' must be a normalized repository-relative path.');
   }
   const absolute = path.resolve(ROOT, relativePath);
@@ -115,7 +115,7 @@ function validateRouteForTemplate(slug, templateId) {
   const routeRelative = slug + '.php';
   const routeAbsolute = path.resolve(ROOT, routeRelative);
   if (!isInsideRoot(routeAbsolute)) throw registryError('Route is outside the repository.');
-  if (fs.existsSync(routeAbsolute) || fs.existsSync(path.join(ROOT, template.recordDirectory, slug + '.json'))) {
+  if (fs.existsSync(routeAbsolute) || fs.existsSync(path.join(ROOT, template.recordDirectory, slug + '.json')) || Object.prototype.hasOwnProperty.call(PAGE_TEMPLATE_REGISTRY, slug)) {
     throw registryError('That route or content record already exists. Existing routes are never overwritten.');
   }
   return { route: routeRelative, renderer: template.renderer, stylesheets: [...template.stylesheetPaths] };
@@ -932,7 +932,8 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) {
       return respond(res, 200, 'text/html; charset=utf-8', fs.readFileSync(UI_PATH));
     }
-    if (req.method === 'GET' && url.pathname === '/api/status') return respondJson(res, 200, statusPayload());
+    if (req.method === 'GET' && url.pathname === '/api/status') return respondJson(res, 200, { ...statusPayload(), v2Registry: validateTemplateRegistry() });
+    if (req.method === 'GET' && url.pathname === '/api/templates') return respondJson(res, 200, { templates: Object.keys(PAGE_TEMPLATE_REGISTRY).map(id => { const item = getTemplateContract(id); return { id: item.id, label: item.label, routePattern: item.routePattern, stylesheetPaths: [...item.stylesheetPaths], requiredFields: [...item.requiredFields], recordType: item.recordType }; }), managedPages: Object.entries(STUDIO_MANAGED_PAGE_REGISTRY).map(([route, page]) => ({ route, label: page.label, templateId: page.templateId, editableFields: [...page.editableFields] })) });
     if (req.method === 'GET' && url.pathname === '/api/content') return respondJson(res, 200, listManagedContent());
     const managedMatch = url.pathname.match(/^\/api\/content\/(tours|blogs|gallery)\/([a-z0-9]+(?:-[a-z0-9]+)*)(\/status)?$/);
     if (managedMatch) {
