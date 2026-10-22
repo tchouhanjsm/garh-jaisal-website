@@ -473,6 +473,7 @@ function createPage(type, slug, record, variable) {
   const oldSitemap = fs.readFileSync(sitemapPath);
   assertContentDirectoryChain(path.dirname(files.record), true);
   const cssFile = type === 'pages' ? generatedPageCssPath(slug, true) : null;
+  if (cssFile && fs.existsSync(cssFile)) throw fail(409, 'A generated page stylesheet already exists for this slug. Review it before creating a page.');
   let recordCreated = false;
   let routeCreated = false;
   let cssCreated = false;
@@ -533,7 +534,7 @@ function assertContentDirectoryChain(targetDirectory, createMissing = false) {
 }
 
 function managedPaths(type, slug) {
-  const directories = { tours: 'experiences', blogs: 'editorial', gallery: 'gallery' };
+  const directories = { tours: 'experiences', blogs: 'editorial', gallery: 'gallery', pages: 'pages' };
   if (!Object.prototype.hasOwnProperty.call(directories, type)) throw fail(404, 'Unknown Content Studio content type.');
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(slug || ''))) throw fail(400, 'Invalid content identifier.');
   const record = path.join(CONTENT_ROOT, directories[type], slug + '.json');
@@ -595,6 +596,11 @@ function safeManagedRoute(route, type, slug) {
 }
 
 function verifyPublishableRecord(type, record) {
+  if (type === 'pages') {
+    try { validateLandingPageRecord(record); }
+    catch (error) { throw fail(422, 'This landing page is not ready for release: ' + error.message); }
+    return;
+  }
   if (type === 'tours') {
     if (!['desert', 'city'].includes(record.category)
       || typeof record.h1 !== 'string' || record.h1.trim().length < 3
@@ -652,7 +658,7 @@ function verifyPublishableRecord(type, record) {
 
 function listManagedContent() {
   const items = [];
-  for (const type of ['tours', 'blogs', 'gallery']) {
+  for (const type of ['tours', 'blogs', 'gallery', 'pages']) {
     const folder = managedPaths(type, 'content-studio-placeholder').directory;
     if (!fs.existsSync(folder)) continue;
     const names = fs.readdirSync(folder).filter(name => name.endsWith('.json')).sort((a, b) => a.localeCompare(b));
@@ -672,7 +678,9 @@ function listManagedContent() {
             : String(record.h1 || record.title || slug),
           detail: type === 'gallery'
             ? String(record.category || 'Gallery') + ' · ' + String(photo.src || '')
-            : String(record.eyebrow || (type === 'tours' ? record.category : 'Travel guide')),
+            : type === 'pages'
+              ? String(record.theme || 'heritage') + ' theme · ' + String(record.sections ? record.sections.length : 0) + ' sections'
+              : String(record.eyebrow || (type === 'tours' ? record.category : 'Travel guide')),
           modified: String(record.date_modified || record.date_published || ''),
           pagePath: type === 'gallery' ? '/gallery.php#' + encodeURIComponent(record.category) : '/' + slug + '.php',
           invalid: false,
@@ -705,7 +713,6 @@ function updateManagedPage(type, slug, record) {
   record.review_status = 'draft';
   if (type === 'gallery') throw fail(400, 'Gallery records do not use PHP page routes.');
   safeManagedRoute(files.route, type, slug);
-  // Preserve fields the form does not expose, including operator-customized ordering and related links.
   record = { ...previous, ...record };
   if (type === 'tours') {
     for (const key of ['parent', 'order', 'timeline_label', 'related']) {
@@ -715,6 +722,15 @@ function updateManagedPage(type, slug, record) {
     for (const key of ['related', 'cta_eyebrow', 'cta_primary_label', 'cta_primary_href', 'cta_secondary_label', 'cta_secondary_href']) {
       if (previous[key] !== undefined) record[key] = previous[key];
     }
+  } else if (type === 'pages') {
+    validateLandingPageRecord(record);
+  }
+  const cssFile = type === 'pages' ? generatedPageCssPath(slug) : null;
+  let oldCss = null;
+  if (cssFile && fs.existsSync(cssFile)) {
+    const cssStat = fs.lstatSync(cssFile);
+    if (!cssStat.isFile() || cssStat.isSymbolicLink()) throw fail(409, 'Generated page CSS is not a regular file and cannot be updated safely.');
+    oldCss = fs.readFileSync(cssFile);
   }
   const oldRecord = fs.readFileSync(files.record);
   const sitemapPath = path.join(ROOT, 'sitemap.xml');
@@ -728,10 +744,17 @@ function updateManagedPage(type, slug, record) {
   }
   try {
     atomicWrite(files.record, JSON.stringify(record, null, 2) + '\n');
+    if (cssFile) atomicWrite(cssFile, buildLandingPageCss(slug, record));
     const sitemapMessage = runSitemap();
     return { slug, status: record.status, pagePath: '/' + slug + '.php', sitemapMessage, updated: true };
   } catch (error) {
     try { atomicWrite(files.record, oldRecord); } catch (_) {}
+    if (cssFile) {
+      try {
+        if (oldCss) atomicWrite(cssFile, oldCss);
+        else if (fs.existsSync(cssFile)) fs.unlinkSync(cssFile);
+      } catch (_) {}
+    }
     try { atomicWrite(sitemapPath, oldSitemap); } catch (_) {}
     throw error;
   }
@@ -811,10 +834,18 @@ function deleteManagedDraft(type, slug) {
   if (type !== 'gallery') safeManagedRoute(files.route, type, slug);
   const oldRecord = fs.readFileSync(files.record);
   const oldRoute = type === 'gallery' ? null : fs.readFileSync(files.route);
+  const cssFile = type === 'pages' ? generatedPageCssPath(slug) : null;
+  let oldCss = null;
+  if (cssFile && fs.existsSync(cssFile)) {
+    const cssStat = fs.lstatSync(cssFile);
+    if (!cssStat.isFile() || cssStat.isSymbolicLink()) throw fail(409, 'Generated page CSS is not a regular file and cannot be deleted safely.');
+    oldCss = fs.readFileSync(cssFile);
+  }
   const sitemapPath = path.join(ROOT, 'sitemap.xml');
   const oldSitemap = type === 'gallery' ? null : fs.readFileSync(sitemapPath);
   let routeRemoved = false;
   let recordRemoved = false;
+  let cssRemoved = false;
   try {
     if (type !== 'gallery') {
       fs.unlinkSync(files.route);
@@ -822,11 +853,16 @@ function deleteManagedDraft(type, slug) {
     }
     fs.unlinkSync(files.record);
     recordRemoved = true;
+    if (cssFile && oldCss) {
+      fs.unlinkSync(cssFile);
+      cssRemoved = true;
+    }
     if (type !== 'gallery') runSitemap();
-    return { type, slug, deleted: true, message: 'Draft removed from the local working tree. Source images are retained.' };
+    return { type, slug, deleted: true, message: 'Draft removed from the local working tree. Generated page assets are removed; uploaded source images are retained.' };
   } catch (error) {
     if (recordRemoved) { try { atomicWrite(files.record, oldRecord); } catch (_) {} }
     if (routeRemoved && oldRoute) { try { atomicWrite(files.route, oldRoute); } catch (_) {} }
+    if (cssRemoved && oldCss) { try { atomicWrite(cssFile, oldCss); } catch (_) {} }
     if (oldSitemap) { try { atomicWrite(sitemapPath, oldSitemap); } catch (_) {} }
     throw error;
   }
@@ -1239,6 +1275,7 @@ function previewRecordPaths() {
   return [
     { directory: path.join(CONTENT_ROOT, 'experiences'), type: 'tours' },
     { directory: path.join(CONTENT_ROOT, 'editorial'), type: 'blogs' },
+    { directory: path.join(CONTENT_ROOT, 'pages'), type: 'pages' },
   ];
 }
 
