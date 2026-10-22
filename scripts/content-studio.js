@@ -589,7 +589,7 @@ function safeManagedRoute(route, type, slug) {
     throw error;
   }
   if (!stat.isFile() || stat.isSymbolicLink()) throw fail(409, 'The page route is not a regular file and cannot be changed safely.');
-  const variable = type === 'tours' ? 'experienceSlug' : 'editorialGuideSlug';
+  const variable = type === 'tours' ? 'experienceSlug' : type === 'pages' ? 'studioPageSlug' : 'editorialGuideSlug';
   if (fs.readFileSync(route, 'utf8') !== wrapper(variable, slug)) {
     throw fail(409, 'This page route no longer matches the generated Content Studio wrapper. Ask the operator to review it before editing or deleting this record.');
   }
