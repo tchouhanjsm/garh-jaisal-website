@@ -66,7 +66,13 @@ function normalizeAdvisoryResponse(statusCode, upstreamHeaders, rawBody) {
 }
 
 function isAllowedRequest(method, requestUrl) {
-  return method === 'POST' && requestUrl === BULK_PATH;
+  if (method !== 'POST' || typeof requestUrl !== 'string') return false;
+  try {
+    const parsed = new URL(requestUrl, 'http://' + HOST + ':' + PORT);
+    return parsed.pathname.replace(/\\/$/, '') === BULK_PATH && !parsed.search && !parsed.hash;
+  } catch (_) {
+    return false;
+  }
 }
 
 function jsonResponse(response, statusCode, message) {
@@ -81,6 +87,7 @@ function jsonResponse(response, statusCode, message) {
 
 function createProxyServer() {
   return http.createServer((request, response) => {
+    process.stderr.write('[npm audit proxy] Incoming ' + request.method + ' ' + request.url + '\\n');
     if (request.method === 'GET' && request.url === '/healthz') {
       const body = Buffer.from('ok\n');
       response.writeHead(200, { 'content-type': 'text/plain; charset=utf-8', 'content-length': String(body.length) });
@@ -213,6 +220,7 @@ function runSelfTest() {
   assert.equal(normalized.headers['content-length'], String(json.length));
   assert.equal(normalized.correctedMissingEncoding, true);
   assert.equal(isAllowedRequest('POST', BULK_PATH), true);
+  assert.equal(isAllowedRequest('POST', BULK_PATH + '/'), true);
   assert.equal(isAllowedRequest('GET', BULK_PATH), false);
   assert.equal(isAllowedRequest('POST', '/-/npm/v1/security/audits/quick'), false);
   assert.equal(isAllowedRequest('POST', 'https://example.invalid/'), false);
