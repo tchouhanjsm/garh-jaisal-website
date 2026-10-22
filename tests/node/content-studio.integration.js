@@ -614,7 +614,7 @@ async function main() {
   assert.ok(html.includes('A reusable image-and-text block'));
   const renderedSectionHeadings = Array.from(html.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/gi), match => match[1].replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').trim());
   assert.ok(
-    ['Plan your visit', 'A closer look', 'Useful details'].every(heading => renderedSectionHeadings.includes(heading)),
+    ['Plan your visit', 'A closer look', 'What to know'].every(heading => renderedSectionHeadings.includes(heading)),
     'published page must render each authored block heading; observed: ' + JSON.stringify(renderedSectionHeadings),
   );
   assert.doesNotMatch(phpErrors, /Unknown modifier|preg_match\(\):/, 'landing renderer must not emit PHP regex warnings');
