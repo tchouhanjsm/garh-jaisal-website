@@ -35,7 +35,7 @@ function placePhoto({ type, slug, role, n, file, category, stage }) {
   const stat = fs.statSync(file);
   if (!stat.isFile() || stat.size > 25 * 1024 * 1024) throw new Error('Photo must be a regular file under 25 MB.');
   fs.mkdirSync(path.dirname(dest), { recursive: true });
-  const r = spawnSync('python3', ['-I', '-c', PY, file, dest, String(cap.max_width), String(cap.max_bytes)], { encoding: 'utf8' });
+  const r = spawnSync('python3', ['-c', PY, file, dest, String(cap.max_width), String(cap.max_bytes)], { encoding: 'utf8' });
   if (r.status !== 0) {
     try { fs.unlinkSync(dest); } catch (_) {}
     throw new Error(r.status === 3 ? 'Could not fit the photo within ' + cap.max_bytes + ' bytes; crop it or use a simpler image.' : 'Image conversion failed (needs python3 with Pillow, and a real image): ' + String(r.stderr || '').trim().split('\n').pop());

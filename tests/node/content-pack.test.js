@@ -25,7 +25,7 @@ const test = (name, fn) => { try { fn(); passed++; } catch (e) { console.error('
 function makeImage(file, width, height, noise, fmt) {
   const py = 'import sys,os\nfrom PIL import Image\nw,h,noise,out,fmt=int(sys.argv[1]),int(sys.argv[2]),sys.argv[3]=="1",sys.argv[4],sys.argv[5]\n' +
     'im=Image.new("RGB",(w,h))\nim.putdata([((x*3+y)%256,(x+y*2)%256,(os.urandom(1)[0] if noise else 90)) for y in range(h) for x in range(w)])\nim.save(out,fmt,quality=95)';
-  const r = spawnSync('python3', ['-I', '-c', py, String(width), String(height), noise ? '1' : '0', file, fmt], { encoding: 'utf8' });
+  const r = spawnSync('python3', ['-c', py, String(width), String(height), noise ? '1' : '0', file, fmt], { encoding: 'utf8' });
   assert.equal(r.status, 0, r.stderr);
 }
 const jpg = path.join(tmp, 'src.jpg');
