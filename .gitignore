@@ -18,3 +18,5 @@ playwright-report/
 # Ephemeral Content Studio PHP previews (ignored even if a session is interrupted).
 content/experiences/content-studio-preview-*.json
 content/editorial/content-studio-preview-*.json
+content/pages/content-studio-preview-*.json
+css/pages/content-studio-preview-*.css

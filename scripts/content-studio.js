@@ -28,6 +28,25 @@ const IMAGE_TYPES = {
 };
 const CATEGORIES = ['hotel', 'rooms', 'desert', 'restaurant'];
 const CROPS = ['arch', 'landscape', 'portrait', 'standard'];
+const PAGE_THEMES = Object.freeze({
+  heritage: Object.freeze({
+    surface: 'var(--cream)', surfaceAlt: 'var(--sand-light)', text: 'var(--ink)',
+    muted: 'var(--muted)', accent: 'var(--brown)', heroBg: 'var(--dark)',
+    heroText: '#fff', heroMuted: '#e5ddd4', cardBg: '#fff', buttonText: 'var(--dark)',
+  }),
+  sandstone: Object.freeze({
+    surface: 'var(--sand-light)', surfaceAlt: '#fff', text: 'var(--ink)',
+    muted: 'var(--muted)', accent: 'var(--brown)', heroBg: 'var(--brown)',
+    heroText: '#fff', heroMuted: '#efe5da', cardBg: '#fff', buttonText: 'var(--dark)',
+  }),
+  'desert-night': Object.freeze({
+    surface: 'var(--dark)', surfaceAlt: '#24221d', text: '#fff',
+    muted: '#ded6ce', accent: '#f3d8b7', heroBg: '#171513',
+    heroText: '#fff', heroMuted: '#e5ddd4', cardBg: '#24221d', buttonText: 'var(--dark)',
+  }),
+});
+const PAGE_LAYOUTS = Object.freeze(['split', 'centered']);
+const PAGE_SECTION_TYPES = Object.freeze(['intro', 'image_text', 'feature_list', 'faq', 'cta']);
 
 // Approved render contracts for Content Studio V2.
 // This registry is deliberately data-only: staff select a template, never a PHP or CSS path.
@@ -47,6 +66,14 @@ const PAGE_TEMPLATE_REGISTRY = Object.freeze({
     sharedIncludes: Object.freeze(['include/page-head.php', 'include/header-v2.php', 'include/footer-v2.php']),
     requiredFields: Object.freeze(['title', 'description', 'h1', 'hero_image', 'hero_alt', 'lede', 'sections', 'sources']),
     recordType: 'blog'
+  }),
+  'landing-page': Object.freeze({
+    id: 'landing-page', label: 'Landing or campaign page', renderer: 'include/studio-page.php',
+    routePattern: '/{slug}.php', recordDirectory: 'content/pages',
+    stylesheetPaths: Object.freeze(['css/garh-v2.css', 'css/page-builder.css', 'css/thar-sunset-story.css']),
+    sharedIncludes: Object.freeze(['include/page-head.php', 'include/header-v2.php', 'include/footer-v2.php']),
+    requiredFields: Object.freeze(['title', 'description', 'h1', 'hero_image', 'hero_alt', 'sections']),
+    recordType: 'page'
   })
 });
 const STUDIO_MANAGED_PAGE_REGISTRY = Object.freeze({
@@ -65,6 +92,7 @@ const APPROVED_STYLESHEET_PATHS = new Set([
   'css/gallery.css',
   'css/garh-v2.css',
   'css/packages.css',
+  'css/page-builder.css',
   'css/restaurant.css',
   'css/rooms.css',
   'css/tariff.css',
@@ -355,7 +383,7 @@ function imagePath(value) {
 }
 
 function assertStudioRouteAvailable(slug, type) {
-  const templateId = type === 'experiences' ? 'experience-detail' : type === 'editorial' ? 'editorial-guide' : null;
+  const templateId = type === 'experiences' ? 'experience-detail' : type === 'editorial' ? 'editorial-guide' : type === 'pages' ? 'landing-page' : null;
   if (!templateId) throw fail(400, 'Choose a supported Content Studio page template.');
   try {
     return validateRouteForTemplate(slug, templateId);
@@ -368,14 +396,63 @@ function assertStudioRouteAvailable(slug, type) {
 function ensureNewSlug(slug, type) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw fail(400, 'Use a URL slug made from lowercase letters, digits and hyphens.');
   assertStudioRouteAvailable(slug, type);
+  const directories = { experiences: 'experiences', editorial: 'editorial', pages: 'pages' };
+  if (!Object.prototype.hasOwnProperty.call(directories, type)) throw fail(400, 'Choose a supported Content Studio content directory.');
   return {
     route: path.join(ROOT, slug + '.php'),
-    record: path.join(CONTENT_ROOT, type, slug + '.json'),
+    record: path.join(CONTENT_ROOT, directories[type], slug + '.json'),
   };
 }
 
+function generatedPageCssPath(slug, createDirectory = false) {
+  if (typeof slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+    throw fail(400, 'Invalid generated page stylesheet identifier.');
+  }
+  const cssRoot = path.join(ROOT, 'css');
+  const cssRootStat = fs.lstatSync(cssRoot);
+  if (!cssRootStat.isDirectory() || cssRootStat.isSymbolicLink()) throw fail(400, 'The CSS directory must be a real local directory.');
+  const directory = path.join(cssRoot, 'pages');
+  let stat;
+  try { stat = fs.lstatSync(directory); }
+  catch (error) {
+    if (error.code !== 'ENOENT' || !createDirectory) throw fail(400, 'Generated page CSS directory is missing or unavailable.');
+    fs.mkdirSync(directory, { mode: 0o755 });
+    stat = fs.lstatSync(directory);
+  }
+  if (!stat.isDirectory() || stat.isSymbolicLink()) throw fail(400, 'Generated page CSS directory must be a real local directory.');
+  return path.join(directory, slug + '.css');
+}
+
+function buildLandingPageCss(slug, record) {
+  const theme = PAGE_THEMES[record.theme];
+  if (!theme || !PAGE_LAYOUTS.includes(record.hero_layout)) throw fail(400, 'Choose an approved landing page theme and hero layout.');
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw fail(400, 'Invalid landing page stylesheet identifier.');
+  return [
+    '/* Generated by Content Studio from approved design tokens. Do not hand-edit. */',
+    '.studio-page--' + slug + ' {',
+    '  --studio-page-surface: ' + theme.surface + ';',
+    '  --studio-page-surface-alt: ' + theme.surfaceAlt + ';',
+    '  --studio-page-text: ' + theme.text + ';',
+    '  --studio-page-muted: ' + theme.muted + ';',
+    '  --studio-page-accent: ' + theme.accent + ';',
+    '  --studio-page-hero-bg: ' + theme.heroBg + ';',
+    '  --studio-page-hero-text: ' + theme.heroText + ';',
+    '  --studio-page-hero-muted: ' + theme.heroMuted + ';',
+    '  --studio-page-card-bg: ' + theme.cardBg + ';',
+    '  --studio-page-button-text: ' + theme.buttonText + ';',
+    '}',
+    '',
+  ].join('\n');
+}
+
 function wrapper(variable, slug) {
-  const renderer = variable === 'experienceSlug' ? 'experience-page.php' : 'editorial-guide-page.php';
+  const renderers = {
+    experienceSlug: 'experience-page.php',
+    editorialGuideSlug: 'editorial-guide-page.php',
+    studioPageSlug: 'studio-page.php',
+  };
+  const renderer = renderers[variable];
+  if (!renderer || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw fail(400, 'Unsupported local page wrapper.');
   return "<?php\n$" + variable + " = '" + slug + "';\nrequire __DIR__ . '/include/" + renderer + "';\n";
 }
 
@@ -395,17 +472,25 @@ function createPage(type, slug, record, variable) {
   const sitemapPath = path.join(ROOT, 'sitemap.xml');
   const oldSitemap = fs.readFileSync(sitemapPath);
   assertContentDirectoryChain(path.dirname(files.record), true);
+  const cssFile = type === 'pages' ? generatedPageCssPath(slug, true) : null;
+  if (cssFile && fs.existsSync(cssFile)) throw fail(409, 'A generated page stylesheet already exists for this slug. Review it before creating a page.');
   let recordCreated = false;
   let routeCreated = false;
+  let cssCreated = false;
   try {
     atomicWrite(files.record, JSON.stringify(record, null, 2) + '\n');
     recordCreated = true;
     atomicWrite(files.route, wrapper(variable, slug));
     routeCreated = true;
+    if (cssFile) {
+      atomicWrite(cssFile, buildLandingPageCss(slug, record), { flag: 'wx', mode: 0o644 });
+      cssCreated = true;
+    }
     let sitemapMessage = 'Draft saved. It is excluded from the public archive and sitemap.';
     if (record.status === 'live') sitemapMessage = runSitemap();
     return { slug, status: record.status, pagePath: '/' + slug + '.php', sitemapMessage };
   } catch (error) {
+    if (cssCreated) { try { fs.unlinkSync(cssFile); } catch (_) {} }
     if (routeCreated) { try { fs.unlinkSync(files.route); } catch (_) {} }
     if (recordCreated) { try { fs.unlinkSync(files.record); } catch (_) {} }
     try { atomicWrite(sitemapPath, oldSitemap); } catch (_) {}
@@ -449,7 +534,7 @@ function assertContentDirectoryChain(targetDirectory, createMissing = false) {
 }
 
 function managedPaths(type, slug) {
-  const directories = { tours: 'experiences', blogs: 'editorial', gallery: 'gallery' };
+  const directories = { tours: 'experiences', blogs: 'editorial', gallery: 'gallery', pages: 'pages' };
   if (!Object.prototype.hasOwnProperty.call(directories, type)) throw fail(404, 'Unknown Content Studio content type.');
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(slug || ''))) throw fail(400, 'Invalid content identifier.');
   const record = path.join(CONTENT_ROOT, directories[type], slug + '.json');
@@ -504,13 +589,18 @@ function safeManagedRoute(route, type, slug) {
     throw error;
   }
   if (!stat.isFile() || stat.isSymbolicLink()) throw fail(409, 'The page route is not a regular file and cannot be changed safely.');
-  const variable = type === 'tours' ? 'experienceSlug' : 'editorialGuideSlug';
+  const variable = type === 'tours' ? 'experienceSlug' : type === 'pages' ? 'studioPageSlug' : 'editorialGuideSlug';
   if (fs.readFileSync(route, 'utf8') !== wrapper(variable, slug)) {
     throw fail(409, 'This page route no longer matches the generated Content Studio wrapper. Ask the operator to review it before editing or deleting this record.');
   }
 }
 
 function verifyPublishableRecord(type, record) {
+  if (type === 'pages') {
+    try { validateLandingPageRecord(record); }
+    catch (error) { throw fail(422, 'This landing page is not ready for release: ' + error.message); }
+    return;
+  }
   if (type === 'tours') {
     if (!['desert', 'city'].includes(record.category)
       || typeof record.h1 !== 'string' || record.h1.trim().length < 3
@@ -568,7 +658,7 @@ function verifyPublishableRecord(type, record) {
 
 function listManagedContent() {
   const items = [];
-  for (const type of ['tours', 'blogs', 'gallery']) {
+  for (const type of ['tours', 'blogs', 'gallery', 'pages']) {
     const folder = managedPaths(type, 'content-studio-placeholder').directory;
     if (!fs.existsSync(folder)) continue;
     const names = fs.readdirSync(folder).filter(name => name.endsWith('.json')).sort((a, b) => a.localeCompare(b));
@@ -588,7 +678,9 @@ function listManagedContent() {
             : String(record.h1 || record.title || slug),
           detail: type === 'gallery'
             ? String(record.category || 'Gallery') + ' · ' + String(photo.src || '')
-            : String(record.eyebrow || (type === 'tours' ? record.category : 'Travel guide')),
+            : type === 'pages'
+              ? String(record.theme || 'heritage') + ' theme · ' + String(record.sections ? record.sections.length : 0) + ' sections'
+              : String(record.eyebrow || (type === 'tours' ? record.category : 'Travel guide')),
           modified: String(record.date_modified || record.date_published || ''),
           pagePath: type === 'gallery' ? '/gallery.php#' + encodeURIComponent(record.category) : '/' + slug + '.php',
           invalid: false,
@@ -621,7 +713,6 @@ function updateManagedPage(type, slug, record) {
   record.review_status = 'draft';
   if (type === 'gallery') throw fail(400, 'Gallery records do not use PHP page routes.');
   safeManagedRoute(files.route, type, slug);
-  // Preserve fields the form does not expose, including operator-customized ordering and related links.
   record = { ...previous, ...record };
   if (type === 'tours') {
     for (const key of ['parent', 'order', 'timeline_label', 'related']) {
@@ -631,6 +722,15 @@ function updateManagedPage(type, slug, record) {
     for (const key of ['related', 'cta_eyebrow', 'cta_primary_label', 'cta_primary_href', 'cta_secondary_label', 'cta_secondary_href']) {
       if (previous[key] !== undefined) record[key] = previous[key];
     }
+  } else if (type === 'pages') {
+    validateLandingPageRecord(record);
+  }
+  const cssFile = type === 'pages' ? generatedPageCssPath(slug) : null;
+  let oldCss = null;
+  if (cssFile && fs.existsSync(cssFile)) {
+    const cssStat = fs.lstatSync(cssFile);
+    if (!cssStat.isFile() || cssStat.isSymbolicLink()) throw fail(409, 'Generated page CSS is not a regular file and cannot be updated safely.');
+    oldCss = fs.readFileSync(cssFile);
   }
   const oldRecord = fs.readFileSync(files.record);
   const sitemapPath = path.join(ROOT, 'sitemap.xml');
@@ -644,10 +744,17 @@ function updateManagedPage(type, slug, record) {
   }
   try {
     atomicWrite(files.record, JSON.stringify(record, null, 2) + '\n');
+    if (cssFile) atomicWrite(cssFile, buildLandingPageCss(slug, record));
     const sitemapMessage = runSitemap();
     return { slug, status: record.status, pagePath: '/' + slug + '.php', sitemapMessage, updated: true };
   } catch (error) {
     try { atomicWrite(files.record, oldRecord); } catch (_) {}
+    if (cssFile) {
+      try {
+        if (oldCss) atomicWrite(cssFile, oldCss);
+        else if (fs.existsSync(cssFile)) fs.unlinkSync(cssFile);
+      } catch (_) {}
+    }
     try { atomicWrite(sitemapPath, oldSitemap); } catch (_) {}
     throw error;
   }
@@ -727,10 +834,18 @@ function deleteManagedDraft(type, slug) {
   if (type !== 'gallery') safeManagedRoute(files.route, type, slug);
   const oldRecord = fs.readFileSync(files.record);
   const oldRoute = type === 'gallery' ? null : fs.readFileSync(files.route);
+  const cssFile = type === 'pages' ? generatedPageCssPath(slug) : null;
+  let oldCss = null;
+  if (cssFile && fs.existsSync(cssFile)) {
+    const cssStat = fs.lstatSync(cssFile);
+    if (!cssStat.isFile() || cssStat.isSymbolicLink()) throw fail(409, 'Generated page CSS is not a regular file and cannot be deleted safely.');
+    oldCss = fs.readFileSync(cssFile);
+  }
   const sitemapPath = path.join(ROOT, 'sitemap.xml');
   const oldSitemap = type === 'gallery' ? null : fs.readFileSync(sitemapPath);
   let routeRemoved = false;
   let recordRemoved = false;
+  let cssRemoved = false;
   try {
     if (type !== 'gallery') {
       fs.unlinkSync(files.route);
@@ -738,11 +853,16 @@ function deleteManagedDraft(type, slug) {
     }
     fs.unlinkSync(files.record);
     recordRemoved = true;
+    if (cssFile && oldCss) {
+      fs.unlinkSync(cssFile);
+      cssRemoved = true;
+    }
     if (type !== 'gallery') runSitemap();
-    return { type, slug, deleted: true, message: 'Draft removed from the local working tree. Source images are retained.' };
+    return { type, slug, deleted: true, message: 'Draft removed from the local working tree. Generated page assets are removed; uploaded source images are retained.' };
   } catch (error) {
     if (recordRemoved) { try { atomicWrite(files.record, oldRecord); } catch (_) {} }
     if (routeRemoved && oldRoute) { try { atomicWrite(files.route, oldRoute); } catch (_) {} }
+    if (cssRemoved && oldCss) { try { atomicWrite(cssFile, oldCss); } catch (_) {} }
     if (oldSitemap) { try { atomicWrite(sitemapPath, oldSitemap); } catch (_) {} }
     throw error;
   }
@@ -904,6 +1024,152 @@ function createBlog(input, existingSlug = null, previewOnly = false) {
     : createPage('editorial', slug, record, 'editorialGuideSlug'));
 }
 
+function normalizePageHref(value, label, required = false) {
+  const href = typeof value === 'string' ? value.trim() : '';
+  if (!href) {
+    if (required) throw fail(400, label + ' is required.');
+    return '';
+  }
+  if (href === '/' || /^\/[a-z0-9-]+\.php(?:#[a-z0-9-]+)?$/.test(href) || /^#[a-z0-9][a-z0-9-]*$/.test(href)) {
+    return href;
+  }
+  throw fail(400, label + ' must point to a local page such as /contact.php or a section anchor.');
+}
+
+function parseLandingSections(value) {
+  let sections = value;
+  if (typeof sections === 'string') {
+    try { sections = JSON.parse(sections); }
+    catch (_) { throw fail(400, 'Page sections could not be read. Add sections using the guided section builder.'); }
+  }
+  if (!Array.isArray(sections) || !sections.length) throw fail(400, 'Add at least one page section.');
+  if (sections.length > 20) throw fail(400, 'A landing page can contain at most 20 sections.');
+
+  const usedIds = new Set();
+  return sections.map((raw, index) => {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw fail(400, 'Each page section must be a structured section.');
+    const type = String(raw.type || '');
+    if (!PAGE_SECTION_TYPES.includes(type)) throw fail(400, 'Choose a supported page section type.');
+    const heading = textField(raw.heading, 'Section heading', 2, 140);
+    const initialId = slugify(raw.id || heading) || 'section-' + (index + 1);
+    let id = initialId;
+    let suffix = 2;
+    while (usedIds.has(id)) id = initialId + '-' + suffix++;
+    usedIds.add(id);
+
+    if (type === 'intro') {
+      return { type, id, heading, body: textField(raw.body, 'Section text', 30, 5000) };
+    }
+    if (type === 'image_text') {
+      const image = imagePath(raw.image);
+      const alt = textField(raw.alt, 'Section image alternative text', 10, 240);
+      const imageSide = String(raw.image_side || 'left');
+      if (!['left', 'right'].includes(imageSide)) throw fail(400, 'Choose whether the image appears on the left or right.');
+      const linkLabel = typeof raw.link_label === 'string' ? raw.link_label.trim() : '';
+      if (linkLabel.length > 80) throw fail(400, 'Image-section link labels must be 80 characters or shorter.');
+      const linkHref = normalizePageHref(raw.link_href, 'Image-section link');
+      if (!!linkLabel !== !!linkHref) throw fail(400, 'Provide both a link label and link destination, or leave both empty.');
+      return {
+        type, id, heading, body: textField(raw.body, 'Image-section text', 20, 4000),
+        image, alt, image_side: imageSide, link_label: linkLabel, link_href: linkHref,
+      };
+    }
+    if (type === 'feature_list') {
+      const items = Array.isArray(raw.items) ? raw.items : lines(raw.items, 'Feature list', true, 12, 240);
+      if (items.length < 2 || items.length > 12) throw fail(400, 'A feature list needs between 2 and 12 items.');
+      return { type, id, heading, items: items.map(item => textField(item, 'Feature item', 2, 240)) };
+    }
+    if (type === 'faq') {
+      if (!Array.isArray(raw.items) || raw.items.length < 1 || raw.items.length > 12) throw fail(400, 'A FAQ section needs between 1 and 12 question-and-answer pairs.');
+      return {
+        type, id, heading,
+        items: raw.items.map(item => {
+          if (!item || typeof item !== 'object' || Array.isArray(item)) throw fail(400, 'Each FAQ item needs a question and answer.');
+          return {
+            question: textField(item.question, 'FAQ question', 5, 220),
+            answer: textField(item.answer, 'FAQ answer', 10, 1200),
+          };
+        }),
+      };
+    }
+    return {
+      type, id, heading,
+      body: textField(raw.body, 'Call-to-action text', 15, 1600),
+      button_label: textField(raw.button_label, 'Call-to-action button label', 2, 80),
+      button_href: normalizePageHref(raw.button_href, 'Call-to-action destination', true),
+    };
+  });
+}
+
+function validateLandingPageRecord(record) {
+  if (!record || typeof record !== 'object' || Array.isArray(record)) throw fail(422, 'Landing page record is not a valid object.');
+  textField(record.h1, 'Page heading', 8, 160);
+  textField(record.title, 'SEO title', 8, 180);
+  textField(record.description, 'SEO description', 40, 300);
+  imagePath(record.hero_image);
+  textField(record.hero_alt, 'Hero image alternative text', 10, 240);
+  if (!PAGE_THEMES[record.theme] || !PAGE_LAYOUTS.includes(record.hero_layout)) throw fail(422, 'Landing page uses an unsupported design preset.');
+  parseLandingSections(record.sections);
+}
+
+function createLandingPage(input, existingSlug = null, previewOnly = false) {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) throw fail(400, 'Complete the landing-page form.');
+  const h1 = textField(input.h1, 'Page heading', 8, 160);
+  const requestedSlug = slugify(input.slug || h1);
+  const slug = existingSlug || requestedSlug;
+  if (existingSlug && input.slug && requestedSlug !== existingSlug) {
+    throw fail(400, 'The URL slug cannot be changed in the editor because existing links may point to it.');
+  }
+  if (!existingSlug) assertStudioRouteAvailable(slug, 'pages');
+  const theme = String(input.theme || 'heritage');
+  const heroLayout = String(input.heroLayout || 'split');
+  if (!PAGE_THEMES[theme]) throw fail(400, 'Choose one of the approved site design themes.');
+  if (!PAGE_LAYOUTS.includes(heroLayout)) throw fail(400, 'Choose an approved hero layout.');
+  const heroImage = imagePath(input.heroImage);
+  const heroAlt = textField(input.heroAlt, 'Hero image alternative text', 10, 240);
+  const description = textField(input.description, 'SEO description', 40, 300);
+  const heroIntro = typeof input.heroIntro === 'string' ? input.heroIntro.trim() : '';
+  if (heroIntro.length > 1000) throw fail(400, 'Hero introduction must be 1,000 characters or shorter.');
+  const eyebrow = textField(input.eyebrow || 'Garh Jaisal Haveli', 'Small heading', 2, 80);
+  const heroCtaLabel = typeof input.heroCtaLabel === 'string' ? input.heroCtaLabel.trim() : '';
+  if (heroCtaLabel.length > 80) throw fail(400, 'Hero button label must be 80 characters or shorter.');
+  const heroCtaHref = normalizePageHref(input.heroCtaHref, 'Hero button destination');
+  if (!!heroCtaLabel !== !!heroCtaHref) throw fail(400, 'Provide both the hero button label and destination, or leave both empty.');
+  const sections = parseLandingSections(input.sections);
+  const record = {
+    slug,
+    status: 'draft',
+    review_status: 'draft',
+    title: textField(input.seoTitle || h1, 'SEO title', 8, 180),
+    description,
+    h1,
+    eyebrow,
+    hero_image: heroImage,
+    hero_alt: heroAlt,
+    hero_intro: heroIntro,
+    hero_cta_label: heroCtaLabel,
+    hero_cta_href: heroCtaHref,
+    theme,
+    hero_layout: heroLayout,
+    sections,
+    date_modified: today(),
+  };
+  validateLandingPageRecord(record);
+  if (previewOnly) {
+    return { slug, status: 'draft', record: { ...record, status: 'draft', review_status: 'draft' } };
+  }
+  if (existingSlug) return updateManagedPage('pages', slug, record);
+  if (statusValue(input.status || 'draft') === 'live') {
+    throw fail(409, 'New pages must be saved as Draft, marked Ready for review, and Approved for release before local publication.');
+  }
+  const images = [heroImage, ...sections.filter(section => section.type === 'image_text').map(section => section.image)];
+  const uniqueImages = [...new Set(images)];
+  const createWithManifest = index => index >= uniqueImages.length
+    ? createPage('pages', slug, record, 'studioPageSlug')
+    : withManifestSource(uniqueImages[index], () => createWithManifest(index + 1));
+  return createWithManifest(0);
+}
+
 function existingGallerySources(excludeId = null) {
   const sources = new Set();
   const php = fs.readFileSync(path.join(ROOT, 'include', 'gallery-data.php'), 'utf8');
@@ -1009,12 +1275,13 @@ function previewRecordPaths() {
   return [
     { directory: path.join(CONTENT_ROOT, 'experiences'), type: 'tours' },
     { directory: path.join(CONTENT_ROOT, 'editorial'), type: 'blogs' },
+    { directory: path.join(CONTENT_ROOT, 'pages'), type: 'pages' },
   ];
 }
 
 function pruneExpiredPreviewRecords() {
   const now = Date.now();
-  for (const { directory } of previewRecordPaths()) {
+  for (const { directory, type } of previewRecordPaths()) {
     let directoryStat;
     try { directoryStat = fs.lstatSync(directory); }
     catch (error) { if (error.code === 'ENOENT') continue; else throw error; }
@@ -1032,6 +1299,15 @@ function pruneExpiredPreviewRecords() {
         if (record && record.slug === slug && record.studio_preview_token === match[1]
           && Number.isFinite(record.studio_preview_expires_at)
           && record.studio_preview_expires_at <= now) {
+          if (type === 'pages') {
+            const cssFile = generatedPageCssPath(slug);
+            try {
+              const cssStat = fs.lstatSync(cssFile);
+              if (cssStat.isFile() && !cssStat.isSymbolicLink()) fs.unlinkSync(cssFile);
+            } catch (cssError) {
+              if (cssError.code !== 'ENOENT') throw cssError;
+            }
+          }
           fs.unlinkSync(file);
           const active = PREVIEW_SESSIONS.get(match[1]);
           if (active) {
@@ -1058,6 +1334,15 @@ function cleanupPreviewSession(token) {
     if (!record || record.slug !== session.slug || record.studio_preview_token !== token) {
       throw fail(409, 'The preview record no longer matches this session and was not removed.');
     }
+    if (session.cssFile) {
+      try {
+        const cssStat = fs.lstatSync(session.cssFile);
+        if (!cssStat.isFile() || cssStat.isSymbolicLink()) throw fail(409, 'The generated preview stylesheet changed on disk and was not removed.');
+        fs.unlinkSync(session.cssFile);
+      } catch (cssError) {
+        if (cssError.code !== 'ENOENT') throw cssError;
+      }
+    }
     fs.unlinkSync(session.file);
   } catch (error) {
     if (error.code !== 'ENOENT') {
@@ -1072,19 +1357,22 @@ function cleanupPreviewSession(token) {
 function createPreview(input) {
   if (!input || typeof input !== 'object' || Array.isArray(input)) throw fail(400, 'Preview request must be an object.');
   const type = String(input.type || '');
-  if (!['tours', 'blogs'].includes(type)) throw fail(400, 'Choose a supported page type to preview.');
+  if (!['tours', 'blogs', 'pages'].includes(type)) throw fail(400, 'Choose a supported page type to preview.');
   if (!input.payload || typeof input.payload !== 'object' || Array.isArray(input.payload)) throw fail(400, 'Complete the guided form before previewing.');
-  const templateId = type === 'tours' ? 'experience-detail' : 'editorial-guide';
+  const templateId = type === 'tours' ? 'experience-detail' : type === 'blogs' ? 'editorial-guide' : 'landing-page';
   const contract = getTemplateContract(templateId);
-  if (!contract || contract.recordType !== (type === 'tours' ? 'tour' : 'blog')) throw fail(400, 'The selected page template is unavailable.');
+  const expectedRecordType = type === 'tours' ? 'tour' : type === 'blogs' ? 'blog' : 'page';
+  if (!contract || contract.recordType !== expectedRecordType) throw fail(400, 'The selected page template is unavailable.');
   pruneExpiredPreviewRecords();
   const token = crypto.randomBytes(12).toString('hex');
   const slug = 'content-studio-preview-' + token;
   const payload = { ...input.payload, slug, status: 'draft' };
   const prepared = type === 'tours'
     ? createTour(payload, null, true)
-    : createBlog(payload, null, true);
-  const directory = path.join(CONTENT_ROOT, type === 'tours' ? 'experiences' : 'editorial');
+    : type === 'blogs'
+      ? createBlog(payload, null, true)
+      : createLandingPage(payload, null, true);
+  const directory = path.join(CONTENT_ROOT, type === 'tours' ? 'experiences' : type === 'blogs' ? 'editorial' : 'pages');
   assertContentDirectoryChain(directory, true);
   const file = path.join(directory, slug + '.json');
   try {
@@ -1104,7 +1392,17 @@ function createPreview(input) {
     studio_preview_expires_at: expiresAt,
   };
   atomicWrite(file, JSON.stringify(record, null, 2) + '\n');
-  const session = { file, slug, type, timer: null };
+  let cssFile = null;
+  if (type === 'pages') {
+    cssFile = generatedPageCssPath(slug, true);
+    try {
+      atomicWrite(cssFile, buildLandingPageCss(slug, record));
+    } catch (error) {
+      try { fs.unlinkSync(file); } catch (_) {}
+      throw error;
+    }
+  }
+  const session = { file, slug, type, cssFile, timer: null };
   session.timer = setTimeout(() => {
     try { cleanupPreviewSession(token); } catch (_) {}
   }, PREVIEW_TTL_MS);
@@ -1139,6 +1437,7 @@ function statusPayload() {
     tours: summary('experiences'),
     blogs: summary('editorial'),
     gallery: summary('gallery'),
+    pages: summary('pages'),
   };
 }
 
@@ -1157,14 +1456,14 @@ const server = http.createServer(async (req, res) => {
       const input = await readJson(req);
       return respondJson(res, 200, { removed: cleanupPreviewSession(input.token), message: 'The local preview session was closed. No public page or deployment was changed.' });
     }
-    const reviewMatch = url.pathname.match(/^\/api\/content\/(tours|blogs|gallery)\/([a-z0-9]+(?:-[a-z0-9]+)*)\/review$/);
+    const reviewMatch = url.pathname.match(/^\/api\/content\/(tours|blogs|gallery|pages)\/([a-z0-9]+(?:-[a-z0-9]+)*)\/review$/);
     if (reviewMatch && req.method === 'PATCH') {
       const [, type, slug] = reviewMatch;
       const input = await readJson(req);
       return respondJson(res, 200, setReviewStatus(type, slug, input.reviewStatus));
     }
     if (req.method === 'GET' && url.pathname === '/api/content') return respondJson(res, 200, listManagedContent());
-    const managedMatch = url.pathname.match(/^\/api\/content\/(tours|blogs|gallery)\/([a-z0-9]+(?:-[a-z0-9]+)*)(\/status)?$/);
+    const managedMatch = url.pathname.match(/^\/api\/content\/(tours|blogs|gallery|pages)\/([a-z0-9]+(?:-[a-z0-9]+)*)(\/status)?$/);
     if (managedMatch) {
       const [, type, slug, statusPath] = managedMatch;
       if (req.method === 'GET' && !statusPath) return respondJson(res, 200, readManagedContent(type, slug));
@@ -1174,7 +1473,9 @@ const server = http.createServer(async (req, res) => {
           ? createTour(input, slug)
           : type === 'blogs'
             ? createBlog(input, slug)
-            : createGallery(input, slug);
+            : type === 'pages'
+              ? createLandingPage(input, slug)
+              : createGallery(input, slug);
         return respondJson(res, 200, result);
       }
       if (req.method === 'PATCH' && statusPath) {
@@ -1186,6 +1487,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'POST' && url.pathname === '/api/upload') return respondJson(res, 201, await upload(req, url));
     if (req.method === 'POST' && url.pathname === '/api/tours') return respondJson(res, 201, createTour(await readJson(req)));
     if (req.method === 'POST' && url.pathname === '/api/blogs') return respondJson(res, 201, createBlog(await readJson(req)));
+    if (req.method === 'POST' && url.pathname === '/api/pages') return respondJson(res, 201, createLandingPage(await readJson(req)));
     if (req.method === 'POST' && url.pathname === '/api/gallery') return respondJson(res, 201, createGallery(await readJson(req)));
     if (req.method === 'POST' && url.pathname === '/api/optimize') {
       const result = spawnSync('python3', ['scripts/build-responsive-image-assets.py'], {

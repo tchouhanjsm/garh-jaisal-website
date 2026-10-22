@@ -5,7 +5,7 @@ const { test, expect } = require('@playwright/test');
 
 test('Content Studio guides a nontechnical user through tour and blog drafts', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Run the local Content Studio workflow once per browser matrix.');
-  test.setTimeout(60_000);
+  test.setTimeout(120_000);
 
   const root = path.resolve(__dirname, '../..');
   const port = 43000 + (process.pid % 10000);
@@ -13,6 +13,14 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
   const suffix = String(process.pid);
   const tourSlug = 'content-studio-ui-tour-' + suffix;
   const blogSlug = 'content-studio-ui-blog-' + suffix;
+  const pageSlug = 'content-studio-ui-page-' + suffix;
+  const pageCssDirectory = path.join(root, 'css/pages');
+  const existedPageCssDirectory = fs.existsSync(pageCssDirectory);
+  const uploadedImageDirectory = path.join(root, 'img/content-studio');
+  const existedUploadedImageDirectory = fs.existsSync(uploadedImageDirectory);
+  const pageRoute = path.join(root, pageSlug + '.php');
+  const pageRecord = path.join(root, 'content/pages/' + pageSlug + '.json');
+  const pageCss = path.join(pageCssDirectory, pageSlug + '.css');
   const sitemapPath = path.join(root, 'sitemap.xml');
   const originalSitemap = fs.readFileSync(sitemapPath);
   const manifestPath = path.join(root, 'scripts/responsive-image-assets-manifest.json');
@@ -39,6 +47,9 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     path.join(root, 'content/experiences/' + tourSlug + '.json'),
     path.join(root, blogSlug + '.php'),
     path.join(root, 'content/editorial/' + blogSlug + '.json'),
+    pageRoute,
+    pageRecord,
+    pageCss,
   ];
   for (const file of ownedPaths) {
     if (fs.existsSync(file)) throw new Error('Refusing to overwrite an existing test fixture: ' + path.relative(root, file));
@@ -184,6 +195,92 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     expect(fs.existsSync(ownedPaths[3])).toBeTruthy();
     expect(fs.readFileSync(sitemapPath, 'utf8')).not.toContain('/' + blogSlug + '.php</loc>');
 
+    // Landing Page Builder: create a page with approved blocks, preview the real PHP renderer, and exercise release approval.
+    await page.getByRole('tab', { name: 'Build a page' }).click();
+    await expect(page.locator('#pane-pages')).toBeVisible();
+    await page.locator('#page-h1').fill('Browser UI test landing page');
+    await page.locator('#page-slug').fill(pageSlug);
+    await page.locator('#page-seo-title').fill('Browser UI test landing page');
+    await page.locator('#page-description').fill('A temporary landing page to verify guided sections, consistent templates and safe local release workflow.');
+    await page.locator('#page-eyebrow').fill('Browser UI acceptance test');
+    await page.locator('#page-theme').selectOption('sandstone');
+    await page.locator('#page-hero-layout').selectOption('centered');
+    await page.locator('#page-hero-intro').fill('This temporary introduction checks the guided landing page editor and actual shared site shell.');
+    await page.locator('#page-hero-image').fill('img/desert3.jpg');
+    await page.locator('#page-hero-alt').fill('Camel riders travelling over dunes near Jaisalmer');
+    await page.locator('#page-hero-cta-label').fill('Contact the hotel');
+    await page.locator('#page-hero-cta-href').fill('/contact.php');
+    let pageSection = page.locator('#page-section-list .page-section-editor').nth(0);
+    await pageSection.locator('[data-page-field="heading"]').fill('Plan your visit');
+    await pageSection.locator('[data-page-field="body"]').fill('Use this temporary content block to validate the text introduction layout and the final rendered page.');
+    await page.locator('#page-section-type').selectOption('image_text');
+    await page.locator('#page-add-section').click();
+    pageSection = page.locator('#page-section-list .page-section-editor').nth(1);
+    await pageSection.locator('[data-page-field="heading"]').fill('A closer look');
+    await pageSection.locator('[data-page-field="body"]').fill('A reusable photo and text block lets the team explain another part of the stay without changing the site design.');
+    await pageSection.locator('[data-page-field="alt"]').fill('A sandstone desert scene near Jaisalmer');
+    const sectionUploadResponsePromise = page.waitForResponse(response => response.url().includes('/api/upload?filename=') && response.request().method() === 'POST');
+    await pageSection.locator('input[type="file"][data-upload-target]').setInputFiles(path.join(root, 'img/desert12.jpg'));
+    const sectionUploadResponse = await sectionUploadResponsePromise;
+    expect(sectionUploadResponse.status()).toBe(201);
+    const sectionImagePath = pageSection.locator('[data-page-field="image"]');
+    // Avoid reading the response body through Chromium's DevTools cache: this
+    // test runs late in a large suite, where Network.getResponseBody may evict it.
+    await expect(sectionImagePath).toHaveValue(/^img\/content-studio\/[a-z0-9-]+\.jpg$/);
+    const sectionUploadSrc = await sectionImagePath.inputValue();
+    ownedPaths.push(path.join(root, sectionUploadSrc));
+
+    await page.locator('#page-section-type').selectOption('feature_list');
+    await page.locator('#page-add-section').click();
+    pageSection = page.locator('#page-section-list .page-section-editor').nth(2);
+    await pageSection.locator('[data-page-field="heading"]').fill('Useful details');
+    await pageSection.locator('[data-page-field="items"]').fill('Confirm current arrangements\nReview details for your selected date');
+    await expect(page.locator('#page-outline-preview')).toContainText('Plan your visit');
+    await expect(page.locator('#page-outline-preview')).toContainText('2 feature item(s)');
+    expect(JSON.parse(await page.locator('#page-sections').inputValue())).toHaveLength(3);
+    expect(await page.locator('#page-sections').inputValue()).toContain('"type":"feature_list"');
+
+    const pagePreviewRequestPromise = page.waitForRequest(request => request.url() === studioUrl + '/api/preview' && request.method() === 'POST');
+    const pagePreviewResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/preview' && response.request().method() === 'POST');
+    await page.locator('#page-preview').click();
+    const [pagePreviewRequest, pagePreviewResponse] = await Promise.all([pagePreviewRequestPromise, pagePreviewResponsePromise]);
+    expect(pagePreviewResponse.status()).toBe(201);
+    expect(pagePreviewRequest.postDataJSON().type).toBe('pages');
+    expect(pagePreviewRequest.postDataJSON().payload.status).toBe('draft');
+    const pagePreviewResult = await pagePreviewResponse.json();
+    const pagePreviewToken = pagePreviewResult.token;
+    const pagePreviewSlug = 'content-studio-preview-' + pagePreviewToken;
+    ownedPaths.push(path.join(root, 'content/pages/' + pagePreviewSlug + '.json'));
+    ownedPaths.push(path.join(root, 'css/pages/' + pagePreviewSlug + '.css'));
+    await expect(page.locator('#php-preview-frame')).toHaveAttribute('src', /preview\.php\?type=pages&token=/);
+    const landingPreviewFrame = page.frameLocator('#php-preview-frame');
+    await expect(landingPreviewFrame.getByRole('heading', { name: 'Browser UI test landing page', exact: true })).toBeVisible({ timeout: 10000 });
+    await expect(landingPreviewFrame.getByRole('heading', { name: 'Plan your visit', level: 2 })).toBeVisible();
+    await expect(landingPreviewFrame.getByRole('heading', { name: 'A closer look', level: 2 })).toBeVisible();
+    await expect(landingPreviewFrame.getByRole('heading', { name: 'Useful details', level: 2 })).toBeVisible();
+    await expect(landingPreviewFrame.locator('main.studio-page')).toHaveAttribute('data-page-theme', 'sandstone');
+    await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href="css/page-builder.css"]')).toHaveCount(1);
+    await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href="css/pages/' + pagePreviewSlug + '.css"]')).toHaveCount(1);
+    await expect.poll(() => landingPreviewFrame.locator('.studio-page-hero-media img').evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+
+    const pageCreateRequestPromise = page.waitForRequest(request => request.url() === studioUrl + '/api/pages' && request.method() === 'POST');
+    const pageCreateResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/pages' && response.request().method() === 'POST');
+    await page.locator('#page-submit').click();
+    const [pageCreateRequest, pageCreateResponse] = await Promise.all([pageCreateRequestPromise, pageCreateResponsePromise]);
+    expect(pageCreateResponse.status()).toBe(201);
+    const savedPagePayload = pageCreateRequest.postDataJSON();
+    expect(savedPagePayload.status).toBe('draft');
+    const savedPageSections = JSON.parse(savedPagePayload.sections);
+    expect(savedPageSections).toHaveLength(3);
+    expect(savedPageSections.map(section => section.type)).toEqual(['intro', 'image_text', 'feature_list']);
+    expect(savedPageSections[1].image).toBe(sectionUploadSrc);
+    expect(savedPageSections[1].alt).toBe('A sandstone desert scene near Jaisalmer');
+    expect(savedPageSections[2].items).toEqual(['Confirm current arrangements', 'Review details for your selected date']);
+    expect(fs.existsSync(pageRoute)).toBeTruthy();
+    expect(fs.existsSync(pageRecord)).toBeTruthy();
+    expect(fs.existsSync(pageCss)).toBeTruthy();
+    expect(fs.readFileSync(sitemapPath, 'utf8')).not.toContain('/' + pageSlug + '.php</loc>');
+
     // Create a Gallery draft, then verify every content type can be managed from the same screen.
     await page.getByRole('tab', { name: 'Add Gallery photos' }).click();
     await page.locator('#gallery-src').fill(gallerySource);
@@ -291,6 +388,59 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await expect(page.locator('.content-record[data-record-key="gallery:' + galleryId + '"]')).toHaveCount(0);
     expect(fs.existsSync(galleryRecordPath)).toBeFalsy();
     expect(fs.existsSync(path.join(root, gallerySource))).toBeTruthy();
+
+    // Landing page: approval, publication, edit-triggered re-approval, unpublish and delete.
+    await page.getByRole('tab', { name: 'Manage saved content' }).click();
+    let pageCard = page.locator('.content-record[data-record-key="pages:' + pageSlug + '"]');
+    await expect(pageCard).toContainText('DRAFT');
+    await pageCard.getByRole('button', { name: 'Ready for review' }).click();
+    await expect(pageCard).toContainText('READY FOR REVIEW');
+    await pageCard.getByRole('button', { name: 'Approve for release' }).click();
+    await expect(pageCard).toContainText('APPROVED FOR RELEASE');
+    const publishPageResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/pages/' + pageSlug + '/status' && response.request().method() === 'PATCH');
+    await pageCard.getByRole('button', { name: 'Publish locally' }).click();
+    expect((await publishPageResponsePromise).status()).toBe(200);
+    pageCard = page.locator('.content-record[data-record-key="pages:' + pageSlug + '"]');
+    await expect(pageCard).toContainText('LIVE');
+    expect(fs.readFileSync(sitemapPath, 'utf8')).toContain('/' + pageSlug + '.php</loc>');
+    const livePageHtml = await (await fetch(phpPreview + '/' + pageSlug + '.php')).text();
+    expect(livePageHtml).toContain('Browser UI test landing page');
+    expect(livePageHtml).not.toMatch(/noindex,follow/);
+
+    await pageCard.getByRole('button', { name: 'Edit' }).click();
+    await expect(page.locator('#pane-pages')).toBeVisible();
+    await page.locator('#page-h1').fill('Browser UI test landing page revised');
+    await page.locator('#page-seo-title').fill('Browser UI test landing page revised');
+    const pageUpdateResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/pages/' + pageSlug && response.request().method() === 'PUT');
+    await page.locator('#page-submit').click();
+    expect((await pageUpdateResponsePromise).status()).toBe(200);
+    await expect(page.locator('#pane-manage')).toBeVisible();
+    pageCard = page.locator('.content-record[data-record-key="pages:' + pageSlug + '"]');
+    await expect(pageCard).toContainText('DRAFT');
+    await expect(pageCard).toContainText('REVIEW: DRAFT');
+    expect(fs.readFileSync(sitemapPath, 'utf8')).not.toContain('/' + pageSlug + '.php</loc>');
+
+    await pageCard.getByRole('button', { name: 'Ready for review' }).click();
+    await pageCard.getByRole('button', { name: 'Approve for release' }).click();
+    const republishPageResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/pages/' + pageSlug + '/status' && response.request().method() === 'PATCH');
+    await pageCard.getByRole('button', { name: 'Publish locally' }).click();
+    expect((await republishPageResponsePromise).status()).toBe(200);
+    pageCard = page.locator('.content-record[data-record-key="pages:' + pageSlug + '"]');
+    await expect(pageCard).toContainText('LIVE');
+
+    const unpublishPageResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/pages/' + pageSlug + '/status' && response.request().method() === 'PATCH');
+    await pageCard.getByRole('button', { name: 'Set to Draft' }).click();
+    expect((await unpublishPageResponsePromise).status()).toBe(200);
+    await expect(pageCard).toContainText('DRAFT');
+    expect(fs.readFileSync(sitemapPath, 'utf8')).not.toContain('/' + pageSlug + '.php</loc>');
+    const deletePageResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/pages/' + pageSlug && response.request().method() === 'DELETE');
+    await pageCard.getByRole('button', { name: 'Delete draft' }).click();
+    expect((await deletePageResponsePromise).status()).toBe(200);
+    expect(fs.existsSync(pageRoute)).toBeFalsy();
+    expect(fs.existsSync(pageRecord)).toBeFalsy();
+    expect(fs.existsSync(pageCss)).toBeFalsy();
+    expect(fs.existsSync(path.join(root, 'img/desert3.jpg'))).toBeTruthy();
+
   } finally {
     if (server.exitCode === null) {
       server.kill('SIGTERM');
@@ -308,5 +458,15 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     try {
       if (!fs.readFileSync(manifestPath).equals(originalManifest)) fs.writeFileSync(manifestPath, originalManifest);
     } catch (_) {}
+    if (!existedPageCssDirectory) {
+      try {
+        if (fs.existsSync(pageCssDirectory) && fs.readdirSync(pageCssDirectory).length === 0) fs.rmdirSync(pageCssDirectory);
+      } catch (_) {}
+    }
+    if (!existedUploadedImageDirectory) {
+      try {
+        if (fs.existsSync(uploadedImageDirectory) && fs.readdirSync(uploadedImageDirectory).length === 0) fs.rmdirSync(uploadedImageDirectory);
+      } catch (_) {}
+    }
   }
 });

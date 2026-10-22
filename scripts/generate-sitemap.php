@@ -14,6 +14,7 @@ $root = dirname(__DIR__);
 $config = require $root . '/include/site-config.php';
 $experiences = require $root . '/include/experience-data.php';
 $editorialGuides = require $root . '/include/editorial-guides-data.php';
+$studioPages = require $root . '/include/studio-pages-data.php';
 $siteUrl = rtrim($config['site_url'] ?? '', '/');
 
 if ($siteUrl === '' || !preg_match('#^https://#i', $siteUrl)) {
@@ -132,6 +133,33 @@ foreach ($editorialGuides as $slug => $guide) {
     $urls['/' . $slug . '.php'] = '0.7';
 }
 
+// Content Studio landing pages are discoverable only when their JSON record is
+// explicitly Live and the generated route exists. Draft and hidden pages never
+// enter the public sitemap.
+foreach ($studioPages as $slug => $studioPage) {
+    $status = $studioPage['status'] ?? 'draft';
+    if (!in_array($status, ['live', 'draft', 'hidden'], true)) {
+        fwrite(STDERR, 'ERROR invalid landing-page publication status: ' . (string) $slug . PHP_EOL);
+        exit(1);
+    }
+    if (!is_string($slug) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $slug)) {
+        fwrite(STDERR, "ERROR invalid landing-page slug in studio-pages-data.php" . PHP_EOL);
+        exit(1);
+    }
+    if (($studioPage['slug'] ?? null) !== $slug) {
+        fwrite(STDERR, 'ERROR landing-page key/slug mismatch: ' . $slug . PHP_EOL);
+        exit(1);
+    }
+    if ($status !== 'live') {
+        continue;
+    }
+    if (!is_file($root . '/' . $slug . '.php')) {
+        fwrite(STDERR, 'ERROR live landing page has no page file: ' . $slug . '.php' . PHP_EOL);
+        exit(1);
+    }
+    $urls['/' . $slug . '.php'] = '0.7';
+}
+
 $lastmodForSource = static function ($relativePaths) use ($root) {
     $relativePaths = is_array($relativePaths) ? array_values(array_unique($relativePaths)) : [$relativePaths];
     if (!function_exists('exec')) {
@@ -177,6 +205,9 @@ foreach ($urls as $path => $priority) {
     if (array_key_exists($routeSlug, $editorialGuides)) {
         $sourceFiles[] = 'include/editorial-guides-data.php';
     }
+    if (array_key_exists($routeSlug, $studioPages)) {
+        $sourceFiles[] = 'include/studio-pages-data.php';
+    }
     if ($path === '/blog.php') {
         $sourceFiles[] = 'include/editorial-guides-data.php';
     } elseif ($path === '/gallery.php') {
@@ -192,6 +223,7 @@ foreach ($urls as $path => $priority) {
         foreach ([
             'content/experiences/' . $routeSlug . '.json',
             'content/editorial/' . $routeSlug . '.json',
+            'content/pages/' . $routeSlug . '.json',
         ] as $candidate) {
             if (is_file($root . '/' . $candidate) && !is_link($root . '/' . $candidate)) {
                 $contentRecordPath = $root . '/' . $candidate;
