@@ -23,6 +23,12 @@ function hasGzipSignature(buffer) {
     && buffer[0] === 0x1f && buffer[1] === 0x8b;
 }
 
+function decodeAuditRequestBody(rawBody) {
+  const body = Buffer.isBuffer(rawBody) ? rawBody : Buffer.from(rawBody || '');
+  if (!hasGzipSignature(body)) return body;
+  return gunzipSync(body, { maxOutputLength: MAX_REQUEST_BYTES });
+}
+
 function normalizeAdvisoryResponse(statusCode, upstreamHeaders, rawBody) {
   let body = Buffer.isBuffer(rawBody) ? rawBody : Buffer.from(rawBody || '');
   const headers = { ...(upstreamHeaders || {}) };
@@ -130,16 +136,21 @@ function createProxyServer() {
 
     request.on('end', () => {
       if (finished || response.writableEnded) return;
-      const body = Buffer.concat(chunks);
-      process.stderr.write('[npm audit proxy] Bulk request body bytes=' + body.length + '\\n');
+      let body = Buffer.concat(chunks);
+      const compressedRequest = hasGzipSignature(body);
       try {
+        body = decodeAuditRequestBody(body);
+        if (body.length > MAX_REQUEST_BYTES) throw new Error('Decoded request exceeded the local safety limit.');
+        if (compressedRequest) {
+          process.stderr.write('[npm audit proxy] Decompressed gzip-encoded bulk request body; bytes=' + body.length + '\\n');
+        }
         const payload = JSON.parse(body.toString('utf8'));
         if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
           throw new Error('Expected an object');
         }
       } catch (error) {
-        process.stderr.write('[npm audit proxy] Invalid bulk request JSON: ' + error.message + '\\n');
-        jsonResponse(response, 400, 'The npm bulk-advisory request was not a valid JSON object.');
+        process.stderr.write('[npm audit proxy] Invalid bulk request body: ' + error.message + '\\n');
+        jsonResponse(response, 400, 'The npm bulk-advisory request was not a valid bounded JSON object.');
         return;
       }
 
@@ -227,6 +238,9 @@ function runSelfTest() {
   assert.equal(isAllowedRequest('POST', BULK_PATH), true);
   assert.equal(isAllowedRequest('POST', BULK_PATH + '/'), true);
   assert.equal(isAllowedRequest('GET', BULK_PATH), false);
+  const compressedRequest = gzipSync(Buffer.from('{"@playwright/test":["1.64.1"]}'));
+  assert.equal(decodeAuditRequestBody(compressedRequest).toString('utf8'), '{"@playwright/test":["1.64.1"]}');
+  assert.equal(decodeAuditRequestBody(Buffer.from('{"playwright":["1.64.1"]}')).toString('utf8'), '{"playwright":["1.64.1"]}');
   assert.equal(isAllowedRequest('POST', '/-/npm/v1/security/audits/quick'), false);
   assert.equal(isAllowedRequest('POST', 'https://example.invalid/'), false);
   process.stdout.write('npm audit registry proxy self-test passed.\n');
@@ -277,4 +291,4 @@ if (require.main === module) {
   }
 }
 
-module.exports = { hasGzipSignature, normalizeAdvisoryResponse, isAllowedRequest };
+module.exports = { hasGzipSignature, decodeAuditRequestBody, normalizeAdvisoryResponse, isAllowedRequest };
