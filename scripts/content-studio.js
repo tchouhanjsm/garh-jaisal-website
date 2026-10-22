@@ -1281,7 +1281,7 @@ function previewRecordPaths() {
 
 function pruneExpiredPreviewRecords() {
   const now = Date.now();
-  for (const { directory } of previewRecordPaths()) {
+  for (const { directory, type } of previewRecordPaths()) {
     let directoryStat;
     try { directoryStat = fs.lstatSync(directory); }
     catch (error) { if (error.code === 'ENOENT') continue; else throw error; }
@@ -1299,6 +1299,15 @@ function pruneExpiredPreviewRecords() {
         if (record && record.slug === slug && record.studio_preview_token === match[1]
           && Number.isFinite(record.studio_preview_expires_at)
           && record.studio_preview_expires_at <= now) {
+          if (type === 'pages') {
+            const cssFile = generatedPageCssPath(slug);
+            try {
+              const cssStat = fs.lstatSync(cssFile);
+              if (cssStat.isFile() && !cssStat.isSymbolicLink()) fs.unlinkSync(cssFile);
+            } catch (cssError) {
+              if (cssError.code !== 'ENOENT') throw cssError;
+            }
+          }
           fs.unlinkSync(file);
           const active = PREVIEW_SESSIONS.get(match[1]);
           if (active) {
@@ -1325,6 +1334,15 @@ function cleanupPreviewSession(token) {
     if (!record || record.slug !== session.slug || record.studio_preview_token !== token) {
       throw fail(409, 'The preview record no longer matches this session and was not removed.');
     }
+    if (session.cssFile) {
+      try {
+        const cssStat = fs.lstatSync(session.cssFile);
+        if (!cssStat.isFile() || cssStat.isSymbolicLink()) throw fail(409, 'The generated preview stylesheet changed on disk and was not removed.');
+        fs.unlinkSync(session.cssFile);
+      } catch (cssError) {
+        if (cssError.code !== 'ENOENT') throw cssError;
+      }
+    }
     fs.unlinkSync(session.file);
   } catch (error) {
     if (error.code !== 'ENOENT') {
@@ -1339,19 +1357,22 @@ function cleanupPreviewSession(token) {
 function createPreview(input) {
   if (!input || typeof input !== 'object' || Array.isArray(input)) throw fail(400, 'Preview request must be an object.');
   const type = String(input.type || '');
-  if (!['tours', 'blogs'].includes(type)) throw fail(400, 'Choose a supported page type to preview.');
+  if (!['tours', 'blogs', 'pages'].includes(type)) throw fail(400, 'Choose a supported page type to preview.');
   if (!input.payload || typeof input.payload !== 'object' || Array.isArray(input.payload)) throw fail(400, 'Complete the guided form before previewing.');
-  const templateId = type === 'tours' ? 'experience-detail' : 'editorial-guide';
+  const templateId = type === 'tours' ? 'experience-detail' : type === 'blogs' ? 'editorial-guide' : 'landing-page';
   const contract = getTemplateContract(templateId);
-  if (!contract || contract.recordType !== (type === 'tours' ? 'tour' : 'blog')) throw fail(400, 'The selected page template is unavailable.');
+  const expectedRecordType = type === 'tours' ? 'tour' : type === 'blogs' ? 'blog' : 'page';
+  if (!contract || contract.recordType !== expectedRecordType) throw fail(400, 'The selected page template is unavailable.');
   pruneExpiredPreviewRecords();
   const token = crypto.randomBytes(12).toString('hex');
   const slug = 'content-studio-preview-' + token;
   const payload = { ...input.payload, slug, status: 'draft' };
   const prepared = type === 'tours'
     ? createTour(payload, null, true)
-    : createBlog(payload, null, true);
-  const directory = path.join(CONTENT_ROOT, type === 'tours' ? 'experiences' : 'editorial');
+    : type === 'blogs'
+      ? createBlog(payload, null, true)
+      : createLandingPage(payload, null, true);
+  const directory = path.join(CONTENT_ROOT, type === 'tours' ? 'experiences' : type === 'blogs' ? 'editorial' : 'pages');
   assertContentDirectoryChain(directory, true);
   const file = path.join(directory, slug + '.json');
   try {
@@ -1371,7 +1392,17 @@ function createPreview(input) {
     studio_preview_expires_at: expiresAt,
   };
   atomicWrite(file, JSON.stringify(record, null, 2) + '\n');
-  const session = { file, slug, type, timer: null };
+  let cssFile = null;
+  if (type === 'pages') {
+    cssFile = generatedPageCssPath(slug, true);
+    try {
+      atomicWrite(cssFile, buildLandingPageCss(slug, record));
+    } catch (error) {
+      try { fs.unlinkSync(file); } catch (_) {}
+      throw error;
+    }
+  }
+  const session = { file, slug, type, cssFile, timer: null };
   session.timer = setTimeout(() => {
     try { cleanupPreviewSession(token); } catch (_) {}
   }, PREVIEW_TTL_MS);
@@ -1406,6 +1437,7 @@ function statusPayload() {
     tours: summary('experiences'),
     blogs: summary('editorial'),
     gallery: summary('gallery'),
+    pages: summary('pages'),
   };
 }
 
@@ -1424,14 +1456,14 @@ const server = http.createServer(async (req, res) => {
       const input = await readJson(req);
       return respondJson(res, 200, { removed: cleanupPreviewSession(input.token), message: 'The local preview session was closed. No public page or deployment was changed.' });
     }
-    const reviewMatch = url.pathname.match(/^\/api\/content\/(tours|blogs|gallery)\/([a-z0-9]+(?:-[a-z0-9]+)*)\/review$/);
+    const reviewMatch = url.pathname.match(/^\/api\/content\/(tours|blogs|gallery|pages)\/([a-z0-9]+(?:-[a-z0-9]+)*)\/review$/);
     if (reviewMatch && req.method === 'PATCH') {
       const [, type, slug] = reviewMatch;
       const input = await readJson(req);
       return respondJson(res, 200, setReviewStatus(type, slug, input.reviewStatus));
     }
     if (req.method === 'GET' && url.pathname === '/api/content') return respondJson(res, 200, listManagedContent());
-    const managedMatch = url.pathname.match(/^\/api\/content\/(tours|blogs|gallery)\/([a-z0-9]+(?:-[a-z0-9]+)*)(\/status)?$/);
+    const managedMatch = url.pathname.match(/^\/api\/content\/(tours|blogs|gallery|pages)\/([a-z0-9]+(?:-[a-z0-9]+)*)(\/status)?$/);
     if (managedMatch) {
       const [, type, slug, statusPath] = managedMatch;
       if (req.method === 'GET' && !statusPath) return respondJson(res, 200, readManagedContent(type, slug));
@@ -1441,7 +1473,9 @@ const server = http.createServer(async (req, res) => {
           ? createTour(input, slug)
           : type === 'blogs'
             ? createBlog(input, slug)
-            : createGallery(input, slug);
+            : type === 'pages'
+              ? createLandingPage(input, slug)
+              : createGallery(input, slug);
         return respondJson(res, 200, result);
       }
       if (req.method === 'PATCH' && statusPath) {
@@ -1453,6 +1487,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'POST' && url.pathname === '/api/upload') return respondJson(res, 201, await upload(req, url));
     if (req.method === 'POST' && url.pathname === '/api/tours') return respondJson(res, 201, createTour(await readJson(req)));
     if (req.method === 'POST' && url.pathname === '/api/blogs') return respondJson(res, 201, createBlog(await readJson(req)));
+    if (req.method === 'POST' && url.pathname === '/api/pages') return respondJson(res, 201, createLandingPage(await readJson(req)));
     if (req.method === 'POST' && url.pathname === '/api/gallery') return respondJson(res, 201, createGallery(await readJson(req)));
     if (req.method === 'POST' && url.pathname === '/api/optimize') {
       const result = spawnSync('python3', ['scripts/build-responsive-image-assets.py'], {
