@@ -19,7 +19,7 @@ const { writeZip, readZip } = require('../../scripts/studio/zip');
 const run = require('../../scripts/studio/run');
 
 let passed = 0;
-const test = (name, fn) => { try { fn(); passed++; } catch (e) { console.error('FAIL ' + name + '\n' + (e.stack || e)); process.exitCode = 1; } };
+const test = (name, fn) => { try { fn(); passed++; } catch (e) { console.error('FAIL ' + name + '\n' + (e.stack || e)); if (process.env.GITHUB_ACTIONS) console.log('::error title=pack eval failed::' + name + ' | ' + String(e.message || e).split('\n').join(' ').slice(0, 400)); process.exitCode = 1; } };
 
 function makeImage(file, width, height, noise, fmt) {
   const py = 'import sys,os\nfrom PIL import Image\nw,h,noise,out,fmt=int(sys.argv[1]),int(sys.argv[2]),sys.argv[3]=="1",sys.argv[4],sys.argv[5]\n' +
