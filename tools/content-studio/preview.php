@@ -17,7 +17,7 @@ if (!in_array($remoteAddress, ['127.0.0.1', '::1'], true)
 
 $type = (string) ($_GET['type'] ?? '');
 $token = (string) ($_GET['token'] ?? '');
-if (!in_array($type, ['tours', 'blogs'], true) || !preg_match('/^[a-f0-9]{24}$/', $token)) {
+if (!in_array($type, ['tours', 'blogs', 'pages'], true) || !preg_match('/^[a-f0-9]{24}$/', $token)) {
     http_response_code(404);
     header('Content-Type: text/plain; charset=utf-8');
     exit("Preview not found.\n");
@@ -25,7 +25,7 @@ if (!in_array($type, ['tours', 'blogs'], true) || !preg_match('/^[a-f0-9]{24}$/'
 
 $root = dirname(__DIR__, 2);
 $slug = 'content-studio-preview-' . $token;
-$directory = $root . '/content/' . ($type === 'tours' ? 'experiences' : 'editorial');
+$directory = $root . '/content/' . ($type === 'tours' ? 'experiences' : ($type === 'blogs' ? 'editorial' : 'pages'));
 $file = $directory . '/' . $slug . '.json';
 header('Cache-Control: no-store, max-age=0');
 header('Pragma: no-cache');
@@ -59,9 +59,12 @@ ob_start();
 if ($type === 'tours') {
     $experienceSlug = $slug;
     require $root . '/include/experience-page.php';
-} else {
+} elseif ($type === 'blogs') {
     $editorialGuideSlug = $slug;
     require $root . '/include/editorial-guide-page.php';
+} else {
+    $studioPageSlug = $slug;
+    require $root . '/include/studio-page.php';
 }
 $renderedPage = (string) ob_get_clean();
 $renderedPage = preg_replace('/(<head\\b[^>]*>)/i', '$1' . "\n  <base href=\"/\">", $renderedPage, 1, $baseCount);
