@@ -88,6 +88,9 @@ test('Gallery filters, six-photo reveal and keyboard-operable lightbox stay cohe
     width: img.getAttribute('width'),
     height: img.getAttribute('height'),
   }));
+  const expectedFirstSource = new URL(firstHref, 'http://127.0.0.1:8080/gallery.php').href;
+  await expect.poll(() => lightboxImage.evaluate((img) => img.currentSrc)).toBe(expectedFirstSource);
+  await expect.poll(() => lightboxImage.evaluate((img) => img.complete && img.naturalWidth > 0)).toBe(true);
   const firstLightboxSource = await lightboxImage.evaluate((img) => ({
     src: img.src,
     currentSrc: img.currentSrc,
@@ -95,7 +98,7 @@ test('Gallery filters, six-photo reveal and keyboard-operable lightbox stay cohe
     width: img.getAttribute('width'),
     height: img.getAttribute('height'),
   }));
-  expect(firstLightboxSource.src).toBe(new URL(firstHref, 'http://127.0.0.1:8080/gallery.php').href);
+  expect(firstLightboxSource.src).toBe(expectedFirstSource);
   expect(firstLightboxSource.currentSrc).toBe(firstLightboxSource.src);
   expect(firstLightboxSource.srcset).toBeNull();
   expect(firstLightboxSource.width).toBe(firstDimensions.width);
@@ -111,6 +114,9 @@ test('Gallery filters, six-photo reveal and keyboard-operable lightbox stay cohe
     width: img.getAttribute('width'),
     height: img.getAttribute('height'),
   }));
+  const expectedNextSource = new URL(nextHref, 'http://127.0.0.1:8080/gallery.php').href;
+  await expect.poll(() => lightboxImage.evaluate((img) => img.currentSrc)).toBe(expectedNextSource);
+  await expect.poll(() => lightboxImage.evaluate((img) => img.complete && img.naturalWidth > 0)).toBe(true);
   const nextLightboxSource = await lightboxImage.evaluate((img) => ({
     src: img.src,
     currentSrc: img.currentSrc,
@@ -118,7 +124,7 @@ test('Gallery filters, six-photo reveal and keyboard-operable lightbox stay cohe
     width: img.getAttribute('width'),
     height: img.getAttribute('height'),
   }));
-  expect(nextLightboxSource.src).toBe(new URL(nextHref, 'http://127.0.0.1:8080/gallery.php').href);
+  expect(nextLightboxSource.src).toBe(expectedNextSource);
   expect(nextLightboxSource.currentSrc).toBe(nextLightboxSource.src);
   expect(nextLightboxSource.srcset).toBeNull();
   expect(nextLightboxSource.width).toBe(nextDimensions.width);

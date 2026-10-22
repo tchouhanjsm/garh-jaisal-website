@@ -289,7 +289,10 @@ async function main() {
   for (const file of [...routeFiles, ...recordFiles]) ownedPaths.add(file);
   sitemapTouched = true;
   studio = start(process.execPath, ['scripts/content-studio.js'], { CONTENT_STUDIO_PORT: String(STUDIO_PORT) }, s => { studioOutput += s; }, s => { studioErrors += s; });
-  await waitFor(STUDIO_URL + '/api/status', studio, 'Content Studio');
+  const studioReadyResponse = await waitFor(STUDIO_URL + '/api/status', studio, 'Content Studio');
+  const studioCsp = studioReadyResponse.headers.get('content-security-policy') || '';
+  assert.match(studioCsp, /frame-src[^;]*http:\/\/127\.0\.0\.1:\*[^;]*http:\/\/localhost:\*/,
+    'Content Studio must allow its validated loopback PHP preview port in frames while keeping other origins blocked.');
 
   phpServer = start('php', ['-S', '127.0.0.1:' + PHP_PORT, '-t', ROOT], {}, s => { phpOutput += s; }, s => { phpErrors += s; });
   await waitFor(PHP_URL + '/blog.php', phpServer, 'PHP preview server');

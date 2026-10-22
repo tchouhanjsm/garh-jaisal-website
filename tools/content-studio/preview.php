@@ -52,11 +52,22 @@ if (!is_array($record)
     exit("Preview not found or expired.\n");
 }
 
+// These templates use root-relative paths such as css/ and img/. The preview
+// route lives below /tools/content-studio/, so set a safe root base URL without
+// changing the production page renderers or their shared includes.
+ob_start();
 if ($type === 'tours') {
     $experienceSlug = $slug;
     require $root . '/include/experience-page.php';
-    exit;
+} else {
+    $editorialGuideSlug = $slug;
+    require $root . '/include/editorial-guide-page.php';
 }
-
-$editorialGuideSlug = $slug;
-require $root . '/include/editorial-guide-page.php';
+$renderedPage = (string) ob_get_clean();
+$renderedPage = preg_replace('/(<head\\b[^>]*>)/i', '$1' . "\n  <base href=\"/\">", $renderedPage, 1, $baseCount);
+if ($baseCount !== 1) {
+    http_response_code(500);
+    header('Content-Type: text/plain; charset=utf-8');
+    exit("Could not safely prepare the local page preview.\\n");
+}
+echo $renderedPage;
