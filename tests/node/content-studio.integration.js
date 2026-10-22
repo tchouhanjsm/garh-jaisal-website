@@ -614,7 +614,7 @@ async function main() {
   assert.ok(html.includes('Confirm current arrangements'));
   assert.ok(html.includes('css/page-builder.css') && html.includes('css/pages/' + pageSlug + '.css'));
   assert.doesNotMatch(html, /noindex,follow/, 'released landing page should be indexable');
-  assert.ok(html.includes('og:title') && html.includes('application/ld\\+json'), 'landing page must retain site SEO metadata and structured schema');
+  assert.ok(html.includes('og:title') && html.includes('application/ld+json'), 'landing page must retain site SEO metadata and structured schema');
 
   const editedLandingPage = landingPagePayload(pageSlug, 'sandstone');
   editedLandingPage.h1 = 'Content Studio Landing Page Revised';
