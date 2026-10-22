@@ -433,6 +433,9 @@ document.addEventListener('DOMContentLoaded', () => {
         lightboxImage.removeAttribute('width');
         lightboxImage.removeAttribute('height');
       }
+      // A lightbox is an explicit user action; lazy loading can otherwise leave
+      // the next/previous photo blank while its caption has already advanced.
+      lightboxImage.loading = 'eager';
       lightboxImage.src = link.href;
       lightboxImage.alt = thumbnail.alt;
       caption.textContent = thumbnail.alt;

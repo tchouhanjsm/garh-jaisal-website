@@ -16,6 +16,9 @@ const CONTENT_ROOT = path.join(ROOT, 'content');
 const IMAGE_ROOT = path.join(ROOT, 'img');
 const MAX_JSON_BYTES = 1024 * 1024;
 const MAX_IMAGE_BYTES = 15 * 1024 * 1024;
+const PREVIEW_TTL_MS = 15 * 60 * 1000;
+const PREVIEW_SESSIONS = new Map();
+const REVIEW_STATUSES = Object.freeze(['draft', 'ready_for_review', 'approved_for_release']);
 const IMAGE_TYPES = {
   '.jpg': { mime: 'image/jpeg', signature: b => b.length > 3 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff },
   '.jpeg': { mime: 'image/jpeg', signature: b => b.length > 3 && b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff },
@@ -175,7 +178,7 @@ function respond(res, status, type, body) {
     'Cache-Control': 'no-store',
     'X-Content-Type-Options': 'nosniff',
     'Referrer-Policy': 'no-referrer',
-    'Content-Security-Policy': "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'",
+    'Content-Security-Policy': "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-src 'self' http://127.0.0.1:* http://localhost:*; base-uri 'none'; frame-ancestors 'none'",
   });
   res.end(data);
 }
@@ -279,6 +282,20 @@ function statusValue(value) {
   return status;
 }
 
+function reviewStatusForRecord(record) {
+  if (REVIEW_STATUSES.includes(record.review_status)) return record.review_status;
+  // Legacy records already marked Live pre-date explicit review metadata; do not silently unpublish them.
+  return record.status === 'live' ? 'approved_for_release' : 'draft';
+}
+
+function reviewStatusValue(value) {
+  const status = String(value || '');
+  if (!REVIEW_STATUSES.includes(status)) {
+    throw fail(400, 'Choose Draft, Ready for review, or Approved for release.');
+  }
+  return status;
+}
+
 function today() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -337,11 +354,20 @@ function imagePath(value) {
   return src;
 }
 
+function assertStudioRouteAvailable(slug, type) {
+  const templateId = type === 'experiences' ? 'experience-detail' : type === 'editorial' ? 'editorial-guide' : null;
+  if (!templateId) throw fail(400, 'Choose a supported Content Studio page template.');
+  try {
+    return validateRouteForTemplate(slug, templateId);
+  } catch (error) {
+    const message = String(error.message || 'Page template validation failed.');
+    throw fail(/already exists/i.test(message) ? 409 : 400, message);
+  }
+}
+
 function ensureNewSlug(slug, type) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw fail(400, 'Use a URL slug made from lowercase letters, digits and hyphens.');
-  if (fs.existsSync(path.join(ROOT, slug + '.php')) || fs.existsSync(path.join(CONTENT_ROOT, type, slug + '.json'))) {
-    throw fail(409, 'That slug already exists. Existing pages are never overwritten.');
-  }
+  assertStudioRouteAvailable(slug, type);
   return {
     route: path.join(ROOT, slug + '.php'),
     record: path.join(CONTENT_ROOT, type, slug + '.json'),
@@ -461,6 +487,12 @@ function readManagedRecord(type, slug) {
   const storedId = type === 'gallery' ? record.id : record.slug;
   if (storedId !== slug) throw fail(422, 'The saved record identifier does not match its filename.');
   if (!['draft', 'live', 'hidden'].includes(record.status)) throw fail(422, 'The saved record has an invalid publication state.');
+  if (record.review_status !== undefined && !REVIEW_STATUSES.includes(record.review_status)) {
+    throw fail(422, 'The saved record has an invalid review state. Ask the operator to review it before changing publication.');
+  }
+  if (record.status === 'live' && record.review_status !== undefined && record.review_status !== 'approved_for_release') {
+    throw fail(422, 'A Live record must have an Approved for release review state. Ask the operator to reconcile this record.');
+  }
   return { files, record };
 }
 
@@ -542,6 +574,7 @@ function listManagedContent() {
     const names = fs.readdirSync(folder).filter(name => name.endsWith('.json')).sort((a, b) => a.localeCompare(b));
     for (const name of names) {
       const slug = name.slice(0, -5);
+      if (/^content-studio-preview-[a-f0-9]{24}$/.test(slug)) continue;
       try {
         const { record } = readManagedRecord(type, slug);
         const photo = type === 'gallery' ? record.image : null;
@@ -549,6 +582,7 @@ function listManagedContent() {
           type,
           slug,
           status: record.status,
+          reviewStatus: reviewStatusForRecord(record),
           title: type === 'gallery'
             ? String(photo.caption || photo.alt || photo.src)
             : String(record.h1 || record.title || slug),
@@ -583,6 +617,8 @@ function readManagedContent(type, slug) {
 function updateManagedPage(type, slug, record) {
   const { files, record: previous } = readManagedRecord(type, slug);
   if (previous.status === 'hidden') throw fail(409, 'This record uses Hidden status. Ask the operator to review it before editing.');
+  if (record.status === 'live') throw fail(409, 'Set the page to Draft before editing it. Edited content must pass Ready for review and Approved for release again before it can be made Live locally.');
+  record.review_status = 'draft';
   if (type === 'gallery') throw fail(400, 'Gallery records do not use PHP page routes.');
   safeManagedRoute(files.route, type, slug);
   // Preserve fields the form does not expose, including operator-customized ordering and related links.
@@ -622,6 +658,9 @@ function setManagedStatus(type, slug, nextStatus) {
   const { files, record } = readManagedRecord(type, slug);
   if (record.status === 'hidden') throw fail(409, 'This record uses Hidden status. Ask the operator to review it before changing publication.');
   if (record.status === status) return { type, slug, status, message: 'No publication-state change was needed.' };
+  if (status === 'live' && reviewStatusForRecord(record) !== 'approved_for_release') {
+    throw fail(409, 'Content must be Approved for release before it can be marked Live locally. Approval does not deploy or upload anything.');
+  }
   if (status === 'live') verifyPublishableRecord(type, record);
   if (type !== 'gallery') safeManagedRoute(files.route, type, slug);
   const oldRecord = fs.readFileSync(files.record);
@@ -630,6 +669,8 @@ function setManagedStatus(type, slug, nextStatus) {
 
   const changeState = () => {
     record.status = status;
+    if (status === 'draft') record.review_status = 'draft';
+    else record.review_status = 'approved_for_release';
     if (type !== 'gallery') record.date_modified = today();
     try {
       atomicWrite(files.record, JSON.stringify(record, null, 2) + '\n');
@@ -645,6 +686,39 @@ function setManagedStatus(type, slug, nextStatus) {
   if (status !== 'live') return changeState();
   const source = type === 'gallery' ? record.image.src : record.hero_image;
   return withManifestSource(source, changeState);
+}
+
+function setReviewStatus(type, slug, nextReviewStatus) {
+  const reviewStatus = reviewStatusValue(nextReviewStatus);
+  const { files, record } = readManagedRecord(type, slug);
+  if (record.status === 'hidden') throw fail(409, 'Hidden content must be reviewed by the operator before it can enter the review workflow.');
+  const current = reviewStatusForRecord(record);
+  if (current === reviewStatus) return { type, slug, reviewStatus, message: 'No review-state change was needed.' };
+  if (record.status !== 'draft') throw fail(409, 'Set the content to Draft before changing its review state.');
+  if (reviewStatus === 'ready_for_review' && current !== 'draft') {
+    throw fail(409, 'Return the review state to Draft before resubmitting it for review.');
+  }
+  if (reviewStatus === 'approved_for_release' && current !== 'ready_for_review') {
+    throw fail(409, 'Approve content only after it has been marked Ready for review.');
+  }
+  if (reviewStatus === 'ready_for_review' || reviewStatus === 'approved_for_release') {
+    verifyPublishableRecord(type, record);
+    if (type !== 'gallery') safeManagedRoute(files.route, type, slug);
+  }
+  const oldRecord = fs.readFileSync(files.record);
+  record.review_status = reviewStatus;
+  if (type !== 'gallery') record.date_modified = today();
+  try {
+    atomicWrite(files.record, JSON.stringify(record, null, 2) + '\n');
+  } catch (error) {
+    try { atomicWrite(files.record, oldRecord); } catch (_) {}
+    throw error;
+  }
+  const labels = { draft: 'Draft', ready_for_review: 'Ready for review', approved_for_release: 'Approved for release' };
+  return {
+    type, slug, reviewStatus,
+    message: 'Review state updated to ' + labels[reviewStatus] + '. This changes local review metadata only; it does not upload, deploy, or make the page public.',
+  };
 }
 
 function deleteManagedDraft(type, slug) {
@@ -674,11 +748,12 @@ function deleteManagedDraft(type, slug) {
   }
 }
 
-function createTour(input, existingSlug = null) {
+function createTour(input, existingSlug = null, previewOnly = false) {
   const h1 = textField(input.title, 'Tour name', 3, 120);
   const requestedSlug = slugify(input.slug || h1);
   const slug = existingSlug || requestedSlug;
   if (existingSlug && input.slug && requestedSlug !== existingSlug) throw fail(400, 'The URL slug cannot be changed in the editor because existing links may point to it.');
+  if (!existingSlug) assertStudioRouteAvailable(slug, 'experiences');
   const category = String(input.category || '');
   if (!['desert', 'city'].includes(category)) throw fail(400, 'Choose a desert or city tour category.');
   const durationType = String(input.durationType || '');
@@ -701,7 +776,7 @@ function createTour(input, existingSlug = null) {
   const record = {
     slug, category, parent: category === 'city' ? 'guided-jaisalmer-tour' : 'desert-safari',
     menu_label: textField(input.menuLabel || h1, 'Short label', 3, 70),
-    duration_type: durationType, order: 900, status,
+    duration_type: durationType, order: 900, status, review_status: 'draft',
     title: textField(input.seoTitle || h1, 'SEO title', 8, 180),
     description, h1,
     eyebrow: textField(input.eyebrow || (category === 'city' ? 'Jaisalmer tour' : 'Desert experience'), 'Eyebrow', 2, 80),
@@ -726,6 +801,8 @@ function createTour(input, existingSlug = null) {
     related: category === 'city' ? ['half-day-jaisalmer-tour', 'full-day-jaisalmer-tour'] : ['sleep-under-the-stars', 'swiss-tent-safari'],
     date_modified: date,
   };
+  if (previewOnly) return { slug, status: 'draft', pagePath: '/' + slug + '.php', record: { ...record, status: 'draft', review_status: 'draft' } };
+  if (!existingSlug && status === 'live') throw fail(409, 'New content must be saved as Draft, marked Ready for review, and Approved for release before it can be made Live locally.');
   return withManifestSource(heroImage, () => existingSlug
     ? updateManagedPage('tours', slug, record)
     : createPage('experiences', slug, record, 'experienceSlug'));
@@ -784,18 +861,19 @@ function parseSources(value) {
   });
 }
 
-function createBlog(input, existingSlug = null) {
+function createBlog(input, existingSlug = null, previewOnly = false) {
   const h1 = textField(input.h1, 'Article heading', 8, 160);
   const requestedSlug = slugify(input.slug || h1);
   const slug = existingSlug || requestedSlug;
   if (existingSlug && input.slug && requestedSlug !== existingSlug) throw fail(400, 'The URL slug cannot be changed in the editor because existing links may point to it.');
+  if (!existingSlug) assertStudioRouteAvailable(slug, 'editorial');
   const date = today();
   const eyebrow = textField(input.eyebrow || 'Jaisalmer travel guide', 'Guide category', 2, 80);
   const description = textField(input.description, 'SEO description', 40, 300);
   const heroImage = imagePath(input.heroImage);
   const heroAlt = textField(input.heroAlt, 'Hero image alternative text', 10, 240);
   const record = {
-    slug, status: statusValue(input.status),
+    slug, status: statusValue(input.status), review_status: 'draft',
     title: textField(input.seoTitle || h1, 'SEO title', 8, 180),
     description, h1, eyebrow,
     lede: textField(input.lede, 'Article introduction', 30, 700),
@@ -819,6 +897,8 @@ function createBlog(input, existingSlug = null) {
     cta_secondary_label: 'Contact the hotel', cta_secondary_href: 'contact.php',
   };
   record.toc = record.sections.map(item => ({ id: item.id, label: item.heading }));
+  if (previewOnly) return { slug, status: 'draft', pagePath: '/' + slug + '.php', record: { ...record, status: 'draft', review_status: 'draft' } };
+  if (!existingSlug && record.status === 'live') throw fail(409, 'New content must be saved as Draft, marked Ready for review, and Approved for release before it can be made Live locally.');
   return withManifestSource(heroImage, () => existingSlug
     ? updateManagedPage('blogs', slug, record)
     : createPage('editorial', slug, record, 'editorialGuideSlug'));
@@ -850,9 +930,11 @@ function createGallery(input, existingId = null) {
   if (!CROPS.includes(crop)) throw fail(400, 'Choose a supported image crop.');
   const status = statusValue(input.status);
   const id = existingId || slugify(category + '-' + path.parse(src).name + '-' + crypto.randomBytes(3).toString('hex'));
-  const record = { id, category, status, image: { src, alt, caption, crop } };
   const previousManaged = existingId ? readManagedRecord('gallery', existingId) : null;
+  if (!existingId && status === 'live') throw fail(409, 'New Gallery entries must be Draft, Ready for review, and Approved for release before they can be made Live locally.');
   if (previousManaged && previousManaged.record.status === 'hidden') throw fail(409, 'This record uses Hidden status. Ask the operator to review it before editing.');
+  if (previousManaged && status === 'live') throw fail(409, 'Save Gallery edits as Draft, mark them Ready for review, and Approve for release before making them Live locally.');
+  const record = { id, category, status, review_status: 'draft', image: { src, alt, caption, crop } };
   const file = previousManaged ? previousManaged.files.record : path.join(CONTENT_ROOT, 'gallery', id + '.json');
   assertContentDirectoryChain(path.dirname(file), true);
   const previous = previousManaged ? fs.readFileSync(file) : null;
@@ -861,7 +943,7 @@ function createGallery(input, existingId = null) {
   try {
     updateImageManifest(src);
     const safeRecord = previousManaged
-      ? { ...previousManaged.record, ...record, image: { ...previousManaged.record.image, ...record.image } }
+      ? { ...previousManaged.record, ...record, review_status: 'draft', image: { ...previousManaged.record.image, ...record.image } }
       : record;
     atomicWrite(file, JSON.stringify(safeRecord, null, 2) + '\n');
   } catch (error) {
@@ -923,11 +1005,125 @@ async function upload(req, url) {
   return { src, message: 'Uploaded. The source image is registered for responsive-image generation.' };
 }
 
+function previewRecordPaths() {
+  return [
+    { directory: path.join(CONTENT_ROOT, 'experiences'), type: 'tours' },
+    { directory: path.join(CONTENT_ROOT, 'editorial'), type: 'blogs' },
+  ];
+}
+
+function pruneExpiredPreviewRecords() {
+  const now = Date.now();
+  for (const { directory } of previewRecordPaths()) {
+    let directoryStat;
+    try { directoryStat = fs.lstatSync(directory); }
+    catch (error) { if (error.code === 'ENOENT') continue; else throw error; }
+    if (!directoryStat.isDirectory() || directoryStat.isSymbolicLink()) continue;
+    for (const name of fs.readdirSync(directory)) {
+      const match = name.match(/^content-studio-preview-([a-f0-9]{24})\.json$/);
+      if (!match) continue;
+      const file = path.join(directory, name);
+      let stat;
+      try { stat = fs.lstatSync(file); } catch (error) { if (error.code === 'ENOENT') continue; else throw error; }
+      if (!stat.isFile() || stat.isSymbolicLink()) continue;
+      try {
+        const record = JSON.parse(fs.readFileSync(file, 'utf8'));
+        const slug = name.slice(0, -5);
+        if (record && record.slug === slug && record.studio_preview_token === match[1]
+          && Number.isFinite(record.studio_preview_expires_at)
+          && record.studio_preview_expires_at <= now) {
+          fs.unlinkSync(file);
+          const active = PREVIEW_SESSIONS.get(match[1]);
+          if (active) {
+            clearTimeout(active.timer);
+            PREVIEW_SESSIONS.delete(match[1]);
+          }
+        }
+      } catch (_) {
+        // Malformed or manually altered records are left for operator review, never executed or guessed at.
+      }
+    }
+  }
+}
+
+function cleanupPreviewSession(token) {
+  if (typeof token !== 'string' || !/^[a-f0-9]{24}$/.test(token)) return false;
+  const session = PREVIEW_SESSIONS.get(token);
+  if (!session) return false;
+  clearTimeout(session.timer);
+  try {
+    const stat = fs.lstatSync(session.file);
+    if (!stat.isFile() || stat.isSymbolicLink()) throw fail(409, 'The preview record changed on disk and was not removed.');
+    const record = JSON.parse(fs.readFileSync(session.file, 'utf8'));
+    if (!record || record.slug !== session.slug || record.studio_preview_token !== token) {
+      throw fail(409, 'The preview record no longer matches this session and was not removed.');
+    }
+    fs.unlinkSync(session.file);
+  } catch (error) {
+    if (error.code !== 'ENOENT') {
+      PREVIEW_SESSIONS.delete(token);
+      throw error;
+    }
+  }
+  PREVIEW_SESSIONS.delete(token);
+  return true;
+}
+
+function createPreview(input) {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) throw fail(400, 'Preview request must be an object.');
+  const type = String(input.type || '');
+  if (!['tours', 'blogs'].includes(type)) throw fail(400, 'Choose a supported page type to preview.');
+  if (!input.payload || typeof input.payload !== 'object' || Array.isArray(input.payload)) throw fail(400, 'Complete the guided form before previewing.');
+  const templateId = type === 'tours' ? 'experience-detail' : 'editorial-guide';
+  const contract = getTemplateContract(templateId);
+  if (!contract || contract.recordType !== (type === 'tours' ? 'tour' : 'blog')) throw fail(400, 'The selected page template is unavailable.');
+  pruneExpiredPreviewRecords();
+  const token = crypto.randomBytes(12).toString('hex');
+  const slug = 'content-studio-preview-' + token;
+  const payload = { ...input.payload, slug, status: 'draft' };
+  const prepared = type === 'tours'
+    ? createTour(payload, null, true)
+    : createBlog(payload, null, true);
+  const directory = path.join(CONTENT_ROOT, type === 'tours' ? 'experiences' : 'editorial');
+  assertContentDirectoryChain(directory, true);
+  const file = path.join(directory, slug + '.json');
+  try {
+    fs.lstatSync(file);
+    throw fail(409, 'Could not reserve a unique local preview record. Generate the preview again.');
+  } catch (error) {
+    if (error.statusCode) throw error;
+    if (error.code !== 'ENOENT') throw error;
+  }
+  const expiresAt = Date.now() + PREVIEW_TTL_MS;
+  const record = {
+    ...prepared.record,
+    slug,
+    status: 'draft',
+    review_status: 'draft',
+    studio_preview_token: token,
+    studio_preview_expires_at: expiresAt,
+  };
+  atomicWrite(file, JSON.stringify(record, null, 2) + '\n');
+  const session = { file, slug, type, timer: null };
+  session.timer = setTimeout(() => {
+    try { cleanupPreviewSession(token); } catch (_) {}
+  }, PREVIEW_TTL_MS);
+  if (session.timer && typeof session.timer.unref === 'function') session.timer.unref();
+  PREVIEW_SESSIONS.set(token, session);
+  return {
+    token, type, slug,
+    pagePath: '/tools/content-studio/preview.php?type=' + type + '&token=' + token,
+    expiresAt: new Date(expiresAt).toISOString(),
+    expiresInSeconds: Math.floor(PREVIEW_TTL_MS / 1000),
+    message: 'Private, unsaved PHP preview. It expires automatically and does not change the sitemap, source image manifest, or publication state.',
+  };
+}
+
 function statusPayload() {
   const summary = dir => {
     const folder = path.join(CONTENT_ROOT, dir);
     if (!fs.existsSync(folder)) return { total: 0, live: 0, drafts: 0, invalid: 0 };
-    const records = fs.readdirSync(folder).filter(name => name.endsWith('.json')).map(name => {
+    const records = fs.readdirSync(folder).filter(name => name.endsWith('.json') && !/^content-studio-preview-[a-f0-9]{24}\.json$/.test(name)).map(name => {
       try { return JSON.parse(fs.readFileSync(path.join(folder, name), 'utf8')).status || 'draft'; }
       catch (_) { return 'invalid'; }
     });
@@ -956,6 +1152,17 @@ const server = http.createServer(async (req, res) => {
     }
     if (req.method === 'GET' && url.pathname === '/api/status') return respondJson(res, 200, { ...statusPayload(), v2Registry: validateTemplateRegistry() });
     if (req.method === 'GET' && url.pathname === '/api/templates') return respondJson(res, 200, { templates: Object.keys(PAGE_TEMPLATE_REGISTRY).map(id => { const item = getTemplateContract(id); return { id: item.id, label: item.label, routePattern: item.routePattern, stylesheetPaths: [...item.stylesheetPaths], requiredFields: [...item.requiredFields], recordType: item.recordType }; }), managedPages: Object.entries(STUDIO_MANAGED_PAGE_REGISTRY).map(([route, page]) => ({ route, label: page.label, templateId: page.templateId, editableFields: [...page.editableFields] })) });
+    if (req.method === 'POST' && url.pathname === '/api/preview') return respondJson(res, 201, createPreview(await readJson(req)));
+    if (req.method === 'POST' && url.pathname === '/api/preview/cleanup') {
+      const input = await readJson(req);
+      return respondJson(res, 200, { removed: cleanupPreviewSession(input.token), message: 'The local preview session was closed. No public page or deployment was changed.' });
+    }
+    const reviewMatch = url.pathname.match(/^\/api\/content\/(tours|blogs|gallery)\/([a-z0-9]+(?:-[a-z0-9]+)*)\/review$/);
+    if (reviewMatch && req.method === 'PATCH') {
+      const [, type, slug] = reviewMatch;
+      const input = await readJson(req);
+      return respondJson(res, 200, setReviewStatus(type, slug, input.reviewStatus));
+    }
     if (req.method === 'GET' && url.pathname === '/api/content') return respondJson(res, 200, listManagedContent());
     const managedMatch = url.pathname.match(/^\/api\/content\/(tours|blogs|gallery)\/([a-z0-9]+(?:-[a-z0-9]+)*)(\/status)?$/);
     if (managedMatch) {

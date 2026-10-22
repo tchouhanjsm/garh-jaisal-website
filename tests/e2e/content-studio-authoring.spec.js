@@ -72,6 +72,7 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     if (!ready) throw new Error('Content Studio did not start: ' + lastError + '\n' + output + errors);
 
     await page.goto(studioUrl + '/', { waitUntil: 'domcontentloaded' });
+    await page.locator('#preview-base').fill(phpPreview);
     await expect(page.locator('#statusline')).toContainText('Local authoring only');
     await expect(page.getByText('Four steps to add content')).toBeVisible();
 
@@ -96,6 +97,25 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await faq.locator('[data-key="question"]').fill('What should I confirm before departure?');
     await faq.locator('[data-key="answer"]').fill('Ask the hotel to confirm the current time, meeting point and inclusions.');
 
+    const previewRequestPromise = page.waitForRequest(request => request.url() === studioUrl + '/api/preview' && request.method() === 'POST');
+    const previewResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/preview' && response.request().method() === 'POST');
+    await page.getByRole('button', { name: 'Preview PHP-rendered draft' }).first().click();
+    const [previewRequest, previewResponse] = await Promise.all([previewRequestPromise, previewResponsePromise]);
+    expect(previewResponse.status()).toBe(201);
+    expect(previewRequest.postDataJSON().type).toBe('tours');
+    expect(previewRequest.postDataJSON().payload.status).toBe('draft');
+    await expect(page.locator('#php-preview-frame')).toHaveAttribute('src', /preview\.php\?type=tours&token=/);
+    await expect(page.locator('#preview-state')).toContainText('unsaved Draft');
+    const phpPage = page.frameLocator('#php-preview-frame');
+    await expect(phpPage.getByRole('heading', { name: 'Browser UI test tour', exact: true }).first()).toBeVisible({ timeout: 10000 });
+    await expect(phpPage.locator('base')).toHaveAttribute('href', '/');
+    await expect(phpPage.locator('link[rel="stylesheet"][href="css/garh-v2.css"]')).toHaveCount(1);
+    await expect.poll(() => phpPage.locator('.experience-hero-media img').evaluate((image) => image.complete && image.naturalWidth > 0)).toBe(true);
+    await page.locator('#preview-mobile').click();
+    await expect(page.locator('#php-preview-frame')).toHaveClass(/mobile/);
+    await page.locator('#preview-desktop').click();
+    await expect(page.locator('#php-preview-frame')).not.toHaveClass(/mobile/);
+
     const tourRequestPromise = page.waitForRequest(request => request.url() === studioUrl + '/api/tours' && request.method() === 'POST');
     const tourResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/tours' && response.request().method() === 'POST');
     await page.getByRole('button', { name: 'Validate and save tour' }).click();
@@ -113,6 +133,8 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
 
     // Blog form: section and source builders create the format the server expects.
     await page.getByRole('tab', { name: 'Add a blog' }).click();
+    await expect(page.locator('#pane-blog')).toBeVisible();
+    await expect(page.locator('#blog-preview')).toBeVisible();
     await page.locator('#blog-h1').fill('Browser UI test travel guide');
     await page.locator('#blog-slug').fill(blogSlug);
     await page.locator('#blog-seo-title').fill('Browser UI test travel guide');
@@ -136,6 +158,14 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     source = page.locator('#blog-source-list .section-editor').nth(1);
     await source.locator('[data-key="label"]').fill('Official destination information');
     await source.locator('[data-key="url"]').fill('https://www.incredibleindia.gov.in/');
+
+    const blogPreviewResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/preview' && response.request().method() === 'POST');
+    await page.locator('#blog-preview').click();
+    const blogPreviewResponse = await blogPreviewResponsePromise;
+    expect(blogPreviewResponse.status()).toBe(201);
+    const blogPreviewFrame = page.frameLocator('#php-preview-frame');
+    await expect(page.locator('#php-preview-frame')).toHaveAttribute('src', /preview\.php\?type=blogs&token=/);
+    await expect(blogPreviewFrame.getByRole('heading', { name: 'Browser UI test travel guide', exact: true }).first()).toBeVisible({ timeout: 10000 });
 
     const blogRequestPromise = page.waitForRequest(request => request.url() === studioUrl + '/api/blogs' && request.method() === 'POST');
     const blogResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/blogs' && response.request().method() === 'POST');
@@ -183,6 +213,14 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     expect((await updateTourResponsePromise).status()).toBe(200);
     tourCard = page.locator('.content-record[data-record-key="tours:' + tourSlug + '"]');
     await expect(tourCard).toContainText('Browser UI test tour revised');
+    const readyTourResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/tours/' + tourSlug + '/review' && response.request().method() === 'PATCH');
+    await tourCard.getByRole('button', { name: 'Ready for review' }).click();
+    expect((await readyTourResponsePromise).status()).toBe(200);
+    await expect(tourCard).toContainText('READY FOR REVIEW');
+    const approveTourResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/tours/' + tourSlug + '/review' && response.request().method() === 'PATCH');
+    await tourCard.getByRole('button', { name: 'Approve for release' }).click();
+    expect((await approveTourResponsePromise).status()).toBe(200);
+    await expect(tourCard).toContainText('APPROVED FOR RELEASE');
     const publishTourResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/tours/' + tourSlug + '/status' && response.request().method() === 'PATCH');
     await tourCard.getByRole('button', { name: 'Publish locally' }).click();
     expect((await publishTourResponsePromise).status()).toBe(200);
@@ -231,6 +269,14 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     expect((await updateGalleryResponsePromise).status()).toBe(200);
     galleryCard = page.locator('.content-record[data-record-key="gallery:' + galleryId + '"]');
     await expect(galleryCard).toContainText('Browser UI updated Gallery caption');
+    const readyGalleryResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/gallery/' + galleryId + '/review' && response.request().method() === 'PATCH');
+    await galleryCard.getByRole('button', { name: 'Ready for review' }).click();
+    expect((await readyGalleryResponsePromise).status()).toBe(200);
+    await expect(galleryCard).toContainText('READY FOR REVIEW');
+    const approveGalleryResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/gallery/' + galleryId + '/review' && response.request().method() === 'PATCH');
+    await galleryCard.getByRole('button', { name: 'Approve for release' }).click();
+    expect((await approveGalleryResponsePromise).status()).toBe(200);
+    await expect(galleryCard).toContainText('APPROVED FOR RELEASE');
     const publishGalleryResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/gallery/' + galleryId + '/status' && response.request().method() === 'PATCH');
     await galleryCard.getByRole('button', { name: 'Publish locally' }).click();
     expect((await publishGalleryResponsePromise).status()).toBe(200);

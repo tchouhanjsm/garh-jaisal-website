@@ -47,11 +47,18 @@ jobs:
         with:
           node-version: '22'
 
+      # The npm registry has returned gzip advisory responses without headers, causing
+      # npm CLI to call the retired Quick Audit endpoint. Keep install deterministic,
+      # then audit the same lockfile directly against the supported Bulk Advisory API.
+      # The auditor normalizes mislabeled gzip responses and fails closed on bad data.
       - name: Install locked Node dependencies
-        run: npm ci
+        run: npm ci --no-audit
+
+      - name: Test npm Bulk Advisory auditor
+        run: node scripts/npm-bulk-advisory-audit.cjs --self-test
 
       - name: Check dependency advisories
-        run: npm audit --audit-level=high
+        run: node scripts/npm-bulk-advisory-audit.cjs --audit
 
       - name: Install Chromium and system dependencies
         run: npx playwright install --with-deps chromium
