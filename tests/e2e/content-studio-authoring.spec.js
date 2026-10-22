@@ -252,6 +252,9 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await expect(page.locator('#php-preview-frame')).toHaveAttribute('src', /preview\.php\?type=pages&token=/);
     const landingPreviewFrame = page.frameLocator('#php-preview-frame');
     await expect(landingPreviewFrame.getByRole('heading', { name: 'Browser UI test landing page', exact: true })).toBeVisible({ timeout: 10000 });
+    await expect(landingPreviewFrame.getByRole('heading', { name: 'Plan your visit', level: 2 })).toBeVisible();
+    await expect(landingPreviewFrame.getByRole('heading', { name: 'A closer look', level: 2 })).toBeVisible();
+    await expect(landingPreviewFrame.getByRole('heading', { name: 'Useful details', level: 2 })).toBeVisible();
     await expect(landingPreviewFrame.locator('main.studio-page')).toHaveAttribute('data-page-theme', 'sandstone');
     await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href="css/page-builder.css"]')).toHaveCount(1);
     await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href="css/pages/' + pagePreviewSlug + '.css"]')).toHaveCount(1);
