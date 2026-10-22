@@ -18,6 +18,7 @@ const { checkPack, applyPack, loadPack } = require('../../scripts/check-content-
 const { writeZip, readZip } = require('../../scripts/studio/zip');
 const run = require('../../scripts/studio/run');
 
+process.on('uncaughtException', e => { console.error(e); if (process.env.GITHUB_ACTIONS) console.log('::error title=pack eval crashed::' + String(e.stack || e).split('\n').slice(0, 4).join(' | ').slice(0, 500)); process.exit(1); });
 let passed = 0;
 const test = (name, fn) => { try { fn(); passed++; } catch (e) { console.error('FAIL ' + name + '\n' + (e.stack || e)); if (process.env.GITHUB_ACTIONS) console.log('::error title=pack eval failed::' + name + ' | ' + String(e.message || e).split('\n').join(' ').slice(0, 400)); process.exitCode = 1; } };
 
