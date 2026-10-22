@@ -206,7 +206,19 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await page.locator('#page-theme').selectOption('sandstone');
     await page.locator('#page-hero-layout').selectOption('centered');
     await page.locator('#page-hero-intro').fill('This temporary introduction checks the guided landing page editor and actual shared site shell.');
-    await page.locator('#page-hero-image').fill('img/desert3.jpg');
+    await page.locator('#page-hero-image').fill('img/desert12.jpg');
+    await page.locator('#page-hero-alt').fill('A previous image description that must clear when the photograph changes');
+    await page.locator('[data-asset-picker-target="page-hero-image"]').click();
+    const assetDialog = page.locator('#asset-picker');
+    await expect(assetDialog).toBeVisible();
+    await assetDialog.locator('#asset-picker-search').fill('desert3.jpg');
+    const heroLibraryChoice = assetDialog.locator('[data-asset-src="img/desert3.jpg"]');
+    await expect(heroLibraryChoice).toHaveCount(1);
+    await expect.poll(() => heroLibraryChoice.locator('img').evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+    await heroLibraryChoice.click();
+    await expect(assetDialog).not.toBeVisible();
+    await expect(page.locator('#page-hero-image')).toHaveValue('img/desert3.jpg');
+    await expect(page.locator('#page-hero-alt')).toHaveValue('');
     await page.locator('#page-hero-alt').fill('Camel riders travelling over dunes near Jaisalmer');
     await page.locator('#page-hero-cta-label').fill('Contact the hotel');
     await page.locator('#page-hero-cta-href').fill('/contact.php');
@@ -218,7 +230,16 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     pageSection = page.locator('#page-section-list .page-section-editor').nth(1);
     await pageSection.locator('[data-page-field="heading"]').fill('A closer look');
     await pageSection.locator('[data-page-field="body"]').fill('A reusable photo and text block lets the team explain another part of the stay without changing the site design.');
-    await pageSection.locator('[data-page-field="alt"]').fill('A sandstone desert scene near Jaisalmer');
+    await pageSection.locator('[data-page-field="alt"]').fill('An old photo description that must clear when the image changes');
+    await pageSection.locator('[data-asset-picker-section]').click();
+    await expect(assetDialog).toBeVisible();
+    await assetDialog.locator('#asset-picker-search').fill('desert12.jpg');
+    const sectionLibraryChoice = assetDialog.locator('[data-asset-src="img/desert12.jpg"]');
+    await expect(sectionLibraryChoice).toHaveCount(1);
+    await expect.poll(() => sectionLibraryChoice.locator('img').evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+    await sectionLibraryChoice.click();
+    await expect(pageSection.locator('[data-page-field="image"]')).toHaveValue('img/desert12.jpg');
+    await expect(pageSection.locator('[data-page-field="alt"]')).toHaveValue('');
     const sectionUploadResponsePromise = page.waitForResponse(response => response.url().includes('/api/upload?filename=') && response.request().method() === 'POST');
     await pageSection.locator('input[type="file"][data-upload-target]').setInputFiles(path.join(root, 'img/desert12.jpg'));
     const sectionUploadResponse = await sectionUploadResponsePromise;
@@ -227,6 +248,8 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     // Avoid reading the response body through Chromium's DevTools cache: this
     // test runs late in a large suite, where Network.getResponseBody may evict it.
     await expect(sectionImagePath).toHaveValue(/^img\/content-studio\/[a-z0-9-]+\.jpg$/);
+    await expect(pageSection.locator('[data-page-field="alt"]')).toHaveValue('');
+    await pageSection.locator('[data-page-field="alt"]').fill('A sandstone desert scene near Jaisalmer');
     const sectionUploadSrc = await sectionImagePath.inputValue();
     ownedPaths.push(path.join(root, sectionUploadSrc));
 

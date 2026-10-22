@@ -18,6 +18,29 @@
 @media(max-width:720px){.shell{width:calc(100% - 22px);padding-top:20px}.head{align-items:start;flex-direction:column}.local-note{max-width:none}.stats{grid-template-columns:1fr}.grid,.uploadrow,.preview{grid-template-columns:1fr}.field.full{grid-column:auto}.panel-head{margin-bottom:19px}.actions button{width:100%}.footer-tools{align-items:stretch;flex-direction:column}.footer-tools button{width:100%}.workflow ol{grid-template-columns:1fr 1fr}.section-builder-head{flex-direction:column} .section-builder-head button{width:100%}.content-record{grid-template-columns:1fr}.record-actions{justify-content:stretch}.record-actions button{flex:1}.content-record .record-actions button{width:auto}}
  .render-preview{margin:18px 0}.preview-connection{max-width:440px;margin:12px 0 16px}.preview-connection label{display:block;margin-bottom:6px;font-size:.85rem;font-weight:700}.preview-connection input{width:100%;border:1px solid var(--line);border-radius:9px;background:#191815;color:var(--text);padding:10px 12px;font:inherit}.preview-connection .hint{margin:6px 0 0}.preview-actions{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-bottom:14px}.preview-actions .note{flex:1;min-width:220px;margin:0}.preview-stage{display:flex;justify-content:center;overflow:auto;border:1px solid var(--line);border-radius:12px;background:#ded7cc;padding:12px;min-height:200px}.preview-stage.mobile-stage{justify-content:flex-start}#php-preview-frame{display:block;border:0;border-radius:5px;background:#fff;box-shadow:0 7px 24px #0002;width:100%;height:min(82vh,920px);min-height:660px;flex:1 0 100%}#php-preview-frame.mobile{width:390px;min-width:390px;max-width:none;height:844px;min-height:844px;flex:0 0 390px}.review-status{display:inline-block;padding:3px 8px;border:1px solid var(--line);border-radius:999px;font-size:.7rem;font-weight:700;color:var(--muted)}.review-status.ready-for-review{border-color:#8b7045;color:#f1d29a}.review-status.approved-for-release{border-color:#416d48;color:var(--good)}.preview-actions button[aria-pressed=true]{border-color:var(--gold);background:var(--gold);color:#21190d}@media(max-width:720px){.preview-actions{align-items:stretch}.preview-actions button{flex:1}.preview-actions .note{flex-basis:100%}.preview-stage{padding:6px}#php-preview-frame{min-height:620px}} 
 .page-section-builder{margin-top:24px}.page-section-addbar{display:flex;align-items:center;gap:8px}.page-section-addbar select{min-width:190px}.page-section-editor{background:#1b1a17}.page-section-editor legend{color:var(--gold)}.page-section-controls{display:flex;gap:7px;justify-content:flex-end;margin-bottom:8px}.page-section-controls button{font-size:.76rem;padding:7px 9px}.page-section-controls button:disabled{opacity:.4;cursor:not-allowed}.page-section-editor .page-faq-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr) auto;gap:8px;align-items:start;margin-top:10px}.page-section-editor .page-faq-row textarea{min-height:82px}.page-section-editor .page-faq-row .field.full{grid-column:auto}.page-section-editor .page-faq-row button{padding:8px 10px;font-size:.78rem}.page-section-editor .page-faq-add{margin-top:12px;padding:8px 11px;font-size:.8rem}.page-section-editor textarea{min-height:100px}.page-section-editor [data-page-field="items"]{min-height:125px}.page-section-editor .hint{margin-top:4px}
+ 
+.asset-picker-trigger{width:100%;margin-top:7px;font-size:.82rem;padding:9px 11px}
+dialog.asset-picker{width:min(1040px,calc(100% - 22px));max-width:1040px;max-height:88vh;overflow:hidden;padding:0;border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--text);box-shadow:0 22px 80px #0009}
+dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
+.asset-picker-inner{display:flex;flex-direction:column;gap:12px;padding:clamp(15px,3vw,26px);max-height:88vh}
+.asset-picker-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.asset-picker-head h2{font-size:clamp(1.25rem,3vw,1.7rem)}
+.asset-picker-head .eyebrow{margin-bottom:6px}
+.asset-picker-intro{margin:0;color:var(--muted);font-size:.86rem;line-height:1.5}
+.asset-picker-search{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:end}
+.asset-picker-search label{display:block;margin-bottom:6px}
+.asset-picker-search p{margin:0;color:var(--muted);font-size:.78rem;text-align:right}
+.asset-library-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;overflow:auto;min-height:160px;max-height:54vh;padding:2px}
+.asset-library-item{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:6px;min-width:0;text-align:left;padding:8px;background:#191815}
+.asset-library-item img{display:block;width:100%;height:112px;object-fit:cover;border-radius:6px;background:#302d27}
+.asset-library-item img[hidden]{display:none}
+.asset-library-item strong,.asset-library-item small{overflow-wrap:anywhere;word-break:break-word}
+.asset-library-item strong{font-size:.78rem;line-height:1.35}
+.asset-library-item small{display:block;color:var(--muted);font-size:.68rem;line-height:1.35}
+.asset-picker-message{min-height:1.3em;margin:0;color:var(--muted);font-size:.8rem;line-height:1.5}
+.asset-picker-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:10px;border-top:1px solid var(--line)}
+.asset-picker-footer .hint{margin:0;max-width:650px}
+@media(max-width:720px){dialog.asset-picker{max-height:92vh}.asset-picker-inner{max-height:92vh}.asset-library-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:51vh}.asset-library-item img{height:125px}.asset-picker-search{grid-template-columns:1fr}.asset-picker-search p{text-align:left}.asset-picker-head button{white-space:nowrap}.asset-picker-footer{align-items:stretch;flex-direction:column}.asset-picker-footer button{width:100%}}
 </style>
 </head>
 <body>
@@ -72,7 +95,7 @@
         <div class="field full"><label for="tour-summary">Short card summary *</label><textarea id="tour-summary" name="summary" required minlength="20" maxlength="500" placeholder="Describe the experience clearly for a guest comparing tours."></textarea></div>
         <div class="field"><label for="tour-eyebrow">Small heading</label><input id="tour-eyebrow" name="eyebrow" maxlength="80" placeholder="e.g. Heritage and city"></div>
         <div class="field"><label for="tour-best-for">Best suited to *</label><input id="tour-best-for" name="bestFor" required minlength="10" maxlength="400" placeholder="Who is this experience for?"></div>
-        <div class="field full"><div class="uploadrow"><div><label for="tour-hero-upload">Upload main photo</label><input id="tour-hero-upload" type="file" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif" data-upload-target="tour-hero-image"><div id="tour-hero-upload-status" class="upload-status">JPG, PNG, WebP or AVIF, maximum 15 MB.</div></div><div><label for="tour-hero-image">Photo path *</label><input id="tour-hero-image" name="heroImage" required placeholder="img/content-studio/... or existing img/ path"></div></div></div>
+        <div class="field full"><div class="uploadrow"><div><label for="tour-hero-upload">Upload main photo</label><input id="tour-hero-upload" type="file" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif" data-upload-target="tour-hero-image"><div id="tour-hero-upload-status" class="upload-status">JPG, PNG, WebP or AVIF, maximum 15 MB.</div></div><div><label for="tour-hero-image">Photo path *</label><input id="tour-hero-image" name="heroImage" required placeholder="img/content-studio/... or existing img/ path"><button type="button" class="asset-picker-trigger" data-asset-picker-target="tour-hero-image">Browse existing photos</button></div></div></div>
         <div class="field full"><label for="tour-hero-alt">Photo alternative text *</label><input id="tour-hero-alt" name="heroAlt" required minlength="10" maxlength="240" placeholder="Describe what the photograph actually shows"></div>
         <div class="field"><label for="tour-duration-label">Duration shown</label><input id="tour-duration-label" name="durationLabel" placeholder="e.g. Afternoon to evening"></div>
         <div class="field"><label for="tour-overnight">Overnight arrangement</label><input id="tour-overnight" name="overnight" placeholder="e.g. No; return to town"></div>
@@ -111,7 +134,7 @@
         <div class="field full"><label for="blog-seo-title">SEO title *</label><input id="blog-seo-title" name="seoTitle" required minlength="8" maxlength="180" placeholder="Search result title"></div>
         <div class="field full"><label for="blog-description">SEO description *</label><textarea id="blog-description" name="description" required minlength="40" maxlength="300" placeholder="Accurate search summary of the article."></textarea></div>
         <div class="field full"><label for="blog-lede">Article introduction *</label><textarea id="blog-lede" name="lede" required minlength="30" maxlength="700" placeholder="Explain what this guide covers and who it helps."></textarea></div>
-        <div class="field full"><div class="uploadrow"><div><label for="blog-hero-upload">Upload cover photo</label><input id="blog-hero-upload" type="file" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif" data-upload-target="blog-hero-image"><div id="blog-hero-upload-status" class="upload-status">JPG, PNG, WebP or AVIF, maximum 15 MB.</div></div><div><label for="blog-hero-image">Photo path *</label><input id="blog-hero-image" name="heroImage" required placeholder="img/content-studio/... or existing img/ path"></div></div></div>
+        <div class="field full"><div class="uploadrow"><div><label for="blog-hero-upload">Upload cover photo</label><input id="blog-hero-upload" type="file" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif" data-upload-target="blog-hero-image"><div id="blog-hero-upload-status" class="upload-status">JPG, PNG, WebP or AVIF, maximum 15 MB.</div></div><div><label for="blog-hero-image">Photo path *</label><input id="blog-hero-image" name="heroImage" required placeholder="img/content-studio/... or existing img/ path"><button type="button" class="asset-picker-trigger" data-asset-picker-target="blog-hero-image">Browse existing photos</button></div></div></div>
         <div class="field full"><label for="blog-hero-alt">Cover photo alternative text *</label><input id="blog-hero-alt" name="heroAlt" required minlength="10" maxlength="240" placeholder="Describe the image, not keywords"></div>
         <div class="field"><label for="blog-card-title">Archive card heading</label><input id="blog-card-title" name="cardTitle" maxlength="140" placeholder="Defaults to article heading"></div>
         <div class="field"><label for="blog-card-description">Archive card description</label><textarea id="blog-card-description" name="cardDescription" maxlength="260" placeholder="Short teaser; defaults to SEO description"></textarea></div>
@@ -154,7 +177,7 @@
         <div class="field full">
           <div class="uploadrow">
             <div><label for="page-hero-upload">Upload main photo</label><input id="page-hero-upload" type="file" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif" data-upload-target="page-hero-image"><div id="page-hero-upload-status" class="upload-status">JPG, PNG, WebP or AVIF, maximum 15 MB.</div></div>
-            <div><label for="page-hero-image">Photo path *</label><input id="page-hero-image" name="heroImage" required placeholder="img/content-studio/... or an existing img/ path"></div>
+            <div><label for="page-hero-image">Photo path *</label><input id="page-hero-image" name="heroImage" required placeholder="img/content-studio/... or an existing img/ path"><button type="button" class="asset-picker-trigger" data-asset-picker-target="page-hero-image">Browse existing photos</button></div>
           </div>
         </div>
         <div class="field full"><label for="page-hero-alt">Main photo alternative text *</label><input id="page-hero-alt" name="heroAlt" required minlength="10" maxlength="240" placeholder="Describe what is actually visible in the image"></div>
@@ -190,7 +213,7 @@
       <div class="grid">
         <div class="field"><label for="gallery-category">Gallery section *</label><select id="gallery-category" name="category"><option value="hotel">Fort &amp; haveli</option><option value="rooms">Rooms</option><option value="desert">Desert</option><option value="restaurant">Rooftop dining</option></select></div>
         <div class="field"><label for="gallery-status">Publication state *</label><select id="gallery-status" name="status"><option value="draft">Draft — recommended while reviewing</option><option value="live">Live locally — never public by itself</option></select><p class="hint">New or edited photos must stay Draft through Ready for review and Approved for release. Publication changes only local files.</p></div>
-        <div class="field full"><div class="uploadrow"><div><label for="gallery-upload">Choose photo *</label><input id="gallery-upload" type="file" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif" data-upload-target="gallery-src"><div id="gallery-upload-status" class="upload-status">JPG, PNG, WebP or AVIF, maximum 15 MB.</div></div><div><label for="gallery-src">Photo path *</label><input id="gallery-src" name="src" required placeholder="Upload a photo or enter an existing img/ path"></div></div></div>
+        <div class="field full"><div class="uploadrow"><div><label for="gallery-upload">Choose photo *</label><input id="gallery-upload" type="file" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif" data-upload-target="gallery-src"><div id="gallery-upload-status" class="upload-status">JPG, PNG, WebP or AVIF, maximum 15 MB.</div></div><div><label for="gallery-src">Photo path *</label><input id="gallery-src" name="src" required placeholder="Upload a photo or enter an existing img/ path"><button type="button" class="asset-picker-trigger" data-asset-picker-target="gallery-src">Browse existing photos</button></div></div></div>
         <div class="field full"><label for="gallery-alt">Alternative text *</label><input id="gallery-alt" name="alt" required minlength="10" maxlength="240" placeholder="Describe what is visible in this photograph"></div>
         <div class="field"><label for="gallery-caption">Caption</label><input id="gallery-caption" name="caption" maxlength="240" placeholder="Defaults to alternative text"></div>
         <div class="field"><label for="gallery-crop">Crop style *</label><select id="gallery-crop" name="crop"><option value="landscape">Landscape</option><option value="standard">Standard</option><option value="portrait">Portrait</option><option value="arch">Arch</option></select></div>
@@ -241,6 +264,24 @@
   <div class="result" id="optimize-result" role="status" aria-live="polite"></div>
   <p class="footnote">This editor is not a public admin page. It only listens on 127.0.0.1 and is not included in the cPanel runtime package. The one-click launcher starts the local preview and editor together; keep its Terminal window open while working, and close that window to stop both services. Save work as Draft until the facts and photos are reviewed. Content changes still need Git review, CI and the approved staging process.</p>
 </main>
+
+<dialog class="asset-picker" id="asset-picker" aria-labelledby="asset-picker-title">
+  <div class="asset-picker-inner">
+    <div class="asset-picker-head">
+      <div><p class="eyebrow">Content Studio · Photo library</p><h2 id="asset-picker-title">Choose an existing photo</h2></div>
+      <button type="button" id="asset-picker-close">Close</button>
+    </div>
+    <p class="asset-picker-intro">Choose a photo already in the website’s <code>img/</code> library. Uploaded photos appear here too. Generated responsive variants and symbolic links are excluded.</p>
+    <div class="asset-picker-search">
+      <div><label for="asset-picker-search">Search by filename or folder</label><input id="asset-picker-search" type="search" autocomplete="off" placeholder="e.g. desert, rooms, content-studio"></div>
+      <p id="asset-picker-count" role="status" aria-live="polite">Photo library not loaded.</p>
+    </div>
+    <div id="asset-library-grid" class="asset-library-grid" aria-label="Available source photos"></div>
+    <p id="asset-picker-message" class="asset-picker-message" role="status" aria-live="polite">Choose a thumbnail to use that photo.</p>
+    <div class="asset-picker-footer"><p class="hint">Selecting a different photo clears the old alternative text so you can describe the new image accurately. Alternative text remains required.</p><button type="button" id="asset-picker-cancel">Cancel</button></div>
+  </div>
+</dialog>
+
 <script>
 (function(){
   const tabs=Array.from(document.querySelectorAll('[role="tab"][data-pane]'));
@@ -273,6 +314,105 @@
     }
     return url.origin;
   }
+  const assetPicker=document.getElementById('asset-picker');
+  const assetPickerSearch=document.getElementById('asset-picker-search');
+  const assetPickerCount=document.getElementById('asset-picker-count');
+  const assetPickerMessage=document.getElementById('asset-picker-message');
+  const assetLibraryGrid=document.getElementById('asset-library-grid');
+  let assetLibrary=null;
+  let assetPickerTarget=null;
+  const assetLibraryDisplayLimit=80;
+
+  function renderAssetLibrary(){
+    const query=assetPickerSearch.value.trim().toLowerCase();
+    const matches=(assetLibrary||[]).filter(asset=>(asset.src+' '+asset.name+' '+asset.folder).toLowerCase().includes(query));
+    const shown=matches.slice(0,assetLibraryDisplayLimit);
+    let previewBase=null;
+    try{previewBase=getPreviewBase();}catch(_){}
+    assetLibraryGrid.replaceChildren();
+    assetPickerCount.textContent=matches.length+' photo'+(matches.length===1?'':'s')+' found';
+    for(const asset of shown){
+      const choice=document.createElement('button');choice.type='button';choice.className='asset-library-item';
+      choice.dataset.assetSrc=asset.src;choice.setAttribute('aria-label','Choose photo '+asset.src);
+      const thumbnail=document.createElement('img');thumbnail.alt='';thumbnail.loading='lazy';thumbnail.decoding='async';
+      if(previewBase){
+        thumbnail.src=previewBase+'/'+asset.src;
+        thumbnail.addEventListener('error',()=>{thumbnail.hidden=true;},{once:true});
+      }else{
+        thumbnail.hidden=true;
+      }
+      const name=document.createElement('strong');name.textContent=asset.name;
+      const path=document.createElement('small');path.textContent=asset.src;
+      choice.append(thumbnail,name,path);
+      choice.addEventListener('click',()=>selectLibraryPhoto(asset.src));
+      assetLibraryGrid.appendChild(choice);
+    }
+    if(!matches.length){
+      const empty=document.createElement('p');empty.className='empty-records';
+      empty.textContent=query?'No photos match this search. Try a shorter filename or folder name.':'No source photos were found under img/.';
+      assetLibraryGrid.appendChild(empty);
+    }
+    if(matches.length>shown.length){
+      assetPickerMessage.textContent='Showing '+shown.length+' of '+matches.length+' photos. Search by filename or folder to narrow the list.';
+    }else if(!previewBase){
+      assetPickerMessage.textContent='Photo paths are available, but thumbnails require the local PHP preview server. Check the preview address above.';
+    }else{
+      assetPickerMessage.textContent='Select a photo to fill the current field. Alternative text remains a separate required field.';
+    }
+  }
+
+  async function openAssetPicker(target){
+    if(!target||!target.isConnected)return;
+    assetPickerTarget=target;
+    assetPickerSearch.value='';
+    assetLibraryGrid.replaceChildren();
+    assetPickerCount.textContent='Loading…';
+    assetPickerMessage.textContent='Loading source photos from img/.';
+    if(!assetPicker.open)assetPicker.showModal();
+    try{
+      if(!assetLibrary){
+        const response=await fetch('/api/assets',{cache:'no-store'});
+        const data=await response.json();
+        if(!response.ok)throw new Error(data.error||'The photo library could not be loaded.');
+        if(!Array.isArray(data.assets))throw new Error('The photo library response was invalid.');
+        assetLibrary=data.assets;
+      }
+      renderAssetLibrary();
+      assetPickerSearch.focus();
+    }catch(error){
+      assetLibraryGrid.replaceChildren();
+      assetPickerCount.textContent='Photo library unavailable';
+      assetPickerMessage.textContent=error.message||'The photo library could not be loaded.';
+    }
+  }
+
+  function selectLibraryPhoto(src){
+    const target=assetPickerTarget;
+    if(!target||!target.isConnected){
+      assetPickerMessage.textContent='The photo field is no longer available. Close this window and choose a photo field again.';
+      return;
+    }
+    setImageFieldValue(target,src);
+    assetPicker.close();
+  }
+
+  assetPickerSearch.addEventListener('input',renderAssetLibrary);
+  document.getElementById('asset-picker-close').addEventListener('click',()=>assetPicker.close());
+  document.getElementById('asset-picker-cancel').addEventListener('click',()=>assetPicker.close());
+  assetPicker.addEventListener('close',()=>{
+    const target=assetPickerTarget;assetPickerTarget=null;
+    if(target&&target.isConnected)target.focus();
+  });
+  document.addEventListener('click',event=>{
+    const trigger=event.target.closest('[data-asset-picker-target],[data-asset-picker-section]');
+    if(!trigger)return;
+    event.preventDefault();
+    const target=trigger.dataset.assetPickerTarget
+      ?document.getElementById(trigger.dataset.assetPickerTarget)
+      :trigger.closest('.page-section-editor')?.querySelector('[data-page-field="image"]');
+    if(target)openAssetPicker(target);
+  });
+
   function setPreviewMode(mode){
     previewMode=mode==='mobile'?'mobile':'desktop';
     const frame=document.getElementById('php-preview-frame');
@@ -413,6 +553,33 @@
   addSectionButton.addEventListener('click',addBlogSection);
   addBlogSection();
 
+  function altFieldForImageTarget(target){
+    const staticAltIds={
+      'tour-hero-image':'tour-hero-alt',
+      'blog-hero-image':'blog-hero-alt',
+      'page-hero-image':'page-hero-alt',
+      'gallery-src':'gallery-alt',
+    };
+    if(staticAltIds[target.id])return document.getElementById(staticAltIds[target.id]);
+    const section=target.closest('.page-section-editor');
+    return section?section.querySelector('[data-page-field="alt"]'):null;
+  }
+
+  function setImageFieldValue(target,src){
+    const previous=target.value.trim();
+    if(previous!==src){
+      const alt=altFieldForImageTarget(target);
+      if(alt){
+        alt.value='';
+        alt.dispatchEvent(new Event('input',{bubbles:true}));
+        alt.dispatchEvent(new Event('change',{bubbles:true}));
+      }
+    }
+    target.value=src;
+    target.dispatchEvent(new Event('input',{bubbles:true}));
+    target.dispatchEvent(new Event('change',{bubbles:true}));
+  }
+
   async function handleImageUpload(input){
     const file=input.files&&input.files[0];if(!file)return;
     const status=document.getElementById(input.id.replace('-upload','-upload-status'));
@@ -423,7 +590,8 @@
     try{
       const response=await fetch('/api/upload?filename='+encodeURIComponent(file.name),{method:'POST',headers:{'Content-Type':file.type},body:file});
       const data=await response.json();if(!response.ok)throw new Error(data.error||'Upload failed');
-      target.value=data.src;target.dispatchEvent(new Event('input',{bubbles:true}));
+      setImageFieldValue(target,data.src);
+      assetLibrary=null;
       status.textContent=data.message+' Path: '+data.src;
     }catch(error){
       status.textContent=error.message;
@@ -502,6 +670,12 @@
       image.control.id=sectionId+'-image-path';
       image.control.value=values.image||'';
       image.field.className='field';
+      const imageLibraryButton=document.createElement('button');
+      imageLibraryButton.type='button';
+      imageLibraryButton.className='asset-picker-trigger';
+      imageLibraryButton.dataset.assetPickerSection='true';
+      imageLibraryButton.textContent='Browse existing photos';
+      image.field.appendChild(imageLibraryButton);
       const imageUploadWrap=document.createElement('div');imageUploadWrap.className='field full';
       const uploadRow=document.createElement('div');uploadRow.className='uploadrow';
       const uploadBox=document.createElement('div');

@@ -206,7 +206,7 @@ function respond(res, status, type, body) {
     'Cache-Control': 'no-store',
     'X-Content-Type-Options': 'nosniff',
     'Referrer-Policy': 'no-referrer',
-    'Content-Security-Policy': "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-src 'self' http://127.0.0.1:* http://localhost:*; base-uri 'none'; frame-ancestors 'none'",
+    'Content-Security-Policy': "default-src 'self'; img-src 'self' data: http://127.0.0.1:* http://localhost:*; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-src 'self' http://127.0.0.1:* http://localhost:*; base-uri 'none'; frame-ancestors 'none'",
   });
   res.end(data);
 }
@@ -380,6 +380,45 @@ function imagePath(value) {
     throw fail(400, 'Image file does not exist: ' + src);
   }
   return src;
+}
+
+function listImageAssets() {
+  assertImageDirectoryChain(IMAGE_ROOT);
+  const assets = [];
+  function walk(directory, relativeParts, depth) {
+    if (depth > 10) return;
+    const names = fs.readdirSync(directory).sort((a, b) => a.localeCompare(b));
+    for (const name of names) {
+      if (!name || name.startsWith('.')) continue;
+      const absolute = path.join(directory, name);
+      let stat;
+      try { stat = fs.lstatSync(absolute); }
+      catch (error) {
+        if (error.code === 'ENOENT') continue;
+        throw fail(500, 'Could not safely inspect the local photo library.');
+      }
+      if (stat.isSymbolicLink()) continue;
+      if (stat.isDirectory()) {
+        // Responsive derivatives are generated build output, not editable source assets.
+        if (relativeParts.length === 0 && name.toLowerCase() === 'responsive') continue;
+        walk(absolute, [...relativeParts, name], depth + 1);
+        continue;
+      }
+      if (!stat.isFile() || stat.size <= 0 || !IMAGE_TYPES[path.extname(name).toLowerCase()]) continue;
+      const src = ['img', ...relativeParts, name].join('/');
+      if (!/^img\/[A-Za-z0-9._/-]+\.(?:avif|jpe?g|png|webp)$/i.test(src)
+        || src.includes('..') || src.includes('\\')) continue;
+      assets.push({
+        src,
+        name,
+        folder: relativeParts.length ? relativeParts.join('/') : 'img',
+        bytes: stat.size,
+      });
+    }
+  }
+  walk(IMAGE_ROOT, [], 0);
+  assets.sort((a, b) => a.src.localeCompare(b.src));
+  return { count: assets.length, assets };
 }
 
 function assertStudioRouteAvailable(slug, type) {
@@ -1449,6 +1488,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) {
       return respond(res, 200, 'text/html; charset=utf-8', fs.readFileSync(UI_PATH));
     }
+    if (req.method === 'GET' && url.pathname === '/api/assets') return respondJson(res, 200, listImageAssets());
     if (req.method === 'GET' && url.pathname === '/api/status') return respondJson(res, 200, { ...statusPayload(), v2Registry: validateTemplateRegistry() });
     if (req.method === 'GET' && url.pathname === '/api/templates') return respondJson(res, 200, { templates: Object.keys(PAGE_TEMPLATE_REGISTRY).map(id => { const item = getTemplateContract(id); return { id: item.id, label: item.label, routePattern: item.routePattern, stylesheetPaths: [...item.stylesheetPaths], requiredFields: [...item.requiredFields], recordType: item.recordType }; }), managedPages: Object.entries(STUDIO_MANAGED_PAGE_REGISTRY).map(([route, page]) => ({ route, label: page.label, templateId: page.templateId, editableFields: [...page.editableFields] })) });
     if (req.method === 'POST' && url.pathname === '/api/preview') return respondJson(res, 201, createPreview(await readJson(req)));

@@ -244,6 +244,11 @@ function verifyContentStudioAuthoringUi() {
   assert.ok(html.includes('Live locally — never public by itself'), 'the UI must state that publication is local-only');
   assert.ok(html.includes('Preview PHP-rendered draft'), 'tour and blog authoring must expose the actual PHP-rendered preview');
   assert.ok(html.includes('createPageSection'), 'landing pages must use the guided reusable section builder');
+  assert.ok(html.includes('id="asset-picker"') && html.includes("fetch('/api/assets'"), 'Content Studio must expose the visual photo library and its local API');
+  for (const id of ['tour-hero-image','blog-hero-image','page-hero-image','gallery-src']) {
+    assert.ok(html.includes('data-asset-picker-target="' + id + '"'), 'visual photo selection should be available for image field: ' + id);
+  }
+  assert.ok(html.includes('data-asset-picker-section'), 'dynamically added image/text sections should support visual photo selection');
   assert.ok(html.includes('type:\'landing-page\'' ) || html.includes('data-pane="pages"'), 'landing-page authoring must be exposed in Content Studio');
   assert.ok(html.includes('Approved for release'), 'the UI must explain release approval separately from publication');
   process.stdout.write('PASS Content Studio UI script syntax and nontechnical guided authoring controls.\\n');
@@ -330,6 +335,17 @@ async function main() {
   const studioCsp = studioReadyResponse.headers.get('content-security-policy') || '';
   assert.match(studioCsp, /frame-src[^;]*http:\/\/127\.0\.0\.1:\*[^;]*http:\/\/localhost:\*/,
     'Content Studio must allow its validated loopback PHP preview port in frames while keeping other origins blocked.');
+  assert.match(studioCsp, /img-src[^;]*http:\/\/127\.0\.0\.1:\*[^;]*http:\/\/localhost:\*/,
+    'photo-library thumbnails must be allowed from the validated loopback PHP preview without opening external image origins.');
+  const assetLibraryResponse = await fetch(STUDIO_URL + '/api/assets', { cache: 'no-store' });
+  assert.equal(assetLibraryResponse.status, 200, 'the visual photo library endpoint should be available locally');
+  const assetLibrary = await assetLibraryResponse.json();
+  assert.ok(assetLibrary.count > 0 && assetLibrary.assets.length === assetLibrary.count, 'the photo library should return an accurate source-photo inventory');
+  assert.ok(assetLibrary.assets.some(asset => asset.src === 'img/desert3.jpg'), 'the photo library should include a known existing website photograph');
+  assert.ok(assetLibrary.assets.every(asset => /^img\/[A-Za-z0-9._/-]+\.(?:avif|jpe?g|png|webp)$/i.test(asset.src)
+    && !asset.src.includes('..') && !asset.src.includes('\\') && Number.isInteger(asset.bytes) && asset.bytes > 0),
+    'photo-library entries must be normalized, supported raster assets under img/ with positive file size');
+  assert.ok(!assetLibrary.assets.some(asset => asset.src.startsWith('img/responsive/')), 'generated responsive derivatives must not appear as editable source photos');
 
   phpServer = start('php', ['-S', '127.0.0.1:' + PHP_PORT, '-t', ROOT], {}, s => { phpOutput += s; }, s => { phpErrors += s; });
   await waitFor(PHP_URL + '/blog.php', phpServer, 'PHP preview server');
@@ -773,6 +789,11 @@ async function main() {
   assert.ok(!fs.existsSync(unsafeImageLink), 'refusing to overwrite a pre-existing image-path safety fixture');
   fs.symlinkSync(path.join(ROOT, 'img/Desert_Camp'), unsafeImageLink, 'dir');
   try {
+    const symlinkLibraryResponse = await fetch(STUDIO_URL + '/api/assets', { cache: 'no-store' });
+    assert.equal(symlinkLibraryResponse.status, 200);
+    const symlinkLibrary = await symlinkLibraryResponse.json();
+    assert.ok(!symlinkLibrary.assets.some(asset => asset.src.startsWith('img/content-studio-ci-symlink/')),
+      'the photo library must never traverse or list content behind a symbolic-link directory');
     const symlinkImage = await requestJson(STUDIO_URL + '/api/gallery', 'POST', {
       category: 'hotel', status: 'draft', src: 'img/content-studio-ci-symlink/Tent.jpeg',
       alt: 'A test path that traverses a symlinked image directory', crop: 'landscape',

@@ -6,27 +6,26 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-20 |
-| Current phase | Sprint 53 — saved Content Studio management |
-| Verified main SHA | ed75f9856e9e84b6c483ce637b28fba0f409066c (PR #109 merge commit) |
-| Latest merged PR | [#109 — one-click local Content Studio launcher](https://github.com/tchouhanjsm/garh-jaisal-website/pull/109) |
-| Main Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39393437203) |
-| Main package preflight/build | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39393437165); package artifact only |
-| Main non-deploying Staging QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39393437166); not external-host validation |
-| Main Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39393437265); exact merge SHA |
-| Recent merged work | PR #107 photo-led entry/mobile actions; #108 Content Studio authoring; #109 one-click local startup |
-| Active phase PR | [#110 — manage saved Content Studio content safely](https://github.com/tchouhanjsm/garh-jaisal-website/pull/110); exact-head CI pending |
-| Feature branch | feat/content-studio-draft-manager-20261020 |
+| Last updated | 2026-10-22 |
+| Current phase | Sprint 54 — visual photo library for local Content Studio |
+| Verified main SHA | 2a1797b40716a71ff9ab4b1c3d6e5c6e1d2773dc (PR #115 merge commit) |
+| Latest merged PR | [#115 — keep unapproved landing pages private](https://github.com/tchouhanjsm/garh-jaisal-website/pull/115) |
+| Main Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39733975303) |
+| PR #115 Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39732186406); exact feature head |
+| PR #115 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39732186351); artifact only |
+| PR #115 non-deploying QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39732186373); not external-host validation |
+| Recent merged work | PR #114 Landing Page Builder; #115 public Draft route guard |
+| Active phase branch | `feat/content-studio-visual-photo-library-20261022`; exact-head CI pending |
 
 ## Current phase
 
-**Sprint 53 goal:** let non-developers reopen, edit, publish locally, unpublish and safely delete Content Studio records without editing JSON manually.
+**Sprint 54 goal:** let hotel staff visually find and reuse existing source photos without needing to know or type repository file paths.
 
-- The manager lists only Content Studio JSON overlays. Legacy PHP registry pages are deliberately read-only.
-- Editing keeps existing public slugs, preserves blog publication dates and retains custom registry fields that the form does not expose.
-- Publishing/unpublishing updates the record and sitemap consistently. Hidden records and externally modified route wrappers are protected; live records must be made Draft before deletion.
-- Draft deletion removes only the overlay record and the generated wrapper, retaining source images. Image/content directory symlinks are rejected; failed saves roll back record, sitemap and image-manifest state.
-- Acceptance is pending until Site Checks on PHP 7.4/8.2, package preflight, non-deploying Staging QA and full Browser E2E pass on PR #110's exact head.
+- Add a local-only `GET /api/assets` inventory with supported raster types, normalized `img/...` paths and file sizes.
+- Exclude generated responsive derivatives, hidden files and symbolic-link paths; keep the local-only loopback boundary and safe image CSP.
+- Reuse one accessible photo picker for tour/blog/landing-page/Gallery hero fields and dynamic landing-page image/text sections.
+- Keep alternative text independent and required; picking a photo never publishes, changes metadata, alters source photos or deploys.
+- Acceptance is pending until PHP 7.4/8.2 Site Checks, strict image/sitemap checks, package preflight, non-deploying QA and complete Browser E2E pass on the exact PR head.
 
 ## Remaining blockers
 
