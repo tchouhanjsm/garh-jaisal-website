@@ -612,7 +612,12 @@ async function main() {
   html = await response.text();
   assert.ok(html.includes('Content Studio Landing Page Integration Test'));
   assert.ok(html.includes('A reusable image-and-text block'));
-  assert.ok(html.includes('<h2>Plan your visit</h2>') && html.includes('<h2>A closer look</h2>') && html.includes('<h2>Useful details</h2>'), 'published page must render each authored block heading');
+  const renderedSectionHeadings = Array.from(html.matchAll(/<h2\b[^>]*>([\s\S]*?)<\/h2>/gi), match => match[1].replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').trim());
+  assert.ok(
+    ['Plan your visit', 'A closer look', 'Useful details'].every(heading => renderedSectionHeadings.includes(heading)),
+    'published page must render each authored block heading; observed: ' + JSON.stringify(renderedSectionHeadings),
+  );
+  assert.doesNotMatch(phpErrors, /Unknown modifier|preg_match\(\):/, 'landing renderer must not emit PHP regex warnings');
   assert.ok(html.includes('Confirm current arrangements'));
   assert.ok(html.includes('css/page-builder.css') && html.includes('css/pages/' + pageSlug + '.css'));
   assert.doesNotMatch(html, /noindex,follow/, 'released landing page should be indexable');
