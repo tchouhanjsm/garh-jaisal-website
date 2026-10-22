@@ -97,12 +97,14 @@ function createProxyServer() {
     }
 
     if (!isAllowedRequest(request.method, request.url)) {
+      process.stderr.write('[npm audit proxy] Rejected route: method=' + request.method + ', path=' + request.url + '\\n');
       jsonResponse(response, 404, 'Only the npm bulk-advisory POST route is supported by this local CI proxy.');
       return;
     }
 
     const contentType = String(request.headers['content-type'] || '').toLowerCase();
     if (!contentType.includes('application/json')) {
+      process.stderr.write('[npm audit proxy] Rejected bulk request content type: ' + (contentType || '<missing>') + '\\n');
       jsonResponse(response, 415, 'The npm bulk-advisory request must be JSON.');
       return;
     }
@@ -129,12 +131,14 @@ function createProxyServer() {
     request.on('end', () => {
       if (finished || response.writableEnded) return;
       const body = Buffer.concat(chunks);
+      process.stderr.write('[npm audit proxy] Bulk request body bytes=' + body.length + '\\n');
       try {
         const payload = JSON.parse(body.toString('utf8'));
         if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
           throw new Error('Expected an object');
         }
-      } catch (_) {
+      } catch (error) {
+        process.stderr.write('[npm audit proxy] Invalid bulk request JSON: ' + error.message + '\\n');
         jsonResponse(response, 400, 'The npm bulk-advisory request was not a valid JSON object.');
         return;
       }
