@@ -41,7 +41,7 @@ $studioPageEscape = static function ($value) {
 };
 $studioPageHref = static function ($value) {
     $href = trim((string) $value);
-    if ($href === '/' || preg_match('#^/[a-z0-9-]+\.php(?:#[a-z0-9-]+)?$#D', $href) || preg_match('/^#[a-z0-9][a-z0-9-]*$/D', $href)) {
+    if ($href === '/' || preg_match('~^/[a-z0-9-]+\.php(?:#[a-z0-9-]+)?$~D', $href) || preg_match('/^#[a-z0-9][a-z0-9-]*$/D', $href)) {
         return $href;
     }
     return '';
