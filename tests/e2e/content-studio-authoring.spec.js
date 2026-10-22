@@ -419,6 +419,9 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await expect(pageCard).toContainText('DRAFT');
     await expect(pageCard).toContainText('REVIEW: DRAFT');
     expect(fs.readFileSync(sitemapPath, 'utf8')).not.toContain('/' + pageSlug + '.php</loc>');
+    const draftPageResponse = await fetch(phpPreview + '/' + pageSlug + '.php');
+    expect(draftPageResponse.status).toBe(404);
+    expect(await draftPageResponse.text()).not.toContain('Browser UI test landing page revised');
 
     await pageCard.getByRole('button', { name: 'Ready for review' }).click();
     await pageCard.getByRole('button', { name: 'Approve for release' }).click();
