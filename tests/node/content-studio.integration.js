@@ -383,6 +383,7 @@ async function main() {
   html = await response.text();
   assert.ok(html.includes('Content Studio Landing Page Integration Test'), 'landing preview should render its authored H1');
   assert.ok(html.includes('Plan your visit') && html.includes('Common questions'), 'landing preview should render the authored content blocks');
+  assert.ok(html.includes('<h2>Plan your visit</h2>') && html.includes('<h2>Common questions</h2>'), 'landing preview must render authored section headings, not only their body content');
   assert.ok(html.includes('css/page-builder.css') && html.includes('css/pages/' + landingPreviewSlug + '.css'), 'landing preview should use shared CSS and the generated page token CSS');
   assert.match(html, /noindex,follow/, 'unsaved landing-page preview must be non-indexable');
   cleanupResponse = await requestJson(STUDIO_URL + '/api/preview/cleanup', 'POST', { token: landingPreviewToken });
@@ -611,6 +612,7 @@ async function main() {
   html = await response.text();
   assert.ok(html.includes('Content Studio Landing Page Integration Test'));
   assert.ok(html.includes('A reusable image-and-text block'));
+  assert.ok(html.includes('<h2>Plan your visit</h2>') && html.includes('<h2>A closer look</h2>') && html.includes('<h2>Useful details</h2>'), 'published page must render each authored block heading');
   assert.ok(html.includes('Confirm current arrangements'));
   assert.ok(html.includes('css/page-builder.css') && html.includes('css/pages/' + pageSlug + '.css'));
   assert.doesNotMatch(html, /noindex,follow/, 'released landing page should be indexable');
