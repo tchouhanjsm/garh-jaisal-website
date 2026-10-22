@@ -23,13 +23,19 @@ const recordFiles = [
   path.join(ROOT, 'content/experiences/' + slugs[1] + '.json'),
   path.join(ROOT, 'content/editorial/' + slugs[2] + '.json'),
 ];
+const pageSlug = 'content-studio-ci-landing-page';
+const pageRouteFile = path.join(ROOT, pageSlug + '.php');
+const pageRecordFile = path.join(ROOT, 'content/pages/' + pageSlug + '.json');
+const pageCssDirectory = path.join(ROOT, 'css/pages');
+const pageCssFile = path.join(pageCssDirectory, pageSlug + '.css');
+const existedPageCssDirectory = fs.existsSync(pageCssDirectory);
 const galleryDir = path.join(ROOT, 'content/gallery');
 const galleryPrefix = 'content-studio-ci-photo-';
 const sitemapPath = path.join(ROOT, 'sitemap.xml');
 const originalSitemap = fs.readFileSync(sitemapPath);
 const responsiveManifestPath = path.join(ROOT, 'scripts/responsive-image-assets-manifest.json');
 const originalResponsiveManifest = fs.readFileSync(responsiveManifestPath);
-const contentDirs = ['content/experiences', 'content/editorial', 'content/gallery'].map(p => path.join(ROOT, p));
+const contentDirs = ['content/experiences', 'content/editorial', 'content/gallery', 'content/pages'].map(p => path.join(ROOT, p));
 const existedDirectories = new Map(contentDirs.map(dir => [dir, fs.existsSync(dir)]));
 let galleryRecordPath = null;
 const ownedPaths = new Set();
@@ -42,7 +48,7 @@ let phpOutput = '';
 let phpErrors = '';
 
 function noExistingFixtures() {
-  for (const file of [...routeFiles, ...recordFiles]) {
+  for (const file of [...routeFiles, ...recordFiles, pageRouteFile, pageRecordFile, pageCssFile]) {
     let occupied = false;
     try {
       fs.lstatSync(file);
@@ -117,6 +123,31 @@ function requestStatusWithHost(url, host) {
   });
 }
 
+function landingPagePayload(slug, theme = 'heritage') {
+  return {
+    h1: 'Content Studio Landing Page Integration Test',
+    slug,
+    status: 'draft',
+    seoTitle: 'Content Studio Landing Page Integration Test',
+    description: 'A temporary landing page used to validate the reusable design and publication workflow.',
+    eyebrow: 'Integration test',
+    theme,
+    heroLayout: 'split',
+    heroIntro: 'A temporary landing page introduction used to confirm the real shared PHP renderer.',
+    heroImage: 'img/desert3.jpg',
+    heroAlt: 'Camel riders travelling over dunes near Jaisalmer',
+    heroCtaLabel: 'Contact the hotel',
+    heroCtaHref: '/contact.php',
+    sections: JSON.stringify([
+      { type: 'intro', id: 'plan-your-visit', heading: 'Plan your visit', body: 'This temporary introduction confirms that authored plain text is rendered through a safe page section.' },
+      { type: 'image_text', id: 'a-closer-look', heading: 'A closer look', body: 'A reusable image-and-text block keeps the page consistent with the site design.', image: 'img/desert12.jpg', alt: 'A curated Jaisalmer destination photograph', image_side: 'right', link_label: 'Explore the rooms', link_href: '/room.php' },
+      { type: 'feature_list', id: 'what-to-know', heading: 'What to know', items: ['Confirm current arrangements', 'Check details for your travel date'] },
+      { type: 'faq', id: 'common-questions', heading: 'Common questions', items: [{ question: 'What should guests confirm?', answer: 'Ask the hotel to confirm current details before departure.' }] },
+      { type: 'cta', id: 'next-step', heading: 'Plan the next step', body: 'Contact the hotel to discuss the requirements for your selected dates.', button_label: 'Contact the hotel', button_href: '/contact.php' },
+    ]),
+  };
+}
+
 function tourPayload(slug, status) {
   return {
     title: slug === slugs[0] ? 'Content Studio Integration Test Tour' : 'Content Studio Draft Test Tour',
@@ -150,7 +181,9 @@ function verifyV2TemplateAndAssetRegistry() {
     const contract = api.getTemplateContract(templateId);
     assert.ok(contract.renderer.endsWith('.php'), 'registered renderers must remain PHP templates');
   }
-  assert.equal(result.templateCount, 2, 'only explicit renderer-backed templates should be available');
+  assert.equal(result.templateCount, 3, 'only explicit renderer-backed templates should be available');
+  assert.deepEqual(Array.from(api.getTemplateContract('landing-page').stylesheetPaths), ['css/garh-v2.css', 'css/page-builder.css']);
+  assert.ok(api.getTemplateContract('landing-page').requiredFields.includes('sections'), 'landing-page schema must include controlled sections');
   assert.equal(result.managedPageCount, 4, 'known routes should be registered for supported-field editing');
   assert.deepEqual(Array.from(api.getTemplateContract('experience-detail').stylesheetPaths), ['css/garh-v2.css', 'css/experiences.css', 'css/thar-sunset-story.css']);
   assert.deepEqual(Array.from(api.getTemplateContract('editorial-guide').stylesheetPaths), ['css/garh-v2.css', 'css/article.css', 'css/thar-sunset-story.css']);
@@ -197,7 +230,7 @@ function verifyContentStudioAuthoringUi() {
   scripts.forEach((match, index) => {
     new vm.Script(match[1], { filename: 'tools/content-studio/index.html inline script ' + (index + 1) });
   });
-  for (const id of ['blog-section-list', 'tour-step-list', 'tour-faq-list', 'blog-source-list', 'managed-content-list', 'refresh-content']) {
+  for (const id of ['blog-section-list', 'tour-step-list', 'tour-faq-list', 'blog-source-list', 'page-form', 'page-section-list', 'page-add-section', 'page-preview', 'managed-content-list', 'refresh-content']) {
     assert.ok(html.includes('id="' + id + '"'), 'guided authoring control should exist: ' + id);
   }
   assert.ok(html.includes('id="tab-manage"'), 'saved content manager tab should exist');
@@ -208,6 +241,8 @@ function verifyContentStudioAuthoringUi() {
   assert.ok(html.includes('Four steps to add content'), 'the editor should explain the workflow in plain language');
   assert.ok(html.includes('Live locally — never public by itself'), 'the UI must state that publication is local-only');
   assert.ok(html.includes('Preview PHP-rendered draft'), 'tour and blog authoring must expose the actual PHP-rendered preview');
+  assert.ok(html.includes('createPageSection'), 'landing pages must use the guided reusable section builder');
+  assert.ok(html.includes('type:\'landing-page\'' ) || html.includes('data-pane="pages"'), 'landing-page authoring must be exposed in Content Studio');
   assert.ok(html.includes('Approved for release'), 'the UI must explain release approval separately from publication');
   process.stdout.write('PASS Content Studio UI script syntax and nontechnical guided authoring controls.\\n');
 }
