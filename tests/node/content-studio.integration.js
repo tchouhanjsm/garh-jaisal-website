@@ -29,6 +29,8 @@ const pageRecordFile = path.join(ROOT, 'content/pages/' + pageSlug + '.json');
 const pageCssDirectory = path.join(ROOT, 'css/pages');
 const pageCssFile = path.join(pageCssDirectory, pageSlug + '.css');
 const existedPageCssDirectory = fs.existsSync(pageCssDirectory);
+const uploadedImageDirectory = path.join(ROOT, 'img/content-studio');
+const existedUploadedImageDirectory = fs.existsSync(uploadedImageDirectory);
 const galleryDir = path.join(ROOT, 'content/gallery');
 const galleryPrefix = 'content-studio-ci-photo-';
 const sitemapPath = path.join(ROOT, 'sitemap.xml');
@@ -748,6 +750,20 @@ async function main() {
   });
   assert.equal(badUpload.status, 400, 'invalid image bytes should be rejected');
 
+  // The happy path must persist the exact image bytes and register the safe, generated path.
+  const sourceImageBytes = fs.readFileSync(path.join(ROOT, 'img/desert12.jpg'));
+  const validUpload = await fetch(STUDIO_URL + '/api/upload?filename=integration-upload.jpg', {
+    method: 'POST', headers: { 'Content-Type': 'image/jpeg' }, body: sourceImageBytes,
+  });
+  assert.equal(validUpload.status, 201, 'a valid JPEG should upload successfully');
+  const validUploadBody = await validUpload.json();
+  assert.match(validUploadBody.src, /^img\/content-studio\/[a-z0-9]+-[a-f0-9]{8}-integration-upload\.jpg$/);
+  const validUploadPath = path.join(ROOT, validUploadBody.src);
+  ownedPaths.add(validUploadPath);
+  assert.ok(fs.existsSync(validUploadPath), 'successful image upload must create the generated file');
+  assert.deepEqual(fs.readFileSync(validUploadPath), sourceImageBytes, 'upload must preserve the validated source bytes');
+  assert.ok(fs.readFileSync(responsiveManifestPath, 'utf8').includes(validUploadBody.src), 'uploaded image must be registered in the responsive image manifest');
+
   // A symlinked image directory must be rejected even if the final image file exists behind it.
   const unsafeImageLink = path.join(ROOT, 'img/content-studio-ci-symlink');
   assert.ok(!fs.existsSync(unsafeImageLink), 'refusing to overwrite a pre-existing image-path safety fixture');
@@ -788,6 +804,11 @@ main()
           if (fs.existsSync(dir) && fs.readdirSync(dir).length === 0) fs.rmdirSync(dir);
         } catch (_) {}
       }
+    }
+    if (!existedUploadedImageDirectory) {
+      try {
+        if (fs.existsSync(uploadedImageDirectory) && fs.readdirSync(uploadedImageDirectory).length === 0) fs.rmdirSync(uploadedImageDirectory);
+      } catch (_) {}
     }
     if (!existedPageCssDirectory) {
       try {
