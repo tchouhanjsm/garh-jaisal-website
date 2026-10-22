@@ -225,7 +225,10 @@ async function runAudit() {
     '--registry=http://' + HOST + ':' + PORT,
   ], { stdio: 'inherit' });
 
+  let finished = false;
   const finish = async code => {
+    if (finished) return;
+    finished = true;
     await new Promise(resolve => server.close(resolve));
     process.exitCode = Number.isInteger(code) ? code : 1;
   };
