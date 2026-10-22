@@ -162,10 +162,18 @@ function createProxyServer() {
         upstreamResponse.on('end', () => {
           if (overflow || response.writableEnded) return;
           try {
+            const rawBody = Buffer.concat(responseChunks);
+            process.stderr.write(
+              '[npm audit proxy] Upstream bulk response: status=' + String(upstreamResponse.statusCode || 502)
+              + ', bytes=' + String(rawBody.length)
+              + ', content-encoding=' + String(upstreamResponse.headers['content-encoding'] || '<missing>')
+              + ', content-type=' + String(upstreamResponse.headers['content-type'] || '<missing>')
+              + ', gzip-magic=' + String(hasGzipSignature(rawBody)) + '\n',
+            );
             const normalized = normalizeAdvisoryResponse(
               upstreamResponse.statusCode || 502,
               upstreamResponse.headers,
-              Buffer.concat(responseChunks),
+              rawBody,
             );
             if (normalized.correctedMissingEncoding) {
               process.stderr.write('[npm audit proxy] Corrected an npm registry gzip response missing Content-Encoding.\n');
