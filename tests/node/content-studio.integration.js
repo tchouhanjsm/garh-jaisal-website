@@ -182,7 +182,7 @@ function verifyV2TemplateAndAssetRegistry() {
     assert.ok(contract.renderer.endsWith('.php'), 'registered renderers must remain PHP templates');
   }
   assert.equal(result.templateCount, 3, 'only explicit renderer-backed templates should be available');
-  assert.deepEqual(Array.from(api.getTemplateContract('landing-page').stylesheetPaths), ['css/garh-v2.css', 'css/page-builder.css']);
+  assert.deepEqual(Array.from(api.getTemplateContract('landing-page').stylesheetPaths), ['css/garh-v2.css', 'css/page-builder.css', 'css/thar-sunset-story.css']);
   assert.ok(api.getTemplateContract('landing-page').requiredFields.includes('sections'), 'landing-page schema must include controlled sections');
   assert.equal(result.managedPageCount, 4, 'known routes should be registered for supported-field editing');
   assert.deepEqual(Array.from(api.getTemplateContract('experience-detail').stylesheetPaths), ['css/garh-v2.css', 'css/experiences.css', 'css/thar-sunset-story.css']);
@@ -581,6 +581,14 @@ async function main() {
   result = await requestJson(STUDIO_URL + '/api/pages', 'POST', unsafeSectionPage);
   assert.equal(result.response.status, 400, 'arbitrary section types/HTML must be rejected');
   assert.ok(!fs.existsSync(pageRouteFile) && !fs.existsSync(pageRecordFile), 'invalid section payload must not create page artifacts');
+  const unsafeLinkPage = landingPagePayload(pageSlug);
+  unsafeLinkPage.sections = JSON.stringify([{ type: 'cta', heading: 'Unsafe link test', body: 'The renderer must never allow an external destination here.', button_label: 'Visit external site', button_href: 'https://example.com/' }]);
+  result = await requestJson(STUDIO_URL + '/api/pages', 'POST', unsafeLinkPage);
+  assert.equal(result.response.status, 400, 'external links must be rejected by landing-page input validation');
+  unsafeLinkPage.sections = JSON.stringify([{ type: 'cta', heading: 'Unsafe link test', body: 'The renderer must never allow a script destination here.', button_label: 'Run script', button_href: 'javascript:alert(1)' }]);
+  result = await requestJson(STUDIO_URL + '/api/pages', 'POST', unsafeLinkPage);
+  assert.equal(result.response.status, 400, 'script URLs must be rejected by landing-page input validation');
+  assert.ok(!fs.existsSync(pageRouteFile) && !fs.existsSync(pageRecordFile), 'rejected links must not create page artifacts');
 
   result = await requestJson(STUDIO_URL + '/api/pages', 'POST', landingPagePayload(pageSlug));
   assert.equal(result.response.status, 201, 'landing-page Draft should be created: ' + JSON.stringify(result.body));
@@ -619,7 +627,9 @@ async function main() {
   );
   assert.doesNotMatch(phpErrors, /Unknown modifier|preg_match\(\):/, 'landing renderer must not emit PHP regex warnings');
   assert.ok(html.includes('Confirm current arrangements'));
-  assert.ok(html.includes('css/page-builder.css') && html.includes('css/pages/' + pageSlug + '.css'));
+  assert.match(html, /studio-page-image-text[^>]*>[\s\S]{0,2500}href="\/room\.php"/, 'approved section links should retain local page destinations');
+  assert.match(html, /studio-page-cta[^>]*>[\s\S]{0,1500}href="\/contact\.php"/, 'CTA links should retain approved local routes');
+  assert.ok(html.includes('css/page-builder.css') && html.includes('css/thar-sunset-story.css') && html.includes('css/pages/' + pageSlug + '.css'));
   assert.doesNotMatch(html, /noindex,follow/, 'released landing page should be indexable');
   assert.ok(html.includes('og:title') && html.includes('application/ld+json'), 'landing page must retain site SEO metadata and structured schema');
 
