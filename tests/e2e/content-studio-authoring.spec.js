@@ -133,6 +133,8 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
 
     // Blog form: section and source builders create the format the server expects.
     await page.getByRole('tab', { name: 'Add a blog' }).click();
+    await expect(page.locator('#pane-blog')).toBeVisible();
+    await expect(page.locator('#blog-preview')).toBeVisible();
     await page.locator('#blog-h1').fill('Browser UI test travel guide');
     await page.locator('#blog-slug').fill(blogSlug);
     await page.locator('#blog-seo-title').fill('Browser UI test travel guide');
@@ -158,7 +160,7 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await source.locator('[data-key="url"]').fill('https://www.incredibleindia.gov.in/');
 
     const blogPreviewResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/preview' && response.request().method() === 'POST');
-    await page.getByRole('button', { name: 'Preview PHP-rendered draft' }).nth(1).click();
+    await page.locator('#blog-preview').click();
     const blogPreviewResponse = await blogPreviewResponsePromise;
     expect(blogPreviewResponse.status()).toBe(201);
     const blogPreviewFrame = page.frameLocator('#php-preview-frame');
