@@ -598,6 +598,10 @@ async function main() {
   assert.ok(fs.existsSync(pageRouteFile), 'landing page wrapper should be generated from the trusted renderer');
   assert.ok(fs.existsSync(pageRecordFile), 'landing page JSON should be persisted');
   assert.ok(fs.existsSync(pageCssFile), 'landing page token CSS should be generated');
+  response = await fetch(PHP_URL + '/' + pageSlug + '.php');
+  assert.equal(response.status, 404, 'a new landing-page Draft must be blocked at its public route before review');
+  html = await response.text();
+  assert.doesNotMatch(html, /Content Studio Landing Page Integration Test/, 'public Draft route must not disclose the page title');
   let pageRecord = JSON.parse(fs.readFileSync(pageRecordFile, 'utf8'));
   assert.equal(pageRecord.status, 'draft');
   assert.equal(pageRecord.review_status, 'draft');
@@ -649,8 +653,8 @@ async function main() {
   assert.ok(!fs.readFileSync(sitemapPath, 'utf8').includes('/' + pageSlug + '.php</loc>'), 'edited landing Draft must be removed from sitemap');
   response = await fetch(PHP_URL + '/' + pageSlug + '.php');
   html = await response.text();
-  assert.ok(html.includes('Content Studio Landing Page Revised'));
-  assert.match(html, /noindex,follow/, 'edited landing page remains non-indexable until re-approved');
+  assert.equal(response.status, 404, 'a landing-page Draft must not be retrievable through its public slug route');
+  assert.doesNotMatch(html, /Content Studio Landing Page Revised/, 'public Draft response must not reveal authored content');
 
   await transitionReview('pages', pageSlug, 'ready_for_review');
   await transitionReview('pages', pageSlug, 'approved_for_release');
