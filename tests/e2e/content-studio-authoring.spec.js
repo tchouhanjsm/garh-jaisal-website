@@ -16,6 +16,8 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
   const pageSlug = 'content-studio-ui-page-' + suffix;
   const pageCssDirectory = path.join(root, 'css/pages');
   const existedPageCssDirectory = fs.existsSync(pageCssDirectory);
+  const uploadedImageDirectory = path.join(root, 'img/content-studio');
+  const existedUploadedImageDirectory = fs.existsSync(uploadedImageDirectory);
   const pageRoute = path.join(root, pageSlug + '.php');
   const pageRecord = path.join(root, 'content/pages/' + pageSlug + '.json');
   const pageCss = path.join(pageCssDirectory, pageSlug + '.css');
@@ -211,13 +213,28 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     let pageSection = page.locator('#page-section-list .page-section-editor').nth(0);
     await pageSection.locator('[data-page-field="heading"]').fill('Plan your visit');
     await pageSection.locator('[data-page-field="body"]').fill('Use this temporary content block to validate the text introduction layout and the final rendered page.');
-    await page.locator('#page-section-type').selectOption('feature_list');
+    await page.locator('#page-section-type').selectOption('image_text');
     await page.locator('#page-add-section').click();
     pageSection = page.locator('#page-section-list .page-section-editor').nth(1);
+    await pageSection.locator('[data-page-field="heading"]').fill('A closer look');
+    await pageSection.locator('[data-page-field="body"]').fill('A reusable photo and text block lets the team explain another part of the stay without changing the site design.');
+    await pageSection.locator('[data-page-field="alt"]').fill('A sandstone desert scene near Jaisalmer');
+    const sectionUploadResponsePromise = page.waitForResponse(response => response.url().includes('/api/upload?filename=') && response.request().method() === 'POST');
+    await pageSection.locator('input[type="file"][data-upload-target]').setInputFiles(path.join(root, 'img/desert12.jpg'));
+    const sectionUploadResponse = await sectionUploadResponsePromise;
+    expect(sectionUploadResponse.status()).toBe(201);
+    const sectionUpload = await sectionUploadResponse.json();
+    ownedPaths.push(path.join(root, sectionUpload.src));
+    await expect(pageSection.locator('[data-page-field="image"]')).toHaveValue(sectionUpload.src);
+
+    await page.locator('#page-section-type').selectOption('feature_list');
+    await page.locator('#page-add-section').click();
+    pageSection = page.locator('#page-section-list .page-section-editor').nth(2);
     await pageSection.locator('[data-page-field="heading"]').fill('Useful details');
     await pageSection.locator('[data-page-field="items"]').fill('Confirm current arrangements\nReview details for your selected date');
     await expect(page.locator('#page-outline-preview')).toContainText('Plan your visit');
     await expect(page.locator('#page-outline-preview')).toContainText('2 feature item(s)');
+    expect(JSON.parse(await page.locator('#page-sections').inputValue())).toHaveLength(3);
     expect(await page.locator('#page-sections').inputValue()).toContain('"type":"feature_list"');
 
     const pagePreviewRequestPromise = page.waitForRequest(request => request.url() === studioUrl + '/api/preview' && request.method() === 'POST');
@@ -433,6 +450,11 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     if (!existedPageCssDirectory) {
       try {
         if (fs.existsSync(pageCssDirectory) && fs.readdirSync(pageCssDirectory).length === 0) fs.rmdirSync(pageCssDirectory);
+      } catch (_) {}
+    }
+    if (!existedUploadedImageDirectory) {
+      try {
+        if (fs.existsSync(uploadedImageDirectory) && fs.readdirSync(uploadedImageDirectory).length === 0) fs.rmdirSync(uploadedImageDirectory);
       } catch (_) {}
     }
   }
