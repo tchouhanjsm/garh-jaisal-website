@@ -413,11 +413,29 @@
   addSectionButton.addEventListener('click',addBlogSection);
   addBlogSection();
 
+  async function handleImageUpload(input){
+    const file=input.files&&input.files[0];if(!file)return;
+    const status=document.getElementById(input.id.replace('-upload','-upload-status'));
+    const target=document.getElementById(input.dataset.uploadTarget);
+    if(!status||!target){show('page-result','The image upload control is not connected to a page field.',false);return;}
+    status.textContent='Uploading and validating the image…';
+    input.disabled=true;
+    try{
+      const response=await fetch('/api/upload?filename='+encodeURIComponent(file.name),{method:'POST',headers:{'Content-Type':file.type},body:file});
+      const data=await response.json();if(!response.ok)throw new Error(data.error||'Upload failed');
+      target.value=data.src;target.dispatchEvent(new Event('input',{bubbles:true}));
+      status.textContent=data.message+' Path: '+data.src;
+    }catch(error){
+      status.textContent=error.message;
+    }finally{input.disabled=false;}
+  }
+
   const pageSectionList=document.getElementById('page-section-list');
   const pageSectionType=document.getElementById('page-section-type');
   const pageSectionAdd=document.getElementById('page-add-section');
   const pageOutline=document.getElementById('page-outline-preview');
   const pageSectionLimit=20;
+  let pageSectionSequence=0;
 
   function pageField(labelText,key,tag,minLength,maxLength,placeholder,required=true){
     const field=document.createElement('div');field.className='field full';
@@ -467,6 +485,8 @@
     const currentCount=pageSectionList.querySelectorAll('.page-section-editor').length;
     if(currentCount>=pageSectionLimit)return null;
     const card=document.createElement('fieldset');card.className='section-editor page-section-editor';card.dataset.sectionType=type;
+    const sectionId='page-section-'+(++pageSectionSequence);
+    card.dataset.sectionId=sectionId;
     pageSectionHeader(card,type);
     const heading=pageField('Section heading *','heading','input',2,140,'e.g. A thoughtful stay inside the Fort',true);
     heading.control.value=values.heading||'';
@@ -478,8 +498,23 @@
     }else if(type==='image_text'){
       const body=pageField('Section text *','body','textarea',20,4000,'Explain this photo or feature in plain language.',true);
       body.control.value=values.body||'';
-      const image=pageField('Photo path *','image','input',8,240,'img/your-existing-photo.jpg',true);
+      const image=pageField('Photo path *','image','input',8,240,'Upload a photo or enter an existing img/ path.',true);
+      image.control.id=sectionId+'-image-path';
       image.control.value=values.image||'';
+      image.field.className='field';
+      const imageUploadWrap=document.createElement('div');imageUploadWrap.className='field full';
+      const uploadRow=document.createElement('div');uploadRow.className='uploadrow';
+      const uploadBox=document.createElement('div');
+      const uploadLabel=document.createElement('label');uploadLabel.htmlFor=sectionId+'-image-upload';uploadLabel.textContent='Upload section photo';
+      const upload=document.createElement('input');upload.type='file';upload.id=sectionId+'-image-upload';
+      upload.accept='.jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif';
+      upload.dataset.uploadTarget=image.control.id;
+      const uploadStatus=document.createElement('div');uploadStatus.id=sectionId+'-image-upload-status';uploadStatus.className='upload-status';
+      uploadStatus.textContent=values.image?'Existing photo retained. Choose a new photo only to replace it.':'JPG, PNG, WebP or AVIF, maximum 15 MB.';
+      upload.addEventListener('change',()=>handleImageUpload(upload));
+      uploadBox.append(uploadLabel,upload,uploadStatus);
+      uploadRow.append(uploadBox,image.field);
+      imageUploadWrap.appendChild(uploadRow);
       const alt=pageField('Photo alternative text *','alt','input',10,240,'Describe what the photo actually shows.',true);
       alt.control.value=values.alt||'';
       const side=pageField('Photo position','image_side','select',null,null,'',true);
@@ -492,7 +527,7 @@
       linkLabel.control.value=values.link_label||'';
       const linkHref=pageField('Optional internal link','link_href','input',0,300,'/room.php',false);
       linkHref.control.value=values.link_href||'';
-      card.append(body.field,image.field,alt.field,side.field,linkLabel.field,linkHref.field);
+      card.append(body.field,imageUploadWrap,alt.field,side.field,linkLabel.field,linkHref.field);
     }else if(type==='feature_list'){
       const items=pageField('Feature items * (one per line)','items','textarea',5,3000,'A quiet heritage setting\nA rooftop restaurant\nPersonal help planning your stay',true);
       items.control.value=Array.isArray(values.items)?values.items.join('\n'):(values.items||'');
@@ -896,15 +931,7 @@
   managedList.addEventListener('click',handleManagedAction);
   document.getElementById('refresh-content').addEventListener('click',refreshManagedContent);
 
-  document.querySelectorAll('input[type="file"][data-upload-target]').forEach(input=>input.addEventListener('change',async()=>{
-    const file=input.files&&input.files[0];if(!file)return;
-    const statusId=input.id.replace('-upload','-upload-status');const status=document.getElementById(statusId);status.textContent='Uploading and validating the image…';
-    try{
-      const url='/api/upload?filename='+encodeURIComponent(file.name);
-      const res=await fetch(url,{method:'POST',headers:{'Content-Type':file.type},body:file});const data=await res.json();if(!res.ok)throw new Error(data.error||'Upload failed');
-      document.getElementById(input.dataset.uploadTarget).value=data.src;status.textContent=data.message+' Path: '+data.src;
-    }catch(e){status.textContent=e.message;}
-  }));
+  document.querySelectorAll('input[type="file"][data-upload-target]').forEach(input=>input.addEventListener('change',()=>handleImageUpload(input)));
   async function attachForm(formId,endpoint,resultId,managedType){
     const form=document.getElementById(formId);
     form.addEventListener('submit',async event=>{
