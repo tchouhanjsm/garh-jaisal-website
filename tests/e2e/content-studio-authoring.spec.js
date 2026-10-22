@@ -270,7 +270,12 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     expect(pageCreateResponse.status()).toBe(201);
     const savedPagePayload = pageCreateRequest.postDataJSON();
     expect(savedPagePayload.status).toBe('draft');
-    expect(JSON.parse(savedPagePayload.sections)).toHaveLength(2);
+    const savedPageSections = JSON.parse(savedPagePayload.sections);
+    expect(savedPageSections).toHaveLength(3);
+    expect(savedPageSections.map(section => section.type)).toEqual(['intro', 'image_text', 'feature_list']);
+    expect(savedPageSections[1].image).toBe(sectionUploadSrc);
+    expect(savedPageSections[1].alt).toBe('A sandstone desert scene near Jaisalmer');
+    expect(savedPageSections[2].items).toEqual(['Confirm current arrangements', 'Review details for your selected date']);
     expect(fs.existsSync(pageRoute)).toBeTruthy();
     expect(fs.existsSync(pageRecord)).toBeTruthy();
     expect(fs.existsSync(pageCss)).toBeTruthy();
