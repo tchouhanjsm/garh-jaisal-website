@@ -439,7 +439,7 @@
     return {field,control};
   }
 
-  function pageSectionHeader(card,type,heading){
+  function pageSectionHeader(card,type){
     const legend=document.createElement('legend');
     legend.textContent=({intro:'Text introduction',image_text:'Photo and text',feature_list:'Feature list',faq:'Questions and answers',cta:'Call to action'})[type]||'Page section';
     card.appendChild(legend);
@@ -467,7 +467,7 @@
     const currentCount=pageSectionList.querySelectorAll('.page-section-editor').length;
     if(currentCount>=pageSectionLimit)return null;
     const card=document.createElement('fieldset');card.className='section-editor page-section-editor';card.dataset.sectionType=type;
-    pageSectionHeader(card,type,values.heading||'');
+    pageSectionHeader(card,type);
     const heading=pageField('Section heading *','heading','input',2,140,'e.g. A thoughtful stay inside the Fort',true);
     heading.control.value=values.heading||'';
     card.appendChild(heading.field);
@@ -475,7 +475,6 @@
     if(type==='intro'){
       const body=pageField('Section text *','body','textarea',30,5000,'Write the section text. Use a blank line between paragraphs.',true);
       body.control.value=values.body||'';card.appendChild(body.field);
-      body.field.firstChild;
     }else if(type==='image_text'){
       const body=pageField('Section text *','body','textarea',20,4000,'Explain this photo or feature in plain language.',true);
       body.control.value=values.body||'';
