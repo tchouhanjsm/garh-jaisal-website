@@ -6,7 +6,15 @@
     "node": ">=20 <23"
   },
   "scripts": {
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "studio": "node scripts/content-studio.js",
+    "pack:check": "node scripts/check-content-pack.js",
+    "pack:export": "node scripts/studio/cli.js export",
+    "studio:cli": "node scripts/studio/cli.js",
+    "test:studio": "node tests/node/content-pack.test.js",
+    "studio:start": "node tools/content-studio/start.js",
+    "studio:verify": "node scripts/studio/verify-release.js",
+    "studio:snapshot": "node scripts/studio/route-snapshot.js"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1"

@@ -50,6 +50,27 @@ jobs:
       - name: Exercise Content Studio live/draft publishing workflow
         run: node tests/node/content-studio.integration.js
 
+      - name: Install Pillow for Content Studio photo placement checks
+        run: python3 -c "import PIL" 2>/dev/null || python3 -m pip install --break-system-packages pillow
+
+      - name: Check Content Studio pack modules syntax
+        run: |
+          for f in scripts/studio/*.js scripts/check-content-pack.js tools/content-studio/start.js; do node --check "$f"; done
+
+      - name: Content Studio pack evals (golden packs and bad packs)
+        run: node tests/node/content-pack.test.js
+
+      - name: Content Studio route snapshot (existing pages unchanged when content changes)
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          base="origin/${{ github.base_ref }}"
+          if git diff --name-only "$base"...HEAD | grep -qE '^(content/(experiences|editorial|gallery|pages)/|img/(tours|journal|gallery)/)'; then
+            node scripts/studio/route-snapshot.js --against "$base"
+          else
+            echo "No Content Studio content changed; snapshot not needed."
+          fi
+
       - name: Lint PHP files
         shell: bash
         run: |

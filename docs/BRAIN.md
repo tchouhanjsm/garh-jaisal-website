@@ -46,3 +46,6 @@ Make hotelgarhjaisal.com a fast, trustworthy direct-booking site for a heritage 
 
 ## Resuming in a new chat
 Read this file, `docs/PROJECT-LOG.md`, `docs/SPRINT-PLAN.md`. Reply in 5 lines: current sprint and step, last merged PR, open PR, blocker, next action. Wait for "go".
+
+## Content Studio (tours, blogs, gallery)
+Add or change tours, blogs and gallery sets only through the Content Studio pack workflow: `docs/CONTENT-STUDIO.md` (how-to), `docs/CONTENT-STUDIO-DESIGN.md` (design), `content/_paths.json` (exact paths), skill `.agents/skills/content-pack`. Never hand-place files or rename existing images.
