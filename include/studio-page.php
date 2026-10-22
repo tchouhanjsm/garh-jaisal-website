@@ -23,6 +23,22 @@ if (!is_array($studioPage)) {
 }
 
 $studioPageStatus = $studioPage['status'] ?? 'draft';
+$studioPagePreviewToken = $studioPage['studio_preview_token'] ?? null;
+$studioPagePreviewExpiresAt = $studioPage['studio_preview_expires_at'] ?? null;
+// Only the private preview entry point can opt in to rendering a temporary Draft.
+// A public slug route must never reveal content before it has been approved and made Live.
+$studioPageIsPrivatePreview = isset($studioPageAllowDraftPreview)
+    && $studioPageAllowDraftPreview === true
+    && $studioPageStatus === 'draft'
+    && is_string($studioPagePreviewToken)
+    && preg_match('/^[a-f0-9]{24}$/D', $studioPagePreviewToken)
+    && is_int($studioPagePreviewExpiresAt)
+    && $studioPagePreviewExpiresAt > (int) floor(microtime(true) * 1000);
+if ($studioPageStatus !== 'live' && !$studioPageIsPrivatePreview) {
+    http_response_code(404);
+    echo 'Page not found';
+    return;
+}
 $studioPageIsDraft = $studioPageStatus !== 'live';
 $studioPageTitle = (string) ($studioPage['title'] ?? $studioPage['h1'] ?? 'Garh Jaisal Haveli');
 $studioPageDescription = (string) ($studioPage['description'] ?? '');
