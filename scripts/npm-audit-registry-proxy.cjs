@@ -69,7 +69,8 @@ function isAllowedRequest(method, requestUrl) {
   if (method !== 'POST' || typeof requestUrl !== 'string') return false;
   try {
     const parsed = new URL(requestUrl, 'http://' + HOST + ':' + PORT);
-    const pathname = parsed.pathname.endsWith('/') ? parsed.pathname.slice(0, -1) : parsed.pathname;\n    return pathname === BULK_PATH && !parsed.search && !parsed.hash;
+    const pathname = parsed.pathname.endsWith('/') ? parsed.pathname.slice(0, -1) : parsed.pathname;
+    return pathname === BULK_PATH && !parsed.search && !parsed.hash;
   } catch (_) {
     return false;
   }
