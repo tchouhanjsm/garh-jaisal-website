@@ -28,6 +28,25 @@ const IMAGE_TYPES = {
 };
 const CATEGORIES = ['hotel', 'rooms', 'desert', 'restaurant'];
 const CROPS = ['arch', 'landscape', 'portrait', 'standard'];
+const PAGE_THEMES = Object.freeze({
+  heritage: Object.freeze({
+    surface: 'var(--cream)', surfaceAlt: 'var(--sand-light)', text: 'var(--ink)',
+    muted: 'var(--muted)', accent: 'var(--brown)', heroBg: 'var(--dark)',
+    heroText: '#fff', heroMuted: '#e5ddd4', cardBg: '#fff', buttonText: 'var(--dark)',
+  }),
+  sandstone: Object.freeze({
+    surface: 'var(--sand-light)', surfaceAlt: '#fff', text: 'var(--ink)',
+    muted: 'var(--muted)', accent: 'var(--brown)', heroBg: 'var(--brown)',
+    heroText: '#fff', heroMuted: '#efe5da', cardBg: '#fff', buttonText: 'var(--dark)',
+  }),
+  'desert-night': Object.freeze({
+    surface: 'var(--dark)', surfaceAlt: '#24221d', text: '#fff',
+    muted: '#ded6ce', accent: '#f3d8b7', heroBg: '#171513',
+    heroText: '#fff', heroMuted: '#e5ddd4', cardBg: '#24221d', buttonText: 'var(--dark)',
+  }),
+});
+const PAGE_LAYOUTS = Object.freeze(['split', 'centered']);
+const PAGE_SECTION_TYPES = Object.freeze(['intro', 'image_text', 'feature_list', 'faq', 'cta']);
 
 // Approved render contracts for Content Studio V2.
 // This registry is deliberately data-only: staff select a template, never a PHP or CSS path.
@@ -47,6 +66,14 @@ const PAGE_TEMPLATE_REGISTRY = Object.freeze({
     sharedIncludes: Object.freeze(['include/page-head.php', 'include/header-v2.php', 'include/footer-v2.php']),
     requiredFields: Object.freeze(['title', 'description', 'h1', 'hero_image', 'hero_alt', 'lede', 'sections', 'sources']),
     recordType: 'blog'
+  }),
+  'landing-page': Object.freeze({
+    id: 'landing-page', label: 'Landing or campaign page', renderer: 'include/studio-page.php',
+    routePattern: '/{slug}.php', recordDirectory: 'content/pages',
+    stylesheetPaths: Object.freeze(['css/garh-v2.css', 'css/page-builder.css']),
+    sharedIncludes: Object.freeze(['include/page-head.php', 'include/header-v2.php', 'include/footer-v2.php']),
+    requiredFields: Object.freeze(['title', 'description', 'h1', 'hero_image', 'hero_alt', 'sections']),
+    recordType: 'page'
   })
 });
 const STUDIO_MANAGED_PAGE_REGISTRY = Object.freeze({
@@ -65,6 +92,7 @@ const APPROVED_STYLESHEET_PATHS = new Set([
   'css/gallery.css',
   'css/garh-v2.css',
   'css/packages.css',
+  'css/page-builder.css',
   'css/restaurant.css',
   'css/rooms.css',
   'css/tariff.css',
@@ -355,7 +383,7 @@ function imagePath(value) {
 }
 
 function assertStudioRouteAvailable(slug, type) {
-  const templateId = type === 'experiences' ? 'experience-detail' : type === 'editorial' ? 'editorial-guide' : null;
+  const templateId = type === 'experiences' ? 'experience-detail' : type === 'editorial' ? 'editorial-guide' : type === 'pages' ? 'landing-page' : null;
   if (!templateId) throw fail(400, 'Choose a supported Content Studio page template.');
   try {
     return validateRouteForTemplate(slug, templateId);
@@ -368,14 +396,63 @@ function assertStudioRouteAvailable(slug, type) {
 function ensureNewSlug(slug, type) {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw fail(400, 'Use a URL slug made from lowercase letters, digits and hyphens.');
   assertStudioRouteAvailable(slug, type);
+  const directories = { experiences: 'experiences', editorial: 'editorial', pages: 'pages' };
+  if (!Object.prototype.hasOwnProperty.call(directories, type)) throw fail(400, 'Choose a supported Content Studio content directory.');
   return {
     route: path.join(ROOT, slug + '.php'),
-    record: path.join(CONTENT_ROOT, type, slug + '.json'),
+    record: path.join(CONTENT_ROOT, directories[type], slug + '.json'),
   };
 }
 
+function generatedPageCssPath(slug, createDirectory = false) {
+  if (typeof slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+    throw fail(400, 'Invalid generated page stylesheet identifier.');
+  }
+  const cssRoot = path.join(ROOT, 'css');
+  const cssRootStat = fs.lstatSync(cssRoot);
+  if (!cssRootStat.isDirectory() || cssRootStat.isSymbolicLink()) throw fail(400, 'The CSS directory must be a real local directory.');
+  const directory = path.join(cssRoot, 'pages');
+  let stat;
+  try { stat = fs.lstatSync(directory); }
+  catch (error) {
+    if (error.code !== 'ENOENT' || !createDirectory) throw fail(400, 'Generated page CSS directory is missing or unavailable.');
+    fs.mkdirSync(directory, { mode: 0o755 });
+    stat = fs.lstatSync(directory);
+  }
+  if (!stat.isDirectory() || stat.isSymbolicLink()) throw fail(400, 'Generated page CSS directory must be a real local directory.');
+  return path.join(directory, slug + '.css');
+}
+
+function buildLandingPageCss(slug, record) {
+  const theme = PAGE_THEMES[record.theme];
+  if (!theme || !PAGE_LAYOUTS.includes(record.hero_layout)) throw fail(400, 'Choose an approved landing page theme and hero layout.');
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw fail(400, 'Invalid landing page stylesheet identifier.');
+  return [
+    '/* Generated by Content Studio from approved design tokens. Do not hand-edit. */',
+    '.studio-page--' + slug + ' {',
+    '  --studio-page-surface: ' + theme.surface + ';',
+    '  --studio-page-surface-alt: ' + theme.surfaceAlt + ';',
+    '  --studio-page-text: ' + theme.text + ';',
+    '  --studio-page-muted: ' + theme.muted + ';',
+    '  --studio-page-accent: ' + theme.accent + ';',
+    '  --studio-page-hero-bg: ' + theme.heroBg + ';',
+    '  --studio-page-hero-text: ' + theme.heroText + ';',
+    '  --studio-page-hero-muted: ' + theme.heroMuted + ';',
+    '  --studio-page-card-bg: ' + theme.cardBg + ';',
+    '  --studio-page-button-text: ' + theme.buttonText + ';',
+    '}',
+    '',
+  ].join('\n');
+}
+
 function wrapper(variable, slug) {
-  const renderer = variable === 'experienceSlug' ? 'experience-page.php' : 'editorial-guide-page.php';
+  const renderers = {
+    experienceSlug: 'experience-page.php',
+    editorialGuideSlug: 'editorial-guide-page.php',
+    studioPageSlug: 'studio-page.php',
+  };
+  const renderer = renderers[variable];
+  if (!renderer || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw fail(400, 'Unsupported local page wrapper.');
   return "<?php\n$" + variable + " = '" + slug + "';\nrequire __DIR__ . '/include/" + renderer + "';\n";
 }
 
@@ -395,17 +472,24 @@ function createPage(type, slug, record, variable) {
   const sitemapPath = path.join(ROOT, 'sitemap.xml');
   const oldSitemap = fs.readFileSync(sitemapPath);
   assertContentDirectoryChain(path.dirname(files.record), true);
+  const cssFile = type === 'pages' ? generatedPageCssPath(slug, true) : null;
   let recordCreated = false;
   let routeCreated = false;
+  let cssCreated = false;
   try {
     atomicWrite(files.record, JSON.stringify(record, null, 2) + '\n');
     recordCreated = true;
     atomicWrite(files.route, wrapper(variable, slug));
     routeCreated = true;
+    if (cssFile) {
+      atomicWrite(cssFile, buildLandingPageCss(slug, record), { flag: 'wx', mode: 0o644 });
+      cssCreated = true;
+    }
     let sitemapMessage = 'Draft saved. It is excluded from the public archive and sitemap.';
     if (record.status === 'live') sitemapMessage = runSitemap();
     return { slug, status: record.status, pagePath: '/' + slug + '.php', sitemapMessage };
   } catch (error) {
+    if (cssCreated) { try { fs.unlinkSync(cssFile); } catch (_) {} }
     if (routeCreated) { try { fs.unlinkSync(files.route); } catch (_) {} }
     if (recordCreated) { try { fs.unlinkSync(files.record); } catch (_) {} }
     try { atomicWrite(sitemapPath, oldSitemap); } catch (_) {}
