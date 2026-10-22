@@ -70,7 +70,7 @@ const PAGE_TEMPLATE_REGISTRY = Object.freeze({
   'landing-page': Object.freeze({
     id: 'landing-page', label: 'Landing or campaign page', renderer: 'include/studio-page.php',
     routePattern: '/{slug}.php', recordDirectory: 'content/pages',
-    stylesheetPaths: Object.freeze(['css/garh-v2.css', 'css/page-builder.css']),
+    stylesheetPaths: Object.freeze(['css/garh-v2.css', 'css/page-builder.css', 'css/thar-sunset-story.css']),
     sharedIncludes: Object.freeze(['include/page-head.php', 'include/header-v2.php', 'include/footer-v2.php']),
     requiredFields: Object.freeze(['title', 'description', 'h1', 'hero_image', 'hero_alt', 'sections']),
     recordType: 'page'
