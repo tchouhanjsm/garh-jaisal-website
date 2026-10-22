@@ -988,6 +988,152 @@ function createBlog(input, existingSlug = null, previewOnly = false) {
     : createPage('editorial', slug, record, 'editorialGuideSlug'));
 }
 
+function normalizePageHref(value, label, required = false) {
+  const href = typeof value === 'string' ? value.trim() : '';
+  if (!href) {
+    if (required) throw fail(400, label + ' is required.');
+    return '';
+  }
+  if (href === '/' || /^\/[a-z0-9-]+\.php(?:#[a-z0-9-]+)?$/.test(href) || /^#[a-z0-9][a-z0-9-]*$/.test(href)) {
+    return href;
+  }
+  throw fail(400, label + ' must point to a local page such as /contact.php or a section anchor.');
+}
+
+function parseLandingSections(value) {
+  let sections = value;
+  if (typeof sections === 'string') {
+    try { sections = JSON.parse(sections); }
+    catch (_) { throw fail(400, 'Page sections could not be read. Add sections using the guided section builder.'); }
+  }
+  if (!Array.isArray(sections) || !sections.length) throw fail(400, 'Add at least one page section.');
+  if (sections.length > 20) throw fail(400, 'A landing page can contain at most 20 sections.');
+
+  const usedIds = new Set();
+  return sections.map((raw, index) => {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) throw fail(400, 'Each page section must be a structured section.');
+    const type = String(raw.type || '');
+    if (!PAGE_SECTION_TYPES.includes(type)) throw fail(400, 'Choose a supported page section type.');
+    const heading = textField(raw.heading, 'Section heading', 2, 140);
+    const initialId = slugify(raw.id || heading) || 'section-' + (index + 1);
+    let id = initialId;
+    let suffix = 2;
+    while (usedIds.has(id)) id = initialId + '-' + suffix++;
+    usedIds.add(id);
+
+    if (type === 'intro') {
+      return { type, id, heading, body: textField(raw.body, 'Section text', 30, 5000) };
+    }
+    if (type === 'image_text') {
+      const image = imagePath(raw.image);
+      const alt = textField(raw.alt, 'Section image alternative text', 10, 240);
+      const imageSide = String(raw.image_side || 'left');
+      if (!['left', 'right'].includes(imageSide)) throw fail(400, 'Choose whether the image appears on the left or right.');
+      const linkLabel = typeof raw.link_label === 'string' ? raw.link_label.trim() : '';
+      if (linkLabel.length > 80) throw fail(400, 'Image-section link labels must be 80 characters or shorter.');
+      const linkHref = normalizePageHref(raw.link_href, 'Image-section link');
+      if (!!linkLabel !== !!linkHref) throw fail(400, 'Provide both a link label and link destination, or leave both empty.');
+      return {
+        type, id, heading, body: textField(raw.body, 'Image-section text', 20, 4000),
+        image, alt, image_side: imageSide, link_label: linkLabel, link_href: linkHref,
+      };
+    }
+    if (type === 'feature_list') {
+      const items = Array.isArray(raw.items) ? raw.items : lines(raw.items, 'Feature list', true, 12, 240);
+      if (items.length < 2 || items.length > 12) throw fail(400, 'A feature list needs between 2 and 12 items.');
+      return { type, id, heading, items: items.map(item => textField(item, 'Feature item', 2, 240)) };
+    }
+    if (type === 'faq') {
+      if (!Array.isArray(raw.items) || raw.items.length < 1 || raw.items.length > 12) throw fail(400, 'A FAQ section needs between 1 and 12 question-and-answer pairs.');
+      return {
+        type, id, heading,
+        items: raw.items.map(item => {
+          if (!item || typeof item !== 'object' || Array.isArray(item)) throw fail(400, 'Each FAQ item needs a question and answer.');
+          return {
+            question: textField(item.question, 'FAQ question', 5, 220),
+            answer: textField(item.answer, 'FAQ answer', 10, 1200),
+          };
+        }),
+      };
+    }
+    return {
+      type, id, heading,
+      body: textField(raw.body, 'Call-to-action text', 15, 1600),
+      button_label: textField(raw.button_label, 'Call-to-action button label', 2, 80),
+      button_href: normalizePageHref(raw.button_href, 'Call-to-action destination', true),
+    };
+  });
+}
+
+function validateLandingPageRecord(record) {
+  if (!record || typeof record !== 'object' || Array.isArray(record)) throw fail(422, 'Landing page record is not a valid object.');
+  textField(record.h1, 'Page heading', 8, 160);
+  textField(record.title, 'SEO title', 8, 180);
+  textField(record.description, 'SEO description', 40, 300);
+  imagePath(record.hero_image);
+  textField(record.hero_alt, 'Hero image alternative text', 10, 240);
+  if (!PAGE_THEMES[record.theme] || !PAGE_LAYOUTS.includes(record.hero_layout)) throw fail(422, 'Landing page uses an unsupported design preset.');
+  parseLandingSections(record.sections);
+}
+
+function createLandingPage(input, existingSlug = null, previewOnly = false) {
+  if (!input || typeof input !== 'object' || Array.isArray(input)) throw fail(400, 'Complete the landing-page form.');
+  const h1 = textField(input.h1, 'Page heading', 8, 160);
+  const requestedSlug = slugify(input.slug || h1);
+  const slug = existingSlug || requestedSlug;
+  if (existingSlug && input.slug && requestedSlug !== existingSlug) {
+    throw fail(400, 'The URL slug cannot be changed in the editor because existing links may point to it.');
+  }
+  if (!existingSlug) assertStudioRouteAvailable(slug, 'pages');
+  const theme = String(input.theme || 'heritage');
+  const heroLayout = String(input.heroLayout || 'split');
+  if (!PAGE_THEMES[theme]) throw fail(400, 'Choose one of the approved site design themes.');
+  if (!PAGE_LAYOUTS.includes(heroLayout)) throw fail(400, 'Choose an approved hero layout.');
+  const heroImage = imagePath(input.heroImage);
+  const heroAlt = textField(input.heroAlt, 'Hero image alternative text', 10, 240);
+  const description = textField(input.description, 'SEO description', 40, 300);
+  const heroIntro = typeof input.heroIntro === 'string' ? input.heroIntro.trim() : '';
+  if (heroIntro.length > 1000) throw fail(400, 'Hero introduction must be 1,000 characters or shorter.');
+  const eyebrow = textField(input.eyebrow || 'Garh Jaisal Haveli', 'Small heading', 2, 80);
+  const heroCtaLabel = typeof input.heroCtaLabel === 'string' ? input.heroCtaLabel.trim() : '';
+  if (heroCtaLabel.length > 80) throw fail(400, 'Hero button label must be 80 characters or shorter.');
+  const heroCtaHref = normalizePageHref(input.heroCtaHref, 'Hero button destination');
+  if (!!heroCtaLabel !== !!heroCtaHref) throw fail(400, 'Provide both the hero button label and destination, or leave both empty.');
+  const sections = parseLandingSections(input.sections);
+  const record = {
+    slug,
+    status: 'draft',
+    review_status: 'draft',
+    title: textField(input.seoTitle || h1, 'SEO title', 8, 180),
+    description,
+    h1,
+    eyebrow,
+    hero_image: heroImage,
+    hero_alt: heroAlt,
+    hero_intro: heroIntro,
+    hero_cta_label: heroCtaLabel,
+    hero_cta_href: heroCtaHref,
+    theme,
+    hero_layout: heroLayout,
+    sections,
+    date_modified: today(),
+  };
+  validateLandingPageRecord(record);
+  if (previewOnly) {
+    return { slug, status: 'draft', record: { ...record, status: 'draft', review_status: 'draft' } };
+  }
+  if (existingSlug) return updateManagedPage('pages', slug, record);
+  if (statusValue(input.status || 'draft') === 'live') {
+    throw fail(409, 'New pages must be saved as Draft, marked Ready for review, and Approved for release before local publication.');
+  }
+  const images = [heroImage, ...sections.filter(section => section.type === 'image_text').map(section => section.image)];
+  const uniqueImages = [...new Set(images)];
+  const createWithManifest = index => index >= uniqueImages.length
+    ? createPage('pages', slug, record, 'studioPageSlug')
+    : withManifestSource(uniqueImages[index], () => createWithManifest(index + 1));
+  return createWithManifest(0);
+}
+
 function existingGallerySources(excludeId = null) {
   const sources = new Set();
   const php = fs.readFileSync(path.join(ROOT, 'include', 'gallery-data.php'), 'utf8');
