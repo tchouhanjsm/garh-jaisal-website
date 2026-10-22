@@ -63,6 +63,8 @@ if ($type === 'tours') {
     $editorialGuideSlug = $slug;
     require $root . '/include/editorial-guide-page.php';
 } else {
+    // The renderer accepts Draft content only through this token-validated, expiring route.
+    $studioPageAllowDraftPreview = true;
     $studioPageSlug = $slug;
     require $root . '/include/studio-page.php';
 }
