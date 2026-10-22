@@ -321,7 +321,7 @@ async function main() {
   verifyContentStudioAuthoringUi();
   await verifyOneClickLauncher();
   noExistingFixtures();
-  for (const file of [...routeFiles, ...recordFiles]) ownedPaths.add(file);
+  for (const file of [...routeFiles, ...recordFiles, pageRouteFile, pageRecordFile, pageCssFile]) ownedPaths.add(file);
   sitemapTouched = true;
   studio = start(process.execPath, ['scripts/content-studio.js'], { CONTENT_STUDIO_PORT: String(STUDIO_PORT) }, s => { studioOutput += s; }, s => { studioErrors += s; });
   const studioReadyResponse = await waitFor(STUDIO_URL + '/api/status', studio, 'Content Studio');
@@ -361,6 +361,36 @@ async function main() {
   cleanupResponse = await requestJson(STUDIO_URL + '/api/preview/cleanup', 'POST', { token: '../etc/passwd' });
   assert.equal(cleanupResponse.response.status, 200, 'invalid cleanup tokens must not reach filesystem paths');
   assert.equal(cleanupResponse.body.removed, false);
+
+  // Landing-page previews use the same guarded PHP renderer, generated design-token CSS, and token cleanup as tours/blogs.
+  const landingPreview = await requestJson(STUDIO_URL + '/api/preview', 'POST', {
+    type: 'pages', payload: landingPagePayload('temporary-preview-input'),
+  });
+  assert.equal(landingPreview.response.status, 201, 'landing-page PHP preview should be created: ' + JSON.stringify(landingPreview.body));
+  assert.match(landingPreview.body.pagePath, /^\/tools\/content-studio\/preview\.php\?type=pages&token=[a-f0-9]{24}$/);
+  const landingPreviewToken = landingPreview.body.token;
+  const landingPreviewSlug = 'content-studio-preview-' + landingPreviewToken;
+  const landingPreviewRecord = path.join(ROOT, 'content/pages/' + landingPreviewSlug + '.json');
+  const landingPreviewCss = path.join(ROOT, 'css/pages/' + landingPreviewSlug + '.css');
+  ownedPaths.add(landingPreviewRecord);
+  ownedPaths.add(landingPreviewCss);
+  assert.ok(fs.existsSync(landingPreviewRecord), 'landing preview must create a token-bound JSON record');
+  assert.ok(fs.existsSync(landingPreviewCss), 'landing preview must render through a generated approved-token stylesheet');
+  assert.ok(!fs.existsSync(path.join(ROOT, landingPreviewSlug + '.php')), 'landing preview must not create a routable PHP wrapper');
+  assert.ok(!fs.readFileSync(sitemapPath, 'utf8').includes('/' + landingPreviewSlug + '.php</loc>'), 'landing preview must not enter the sitemap');
+  response = await fetch(PHP_URL + landingPreview.body.pagePath);
+  assert.equal(response.status, 200, 'landing preview should render with the actual PHP landing-page renderer');
+  html = await response.text();
+  assert.ok(html.includes('Content Studio Landing Page Integration Test'), 'landing preview should render its authored H1');
+  assert.ok(html.includes('Plan your visit') && html.includes('Common questions'), 'landing preview should render the authored content blocks');
+  assert.ok(html.includes('css/page-builder.css') && html.includes('css/pages/' + landingPreviewSlug + '.css'), 'landing preview should use shared CSS and the generated page token CSS');
+  assert.match(html, /noindex,follow/, 'unsaved landing-page preview must be non-indexable');
+  cleanupResponse = await requestJson(STUDIO_URL + '/api/preview/cleanup', 'POST', { token: landingPreviewToken });
+  assert.equal(cleanupResponse.response.status, 200);
+  assert.equal(cleanupResponse.body.removed, true);
+  assert.ok(!fs.existsSync(landingPreviewRecord) && !fs.existsSync(landingPreviewCss), 'landing preview cleanup must remove its data and generated stylesheet');
+  response = await fetch(PHP_URL + landingPreview.body.pagePath);
+  assert.equal(response.status, 404, 'closed landing preview token must stop rendering');
 
   // New records cannot bypass the review workflow by being created directly as Live.
   result = await requestJson(STUDIO_URL + '/api/tours', 'POST', tourPayload(slugs[0], 'live'));
@@ -541,6 +571,82 @@ async function main() {
   assert.ok(!fs.existsSync(routeFiles[2]));
   assert.ok(!fs.existsSync(recordFiles[2]));
 
+  // Landing page: validate safe content blocks, then exercise the full draft/review/release lifecycle.
+  const directLivePage = await requestJson(STUDIO_URL + '/api/pages', 'POST', { ...landingPagePayload(pageSlug), status: 'live' });
+  assert.equal(directLivePage.response.status, 409, 'a new landing page must not skip review approval');
+  assert.ok(!fs.existsSync(pageRouteFile) && !fs.existsSync(pageRecordFile), 'rejected direct-Live landing page must not write artifacts');
+  const unsafeSectionPage = landingPagePayload(pageSlug);
+  unsafeSectionPage.sections = JSON.stringify([{ type: '<script>', heading: 'Unsafe', body: 'An unsupported type must not be rendered.' }]);
+  result = await requestJson(STUDIO_URL + '/api/pages', 'POST', unsafeSectionPage);
+  assert.equal(result.response.status, 400, 'arbitrary section types/HTML must be rejected');
+  assert.ok(!fs.existsSync(pageRouteFile) && !fs.existsSync(pageRecordFile), 'invalid section payload must not create page artifacts');
+
+  result = await requestJson(STUDIO_URL + '/api/pages', 'POST', landingPagePayload(pageSlug));
+  assert.equal(result.response.status, 201, 'landing-page Draft should be created: ' + JSON.stringify(result.body));
+  assert.equal(result.body.status, 'draft');
+  assert.ok(fs.existsSync(pageRouteFile), 'landing page wrapper should be generated from the trusted renderer');
+  assert.ok(fs.existsSync(pageRecordFile), 'landing page JSON should be persisted');
+  assert.ok(fs.existsSync(pageCssFile), 'landing page token CSS should be generated');
+  let pageRecord = JSON.parse(fs.readFileSync(pageRecordFile, 'utf8'));
+  assert.equal(pageRecord.status, 'draft');
+  assert.equal(pageRecord.review_status, 'draft');
+  assert.equal(pageRecord.sections.length, 5, 'the builder should preserve structured reusable sections');
+  assert.doesNotMatch(fs.readFileSync(pageCssFile, 'utf8'), /<script|expression\s*\(|url\s*\(\s*https?:/i, 'generated CSS must contain only approved tokens, not executable author content');
+  sitemap = fs.readFileSync(sitemapPath, 'utf8');
+  assert.ok(!sitemap.includes('/' + pageSlug + '.php</loc>'), 'landing-page Draft must be absent from sitemap');
+  result = await requestJson(STUDIO_URL + '/api/content', 'GET');
+  assert.ok(result.body.items.some(item => item.type === 'pages' && item.slug === pageSlug && item.status === 'draft'), 'landing page should appear in the unified manager');
+  result = await requestJson(STUDIO_URL + '/api/content/pages/' + pageSlug + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 409, 'landing-page Draft must not be published before review');
+
+  await transitionReview('pages', pageSlug, 'ready_for_review');
+  await transitionReview('pages', pageSlug, 'approved_for_release');
+  assert.ok(!fs.readFileSync(sitemapPath, 'utf8').includes('/' + pageSlug + '.php</loc>'), 'approval is not publication');
+  result = await requestJson(STUDIO_URL + '/api/content/pages/' + pageSlug + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 200, 'approved landing page should publish locally');
+  sitemap = fs.readFileSync(sitemapPath, 'utf8');
+  assert.ok(sitemap.includes('/' + pageSlug + '.php</loc>'), 'live landing page should be added to sitemap');
+  response = await fetch(PHP_URL + '/' + pageSlug + '.php');
+  assert.equal(response.status, 200, 'published landing page should render using the shared PHP shell');
+  html = await response.text();
+  assert.ok(html.includes('Content Studio Landing Page Integration Test'));
+  assert.ok(html.includes('A reusable image-and-text block'));
+  assert.ok(html.includes('Confirm current arrangements'));
+  assert.ok(html.includes('css/page-builder.css') && html.includes('css/pages/' + pageSlug + '.css'));
+  assert.doesNotMatch(html, /noindex,follow/, 'released landing page should be indexable');
+  assert.ok(html.includes('og:title') && html.includes('application/ld\\+json'), 'landing page must retain site SEO metadata and structured schema');
+
+  const editedLandingPage = landingPagePayload(pageSlug, 'sandstone');
+  editedLandingPage.h1 = 'Content Studio Landing Page Revised';
+  editedLandingPage.seoTitle = 'Content Studio Landing Page Revised';
+  editedLandingPage.heroIntro = 'This updated introduction validates that editing resets the release approval and regenerates the safe theme stylesheet.';
+  result = await requestJson(STUDIO_URL + '/api/content/pages/' + pageSlug, 'PUT', editedLandingPage);
+  assert.equal(result.response.status, 200, 'landing page should be editable through the unified manager');
+  pageRecord = JSON.parse(fs.readFileSync(pageRecordFile, 'utf8'));
+  assert.equal(pageRecord.status, 'draft', 'editing a live landing page must return it to Draft');
+  assert.equal(pageRecord.review_status, 'draft', 'editing must reset approval');
+  const regeneratedPageCss = fs.readFileSync(pageCssFile, 'utf8');
+  assert.ok(regeneratedPageCss.includes('--studio-page-hero-bg: var(--brown)'), 'editing the theme should regenerate CSS from the approved design token preset');
+  assert.ok(!fs.readFileSync(sitemapPath, 'utf8').includes('/' + pageSlug + '.php</loc>'), 'edited landing Draft must be removed from sitemap');
+  response = await fetch(PHP_URL + '/' + pageSlug + '.php');
+  html = await response.text();
+  assert.ok(html.includes('Content Studio Landing Page Revised'));
+  assert.match(html, /noindex,follow/, 'edited landing page remains non-indexable until re-approved');
+
+  await transitionReview('pages', pageSlug, 'ready_for_review');
+  await transitionReview('pages', pageSlug, 'approved_for_release');
+  result = await requestJson(STUDIO_URL + '/api/content/pages/' + pageSlug + '/status', 'PATCH', { status: 'live' });
+  assert.equal(result.response.status, 200, 'edited landing page may be republished only after fresh approval');
+  result = await requestJson(STUDIO_URL + '/api/content/pages/' + pageSlug + '/status', 'PATCH', { status: 'draft' });
+  assert.equal(result.response.status, 200, 'landing page may be unpublished safely');
+  assert.ok(!fs.readFileSync(sitemapPath, 'utf8').includes('/' + pageSlug + '.php</loc>'));
+  result = await requestJson(STUDIO_URL + '/api/content/pages/' + pageSlug, 'DELETE');
+  assert.equal(result.response.status, 200, 'unpublished landing-page Draft should be removable');
+  assert.ok(!fs.existsSync(pageRouteFile));
+  assert.ok(!fs.existsSync(pageRecordFile));
+  assert.ok(!fs.existsSync(pageCssFile), 'deleting the page should remove generated CSS but not user-uploaded source images');
+  assert.ok(fs.existsSync(path.join(ROOT, 'img/desert3.jpg')), 'page deletion must retain the source image');
+
   // A Gallery addition uses a local, previously uncurated source and renders on the existing Gallery route.
   const gallerySourcePhp = fs.readFileSync(path.join(ROOT, 'include/gallery-data.php'), 'utf8');
   const used = new Set([...gallerySourcePhp.matchAll(/'src'\s*=>\s*'([^']+)'/g)].map(m => m[1]));
@@ -641,7 +747,7 @@ async function main() {
 }
 
 main()
-  .then(() => process.stdout.write('PASS Content Studio publishes live tour/blog/Gallery records and keeps draft/overwrite boundaries.\n'))
+  .then(() => process.stdout.write('PASS Content Studio validates and publishes tour/blog/landing-page/Gallery records with preview, review and overwrite boundaries.\n'))
   .catch(error => {
     process.stderr.write('FAIL Content Studio publishing integration: ' + (error.stack || error.message || String(error)) + '\n');
     process.stderr.write(studioOutput + studioErrors + phpOutput + phpErrors);
@@ -665,5 +771,10 @@ main()
           if (fs.existsSync(dir) && fs.readdirSync(dir).length === 0) fs.rmdirSync(dir);
         } catch (_) {}
       }
+    }
+    if (!existedPageCssDirectory) {
+      try {
+        if (fs.existsSync(pageCssDirectory) && fs.readdirSync(pageCssDirectory).length === 0) fs.rmdirSync(pageCssDirectory);
+      } catch (_) {}
     }
   });
