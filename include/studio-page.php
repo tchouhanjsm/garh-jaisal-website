@@ -150,7 +150,7 @@ include __DIR__ . '/header-v2.php';
     <?php if ($studioPageSectionType === 'intro'): ?>
       <section class="studio-page-section studio-page-section--intro" id="<?= $studioPageEscape($studioPageSectionId) ?>">
         <div class="studio-page-section-inner studio-page-copy">
-          <?php if ($studioPageHeading !== ''): ?><h2><?= $studioPageEscape($studioPageSectionHeading) ?></h2><?php endif; ?>
+          <?php if ($studioPageSectionHeading !== ''): ?><h2><?= $studioPageEscape($studioPageSectionHeading) ?></h2><?php endif; ?>
           <?php foreach ($studioPageParagraphs($studioPageSection['body'] ?? '') as $studioPageParagraph): ?>
             <p><?= $studioPageEscape($studioPageParagraph) ?></p>
           <?php endforeach; ?>
@@ -163,7 +163,7 @@ include __DIR__ . '/header-v2.php';
           <div class="studio-page-section-inner studio-page-image-text-grid">
             <figure><img src="<?= $studioPageEscape($studioPageSectionImage) ?>" alt="<?= $studioPageEscape($studioPageSection['alt'] ?? '') ?>" loading="lazy" width="1200" height="900"></figure>
             <div class="studio-page-copy">
-              <?php if ($studioPageHeading !== ''): ?><h2><?= $studioPageEscape($studioPageSectionHeading) ?></h2><?php endif; ?>
+              <?php if ($studioPageSectionHeading !== ''): ?><h2><?= $studioPageEscape($studioPageSectionHeading) ?></h2><?php endif; ?>
               <?php foreach ($studioPageParagraphs($studioPageSection['body'] ?? '') as $studioPageParagraph): ?><p><?= $studioPageEscape($studioPageParagraph) ?></p><?php endforeach; ?>
               <?php $studioPageSectionHref = $studioPageHref($studioPageSection['link_href'] ?? ''); ?>
               <?php if ($studioPageSectionHref !== '' && trim((string) ($studioPageSection['link_label'] ?? '')) !== ''): ?>
@@ -176,7 +176,7 @@ include __DIR__ . '/header-v2.php';
     <?php elseif ($studioPageSectionType === 'feature_list'): ?>
       <section class="studio-page-section studio-page-section--features" id="<?= $studioPageEscape($studioPageSectionId) ?>">
         <div class="studio-page-section-inner">
-          <?php if ($studioPageHeading !== ''): ?><h2><?= $studioPageEscape($studioPageSectionHeading) ?></h2><?php endif; ?>
+          <?php if ($studioPageSectionHeading !== ''): ?><h2><?= $studioPageEscape($studioPageSectionHeading) ?></h2><?php endif; ?>
           <ul class="studio-page-feature-list">
             <?php foreach (($studioPageSection['items'] ?? []) as $studioPageItem): ?><li><?= $studioPageEscape($studioPageItem) ?></li><?php endforeach; ?>
           </ul>
@@ -185,7 +185,7 @@ include __DIR__ . '/header-v2.php';
     <?php elseif ($studioPageSectionType === 'faq'): ?>
       <section class="studio-page-section studio-page-section--faq" id="<?= $studioPageEscape($studioPageSectionId) ?>">
         <div class="studio-page-section-inner studio-page-copy">
-          <?php if ($studioPageHeading !== ''): ?><h2><?= $studioPageEscape($studioPageSectionHeading) ?></h2><?php endif; ?>
+          <?php if ($studioPageSectionHeading !== ''): ?><h2><?= $studioPageEscape($studioPageSectionHeading) ?></h2><?php endif; ?>
           <?php foreach (($studioPageSection['items'] ?? []) as $studioPageFaq): ?>
             <?php if (!is_array($studioPageFaq)) { continue; } ?>
             <details class="studio-page-faq-item">
@@ -198,7 +198,7 @@ include __DIR__ . '/header-v2.php';
     <?php elseif ($studioPageSectionType === 'cta'): ?>
       <section class="studio-page-section studio-page-cta" id="<?= $studioPageEscape($studioPageSectionId) ?>">
         <div class="studio-page-cta-inner">
-          <?php if ($studioPageHeading !== ''): ?><h2><?= $studioPageEscape($studioPageSectionHeading) ?></h2><?php endif; ?>
+          <?php if ($studioPageSectionHeading !== ''): ?><h2><?= $studioPageEscape($studioPageSectionHeading) ?></h2><?php endif; ?>
           <?php foreach ($studioPageParagraphs($studioPageSection['body'] ?? '') as $studioPageParagraph): ?><p><?= $studioPageEscape($studioPageParagraph) ?></p><?php endforeach; ?>
           <?php $studioPageCtaHref = $studioPageHref($studioPageSection['button_href'] ?? ''); ?>
           <?php if ($studioPageCtaHref !== '' && trim((string) ($studioPageSection['button_label'] ?? '')) !== ''): ?>
