@@ -223,9 +223,12 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await pageSection.locator('input[type="file"][data-upload-target]').setInputFiles(path.join(root, 'img/desert12.jpg'));
     const sectionUploadResponse = await sectionUploadResponsePromise;
     expect(sectionUploadResponse.status()).toBe(201);
-    const sectionUpload = await sectionUploadResponse.json();
-    ownedPaths.push(path.join(root, sectionUpload.src));
-    await expect(pageSection.locator('[data-page-field="image"]')).toHaveValue(sectionUpload.src);
+    const sectionImagePath = pageSection.locator('[data-page-field="image"]');
+    // Avoid reading the response body through Chromium's DevTools cache: this
+    // test runs late in a large suite, where Network.getResponseBody may evict it.
+    await expect(sectionImagePath).toHaveValue(/^img\/content-studio\/[a-z0-9-]+\.jpg$/);
+    const sectionUploadSrc = await sectionImagePath.inputValue();
+    ownedPaths.push(path.join(root, sectionUploadSrc));
 
     await page.locator('#page-section-type').selectOption('feature_list');
     await page.locator('#page-add-section').click();
