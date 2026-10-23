@@ -13,7 +13,7 @@ const L = require('../../scripts/studio/lib');
 const { checkIntake } = require('../../scripts/studio/check-record');
 const { planSave } = require('../../scripts/studio/plan-save');
 const { placePhoto } = require('../../scripts/studio/place-photo');
-const { exportPack } = require('../../scripts/studio/export-pack');
+const { exportPack, exportFromTree } = require('../../scripts/studio/export-pack');
 const { checkPack, applyPack, loadPack } = require('../../scripts/check-content-pack');
 const { writeZip, readZip } = require('../../scripts/studio/zip');
 const run = require('../../scripts/studio/run');
@@ -175,6 +175,38 @@ test('run state advances one step at a time and approval needs a different perso
   s = run.advance(r.id, { pass: false, by: 'owner' }); assert.equal(s.state, 'APPROVE');
   s = run.advance(r.id, { pass: true, by: 'owner' }); assert.equal(s.state, 'PACK');
   for (let i = 0; i < 5; i++) s = run.advance(r.id, { pass: true }); assert.equal(s.state, 'DONE');
+});
+
+// ---- Sync export from a record saved in the working tree (Studio form "Export pack"). ----
+test('exportFromTree packs a saved tour with its own-folder photos and applies cleanly elsewhere', () => {
+  const root = L.repoRoot();
+  const slug = 'saved-dune-dinner';
+  const rec = tourRecord(slug, { images: undefined });
+  delete rec.images;
+  fs.mkdirSync(path.join(root, 'content/experiences'), { recursive: true });
+  fs.writeFileSync(path.join(root, 'content/experiences/' + slug + '.json'), JSON.stringify(rec));
+  const stage = fs.mkdtempSync(path.join(tmp, 'stage-'));
+  const placed = placePhoto({ type: 'tour', slug, role: 'hero', n: 1, file: jpg, stage });
+  fs.mkdirSync(path.join(root, path.dirname(placed.path)), { recursive: true });
+  fs.copyFileSync(path.join(stage, placed.path), path.join(root, placed.path));
+  const res = exportFromTree({ type: 'tour', slug, outDir: path.join(tmp, 'sync'), date: '2026-10-23' });
+  assert.equal(res.ok, true, JSON.stringify(res.findings));
+  assert.ok(res.files.includes(placed.path) && res.files.includes(slug + '.php'));
+  const verdict = checkPack(loadPack(res.zip));
+  assert.equal(verdict.ok, true, JSON.stringify(verdict.findings));
+  // Applying on a different (empty) site root creates the same files.
+  const other = fs.mkdtempSync(path.join(tmp, 'other-'));
+  const prev = process.env.CONTENT_STUDIO_ROOT; process.env.CONTENT_STUDIO_ROOT = other;
+  try { const a = applyPack(res.zip, { dryRun: false, sitemap: false }); assert.equal(a.ok, true, JSON.stringify(a.findings)); assert.ok(fs.existsSync(path.join(other, placed.path))); }
+  finally { process.env.CONTENT_STUDIO_ROOT = prev; }
+});
+test('exportFromTree refuses legacy flat uploads and missing records', () => {
+  const root = L.repoRoot();
+  const slug = 'legacy-flat-tour';
+  fs.writeFileSync(path.join(root, 'content/experiences/' + slug + '.json'), JSON.stringify(tourRecord(slug, { hero_image: 'img/content-studio/abc-hero.jpg', images: undefined })));
+  const r = exportFromTree({ type: 'tour', slug, outDir: path.join(tmp, 'sync2') });
+  assert.equal(r.ok, false); assert.ok(r.findings.some(x => x.rule === 'EX-03'));
+  assert.equal(exportFromTree({ type: 'tour', slug: 'nothing-here', outDir: path.join(tmp, 'sync3') }).findings[0].rule, 'EX-01');
 });
 test('path map matches the Studio server record directories', () => {
   const server = fs.readFileSync(path.join(L.ROOT, 'scripts/content-studio.js'), 'utf8');
