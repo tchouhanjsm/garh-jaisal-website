@@ -27,10 +27,14 @@ const ROUTES_ADDED_AFTER_FROZEN_HEAD_BASELINE = [
   '/jaisalmer-markets-and-crafts-guide.php',
 ];
 
-async function captureHead(page, route) {
+async function captureHead(page, route, expectedStatus = 'success') {
   const response = await page.goto(route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
   expect(response, 'No HTTP response for ' + route).not.toBeNull();
-  expect(response.status(), 'Unexpected status for ' + route).toBeLessThan(400);
+  if (expectedStatus === 404) {
+    expect(response.status(), 'Private or unpublished route must return 404: ' + route).toBe(404);
+  } else {
+    expect(response.status(), 'Unexpected status for ' + route).toBeLessThan(400);
+  }
 
   const snapshot = await page.evaluate(({ route }) => {
     // Migrated pages now emit the shared Hotel and WebSite graph roots from
@@ -143,7 +147,7 @@ async function captureHead(page, route) {
     };
   }, { route });
 
-  return { route, ...snapshot };
+  return { route, status: response.status(), ...snapshot };
 }
 
 
@@ -203,6 +207,7 @@ function normalizeSocialImageValues(snapshot) {
       internIndex(page[0]),
       internIndex(page[1]),
       internIndex(page[2]),
+      page[3] ?? null,
     ]),
   };
 
@@ -244,6 +249,7 @@ function compactSnapshot(snapshot) {
       intern(page.route),
       intern(page.title),
       intern(page.robots),
+      page.status,
     ]),
   };
 }
@@ -274,9 +280,10 @@ test('sitemap head output matches the frozen pre-refactor baseline', async ({ br
     }
 
     for (const route of DRAFT_AND_HIDDEN_ROUTES) {
-      const head = await captureHead(page, route);
+      const head = await captureHead(page, route, 404);
       draftAndHiddenPages.push({
         route: head.route,
+        status: head.status,
         title: head.title,
         robots: head.robots,
       });
@@ -297,16 +304,22 @@ test('sitemap head output matches the frozen pre-refactor baseline', async ({ br
     'Missing committed pre-refactor fixture; capture it before any shared-head migration.'
   ).toBe(true);
   const expected = JSON.parse(fs.readFileSync(FIXTURE_PATH, 'utf8'));
+  // This frozen fixture predates the deliberate change from public noindex Draft
+  // pages to HTTP 404. Keep the unchanged public sitemap/head baseline strict;
+  // the current 404 status and generic not-found head are asserted below and in
+  // seo.spec.js. The artifact still records the current private-route status.
   const frozenBaseline = {
     ...snapshot,
+    draftAndHiddenPages: [],
     sitemapRoutes: snapshot.sitemapRoutes.filter(route => !ROUTES_ADDED_AFTER_FROZEN_HEAD_BASELINE.includes(route)),
     pageHeads: snapshot.pageHeads.filter(head => !ROUTES_ADDED_AFTER_FROZEN_HEAD_BASELINE.includes(head.route)),
   };
+  const expectedBaseline = { ...expected, draftAndHiddenPages: [] };
   const comparable = normalizeSocialImageValues(compactSnapshot(frozenBaseline));
   expect(
     comparable,
-    'Existing route titles, metadata, canonicals, social tags, JSON-LD types, analytics and draft visibility changed'
-  ).toEqual(normalizeSocialImageValues(expected));
+    'Existing public route titles, metadata, canonicals, social tags, JSON-LD types and analytics changed'
+  ).toEqual(normalizeSocialImageValues(expectedBaseline));
 
   // Keep full current output as an artifact; only the fixture comparison omits
   // new articles whose metadata and visible-content contracts have their own tests.

@@ -360,20 +360,20 @@ test('draft tour entries remain absent from public navigation and footer', async
   }
 });
 
-test('draft tour pages are noindex and excluded from the sitemap', async ({ page }, testInfo) => {
+test('public Draft tour routes return 404 and remain excluded from the sitemap', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Publication status checks run once');
   const sitemapRoutes = getSitemapEntries();
   for (const route of ['/longewala-tour.php', '/rajasthan-tours.php']) {
     expect(sitemapRoutes, `${route} must stay out of sitemap.xml until approved`).not.toContain(route);
     const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
     expect(response, `No HTTP response for draft ${route}`).not.toBeNull();
-    expect(response.status(), `Draft route ${route} should render for owner review`).toBeLessThan(400);
-    await expect(page.locator('head meta[name="robots"]')).toHaveAttribute('content', /noindex\s*,\s*follow/i);
-    await expect(page.locator('main h1')).toContainText(/draft|confirm/i);
+    expect(response.status(), `Public Draft route ${route} must return 404`).toBe(404);
+    await expect(page.locator('main h1')).toHaveText('Experience not found');
+    await expect(page.locator('main')).not.toContainText(/Longewala|Rajasthan tours/i);
   }
 });
 
-test('hidden overlap pages stay out of the sitemap and public discovery until the owner decides', async ({ page }, testInfo) => {
+test('hidden overlap pages return 404 and stay out of public discovery until approved', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Publication status checks run once');
   const hiddenRoute = '/explore-the-desert.php';
   expect(getSitemapEntries(), `${hiddenRoute} must stay out of sitemap.xml while hidden`).not.toContain(hiddenRoute);
@@ -398,6 +398,7 @@ test('hidden overlap pages stay out of the sitemap and public discovery until th
 
   const response = await page.goto(hiddenRoute, { waitUntil: 'domcontentloaded' });
   expect(response, `No HTTP response for hidden ${hiddenRoute}`).not.toBeNull();
-  expect(response.status(), 'Hidden page keeps its URL (no 404, no redirect) until reviewed').toBeLessThan(400);
-  await expect(page.locator('head meta[name="robots"]')).toHaveAttribute('content', /noindex\s*,\s*follow/i);
+  expect(response.status(), 'Hidden public route must return 404 until approved').toBe(404);
+  await expect(page.locator('main h1')).toHaveText('Experience not found');
+  await expect(page.locator('main')).not.toContainText(/Explore the Desert is the broader day experience/i);
 });
