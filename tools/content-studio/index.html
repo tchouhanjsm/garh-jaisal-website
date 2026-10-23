@@ -73,7 +73,8 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
   </section>
 
   <nav class="tabs" role="tablist" aria-label="Choose a content type">
-    <button class="tab" role="tab" id="tab-tour" aria-controls="pane-tour" aria-selected="true" data-pane="tour">Add a tour</button>
+    <button class="tab" role="tab" id="tab-quick" aria-controls="pane-quick" aria-selected="true" data-pane="quick">Quick add (automatic)</button>
+    <button class="tab" role="tab" id="tab-tour" aria-controls="pane-tour" aria-selected="false" data-pane="tour">Add a tour</button>
     <button class="tab" role="tab" id="tab-blog" aria-controls="pane-blog" aria-selected="false" data-pane="blog">Add a blog</button>
     <button class="tab" role="tab" id="tab-pages" aria-controls="pane-pages" aria-selected="false" data-pane="pages">Build a page</button>
     <button class="tab" role="tab" id="tab-gallery" aria-controls="pane-gallery" aria-selected="false" data-pane="gallery">Add Gallery photos</button>
@@ -81,7 +82,24 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
     <button class="tab" role="tab" id="tab-manage" aria-controls="pane-manage" aria-selected="false" data-pane="manage">Manage saved content</button>
   </nav>
 
-  <section class="pane active" id="pane-tour" role="tabpanel" aria-labelledby="tab-tour">
+  <section class="pane active" id="pane-quick" role="tabpanel" aria-labelledby="tab-quick">
+    <div class="panel">
+      <div class="panel-head">
+        <p class="eyebrow">Automatic</p>
+        <h2>Quick add: brief + photos, the Studio does the rest</h2>
+        <p>Paste a short brief and choose photos. The Studio picks the URL, names and places every photo in its own folder, drafts the SEO text, builds the page record, runs every check and shows the exact files. You only approve. Everything starts as Draft.</p>
+      </div>
+      <div class="grid">
+        <div class="field"><label for="quick-type">What are you adding?</label><select id="quick-type"><option value="tour">Tour or experience</option><option value="blog">Travel guide (blog)</option></select></div>
+        <div class="field"><label for="quick-photos">Photos (first one, or one named hero, is the main photo)</label><input id="quick-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple><div class="hint" id="quick-photo-list">No photos chosen.</div></div>
+        <div class="field full"><label for="quick-brief">Brief</label><textarea class="tall" id="quick-brief" spellcheck="false"></textarea><div class="hint">One "key: value" per line. Lists use "- item" lines. Only confirmed facts. Missing details are asked back to you in plain words.</div></div>
+      </div>
+      <div class="actions"><button type="button" class="primary" id="quick-build">Build draft</button><p class="note">Nothing is saved to the site until you approve. Approving writes a Draft to this working tree and builds a checked zip pack.</p></div>
+      <div class="result" id="quick-result" role="status" aria-live="polite"></div>
+      <div class="field" id="quick-approve-box" hidden><label for="quick-by">Approved by (your name; must not be the author)</label><input id="quick-by" type="text" autocomplete="name"><p class="actions"><button type="button" class="primary" id="quick-approve">Approve, save as Draft and build pack</button></p></div>
+    </div>
+  </section>
+  <section class="pane" id="pane-tour" role="tabpanel" aria-labelledby="tab-tour">
     <form class="panel" id="tour-form">
       <div class="panel-head"><p class="eyebrow">Experiences</p><h2 id="tour-form-heading">New tour or experience</h2><p>Describe the guest experience, choose a photo and add the steps in the order they happen. A Live record will be included in local tour listings and the trip planner after review; Draft is best while you are still working.</p></div>
       <div class="grid">
@@ -1204,6 +1222,45 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
         (data.effects||[]).forEach(e=>lines.push('  effect: '+e));
         out.textContent=lines.join('\n');
       }catch(error){out.textContent='Cannot plan: '+error.message;}
+    });
+  })();
+
+  (function(){
+    const TEMPLATES={
+      tour:['type: tour','title: Sunset Camel Safari','summary: A relaxed camel ride across the dunes at golden hour, with tea on the sand and an easy return to the fort.','best for: Guests who want a short, easy desert experience.','duration: Half-day, about 3 hours','included:','- Camel ride','- Tea on the dunes','not included:','- Personal expenses','timeline:','- Pickup | Meet at the hotel and drive to the dunes.','- Camel ride | Ride across the dunes towards sunset.','- Return | Drive back to the fort.','photos:','- sunset-1.jpg | Camels walking across golden dunes at sunset','facts confirmed by:'].join('\n'),
+      blog:['type: blog','title: A short guide to Jaisalmer Fort','lede: Jaisalmer Fort is a living fort with homes, shops and temples inside the walls.','summary: What to see inside Jaisalmer Fort and how long to allow.','sources:','- Hotel notes | https://www.hotelgarhjaisal.com/','## Visit','Allow about two hours inside the fort and wear shoes with good grip on the stone paths.','## Best time','Early morning is cooler and quieter.'].join('\n')
+    };
+    const type=document.getElementById('quick-type'),brief=document.getElementById('quick-brief'),files=document.getElementById('quick-photos'),list=document.getElementById('quick-photo-list'),result=document.getElementById('quick-result'),approveBox=document.getElementById('quick-approve-box');
+    let batch=null,lastTemplate='tour';
+    brief.value=TEMPLATES.tour;
+    type.addEventListener('change',()=>{if(brief.value.trim()===TEMPLATES[lastTemplate].trim())brief.value=TEMPLATES[type.value];lastTemplate=type.value;});
+    files.addEventListener('change',()=>{list.textContent=files.files.length?Array.from(files.files).map(f=>f.name).join(', '):'No photos chosen.';});
+    function show(good,lines){result.className='result visible '+(good?'good':'bad');result.textContent=lines.join('\n');result.style.whiteSpace='pre-wrap';}
+    document.getElementById('quick-build').addEventListener('click',async()=>{
+      approveBox.hidden=true;
+      batch='q'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+      try{
+        show(true,['Uploading photos and building the draft...']);
+        for(const file of Array.from(files.files)){
+          const r=await fetch('/api/inbox/photo?id='+batch+'&filename='+encodeURIComponent(file.name),{method:'POST',headers:{'Content-Type':file.type||'application/octet-stream'},body:file});
+          const d=await r.json();if(!r.ok)throw new Error(d.error||'Photo upload failed');
+        }
+        const r=await fetch('/api/inbox/build',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:batch,brief:brief.value.replace(/^type:.*$/m,'type: '+type.value)})});
+        const d=await r.json();if(!r.ok)throw new Error(d.error||'Build failed');
+        const lines=[d.ok?'READY FOR APPROVAL: '+d.slug+' ('+d.type+')':'NEEDS YOUR INPUT (stopped at '+d.state+')'];
+        (d.questions||[]).forEach(q=>lines.push('  ? '+q.question));
+        (d.findings||[]).forEach(f=>lines.push('  ! '+f.message+(f.fix?' '+f.fix:'')));
+        if(d.plan)(d.plan.operations||[]).forEach(o=>lines.push('  '+o.op.padEnd(8)+o.path));
+        (d.warnings||[]).forEach(w=>lines.push('  note: '+w.message));
+        show(d.ok,lines);approveBox.hidden=!d.ok;
+      }catch(error){show(false,['Cannot build: '+error.message]);}
+    });
+    document.getElementById('quick-approve').addEventListener('click',async()=>{
+      try{
+        const r=await fetch('/api/inbox/approve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:batch,by:document.getElementById('quick-by').value})});
+        const d=await r.json();if(!r.ok)throw new Error(d.error||'Approval failed');
+        show(d.ok,[d.ok?'DONE. Draft saved and pack built: '+d.zip:'Stopped at '+d.state,...(d.files||[]).map(f=>'  '+f),d.next||'',...(d.findings||[]).map(f=>'  ! '+f.message)]);approveBox.hidden=true;
+      }catch(error){show(false,['Cannot approve: '+error.message]);}
     });
   })();
 </script>

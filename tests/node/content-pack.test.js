@@ -17,6 +17,7 @@ const { exportPack, exportFromTree } = require('../../scripts/studio/export-pack
 const { checkPack, applyPack, loadPack } = require('../../scripts/check-content-pack');
 const { writeZip, readZip } = require('../../scripts/studio/zip');
 const run = require('../../scripts/studio/run');
+const inbox = require('../../scripts/studio/inbox');
 
 process.on('uncaughtException', e => { console.error(e); if (process.env.GITHUB_ACTIONS) console.log('::error title=pack eval crashed::' + String(e.stack || e).split('\n').slice(0, 4).join(' | ').slice(0, 500)); process.exit(1); });
 let passed = 0;
@@ -207,6 +208,52 @@ test('exportFromTree refuses legacy flat uploads and missing records', () => {
   const r = exportFromTree({ type: 'tour', slug, outDir: path.join(tmp, 'sync2') });
   assert.equal(r.ok, false); assert.ok(r.findings.some(x => x.rule === 'EX-03'));
   assert.equal(exportFromTree({ type: 'tour', slug: 'nothing-here', outDir: path.join(tmp, 'sync3') }).findings[0].rule, 'EX-01');
+});
+
+// ---- Quick add: automatic draft builder (brief + photos in, checked draft + pack out). ----
+function inboxBatch(id, briefText, photoNames) {
+  const dir = path.join(inbox.inboxRoot(), id);
+  fs.mkdirSync(path.join(dir, 'photos'), { recursive: true });
+  fs.writeFileSync(path.join(dir, 'brief.md'), briefText);
+  for (const n of photoNames) fs.copyFileSync(jpg, path.join(dir, 'photos', n));
+}
+const TOUR_BRIEF = ['type: tour', 'title: Camel Sunset Tea Safari', 'summary: A relaxed camel ride across the dunes at golden hour with tea on the sand and an easy return.', 'best for: Guests who want an easy desert evening.',
+  'duration: Half-day, about 3 hours', 'included:', '- Camel ride', '- Tea', 'timeline:', '- Pickup | Meet at the hotel.', '- Ride | Camels across the dunes.', 'photos:', '- dune-1.jpg | Camels walking across golden dunes'].join('\n');
+test('parseBrief reads scalars, lists, timeline rows and blog sections', () => {
+  const b = inbox.parseBrief(TOUR_BRIEF + '\n## Ignored heading\nBody text.');
+  assert.equal(b.title, 'Camel Sunset Tea Safari'); assert.deepEqual(b.lists.included, ['Camel ride', 'Tea']); assert.equal(b.lists.timeline.length, 2);
+  assert.equal(b.sections[0].heading, 'Ignored heading'); assert.deepEqual(b.sections[0].paragraphs, ['Body text.']);
+});
+test('quick add builds a clean draft, waits for approval, then packs and applies it as a draft', () => {
+  inboxBatch('qa-tour-001', TOUR_BRIEF, ['dune-1.jpg', 'dune-2.jpg']);
+  const r = inbox.processFolder('qa-tour-001');
+  assert.equal(r.ok, true, JSON.stringify(r)); assert.equal(r.state, 'APPROVE'); assert.equal(r.slug, 'camel-sunset-tea-safari');
+  assert.ok(r.plan.operations.some(o => o.path === 'img/tours/camel-sunset-tea-safari/camel-sunset-tea-safari-hero-01.webp'));
+  const rec = JSON.parse(fs.readFileSync(path.join(inbox.inboxRoot(), 'qa-tour-001/stage/record.json'), 'utf8'));
+  assert.equal(rec.status, 'draft'); assert.equal(rec.facts_confirmed, false); assert.ok(rec.title.length <= 60); assert.ok(rec.description.length >= 110 && rec.description.length <= 160);
+  assert.equal(rec.images[0].alt, 'Camels walking across golden dunes');
+  assert.ok(!fs.existsSync(path.join(L.repoRoot(), 'camel-sunset-tea-safari.php')), 'nothing is written before approval');
+  assert.throws(() => inbox.approve('qa-tour-001', 'inbox'), /other than the author/);
+  const done = inbox.approve('qa-tour-001', 'owner');
+  assert.equal(done.ok, true, JSON.stringify(done)); assert.ok(done.zip.endsWith('.zip'));
+  assert.equal(fs.readFileSync(path.join(L.repoRoot(), 'camel-sunset-tea-safari.php'), 'utf8'), L.wrapperText('tour', 'camel-sunset-tea-safari'));
+  assert.equal(run.readRun(r.run).state, 'VERIFY');
+  assert.ok(inbox.processFolder('qa-tour-001').questions.some(q => q.field === 'slug'), 'existing slug is refused');
+});
+test('quick add asks plain questions instead of guessing', () => {
+  inboxBatch('qa-bad-0001', 'type: tour\ntitle: X\n', []);
+  const q = inbox.processFolder('qa-bad-0001').questions.map(x => x.field);
+  assert.ok(q.includes('title') && q.includes('summary') && q.includes('photos'));
+  inboxBatch('qa-bad-0002', TOUR_BRIEF.replace('Camel Sunset Tea Safari', 'Dune Dinner Without Timeline').replace(/timeline:[\s\S]*photos:/, 'photos:').replace('- Pickup | Meet at the hotel.\n', ''), ['a.jpg']);
+  const r = inbox.processFolder('qa-bad-0002');
+  assert.equal(r.ok, false); assert.equal(r.state, 'BUILD'); assert.ok(r.findings.some(f => f.rule === 'RC-09' && /timeline/.test(f.fix)));
+});
+test('quick add blog builds sections, toc and sources', () => {
+  inboxBatch('qa-blog-001', ['type: blog', 'title: A short guide to the fort walls', 'lede: The fort walls are a living part of the town, with homes and shops built into them.', 'summary: How to see the walls without the crowds.', 'sources:', '- Hotel notes | https://www.hotelgarhjaisal.com/', '## Visit', 'Allow two hours.', '## Timing', 'Go early.'].join('\n'), ['wall.jpg']);
+  const r = inbox.processFolder('qa-blog-001');
+  assert.equal(r.ok, true, JSON.stringify(r));
+  const rec = JSON.parse(fs.readFileSync(path.join(inbox.inboxRoot(), 'qa-blog-001/stage/record.json'), 'utf8'));
+  assert.deepEqual(rec.toc.map(t => t.id), ['visit', 'timing']); assert.equal(rec.sources.length, 1);
 });
 test('path map matches the Studio server record directories', () => {
   const server = fs.readFileSync(path.join(L.ROOT, 'scripts/content-studio.js'), 'utf8');
