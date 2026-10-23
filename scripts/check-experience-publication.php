@@ -70,7 +70,7 @@ foreach ($experiences as $slug => $experience) {
         }
         $source = is_file($root . '/' . $file) ? $read($root . '/' . $file) : '';
         if ($source !== '' && strpos($source, 'include/experience-page.php') === false) {
-            $siteCheckErrors[] = 'Non-live experience should use the shared renderer so noindex behavior stays consistent: ' . $file;
+            $siteCheckErrors[] = 'Non-live experience should use the shared renderer so the 404 behavior stays consistent: ' . $file;
         }
     }
 }

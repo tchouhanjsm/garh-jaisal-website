@@ -54,7 +54,9 @@ if (!is_array($record)
 
 // These templates use root-relative paths such as css/ and img/. The preview
 // route lives below /tools/content-studio/, so set a safe root base URL without
-// changing the production page renderers or their shared includes.
+// changing the production page renderers or their shared includes. This explicit
+// flag is set only after the loopback, token, Draft-state and expiry checks above.
+$studioAllowDraftPreview = true;
 ob_start();
 if ($type === 'tours') {
     $experienceSlug = $slug;

@@ -186,6 +186,9 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     expect(blogResponse.status()).toBe(201);
     const blogPayload = blogRequest.postDataJSON();
     expect(blogPayload.status).toBe('draft');
+    const draftBlogResponse = await fetch(phpPreview + '/' + blogSlug + '.php');
+    expect(draftBlogResponse.status).toBe(404);
+    expect(await draftBlogResponse.text()).not.toContain('Browser UI test travel guide');
     expect(blogPayload.sections).toContain('## Plan the Fort visit');
     expect(blogPayload.sections).toContain('- Confirm the meeting point');
     expect(blogPayload.sections).toContain('## Before you travel');
@@ -356,7 +359,8 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await expect(tourCard).toContainText('DRAFT');
     expect(fs.readFileSync(sitemapPath, 'utf8')).not.toContain('/' + tourSlug + '.php</loc>');
     const draftTourResponse = await fetch(phpPreview + '/' + tourSlug + '.php');
-    expect(await draftTourResponse.text()).toMatch(/noindex,follow/);
+    expect(draftTourResponse.status).toBe(404);
+    expect(await draftTourResponse.text()).not.toContain('Browser UI test tour');
     const deleteTourResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/tours/' + tourSlug && response.request().method() === 'DELETE');
     await tourCard.getByRole('button', { name: 'Delete draft' }).click();
     expect((await deleteTourResponsePromise).status()).toBe(200);

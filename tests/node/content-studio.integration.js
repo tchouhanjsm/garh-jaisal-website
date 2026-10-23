@@ -464,9 +464,9 @@ async function main() {
   sitemap = fs.readFileSync(sitemapPath, 'utf8');
   assert.ok(!sitemap.includes('/' + slugs[1] + '.php</loc>'), 'draft tour must be absent from sitemap');
   response = await fetch(PHP_URL + '/' + slugs[1] + '.php');
-  assert.equal(response.status, 200);
+  assert.equal(response.status, 404, 'public Draft tour routes must not render unapproved content');
   html = await response.text();
-  assert.match(html, /noindex,follow/, 'draft route must remain noindex');
+  assert.doesNotMatch(html, /Content Studio Integration Test Tour/, 'public Draft route must not disclose the tour copy');
 
   // Management lists only Content Studio JSON overlays; it must not edit legacy PHP registry entries.
   result = await requestJson(STUDIO_URL + '/api/content', 'GET');
@@ -483,8 +483,9 @@ async function main() {
   assert.equal(result.response.status, 200, 'existing draft tour should be editable');
   assert.equal(JSON.parse(fs.readFileSync(recordFiles[1], 'utf8')).h1, 'Updated Content Studio Draft Test Tour');
   response = await fetch(PHP_URL + '/' + slugs[1] + '.php');
+  assert.equal(response.status, 404, 'edited Draft content must remain inaccessible on its public route');
   html = await response.text();
-  assert.ok(html.includes('Updated Content Studio Draft Test Tour'), 'edited copy should render through the existing page');
+  assert.doesNotMatch(html, /Updated Content Studio Draft Test Tour/, 'edited Draft copy must not leak in the public response');
 
   // Hidden records and externally modified route wrappers are read-only through the manager.
   const draftTourBytes = fs.readFileSync(recordFiles[1]);
@@ -518,8 +519,9 @@ async function main() {
   sitemap = fs.readFileSync(sitemapPath, 'utf8');
   assert.ok(!sitemap.includes('/' + slugs[1] + '.php</loc>'), 'unpublishing should remove the route from the sitemap');
   response = await fetch(PHP_URL + '/' + slugs[1] + '.php');
+  assert.equal(response.status, 404, 'unpublished tour routes must return 404');
   html = await response.text();
-  assert.match(html, /noindex,follow/, 'unpublished route should become noindex');
+  assert.doesNotMatch(html, /Updated Content Studio Draft Test Tour/, 'unpublished tour copy must not be exposed');
   result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1], 'DELETE');
   assert.equal(result.response.status, 200, 'a Draft may be deleted after it is unpublished');
   assert.ok(!fs.existsSync(routeFiles[1]));
@@ -546,6 +548,10 @@ async function main() {
   assert.ok(fs.existsSync(routeFiles[2]));
   sitemap = fs.readFileSync(sitemapPath, 'utf8');
   assert.ok(!sitemap.includes('/' + slugs[2] + '.php</loc>'), 'a blog draft must not appear in sitemap');
+  response = await fetch(PHP_URL + '/' + slugs[2] + '.php');
+  assert.equal(response.status, 404, 'public Draft article routes must return 404');
+  html = await response.text();
+  assert.doesNotMatch(html, /Content Studio Integration Test Guide/, 'public Draft article response must not disclose the authored copy');
   await transitionReview('blogs', slugs[2], 'ready_for_review');
   await transitionReview('blogs', slugs[2], 'approved_for_release');
   result = await requestJson(STUDIO_URL + '/api/content/blogs/' + slugs[2] + '/status', 'PATCH', { status: 'live' });
@@ -576,9 +582,9 @@ async function main() {
   html = await response.text();
   assert.ok(!html.includes('Content Studio Revised Archive Card'), 'edited draft must not appear in the Blog archive before re-approval');
   response = await fetch(PHP_URL + '/' + slugs[2] + '.php');
+  assert.equal(response.status, 404, 'edited Draft article route must remain private until re-approved');
   html = await response.text();
-  assert.ok(html.includes('Content Studio Integration Test Guide Revised'), 'edited article should render through the PHP renderer');
-  assert.match(html, /noindex,follow/, 'edited draft must be noindex until released');
+  assert.doesNotMatch(html, /Content Studio Integration Test Guide Revised/, 'edited Draft article content must not be disclosed');
   await transitionReview('blogs', slugs[2], 'ready_for_review');
   await transitionReview('blogs', slugs[2], 'approved_for_release');
   result = await requestJson(STUDIO_URL + '/api/content/blogs/' + slugs[2] + '/status', 'PATCH', { status: 'live' });
@@ -591,8 +597,9 @@ async function main() {
   sitemap = fs.readFileSync(sitemapPath, 'utf8');
   assert.ok(!sitemap.includes('/' + slugs[2] + '.php</loc>'), 'unpublishing an article should remove it from the sitemap');
   response = await fetch(PHP_URL + '/' + slugs[2] + '.php');
+  assert.equal(response.status, 404, 'unpublished article route must return 404');
   html = await response.text();
-  assert.match(html, /noindex,follow/, 'unpublished article should become noindex');
+  assert.doesNotMatch(html, /Content Studio Integration Test Guide Revised/, 'unpublished article copy must not be exposed');
   result = await requestJson(STUDIO_URL + '/api/content/blogs/' + slugs[2], 'DELETE');
   assert.equal(result.response.status, 200);
   assert.ok(!fs.existsSync(routeFiles[2]));
