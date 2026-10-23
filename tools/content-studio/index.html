@@ -90,6 +90,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
         <div class="field"><label for="tour-category">Category *</label><select id="tour-category" name="category"><option value="desert">Desert experience</option><option value="city">City / heritage tour</option></select></div>
         <div class="field"><label for="tour-duration">Duration type *</label><select id="tour-duration" name="durationType"><option value="half-day">Half-day</option><option value="full-day">Full-day</option><option value="overnight">Overnight</option><option value="multi-day">Multi-day</option></select></div>
         <div class="field"><label for="tour-status">Publication state *</label><select id="tour-status" name="status"><option value="draft">Draft — recommended while reviewing</option><option value="live">Live locally — never public by itself</option></select><p class="hint">New or edited content must stay Draft through Ready for review and Approved for release. Publish locally is a separate step; it never deploys.</p></div>
+        <div class="field"><label for="tour-facts-confirmed">Owner confirmed the facts *</label><select id="tour-facts-confirmed" name="factsConfirmed"><option value="">No — prices, timings, inclusions not yet confirmed</option><option value="yes">Yes — the owner confirmed them today</option></select><div class="hint">A tour cannot be made Live until this is Yes and saved.</div></div>
         <div class="field"><label for="tour-menu-label">Short listing label</label><input id="tour-menu-label" name="menuLabel" maxlength="70" placeholder="e.g. Sunrise walk"></div>
         <div class="field full"><label for="tour-seo-title">SEO title</label><input id="tour-seo-title" name="seoTitle" maxlength="180" placeholder="Defaults to the tour name"></div>
         <div class="field full"><label for="tour-description">SEO description *</label><textarea id="tour-description" name="description" required minlength="40" maxlength="300" placeholder="Useful search summary. Avoid unconfirmed rates or operational promises."></textarea></div>
@@ -606,7 +607,14 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
     status.textContent='Uploading and validating the image…';
     input.disabled=true;
     try{
-      const response=await fetch('/api/upload?filename='+encodeURIComponent(file.name),{method:'POST',headers:{'Content-Type':file.type},body:file});
+      // Tour and blog photos go to their own folder with a code-chosen name (<slug>-<role>-<nn>.webp) once a slug is known.
+      const entity={'tour-hero-upload':['tour','tour-slug','tour-title'],'blog-hero-upload':['blog','blog-slug','blog-h1']}[input.id];
+      let query='';
+      if(entity){
+        const typed=(document.getElementById(entity[1]).value||document.getElementById(entity[2]).value||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80);
+        if(typed)query='&type='+entity[0]+'&slug='+encodeURIComponent(typed)+'&role=hero';
+      }
+      const response=await fetch('/api/upload?filename='+encodeURIComponent(file.name)+query,{method:'POST',headers:{'Content-Type':file.type},body:file});
       const data=await response.json();if(!response.ok)throw new Error(data.error||'Upload failed');
       setImageFieldValue(target,data.src);
       assetLibrary=null;
@@ -935,6 +943,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
       if(manageable){
         appendAction(actions,'Preview','preview',item);
         appendAction(actions,'Edit','edit',item);
+        if(item.type!=='gallery')appendAction(actions,'Export pack','export-pack',item);
         if(item.status==='draft'){
           if(reviewStatus==='draft')appendAction(actions,'Ready for review','review-ready',item);
           if(reviewStatus==='ready_for_review')appendAction(actions,'Approve for release','review-approve',item);
@@ -980,7 +989,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
       overnight:glance.Overnight,camelRide:glance['Camel ride'],meals:glance.Meals,
       transport:glance.Transport,returnPlan:glance.Return,timelineNote:record.timeline_note,
       included:(record.included||[]).join('\n'),excluded:(record.not_included||[]).join('\n'),
-      beforeBook:record.before_book,
+      beforeBook:record.before_book,factsConfirmed:record.facts_confirmed?'yes':'',
     };
     for(const [name,value] of Object.entries(fields))setField(form,name,value);
     setSimpleRows(tourStepConfig,record.timeline||[],row=>({title:row.title,description:row.text}));
@@ -1103,6 +1112,8 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
       let response;
       if(action==='delete'){
         response=await fetch('/api/content/'+type+'/'+encodeURIComponent(slug),{method:'DELETE'});
+      }else if(action==='export-pack'){
+        response=await fetch('/api/content/'+type+'/'+encodeURIComponent(slug)+'/export',{method:'POST'});
       }else if(Object.prototype.hasOwnProperty.call(reviewTransitions,action)){
         response=await fetch('/api/content/'+type+'/'+encodeURIComponent(slug)+'/review',{
           method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({reviewStatus:reviewTransitions[action]}),

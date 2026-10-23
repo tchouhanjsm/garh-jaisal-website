@@ -54,7 +54,8 @@ function checkRecord(record, ctx) {
   const f = [];
   const { type, slug } = ctx;
   const file = L.recordPath(type, slug);
-  const add = (rule, message, fix) => f.push(L.finding(rule, file, message, fix));
+  const draftSync = ctx.sync && record && record.status !== 'live';
+  const add = (rule, message, fix, soft) => { const x = L.finding(rule, file, message, fix); if (soft && draftSync) x.severity = 'warn'; f.push(x); };
   if (!record || typeof record !== 'object' || Array.isArray(record)) return [L.finding('RC-00', file, 'Record is not a JSON object.', 'Export the record again from the Studio.')];
   const cfg = L.typeConfig(type);
   for (const key of REQUIRED[type]) if (record[key] === undefined || record[key] === '' || record[key] === null) add('RC-01', 'Missing required field "' + key + '".', 'Add "' + key + '".');
@@ -65,15 +66,15 @@ function checkRecord(record, ctx) {
   if (type !== 'gallery') {
     const title = String(record.title || '');
     const desc = String(record.description || '');
-    if (title && (title.length < 8 || title.length > L.PATHS.seo.title_max)) add('RC-05', 'SEO title is ' + title.length + ' characters.', 'Use 8 to ' + L.PATHS.seo.title_max + ' characters.');
-    if (desc && (desc.length < L.PATHS.seo.description_min || desc.length > L.PATHS.seo.description_max)) add('RC-06', 'SEO description is ' + desc.length + ' characters.', 'Use ' + L.PATHS.seo.description_min + ' to ' + L.PATHS.seo.description_max + ' characters.');
+    if (title && (title.length < 8 || title.length > L.PATHS.seo.title_max)) add('RC-05', 'SEO title is ' + title.length + ' characters.', 'Use 8 to ' + L.PATHS.seo.title_max + ' characters.', true);
+    if (desc && (desc.length < L.PATHS.seo.description_min || desc.length > L.PATHS.seo.description_max)) add('RC-06', 'SEO description is ' + desc.length + ' characters.', 'Use ' + L.PATHS.seo.description_min + ' to ' + L.PATHS.seo.description_max + ' characters.', true);
     if (record.hero_alt !== undefined && String(record.hero_alt).length < 10) add('RC-07', 'Hero alt text is too short.', 'Describe the photo in at least 10 characters.');
   }
   if (type === 'tour') {
     if (!['desert', 'city'].includes(record.category)) add('RC-08', 'Category must be "desert" or "city".', 'Choose one.');
     if (!Array.isArray(record.timeline) || record.timeline.length === 0) add('RC-09', 'Timeline needs at least one step.', 'Add steps with title and text.');
     else record.timeline.forEach((s, i) => { if (!s || !s.title || !s.text) add('RC-09', 'Timeline step ' + (i + 1) + ' needs title and text.', 'Fill both.'); });
-    if (!Array.isArray(record.included) || record.included.length === 0) add('RC-10', 'Inclusions list is empty.', 'List what is included.');
+    if (!Array.isArray(record.included) || record.included.length === 0) add('RC-10', 'Inclusions list is empty.', 'List what is included.', true);
   }
   if (type === 'blog') {
     if (!Array.isArray(record.sections) || record.sections.length === 0) add('RC-11', 'Article needs at least one section.', 'Add sections.');

@@ -40,6 +40,10 @@ const originalResponsiveManifest = fs.readFileSync(responsiveManifestPath);
 const contentDirs = ['content/experiences', 'content/editorial', 'content/gallery', 'content/pages'].map(p => path.join(ROOT, p));
 const existedDirectories = new Map(contentDirs.map(dir => [dir, fs.existsSync(dir)]));
 let galleryRecordPath = null;
+let entityPhotoDirectory = null;
+let exportedPackDirectory = null;
+const existedToursImageDirectory = fs.existsSync(path.join(ROOT, 'img/tours'));
+const existedStageDirectory = fs.existsSync(path.join(ROOT, 'content/_stage'));
 const ownedPaths = new Set();
 let sitemapTouched = false;
 let studio = null;
@@ -152,6 +156,7 @@ function landingPagePayload(slug, theme = 'heritage') {
 
 function tourPayload(slug, status) {
   return {
+    factsConfirmed: 'yes',
     title: slug === slugs[0] ? 'Content Studio Integration Test Tour' : 'Content Studio Draft Test Tour',
     slug, category: 'city', durationType: 'half-day', status,
     description: 'A temporary test-only tour that validates the new content publishing workflow.',
@@ -450,8 +455,11 @@ async function main() {
   assert.equal(fs.readFileSync(routeFiles[0], 'utf8'), routeBefore, 'existing route must remain unchanged');
 
   // Draft tour: usable for local review but not exposed through the public sitemap or catalogue.
-  result = await requestJson(STUDIO_URL + '/api/tours', 'POST', tourPayload(slugs[1], 'draft'));
+  result = await requestJson(STUDIO_URL + '/api/tours', 'POST', { ...tourPayload(slugs[1], 'draft'), factsConfirmed: '' });
   assert.equal(result.response.status, 201, 'draft tour should be created');
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1] + '/review', 'PATCH', { reviewStatus: 'ready_for_review' });
+  assert.equal(result.response.status, 422, 'a tour without owner-confirmed facts must not be reviewed or published: ' + JSON.stringify(result.body));
+  assert.match(JSON.stringify(result.body), /Owner confirmed the facts/);
   assert.ok(fs.existsSync(routeFiles[1]));
   sitemap = fs.readFileSync(sitemapPath, 'utf8');
   assert.ok(!sitemap.includes('/' + slugs[1] + '.php</loc>'), 'draft tour must be absent from sitemap');
@@ -784,6 +792,47 @@ async function main() {
   assert.deepEqual(fs.readFileSync(validUploadPath), sourceImageBytes, 'upload must preserve the validated source bytes');
   assert.ok(fs.readFileSync(responsiveManifestPath, 'utf8').includes(validUploadBody.src), 'uploaded image must be registered in the responsive image manifest');
 
+  // Path-safe upload: the code chooses the folder and name, converts to WebP and numbers photos.
+  const entitySlug = 'content-studio-ci-photo-tour';
+  entityPhotoDirectory = path.join(ROOT, 'img/tours', entitySlug);
+  const entityUpload = await fetch(STUDIO_URL + '/api/upload?filename=desert.jpg&type=tour&slug=' + entitySlug + '&role=hero', {
+    method: 'POST', headers: { 'Content-Type': 'image/jpeg' }, body: sourceImageBytes,
+  });
+  assert.equal(entityUpload.status, 201, 'entity upload should succeed: ' + (entityUpload.status === 201 ? '' : await entityUpload.clone().text()));
+  const entityBody = await entityUpload.json();
+  assert.equal(entityBody.src, 'img/tours/' + entitySlug + '/' + entitySlug + '-hero-01.webp');
+  assert.ok(entityBody.bytes <= 204800 && entityBody.width <= 1600, 'hero must be within 200 KB and 1600 px');
+  const secondEntityUpload = await (await fetch(STUDIO_URL + '/api/upload?filename=desert.jpg&type=tour&slug=' + entitySlug + '&role=step', {
+    method: 'POST', headers: { 'Content-Type': 'image/jpeg' }, body: sourceImageBytes,
+  })).json();
+  assert.equal(secondEntityUpload.src, 'img/tours/' + entitySlug + '/' + entitySlug + '-step-02.webp', 'photos are numbered per item');
+  for (const bad of ['slug=Bad_Slug&role=hero&type=tour', 'slug=' + entitySlug + '&role=banner&type=tour', 'slug=' + entitySlug + '&role=hero&type=cabin']) {
+    const rejected = await fetch(STUDIO_URL + '/api/upload?filename=desert.jpg&' + bad, { method: 'POST', headers: { 'Content-Type': 'image/jpeg' }, body: sourceImageBytes });
+    assert.equal(rejected.status, 400, 'bad entity upload parameters must be rejected: ' + bad);
+  }
+  // Export a saved tour as a sync pack and prove the pack check accepts it.
+  const entityTourFiles = [path.join(ROOT, entitySlug + '.php'), path.join(ROOT, 'content/experiences/' + entitySlug + '.json')];
+  for (const file of entityTourFiles) ownedPaths.add(file);
+  result = await requestJson(STUDIO_URL + '/api/tours', 'POST', { ...tourPayload(entitySlug, 'draft'), title: 'Content Studio Photo Folder Tour', heroImage: entityBody.src });
+  assert.equal(result.response.status, 201, 'tour using an entity photo should save: ' + JSON.stringify(result.body));
+  const exported = await requestJson(STUDIO_URL + '/api/content/tours/' + entitySlug + '/export', 'POST', {});
+  assert.equal(exported.response.status, 200, 'export should succeed: ' + JSON.stringify(exported.body));
+  const packZip = path.join(ROOT, exported.body.zip);
+  ownedPaths.add(packZip);
+  exportedPackDirectory = path.join(ROOT, 'content/_stage');
+  const packCheck = require(path.join(ROOT, 'scripts/check-content-pack.js')).checkPack(require(path.join(ROOT, 'scripts/check-content-pack.js')).loadPack(packZip));
+  assert.deepEqual(packCheck.findings.filter(x => x.severity !== 'warn'), [], 'an exported pack must pass the pack check');
+  assert.ok(exported.body.files.includes('img/tours/' + entitySlug + '/' + entitySlug + '-hero-01.webp'), 'the pack carries the photo at its exact path');
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + entitySlug, 'DELETE');
+  assert.equal(result.response.status, 200, 'the test tour should be removable');
+  // An old flat upload cannot travel in a pack.
+  result = await requestJson(STUDIO_URL + '/api/tours', 'POST', { ...tourPayload(entitySlug, 'draft'), title: 'Content Studio Photo Folder Tour', heroImage: validUploadBody.src });
+  assert.equal(result.response.status, 201);
+  const legacyExport = await requestJson(STUDIO_URL + '/api/content/tours/' + entitySlug + '/export', 'POST', {});
+  assert.equal(legacyExport.response.status, 422, 'legacy flat uploads must be refused by export');
+  result = await requestJson(STUDIO_URL + '/api/content/tours/' + entitySlug, 'DELETE');
+  assert.equal(result.response.status, 200);
+
   // A symlinked image directory must be rejected even if the final image file exists behind it.
   const unsafeImageLink = path.join(ROOT, 'img/content-studio-ci-symlink');
   assert.ok(!fs.existsSync(unsafeImageLink), 'refusing to overwrite a pre-existing image-path safety fixture');
@@ -817,6 +866,14 @@ main()
     for (const file of ownedPaths) {
       try { if (fs.existsSync(file) && !fs.lstatSync(file).isSymbolicLink()) fs.unlinkSync(file); } catch (_) {}
     }
+    try {
+      if (entityPhotoDirectory && fs.existsSync(entityPhotoDirectory)) fs.rmSync(entityPhotoDirectory, { recursive: true, force: true });
+      const toursDir = path.join(ROOT, 'img/tours');
+      if (!existedToursImageDirectory && fs.existsSync(toursDir) && fs.readdirSync(toursDir).length === 0) fs.rmdirSync(toursDir);
+      const stageDir = path.join(ROOT, 'content/_stage');
+      const packsDir = path.join(stageDir, 'packs');
+      if (!existedStageDirectory && fs.existsSync(packsDir) && fs.readdirSync(packsDir).length === 0) { fs.rmdirSync(packsDir); fs.rmdirSync(stageDir); }
+    } catch (_) {}
     try { if (sitemapTouched) fs.writeFileSync(sitemapPath, originalSitemap); } catch (_) {}
     try {
       if (!fs.readFileSync(responsiveManifestPath).equals(originalResponsiveManifest)) {

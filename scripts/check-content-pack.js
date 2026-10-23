@@ -72,8 +72,8 @@ function checkPack(entries) {
   const seenSlugs = new Set();
   for (const entry of manifest.entries) {
     const label = String(entry.type) + ':' + String(entry.slug);
-    if (!L.TYPES.includes(entry.type) || !L.SLUG_RE.test(String(entry.slug || '')) || !['new', 'update'].includes(entry.mode)) {
-      add('PK-04', label, 'Entry needs a known type, a valid slug and mode "new" or "update".', 'Rebuild the pack with export_pack.');
+    if (!L.TYPES.includes(entry.type) || !L.SLUG_RE.test(String(entry.slug || '')) || !['new', 'update', 'sync'].includes(entry.mode)) {
+      add('PK-04', label, 'Entry needs a known type, a valid slug and mode "new", "update" or "sync".', 'Rebuild the pack with export_pack.');
       continue;
     }
     if (seenSlugs.has(label)) { add('PK-12', label, 'Duplicate entry in one pack.', 'List each slug once.'); continue; }
@@ -88,7 +88,7 @@ function checkPack(entries) {
     } else add('PK-04', recFile, 'Record file is not in the pack at the expected path.', 'Expected ' + recFile + '.');
     const { set, imageDir } = expectedPaths(entry, record);
     const page = L.pagePath(entry.type, entry.slug);
-    if (page && entry.mode === 'new' && !files.has(page)) add('PK-04', page, 'Page wrapper is missing from the pack.', 'Expected ' + page + '.');
+    if (page && entry.mode !== 'update' && !files.has(page)) add('PK-04', page, 'Page wrapper is missing from the pack.', 'Expected ' + page + '.');
     if (page && files.has(page) && files.get(page).toString('utf8') !== L.wrapperText(entry.type, entry.slug)) add('PK-21', page, 'Page wrapper differs from the generated two-line wrapper.', 'Use the wrapper export_pack writes.');
     for (const fl of (entry.files || [])) {
       const p = fl.path;
@@ -97,7 +97,7 @@ function checkPack(entries) {
       if (entry.mode === 'update') {
         const current = L.hashInRepo(p);
         if (current !== null && fl.prior_sha256 !== current) add('PK-18', p, 'The site file changed since this pack was exported (stale base).', 'Re-export the update from the current site.');
-      } else if (L.existsInRepo(p) && p.startsWith('img/')) add('PK-12', p, 'An image with this name already exists.', 'Use a different number or export an update with replace.');
+      } else if (entry.mode === 'new' && L.existsInRepo(p) && p.startsWith('img/')) add('PK-12', p, 'An image with this name already exists.', 'Use a different number or export an update with replace.');
       if (p.startsWith('img/')) {
         const dir = p.slice(0, p.lastIndexOf('/') + 1);
         if (dir !== imageDir) { add('PK-19', p, 'Photo is in the wrong folder. Expected ' + imageDir + ', found ' + dir + '.', 'Place photos with place_photo.'); continue; }
@@ -119,11 +119,11 @@ function checkPack(entries) {
       }
     }
     if (record) {
-      for (const x of checkRecord(record, { type: entry.type, slug: entry.slug, isNew: entry.mode === 'new', packFiles: allPaths })) f.push(x);
+      for (const x of checkRecord(record, { type: entry.type, slug: entry.slug, isNew: entry.mode === 'new', packFiles: allPaths, sync: entry.mode === 'sync' })) f.push(x);
       if (L.PATHS.types[entry.type].sitemap && record.status === 'live') entry._live = true;
     }
   }
-  return { ok: f.length === 0, findings: f, manifest, files };
+  return { ok: f.every(x => x.severity === 'warn'), findings: f, manifest, files };
 }
 
 function runSitemap() {

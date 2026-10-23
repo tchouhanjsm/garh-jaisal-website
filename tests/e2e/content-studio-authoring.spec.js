@@ -93,6 +93,7 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await page.locator('#tour-slug').fill(tourSlug);
     await page.locator('#tour-description').fill('A temporary automated test tour used to verify the guided content authoring experience.');
     await page.locator('#tour-summary').fill('A temporary test of the guided itinerary editor and draft publishing.');
+    await page.locator('#tour-facts-confirmed').selectOption('yes');
     await page.locator('#tour-best-for').fill('Guests and automated tests of local content authoring.');
     await page.locator('#tour-hero-image').fill('img/desert3.jpg');
     await page.locator('#tour-hero-alt').fill('Camel riders travelling over dunes near Jaisalmer');
