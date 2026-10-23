@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "note": "Single source of truth for where Content Studio content lives. Read by the form, plan_save, check_pack and apply_pack. Nobody types a destination path.",
+  "types": {
+    "tour": {
+      "record_dir": "content/experiences",
+      "page": "{slug}.php",
+      "wrapper_var": "experienceSlug",
+      "renderer": "experience-page.php",
+      "images": "img/tours/{slug}/",
+      "sitemap": true
+    },
+    "blog": {
+      "record_dir": "content/editorial",
+      "page": "{slug}.php",
+      "wrapper_var": "editorialGuideSlug",
+      "renderer": "editorial-guide-page.php",
+      "images": "img/journal/{slug}/",
+      "sitemap": true
+    },
+    "gallery": {
+      "record_dir": "content/gallery",
+      "page": null,
+      "images": "img/gallery/{category}/",
+      "categories": ["hotel", "rooms", "desert", "restaurant"],
+      "sitemap": false
+    }
+  },
+  "roles": ["hero", "step", "gallery", "detail", "og"],
+  "image_extensions": ["webp", "avif"],
+  "limits": {
+    "hero": { "max_width": 1600, "max_bytes": 204800 },
+    "other": { "max_width": 1200, "max_bytes": 81920 }
+  },
+  "seo": { "title_max": 60, "description_min": 110, "description_max": 160 },
+  "never_in_pack": ["sitemap.xml"]
+}

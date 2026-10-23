@@ -20,3 +20,6 @@ content/experiences/content-studio-preview-*.json
 content/editorial/content-studio-preview-*.json
 content/pages/content-studio-preview-*.json
 css/pages/content-studio-preview-*.css
+
+# Content Studio working folders (packs and staged photos are build artifacts)
+content/_stage/

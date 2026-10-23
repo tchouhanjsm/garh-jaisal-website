@@ -1,6 +1,6 @@
 # Content Studio: Final Design (to implement)
 
-Status: design only, nothing implemented. Basis: code on `main` at PR #112 (Oct 21, 2026), read not run.
+Status: implemented in one PR (see docs/CONTENT-STUDIO.md). Deviations: non-live pages stay `noindex,follow` (Studio preview relies on it) instead of 404; template rendering of optional `images` is not added; checks cover presence and sources of facts, not truth. Basis: code on `main` at PR #112 (Oct 21, 2026), read not run.
 This file governs; slices are built one PR each, starting with CS-1.
 
 ## 1. Objective and scope

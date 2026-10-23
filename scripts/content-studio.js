@@ -1538,6 +1538,21 @@ const server = http.createServer(async (req, res) => {
       }
       return respondJson(res, 200, { message: 'Responsive image build completed.', output: String(result.stdout || '').trim() });
     }
+    if (req.method === 'POST' && url.pathname.startsWith('/api/pack/')) {
+      // Path-pack workflow (docs/CONTENT-STUDIO-DESIGN.md): pure checks only; these routes never write files.
+      const body = await readJson(req);
+      const studioLib = require('./studio/lib');
+      if (url.pathname === '/api/pack/intake-check') { const questions = require('./studio/check-record').checkIntake(body.intake); return respondJson(res, 200, { ok: questions.length === 0, questions }); }
+      if (url.pathname === '/api/pack/record-check') {
+        if (!studioLib.TYPES.includes(body.type) || !studioLib.SLUG_RE.test(String(body.slug || ''))) throw fail(400, 'Choose a type and a valid slug.');
+        const findings = require('./studio/check-record').checkRecord(body.record, { type: body.type, slug: body.slug, isNew: !studioLib.recordExists(body.type, body.slug), packFiles: new Set((body.photos || []).map(p => String(p.path))) });
+        return respondJson(res, 200, { ok: findings.length === 0, findings });
+      }
+      if (url.pathname === '/api/pack/plan') return respondJson(res, 200, require('./studio/plan-save').planSave({ type: body.type, slug: body.slug, record: body.record, photos: Array.isArray(body.photos) ? body.photos.map(p => ({ path: String(p.path), bytes: Number(p.bytes) || 0 })) : [] }));
+      if (url.pathname === '/api/pack/paths') return respondJson(res, 200, studioLib.PATHS);
+      throw fail(404, 'No pack route matches this request.');
+    }
+    if (req.method === 'GET' && url.pathname === '/api/pack/paths') return respondJson(res, 200, require('./studio/lib').PATHS);
     if (req.method === 'GET' && url.pathname === '/favicon.ico') { res.writeHead(204); return res.end(); }
     return respondJson(res, 404, { error: 'No Content Studio route matches this request.' });
   } catch (error) {
