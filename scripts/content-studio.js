@@ -657,6 +657,9 @@ function verifyPublishableRecord(type, record) {
     }
     imagePath(record.hero_image);
     textField(record.hero_alt, 'Hero image alternative text', 10, 240);
+    if (record.facts_confirmed !== true || !/^\d{4}-\d{2}-\d{2}$/.test(String(record.last_verified || ''))) {
+      throw fail(422, 'Confirm prices, timings and inclusions with the owner (set "Owner confirmed the facts" to Yes and save) before this tour can be made Live.');
+    }
     return;
   }
   if (type === 'blogs') {
@@ -959,7 +962,9 @@ function createTour(input, existingSlug = null, previewOnly = false) {
     faq,
     related: category === 'city' ? ['half-day-jaisalmer-tour', 'full-day-jaisalmer-tour'] : ['sleep-under-the-stars', 'swiss-tent-safari'],
     date_modified: date,
+    facts_confirmed: input.factsConfirmed === 'yes' || input.factsConfirmed === true,
   };
+  if (record.facts_confirmed) record.last_verified = date;
   if (previewOnly) return { slug, status: 'draft', pagePath: '/' + slug + '.php', record: { ...record, status: 'draft', review_status: 'draft' } };
   if (!existingSlug && status === 'live') throw fail(409, 'New content must be saved as Draft, marked Ready for review, and Approved for release before it can be made Live locally.');
   return withManifestSource(heroImage, () => existingSlug
@@ -1288,6 +1293,35 @@ function withManifestSource(src, action) {
   }
 }
 
+// Path-safe upload: the code chooses the folder and name (<slug>-<role>-<nn>.webp) from content/_paths.json,
+// converts to WebP within the size caps, and registers the source for responsive images.
+function uploadForEntity(buffer, ext, url) {
+  const studio = require('./studio/lib');
+  const type = url.searchParams.get('type');
+  const slug = String(url.searchParams.get('slug') || '');
+  const role = String(url.searchParams.get('role') || 'gallery');
+  const category = url.searchParams.get('category') || undefined;
+  if (!studio.TYPES.includes(type)) throw fail(400, 'Unknown content type for this upload.');
+  if (!studio.SLUG_RE.test(slug)) throw fail(400, 'Use a URL slug made from lowercase letters, digits and hyphens before uploading.');
+  if (!studio.ROLES.includes(role)) throw fail(400, 'Unknown photo role.');
+  const dir = studio.imageDir(type, slug, category);
+  assertImageDirectoryChain(path.join(ROOT, dir), true);
+  const nameRe = studio.photoNameRe(slug);
+  let n = 0;
+  for (const name of fs.readdirSync(path.join(ROOT, dir))) { const m = nameRe.exec(name); if (m) n = Math.max(n, Number(m[2])); }
+  n += 1;
+  if (n > 99) throw fail(400, 'This item already has 99 photos.');
+  const tmp = path.join(require('node:os').tmpdir(), 'gj-upload-' + process.pid + '-' + crypto.randomBytes(4).toString('hex') + ext);
+  fs.writeFileSync(tmp, buffer, { mode: 0o600 });
+  let placed;
+  try { placed = require('./studio/place-photo').placePhoto({ type, slug, role, n, file: tmp, category, stage: ROOT }); }
+  catch (error) { throw fail(422, error.message); }
+  finally { try { fs.unlinkSync(tmp); } catch (_) {} }
+  try { updateImageManifest(placed.path); }
+  catch (error) { try { fs.unlinkSync(path.join(ROOT, placed.path)); } catch (_) {} throw error; }
+  return { src: placed.path, message: 'Uploaded and converted to WebP (' + Math.round(placed.bytes / 1024) + ' KB, ' + placed.width + ' px wide) in its own folder.', bytes: placed.bytes, width: placed.width };
+}
+
 async function upload(req, url) {
   const originalName = path.basename(url.searchParams.get('filename') || 'upload.jpg');
   const ext = path.extname(originalName).toLowerCase();
@@ -1298,6 +1332,7 @@ async function upload(req, url) {
   }
   const buffer = await readBody(req, MAX_IMAGE_BYTES);
   if (buffer.length < 16 || !type.signature(buffer)) throw fail(400, 'The uploaded file signature does not match its image type.');
+  if (url.searchParams.get('type')) return uploadForEntity(buffer, ext, url);
   const name = slugify(path.parse(originalName).name).slice(0, 64) || 'photo';
   const folder = path.join(IMAGE_ROOT, 'content-studio');
   assertImageDirectoryChain(folder, true);
@@ -1537,6 +1572,13 @@ const server = http.createServer(async (req, res) => {
         throw fail(500, 'Responsive-image generation failed. Check Python 3/Pillow and source image formats. ' + String(result.stderr || result.stdout || result.error?.message || '').trim());
       }
       return respondJson(res, 200, { message: 'Responsive image build completed.', output: String(result.stdout || '').trim() });
+    }
+    const exportMatch = req.method === 'POST' && url.pathname.match(/^\/api\/content\/(tours|blogs|gallery)\/([a-z0-9-]+)\/export$/);
+    if (exportMatch) {
+      const packType = { tours: 'tour', blogs: 'blog', gallery: 'gallery' }[exportMatch[1]];
+      const result = require('./studio/export-pack').exportFromTree({ type: packType, slug: exportMatch[2], outDir: path.join(ROOT, 'content/_stage/packs') });
+      if (!result.ok) throw fail(422, 'Cannot export yet: ' + result.findings.map(f => f.message + (f.fix ? ' ' + f.fix : '')).join(' '));
+      return respondJson(res, 200, { message: 'Pack ready: ' + path.relative(ROOT, result.zip) + ' (' + result.files.length + ' files)' + (result.warnings && result.warnings.length ? ' with ' + result.warnings.length + ' draft warning(s): ' + result.warnings.map(w => w.message).join(' ') : '') + '. Unzip it into the other checkout and run: node scripts/check-content-pack.js <zip> --apply', zip: path.relative(ROOT, result.zip), files: result.files, warnings: result.warnings || [] });
     }
     if (req.method === 'POST' && url.pathname.startsWith('/api/pack/')) {
       // Path-pack workflow (docs/CONTENT-STUDIO-DESIGN.md): pure checks only; these routes never write files.

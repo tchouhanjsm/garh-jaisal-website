@@ -47,11 +47,11 @@ jobs:
       - name: Check one-click Content Studio launcher syntax
         run: bash -n "tools/content-studio/Start Content Studio.command"
 
-      - name: Exercise Content Studio live/draft publishing workflow
-        run: node tests/node/content-studio.integration.js
-
       - name: Install Pillow for Content Studio photo placement checks
         run: python3 -c "import PIL" 2>/dev/null || python3 -m pip install --break-system-packages pillow
+
+      - name: Exercise Content Studio live/draft publishing workflow
+        run: node tests/node/content-studio.integration.js
 
       - name: Check Content Studio pack modules syntax
         run: |
