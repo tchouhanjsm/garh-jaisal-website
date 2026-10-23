@@ -18,7 +18,13 @@ Governing design: `docs/CONTENT-STUDIO-DESIGN.md`. This file is the how-to. Owne
 
 Photo name: `<slug>-<role>-<nn>.webp` (roles: hero, step, gallery, detail, og). Hero up to 1600 px and 200 KB; others 1200 px and 80 KB; alt text on every image. `place_photo` converts and sizes for you.
 
-## Using the Studio form (no command line needed for the daily path)
+## Quick add (automatic, the default tab)
+Paste a short brief, choose photos, press **Build draft**. The code derives the slug, converts and names every photo in its own folder (first photo, or one named hero, is the main photo), drafts SEO title and description within limits, builds the record, runs every check and shows the exact files. Missing details come back as plain questions tied to the brief line that fixes them. You then enter your name and press **Approve**: it builds the pack, saves the page as a Draft in this working tree, and the run stops before commit and PR.
+- Brief format: `key: value` lines (`title`, `summary`, `best for`, `duration`, `category`, `slug`, `seo title`, `description`, `facts confirmed by: Name 2026-10-23`), lists with `- item` lines (`included`, `not included`, `timeline` as `- Step | text`, `faq` as `- Question | answer`, `photos` as `- file.jpg | alt text`, `sources`), and for blogs `## Heading` sections.
+- Same thing from a folder, no browser: put `brief.md` and a `photos/` folder in `content/_inbox/<id>/`, then `npm run studio:inbox <id>` and `npm run studio:approve <id> -- --by "Name"`.
+- Always a Draft. Tours cannot go Live until facts are confirmed. Alt text is drafted from the title when you do not give it; the result says so.
+
+## Using the detailed forms (for edits and everything Quick add does not cover)
 1. Add a tour or blog. Enter the title or URL slug **before** uploading the hero photo: it is converted to WebP and stored as `img/tours/<slug>/<slug>-hero-01.webp` (or `img/journal/<slug>/...`) automatically.
 2. For tours, set **Owner confirmed the facts** to Yes only after the owner has confirmed price, timings and inclusions; a tour cannot go Live without it.
 3. In **Manage saved content**, press **Export pack** on a tour or blog. It writes `content/_stage/packs/gj-pack_<slug>_<date>_v1_sync.zip`. Unzip into the other checkout (or run `node scripts/check-content-pack.js <zip> --apply`).
@@ -63,4 +69,4 @@ Upload and extract the pack at the site root, keep the record `draft`, run `php 
 - Browser overflow checks stay in the Playwright suite.
 
 ## Tests
-`node tests/node/content-pack.test.js` (golden packs, 21 bad packs each with its own rule id, and sync export) runs in CI.
+`node tests/node/content-pack.test.js` (golden packs, 21 bad packs each with its own rule id, sync export and Quick add) runs in CI.

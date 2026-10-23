@@ -1580,6 +1580,40 @@ const server = http.createServer(async (req, res) => {
       if (!result.ok) throw fail(422, 'Cannot export yet: ' + result.findings.map(f => f.message + (f.fix ? ' ' + f.fix : '')).join(' '));
       return respondJson(res, 200, { message: 'Pack ready: ' + path.relative(ROOT, result.zip) + ' (' + result.files.length + ' files)' + (result.warnings && result.warnings.length ? ' with ' + result.warnings.length + ' draft warning(s): ' + result.warnings.map(w => w.message).join(' ') : '') + '. Unzip it into the other checkout and run: node scripts/check-content-pack.js <zip> --apply', zip: path.relative(ROOT, result.zip), files: result.files, warnings: result.warnings || [] });
     }
+    if (url.pathname.startsWith('/api/inbox/')) {
+      // Quick add: automatic draft builder (scripts/studio/inbox.js). Local-only; writes only under content/_inbox, then the normal pack apply.
+      const inbox = require('./studio/inbox');
+      const idOk = value => /^[A-Za-z0-9_-]{4,60}$/.test(String(value || ''));
+      if (req.method === 'POST' && url.pathname === '/api/inbox/photo') {
+        const id = url.searchParams.get('id');
+        const name = path.basename(url.searchParams.get('filename') || 'photo.jpg');
+        const ext = path.extname(name).toLowerCase();
+        if (!idOk(id)) throw fail(400, 'Invalid batch id.');
+        if (!['.jpg', '.jpeg', '.png', '.webp'].includes(ext)) throw fail(400, 'Use JPG, PNG or WebP photos.');
+        const buffer = await readBody(req, MAX_IMAGE_BYTES);
+        if (buffer.length < 16) throw fail(400, 'The photo is empty.');
+        const dir = path.join(inbox.inboxRoot(), id, 'photos');
+        fs.mkdirSync(dir, { recursive: true });
+        const safe = (slugify(path.parse(name).name).slice(0, 60) || 'photo') + ext;
+        atomicWrite(path.join(dir, safe), buffer);
+        return respondJson(res, 201, { name: safe, bytes: buffer.length });
+      }
+      if (req.method === 'POST' && url.pathname === '/api/inbox/build') {
+        const body = await readJson(req);
+        if (!idOk(body.id)) throw fail(400, 'Invalid batch id.');
+        const brief = String(body.brief || '');
+        if (brief.length > 60000) throw fail(413, 'The brief is too long.');
+        fs.mkdirSync(path.join(inbox.inboxRoot(), body.id), { recursive: true });
+        atomicWrite(path.join(inbox.inboxRoot(), body.id, 'brief.md'), brief);
+        return respondJson(res, 200, inbox.processFolder(body.id));
+      }
+      if (req.method === 'POST' && url.pathname === '/api/inbox/approve') {
+        const body = await readJson(req);
+        if (!idOk(body.id)) throw fail(400, 'Invalid batch id.');
+        try { return respondJson(res, 200, inbox.approve(body.id, String(body.by || '').trim())); } catch (error) { throw fail(409, error.message); }
+      }
+      throw fail(404, 'No quick-add route matches this request.');
+    }
     if (req.method === 'POST' && url.pathname.startsWith('/api/pack/')) {
       // Path-pack workflow (docs/CONTENT-STUDIO-DESIGN.md): pure checks only; these routes never write files.
       const body = await readJson(req);

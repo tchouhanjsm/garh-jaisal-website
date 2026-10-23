@@ -14,7 +14,9 @@
     "test:studio": "node tests/node/content-pack.test.js",
     "studio:start": "node tools/content-studio/start.js",
     "studio:verify": "node scripts/studio/verify-release.js",
-    "studio:snapshot": "node scripts/studio/route-snapshot.js"
+    "studio:snapshot": "node scripts/studio/route-snapshot.js",
+    "studio:inbox": "node scripts/studio/cli.js inbox",
+    "studio:approve": "node scripts/studio/cli.js inbox-approve"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1"

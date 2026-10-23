@@ -10,6 +10,7 @@ const { placePhoto } = require('./place-photo');
 const { exportPack } = require('./export-pack');
 const { checkPack, applyPack, loadPack } = require('../check-content-pack');
 const run = require('./run');
+const inbox = require('./inbox');
 
 const [cmd, ...rest] = process.argv.slice(2);
 const opt = {};
@@ -38,5 +39,7 @@ try {
   else if (cmd === 'apply') { const r = applyPack(pos[0], { dryRun: !opt.write }); out(r); process.exit(r.ok ? 0 : 1); }
   else if (cmd === 'run-new') out(run.newRun({ type: need('type'), slug: need('slug'), author: need('author'), approver: need('approver') }));
   else if (cmd === 'run-step') out(run.advance(pos[0], { pass: opt.fail ? false : true, evidence: opt.evidence, by: opt.by }));
-  else { console.error('Commands: intake-check, record-check, plan, photo, export, check, apply (--write), run-new, run-step'); process.exit(2); }
+  else if (cmd === 'inbox') { const r = inbox.processFolder(pos[0]); out(r); process.exit(r.ok ? 0 : 1); }
+  else if (cmd === 'inbox-approve') { const r = inbox.approve(pos[0], need('by')); out(r); process.exit(r.ok ? 0 : 1); }
+  else { console.error('Commands: inbox <id>, inbox-approve <id> --by <name>, intake-check, record-check, plan, photo, export, check, apply (--write), run-new, run-step'); process.exit(2); }
 } catch (error) { console.error('Error: ' + error.message); process.exit(1); }
