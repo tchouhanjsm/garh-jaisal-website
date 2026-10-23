@@ -5,10 +5,14 @@
  */
 $siteConfig = require __DIR__ . '/site-config.php';
 $editorialGuides = require __DIR__ . '/editorial-guides-data.php';
+$studioAllowDraftPreview = isset($studioAllowDraftPreview) && $studioAllowDraftPreview === true;
 $editorialGuideSlug = isset($editorialGuideSlug) && is_string($editorialGuideSlug)
     ? $editorialGuideSlug
     : '';
 $guide = $editorialGuides[$editorialGuideSlug] ?? null;
+if (is_array($guide) && ($guide['status'] ?? 'live') !== 'live' && !$studioAllowDraftPreview) {
+    $guide = null;
+}
 if (!is_array($guide)) {
     http_response_code(404);
     $guide = [
@@ -23,7 +27,7 @@ if (!is_array($guide)) {
         'date_published' => '2026-10-15',
         'date_modified' => '2026-10-15',
         'date_display' => '15 October 2026',
-        'status' => 'draft',
+        'status' => 'hidden',
         'toc' => [],
         'sections' => [],
         'sources' => [],
