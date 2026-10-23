@@ -1,6 +1,6 @@
 # Content Studio: Final Design (to implement)
 
-Status: implemented in one PR (see docs/CONTENT-STUDIO.md). Deviations: non-live pages stay `noindex,follow` (Studio preview relies on it) instead of 404; template rendering of optional `images` is not added; checks cover presence and sources of facts, not truth. Basis: code on `main` at PR #112 (Oct 21, 2026), read not run.
+Status: PR #119 implemented the pack workflow; PR #120 hardens the public Draft boundary with 404 responses and keeps authenticated, token-bound local previews working. Remaining limits: optional `images` are validated but not rendered; checks validate fact fields and source presence, not factual truth. Basis: implementation on `main` before PR #120, with verification in its CI.
 This file governs; slices are built one PR each, starting with CS-1.
 
 ## 1. Objective and scope
