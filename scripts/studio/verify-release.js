@@ -37,13 +37,13 @@ const meta = (html, re) => { const m = re.exec(html); return m ? m[1] : ''; };
   const live = !!opt('base');
   try {
     const page = await fetchUrl(base.replace(/\/$/, '') + '/' + slug + '.php');
-    add(7, live ? 'Live URL responds as expected' : 'Page renders', status === 'live' ? page.status === 200 : (page.status === 404 || (page.status === 200 && /noindex/.test(page.body))), 'HTTP ' + page.status + ', status ' + status);
+    add(7, live ? 'Live URL responds as expected' : 'Page renders', status === 'live' ? page.status === 200 : page.status === 404, 'HTTP ' + page.status + ', status ' + status);
     const html = page.body;
     const h1s = (html.match(/<h1[\s>]/g) || []).length;
     const title = meta(html, /<title>([^<]*)<\/title>/); const desc = meta(html, /<meta name="description" content="([^"]*)"/);
     add(6, 'One h1, title and description in range', h1s === 1 && title.length > 0 && title.length <= 70 && desc.length >= 110 && desc.length <= 160, 'h1=' + h1s + ' title=' + title.length + ' desc=' + desc.length);
     const robots = meta(html, /<meta name="robots" content="([^"]*)"/);
-    add(9, 'Canonical present; robots matches status', /rel="canonical"/.test(html) && (status === 'live' ? !/noindex/.test(robots) : /noindex/.test(robots) || page.status === 404), 'robots=' + robots);
+    add(9, 'Canonical present; robots matches status', /rel="canonical"/.test(html) && (status === 'live' ? !/noindex/.test(robots) : page.status === 404), 'robots=' + robots);
     const imgs = [...html.matchAll(/<img[^>]+src="([^"]+)"[^>]*>/g)].map(m => ({ src: m[1], tag: m[0] }));
     const bad = [];
     for (const im of imgs) {

@@ -7,13 +7,18 @@
 $siteConfig = require __DIR__ . '/site-config.php';
 $experiences = require __DIR__ . '/experience-data.php';
 
+$studioAllowDraftPreview = isset($studioAllowDraftPreview) && $studioAllowDraftPreview === true;
 $experienceSlug = $experienceSlug ?? '';
 $experience = $experiences[$experienceSlug] ?? null;
+if (is_array($experience) && ($experience['status'] ?? 'live') !== 'live' && !$studioAllowDraftPreview) {
+    $experience = null;
+}
 
 if (!$experience) {
     http_response_code(404);
     $experience = [
         'slug' => 'not-found',
+        'status' => 'hidden',
         'title' => 'Experience not found | Garh Jaisal Haveli',
         'description' => 'The requested experience could not be found.',
         'h1' => 'Experience not found',

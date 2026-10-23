@@ -4,7 +4,7 @@ Governing design: `docs/CONTENT-STUDIO-DESIGN.md`. This file is the how-to. Owne
 
 ## What it guarantees
 - Every file lands at an exact path from `content/_paths.json`. Nobody types a destination.
-- New content is `draft` first. Drafts render `noindex,follow` and stay out of the sitemap (same as today).
+- New content is `draft` first. Public draft routes return 404 and stay out of the sitemap; only a token-bound, expiring loopback preview can render a draft.
 - Existing pages and images never change: new slugs only, new image names only, `sitemap.xml` is regenerated, never shipped.
 - Every release is a pack with SHA-256 hashes, so it is reproducible and checkable.
 
@@ -51,7 +51,7 @@ Upload and extract the pack at the site root, keep the record `draft`, run `php 
 `git revert` the merge; or re-apply the previous pack; or restore the cPanel backup. `content/_log/changes.jsonl` records the prior hash of every file an apply changed.
 
 ## Known limits (honest)
-- Non-live pages are `noindex,follow` (existing Studio preview relies on this), not 404. Revisit when tours and blogs get token previews like landing pages.
+- Tour, blog and landing-page drafts return 404 on public routes. The local Studio preview uses a loopback-only, token-bound record with an expiry check before opting into Draft rendering.
 - Optional record fields `images`, `facts_confirmed`, `last_verified`, `pack_id` are validated and stored; templates do not render `images` yet, so old pages are byte-identical.
 - Facts are checked for presence and a source, not truth. Only the owner confirms them.
 - Browser overflow checks stay in the Playwright suite.
