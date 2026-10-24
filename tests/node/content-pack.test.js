@@ -237,16 +237,66 @@ test('quick add builds a clean draft, waits for approval, then packs and applies
   const done = inbox.approve('qa-tour-001', 'owner');
   assert.equal(done.ok, true, JSON.stringify(done)); assert.ok(done.zip.endsWith('.zip'));
   assert.equal(fs.readFileSync(path.join(L.repoRoot(), 'camel-sunset-tea-safari.php'), 'utf8'), L.wrapperText('tour', 'camel-sunset-tea-safari'));
-  assert.equal(run.readRun(r.run).state, 'VERIFY');
-  assert.ok(inbox.processFolder('qa-tour-001').questions.some(q => q.field === 'slug'), 'existing slug is refused');
+  assert.equal(run.readRun(r.run).state, 'RELEASE'); assert.equal(done.verify.ran, false);
+  const again = inbox.processFolder('qa-tour-001'); assert.equal(again.slug, 'camel-sunset-tea-safari-2'); assert.ok(again.warnings.some(w => w.rule === 'AU-04'), 'existing slug gets a free name');
 });
-test('quick add asks plain questions instead of guessing', () => {
+test('quick add asks only for title, page name and photos; everything else gets flagged placeholders', () => {
   inboxBatch('qa-bad-0001', 'type: tour\ntitle: X\n', []);
   const q = inbox.processFolder('qa-bad-0001').questions.map(x => x.field);
-  assert.ok(q.includes('title') && q.includes('summary') && q.includes('photos'));
-  inboxBatch('qa-bad-0002', TOUR_BRIEF.replace('Camel Sunset Tea Safari', 'Dune Dinner Without Timeline').replace(/timeline:[\s\S]*photos:/, 'photos:').replace('- Pickup | Meet at the hotel.\n', ''), ['a.jpg']);
-  const r = inbox.processFolder('qa-bad-0002');
-  assert.equal(r.ok, false); assert.equal(r.state, 'BUILD'); assert.ok(r.findings.some(f => f.rule === 'RC-09' && /timeline/.test(f.fix)));
+  assert.ok(q.includes('title') && q.includes('photos') && !q.includes('summary'));
+  inboxBatch('qa-min-0001', 'type: tour\ntitle: Dune Dinner Evening\n', ['a.jpg']);
+  const r = inbox.processFolder('qa-min-0001');
+  assert.equal(r.ok, true, JSON.stringify(r));
+  const rec = JSON.parse(fs.readFileSync(path.join(inbox.inboxRoot(), 'qa-min-0001/stage/record.json'), 'utf8'));
+  assert.equal(rec.status, 'draft'); assert.ok(rec.summary.length >= 20 && rec.description.length >= 110 && rec.description.length <= 160);
+  assert.ok(r.warnings.some(w => w.rule === 'AU-03' && /timeline/.test(w.message)) && r.warnings.some(w => w.rule === 'AU-08'));
+});
+test('quick add picks the sharp landscape as hero, skips duplicates, fixes rotation and rejects tiny photos', () => {
+  const dir = 'qa-smart-001';
+  inboxBatch(dir, 'type: tour\ntitle: Smart Photo Tour\nphotos:\n- land.jpg | Sharp landscape of the dunes at sunset\n', []);
+  const pd = path.join(inbox.inboxRoot(), dir, 'photos');
+  makeImage(path.join(pd, 'land.jpg'), 1200, 800, true, 'JPEG');
+  fs.copyFileSync(path.join(pd, 'land.jpg'), path.join(pd, 'zz-copy.jpg'));
+  makeImage(path.join(pd, 'portrait.jpg'), 600, 900, false, 'JPEG');
+  const r = inbox.processFolder(dir);
+  assert.equal(r.ok, true, JSON.stringify(r));
+  const rec = JSON.parse(fs.readFileSync(path.join(inbox.inboxRoot(), dir, 'stage/record.json'), 'utf8'));
+  assert.equal(rec.images[0].alt, 'Sharp landscape of the dunes at sunset'); assert.equal(rec.images.length, 2);
+  assert.ok(r.warnings.some(w => w.rule === 'AU-05') && r.warnings.some(w => w.rule === 'AU-06'));
+  const rot = path.join(tmp, 'rot.jpg');
+  spawnSync('python3', ['-c', 'from PIL import Image\nim=Image.new("RGB",(600,900),(200,100,50))\nex=Image.Exif()\nex[274]=6\nim.save("' + rot + '","JPEG",exif=ex)']);
+  assert.equal(require('../../scripts/studio/place-photo').analyzePhoto(rot).width, 900);
+  inboxBatch('qa-tiny-001', 'type: tour\ntitle: Tiny Photo Tour\n', []);
+  makeImage(path.join(inbox.inboxRoot(), 'qa-tiny-001/photos/tiny.jpg'), 500, 300, false, 'JPEG');
+  const t = inbox.processFolder('qa-tiny-001');
+  assert.equal(t.ok, false); assert.ok(/too small/.test(t.questions[0].question));
+});
+test('quick add picks a free page name instead of overwriting', () => {
+  inboxBatch('qa-slug-0001', 'type: tour\ntitle: Camel Sunset Tea Safari\n', ['a.jpg']);
+  const r = inbox.processFolder('qa-slug-0001');
+  assert.equal(r.ok, true, JSON.stringify(r)); assert.equal(r.slug, 'camel-sunset-tea-safari-2'); assert.ok(r.warnings.some(w => w.rule === 'AU-04'));
+  inboxBatch('qa-slug-0002', 'type: tour\ntitle: Camel Sunset Tea Safari\nslug: camel-sunset-tea-safari\n', ['a.jpg']);
+  assert.ok(inbox.processFolder('qa-slug-0002').questions.some(q => q.field === 'slug'));
+});
+test('ship puts only the pack files on a new branch, pushes it and returns to the original branch', () => {
+  const git = (cwd, ...a) => spawnSync('git', a, { cwd, encoding: 'utf8' });
+  const bare = path.join(tmp, 'remote.git'); const site = path.join(tmp, 'site-git');
+  git(tmp, 'init', '-q', '--bare', bare); fs.mkdirSync(site); git(site, 'init', '-q', '-b', 'main');
+  git(site, 'config', 'user.email', 't@example.com'); git(site, 'config', 'user.name', 'T');
+  fs.writeFileSync(path.join(site, 'README.md'), 'x'); git(site, 'add', '.'); git(site, 'commit', '-q', '-m', 'init'); git(site, 'remote', 'add', 'origin', bare);
+  const prev = process.env.CONTENT_STUDIO_ROOT; process.env.CONTENT_STUDIO_ROOT = site;
+  try {
+    inboxBatch('qa-ship-0001', 'type: tour\ntitle: Ship Test Tour\n', ['a.jpg']);
+    const pr0 = inbox.processFolder('qa-ship-0001'); assert.equal(pr0.ok, true, JSON.stringify(pr0));
+    assert.throws(() => require('../../scripts/studio/ship').ship('qa-ship-0001'), /not been approved/);
+    const ap = inbox.approve('qa-ship-0001', 'owner'); assert.equal(ap.ok, true, JSON.stringify(ap));
+    const s = require('../../scripts/studio/ship').ship('qa-ship-0001');
+    assert.equal(s.ok, true); assert.ok(/^content\/ship-test-tour-/.test(s.branch));
+    assert.ok(git(bare, 'branch', '--list', s.branch).stdout.includes(s.branch));
+    assert.equal(git(site, 'rev-parse', '--abbrev-ref', 'HEAD').stdout.trim(), 'main');
+    assert.ok(git(site, 'show', '--stat', '--format=', s.branch).stdout.includes('ship-test-tour.php'));
+    assert.ok(!git(site, 'show', '--stat', '--format=', s.branch).stdout.includes('_inbox'));
+  } finally { process.env.CONTENT_STUDIO_ROOT = prev; }
 });
 test('quick add blog builds sections, toc and sources', () => {
   inboxBatch('qa-blog-001', ['type: blog', 'title: A short guide to the fort walls', 'lede: The fort walls are a living part of the town, with homes and shops built into them.', 'summary: How to see the walls without the crowds.', 'sources:', '- Hotel notes | https://www.hotelgarhjaisal.com/', '## Visit', 'Allow two hours.', '## Timing', 'Go early.'].join('\n'), ['wall.jpg']);

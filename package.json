@@ -16,7 +16,9 @@
     "studio:verify": "node scripts/studio/verify-release.js",
     "studio:snapshot": "node scripts/studio/route-snapshot.js",
     "studio:inbox": "node scripts/studio/cli.js inbox",
-    "studio:approve": "node scripts/studio/cli.js inbox-approve"
+    "studio:approve": "node scripts/studio/cli.js inbox-approve",
+    "studio:ship": "node scripts/studio/cli.js ship",
+    "studio:watch": "node scripts/studio/cli.js inbox-watch"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1"

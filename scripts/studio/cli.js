@@ -11,6 +11,7 @@ const { exportPack } = require('./export-pack');
 const { checkPack, applyPack, loadPack } = require('../check-content-pack');
 const run = require('./run');
 const inbox = require('./inbox');
+const { ship } = require('./ship');
 
 const [cmd, ...rest] = process.argv.slice(2);
 const opt = {};
@@ -41,5 +42,11 @@ try {
   else if (cmd === 'run-step') out(run.advance(pos[0], { pass: opt.fail ? false : true, evidence: opt.evidence, by: opt.by }));
   else if (cmd === 'inbox') { const r = inbox.processFolder(pos[0]); out(r); process.exit(r.ok ? 0 : 1); }
   else if (cmd === 'inbox-approve') { const r = inbox.approve(pos[0], need('by')); out(r); process.exit(r.ok ? 0 : 1); }
-  else { console.error('Commands: inbox <id>, inbox-approve <id> --by <name>, intake-check, record-check, plan, photo, export, check, apply (--write), run-new, run-step'); process.exit(2); }
+  else if (cmd === 'ship') { const r = ship(pos[0], {}); out(r); }
+  else if (cmd === 'inbox-watch') {
+    // Poll content/_inbox: any folder with a brief.md and no report is built automatically.
+    const root = inbox.inboxRoot(); const seen = new Set(); console.log('Watching ' + root + ' (Ctrl+C to stop)');
+    setInterval(() => { if (!fs.existsSync(root)) return; for (const id of fs.readdirSync(root)) { const d = path.join(root, id); if (seen.has(id) || !fs.existsSync(path.join(d, 'brief.md')) || fs.existsSync(path.join(d, 'report.json'))) continue; seen.add(id); const r = inbox.processFolder(id); console.log(id + ': ' + (r.ok ? 'ready for approval (npm run studio:approve ' + id + ' -- --by "Name")' : 'needs input: ' + [...(r.questions || []).map(q => q.question), ...(r.findings || []).map(f => f.message)].join(' | '))); } }, 3000);
+  }
+  else { console.error('Commands: inbox <id>, inbox-watch, ship <id>, inbox-approve <id> --by <name>, intake-check, record-check, plan, photo, export, check, apply (--write), run-new, run-step'); process.exit(2); }
 } catch (error) { console.error('Error: ' + error.message); process.exit(1); }

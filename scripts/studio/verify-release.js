@@ -29,15 +29,20 @@ const meta = (html, re) => { const m = re.exec(html); return m ? m[1] : ''; };
   const checks = [];
   const add = (id, name, pass, evidence) => checks.push({ id, name, pass: !!pass, evidence });
   const type = L.TYPES.find(t => t !== 'gallery' && L.existsInRepo(L.recordPath(t, slug)));
-  const record = type ? JSON.parse(fs.readFileSync(path.join(L.ROOT, L.recordPath(type, slug)), 'utf8')) : null;
+  const record = type ? JSON.parse(fs.readFileSync(path.join(L.repoRoot(), L.recordPath(type, slug)), 'utf8')) : null;
   const status = record ? record.status : 'live'; // pages not created by the Studio are already live
   let php = null;
   let base = opt('base');
-  if (!base) { const port = 46000 + (process.pid % 10000); php = spawn('php', ['-S', '127.0.0.1:' + port, '-t', L.ROOT], { stdio: 'ignore' }); base = 'http://127.0.0.1:' + port; for (let i = 0; i < 50; i++) { if ((await fetchUrl(base + '/')).status) break; await new Promise(r => setTimeout(r, 100)); } }
+  if (!base) { const port = 46000 + (process.pid % 10000); php = spawn('php', ['-S', '127.0.0.1:' + port, '-t', L.repoRoot()], { stdio: 'ignore' }); base = 'http://127.0.0.1:' + port; for (let i = 0; i < 50; i++) { if ((await fetchUrl(base + '/')).status) break; await new Promise(r => setTimeout(r, 100)); } }
   const live = !!opt('base');
   try {
     const page = await fetchUrl(base.replace(/\/$/, '') + '/' + slug + '.php');
     add(7, live ? 'Live URL responds as expected' : 'Page renders', status === 'live' ? page.status === 200 : page.status === 404, 'HTTP ' + page.status + ', status ' + status);
+    if (status !== 'live' && page.status === 404) {
+      add(6, 'Draft is private (404 for the public), so page content checks are skipped until it is Live', true, 'draft returns 404');
+      add(8, 'In sitemap only if live', !(await fetchUrl(base.replace(/\/$/, '') + '/sitemap.xml')).body.includes('/' + slug + '.php</loc>'), 'draft not in sitemap');
+      return finish();
+    }
     const html = page.body;
     const h1s = (html.match(/<h1[\s>]/g) || []).length;
     const title = meta(html, /<title>([^<]*)<\/title>/); const desc = meta(html, /<meta name="description" content="([^"]*)"/);
@@ -49,7 +54,7 @@ const meta = (html, re) => { const m = re.exec(html); return m ? m[1] : ''; };
     for (const im of imgs) {
       if (/^https?:|^data:/.test(im.src)) continue;
       const rel = im.src.replace(/^\//, '').split('?')[0];
-      const abs = path.join(L.ROOT, rel);
+      const abs = path.join(L.repoRoot(), rel);
       if (!fs.existsSync(abs)) bad.push('missing ' + rel); else if (rel.startsWith('img/tours/') || rel.startsWith('img/journal/') || rel.startsWith('img/gallery/')) { const cap = /-hero-/.test(rel) ? L.PATHS.limits.hero.max_bytes : L.PATHS.limits.other.max_bytes; if (fs.statSync(abs).size > cap) bad.push('over cap ' + rel); }
       const studioImage = /^img\/(tours|journal|gallery)\//.test(rel);
       if (studioImage ? !/\balt="[^"]{10,}"/.test(im.tag) : !/\balt="/.test(im.tag)) bad.push('no alt ' + rel);
@@ -62,8 +67,12 @@ const meta = (html, re) => { const m = re.exec(html); return m ? m[1] : ''; };
     const inMap = sitemap.body.includes('/' + slug + '.php</loc>');
     add(8, 'In sitemap only if live', status === 'live' ? inMap : !inMap, 'in sitemap: ' + inMap);
   } finally { if (php) php.kill(); }
+  finish();
+  async function finish() {
+  if (php) php.kill();
   for (const c of checks) console.log((c.pass ? 'PASS ' : 'FAIL ') + c.id + ' ' + c.name + ' - ' + c.evidence);
   const ok = checks.every(c => c.pass);
   if (opt('run')) { try { require('./run').advance(opt('run'), { pass: ok, evidence: 'verify-release ' + (live ? 'live' : 'local') + ' ' + checks.filter(c => !c.pass).map(c => c.id).join(',') }); } catch (e) { console.error(e.message); } }
   process.exit(ok ? 0 : 1);
+  }
 })();
