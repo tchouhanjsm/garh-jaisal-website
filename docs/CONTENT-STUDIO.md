@@ -29,7 +29,7 @@ You supply only what a person must: **title**, **page name** (optional) and **ph
 - No browser: put `brief.md` (a `title:` line is enough) and a `photos/` folder in `content/_inbox/<id>/`, then `npm run studio:inbox <id>`, `npm run studio:approve <id> -- --by "Name"`, `npm run studio:ship <id>`. `npm run studio:watch` builds any new folder automatically.
 - Tours cannot go Live until facts are confirmed; alt text is drafted from the title when not given, and the result says so.
 
-## Using the detailed forms (for edits and everything Quick add does not cover)
+## Using the detailed forms (press "Advanced forms" for edits and everything Quick add does not cover)
 1. Add a tour or blog. Enter the title or URL slug **before** uploading the hero photo: it is converted to WebP and stored as `img/tours/<slug>/<slug>-hero-01.webp` (or `img/journal/<slug>/...`) automatically.
 2. For tours, set **Owner confirmed the facts** to Yes only after the owner has confirmed price, timings and inclusions; a tour cannot go Live without it.
 3. In **Manage saved content**, press **Export pack** on a tour or blog. It writes `content/_stage/packs/gj-pack_<slug>_<date>_v1_sync.zip`. Unzip into the other checkout (or run `node scripts/check-content-pack.js <zip> --apply`).
