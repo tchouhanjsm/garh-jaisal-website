@@ -83,6 +83,7 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     if (!ready) throw new Error('Content Studio did not start: ' + lastError + '\n' + output + errors);
 
     await page.goto(studioUrl + '/', { waitUntil: 'domcontentloaded' });
+    await page.getByRole('button', { name: /Advanced forms/ }).click();
     await page.getByRole('tab', { name: 'Add a tour' }).click();
     await page.locator('#preview-base').fill(phpPreview);
     await expect(page.locator('#statusline')).toContainText('Local authoring only');

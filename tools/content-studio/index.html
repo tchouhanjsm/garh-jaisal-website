@@ -41,6 +41,9 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
 .asset-picker-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:10px;border-top:1px solid var(--line)}
 .asset-picker-footer .hint{margin:0;max-width:650px}
 @media(max-width:720px){dialog.asset-picker{max-height:92vh}.asset-picker-inner{max-height:92vh}.asset-library-grid{grid-template-columns:repeat(2,minmax(0,1fr));max-height:51vh}.asset-library-item img{height:125px}.asset-picker-search{grid-template-columns:1fr}.asset-picker-search p{text-align:left}.asset-picker-head button{white-space:nowrap}.asset-picker-footer{align-items:stretch;flex-direction:column}.asset-picker-footer button{width:100%}}
+
+.about{border:1px solid var(--line);border-radius:12px;margin:0 0 14px;background:#24221d99}.about>summary{cursor:pointer;padding:11px 14px;color:var(--muted);font-size:.9rem}.about[open]>summary{border-bottom:1px solid var(--line)}.about>.workflow,.about>.stats{margin:14px}
+#main-tabs:not(.adv) .tab[data-adv]{display:none}body:not(.adv) #render-preview,body:not(.adv) .footer-tools{display:none}
 </style>
 </head>
 <body>
@@ -49,12 +52,13 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
     <div>
       <p class="eyebrow">Garh Jaisal Haveli · Local authoring tool</p>
       <h1>Content Studio</h1>
-      <p class="lede">Create tours, travel guides, landing pages and Gallery entries with guided forms. Landing pages use approved design themes and reusable content sections, so the website stays consistent without writing HTML or CSS. On a Mac, double-click <strong>tools/content-studio/Start Content Studio.command</strong> in your project folder to open the editor and local PHP preview together. Changes remain local until reviewed and approved.</p>
+      <p class="lede">Add a tour or travel guide from a title and photos. The Studio does the rest and asks you only to approve. Everything starts as a Draft; nothing goes public from here.</p>
     </div>
     <aside class="local-note"><strong>Local-only by design</strong>Bound to 127.0.0.1. Changes are written into this Git working tree; review them and test the staging ZIP before production.</aside>
   </header>
 
   <div class="statusline" id="statusline" role="status" aria-live="polite">Checking local Content Studio records…</div>
+  <details class="about"><summary>How it works, and what is saved</summary>
   <section class="workflow" aria-label="How to use Content Studio">
     <h2>Four steps to add content</h2>
     <ol>
@@ -71,14 +75,16 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
     <div class="stat"><span>Gallery entries</span><strong id="gallery-count">—</strong></div>
     <div class="stat"><span>Landing pages</span><strong id="page-count">—</strong></div>
   </section>
+  </details>
 
-  <nav class="tabs" role="tablist" aria-label="Choose a content type">
+  <nav class="tabs" id="main-tabs" role="tablist" aria-label="Choose a content type">
     <button class="tab" role="tab" id="tab-quick" aria-controls="pane-quick" aria-selected="true" data-pane="quick">Quick add (automatic)</button>
-    <button class="tab" role="tab" id="tab-tour" aria-controls="pane-tour" aria-selected="false" data-pane="tour">Add a tour</button>
-    <button class="tab" role="tab" id="tab-blog" aria-controls="pane-blog" aria-selected="false" data-pane="blog">Add a blog</button>
-    <button class="tab" role="tab" id="tab-pages" aria-controls="pane-pages" aria-selected="false" data-pane="pages">Build a page</button>
-    <button class="tab" role="tab" id="tab-gallery" aria-controls="pane-gallery" aria-selected="false" data-pane="gallery">Add Gallery photos</button>
-    <button class="tab" role="tab" id="tab-pack" aria-controls="pane-pack" aria-selected="false" data-pane="pack">Pack check</button>
+    <button type="button" class="tab" id="tab-advanced" aria-expanded="false" aria-controls="main-tabs">Advanced forms ▾</button>
+    <button class="tab" role="tab" data-adv="1" id="tab-tour" aria-controls="pane-tour" aria-selected="false" data-pane="tour">Add a tour</button>
+    <button class="tab" role="tab" data-adv="1" id="tab-blog" aria-controls="pane-blog" aria-selected="false" data-pane="blog">Add a blog</button>
+    <button class="tab" role="tab" data-adv="1" id="tab-pages" aria-controls="pane-pages" aria-selected="false" data-pane="pages">Build a page</button>
+    <button class="tab" role="tab" data-adv="1" id="tab-gallery" aria-controls="pane-gallery" aria-selected="false" data-pane="gallery">Add Gallery photos</button>
+    <button class="tab" role="tab" data-adv="1" id="tab-pack" aria-controls="pane-pack" aria-selected="false" data-pane="pack">Pack check</button>
     <button class="tab" role="tab" id="tab-manage" aria-controls="pane-manage" aria-selected="false" data-pane="manage">Manage saved content</button>
   </nav>
 
@@ -328,7 +334,11 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
   let previewToken=null;
   let previewCurrentUrl=null;
   let previewMode='desktop';
+  const ADV_PANES=['tour','blog','pages','gallery','pack'];
+  function setAdv(on){document.getElementById('main-tabs').classList.toggle('adv',on);document.body.classList.toggle('adv',on);const b=document.getElementById('tab-advanced');b.setAttribute('aria-expanded',on?'true':'false');b.textContent=on?'Advanced forms ▴':'Advanced forms ▾';}
+  document.getElementById('tab-advanced').addEventListener('click',()=>setAdv(!document.body.classList.contains('adv')));
   function activatePane(pane){
+    if(ADV_PANES.includes(pane))setAdv(true);
     tabs.forEach(tab=>{
       const selected=tab.dataset.pane===pane;
       tab.setAttribute('aria-selected',selected?'true':'false');

@@ -38,6 +38,7 @@ test('Content Studio Pack check is useful and remains a read-only dry run', asyn
     if (!ready) throw new Error('Content Studio did not start: ' + lastError + '\n' + output + errors);
 
     await page.goto(studioUrl + '/', { waitUntil: 'domcontentloaded' });
+    await page.getByRole('button', { name: /Advanced forms/ }).click();
     await page.getByRole('tab', { name: 'Add a tour' }).click();
     await page.getByRole('tab', { name: 'Pack check' }).click();
     await expect(page.locator('#pane-pack')).toBeVisible();
