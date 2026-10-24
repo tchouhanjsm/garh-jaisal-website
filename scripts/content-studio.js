@@ -1601,7 +1601,10 @@ const server = http.createServer(async (req, res) => {
       if (req.method === 'POST' && url.pathname === '/api/inbox/build') {
         const body = await readJson(req);
         if (!idOk(body.id)) throw fail(400, 'Invalid batch id.');
-        const brief = String(body.brief || '');
+        let brief = String(body.brief || '');
+        // The three things only a person can supply (title, page name, photos) arrive as fields; the rest of the brief is optional notes.
+        const lead = ['type: ' + (body.type === 'blog' ? 'blog' : 'tour'), body.title ? 'title: ' + String(body.title).replace(/\s+/g, ' ').trim().slice(0, 140) : '', body.slug ? 'slug: ' + String(body.slug).replace(/\s+/g, ' ').trim().slice(0, 80) : ''].filter(Boolean).join('\n');
+        brief = lead + '\n' + brief.split('\n').filter(l => !/^(type|title|slug):/i.test(l)).join('\n');
         if (brief.length > 60000) throw fail(413, 'The brief is too long.');
         fs.mkdirSync(path.join(inbox.inboxRoot(), body.id), { recursive: true });
         atomicWrite(path.join(inbox.inboxRoot(), body.id, 'brief.md'), brief);
@@ -1611,6 +1614,11 @@ const server = http.createServer(async (req, res) => {
         const body = await readJson(req);
         if (!idOk(body.id)) throw fail(400, 'Invalid batch id.');
         try { return respondJson(res, 200, inbox.approve(body.id, String(body.by || '').trim())); } catch (error) { throw fail(409, error.message); }
+      }
+      if (req.method === 'POST' && url.pathname === '/api/inbox/ship') {
+        const body = await readJson(req);
+        if (!idOk(body.id)) throw fail(400, 'Invalid batch id.');
+        try { return respondJson(res, 200, require('./studio/ship').ship(body.id, {})); } catch (error) { throw fail(409, error.message); }
       }
       throw fail(404, 'No quick-add route matches this request.');
     }

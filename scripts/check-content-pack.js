@@ -119,7 +119,7 @@ function checkPack(entries) {
       }
     }
     if (record) {
-      for (const x of checkRecord(record, { type: entry.type, slug: entry.slug, isNew: entry.mode === 'new', packFiles: allPaths, sync: entry.mode === 'sync' })) f.push(x);
+      for (const x of checkRecord(record, { type: entry.type, slug: entry.slug, isNew: entry.mode === 'new', packFiles: allPaths, sync: entry.mode === 'sync' || record.status !== 'live' })) f.push(x);
       if (L.PATHS.types[entry.type].sitemap && record.status === 'live') entry._live = true;
     }
   }

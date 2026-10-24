@@ -72,13 +72,13 @@ function checkRecord(record, ctx) {
   }
   if (type === 'tour') {
     if (!['desert', 'city'].includes(record.category)) add('RC-08', 'Category must be "desert" or "city".', 'Choose one.');
-    if (!Array.isArray(record.timeline) || record.timeline.length === 0) add('RC-09', 'Timeline needs at least one step.', 'Add steps with title and text.');
+    if (!Array.isArray(record.timeline) || record.timeline.length === 0) add('RC-09', 'Timeline needs at least one step.', 'Add steps with title and text.', true);
     else record.timeline.forEach((s, i) => { if (!s || !s.title || !s.text) add('RC-09', 'Timeline step ' + (i + 1) + ' needs title and text.', 'Fill both.'); });
     if (!Array.isArray(record.included) || record.included.length === 0) add('RC-10', 'Inclusions list is empty.', 'List what is included.', true);
   }
   if (type === 'blog') {
-    if (!Array.isArray(record.sections) || record.sections.length === 0) add('RC-11', 'Article needs at least one section.', 'Add sections.');
-    if (!Array.isArray(record.sources) || record.sources.length === 0) add('RC-12', 'Article needs sources.', 'List the sources for each claim.');
+    if (!Array.isArray(record.sections) || record.sections.length === 0) add('RC-11', 'Article needs at least one section.', 'Add sections.', true);
+    if (!Array.isArray(record.sources) || record.sources.length === 0) add('RC-12', 'Article needs sources.', 'List the sources for each claim.', true);
   }
   if (type === 'gallery') {
     if (record.category && !cfg.categories.includes(record.category)) add('RC-13', 'Unknown gallery category "' + record.category + '".', 'Use one of: ' + cfg.categories.join(', ') + '.');

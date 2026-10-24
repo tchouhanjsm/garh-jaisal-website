@@ -86,17 +86,19 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
     <div class="panel">
       <div class="panel-head">
         <p class="eyebrow">Automatic</p>
-        <h2>Quick add: brief + photos, the Studio does the rest</h2>
-        <p>Paste a short brief and choose photos. The Studio picks the URL, names and places every photo in its own folder, drafts the SEO text, builds the page record, runs every check and shows the exact files. You only approve. Everything starts as Draft.</p>
+        <h2>Quick add: title + photos, the Studio does the rest</h2>
+        <p>Enter a title and choose photos. The Studio picks the main photo, removes duplicates, fixes rotation, names and places every photo in its own folder, drafts the SEO text, builds the page, runs every check, previews it and prepares a pull request. You only approve. Everything starts as Draft.</p>
       </div>
       <div class="grid">
+        <div class="field"><label for="quick-title">Title *</label><input id="quick-title" type="text" autocomplete="off" placeholder="e.g. Sunset Camel Safari"></div>
+        <div class="field"><label for="quick-slug">Page name (optional)</label><input id="quick-slug" type="text" autocomplete="off" placeholder="made from the title, e.g. sunset-camel-safari"><div class="hint">Lowercase letters, digits and hyphens. If the name is taken, the next free one is used.</div></div>
         <div class="field"><label for="quick-type">What are you adding?</label><select id="quick-type"><option value="tour">Tour or experience</option><option value="blog">Travel guide (blog)</option></select></div>
         <div class="field"><label for="quick-photos">Photos (first one, or one named hero, is the main photo)</label><input id="quick-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple><div class="hint" id="quick-photo-list">No photos chosen.</div></div>
-        <div class="field full"><label for="quick-brief">Brief</label><textarea class="tall" id="quick-brief" spellcheck="false"></textarea><div class="hint">One "key: value" per line. Lists use "- item" lines. Only confirmed facts. Missing details are asked back to you in plain words.</div></div>
+        <div class="field full"><label for="quick-brief">Notes (optional: only confirmed facts)</label><textarea class="tall" id="quick-brief" spellcheck="false"></textarea><div class="hint">Everything here is optional. Anything you leave out is filled with a neutral placeholder and listed for you to confirm before the page can go Live. Photos only need a real JPG, PNG or WebP at least 800 px wide.</div></div>
       </div>
       <div class="actions"><button type="button" class="primary" id="quick-build">Build draft</button><p class="note">Nothing is saved to the site until you approve. Approving writes a Draft to this working tree and builds a checked zip pack.</p></div>
       <div class="result" id="quick-result" role="status" aria-live="polite"></div>
-      <div class="field" id="quick-approve-box" hidden><label for="quick-by">Approved by (your name; must not be the author)</label><input id="quick-by" type="text" autocomplete="name"><p class="actions"><button type="button" class="primary" id="quick-approve">Approve, save as Draft and build pack</button></p></div>
+      <div class="field" id="quick-approve-box" hidden><label for="quick-by">Approved by (your name; must not be the author)</label><input id="quick-by" type="text" autocomplete="name"><p class="actions"><button type="button" class="primary" id="quick-approve">Approve, save as Draft and check it</button> <button type="button" id="quick-ship" hidden>Open pull request</button></p></div>
     </div>
   </section>
   <section class="pane" id="pane-tour" role="tabpanel" aria-labelledby="tab-tour">
@@ -1231,9 +1233,10 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
       blog:['type: blog','title: A short guide to Jaisalmer Fort','lede: Jaisalmer Fort is a living fort with homes, shops and temples inside the walls.','summary: What to see inside Jaisalmer Fort and how long to allow.','sources:','- Hotel notes | https://www.hotelgarhjaisal.com/','## Visit','Allow about two hours inside the fort and wear shoes with good grip on the stone paths.','## Best time','Early morning is cooler and quieter.'].join('\n')
     };
     const type=document.getElementById('quick-type'),brief=document.getElementById('quick-brief'),files=document.getElementById('quick-photos'),list=document.getElementById('quick-photo-list'),result=document.getElementById('quick-result'),approveBox=document.getElementById('quick-approve-box');
-    let batch=null,lastTemplate='tour';
-    brief.value=TEMPLATES.tour;
-    type.addEventListener('change',()=>{if(brief.value.trim()===TEMPLATES[lastTemplate].trim())brief.value=TEMPLATES[type.value];lastTemplate=type.value;});
+    let batch=null;
+    brief.value='';
+    brief.placeholder=TEMPLATES.tour;
+    type.addEventListener('change',()=>{brief.placeholder=TEMPLATES[type.value];});
     files.addEventListener('change',()=>{list.textContent=files.files.length?Array.from(files.files).map(f=>f.name).join(', '):'No photos chosen.';});
     function show(good,lines){result.className='result visible '+(good?'good':'bad');result.textContent=lines.join('\n');result.style.whiteSpace='pre-wrap';}
     document.getElementById('quick-build').addEventListener('click',async()=>{
@@ -1245,7 +1248,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
           const r=await fetch('/api/inbox/photo?id='+batch+'&filename='+encodeURIComponent(file.name),{method:'POST',headers:{'Content-Type':file.type||'application/octet-stream'},body:file});
           const d=await r.json();if(!r.ok)throw new Error(d.error||'Photo upload failed');
         }
-        const r=await fetch('/api/inbox/build',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:batch,brief:brief.value.replace(/^type:.*$/m,'type: '+type.value)})});
+        const r=await fetch('/api/inbox/build',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:batch,type:type.value,title:document.getElementById('quick-title').value,slug:document.getElementById('quick-slug').value,brief:brief.value})});
         const d=await r.json();if(!r.ok)throw new Error(d.error||'Build failed');
         const lines=[d.ok?'READY FOR APPROVAL: '+d.slug+' ('+d.type+')':'NEEDS YOUR INPUT (stopped at '+d.state+')'];
         (d.questions||[]).forEach(q=>lines.push('  ? '+q.question));
@@ -1259,8 +1262,16 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
       try{
         const r=await fetch('/api/inbox/approve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:batch,by:document.getElementById('quick-by').value})});
         const d=await r.json();if(!r.ok)throw new Error(d.error||'Approval failed');
-        show(d.ok,[d.ok?'DONE. Draft saved and pack built: '+d.zip:'Stopped at '+d.state,...(d.files||[]).map(f=>'  '+f),d.next||'',...(d.findings||[]).map(f=>'  ! '+f.message)]);approveBox.hidden=true;
+        const v=d.verify&&d.verify.ran?(d.verify.lines||[]).map(l=>'  '+l):['  (page checks run when PHP is available)'];show(d.ok&&d.state==='RELEASE',[d.ok?'Draft saved and pack built: '+d.zip:'Stopped at '+d.state,...(d.files||[]).map(f=>'  '+f),...v,d.next||'',...(d.findings||[]).map(f=>'  ! '+f.message)]);document.getElementById('quick-ship').hidden=!(d.ok&&d.state==='RELEASE');
       }catch(error){show(false,['Cannot approve: '+error.message]);}
+    });
+
+    document.getElementById('quick-ship').addEventListener('click',async()=>{
+      try{
+        const r=await fetch('/api/inbox/ship',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:batch})});
+        const d=await r.json();if(!r.ok)throw new Error(d.error||'Could not open the pull request');
+        show(true,['Sent for review on branch '+d.branch+'.',d.next,'Nothing is live until you merge it and CI is green.']);document.getElementById('quick-ship').hidden=true;
+      }catch(error){show(false,['Cannot open the pull request: '+error.message]);}
     });
   })();
 </script>

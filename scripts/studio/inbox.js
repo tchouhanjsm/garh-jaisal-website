@@ -8,10 +8,11 @@ const path = require('node:path');
 const L = require('./lib');
 const { checkRecord } = require('./check-record');
 const { planSave } = require('./plan-save');
-const { placePhoto } = require('./place-photo');
+const { placePhoto, analyzePhoto, hamming } = require('./place-photo');
 const { exportPack } = require('./export-pack');
 const { applyPack } = require('../check-content-pack');
 const run = require('./run');
+const { spawnSync } = require('node:child_process');
 
 const inboxRoot = () => path.join(L.repoRoot(), 'content/_inbox');
 const slugify = v => String(v || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 70);
@@ -56,14 +57,35 @@ function fitDescription(d, fallbackTail) {
 }
 const TAIL = 'Ask Garh Jaisal Haveli to confirm current details for your dates.';
 
+// Looks at every photo once: drops near-duplicates, picks the best main photo (named hero, else the sharpest landscape),
+// and orders the rest by capture time (EXIF) or file name. Returns { photos, warnings, unreadable }.
 function readPhotos(dir, brief) {
   const photoDir = path.join(dir, 'photos');
-  if (!fs.existsSync(photoDir)) return [];
+  const out = { photos: [], warnings: [], unreadable: [] };
+  if (!fs.existsSync(photoDir)) return out;
   const alts = new Map();
   for (const row of (brief.lists.photos || [])) { const [file, ...alt] = row.split('|'); if (alt.length) alts.set(file.trim().toLowerCase(), alt.join('|').trim()); }
-  const files = fs.readdirSync(photoDir).filter(n => /\.(jpe?g|png|webp)$/i.test(n)).sort();
-  files.sort((a, b) => (/hero|cover|main/i.test(b) ? 1 : 0) - (/hero|cover|main/i.test(a) ? 1 : 0));
-  return files.map(name => ({ file: path.join(photoDir, name), name, alt: alts.get(name.toLowerCase()) || null }));
+  const kept = [];
+  for (const name of fs.readdirSync(photoDir).filter(n => /\.(jpe?g|png|webp)$/i.test(n)).sort()) {
+    const file = path.join(photoDir, name);
+    let info;
+    try { info = analyzePhoto(file); } catch (_) { out.unreadable.push(name); continue; }
+    const twin = kept.find(k => hamming(k.dhash, info.dhash) <= 4);
+    if (twin) { out.warnings.push({ rule: 'AU-05', message: 'Skipped ' + name + ': near-duplicate of ' + twin.name + '.' }); continue; }
+    kept.push({ file, name, alt: alts.get(name.toLowerCase()) || null, ...info });
+  }
+  const named = kept.find(k => /hero|cover|main/i.test(k.name));
+  const score = k => k.sharp * Math.min(k.width, 1600) * (k.width / k.height >= 1.3 ? 1 : 0.35);
+  const hero = named || [...kept].sort((a, b) => score(b) - score(a))[0];
+  if (hero && !named && kept.length > 1) out.warnings.push({ rule: 'AU-06', message: 'Chose ' + hero.name + ' as the main photo (sharpest landscape); rename a file to hero-... to override.' });
+  const rest = kept.filter(k => k !== hero);
+  rest.sort((a, b) => (a.taken && b.taken && a.taken !== b.taken) ? (a.taken < b.taken ? -1 : 1) : (a.name < b.name ? -1 : 1));
+  const ordered = hero ? [hero, ...rest] : [];
+  const sharps = ordered.map(k => k.sharp).sort((a, b) => a - b);
+  const median = sharps[Math.floor(sharps.length / 2)] || 0;
+  for (const k of ordered) if (ordered.length >= 3 && k.sharp < median * 0.4) out.warnings.push({ rule: 'AU-07', message: k.name + ' looks blurry compared with the others; consider replacing it.' });
+  out.photos = ordered;
+  return out;
 }
 
 function buildRecord(type, slug, brief, placed, warnings) {
@@ -119,13 +141,30 @@ function processFolder(id) {
   const warnings = [];
   if (!type) questions.push({ field: 'type', question: 'Quick add supports "type: tour" or "type: blog". Use the Gallery form for photo sets.' });
   if (!brief.title || brief.title.length < 3) questions.push({ field: 'title', question: 'What is the title? Add "title: ..." to the brief.' });
-  const summary = type === 'blog' ? (brief.lede || brief.summary) : brief.summary;
-  if (!summary || summary.length < 20) questions.push({ field: 'summary', question: 'Add a one or two sentence "summary:" (at least 20 characters).' });
-  const photos = type ? readPhotos(dir, brief) : [];
-  if (type && photos.length === 0) questions.push({ field: 'photos', question: 'Add at least one photo (the first, or one named hero, becomes the main photo).' });
-  const slug = brief.slug ? slugify(brief.slug) : slugify(brief.title);
-  if (type && !L.SLUG_RE.test(slug)) questions.push({ field: 'slug', question: 'Could not make a URL slug; set "slug:" using lowercase letters, digits and hyphens.' });
-  else if (type && L.recordExists(type, slug)) questions.push({ field: 'slug', question: 'A page with the slug "' + slug + '" already exists. Choose another "slug:"; existing pages are never overwritten.' });
+  const scan = type ? readPhotos(dir, brief) : { photos: [], warnings: [], unreadable: [] };
+  warnings.push(...scan.warnings);
+  const photos = scan.photos;
+  for (const bad of scan.unreadable) questions.push({ field: 'photos', question: bad + ' is not a readable photo; replace it with a JPG, PNG or WebP.' });
+  if (type && photos.length === 0 && !scan.unreadable.length) questions.push({ field: 'photos', question: 'Add at least one photo (the sharpest landscape, or one named hero, becomes the main photo).' });
+  let slug = brief.slug ? slugify(brief.slug) : slugify(brief.title);
+  if (type && !L.SLUG_RE.test(slug)) questions.push({ field: 'slug', question: 'Could not make a URL slug; set the page name using lowercase letters, digits and hyphens.' });
+  else if (type && L.recordExists(type, slug)) {
+    const free = [2, 3, 4, 5, 6, 7, 8, 9].map(n => slug + '-' + n).find(c => !L.recordExists(type, c));
+    if (brief.slug || !free) questions.push({ field: 'slug', question: 'A page named "' + slug + '" already exists and is never overwritten. Choose another page name.' });
+    else { warnings.push({ rule: 'AU-04', message: 'A page named "' + slug + '" exists, so this draft uses "' + free + '". Change the page name if you prefer another.' }); slug = free; }
+  }
+  // Everything except title, page name and photos is optional: missing facts get neutral placeholders and are listed for the owner.
+  const needs = [];
+  const fill = (cond, label) => { if (!cond) needs.push(label); return cond; };
+  if (type === 'tour') { fill(brief.summary, 'summary'); fill(brief['best for'], 'best for'); fill((brief.lists.included || []).length, 'included'); fill((brief.lists.timeline || []).length, 'timeline'); }
+  if (type === 'blog') { fill(brief.lede || brief.summary, 'intro'); fill(brief.sections.length, 'sections'); fill((brief.lists.sources || []).length, 'sources'); }
+  if (type) {
+    const t = brief.title || '';
+    if (!brief.summary) brief.summary = t + ' with Garh Jaisal Haveli in Jaisalmer. Details are confirmed by the hotel for your dates.';
+    if (type === 'tour' && !brief['best for']) brief['best for'] = 'Confirm suitability with the hotel before booking.';
+    if (type === 'blog' && !brief.lede) brief.lede = t + ': a Garh Jaisal Haveli guide to Jaisalmer, written from the hotel.';
+    if (needs.length) warnings.push({ rule: 'AU-03', message: 'Not provided, so placeholders or empty sections were used (add them before going Live): ' + needs.join(', ') + '.' });
+  }
   const author = brief.author || 'inbox';
   const base = { id, type, slug, warnings };
   if (questions.length) return { ...base, ok: false, state: 'INTAKE', questions, findings: [] };
@@ -147,10 +186,12 @@ function processFolder(id) {
   const record = buildRecord(type, slug, { ...brief, title: brief.title }, placed, warnings);
   fs.writeFileSync(path.join(stage, 'record.json'), JSON.stringify(record, null, 2) + '\n');
   run.advance(r.id, { pass: true, evidence: placed.length + ' photos placed', by: author });
-  const plan = planSave({ type, slug, record, photos: placed.map(p => ({ path: p.path, bytes: p.bytes })) });
+  const plan = planSave({ type, slug, record, photos: placed.map(p => ({ path: p.path, bytes: p.bytes })), soft: true });
   const fixes = plan.findings.map(f => ({ rule: f.rule, message: f.message, fix: HINT[f.rule] || f.fix }));
   if (!plan.ok) { run.advance(r.id, { pass: false, evidence: plan.findings.map(f => f.rule).join(','), by: author }); return { ...base, ok: false, run: r.id, state: 'BUILD', questions: [], findings: fixes, plan }; }
   run.advance(r.id, { pass: true, evidence: 'record and plan clean', by: author });
+  const softNotes = plan.findings.filter(f => f.severity === 'warn');
+  if (softNotes.length) warnings.push({ rule: 'AU-08', message: 'To fix before Live: ' + softNotes.map(f => f.message).join(' ') });
   if (type === 'tour' && !record.facts_confirmed) warnings.push({ rule: 'AU-02', message: 'Facts are not confirmed: price, timings and inclusions must be confirmed by the owner before this tour can go Live ("facts confirmed by: Name 2026-10-23" in the brief).' });
   const report = { ...base, ok: true, run: r.id, state: 'APPROVE', questions: [], findings: [], plan, record_path: L.recordPath(type, slug), photos: placed.map(p => p.path), next: 'Approve to build the pack and add the draft to this working tree.' };
   fs.writeFileSync(path.join(dir, 'report.json'), JSON.stringify(report, null, 2) + '\n');
@@ -173,7 +214,22 @@ function approve(id, by) {
   const applied = applyPack(exp.zip, { dryRun: false, sitemap: false });
   if (!applied.ok) { run.advance(report.run, { pass: false, evidence: applied.findings.map(f => f.rule).join(',') }); return { ok: false, state: 'APPLY', findings: applied.findings }; }
   run.advance(report.run, { pass: true, evidence: applied.operations.length + ' files written as draft' });
-  return { ok: true, state: 'VERIFY', run: report.run, zip: path.relative(L.repoRoot(), exp.zip), files: exp.files, next: 'Draft saved to this working tree: open it in Manage saved content or the preview. Then run "npm run studio:verify ' + report.slug + '" and open a PR.' };
+  // Automatic verification: render the new draft page and run the release checks that can run locally.
+  const verify = verifyDraft(report.slug);
+  if (verify.ran) run.advance(report.run, { pass: verify.ok, evidence: 'verify-release: ' + (verify.ok ? 'all local checks pass' : verify.lines.filter(l => l.startsWith('FAIL')).join(' ; ')) });
+  else run.advance(report.run, { pass: true, evidence: 'verify skipped: ' + verify.reason });
+  const approved = { run: report.run, id, type: report.type, slug: report.slug, zip: path.relative(L.repoRoot(), exp.zip), files: exp.files, verify, by, time: new Date().toISOString() };
+  fs.writeFileSync(path.join(dir, 'approved.json'), JSON.stringify(approved, null, 2) + '\n');
+  return { ok: true, state: verify.ran && !verify.ok ? 'VERIFY' : 'RELEASE', run: report.run, zip: approved.zip, files: exp.files, verify, next: verify.ran && !verify.ok ? 'The draft page has problems: ' + verify.lines.filter(l => l.startsWith('FAIL')).join(' ; ') : 'Draft saved in this working tree and checked. Press "Open pull request" (or run npm run studio:ship ' + id + ') to send it for review.' };
 }
 
-module.exports = { parseBrief, processFolder, approve, inboxRoot, buildRecord, slugify };
+function verifyDraft(slug) {
+  const root = L.repoRoot();
+  if (spawnSync(process.env.PHP_BIN || 'php', ['--version'], { stdio: 'ignore' }).status !== 0) return { ran: false, reason: 'php not found' };
+  if (!fs.existsSync(path.join(root, 'include/page-head.php'))) return { ran: false, reason: 'not a full site checkout' };
+  const r = spawnSync(process.execPath, [path.join(__dirname, 'verify-release.js'), slug], { encoding: 'utf8', timeout: 60000, env: process.env });
+  const lines = String(r.stdout || '').split('\n').filter(Boolean);
+  return { ran: true, ok: r.status === 0, lines };
+}
+
+module.exports = { parseBrief, processFolder, approve, verifyDraft, inboxRoot, buildRecord, slugify };
