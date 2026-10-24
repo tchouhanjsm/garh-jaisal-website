@@ -44,6 +44,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
 
 .about{border:1px solid var(--line);border-radius:12px;margin:0 0 14px;background:#24221d99}.about>summary{cursor:pointer;padding:11px 14px;color:var(--muted);font-size:.9rem}.about[open]>summary{border-bottom:1px solid var(--line)}.about>.workflow,.about>.stats{margin:14px}
 #main-tabs:not(.adv) .tab[data-adv]{display:none}body:not(.adv) #render-preview,body:not(.adv) .footer-tools{display:none}
+.steps{display:flex;gap:8px;list-style:none;padding:0;margin:0 0 18px;flex-wrap:wrap}.steps li{padding:7px 13px;border:1px solid var(--line);border-radius:999px;font-size:.85rem;color:var(--muted)}.steps li.on{background:var(--gold);color:#21190d;border-color:var(--gold);font-weight:700}details.more{margin:14px 0}details.more summary{cursor:pointer;color:var(--gold);font-weight:700;font-size:.9rem}.drop{border:2px dashed #5b5141;border-radius:12px;padding:30px 16px;text-align:center;cursor:pointer;color:var(--muted);line-height:1.6}.drop.over,.drop:focus-visible{border-color:var(--gold);color:var(--text)}.thumbs{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}.thumbs figure{margin:0;width:92px;font-size:.7rem;color:var(--muted);overflow:hidden}.thumbs img{width:92px;height:70px;object-fit:cover;border-radius:8px;display:block}.scorecard{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-top:14px}.scorenum{min-width:96px;text-align:center;border-radius:12px;padding:14px 10px;font-size:2rem;font-weight:800;border:2px solid var(--line)}.scorenum small{display:block;font-size:.72rem;font-weight:700}.scorenum.green{border-color:#4f9a5c;color:#8ed19a}.scorenum.amber{border-color:#c79a2c;color:#f0c960}.scorenum.red{border-color:#b9544c;color:#f08d85}.scorelist{flex:1;min-width:240px;list-style:none;margin:0;padding:0;font-size:.88rem;line-height:1.5}.scorelist li{padding:4px 0 4px 22px;position:relative}.scorelist li:before{content:"";position:absolute;left:2px;top:.75em;width:10px;height:10px;border-radius:50%;background:#888}.scorelist li.green:before{background:#4f9a5c}.scorelist li.amber:before{background:#c79a2c}.scorelist li.red:before{background:#b9544c}.pvcard{margin-top:16px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel2)}.pvcard img{width:100%;max-height:220px;object-fit:cover;display:block}.pvcard div{padding:14px 16px;line-height:1.55;font-size:.9rem}.pvcard h3{margin:0 0 6px;font-size:1.1rem}.pvcard .meta{color:var(--muted);font-size:.78rem}.check{display:flex;gap:9px;align-items:flex-start;font-weight:600;margin:14px 0}.check input{width:auto;margin-top:3px}
 </style>
 </head>
 <body>
@@ -92,19 +93,39 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
     <div class="panel">
       <div class="panel-head">
         <p class="eyebrow">Automatic</p>
-        <h2>Quick add: title + photos, the Studio does the rest</h2>
-        <p>Enter a title and choose photos. The Studio picks the main photo, removes duplicates, fixes rotation, names and places every photo in its own folder, drafts the SEO text, builds the page, runs every check, previews it and prepares a pull request. You only approve. Everything starts as Draft.</p>
+        <h2>Add a page in three steps</h2>
+        <p>Title, photos, approve. The Studio names and places files, drafts the SEO text, runs every check and prepares the pull request. Everything starts as Draft.</p>
       </div>
-      <div class="grid">
-        <div class="field"><label for="quick-title">Title *</label><input id="quick-title" type="text" autocomplete="off" placeholder="e.g. Sunset Camel Safari"></div>
-        <div class="field"><label for="quick-slug">Page name (optional)</label><input id="quick-slug" type="text" autocomplete="off" placeholder="made from the title, e.g. sunset-camel-safari"><div class="hint">Lowercase letters, digits and hyphens. If the name is taken, the next free one is used.</div></div>
-        <div class="field"><label for="quick-type">What are you adding?</label><select id="quick-type"><option value="tour">Tour or experience</option><option value="blog">Travel guide (blog)</option></select></div>
-        <div class="field"><label for="quick-photos">Photos (first one, or one named hero, is the main photo)</label><input id="quick-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple><div class="hint" id="quick-photo-list">No photos chosen.</div></div>
-        <div class="field full"><label for="quick-brief">Notes (optional: only confirmed facts)</label><textarea class="tall" id="quick-brief" spellcheck="false"></textarea><div class="hint">Everything here is optional. Anything you leave out is filled with a neutral placeholder and listed for you to confirm before the page can go Live. Photos only need a real JPG, PNG or WebP at least 800 px wide.</div></div>
+      <ol class="steps" id="quick-steps" aria-label="Progress"><li class="on" data-s="1">1 Title</li><li data-s="2">2 Photos</li><li data-s="3">3 Check and approve</li></ol>
+      <div class="qstep" id="qs1">
+        <div class="grid">
+          <div class="field"><label for="quick-type">What are you adding?</label><select id="quick-type"><option value="tour">Tour or experience</option><option value="blog">Travel guide (blog)</option></select></div>
+          <div class="field"><label for="quick-title">Title *</label><input id="quick-title" type="text" autocomplete="off" placeholder="e.g. Sunset Camel Safari"></div>
+        </div>
+        <details class="more"><summary>Change page name</summary><div class="field"><label for="quick-slug">Page name (optional)</label><input id="quick-slug" type="text" autocomplete="off" placeholder="made from the title"><div class="hint">Lowercase letters, digits and hyphens. If taken, the next free one is used.</div></div></details>
+        <details class="more"><summary>Add notes (optional, only confirmed facts)</summary><div class="field"><textarea class="tall" id="quick-brief" spellcheck="false"></textarea><div class="hint">Anything left out is filled with a neutral placeholder and listed for you to confirm.</div><p class="actions" id="quick-ai" hidden><button type="button" id="quick-suggest">Suggest wording (local AI)</button><span class="note" id="quick-suggest-out"></span></p></div></details>
+        <p class="actions"><button type="button" class="primary" id="quick-next1">Next: photos</button></p>
       </div>
-      <div class="actions"><button type="button" class="primary" id="quick-build">Build draft</button><p class="note">Nothing is saved to the site until you approve. Approving writes a Draft to this working tree and builds a checked zip pack.</p></div>
-      <div class="result" id="quick-result" role="status" aria-live="polite"></div>
-      <div class="field" id="quick-approve-box" hidden><label for="quick-by">Approved by (your name; must not be the author)</label><input id="quick-by" type="text" autocomplete="name"><p class="actions"><button type="button" class="primary" id="quick-approve">Approve, save as Draft and check it</button> <button type="button" id="quick-ship" hidden>Open pull request</button></p></div>
+      <div class="qstep" id="qs2" hidden>
+        <label for="quick-photos">Photos</label>
+        <div class="drop" id="quick-drop" tabindex="0">Drop photos here or <u>choose files</u><br><small>JPG, PNG or WebP, at least 800 px wide. First photo, or one named hero, is the main photo.</small></div>
+        <input id="quick-photos" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+        <div class="thumbs" id="quick-thumbs"></div><div class="hint" id="quick-photo-list">No photos chosen.</div>
+        <p class="actions"><button type="button" id="quick-back2">Back</button><button type="button" class="primary" id="quick-build">Build and check</button><span class="note">Nothing is saved to the site until you approve.</span></p>
+      </div>
+      <div class="qstep" id="qs3" hidden>
+        <div class="result" id="quick-result" role="status" aria-live="polite"></div>
+        <div id="quick-card" hidden>
+          <div class="scorecard"><div class="scorenum" id="quick-score"></div><ul class="scorelist" id="quick-checks"></ul></div>
+          <div class="pvcard" id="quick-preview"></div>
+        </div>
+        <div class="field" id="quick-approve-box" hidden>
+          <label class="check" id="quick-facts-row" hidden><input type="checkbox" id="quick-facts"> I confirmed the price, timings and inclusions with the hotel today</label>
+          <label for="quick-by">Approved by (your name; must not be the author)</label><input id="quick-by" type="text" autocomplete="name">
+          <p class="actions"><button type="button" class="primary" id="quick-approve">Approve and check it</button> <button type="button" id="quick-ship" hidden>Open pull request</button></p>
+        </div>
+        <p class="actions"><button type="button" id="quick-back3">Back to photos</button><button type="button" id="quick-restart">Start another page</button></p>
+      </div>
     </div>
   </section>
   <section class="pane" id="pane-tour" role="tabpanel" aria-labelledby="tab-tour">
@@ -1242,45 +1263,63 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
       tour:['type: tour','title: Sunset Camel Safari','summary: A relaxed camel ride across the dunes at golden hour, with tea on the sand and an easy return to the fort.','best for: Guests who want a short, easy desert experience.','duration: Half-day, about 3 hours','included:','- Camel ride','- Tea on the dunes','not included:','- Personal expenses','timeline:','- Pickup | Meet at the hotel and drive to the dunes.','- Camel ride | Ride across the dunes towards sunset.','- Return | Drive back to the fort.','photos:','- sunset-1.jpg | Camels walking across golden dunes at sunset','facts confirmed by:'].join('\n'),
       blog:['type: blog','title: A short guide to Jaisalmer Fort','lede: Jaisalmer Fort is a living fort with homes, shops and temples inside the walls.','summary: What to see inside Jaisalmer Fort and how long to allow.','sources:','- Hotel notes | https://www.hotelgarhjaisal.com/','## Visit','Allow about two hours inside the fort and wear shoes with good grip on the stone paths.','## Best time','Early morning is cooler and quieter.'].join('\n')
     };
-    const type=document.getElementById('quick-type'),brief=document.getElementById('quick-brief'),files=document.getElementById('quick-photos'),list=document.getElementById('quick-photo-list'),result=document.getElementById('quick-result'),approveBox=document.getElementById('quick-approve-box');
-    let batch=null;
-    brief.value='';
+    const $=id=>document.getElementById(id);
+    const type=$('quick-type'),brief=$('quick-brief'),files=$('quick-photos'),result=$('quick-result'),approveBox=$('quick-approve-box'),drop=$('quick-drop');
+    let batch=null,picked=[];
     brief.placeholder=TEMPLATES.tour;
-    type.addEventListener('change',()=>{brief.placeholder=TEMPLATES[type.value];});
-    files.addEventListener('change',()=>{list.textContent=files.files.length?Array.from(files.files).map(f=>f.name).join(', '):'No photos chosen.';});
+    type.addEventListener('change',()=>{brief.placeholder=TEMPLATES[type.value];$('quick-facts-row').hidden=type.value!=='tour';});
+    function step(n){[1,2,3].forEach(i=>{$('qs'+i).hidden=i!==n;});document.querySelectorAll('#quick-steps li').forEach(li=>li.classList.toggle('on',+li.dataset.s===n));}
     function show(good,lines){result.className='result visible '+(good?'good':'bad');result.textContent=lines.join('\n');result.style.whiteSpace='pre-wrap';}
-    document.getElementById('quick-build').addEventListener('click',async()=>{
-      approveBox.hidden=true;
+    function thumbs(){const box=$('quick-thumbs');box.textContent='';picked.forEach(f=>{const fig=document.createElement('figure'),im=document.createElement('img');im.alt=f.name;im.src=URL.createObjectURL(f);const c=document.createElement('figcaption');c.textContent=f.name;fig.append(im,c);box.append(fig);});$('quick-photo-list').textContent=picked.length?picked.length+' photo(s) chosen.':'No photos chosen.';}
+    function addFiles(list){Array.from(list).filter(f=>/^image\//.test(f.type)).forEach(f=>picked.push(f));thumbs();}
+    drop.addEventListener('click',()=>files.click());drop.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();files.click();}});
+    files.addEventListener('change',()=>{addFiles(files.files);files.value='';});
+    ['dragenter','dragover'].forEach(n=>drop.addEventListener(n,e=>{e.preventDefault();drop.classList.add('over');}));
+    ['dragleave','drop'].forEach(n=>drop.addEventListener(n,e=>{e.preventDefault();drop.classList.remove('over');}));
+    drop.addEventListener('drop',e=>addFiles(e.dataTransfer.files));
+    $('quick-next1').addEventListener('click',()=>{if(!$('quick-title').value.trim()){$('quick-title').focus();return;}step(2);});
+    $('quick-back2').addEventListener('click',()=>step(1));$('quick-back3').addEventListener('click',()=>step(2));
+    $('quick-restart').addEventListener('click',()=>{batch=null;picked=[];thumbs();$('quick-title').value='';$('quick-slug').value='';brief.value='';$('quick-card').hidden=true;approveBox.hidden=true;result.className='result';$('quick-ship').hidden=true;step(1);});
+    fetch('/api/inbox/ai-status').then(r=>r.json()).then(d=>{if(d.available)$('quick-ai').hidden=false;}).catch(()=>{});
+    $('quick-suggest').addEventListener('click',async()=>{const out=$('quick-suggest-out');out.textContent='Thinking...';try{const r=await fetch('/api/inbox/draft-wording',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:type.value,title:$('quick-title').value,notes:brief.value})});const d=await r.json();if(!d.ok){out.textContent='Not used: '+(d.rejected||[]).join(' ');return;}const x=d.suggestions;const add=[];if(x.summary)add.push('summary: '+x.summary);if(x.best_for)add.push('best for: '+x.best_for);brief.value=(brief.value.trim()+'\n'+add.join('\n')).trim();out.textContent='Added to notes. Please read them before building.';}catch(e){out.textContent='Local AI did not answer.';}});
+    function card(d){
+      const sc=d.score;if(!sc){$('quick-card').hidden=true;return;}
+      const n=$('quick-score');n.className='scorenum '+sc.grade;n.textContent=sc.score;const sm=document.createElement('small');sm.textContent={green:'Good',amber:'Fix soon',red:'Needs work'}[sc.grade];n.append(sm);
+      const ul=$('quick-checks');ul.textContent='';sc.checks.forEach(c=>{const li=document.createElement('li');li.className=c.status;li.textContent=c.msg;ul.append(li);});
+      const pv=d.preview,box=$('quick-preview');box.textContent='';
+      if(pv){const im=document.createElement('img');im.alt=pv.hero_alt||'';im.src='/api/inbox/file?id='+encodeURIComponent(batch)+'&p='+encodeURIComponent(pv.hero);const dv=document.createElement('div'),h=document.createElement('h3'),p=document.createElement('p'),m=document.createElement('p');h.textContent=pv.title||'';p.textContent=pv.summary||pv.description||'';m.className='meta';m.textContent=[pv.description?'Search text: '+pv.description:'',pv.steps&&pv.steps.length?'Steps: '+pv.steps.join(' > '):'',(pv.photos||[]).length+' photo(s)'].filter(Boolean).join(' | ');dv.append(h,p,m);box.append(im,dv);}
+      $('quick-card').hidden=false;
+    }
+    $('quick-build').addEventListener('click',async()=>{
+      approveBox.hidden=true;$('quick-card').hidden=true;step(3);
       batch='q'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
       try{
         show(true,['Uploading photos and building the draft...']);
-        for(const file of Array.from(files.files)){
+        for(const file of picked){
           const r=await fetch('/api/inbox/photo?id='+batch+'&filename='+encodeURIComponent(file.name),{method:'POST',headers:{'Content-Type':file.type||'application/octet-stream'},body:file});
           const d=await r.json();if(!r.ok)throw new Error(d.error||'Photo upload failed');
         }
-        const r=await fetch('/api/inbox/build',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:batch,type:type.value,title:document.getElementById('quick-title').value,slug:document.getElementById('quick-slug').value,brief:brief.value})});
+        const r=await fetch('/api/inbox/build',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:batch,type:type.value,title:$('quick-title').value,slug:$('quick-slug').value,brief:brief.value})});
         const d=await r.json();if(!r.ok)throw new Error(d.error||'Build failed');
-        const lines=[d.ok?'READY FOR APPROVAL: '+d.slug+' ('+d.type+')':'NEEDS YOUR INPUT (stopped at '+d.state+')'];
+        const lines=[d.ok?'Ready for approval: '+d.slug:'Needs your input'];
         (d.questions||[]).forEach(q=>lines.push('  ? '+q.question));
         (d.findings||[]).forEach(f=>lines.push('  ! '+f.message+(f.fix?' '+f.fix:'')));
-        if(d.plan)(d.plan.operations||[]).forEach(o=>lines.push('  '+o.op.padEnd(8)+o.path));
         (d.warnings||[]).forEach(w=>lines.push('  note: '+w.message));
-        show(d.ok,lines);approveBox.hidden=!d.ok;
+        show(d.ok,lines);card(d);approveBox.hidden=!d.ok;$('quick-facts-row').hidden=!(d.ok&&d.type==='tour');
       }catch(error){show(false,['Cannot build: '+error.message]);}
     });
-    document.getElementById('quick-approve').addEventListener('click',async()=>{
+    $('quick-approve').addEventListener('click',async()=>{
       try{
-        const r=await fetch('/api/inbox/approve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:batch,by:document.getElementById('quick-by').value})});
+        const r=await fetch('/api/inbox/approve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:batch,by:$('quick-by').value,factsConfirmed:$('quick-facts').checked})});
         const d=await r.json();if(!r.ok)throw new Error(d.error||'Approval failed');
-        const v=d.verify&&d.verify.ran?(d.verify.lines||[]).map(l=>'  '+l):['  (page checks run when PHP is available)'];show(d.ok&&d.state==='RELEASE',[d.ok?'Draft saved and pack built: '+d.zip:'Stopped at '+d.state,...(d.files||[]).map(f=>'  '+f),...v,d.next||'',...(d.findings||[]).map(f=>'  ! '+f.message)]);document.getElementById('quick-ship').hidden=!(d.ok&&d.state==='RELEASE');
+        const v=d.verify&&d.verify.ran?(d.verify.lines||[]).map(l=>'  '+l):['  (page checks run when PHP is available)'];show(d.ok&&d.state==='RELEASE',[d.ok?'Draft saved and pack built.':'Stopped at '+d.state,...v,d.next||'',...(d.findings||[]).map(f=>'  ! '+f.message)]);$('quick-ship').hidden=!(d.ok&&d.state==='RELEASE');
       }catch(error){show(false,['Cannot approve: '+error.message]);}
     });
-
-    document.getElementById('quick-ship').addEventListener('click',async()=>{
+    $('quick-ship').addEventListener('click',async()=>{
       try{
         const r=await fetch('/api/inbox/ship',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:batch})});
         const d=await r.json();if(!r.ok)throw new Error(d.error||'Could not open the pull request');
-        show(true,['Sent for review on branch '+d.branch+'.',d.next,'Nothing is live until you merge it and CI is green.']);document.getElementById('quick-ship').hidden=true;
+        show(true,['Sent for review on branch '+d.branch+'.',d.next,'Nothing is live until you merge it and CI is green.']);$('quick-ship').hidden=true;
       }catch(error){show(false,['Cannot open the pull request: '+error.message]);}
     });
   })();

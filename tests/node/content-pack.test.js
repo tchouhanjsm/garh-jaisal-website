@@ -21,7 +21,9 @@ const inbox = require('../../scripts/studio/inbox');
 
 process.on('uncaughtException', e => { console.error(e); if (process.env.GITHUB_ACTIONS) console.log('::error title=pack eval crashed::' + String(e.stack || e).split('\n').slice(0, 4).join(' | ').slice(0, 500)); process.exit(1); });
 let passed = 0;
-const test = (name, fn) => { try { fn(); passed++; } catch (e) { console.error('FAIL ' + name + '\n' + (e.stack || e)); if (process.env.GITHUB_ACTIONS) console.log('::error title=pack eval failed::' + name + ' | ' + String(e.message || e).split('\n').join(' ').slice(0, 400)); process.exitCode = 1; } };
+const pending = [];
+const fail = (name, e) => { console.error('FAIL ' + name + '\n' + (e.stack || e)); if (process.env.GITHUB_ACTIONS) console.log('::error title=pack eval failed::' + name + ' | ' + String(e.message || e).split('\n').join(' ').slice(0, 400)); process.exitCode = 1; };
+const test = (name, fn) => { try { const r = fn(); if (r && r.then) pending.push(r.then(() => { passed++; }, e => fail(name, e))); else passed++; } catch (e) { fail(name, e); } };
 
 function makeImage(file, width, height, noise, fmt) {
   const py = 'import sys,os\nfrom PIL import Image\nw,h,noise,out,fmt=int(sys.argv[1]),int(sys.argv[2]),sys.argv[3]=="1",sys.argv[4],sys.argv[5]\n' +
@@ -310,5 +312,45 @@ test('path map matches the Studio server record directories', () => {
   for (const t of Object.values(L.PATHS.types)) assert.ok(server.includes(t.record_dir.split('/').pop()), t.record_dir);
 });
 
-fs.rmSync(tmp, { recursive: true, force: true });
-console.log(passed + ' content-pack checks passed' + (process.exitCode ? ' (with failures)' : ''));
+test('quick add returns score, plain messages and preview', () => {
+  inboxBatch('qa-score-01', TOUR_BRIEF, ['dune-1.jpg', 'dune-2.jpg']);
+  const r = inbox.processFolder('qa-score-01');
+  assert.equal(r.ok, true, JSON.stringify(r));
+  assert.ok(r.score && r.score.score > 0 && ['green', 'amber', 'red'].includes(r.score.grade));
+  assert.ok(r.score.checks.every(c => c.msg && !/\bRC-\d+/.test(c.msg)));
+  assert.ok(r.preview && r.preview.title && /^img\/tours\//.test(r.preview.hero));
+});
+test('score flags hype, exclamation marks and facts', () => {
+  const { scoreRecord } = require('../../scripts/studio/score');
+  const rec = { h1: 'Best Amazing Tour!!!', description: 'Short', summary: 'Book now!!! The best ever unforgettable trip for ₹5000.', images: [] };
+  const sc = scoreRecord('tour', rec);
+  assert.equal(sc.grade, 'red');
+  assert.ok(sc.checks.some(c => c.id === 'tone' && c.status !== 'green'));
+});
+test('approve with factsConfirmed marks the staged tour record', () => {
+  inboxBatch('qa-fact-001', 'type: tour\ntitle: Confirmed Facts Dune Walk\n', ['a.jpg']);
+  const r = inbox.processFolder('qa-fact-001'); assert.equal(r.ok, true, JSON.stringify(r));
+  const a = inbox.approve('qa-fact-001', 'Owner Person', { factsConfirmed: true });
+  assert.ok(a.ok, JSON.stringify(a));
+  const rec = JSON.parse(fs.readFileSync(path.join(L.repoRoot(), 'content/experiences', r.slug + '.json'), 'utf8'));
+  assert.equal(rec.facts_confirmed, true); assert.ok(rec.last_verified);
+});
+test('draft-wording rejects invented numbers and hype; accepts faithful text', async () => {
+  const dw = require('../../scripts/studio/draft-wording');
+  const bad = dw.validate({ summary: 'An amazing 3 hour ride for 2500 rupees!', best_for: 'Everyone' }, 'camel ride at sunset');
+  assert.equal(bad.ok, false); assert.ok(bad.rejected.length >= 2);
+  const good = dw.validate({ summary: 'A camel ride at sunset.', best_for: 'Guests who want an easy evening.' }, 'camel ride at sunset');
+  assert.equal(good.ok, true);
+  assert.equal(dw.loopback('http://evil.example:11434'), false); assert.equal(dw.loopback('http://127.0.0.1:11434'), true);
+  const http = require('node:http');
+  const srv = http.createServer((q, res) => { res.setHeader('Content-Type', 'application/json'); if (q.url === '/api/tags') return res.end(JSON.stringify({ models: [{ name: 'fake' }] })); res.end(JSON.stringify({ response: JSON.stringify({ summary: 'A camel ride at sunset.', best_for: 'Easy evenings.', faq: [] }) })); });
+  await new Promise(r => srv.listen(0, '127.0.0.1', r));
+  const host = 'http://127.0.0.1:' + srv.address().port;
+  assert.equal((await dw.aiStatus(host)).available, true);
+  const out = await dw.suggestWording({ type: 'tour', title: 'Sunset', notes: 'camel ride at sunset', host });
+  srv.close(); assert.equal(out.ok, true, JSON.stringify(out));
+});
+Promise.all(pending).then(() => {
+  fs.rmSync(tmp, { recursive: true, force: true });
+  console.log(passed + ' content-pack checks passed' + (process.exitCode ? ' (with failures)' : ''));
+});

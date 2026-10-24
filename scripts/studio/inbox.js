@@ -12,6 +12,7 @@ const { placePhoto, analyzePhoto, hamming } = require('./place-photo');
 const { exportPack } = require('./export-pack');
 const { applyPack } = require('../check-content-pack');
 const run = require('./run');
+const { scoreRecord, plain } = require('./score');
 const { spawnSync } = require('node:child_process');
 
 const inboxRoot = () => path.join(L.repoRoot(), 'content/_inbox');
@@ -188,18 +189,20 @@ function processFolder(id) {
   run.advance(r.id, { pass: true, evidence: placed.length + ' photos placed', by: author });
   const plan = planSave({ type, slug, record, photos: placed.map(p => ({ path: p.path, bytes: p.bytes })), soft: true });
   const fixes = plan.findings.map(f => ({ rule: f.rule, message: f.message, fix: HINT[f.rule] || f.fix }));
-  if (!plan.ok) { run.advance(r.id, { pass: false, evidence: plan.findings.map(f => f.rule).join(','), by: author }); return { ...base, ok: false, run: r.id, state: 'BUILD', questions: [], findings: fixes, plan }; }
+  if (!plan.ok) { run.advance(r.id, { pass: false, evidence: plan.findings.map(f => f.rule).join(','), by: author }); return { ...base, ok: false, run: r.id, state: 'BUILD', questions: [], findings: fixes.map(f => ({ ...f, message: plain(f) })), plan }; }
   run.advance(r.id, { pass: true, evidence: 'record and plan clean', by: author });
   const softNotes = plan.findings.filter(f => f.severity === 'warn');
   if (softNotes.length) warnings.push({ rule: 'AU-08', message: 'To fix before Live: ' + softNotes.map(f => f.message).join(' ') });
   if (type === 'tour' && !record.facts_confirmed) warnings.push({ rule: 'AU-02', message: 'Facts are not confirmed: price, timings and inclusions must be confirmed by the owner before this tour can go Live ("facts confirmed by: Name 2026-10-23" in the brief).' });
-  const report = { ...base, ok: true, run: r.id, state: 'APPROVE', questions: [], findings: [], plan, record_path: L.recordPath(type, slug), photos: placed.map(p => p.path), next: 'Approve to build the pack and add the draft to this working tree.' };
+  const score = scoreRecord(type, record);
+  const preview = { title: record.h1, description: record.description, summary: record.summary || record.lede, hero: placed[0].path, hero_alt: record.hero_alt, photos: placed.map(p => ({ path: p.path, alt: (record.images.find(i => i.path === p.path) || {}).alt })), steps: (record.timeline || []).map(t => t.title), included: record.included || [], sections: (record.sections || []).map(x => x.heading) };
+  const report = { ...base, ok: true, run: r.id, state: 'APPROVE', questions: [], findings: [], score, preview, plan, record_path: L.recordPath(type, slug), photos: placed.map(p => p.path), next: 'Approve to build the pack and add the draft to this working tree.' };
   fs.writeFileSync(path.join(dir, 'report.json'), JSON.stringify(report, null, 2) + '\n');
   return report;
 }
 
 // After the human gate: pack, apply to this working tree as a draft, verify, and stop before RELEASE (commit and PR).
-function approve(id, by) {
+function approve(id, by, opts = {}) {
   const dir = path.join(inboxRoot(), id);
   const report = JSON.parse(fs.readFileSync(path.join(dir, 'report.json'), 'utf8'));
   const state = run.readRun(report.run);
@@ -207,7 +210,13 @@ function approve(id, by) {
   if (!by || by === state.author) throw new Error('Approval must be given by a named person other than the author.');
   const file = path.join(L.repoRoot(), 'content/_runs', report.run + '.json');
   const raw = JSON.parse(fs.readFileSync(file, 'utf8')); raw.approver = by; L.atomicWrite(file, JSON.stringify(raw, null, 2) + '\n');
-  run.advance(report.run, { pass: true, evidence: 'plan approved', by });
+  if (opts.factsConfirmed && report.type === 'tour') {
+    const recFile = path.join(dir, 'stage/record.json');
+    const rec = JSON.parse(fs.readFileSync(recFile, 'utf8'));
+    rec.facts_confirmed = true; rec.last_verified = today(); rec.facts_confirmed_by = by;
+    fs.writeFileSync(recFile, JSON.stringify(rec, null, 2) + '\n');
+  }
+  run.advance(report.run, { pass: true, evidence: 'plan approved' + (opts.factsConfirmed ? '; facts confirmed by ' + by : ''), by });
   const exp = exportPack({ type: report.type, slug: report.slug, stage: path.join(dir, 'stage'), outDir: path.join(L.repoRoot(), 'content/_stage/packs'), mode: 'new' });
   if (!exp.ok) { run.advance(report.run, { pass: false, evidence: exp.findings.map(f => f.rule).join(',') }); return { ok: false, state: 'PACK', findings: exp.findings }; }
   run.advance(report.run, { pass: true, evidence: exp.pack_id });
