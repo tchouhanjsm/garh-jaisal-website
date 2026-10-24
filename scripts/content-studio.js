@@ -1613,12 +1613,24 @@ const server = http.createServer(async (req, res) => {
       if (req.method === 'POST' && url.pathname === '/api/inbox/approve') {
         const body = await readJson(req);
         if (!idOk(body.id)) throw fail(400, 'Invalid batch id.');
-        try { return respondJson(res, 200, inbox.approve(body.id, String(body.by || '').trim())); } catch (error) { throw fail(409, error.message); }
+        try { return respondJson(res, 200, inbox.approve(body.id, String(body.by || '').trim(), { factsConfirmed: body.factsConfirmed === true })); } catch (error) { throw fail(409, error.message); }
       }
       if (req.method === 'POST' && url.pathname === '/api/inbox/ship') {
         const body = await readJson(req);
         if (!idOk(body.id)) throw fail(400, 'Invalid batch id.');
         try { return respondJson(res, 200, require('./studio/ship').ship(body.id, {})); } catch (error) { throw fail(409, error.message); }
+      }
+      if (req.method === 'GET' && url.pathname === '/api/inbox/ai-status') return respondJson(res, 200, await require('./studio/draft-wording').aiStatus());
+      if (req.method === 'POST' && url.pathname === '/api/inbox/draft-wording') {
+        const body = await readJson(req);
+        return respondJson(res, 200, await require('./studio/draft-wording').suggestWording({ type: body.type === 'blog' ? 'blog' : 'tour', title: String(body.title || '').slice(0, 140), notes: String(body.notes || '') }));
+      }
+      if (req.method === 'GET' && url.pathname === '/api/inbox/file') {
+        const id = url.searchParams.get('id'); const rel = String(url.searchParams.get('p') || '');
+        if (!idOk(id) || !/^img\/(tours|journal|gallery)\/[a-z0-9/_-]+\.webp$/.test(rel) || rel.includes('..')) throw fail(400, 'Invalid file request.');
+        const file = path.join(inbox.inboxRoot(), id, 'stage', rel);
+        if (!fs.existsSync(file) || fs.lstatSync(file).isSymbolicLink()) throw fail(404, 'No such photo.');
+        return respond(res, 200, 'image/webp', fs.readFileSync(file));
       }
       throw fail(404, 'No quick-add route matches this request.');
     }

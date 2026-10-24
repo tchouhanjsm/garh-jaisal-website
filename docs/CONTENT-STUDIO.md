@@ -75,3 +75,12 @@ Upload and extract the pack at the site root, keep the record `draft`, run `php 
 
 ## Tests
 `node tests/node/content-pack.test.js` (golden packs, 21 bad packs each with its own rule id, sync export and Quick add) runs in CI.
+
+## Three-step add screen, score card and local drafting
+
+Quick add is now Title, Photos, Check and approve. Photos can be dragged in. Page name and notes sit behind small links.
+
+- Score card: after Build the Studio scores the page (title, description, keywords, readability, depth, photos and alt text, tone, price, facts) and shows green, amber or red sentences, plus a preview card with the main photo. Code: `scripts/studio/score.js`. Hype words, exclamation marks and unsourced prices lower the score.
+- Facts: for a tour, tick "I confirmed the price, timings and inclusions" at approval to set `facts_confirmed` and `last_verified`. Without it the page stays Draft-only.
+- Suggest wording (optional): if Ollama runs on this computer (`ollama serve`, one model pulled), a button appears under Notes. It only rewords facts you typed; text with new numbers, links, hype or exclamation marks is rejected. It never contacts any remote service. Code: `scripts/studio/draft-wording.js`.
+- Lighthouse (optional): start the site locally, then `npm run studio:lighthouse` for an SEO, accessibility and speed report. Vale can be pointed at `content/` for style linting; neither is required.

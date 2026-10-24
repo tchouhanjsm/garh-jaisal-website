@@ -18,7 +18,8 @@
     "studio:inbox": "node scripts/studio/cli.js inbox",
     "studio:approve": "node scripts/studio/cli.js inbox-approve",
     "studio:ship": "node scripts/studio/cli.js ship",
-    "studio:watch": "node scripts/studio/cli.js inbox-watch"
+    "studio:watch": "node scripts/studio/cli.js inbox-watch",
+    "studio:lighthouse": "npx --yes lighthouse http://127.0.0.1:8088/ --only-categories=seo,accessibility,performance --view"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1"
