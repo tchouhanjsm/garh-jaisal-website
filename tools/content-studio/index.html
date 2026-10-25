@@ -80,7 +80,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
 
   <nav class="tabs" id="main-tabs" role="tablist" aria-label="Choose a content type">
     <button class="tab" role="tab" id="tab-quick" aria-controls="pane-quick" aria-selected="true" data-pane="quick">Quick add (automatic)</button>
-    <button type="button" class="tab" id="tab-advanced" aria-expanded="false" aria-controls="main-tabs">Advanced forms ▾</button>
+    <button type="button" class="tab" id="tab-advanced" aria-expanded="false" aria-controls="main-tabs">Owner tools (Advanced forms) ▾</button>
     <button class="tab" role="tab" data-adv="1" id="tab-tour" aria-controls="pane-tour" aria-selected="false" data-pane="tour">Add a tour</button>
     <button class="tab" role="tab" data-adv="1" id="tab-blog" aria-controls="pane-blog" aria-selected="false" data-pane="blog">Add a blog</button>
     <button class="tab" role="tab" data-adv="1" id="tab-pages" aria-controls="pane-pages" aria-selected="false" data-pane="pages">Build a page</button>
@@ -94,7 +94,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
       <div class="panel-head">
         <p class="eyebrow">Automatic</p>
         <h2>Add a page in three steps</h2>
-        <p>Title, photos, approve. The Studio names and places files, drafts the SEO text, runs every check and prepares the pull request. Everything starts as Draft.</p>
+        <p>Title, photos, approve. The Studio names and places files, drafts the SEO text, runs every check and prepares it for review. Everything starts as Draft.</p>
       </div>
       <ol class="steps" id="quick-steps" aria-label="Progress"><li class="on" data-s="1">1 Title</li><li data-s="2">2 Photos</li><li data-s="3">3 Check and approve</li></ol>
       <div class="qstep" id="qs1">
@@ -121,8 +121,8 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
         </div>
         <div class="field" id="quick-approve-box" hidden>
           <label class="check" id="quick-facts-row" hidden><input type="checkbox" id="quick-facts"> I confirmed the price, timings and inclusions with the hotel today</label>
-          <label for="quick-by">Approved by (your name; must not be the author)</label><input id="quick-by" type="text" autocomplete="name">
-          <p class="actions"><button type="button" class="primary" id="quick-approve">Approve and check it</button> <button type="button" id="quick-ship" hidden>Open pull request</button></p>
+          <label for="quick-by">Your name (the person checking this page)</label><input id="quick-by" type="text" autocomplete="name">
+          <p class="actions"><button type="button" class="primary" id="quick-approve">Looks good, save it</button> <button type="button" id="quick-ship" hidden>Send for review</button></p>
         </div>
         <p class="actions"><button type="button" id="quick-back3">Back to photos</button><button type="button" id="quick-restart">Start another page</button></p>
       </div>
@@ -356,7 +356,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
   let previewCurrentUrl=null;
   let previewMode='desktop';
   const ADV_PANES=['tour','blog','pages','gallery','pack'];
-  function setAdv(on){document.getElementById('main-tabs').classList.toggle('adv',on);document.body.classList.toggle('adv',on);const b=document.getElementById('tab-advanced');b.setAttribute('aria-expanded',on?'true':'false');b.textContent=on?'Advanced forms ▴':'Advanced forms ▾';}
+  function setAdv(on){document.getElementById('main-tabs').classList.toggle('adv',on);document.body.classList.toggle('adv',on);const b=document.getElementById('tab-advanced');b.setAttribute('aria-expanded',on?'true':'false');b.textContent=on?'Advanced forms ▴':'Owner tools (Advanced forms) ▾';}
   document.getElementById('tab-advanced').addEventListener('click',()=>setAdv(!document.body.classList.contains('adv')));
   function activatePane(pane){
     if(ADV_PANES.includes(pane))setAdv(true);
@@ -1312,15 +1312,15 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
       try{
         const r=await fetch('/api/inbox/approve',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:batch,by:$('quick-by').value,factsConfirmed:$('quick-facts').checked})});
         const d=await r.json();if(!r.ok)throw new Error(d.error||'Approval failed');
-        const v=d.verify&&d.verify.ran?(d.verify.lines||[]).map(l=>'  '+l):['  (page checks run when PHP is available)'];show(d.ok&&d.state==='RELEASE',[d.ok?'Draft saved and pack built.':'Stopped at '+d.state,...v,d.next||'',...(d.findings||[]).map(f=>'  ! '+f.message)]);$('quick-ship').hidden=!(d.ok&&d.state==='RELEASE');
+        const v=d.verify&&d.verify.ran?(d.verify.lines||[]).map(l=>'  '+l):['  (page checks run when PHP is available)'];show(d.ok&&d.state==='RELEASE',[d.ok?'Saved as a draft and checked.':'Stopped at '+d.state,...v,d.next||'',...(d.findings||[]).map(f=>'  ! '+f.message)]);$('quick-ship').hidden=!(d.ok&&d.state==='RELEASE');
       }catch(error){show(false,['Cannot approve: '+error.message]);}
     });
     $('quick-ship').addEventListener('click',async()=>{
       try{
         const r=await fetch('/api/inbox/ship',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:batch})});
         const d=await r.json();if(!r.ok)throw new Error(d.error||'Could not open the pull request');
-        show(true,['Sent for review on branch '+d.branch+'.',d.next,'Nothing is live until you merge it and CI is green.']);$('quick-ship').hidden=true;
-      }catch(error){show(false,['Cannot open the pull request: '+error.message]);}
+        show(true,['Sent for review. The owner will check it and publish it.','Nothing is live until the owner publishes it.']);$('quick-ship').hidden=true;
+      }catch(error){show(false,['Could not send for review: '+error.message]);}
     });
   })();
 </script>

@@ -36,7 +36,7 @@ function ship(id, { remote = 'origin', base = 'main' } = {}) {
       const g = spawnSync('gh', ['pr', 'create', '--base', base, '--head', branch, '--title', 'content: ' + a.type + ' ' + a.slug + ' (draft)', '--body', 'Draft content built by Content Studio Quick add. Approved by ' + a.by + '. Files: ' + a.files.join(', ') + '. Facts must be confirmed before Live.'], { cwd: root, encoding: 'utf8', env: { ...process.env, GH_PROMPT_DISABLED: '1' } });
       pr = g.status === 0 ? String(g.stdout).trim().split('\n').pop() : null;
     }
-    result = { ok: true, branch, pr, files: a.files, next: pr ? 'Review and merge: ' + pr : 'Branch pushed. Open a pull request for ' + branch + ' on GitHub and merge it when CI is green.' };
+    result = { ok: true, branch, pr, files: a.files, next: pr ? 'Review and merge: ' + pr : 'Saved and sent. Ask the owner to open GitHub and review branch ' + branch + '.' };
   } finally { git(root, ['checkout', '-q', current]); }
   run.advance(a.run, { pass: true, evidence: 'shipped on ' + branch + (result.pr ? ' ' + result.pr : '') });
   return result;

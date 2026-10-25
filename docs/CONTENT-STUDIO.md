@@ -24,7 +24,7 @@ You supply only what a person must: **title**, **page name** (optional) and **ph
 - **Text:** SEO title and description are fitted to the limits; summary, best-for, timeline and inclusions are optional. If you leave them out, neutral placeholders are used and listed ("To fix before Live"); nothing is invented.
 - **Page name:** made from the title; if taken, the next free name is used (an explicitly typed name that is taken is refused).
 - **Checks and plan:** every check runs, the exact files are listed, and the run stops at the one human gate.
-- **After Approve (a named person other than the author):** the pack is built, the draft is saved in this working tree, the page is rendered and checked (drafts are private, so they must return 404 and stay out of the sitemap), then **Open pull request** puts exactly those files on a new branch `content/<slug>-<date>`, pushes it and opens a PR (via `gh` if installed). It never merges; merging and deploying stay with the owner.
+- **After Approve (a named person other than the author):** the pack is built, the draft is saved in this working tree, the page is rendered and checked (drafts are private, so they must return 404 and stay out of the sitemap), then **Send for review** puts exactly those files on a new branch `content/<slug>-<date>`, pushes it and opens a PR (via `gh` if installed). It never merges; merging and deploying stay with the owner.
 - Optional notes format: `key: value` lines (`summary`, `best for`, `duration`, `category`, `seo title`, `description`, `facts confirmed by: Name 2026-10-24`), lists with `- item` lines (`included`, `not included`, `timeline` as `- Step | text`, `faq` as `- Question | answer`, `photos` as `- file.jpg | alt text`, `sources`), and for blogs `## Heading` sections.
 - No browser: put `brief.md` (a `title:` line is enough) and a `photos/` folder in `content/_inbox/<id>/`, then `npm run studio:inbox <id>`, `npm run studio:approve <id> -- --by "Name"`, `npm run studio:ship <id>`. `npm run studio:watch` builds any new folder automatically.
 - Tours cannot go Live until facts are confirmed; alt text is drafted from the title when not given, and the result says so.
@@ -84,3 +84,7 @@ Quick add is now Title, Photos, Check and approve. Photos can be dragged in. Pag
 - Facts: for a tour, tick "I confirmed the price, timings and inclusions" at approval to set `facts_confirmed` and `last_verified`. Without it the page stays Draft-only.
 - Suggest wording (optional): if Ollama runs on this computer (`ollama serve`, one model pulled), a button appears under Notes. It only rewords facts you typed; text with new numbers, links, hype or exclamation marks is rejected. It never contacts any remote service. Code: `scripts/studio/draft-wording.js`.
 - Lighthouse (optional): start the site locally, then `npm run studio:lighthouse` for an SEO, accessibility and speed report. Vale can be pointed at `content/` for style linting; neither is required.
+
+## Staff view
+
+Staff use `docs/STAFF-GUIDE.md` and the double-click launchers (`Start-Studio.bat`, `Start-Studio.command`). Screen wording avoids git terms: "Send for review" runs branch, push and pull request internally. This runbook and "Owner tools (Advanced forms)" are for the owner.
