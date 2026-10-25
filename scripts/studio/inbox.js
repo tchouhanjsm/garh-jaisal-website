@@ -229,7 +229,7 @@ function approve(id, by, opts = {}) {
   else run.advance(report.run, { pass: true, evidence: 'verify skipped: ' + verify.reason });
   const approved = { run: report.run, id, type: report.type, slug: report.slug, zip: path.relative(L.repoRoot(), exp.zip), files: exp.files, verify, by, time: new Date().toISOString() };
   fs.writeFileSync(path.join(dir, 'approved.json'), JSON.stringify(approved, null, 2) + '\n');
-  return { ok: true, state: verify.ran && !verify.ok ? 'VERIFY' : 'RELEASE', run: report.run, zip: approved.zip, files: exp.files, verify, next: verify.ran && !verify.ok ? 'The draft page has problems: ' + verify.lines.filter(l => l.startsWith('FAIL')).join(' ; ') : 'Draft saved in this working tree and checked. Press "Open pull request" (or run npm run studio:ship ' + id + ') to send it for review.' };
+  return { ok: true, state: verify.ran && !verify.ok ? 'VERIFY' : 'RELEASE', run: report.run, zip: approved.zip, files: exp.files, verify, next: verify.ran && !verify.ok ? 'The draft page has problems: ' + verify.lines.filter(l => l.startsWith('FAIL')).join(' ; ') : 'Draft saved in this working tree and checked. Press "Send for review" (or run npm run studio:ship ' + id + ') to send it for review.' };
 }
 
 function verifyDraft(slug) {
