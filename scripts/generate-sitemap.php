@@ -201,6 +201,7 @@ foreach ($urls as $path => $priority) {
     $routeSlug = $path === '/' ? '' : basename($path, '.php');
     if (array_key_exists($routeSlug, $experiences)) {
         $sourceFiles[] = 'include/experience-data.php';
+        $sourceFiles[] = 'include/experience-page.php';
     }
     if (array_key_exists($routeSlug, $editorialGuides)) {
         $sourceFiles[] = 'include/editorial-guides-data.php';

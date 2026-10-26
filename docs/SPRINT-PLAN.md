@@ -801,7 +801,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - No cPanel action, external staging upload or production deployment is in scope. Owner approval of business facts, visual sign-off and production parity remain separate release gates.
 
 
-## Sprint 58 — experience discovery and comparison UX (PR #132 in review)
+## Sprint 58 — experience discovery and comparison UX (PR #132 merged)
 
 **Commercial goal:** help guests narrow the published desert and city experience list quickly, then open the relevant itinerary or add the option to their trip shortlist.
 
@@ -812,3 +812,17 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Add Playwright coverage for combined search/category/duration filters, empty-state recovery, reset, 320/390/1280/1440px overflow/tap targets and the no-JavaScript fallback.
 - Exact-head acceptance: PHP 7.4/8.2 Site Checks, strict image and sitemap checks, responsive-image review, non-deploying QA, package preflight, complete Browser E2E and screenshot/page-sheet evidence. Local PHP/Playwright execution must be stated honestly if not run in this connector session.
 - No cPanel upload, external staging deployment, production deployment or new business fact is part of this phase.
+
+
+## Sprint 59 — mid-page experience decision checkpoint (PR #133 in review)
+
+**Commercial goal:** after guests review an experience's itinerary and the included/not-included details, present a clear next step without forcing them to scroll to the final footer CTA.
+
+- Reuse the shared experience renderer and a small UI partial to place one responsive conversion checkpoint after the itinerary/detail sections on each live experience page.
+- Keep the primary action context-aware: existing Contact topic for general desert/hub routes, trusted `?experience=` Contact context for non-hub experiences, and the current WhatsApp draft for half-day/full-day city tours.
+- Offer the existing Add to Trip interaction for live non-hub offers and the existing catalogue shortlist route for hub pages. Duplicate Add to Trip controls must stay synchronized through the existing trip-tray implementation.
+- Do not change route slugs, current pricing/availability language, package inclusions, contact destinations, analytics payloads, schema or photography.
+- Update sitemap generation to account for the shared experience renderer in `lastmod`, then regenerate the XML for all live experience URLs.
+- Add Playwright coverage across all eight live experience routes for CTA destinations, placement after itinerary/details, hub/non-hub action behavior, synchronized trip selection and responsive/no-overflow controls.
+- Exact-head acceptance: PHP 7.4/8.2 Site Checks, strict image and sitemap checks, responsive-image review, non-deploying QA, package preflight, complete Browser E2E and screenshot/page-sheet evidence. Local PHP/Playwright execution must be reported honestly if not run in this connector session.
+- No cPanel upload, external staging deployment, production deployment or new unapproved business fact is in scope.
