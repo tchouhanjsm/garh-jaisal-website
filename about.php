@@ -10,7 +10,7 @@ $schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $schemaPageUrl = $schemaSiteUrl . '/about.php';
 $page = [
     'title' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
-    'description' => 'Read the story of Garh Jaisal Haveli, a heritage stay inside Jaisalmer Fort, with preserved jharokhas, rooftop meals and help planning desert trips.',
+    'description' => 'Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and practical help planning a Jaisalmer visit.',
     'path' => '/about.php',
     'og_title' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
     'og_description' => 'Garh Jaisal Haveli is a heritage stay inside Jaisalmer Fort, with antique character and everyday comfort.',
@@ -25,7 +25,7 @@ $page = [
             '@id' => $schemaPageUrl . '#webpage',
             'url' => $schemaPageUrl,
             'name' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
-            'description' => 'Read the story of Garh Jaisal Haveli, a heritage stay inside Jaisalmer Fort, with preserved jharokhas, rooftop meals and help planning desert trips.',
+            'description' => 'Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and practical help planning a Jaisalmer visit.',
             'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
             'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
             'primaryImageOfPage' => [
@@ -70,9 +70,9 @@ require __DIR__ . '/include/page-head.php';
       require __DIR__ . '/include/ui/breadcrumb.php';
       ?>
       <p class="eyebrow">About</p>
-      <h1>A heritage stay inside Jaisalmer Fort.</h1>
+      <h1>Stay inside the Fort. Feel closer to Jaisalmer.</h1>
       <p>
-        Garh Jaisal Haveli is a heritage stay inside Jaisalmer Fort. The house keeps the character of an antique structure and the comfort of a place that feels like home.
+        Garh Jaisal Haveli places you inside Jaisalmer Fort, among the sandstone lanes and the everyday life of this living landmark. Come for the character of the house; stay close to the city, the rooftop and the routes that lead into the Thar Desert.
       </p>
       <div class="actions">
         <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Book your stay</a>
@@ -85,15 +85,15 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell intro-grid">
       <div class="intro-copy">
         <p class="eyebrow">The house</p>
-        <h2>Antique character, with room to be comfortable.</h2>
+        <h2>A place to experience Jaisalmer from within.</h2>
         <p>
-          The property sits within the ancient fort, so a stay here is a way to feel the warmth of Rajasthan from inside its walls. Guests come for an authentic stay that sits between antique detail and everyday comfort.
+          Some places are simply a base for a trip. Here, the Fort is part of the address. Step out into its lanes, notice the sandstone details and local rhythm, then come back to a room within the walls.
         </p>
         <p>
-          Thoughtfully preserved buildings, sculpted jharokhas and hand-painted walls form the background. En-suite bathrooms, Wi-Fi and housekeeping keep the stay relaxed.
+          Carved jharokhas, traditional furnishings and hand-painted details give the house its character. Practical comforts, including en-suite bathrooms, Wi-Fi and housekeeping, help make the stay straightforward.
         </p>
         <p>
-          Rooms are furnished in a Rajasthani style, with modern facilities in each room. Couples and families with children can settle in for a comfortable stay, including a quiet or romantic weekend.
+          Each room has its own look, so take time to compare the photos and listed features before choosing. If a particular facility matters to you, ask us to confirm that it is available in the room you book.
         </p>
       </div>
       <div class="image-panel">
@@ -113,22 +113,22 @@ require __DIR__ . '/include/page-head.php';
       <div class="section-head">
         <div>
           <p class="eyebrow">The stay</p>
-          <h2>What the house looks after.</h2>
+          <h2>Character is only part of a good stay.</h2>
         </div>
-        <p>Cleanliness and comfort come first. The team follows a clear standard so the stay stays straightforward.</p>
+        <p>The setting should feel special, and the practical details should still be clear before you arrive.</p>
       </div>
       <div class="about-points">
         <article class="about-point">
-          <h3>Preserved stonework</h3>
-          <p>Carved jharokhas, hand-painted walls and buildings kept as an antique structure inside the fort.</p>
+          <h3>A living Fort address</h3>
+          <p>Stay among sandstone architecture and the daily life of Jaisalmer Fort, rather than outside its walls.</p>
         </article>
         <article class="about-point">
-          <h3>Comfort in the room</h3>
-          <p>En-suite bathrooms, Wi-Fi, housekeeping and modern facilities sit alongside the Rajasthani furnishings.</p>
+          <h3>Comfort with character</h3>
+          <p>Traditional furnishings sit alongside practical comforts. Room facilities vary, so check the details for your selected room.</p>
         </article>
         <article class="about-point">
-          <h3>A stay that can suit a careful budget</h3>
-          <p>The house aims for a balance of affordability, cleanliness and comfort, with seasonal packages and special offers.</p>
+          <h3>Help planning the days</h3>
+          <p>Ask about a Fort walk, guided city route, rooftop dining or a desert experience. The team can confirm current options for your dates.</p>
         </article>
       </div>
     </div>
@@ -138,9 +138,9 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell wide-feature">
       <div class="copy">
         <p class="eyebrow eyebrow-light">Evenings</p>
-        <h2>Rooftop meals under a starlit sky.</h2>
+        <h2>End the day above the sandstone rooftops.</h2>
         <p>
-          Guests can eat on the rooftop and watch the sky over the Golden City. Common spaces are there when you want company, and a small on-site gallery shows local art.
+          The rooftop gives you a different view of the Golden City. Ask about dining and candlelight options for your date, and explore the property's photos before you plan your evening.
         </p>
         <div class="actions">
           <a class="button button-primary" href="roof.php">Rooftop dining</a>
@@ -172,15 +172,15 @@ require __DIR__ . '/include/page-head.php';
       </div>
       <div class="intro-copy">
         <p class="eyebrow">Hospitality</p>
-        <h2>A team that helps you plan the days.</h2>
+        <h2>Good hospitality begins before you arrive.</h2>
         <p>
-          Staff welcome you with local hospitality. They can help shape an itinerary and arrange desert safaris, camel riding, guided heritage walks and transfers.
+          A stay inside the Fort takes a little more planning than a roadside hotel. We make the arrival details clear and help you ask about currently available desert safaris, camel experiences and guided heritage walks.
         </p>
         <p>
-          The team is multilingual. Ask for directions, local tips or a special request, and someone can help so the stay stays personal.
+          Tell us what matters to you before you arrive: your travel dates, how much time you have and the kind of experience you are looking for. We will confirm guide language, timings and arrangements rather than ask you to rely on assumptions.
         </p>
         <p>
-          In the centre of the Golden City, the idea is simple: Rajasthani hospitality, stone carving, views and stories close by, in a stay that feels like home.
+          Our idea of a good welcome is simple: a characterful place to stay, clear practical information and a helpful starting point for your time in Jaisalmer.
         </p>
         <div class="actions">
           <a class="button button-primary" href="pack.php">Desert experiences</a>
@@ -190,6 +190,19 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
+<section class="section conversion-promise" aria-labelledby="conversion-promise-title">
+  <div class="site-shell">
+    <div class="section-head">
+      <div><p class="eyebrow">Our hosting approach</p><h2 id="conversion-promise-title">Special setting. Clear details. A more considered trip.</h2></div>
+      <p>We do not want you to discover important practical details only after you arrive. Here is what to check with us before you confirm your plans.</p>
+    </div>
+    <div class="conversion-promise__grid">
+      <article><span>01</span><h3>Know the arrival</h3><p>Vehicles cannot enter the Fort. Read the route and confirm any arrival assistance before travelling.</p><a href="direction.php">Read the arrival guide ↗</a></article>
+      <article><span>02</span><h3>Choose the right room</h3><p>Compare room photos and listed features. Ask us to verify any facility that is important to your stay.</p><a href="room.php">Compare rooms ↗</a></article>
+      <article><span>03</span><h3>Confirm the experience</h3><p>Routes, schedules, current rates and inclusions depend on the selected experience and date.</p><a href="pack.php">Explore local experiences ↗</a></article>
+    </div>
+  </div>
+</section>
   <section class="section about-explore">
     <div class="site-shell">
       <div class="section-head">
@@ -216,7 +229,7 @@ $ctaBand = [
     'inner_class' => 'site-shell',
     'eyebrow' => 'Stay',
     'title' => 'Come for the fort, stay for the house.',
-    'text' => 'Check availability, or send a note if you want help with an itinerary before you arrive.',
+    'text' => 'Check your dates or contact the hotel to confirm room details, arrival arrangements and local experiences available during your stay.',
     'actions_class' => 'actions',
     'primary' => [
         'label' => 'Book your stay',

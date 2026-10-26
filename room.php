@@ -104,9 +104,9 @@ require __DIR__ . '/include/page-head.php';
       <div class="rooms-hero-copy">
         <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>
         <p class="eyebrow">Stay inside Jaisalmer Fort</p>
-        <h1 id="rooms-page-title">Rooms at Garh Jaisal Haveli.</h1>
+        <h1 id="rooms-page-title">Find your room inside Jaisalmer Fort.</h1>
         <p class="rooms-hero-lede">
-          Choose a heritage room, then check current rates and availability.
+          Compare the room photos and details, then check current rates, availability and room-specific facilities for your dates.
         </p>
         <div class="rooms-hero-actions">
           <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check availability</a>

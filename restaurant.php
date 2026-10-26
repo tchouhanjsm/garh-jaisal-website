@@ -340,10 +340,10 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell restaurant-hero-grid">
       <div class="restaurant-hero-copy">
         <p class="eyebrow">Garh Jaisal's Kitchen</p>
-        <h1>Rajasthani food on the rooftop.</h1>
-        <p>Vegetarian and non-vegetarian dishes served at Garh Jaisal Haveli, inside Jaisalmer Fort.</p>
+        <h1>Rooftop dining in the heart of Jaisalmer Fort.</h1>
+        <p>Settle in above the sandstone rooftops at Garh Jaisal's Kitchen. Explore the menu, then ask us to confirm current dishes, dietary options, service hours and a table for your date.</p>
         <div class="actions">
-          <a class="button button-primary" href="#reserve">Reserve a table</a>
+          <a class="button button-primary" href="#reserve">Enquire about a table</a>
           <a class="button button-light" href="<?= e($waLink) ?>" target="_blank" rel="noopener">WhatsApp</a>
         </div>
         <p class="restaurant-rooftop-link">Planning a meal or candlelight dinner? <a href="roof.php">Explore the rooftop dining space</a>.</p>
@@ -371,9 +371,9 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell restaurant-intro-grid">
       <div>
         <p class="eyebrow">The kitchen</p>
-        <h2>A simple menu with Rajasthani favourites.</h2>
+        <h2>Rajasthani favourites, served above the Golden City.</h2>
       </div>
-      <p>Ask the team about current Rajasthani dishes, preparation and dietary options for your visit. Menu details are confirmed directly with the hotel.</p>
+      <p>Come for the rooftop setting and ask about the food available when you visit. The menu, preparation details, dietary options and prices are confirmed directly with the hotel.</p>
     </div>
 
     <div class="site-shell restaurant-gallery-social">

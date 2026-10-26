@@ -23,14 +23,14 @@ $faqItems = [
     ['question' => "How do I confirm the route and inclusions?", 'answer' => "Ask the hotel to confirm the current price, departure details, route, pickup arrangement, availability and exact inclusions for your date."],
 ];
 $page = [
-    'title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
-    'description' => 'Explore desert safari options arranged from Garh Jaisal Haveli, including sunset camel safari, cultural evening, sleeping under the stars and Swiss tent stays.',
+    'title' => 'Jaisalmer Desert Safari | Sunset Camel Safaris & Overnight Stays',
+    'description' => 'Compare sunset camel safaris, cultural evenings and overnight desert stays planned from Garh Jaisal Haveli inside Jaisalmer Fort. Confirm availability, timing, inclusions and price for your dates.',
     'path' => '/desert-safari.php',
-    'og_title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
-    'og_description' => 'Explore desert safari options arranged from Garh Jaisal Haveli, including sunset camel safari, cultural evening, sleeping under the stars and Swiss tent stays.',
+    'og_title' => 'Jaisalmer Desert Safari | Sunset Camel Safaris & Overnight Stays',
+    'og_description' => 'Compare sunset camel safaris, cultural evenings and overnight desert stays planned from Garh Jaisal Haveli inside Jaisalmer Fort. Confirm availability, timing, inclusions and price for your dates.',
     'og_image' => '/img/desert3.jpg',
-    'twitter_title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
-    'twitter_description' => 'Explore desert safari options arranged from Garh Jaisal Haveli, including sunset camel safari, cultural evening, sleeping under the stars and Swiss tent stays.',
+    'twitter_title' => 'Jaisalmer Desert Safari | Sunset Camel Safaris & Overnight Stays',
+    'twitter_description' => 'Compare sunset camel safaris, cultural evenings and overnight desert stays planned from Garh Jaisal Haveli inside Jaisalmer Fort. Confirm availability, timing, inclusions and price for your dates.',
     'twitter_image' => '/img/desert3.jpg',
     'css' => ['css/experiences.css'],
     'schema' => [
@@ -39,7 +39,7 @@ $page = [
             '@id' => $canonical . '#webpage',
             'url' => $canonical,
             'name' => 'Desert Safari in Jaisalmer | Camel Safari & Overnight Experiences',
-            'description' => 'Explore desert safari options arranged from Garh Jaisal Haveli, including sunset camel safari, cultural evening, sleeping under the stars and Swiss tent stays.',
+            'description' => 'Compare sunset camel safaris, cultural evenings and overnight desert stays planned from Garh Jaisal Haveli inside Jaisalmer Fort. Confirm availability, timing, inclusions and price for your dates.',
             'isPartOf' => ['@id' => $siteUrl . '/#website'],
             'about' => ['@id' => $siteUrl . '/#hotel'],
             'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
@@ -71,21 +71,21 @@ require __DIR__ . '/include/page-head.php';
         <a href="index.php">Home</a><span aria-hidden="true">/</span><a href="pack.php">Packages</a><span aria-hidden="true">/</span><span aria-current="page">Desert Safari</span>
       </nav>
       <p class="eyebrow">Desert safari</p>
-      <h1>Desert Safari in Jaisalmer</h1>
-      <p>Choose a desert experience based on how much time you have, whether you want to return the same evening, and how you would like to spend the night.</p>
+      <h1>Find the Jaisalmer desert safari that fits your trip.</h1>
+      <p>A sunset outing and an overnight stay are very different experiences. Compare the options below, then ask us to confirm the route, transport, timings, accommodation, meals and total price for your date.</p>
       <div class="actions">
-        <a class="button button-primary" href="catalogue.php">Build your trip shortlist</a>
-        <a class="button button-light" href="contact.php?topic=desert-safari">Ask about desert options</a>
+        <a class="button button-primary" href="#desert-options">Compare safari options</a>
+        <a class="button button-light" href="contact.php?topic=desert-safari">Check dates &amp; prices</a>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" id="desert-options">
     <div class="site-shell">
       <div class="section-head">
         <div>
           <p class="eyebrow">Choose by the kind of evening you want</p>
-          <h2>Choose how you want to experience the desert.</h2>
+          <h2>Pick the kind of evening you want to remember.</h2>
         </div>
         <p>The route and timing depend on the selected package and season. Confirm the current operating details with the hotel before booking.</p>
       </div>
@@ -129,13 +129,22 @@ require __DIR__ . '/include/page-head.php';
         <article><strong>One evening</strong><p>Choose a sunset camel safari or cultural safari and return to Jaisalmer the same evening.</p></article>
         <article><strong>One night, open sky</strong><p>Choose Sleep Under the Stars for an overnight desert experience without tent accommodation.</p></article>
         <article><strong>One night, tent</strong><p>Choose the Swiss Tent Safari when you prefer tent accommodation and a cultural evening.</p></article>
-        <article><strong>Need help choosing?</strong><p>Ask us to compare the currently available desert options and confirm the current price, route, pickup arrangement and timing for your travel date.</p><a class="text-link" href="contact.php">Ask about desert options →</a><a class="text-link" href="catalogue.php">Add options to your Trip shortlist →</a></article>
+        <article><strong>Need help choosing?</strong><p>Ask us to compare the currently available desert options and confirm the current price, route, pickup arrangement and timing for your travel date.</p><a class="text-link" href="contact.php">Ask about desert options →</a><a class="text-link" href="catalogue.php">Build your trip shortlist →</a></article>
       </div>
     </div>
   </section>
 
 
-  <section class="section site-faq desert-faq" aria-labelledby="desert-faq-title">
+  <section class="section conversion-checklist" aria-labelledby="desert-checklist-title">
+  <div class="site-shell conversion-checklist__layout">
+    <div><p class="eyebrow">Before you confirm</p><h2 id="desert-checklist-title">Know what is included, not just what it is called.</h2>
+      <p>Desert packages can differ in important ways. Ask us to confirm these details for the exact option and date you are considering.</p>
+      <a class="button button-primary" href="contact.php?topic=desert-safari">Confirm my safari details</a>
+    </div>
+    <ul><li>Departure, return and sunset timing for your date</li><li>Transport and pickup or meeting arrangements</li><li>Approximate camel-ride duration and route</li><li>Meal, cultural programme and overnight accommodation inclusions</li><li>Total price, availability and any conditions before payment</li></ul>
+  </div>
+</section>
+<section class="section site-faq desert-faq" aria-labelledby="desert-faq-title">
     <div class="site-shell">
       <div class="section-head">
         <div><p class="eyebrow">Common questions</p><h2 id="desert-faq-title">Questions about choosing a desert safari.</h2></div>
@@ -154,8 +163,8 @@ require __DIR__ . '/include/page-head.php';
 <section class="section experience-cta">
     <div class="site-shell experience-cta-inner">
       <p class="eyebrow">Plan from the Fort</p>
-      <h2>Stay inside Jaisalmer Fort, then head into the desert.</h2>
-      <p>Ask the hotel for the latest price, departure details and availability for your travel date.</p>
+      <h2>Make the Fort your base, then head for the dunes.</h2>
+      <p>Tell us your date and preferred experience. We will confirm the current price, transport, timings and inclusions before you decide.</p>
       <div class="actions"><a class="button button-primary" href="contact.php">Contact us</a><a class="button button-secondary" href="guided-jaisalmer-tour.php">Explore guided city tours</a></div>
     </div>
   </section>

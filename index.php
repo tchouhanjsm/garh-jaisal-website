@@ -29,18 +29,18 @@ $buildHeroPreload = static function ($stem, $media, $fallback) {
     return $descriptor;
 };
 $page = [
-    'title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
-    'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Heritage rooms, rooftop views, dining and desert experiences in the heart of the living fort.',
+    'title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
+    'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences from one base in the Golden City.',
     'path' => '/',
     'preload' => [
         $buildHeroPreload('facade', '(max-width: 767px)', '/img/optimized/v2/facade.webp'),
         $buildHeroPreload('fort-from-roof', '(min-width: 768px)', '/img/optimized/v2/fort-from-roof.webp'),
     ],
-    'og_title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
-    'og_description' => 'Heritage rooms, rooftop views and desert experiences inside Jaisalmer Fort.',
+    'og_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
+    'og_description' => 'Heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences inside Jaisalmer Fort.',
     'og_image' => '/img/v2/facade.jpg',
-    'twitter_title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
-    'twitter_description' => 'Heritage rooms, rooftop views and desert experiences inside Jaisalmer Fort.',
+    'twitter_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
+    'twitter_description' => 'Heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences inside Jaisalmer Fort.',
     'twitter_image' => '/img/v2/facade.jpg',
     'css' => ['css/thar-sunset-story.css'],
     'schema' => [
@@ -48,7 +48,7 @@ $page = [
             '@type' => 'WebPage',
             '@id' => $schemaPageUrl . '#webpage',
             'url' => $schemaPageUrl,
-            'name' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
+            'name' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
             'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
             'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
         ],
@@ -80,11 +80,12 @@ require __DIR__ . '/include/page-head.php';
   <div class="site-shell hero-content">
     <p class="eyebrow">Garh Jaisal Haveli</p>
 
-    <h1>Stay inside Jaisalmer Fort.</h1>
+    <h1>Wake up inside Jaisalmer Fort.</h1>
 
     <p>
-      Stay at Garh Jaisal Haveli, inside Jaisalmer Fort, with heritage rooms,
-      rooftop dining and desert experiences arranged from the hotel.
+      Wake up among the sandstone lanes of the living Fort, then return to a
+      heritage-style room after rooftop dining, a guided city walk or a journey
+      into the Thar.
     </p>
 
     <div class="actions">
@@ -93,11 +94,11 @@ require __DIR__ . '/include/page-head.php';
         href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
         target="_blank"
         rel="noopener">
-        Book your stay
+        Check rooms &amp; rates
       </a>
 
-      <a class="button button-light" href="direction.php">
-        Plan your arrival
+      <a class="button button-light" href="#start-planning">
+        Plan your Jaisalmer stay
       </a>
     </div>
   </div>
@@ -155,13 +156,13 @@ require __DIR__ . '/include/page-head.php';
 
       <p class="eyebrow">The place</p>
 
-      <h2>A heritage haveli inside the fort.</h2>
+      <h2>Experience Jaisalmer from inside its living Fort.</h2>
 
       <p>
-        Garh Jaisal Haveli is located inside Jaisalmer Fort, surrounded by
-        the sandstone architecture and everyday life of the historic fort.
-        The stay combines heritage-style rooms, rooftop dining and access
-        to Jaisalmer and the desert.
+        Jaisalmer is more than a stop for photographs. Staying inside the
+        Fort lets you step straight into its sandstone lanes, then return to
+        a room with its own character. Add rooftop dining, a guided heritage
+        walk or a desert outing to shape the visit around your interests.
       </p>
 
       <div class="feature-list">
@@ -171,7 +172,8 @@ require __DIR__ . '/include/page-head.php';
           <div>
             <h3>Inside Jaisalmer Fort</h3>
             <p>
-              Stay within the historic fort rather than outside its walls.
+              Make the living Fort part of the stay, not just a place to visit
+              between transfers.
             </p>
           </div>
         </article>
@@ -181,7 +183,8 @@ require __DIR__ . '/include/page-head.php';
           <div>
             <h3>Rooftop views</h3>
             <p>
-              Enjoy rooftop dining and views across the Golden City. Confirm current service times and menu options with the hotel before visiting.
+              Take in the sandstone skyline over a meal. Ask the team to confirm
+              the current menu, service hours and table availability.
             </p>
           </div>
         </article>
@@ -191,7 +194,9 @@ require __DIR__ . '/include/page-head.php';
           <div>
             <h3>Help with arrival</h3>
             <p>
-              Contact the hotel before arrival to ask whether meet-and-assist or luggage help can be arranged; wait for confirmation before relying on any arrangement.
+              Get the practical details before you travel: where vehicles stop,
+              the final walk through the Fort and any assistance that can be
+              confirmed for your arrival time.
             </p>
           </div>
         </article>
@@ -210,14 +215,28 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
+<section class="section conversion-journey" id="start-planning" aria-labelledby="conversion-journey-title">
+  <div class="site-shell">
+    <div class="section-head">
+      <div><p class="eyebrow">Build your Jaisalmer stay</p><h2 id="conversion-journey-title">Start with the stay. Add the experiences that matter to you.</h2></div>
+      <p>Planning Rajasthan? Make Jaisalmer one memorable stop in the wider journey. Start with local options and confirm rates, routes and arrangements for your dates.</p>
+    </div>
+    <div class="conversion-journey__grid">
+      <article class="conversion-journey__card"><span class="conversion-journey__step">01 / STAY</span><h3>Make the Fort your base</h3><p>Compare room photos and details, then check current rates, availability and facilities.</p><a href="room.php">Explore the rooms ↗</a></article>
+      <article class="conversion-journey__card"><span class="conversion-journey__step">02 / DISCOVER</span><h3>Meet the city beyond the postcard</h3><p>Ask about a Fort walk or guided route, with guide language and itinerary confirmed in advance.</p><a href="guided-jaisalmer-tour.php">Compare guided tours ↗</a></article>
+      <article class="conversion-journey__card"><span class="conversion-journey__step">03 / DESERT</span><h3>Choose your Thar experience</h3><p>Compare sunset and overnight options, then confirm transport, timings and inclusions.</p><a href="desert-safari.php">Explore desert safaris ↗</a></article>
+    </div>
+    <p class="conversion-note">Have a date or travel style in mind? <a href="contact.php?topic=visit-planning">Tell us what you are planning</a>.</p>
+  </div>
+</section>
   <section class="section home-rooms" id="rooms-preview" data-story-reveal aria-labelledby="rooms-preview-title">
     <?php
     $featuredRooms = array_slice($rooms, 0, 3);
     ?>
     <div class="site-shell">
       <div class="section-head">
-        <div><p class="eyebrow">Stay</p><h2 id="rooms-preview-title">Rooms shaped by Jaisalmer.</h2></div>
-        <p>From colourful rooms to carved interiors, each room has its own character. Explore the current room collection and choose the space that suits your stay.</p>
+        <div><p class="eyebrow">Stay</p><h2 id="rooms-preview-title">Find your room inside the Fort.</h2></div>
+        <p>See the rooms before you choose. Compare their character and details, then check current rates, availability and room-specific facilities for your dates.</p>
       </div>
       <div class="cards home-room-cards">
         <?php foreach ($featuredRooms as $room): ?>
@@ -247,12 +266,12 @@ require __DIR__ . '/include/page-head.php';
     <div class="copy">
       <p class="eyebrow eyebrow-light">Rooftop dining</p>
 
-      <h2 id="rooftop-dining-title">Meals with the fort around you.</h2>
+      <h2 id="rooftop-dining-title">Rooftop dining, with the Golden City around you.</h2>
 
       <p>
-        Visit the rooftop for dining and views across Jaisalmer's sandstone
-        rooftops. Contact the hotel to confirm current service times and menu
-        options before visiting.
+        Take a seat above the sandstone rooftops at Garh Jaisal's Kitchen.
+        Ask about the current dishes, service hours and table availability
+        before you make the evening's plan.
       </p>
 
       <p>
@@ -260,8 +279,8 @@ require __DIR__ . '/include/page-head.php';
       </p>
 
       <div class="actions">
-        <a class="button button-primary" href="roof.php">
-          Explore rooftop dining
+        <a class="button button-primary" href="restaurant.php">
+          Explore the restaurant
         </a>
       </div>
     </div>
@@ -284,12 +303,13 @@ require __DIR__ . '/include/page-head.php';
     <div class="section-head">
       <div>
         <p class="eyebrow">Desert experiences</p>
-        <h2 id="desert-experiences-title">From the fort to the Thar.</h2>
+        <h2 id="desert-experiences-title">From the Fort to the open Thar.</h2>
       </div>
 
       <p>
-        Arrange a desert experience from Garh Jaisal, from a sunset camel
-        safari to an overnight stay among the dunes.
+        Choose the kind of desert memory you want to make: an evening among
+        the dunes, a cultural programme or a night beneath the open sky.
+        Routes, timings and inclusions are confirmed for your date.
       </p>
     </div>
 
@@ -484,15 +504,25 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
-
-
+<section class="section conversion-faq" aria-labelledby="conversion-faq-title">
+  <div class="site-shell">
+    <div class="section-head"><div><p class="eyebrow">Before you decide</p><h2 id="conversion-faq-title">A few useful things to know.</h2></div><p>We would rather help you arrive prepared than leave you guessing about practical details.</p></div>
+    <div class="conversion-faq__list">
+      <details><summary>Can a car drive up to the haveli?</summary><p>No. Vehicles cannot enter Jaisalmer Fort, so the final stretch is on foot. Read the <a href="direction.php">arrival guide</a> and contact the hotel if you need to discuss assistance.</p></details>
+      <details><summary>How do I choose a room and rate?</summary><p>Room features vary. Review the details and check current rates and availability for your exact dates.</p></details>
+      <details><summary>Can I add a guided tour or desert safari?</summary><p>Ask about options for your date. Confirm the route, timing, transport, guide availability, price and inclusions before deciding.</p></details>
+      <details><summary>Can I request a rooftop dinner?</summary><p>Send a dining enquiry with your preferred date, time and group size. It is not confirmed until the team confirms current hours and availability.</p></details>
+    </div>
+    <p class="conversion-faq__contact">Need a detail checked before booking? <a href="contact.php">Ask the hotel directly</a>.</p>
+  </div>
+</section>
 <?php
 $ctaBand = [
     'section_class' => 'section final-cta',
     'inner_class' => 'site-shell final-cta-inner',
     'eyebrow' => 'Plan your stay',
-    'title' => 'Stay at Garh Jaisal Haveli.',
-    'text' => 'Check availability, ask about arrival, or enquire about our desert experiences.',
+    'title' => 'Make Jaisalmer more than a stop on the map.',
+    'text' => 'Check your dates, get the arrival details straight, and ask about the city or desert experiences that fit your trip.',
     'actions_class' => 'actions',
     'primary' => [
         'label' => 'Book your stay',
