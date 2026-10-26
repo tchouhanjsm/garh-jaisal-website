@@ -788,7 +788,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Acceptance: exact-head Site Checks including PHP 7.4/8.2, all browser E2E/screenshots, responsive-image review, and safe package/static checks pass. No cPanel action or production deployment is in scope.
 
 
-## Sprint 57 — searchable room discovery and shortlist UX (PR #131 in review)
+## Sprint 57 — searchable room discovery and shortlist UX (PR #131 merged)
 
 **Commercial goal:** help guests compare the existing rooms quickly, so the route from the homepage to a relevant room and then to booking or a room-specific enquiry takes fewer steps.
 
@@ -799,3 +799,16 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Add Playwright coverage for search, combined floor/feature filters, zero-result recovery, reset behavior, keyboard-operable controls and the unchanged booking/enquiry journey. Keep the existing screenshot-sheet and responsive-viewport coverage.
 - Exact-head acceptance: PHP 7.4/8.2 Site Checks, strict image and sitemap checks, responsive-image review, non-deploying QA, package preflight, full Browser E2E and screenshot evidence. Local PHP/Playwright execution must be reported honestly if not run in this connector session.
 - No cPanel action, external staging upload or production deployment is in scope. Owner approval of business facts, visual sign-off and production parity remain separate release gates.
+
+
+## Sprint 58 — experience discovery and comparison UX (PR #132 in review)
+
+**Commercial goal:** help guests narrow the published desert and city experience list quickly, then open the relevant itinerary or add the option to their trip shortlist.
+
+- Add a progressive-enhancement finder to the existing Packages route, with text search plus category and duration-type filters generated from currently published, non-hub experience registry entries.
+- Add concise Half-day, Full-day and Overnight labels to the corresponding published cards using the same registry duration field; do not infer exact clock times or introduce new inclusions.
+- Show live result counts, hide empty result sections, and provide a clear no-results/reset path. With JavaScript disabled, the complete existing published experience lists and their itinerary/trip actions remain available.
+- Keep draft/hidden entries out of cards, filters and counts. Preserve all current public URLs, SEO/schema, booking/contact paths, guide content, Content Studio workflow, trip shortlist behavior, original photography and image budgets.
+- Add Playwright coverage for combined search/category/duration filters, empty-state recovery, reset, 320/390/1280/1440px overflow/tap targets and the no-JavaScript fallback.
+- Exact-head acceptance: PHP 7.4/8.2 Site Checks, strict image and sitemap checks, responsive-image review, non-deploying QA, package preflight, complete Browser E2E and screenshot/page-sheet evidence. Local PHP/Playwright execution must be stated honestly if not run in this connector session.
+- No cPanel upload, external staging deployment, production deployment or new business fact is part of this phase.
