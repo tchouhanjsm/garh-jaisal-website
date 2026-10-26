@@ -14,12 +14,12 @@ $footerNav = $footerNavData['footer'];
   <div class="site-shell footer-grid">
     <div>
       <p class="eyebrow">Garh Jaisal Haveli</p>
-      <h2>Stay inside the living fort.</h2>
-      <p class="footer-copy">A heritage haveli inside Jaisalmer Fort, with intimate rooms, rooftop views and desert experiences arranged from the hotel.</p>
+      <h2>Let Jaisalmer begin inside the Fort.</h2>
+      <p class="footer-copy">A heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and locally arranged city and desert experiences.</p>
 <?php if ($footerBookingUrl !== ''): ?>
       <div class="footer-booking-cta">
-        <a class="button button-primary footer-booking-button" href="<?= htmlspecialchars($footerBookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check room availability</a>
-        <p>See availability and current rates for your dates.</p>
+        <a class="button button-primary footer-booking-button" href="<?= htmlspecialchars($footerBookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check dates &amp; current rates</a>
+        <p>Choose your dates first; contact the hotel to confirm room details or arrival questions.</p>
       </div>
 <?php endif; ?>
       <div class="social-links" aria-label="Social media">
