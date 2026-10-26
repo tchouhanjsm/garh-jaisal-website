@@ -63,7 +63,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 55 | Structured room/experience/topic enquiry handoff | ✓ PR #129 merged at `15585db334be9683b0dc3cc54643ca4a9e317e97`; private lead/email context and retry preservation shipped. Its Browser E2E run was cancelled, so do not treat that run as a pass. |
 | 60 | Trip enquiry completion with optional travel context | ✓ PR #134 merged at `686abd3272bdc37031b38855728bd1bd20a89e76`; optional date/count values appear only in the reviewed WhatsApp draft and are not stored by the site. |
 | 61 | Shared photo storytelling for tours, rooms and dining | ✓ PR #135 merged at `c3326fb320e7b78bd20f70e8829c9e6a54266829`; Site Checks, responsive-image contracts, non-deploying staging QA and package preflight passed. Merge-head Browser E2E was cancelled. |
-| 62 | Decision-first comparison on Desert Safari and Guided Jaisalmer hubs | ◐ Add registry-backed at-a-glance facts to existing tour cards, introduce a reusable escaped facts partial, and make city-tour cards shortlistable; test actions and responsive overflow. No new facts or package records. |
+| 62 | Decision-first comparison on Desert Safari and Guided Jaisalmer hubs | ✓ PR #136 merged at `32c59b579ae7e528afe6644e90988892b35b5237`; reusable registry facts and city-tour shortlist links shipped. |
+| 63 | Direct-booking path and room-first discovery across stay and experience journeys | ◐ Expose the existing stay guide in shared navigation/footer and Home/Rooms, add first-screen booking actions plus a three-step stay guide, and cross-link the room booking step from the Packages, Desert, Guided City and Car & City hubs. Keep booking destination, enquiry semantics and all owner-only policy/price facts unchanged. |
 
 ---
 

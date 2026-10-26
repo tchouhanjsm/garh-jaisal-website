@@ -162,6 +162,8 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
+  <?php require __DIR__ . '/include/ui/stay-booking-note.php'; ?>
+
   <section class="section experience-cta">
     <div class="site-shell experience-cta-inner">
       <p class="eyebrow">Plan your Jaisalmer stay</p>

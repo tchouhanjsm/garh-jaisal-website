@@ -351,6 +351,8 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
+  <?php require __DIR__ . '/include/ui/stay-booking-note.php'; ?>
+
   <section class="section site-faq packages-faq" data-story-reveal aria-labelledby="packages-faq-title">
     <div class="site-shell">
       <div class="section-head">

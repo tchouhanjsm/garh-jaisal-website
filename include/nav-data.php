@@ -26,6 +26,7 @@ return [
             'active' => ['rooms'],
             'children' => [
                 ['label' => 'Heritage rooms', 'url' => 'room.php'],
+                ['label' => 'Book direct', 'url' => 'book-rooms-in-jaisalmer.php'],
                 ['label' => 'Swiss tent desert stay', 'url' => 'swiss-tent-safari.php'],
             ],
         ],
@@ -88,6 +89,7 @@ return [
     // Footer "Plan your stay" column.
     'footer' => [
         ['label' => 'Rooms', 'url' => 'room.php'],
+        ['label' => 'Book direct guide', 'url' => 'book-rooms-in-jaisalmer.php'],
         ['label' => 'Rooftop dining', 'url' => 'roof.php'],
         ['label' => 'Restaurant and menu', 'url' => 'restaurant.php'],
         ['label' => 'Desert tours', 'url' => 'desert-safari.php'],

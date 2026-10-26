@@ -43,7 +43,7 @@ STAY ▾
   Heritage rooms ........... room.php ✅   (7 rooms on one page, linked by anchor: Sweet Purple, Rising Sun,
                                             Scarlet, Opium, Red Maharani, Green, BlueSky)
   Swiss tent desert stay ... swiss-tent-safari.php ✅  (link; canonical lives under Desert Tours)
-  Book direct .............. book-rooms-in-jaisalmer.php 🔧 (keep as the "why book direct" landing page)
+  Book direct .............. book-rooms-in-jaisalmer.php ✅ (linked from Stay navigation, footer, Home and Rooms)
 
 DINING  roof.php 🔧  (rooftop kitchen, the dining hub)
   └─ Menu ................... restaurant.php 🔧  (child page, breadcrumb: Dining › Menu)
