@@ -51,6 +51,7 @@ These are candidates for review, not a promise that Garh Jaisal Haveli currently
 ## Implementation notes (2026-10-26)
 
 - The existing public Contact and Directions pages display primary and alternate phone numbers plus two email destinations. Preserve those established destinations and keep rendered links backed by `include/site-config.php`; change them only after owner confirmation.
+- Shared Hotel, ContactPage and Restaurant JSON-LD telephone/email values must derive from the same public contact configuration as rendered links. Preserve the existing published structured-data phone formatting.
 
 ## Implementation notes (2026-10-17)
 

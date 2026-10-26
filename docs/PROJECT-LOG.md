@@ -7,24 +7,25 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-26 |
-| Current phase | Sprint 65 — shared public contact-channel consistency |
+| Current phase | Sprint 66 — structured-data contact parity |
 | Verified main SHA | 412a34d5a42177d16c449636e572402ca19c1754 (PR #138 merge commit) |
 | Latest merged PR | [#138 — Car & City enquiry discovery](https://github.com/tchouhanjsm/garh-jaisal-website/pull/138) |
 | Recent merged work | PRs #136 tour comparison, #137 direct-booking discovery, #138 Car & City enquiry discovery |
-| Active phase branch | `feature/contact-channel-consistency-20261026` — Sprint 65 review target |
+| Active phase branch | `feature/structured-data-contact-parity-20261026` — Sprint 66 stacked review target |
 
 ## Current phase
 
-**Sprint 65 goal:** keep the existing telephone and email destinations consistent across Contact, Directions and Rooftop, with the public contact values defined in `include/site-config.php`.
+**Sprint 66 goal:** remove the remaining hard-coded Hotel telephone values in structured data while keeping the emitted JSON-LD values identical to the approved current output.
 
-- Preserve both existing phone numbers and both current email destinations.
-- Eliminate hard-coded duplicate links on those pages and add targeted source/browser regression coverage.
-- Refresh the last-modified dates for the affected public pages without changing sitemap inventory or priority.
+- Pass the existing phone configuration through the shared schema helper and derive ContactPage telephone/email metadata from the current configured display values.
+- Add source/browser checks for JSON-LD contact parity on Home, Contact, Directions, Rooftop and Restaurant.
+- PR #139 (Sprint 65) is still in review. Site Checks and non-deploying Staging QA passed; Browser E2E/screenshots remain pending.
 
 ## Latest implementation entry
 
 - [2026-10-26] Sprint 64 / [PR #138](https://github.com/tchouhanjsm/garh-jaisal-website/pull/138) merged at `412a34d5a42177d16c449636e572402ca19c1754`. Site Checks and non-deploying QA passed; Browser E2E was cancelled and must not be treated as a pass.
-- Sprint 65 / `feature/contact-channel-consistency-20261026` centralizes visible Contact/Directions/Rooftop channels, adds source and browser contracts, and refreshes sitemap lastmod dates. Exact-head CI and screenshot evidence are pending.
+- Sprint 65 / PR #139 centralizes Contact/Directions/Rooftop channel links and adds source/browser contracts. Site Checks and non-deploying QA passed; Browser E2E/screenshots are still running.
+- Sprint 66 / `feature/structured-data-contact-parity-20261026` sources JSON-LD contact details from public configuration while preserving current output values; exact-head CI is pending.
 
 ## Remaining blockers
 
