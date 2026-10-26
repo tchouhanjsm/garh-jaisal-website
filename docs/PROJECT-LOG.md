@@ -7,25 +7,25 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-26 |
-| Current phase | Sprint 66 — structured-data contact parity |
+| Current phase | Sprint 66 — combined public contact and schema parity |
 | Verified main SHA | 412a34d5a42177d16c449636e572402ca19c1754 (PR #138 merge commit) |
 | Latest merged PR | [#138 — Car & City enquiry discovery](https://github.com/tchouhanjsm/garh-jaisal-website/pull/138) |
 | Recent merged work | PRs #136 tour comparison, #137 direct-booking discovery, #138 Car & City enquiry discovery |
-| Active phase branch | `feature/structured-data-contact-parity-20261026` — Sprint 66 stacked review target |
+| Active phase branch | `feature/structured-data-contact-parity-20261026` — PR #140 combined review target against `main` |
 
 ## Current phase
 
-**Sprint 66 goal:** remove the remaining hard-coded Hotel telephone values in structured data while keeping the emitted JSON-LD values identical to the approved current output.
+**Sprint 65–66 goal:** make all public Contact/Directions/Rooftop telephone and email links plus shared Hotel/ContactPage/Restaurant schema details configuration-backed while preserving current destinations and JSON-LD output.
 
-- Pass the existing phone configuration through the shared schema helper and derive ContactPage telephone/email metadata from the current configured display values.
-- Add source/browser checks for JSON-LD contact parity on Home, Contact, Directions, Rooftop and Restaurant.
-- PR #139 (Sprint 65) is still in review. Site Checks and non-deploying Staging QA passed; Browser E2E/screenshots remain pending.
+- Preserve the existing primary/alternate phone and email destinations in Contact, Directions and Rooftop; derive the shared Hotel and ContactPage/Restaurant schema fields from the same configuration.
+- Add PHP source contracts and browser regressions for visible contact links, JSON-LD parity, and responsive overflow.
+- PR #140 is the combined 15-file candidate targeting `main`. Its exact-head workflows must all finish successfully, including Browser E2E and screenshots, before merge.
 
 ## Latest implementation entry
 
 - [2026-10-26] Sprint 64 / [PR #138](https://github.com/tchouhanjsm/garh-jaisal-website/pull/138) merged at `412a34d5a42177d16c449636e572402ca19c1754`. Site Checks and non-deploying QA passed; Browser E2E was cancelled and must not be treated as a pass.
-- Sprint 65 / PR #139 centralizes Contact/Directions/Rooftop channel links and adds source/browser contracts. Site Checks and non-deploying QA passed; Browser E2E/screenshots are still running.
-- Sprint 66 / `feature/structured-data-contact-parity-20261026` sources JSON-LD contact details from public configuration while preserving current output values; exact-head CI is pending.
+- Sprint 65 / PR #139 added the configuration-backed public Contact/Directions/Rooftop links and source/browser contracts. Site Checks, non-deploying Staging QA and package preflight passed; its Browser E2E job remains in progress.
+- Sprint 66 / PR #140 combines the visible-link and JSON-LD parity work into one reviewable 15-file change and targets `main` to start a fresh full exact-head test run.
 
 ## Remaining blockers
 
