@@ -3,7 +3,7 @@
 $root = dirname(__DIR__, 2);
 $errors = [];
 $required = [
-    'index.php' => ['Wake up inside Jaisalmer Fort.', 'conversion-journey', 'conversion-faq', 'Check rooms &amp; rates', 'guided-jaisalmer-tour.php', 'desert-safari.php'],
+    'index.php' => ['Wake up inside Jaisalmer Fort.', 'Heritage stay · Inside Jaisalmer Fort', 'individually styled rooms', 'home-hero-facts', 'Explore the rooms', 'conversion-journey', 'conversion-faq', 'Check rooms &amp; rates', 'guided-jaisalmer-tour.php', 'desert-safari.php'],
     'about.php' => ['Stay inside the Fort. Feel closer to Jaisalmer.', 'Good hospitality begins before you arrive.', 'conversion-promise'],
     'desert-safari.php' => ['Find the Jaisalmer desert safari that fits your trip.', 'desert-options', 'conversion-checklist', 'Confirm my safari details'],
     'guided-jaisalmer-tour.php' => ['See Jaisalmer with a guide, at your pace.', 'guided-options', 'Plan my guided tour'],

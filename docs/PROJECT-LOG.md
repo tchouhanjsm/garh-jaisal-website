@@ -7,26 +7,25 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-26 |
-| Current phase | Sprint 55 — structured room/experience/topic enquiry handoff |
-| Verified main SHA | 451d34acfa2ad5c09e8d06ac577da480e65de916 (PR #128 merge commit) |
-| Latest merged PR | [#128 — measure successful enquiries and contextual lead starts](https://github.com/tchouhanjsm/garh-jaisal-website/pull/128) |
-| PR #128 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40266287508); PHP 7.4 and 8.2 |
-| PR #128 Browser E2E | [CANCELLED](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40266287564); full suite result not verified |
-| PR #128 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40266287605); package artifact only |
-| PR #128 non-deploying QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40266287555); not external-host validation |
-| Recent merged work | PR #127 conversion-led website/mobile UX; PR #128 success-only enquiry conversion measurement |
-| Active phase branch | feature/structured-enquiry-context-20261026; exact-head acceptance pending |
+| Current phase | Sprint 56 — three-second homepage first impression |
+| Verified main SHA | 15585db334be9683b0dc3cc54643ca4a9e317e97 (PR #129 merge commit) |
+| Latest merged PR | [#129 — preserve structured guest enquiry context](https://github.com/tchouhanjsm/garh-jaisal-website/pull/129) |
+| PR #129 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40269420923); PHP 7.4 and 8.2 |
+| PR #129 Browser E2E | [CANCELLED](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40269420890); full suite result not verified |
+| PR #129 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40269420839); checks package only |
+| PR #129 non-deploying QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40269420860); not an external-host deployment |
+| Recent merged work | PR #127 conversion-led homepage and mobile UX; #128 success-only lead conversion tracking; #129 structured enquiry handoff |
+| Active phase branch | feature/home-first-impression-20261026; exact-head acceptance pending |
 
 ## Current phase
 
-**Sprint 55 goal:** carry the guest's selected room, live experience or approved Contact topic from the public form into the hotel's private lead record and email notification.
+**Sprint 56 goal:** make the homepage's first screen communicate property identity, location, offer and next action rapidly.
 
-- Extract Contact topic definitions into a single shared registry; resolve every context from trusted registries, never from posted labels.
-- Issue an opaque, two-hour session-bound context token per form view, with a bounded token set so multiple open tabs retain their own intent.
-- Persist the resolved type, slug and label in the existing private lead record and distinguish the item in the email subject/table.
-- Preserve the known context on recoverable validation/CAPTCHA/rate-limit/storage errors; consume the token only after a lead is stored.
-- Tests cover registry allowlists, unsafe/unknown fallbacks, retry paths and browser token issuance without submitting an actual enquiry.
-- Exact-head PHP 7.4/8.2 checks, strict asset/sitemap checks, package preflight, non-deploying QA and Browser E2E must all pass before this PR is ready for owner review. Production staging/deployment remains owner-controlled.
+- Tighten the hero eyebrow and lead copy; maintain the existing art-directed facade and Fort-roof image sources.
+- Keep the booking-engine link as the primary action, use an internal Rooms route for the secondary action, and surface three concise, verified facts.
+- Review initial screen composition across 320, 390, 768, 1280 and 1440 CSS pixels. Preserve the shared responsive image budget and zero-overflow contract.
+- Require exact-head PHP 7.4/8.2 Site Checks, Browser E2E/screenshot evidence and responsive-image review before considering the code review-ready.
+- cPanel upload, external staging and production deployment are explicitly out of scope for this phase.
 
 ## Remaining blockers
 

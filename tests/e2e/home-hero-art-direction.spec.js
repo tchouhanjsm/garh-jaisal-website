@@ -86,16 +86,41 @@ test('homepage hero art direction selects responsive images within asset budgets
       expect(state.alt).toBe('');
       expect(state.ariaHidden).toBe('true');
       expect(fileBytes, viewport.expected + ' must remain under its tracked-byte budget').toBeLessThanOrEqual(viewport.maxBytes);
-      await expect(page.getByRole('heading', { name: 'Stay inside Jaisalmer Fort.' })).toBeVisible();
-      await expect(page.locator('.hero-content a.button-primary')).toBeVisible();
+      await expect(page.getByRole('heading', { level: 1, name: 'Wake up inside Jaisalmer Fort.', exact: true })).toBeVisible();
+      await expect(page.locator('.hero-content > .eyebrow')).toContainText('Heritage stay');
+      await expect(page.locator('.hero-content > p:not(.eyebrow)')).toContainText('individually styled rooms');
+      const primaryCta = page.locator('.hero-content a.button-primary');
+      await expect(primaryCta).toHaveText('Check rooms & rates');
+      await expect(primaryCta).toHaveAttribute('href', /asiatech\.in\/booking_engine\/index3\?token=/);
+      const secondaryCta = page.locator('.hero-content a.button-light');
+      await expect(secondaryCta).toHaveText('Explore the rooms');
+      await expect(secondaryCta).toHaveAttribute('href', 'room.php');
 
-      const heroActionsClear = await page.evaluate(() => {
+      const facts = page.locator('.home-hero-facts');
+      await expect(facts).toBeVisible();
+      await expect(facts).toContainText('heritage rooms');
+      await expect(facts).toContainText('Rooftop dining');
+      await expect(facts).toContainText('City & desert tours');
+
+      const firstScreenState = await page.evaluate(() => {
         const actions = document.querySelector('.hero-content .actions');
-        const dock = document.querySelector('.mobile-action-dock');
-        if (!actions || !dock || getComputedStyle(dock).display === 'none') return true;
-        return actions.getBoundingClientRect().bottom <= dock.getBoundingClientRect().top + 1;
+        const facts = document.querySelector('.home-hero-facts');
+        const dock = document.querySelector('.mobile-cta');
+        if (!actions || !facts) return { actionsClear: false, factsClear: false, factsVisible: false };
+        const limit = dock && getComputedStyle(dock).display !== 'none'
+          ? dock.getBoundingClientRect().top
+          : window.innerHeight;
+        const actionBounds = actions.getBoundingClientRect();
+        const factsBounds = facts.getBoundingClientRect();
+        return {
+          actionsClear: actionBounds.bottom <= limit + 1,
+          factsClear: factsBounds.bottom <= limit + 1,
+          factsVisible: factsBounds.top < window.innerHeight && factsBounds.bottom > 0,
+        };
       });
-      expect(heroActionsClear, 'Hero actions must remain unobstructed above the fixed mobile CTA dock at ' + viewport.width + 'px').toBe(true);
+      expect(firstScreenState.actionsClear, 'The first booking decision must remain above any fixed mobile CTA dock at ' + viewport.width + 'px').toBe(true);
+      expect(firstScreenState.factsClear, 'Hero proof points must not be covered by the fixed mobile CTA dock at ' + viewport.width + 'px').toBe(true);
+      expect(firstScreenState.factsVisible, 'The key stay/dine/explore facts must be visible on the initial screen at ' + viewport.width + 'px').toBe(true);
 
       const horizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
       expect(horizontalOverflow, 'Homepage must not scroll horizontally at ' + viewport.width + 'px').toBe(false);

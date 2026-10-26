@@ -60,7 +60,7 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 49 | Exact-head browser evidence and repository reproducibility | ✓ PRs #100 and #101 merged; all nine checks passed on current main `dc1d7653eecc61fec72489015340d61ae8e52386`. Responsive image delivery and committed Playwright lockfile remain follow-up work; see the post-merge disposition in the full audit. |
 | 50 | Responsive image delivery and reproducible browser dependencies | ✓ PRs #102–#104 merged; candidate delivery, Gallery lightbox, breadcrumb fix, pinned Playwright lockfile and layout-aware `sizes` landed. Exact-main PHP/site checks, Browser E2E, package preflight/build and responsive-image review passed on `f810d79547a04c8fe3d5b84612eafdedf88545c0` after PR #105 merged. |
 | 51 | Directions arrival-journey UX refresh | ◐ Improve the hero with an arrival-summary card, add accessible in-page section navigation, style the parking-to-door steps as an ordered route, and add responsive Browser E2E coverage. Preserve `direction.php`, existing map/contact destinations and owner-confirmed copy; verify exact-head CI and screenshot evidence before review approval. |
-| 55 | Structured room/experience/topic enquiry handoff | In PR #129: resolve registered context from a short-lived server-side session token; include allowlisted room/experience/topic labels in the private lead record and owner notification; preserve context during recoverable form retries. |
+| 55 | Structured room/experience/topic enquiry handoff | ✓ PR #129 merged at `15585db334be9683b0dc3cc54643ca4a9e317e97`; private lead/email context and retry preservation shipped. Its Browser E2E run was cancelled, so do not treat that run as a pass. |
 
 ---
 
@@ -774,3 +774,15 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Regression coverage walks the registry, unknown/unsafe slug fallbacks, context-preserving retry URLs, and token presence on the existing room and experience journeys. Browser tests never submit or send an enquiry.
 - Preserve the external booking-engine URL and existing GA4 privacy boundary; no prices, availability, policies or unconfirmed operational facts are introduced.
 - Acceptance is pending until PHP 7.4/8.2 Site Checks, strict image and sitemap checks, responsive-image review, package preflight, non-deploying Staging QA and complete Browser E2E/screenshot artifacts pass on the exact PR head. No cPanel upload or production deployment is part of the phase.
+
+
+## Sprint 56 — three-second homepage first impression (PR #130)
+
+**Goal:** let a first-time visitor understand the property's identity, location, offer and next action at a glance, without scrolling or decoding a long opening paragraph.
+
+- Clarify the homepage eyebrow as a heritage stay inside Jaisalmer Fort; keep the strong existing H1 and reduce the lead to one concrete sentence.
+- Make the booking action primary and replace the vague planning anchor with the direct, internal "Explore the rooms" route.
+- Bring three registry-backed stay/dine/explore proof points into the hero, using the existing shared facts component and dynamic room count.
+- Give the proof strip a refined, responsive visual treatment while retaining the existing art-directed photo sources, brand palette, no-library rule and reduced-motion/accessibility conventions.
+- Extend the five-viewport hero browser review to verify visible first-screen hierarchy, correct destinations, facts visibility, mobile CTA-dock clearance and zero horizontal overflow.
+- Acceptance: exact-head Site Checks including PHP 7.4/8.2, all browser E2E/screenshots, responsive-image review, and safe package/static checks pass. No cPanel action or production deployment is in scope.
