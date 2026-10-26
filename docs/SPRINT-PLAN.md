@@ -61,7 +61,7 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 50 | Responsive image delivery and reproducible browser dependencies | ✓ PRs #102–#104 merged; candidate delivery, Gallery lightbox, breadcrumb fix, pinned Playwright lockfile and layout-aware `sizes` landed. Exact-main PHP/site checks, Browser E2E, package preflight/build and responsive-image review passed on `f810d79547a04c8fe3d5b84612eafdedf88545c0` after PR #105 merged. |
 | 51 | Directions arrival-journey UX refresh | ◐ Improve the hero with an arrival-summary card, add accessible in-page section navigation, style the parking-to-door steps as an ordered route, and add responsive Browser E2E coverage. Preserve `direction.php`, existing map/contact destinations and owner-confirmed copy; verify exact-head CI and screenshot evidence before review approval. |
 | 55 | Structured room/experience/topic enquiry handoff | ✓ PR #129 merged at `15585db334be9683b0dc3cc54643ca4a9e317e97`; private lead/email context and retry preservation shipped. Its Browser E2E run was cancelled, so do not treat that run as a pass. |
-| 60 | Trip enquiry completion with optional travel context | ◐ PR #134 in review; optional date-range and traveller-count context is added only to the WhatsApp draft, with validation and no server/session persistence for those fields. |
+| 60 | Trip enquiry completion with optional travel context | ✓ PR #134 merged at `686abd3272bd37031b38855728bd1bd20a89e76`; optional date/count values appear only in the reviewed WhatsApp draft and are not stored by the site. |
 
 ---
 
@@ -829,7 +829,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - No cPanel upload, external staging deployment, production deployment or new unapproved business fact is in scope.
 
 
-## Sprint 60 — Trip enquiry completion with optional travel context (PR #134 in review)
+## Sprint 60 — Trip enquiry completion with optional travel context (PR #134 merged)
 
 **Commercial goal:** make the Trip shortlist draft easier for the hotel to respond to by letting a guest add a travel window and party size before opening WhatsApp, without pretending the site can confirm availability.
 
@@ -841,3 +841,17 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Add Playwright coverage for the combined room-and-experience draft, valid date/count values, invalid range/count recovery, tab-only persistence boundaries, reload recovery, keyboard behaviour and 390px/mobile overflow.
 - Exact-head acceptance remains PHP 7.4/8.2 Site Checks, responsive-image/static contracts, sitemap/package preflight, non-deploying QA, complete Browser E2E and screenshot/page-sheet evidence. Local PHP/Playwright was not run from the connector session; record CI results without treating cancelled runs as passes.
 - No cPanel upload, external staging deployment, production deployment or owner-only business fact is part of this phase.
+
+
+## Sprint 61 — shared photo storytelling for tours, rooms and dining (PR #135 in review)
+
+**Commercial goal:** help guests make a visual choice before enquiring by letting them browse multiple relevant photos within the existing tour, room and restaurant journeys instead of relying on a single hero image.
+
+- Add one reusable, accessible previous/next photo carousel with captions, meaningful alt text, visible status, 44px controls, keyboard arrow navigation, reduced-motion support and no automatic movement.
+- Apply it to the live experience-detail renderer and the Desert Safari and Guided Jaisalmer Tours hubs. Use existing experience-gallery data where present and curated public Gallery assets for the sunset, cultural and city tour pages that lacked a set.
+- Add a second photo to each of the seven room cards using already-curated room photographs; keep each room's registered hero first, and preserve search/filter behavior, room anchors, the booking-engine URL/token, trip selection and room-specific Contact handoff.
+- Convert the restaurant's static photo row into a previous/next carousel using the existing restaurant Gallery assets. Keep the menu publication guard unchanged while the menu remains unconfirmed.
+- Preserve all image paths, routes, metadata/schema, rates, timings, confirmed/uncertain inclusions and contact destinations. New city images can be supplied in a later Content Studio pack if the owner wants a different or more accurate set.
+- Add Playwright coverage for next/previous behavior, single-slide active state, all live experience routes, seven room cards, restaurant menu-price guard, no-JavaScript visibility and 320/390/1280/1440px no-overflow.
+- Exact-head acceptance: PHP 7.4/8.2 Site Checks, strict image/sitemap contracts, responsive-image review, package preflight, non-deploying QA, complete Browser E2E and screenshot/page-sheet artifact. Local browser/PHP execution was not run from this connector session; treat only exact-head CI as evidence.
+- No cPanel upload, external staging deployment or production deployment is part of this phase.

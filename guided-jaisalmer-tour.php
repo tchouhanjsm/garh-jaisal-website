@@ -107,6 +107,30 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
+  <?php
+  $experiencePhotoCollections = require __DIR__ . '/include/experience-photo-collections.php';
+  $cityPhotoCollection = $experiencePhotoCollections['guided-jaisalmer-tour'] ?? [];
+  ?>
+  <?php if (count($cityPhotoCollection['slides'] ?? []) > 1): ?>
+    <section class="section experience-photo-gallery" data-story-reveal aria-labelledby="city-photo-gallery-title">
+      <div class="site-shell">
+        <div class="section-head">
+          <div><p class="eyebrow">City photo gallery</p><h2 id="city-photo-gallery-title"><?= htmlspecialchars((string) ($cityPhotoCollection['title'] ?? 'Jaisalmer heritage in pictures'), ENT_QUOTES, 'UTF-8') ?></h2></div>
+          <p><?= htmlspecialchars((string) ($cityPhotoCollection['intro'] ?? ''), ENT_QUOTES, 'UTF-8') ?></p>
+        </div>
+        <?php
+        $photoCarousel = [
+            'label' => (string) ($cityPhotoCollection['title'] ?? 'Jaisalmer photo gallery'),
+            'variant' => 'experience',
+            'slides' => $cityPhotoCollection['slides'],
+        ];
+        require __DIR__ . '/include/ui/photo-carousel.php';
+        unset($photoCarousel);
+        ?>
+      </div>
+    </section>
+  <?php endif; ?>
+
   <section class="section route-planner">
     <div class="site-shell">
       <div class="section-head">

@@ -57,6 +57,14 @@ if ($parentSlug !== 'pack' && isset($experiences[$parentSlug]) && ($experiences[
 }
 $breadcrumbs[] = ['name' => $experience['h1'], 'url' => $canonical];
 $isIndexableExperience = ($experience['status'] ?? 'live') === 'live';
+$experiencePhotoCollections = require __DIR__ . '/experience-photo-collections.php';
+$experiencePhotoCollection = $experiencePhotoCollections[$experience['slug']] ?? [];
+$experienceGallerySlides = !empty($experience['gallery'])
+    ? $experience['gallery']
+    : ($experiencePhotoCollection['slides'] ?? []);
+$experienceGalleryTitle = (string) ($experience['gallery_title'] ?? $experiencePhotoCollection['title'] ?? 'Explore the experience');
+$experienceGalleryIntro = (string) ($experience['gallery_intro'] ?? $experiencePhotoCollection['intro'] ?? 'Explore photos from the existing experience collection. Confirm the exact route and arrangements for your date.');
+
 $experienceContactUrl = 'contact.php';
 $experienceContactLabel = 'Ask about availability';
 $experienceBottomContactLabel = 'Contact us';
@@ -191,26 +199,23 @@ require __DIR__ . '/page-head.php';
     </div>
   </section>
 
-  <?php if (!empty($experience['gallery'])): ?>
+  <?php if (count($experienceGallerySlides) > 1): ?>
     <section class="section experience-photo-gallery" data-story-reveal aria-labelledby="experience-photo-gallery-title">
       <div class="site-shell">
         <div class="section-head">
-          <div><p class="eyebrow">Photo gallery</p><h2 id="experience-photo-gallery-title"><?= htmlspecialchars($experience['gallery_title'] ?? 'Explore the experience', ENT_QUOTES, 'UTF-8') ?></h2></div>
-          <p><?= htmlspecialchars($experience['gallery_intro'] ?? 'Take a closer look at this experience.', ENT_QUOTES, 'UTF-8') ?></p>
+          <div><p class="eyebrow">Photo gallery</p><h2 id="experience-photo-gallery-title"><?= htmlspecialchars($experienceGalleryTitle, ENT_QUOTES, 'UTF-8') ?></h2></div>
+          <p><?= htmlspecialchars($experienceGalleryIntro, ENT_QUOTES, 'UTF-8') ?></p>
         </div>
         <div class="experience-photo-grid" data-experience-gallery>
-          <?php foreach ($experience['gallery'] as $photo): ?>
-            <figure class="experience-photo-card">
-              <img
-                src="<?= htmlspecialchars($photo['src'], ENT_QUOTES, 'UTF-8') ?>"
-                <?= gj_image_dimension_attributes($photo['src'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
-                alt="<?= htmlspecialchars($photo['alt'], ENT_QUOTES, 'UTF-8') ?>"
-                loading="lazy"
-                decoding="async"
-              >
-              <figcaption><?= htmlspecialchars($photo['caption'] ?? $photo['alt'], ENT_QUOTES, 'UTF-8') ?></figcaption>
-            </figure>
-          <?php endforeach; ?>
+          <?php
+          $photoCarousel = [
+              'label' => $experienceGalleryTitle,
+              'variant' => 'experience',
+              'slides' => $experienceGallerySlides,
+          ];
+          require __DIR__ . '/ui/photo-carousel.php';
+          unset($photoCarousel);
+          ?>
         </div>
       </div>
     </section>

@@ -23,6 +23,8 @@ $menuConfig = is_array($menuConfig) ? $menuConfig : [];
 $menu = isset($menuConfig['items']) && is_array($menuConfig['items']) ? $menuConfig['items'] : [];
 $menuCategories = array_keys($menu);
 $menuOwnerConfirmed = !empty($menuConfig['owner_confirmed']);
+$restaurantGallerySections = require __DIR__ . '/include/gallery-data.php';
+$restaurantPhotoSlides = $restaurantGallerySections['restaurant']['images'] ?? [];
 
 
 function e($value): string {
@@ -373,15 +375,20 @@ require __DIR__ . '/include/page-head.php';
         <p class="eyebrow">The kitchen</p>
         <h2>Rajasthani favourites, served above the Golden City.</h2>
       </div>
-      <p>Come for the rooftop setting and ask about the food available when you visit. The menu, preparation details, dietary options and prices are confirmed directly with the hotel.</p>
+      <p>Garh Jaisal's Kitchen is the rooftop restaurant at Garh Jaisal Haveli, inside Jaisalmer Fort. Come for the rooftop setting and ask about the food available when you visit. Current dishes, preparation details, dietary options, service hours and prices are confirmed directly with the hotel for your date.</p>
     </div>
 
     <div class="site-shell restaurant-gallery-social">
       <div class="restaurant-gallery" aria-label="Restaurant and rooftop photo gallery">
-        <figure><img src="img/res1.jpg" alt="Dining at Garh Jaisal's Kitchen" loading="lazy" width="1200" height="800"></figure>
-        <figure><img src="img/rest3.jpg" alt="View from the rooftop restaurant at Garh Jaisal's Kitchen" loading="lazy" width="1200" height="800"></figure>
-        <figure><img src="img/rest4.jpg" alt="Evening setting at Garh Jaisal's Kitchen" loading="lazy" width="1200" height="800"></figure>
-        <figure><img src="img/rest5.jpg" alt="Rooftop table at Garh Jaisal's Kitchen" loading="lazy" width="1200" height="800"></figure>
+        <?php
+        $photoCarousel = [
+            'label' => "Garh Jaisal's Kitchen restaurant and rooftop",
+            'variant' => 'restaurant',
+            'slides' => $restaurantPhotoSlides,
+        ];
+        require __DIR__ . '/include/ui/photo-carousel.php';
+        unset($photoCarousel);
+        ?>
       </div>
       <aside class="restaurant-instagram-panel" aria-labelledby="restaurant-instagram-title">
         <p class="eyebrow">Follow along</p>
