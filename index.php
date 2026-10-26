@@ -107,7 +107,7 @@ require __DIR__ . '/include/page-head.php';
         'items' => [
             ['label' => 'Stay', 'value' => count($rooms) . ' heritage rooms'],
             ['label' => 'Dine', 'value' => 'Rooftop dining'],
-            ['label' => 'Explore', 'value' => 'City &amp; desert tours'],
+            ['label' => 'Explore', 'value' => 'City & desert tours'],
         ],
     ];
     require __DIR__ . '/include/ui/at-a-glance.php';

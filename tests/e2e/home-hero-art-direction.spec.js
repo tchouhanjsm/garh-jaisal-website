@@ -91,7 +91,7 @@ test('homepage hero art direction selects responsive images within asset budgets
       await expect(page.locator('.hero-content > p:not(.eyebrow)')).toContainText('individually styled rooms');
       const primaryCta = page.locator('.hero-content a.button-primary');
       await expect(primaryCta).toHaveText('Check rooms & rates');
-      await expect(primaryCta).toHaveAttribute('href', /asiatech\\.in\\/booking_engine\\/index3\\?token=/);
+      await expect(primaryCta).toHaveAttribute('href', /asiatech\.in\/booking_engine\/index3\?token=/);
       const secondaryCta = page.locator('.hero-content a.button-light');
       await expect(secondaryCta).toHaveText('Explore the rooms');
       await expect(secondaryCta).toHaveAttribute('href', 'room.php');
@@ -100,7 +100,7 @@ test('homepage hero art direction selects responsive images within asset budgets
       await expect(facts).toBeVisible();
       await expect(facts).toContainText('heritage rooms');
       await expect(facts).toContainText('Rooftop dining');
-      await expect(facts).toContainText('City &amp; desert tours');
+      await expect(facts).toContainText('City & desert tours');
 
       const firstScreenState = await page.evaluate(() => {
         const actions = document.querySelector('.hero-content .actions');
