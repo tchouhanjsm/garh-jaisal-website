@@ -89,7 +89,7 @@ test('Packages finder searches published experiences and combines category and d
   await expect(search).toHaveValue('');
 });
 
-test('Packages finder remains responsive and leaves a complete no-JavaScript experience list', async ({ page, browser }, testInfo) => {
+test('Packages finder remains responsive and all filter controls meet touch-target minimums', async ({ page }) => {
   const response = await page.goto('/pack.php', { waitUntil: 'domcontentloaded' });
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
@@ -109,8 +109,11 @@ test('Packages finder remains responsive and leaves a complete no-JavaScript exp
     expect(box?.height ?? 0, selector + ' should have a usable 44px touch target')
       .toBeGreaterThanOrEqual(44);
   }
+});
 
+test('Packages experience list remains complete when JavaScript is unavailable', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'No-JavaScript fallback contract runs once on desktop-1280');
+
   const context = await browser.newContext({
     baseURL: 'http://127.0.0.1:8080',
     javaScriptEnabled: false,
