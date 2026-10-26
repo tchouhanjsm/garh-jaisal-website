@@ -284,6 +284,10 @@ require __DIR__ . '/page-head.php';
     </div>
   </section>
 
+  <?php if (($experience['status'] ?? 'live') === 'live'): ?>
+    <?php require __DIR__ . '/ui/experience-conversion-checkpoint.php'; ?>
+  <?php endif; ?>
+
   <?php if (!empty($experience['faq'])): ?>
     <section class="section experience-faq" data-story-reveal>
       <div class="site-shell">

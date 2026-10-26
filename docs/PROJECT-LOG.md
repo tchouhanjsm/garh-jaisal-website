@@ -7,34 +7,32 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-26 |
-| Current phase | Sprint 58 — experience discovery and comparison UX |
-| Verified main SHA | 9c0c15cf93f83cfba296e6b062e87dcf53f1773b (PR #131 merge commit) |
-| Latest merged PR | [#131 — searchable room discovery and filters](https://github.com/tchouhanjsm/garh-jaisal-website/pull/131) |
-| PR #131 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40279711938); PHP 7.4/8.2 and responsive-image review |
-| PR #131 Browser E2E | [IN PROGRESS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40279711945); merge-head screenshot evidence not confirmed yet |
-| PR #131 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40279711931); artifact/check only, no upload |
-| PR #131 non-deploying QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40279711920); not an external-host deployment |
-| Recent merged work | PR #129 structured enquiry handoff; #130 homepage first impression; #131 searchable room discovery |
-| Active phase branch | feature/experience-finder-20261026; PR #132 open for review; exact-head acceptance pending |
+| Current phase | Sprint 59 — mid-page experience decision checkpoint |
+| Verified main SHA | 838b0e2c685a11b47a00ffdda2e431661a745bd4 (PR #132 merge commit) |
+| Latest merged PR | [#132 — published experience discovery filters](https://github.com/tchouhanjsm/garh-jaisal-website/pull/132) |
+| PR #132 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40284067930); PHP 7.4/8.2 and responsive-image review |
+| PR #132 Browser E2E | [IN PROGRESS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40284067903); merge-head screenshot evidence pending |
+| PR #132 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40284067910); artifact/check only, no upload |
+| PR #132 non-deploying QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40284067866); no external-host deployment |
+| Recent merged work | PR #130 homepage first impression; #131 room finder; #132 published experience finder |
+| Active phase branch | feature/experience-conversion-checkpoint-20261026; PR #133 open for review; exact-head acceptance pending |
 
 ## Current phase
 
-**Sprint 58 goal:** make the Packages route easier to scan and narrow without duplicating or exposing unapproved experience data.
+**Sprint 59 goal:** make the next action available just after guests review the itinerary and included/not-included details on an individual experience page.
 
-- Add search and registry-backed category/duration filters for published, non-hub desert and city options.
-- Show each published card’s configured duration type; keep exact times, prices and inclusions subject to existing approved source content.
-- Preserve live itinerary links, trip shortlist actions, SEO/schema and a full no-JavaScript fallback.
-- Require exact-head PHP 7.4/8.2, responsive-image review, package/static checks, non-deploying QA, full Browser E2E and screenshot/page-sheet evidence.
+- Share one conversion checkpoint across the live experience template; reuse the existing context-aware contact/WhatsApp destinations and Add to Trip/catalogue behavior.
+- Preserve public URLs, registry publication boundaries, current rate/timing qualifications, images and structured data.
+- Include the shared renderer in generated sitemap `lastmod` so template changes refresh all affected live experience URLs.
+- Require exact-head PHP 7.4/8.2, responsive-image, sitemap, package/static, non-deploying QA, full Browser E2E and screenshot/page-sheet evidence.
 - cPanel upload, external staging and production deployment are out of scope.
 
 ## Latest implementation entry
 
-- [2026-10-26] Sprint 58 / [PR #132 — experience discovery](https://github.com/tchouhanjsm/garh-jaisal-website/pulls/132) adds search and category/duration filters to published Packages cards.
-- Filter choices and duration labels come from the existing experience registry; draft and hidden records remain excluded.
-- Refreshed `sitemap.xml` for the updated public Packages route; strict sitemap validation is part of the exact-head gate.
-- Playwright covers combined filters, zero-result recovery, reset, responsive targets and no-JavaScript card availability.
-- PR #132 exact-head CI is pending; local PHP/Playwright was not run in this connector session.
-- PR #131 merge-head Browser E2E remains in progress at last check; no cPanel or production action occurred.
+- [2026-10-26] Sprint 59 / [PR #133 — experience conversion checkpoint](https://github.com/tchouhanjsm/garh-jaisal-website/pulls/133) adds a post-detail CTA partial, responsive styling, route-level Playwright coverage and sitemap dependency tracking.
+- Contextual contact links and the existing trip tray stay unchanged; duplicate Add to Trip controls are tested for synchronization.
+- Exact-head CI is pending; local PHP/Playwright was not run in this connector session.
+- PR #132 merged-main Browser E2E remains in progress at last check; no cPanel or production action occurred.
 
 ## Remaining blockers
 

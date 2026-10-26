@@ -938,3 +938,82 @@ main .experience-card > a > .experience-card-media img{
     margin:8px 8px 0;
   }
 }
+
+
+/* Sprint 59 — contextual decision point after itinerary and inclusion details. */
+.experience-conversion-checkpoint{
+  background:var(--cream);
+}
+.experience-conversion-checkpoint-panel{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);
+  gap:clamp(22px,3.5vw,48px);
+  align-items:center;
+  padding:clamp(24px,3.6vw,42px);
+  border:1px solid rgba(217,164,65,.62);
+  border-radius:var(--radius-card,6px);
+  background:linear-gradient(135deg,#f7efe0 0%,#fffdfa 100%);
+  box-shadow:0 12px 30px rgba(35,26,20,.07);
+}
+.experience-conversion-checkpoint-copy .eyebrow{
+  margin-bottom:9px;
+  color:#72502c;
+}
+.experience-conversion-checkpoint-copy h2{
+  max-width:18ch;
+  margin:0 0 12px;
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:clamp(1.8rem,3vw,2.65rem);
+  font-weight:400;
+  line-height:1.14;
+  text-wrap:balance;
+}
+.experience-conversion-checkpoint-copy p:last-child{
+  max-width:66ch;
+  margin:0;
+  color:#62574e;
+  line-height:1.65;
+}
+.experience-conversion-checkpoint-actions{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:stretch;
+  gap:10px;
+  margin:0;
+}
+.experience-conversion-checkpoint-actions > .button,
+.experience-conversion-checkpoint-actions > .trip-add-button{
+  display:inline-flex;
+  min-height:48px;
+  align-items:center;
+  justify-content:center;
+  margin:0;
+  padding:12px 16px;
+  text-align:center;
+  line-height:1.25;
+}
+.experience-conversion-checkpoint-actions > .trip-add-button{
+  max-width:100%;
+}
+@media(max-width:980px){
+  .experience-conversion-checkpoint-panel{
+    grid-template-columns:minmax(0,1fr);
+    gap:20px;
+  }
+}
+@media(max-width:760px){
+  .experience-conversion-checkpoint-panel{
+    padding:22px 16px;
+  }
+  .experience-conversion-checkpoint-copy h2{
+    font-size:1.85rem;
+  }
+  .experience-conversion-checkpoint-actions{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  .experience-conversion-checkpoint-actions > .button,
+  .experience-conversion-checkpoint-actions > .trip-add-button{
+    width:100%;
+  }
+}
