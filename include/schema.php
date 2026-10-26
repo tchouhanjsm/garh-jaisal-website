@@ -5,16 +5,26 @@
  * Values are copied from the approved homepage graph so page migrations can
  * reference one consistent Hotel and WebSite node without duplicating data.
  */
-function gj_schema_hotel($siteUrl)
+function gj_schema_hotel($siteUrl, $siteConfig = null)
 {
+    if (!is_array($siteConfig)) {
+        $siteConfig = require __DIR__ . '/site-config.php';
+    }
+
     $baseUrl = rtrim((string) $siteUrl, '/');
+    $telephone = (string) ($siteConfig['hotel_phone'] ?? '');
+    $phoneDigits = preg_replace('/\D+/', '', $telephone);
+    if (is_string($phoneDigits) && preg_match('/^91\d{10}$/D', $phoneDigits)) {
+        // Keep the existing JSON-LD format while deriving the number from config.
+        $telephone = '+91-' . substr($phoneDigits, 2);
+    }
 
     return [
         '@type' => 'Hotel',
         '@id' => $baseUrl . '/#hotel',
         'name' => 'Hotel Garh Jaisal Haveli',
         'url' => $baseUrl . '/',
-        'telephone' => '+91-7727047567',
+        'telephone' => $telephone,
         'image' => [
             $baseUrl . '/img/v2/facade.jpg',
             $baseUrl . '/img/5.webp',
