@@ -2,6 +2,7 @@
 $siteConfig = require __DIR__ . '/include/site-config.php';
 require_once __DIR__ . '/include/session.php';
 require_once __DIR__ . '/include/lead-storage.php';
+require_once __DIR__ . '/include/enquiry-context.php';
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     header('Location: contact.php');
@@ -15,9 +16,35 @@ if ($csrfToken === '' || $sessionToken === '' || !hash_equals($sessionToken, $cs
     exit;
 }
 
+$contactContextToken = $_POST['enquiry_context_token'] ?? '';
+$contactContextTokens = $_SESSION['contact_context_tokens'] ?? [];
+$storedContext = null;
+$contactContextTokenValid = false;
+$contextNow = time();
+if (
+    is_string($contactContextToken)
+    && preg_match('/^[a-f0-9]{32}$/D', $contactContextToken)
+    && is_array($contactContextTokens)
+    && isset($contactContextTokens[$contactContextToken])
+    && is_array($contactContextTokens[$contactContextToken])
+) {
+    $candidateContext = $contactContextTokens[$contactContextToken];
+    $issuedAt = isset($candidateContext['issued_at']) && is_numeric($candidateContext['issued_at'])
+        ? (int) $candidateContext['issued_at']
+        : 0;
+    if ($issuedAt > 0 && $issuedAt <= $contextNow + 60 && $issuedAt >= $contextNow - 7200) {
+        $storedContext = $candidateContext;
+        $contactContextTokenValid = true;
+    }
+}
+$enquiryContext = gj_resolve_enquiry_context(
+    $storedContext['type'] ?? 'general',
+    $storedContext['slug'] ?? ''
+);
+
 $honeypot = trim((string) ($_POST['website'] ?? ''));
 if ($honeypot !== '') {
-    header('Location: contact.php?error=send');
+    header('Location: ' . gj_contact_context_return_url($enquiryContext, 'send'));
     exit;
 }
 
@@ -28,7 +55,7 @@ $message = trim((string) ($_POST['message'] ?? ''));
 $consent = trim((string) ($_POST['consent'] ?? ''));
 $captcha = trim((string) ($_POST['g-recaptcha-response'] ?? ''));
 if ($captcha === '') {
-    header('Location: contact.php?error=captcha');
+    header('Location: ' . gj_contact_context_return_url($enquiryContext, 'captcha'));
     exit;
 }
 
@@ -48,14 +75,14 @@ $valid = $name !== ''
     && $consent === '1';
 
 if (!$valid) {
-    header('Location: contact.php?error=invalid');
+    header('Location: ' . gj_contact_context_return_url($enquiryContext, 'invalid'));
     exit;
 }
 
 $now = time();
 $lastSubmission = (int) ($_SESSION['contact_last_submission'] ?? 0);
 if ($lastSubmission > 0 && ($now - $lastSubmission) < 30) {
-    header('Location: contact.php?error=send');
+    header('Location: ' . gj_contact_context_return_url($enquiryContext, 'send'));
     exit;
 }
 // Apply the session throttle before making a remote CAPTCHA verification request.
@@ -63,7 +90,7 @@ $_SESSION['contact_last_submission'] = $now;
 
 $secretKey = trim((string) ($siteConfig['recaptcha_secret'] ?? ''));
 if ($secretKey === '' || preg_match('/(?:PASTE_|REPLACE_WITH_|CHANGE_ME|YOUR[_ -]?)/i', $secretKey)) {
-    header('Location: contact.php?error=config');
+    header('Location: ' . gj_contact_context_return_url($enquiryContext, 'config'));
     exit;
 }
 
@@ -113,22 +140,40 @@ if (
     || $captchaHost === ''
     || !in_array($captchaHost, $allowedCaptchaHosts, true)
 ) {
-    header('Location: contact.php?error=captcha');
+    header('Location: ' . gj_contact_context_return_url($enquiryContext, 'captcha'));
     exit;
 }
 
 $leadResult = gj_store_lead(
     'contact',
-    ['name' => $name, 'email' => $email, 'phone' => $phone, 'message' => $message, 'consent' => true],
+    [
+        'name' => $name,
+        'email' => $email,
+        'phone' => $phone,
+        'message' => $message,
+        'consent' => true,
+        'enquiry_context' => [
+            'type' => $enquiryContext['type'],
+            'slug' => $enquiryContext['slug'],
+            'label' => $enquiryContext['label'],
+        ],
+    ],
     (string) ($_SERVER['REMOTE_ADDR'] ?? ''),
     $phone,
     ['max_per_ip' => 10, 'max_per_phone' => 5]
 );
 if (empty($leadResult['ok'])) {
-    header('Location: contact.php?error=' . (($leadResult['error'] ?? '') === 'rate_limited' ? 'send' : 'storage'));
+    header('Location: ' . gj_contact_context_return_url($enquiryContext, (($leadResult['error'] ?? '') === 'rate_limited' ? 'send' : 'storage')));
     exit;
 }
 $leadReference = $leadResult['reference'];
+if (
+    $contactContextTokenValid
+    && is_array($_SESSION['contact_context_tokens'] ?? null)
+    && isset($_SESSION['contact_context_tokens'][$contactContextToken])
+) {
+    unset($_SESSION['contact_context_tokens'][$contactContextToken]);
+}
 
 $recipients = array_values(array_filter((array) ($siteConfig['inquiry_recipients'] ?? []), static function ($value) {
     return is_string($value) && filter_var($value, FILTER_VALIDATE_EMAIL);
@@ -142,11 +187,25 @@ if ($recipients === []) {
 }
 
 $emailTo = implode(', ', $recipients);
-$subject = 'Enquiry [' . $leadReference . '] - Hotel Garh Jaisal';
+$subjectContext = trim(str_replace(["\r", "\n"], ' ', (string) ($enquiryContext['label'] ?? 'General enquiry')));
+if ($subjectContext === '') {
+    $subjectContext = 'General enquiry';
+}
+if (function_exists('mb_substr')) {
+    $subjectContext = mb_substr($subjectContext, 0, 80, 'UTF-8');
+} else {
+    $subjectContext = substr($subjectContext, 0, 80);
+}
+$subject = 'Enquiry [' . $leadReference . '] - '
+    . $enquiryContext['type_label'] . ': ' . $subjectContext . ' - Hotel Garh Jaisal';
 $replyTo = str_replace(["\r", "\n"], '', $email);
 
 $body = '<p>Enquiry reference: ' . htmlspecialchars($leadReference, ENT_QUOTES, 'UTF-8') . '</p>';
 $body .= "<table border='2px' style='border-collapse:collapse; width:100%;'>";
+$body .= '<tr><td style="padding:5px;">Enquiry type</td><td style="padding:5px;">'
+    . htmlspecialchars($enquiryContext['type_label'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
+$body .= '<tr><td style="padding:5px;">Requested item</td><td style="padding:5px;">'
+    . htmlspecialchars($enquiryContext['label'], ENT_QUOTES, 'UTF-8') . '</td></tr>';
 $body .= '<tr><td style="padding:5px;">Name</td><td style="padding:5px;">'
     . htmlspecialchars($name, ENT_QUOTES, 'UTF-8') . '</td></tr>';
 $body .= '<tr><td style="padding:5px;">Email</td><td style="padding:5px;">'

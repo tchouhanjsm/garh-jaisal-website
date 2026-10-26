@@ -112,6 +112,9 @@ jobs:
       - name: Verify success-only lead conversion instrumentation
         run: php tests/php/lead-conversion-contract.php
 
+      - name: Verify structured enquiry context and safe recovery
+        run: php tests/php/enquiry-context-contract.php
+
       - name: Verify launch hardening configuration
         run: php scripts/check-launch-hardening.php
 

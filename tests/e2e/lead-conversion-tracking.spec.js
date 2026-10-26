@@ -8,6 +8,7 @@ test('contact enquiry-start analytics carry the selected experience without gues
   const context = page.locator('.contact-experience-context');
   await expect(context).toBeVisible();
   await expect(context).toHaveAttribute('data-experience-slug', 'sunset-camel-safari');
+  await expect(page.locator('input[name="enquiry_context_token"]')).toHaveValue(/^[a-f0-9]{32}$/);
   await page.evaluate(() => {
     window.__gjAnalyticsEvents = [];
     window.gtag = (...args) => window.__gjAnalyticsEvents.push(args);
