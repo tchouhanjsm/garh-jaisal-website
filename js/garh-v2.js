@@ -496,7 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyState = roomFinder.querySelector('[data-room-empty]');
     let selectedFeature = 'all';
 
-    const normalizeRoomText = (value) => String(value || '').toLowerCase().replace(/\\s+/g, ' ').trim();
+    const normalizeRoomText = (value) => String(value || '').toLowerCase().replace(/\s+/g, ' ').trim();
 
     const applyRoomFilters = () => {
       const query = normalizeRoomText(searchInput ? searchInput.value : '');
