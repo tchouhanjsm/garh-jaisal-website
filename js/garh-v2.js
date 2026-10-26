@@ -7,6 +7,47 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
   }
 
+  // Progressive enhancement for photo storytelling. No autoplay: guests control the pace.
+  document.querySelectorAll('[data-photo-carousel]').forEach((carousel) => {
+    if (carousel.dataset.photoCarouselInitialized === 'true') return;
+
+    const slides = Array.from(carousel.querySelectorAll('[data-photo-carousel-slide]'));
+    const controls = carousel.querySelector('[data-photo-carousel-controls]');
+    const status = carousel.querySelector('[data-photo-carousel-status]');
+    const previous = carousel.querySelector('[data-photo-carousel-prev]');
+    const next = carousel.querySelector('[data-photo-carousel-next]');
+    if (slides.length < 2 || !controls || !status || !previous || !next) return;
+
+    let activeIndex = 0;
+    const showSlide = (nextIndex) => {
+      activeIndex = (nextIndex + slides.length) % slides.length;
+      slides.forEach((slide, index) => {
+        const isActive = index === activeIndex;
+        slide.hidden = !isActive;
+        slide.setAttribute('aria-hidden', String(!isActive));
+      });
+      status.textContent = 'Photo ' + (activeIndex + 1) + ' of ' + slides.length;
+    };
+
+    previous.addEventListener('click', () => showSlide(activeIndex - 1));
+    next.addEventListener('click', () => showSlide(activeIndex + 1));
+    carousel.addEventListener('keydown', (event) => {
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        showSlide(activeIndex - 1);
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        showSlide(activeIndex + 1);
+      }
+    });
+
+    carousel.dataset.photoCarouselInitialized = 'true';
+    carousel.classList.add('is-ready');
+    showSlide(0);
+    controls.hidden = false;
+  });
+
   // The fixed mobile action dock can cover the Directions arrival essentials card.
   // Suppress it only while its viewport strip would obscure that card; the hero's
   // Call, WhatsApp and Maps actions remain available, and the dock returns afterwards.
