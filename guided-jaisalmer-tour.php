@@ -22,14 +22,14 @@ $faqItems = [
     ['question' => "What should I confirm before booking?", 'answer' => "Ask the hotel to confirm the current price, route, guide availability and language, entry fees where applicable, and pickup arrangements."],
 ];
 $page = [
-    'title' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
-    'description' => 'Explore Jaisalmer with half-day and full-day guided tours from Garh Jaisal Haveli, covering the Fort, havelis, markets and heritage areas.',
+    'title' => 'Guided Jaisalmer Tours from the Fort | Garh Jaisal Haveli',
+    'description' => 'Explore Jaisalmer with guided half-day and full-day routes from Garh Jaisal Haveli inside the Fort. Compare options and confirm guide availability, language, itinerary and current price for your dates.',
     'path' => '/guided-jaisalmer-tour.php',
-    'og_title' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
-    'og_description' => 'Explore Jaisalmer with half-day and full-day guided tours from Garh Jaisal Haveli, covering the Fort, havelis, markets and heritage areas.',
+    'og_title' => 'Guided Jaisalmer Tours from the Fort | Garh Jaisal Haveli',
+    'og_description' => 'Explore Jaisalmer with guided half-day and full-day routes from Garh Jaisal Haveli inside the Fort. Compare options and confirm guide availability, language, itinerary and current price for your dates.',
     'og_image' => '/img/j5.jpg',
-    'twitter_title' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
-    'twitter_description' => 'Explore Jaisalmer with half-day and full-day guided tours from Garh Jaisal Haveli, covering the Fort, havelis, markets and heritage areas.',
+    'twitter_title' => 'Guided Jaisalmer Tours from the Fort | Garh Jaisal Haveli',
+    'twitter_description' => 'Explore Jaisalmer with guided half-day and full-day routes from Garh Jaisal Haveli inside the Fort. Compare options and confirm guide availability, language, itinerary and current price for your dates.',
     'twitter_image' => '/img/j5.jpg',
     'css' => ['css/experiences.css'],
     'schema' => [
@@ -37,8 +37,8 @@ $page = [
             '@type' => 'WebPage',
             '@id' => $canonical . '#webpage',
             'url' => $canonical,
-            'name' => 'Guided Jaisalmer Tours | Half-Day & Full-Day Tours',
-            'description' => 'Explore Jaisalmer with half-day and full-day guided tours from Garh Jaisal Haveli, covering the Fort, havelis, markets and heritage areas.',
+            'name' => 'Guided Jaisalmer Tours from the Fort | Garh Jaisal Haveli',
+            'description' => 'Explore Jaisalmer with guided half-day and full-day routes from Garh Jaisal Haveli inside the Fort. Compare options and confirm guide availability, language, itinerary and current price for your dates.',
             'isPartOf' => ['@id' => $siteUrl . '/#website'],
             'about' => ['@id' => $siteUrl . '/#hotel'],
             'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
@@ -70,21 +70,21 @@ require __DIR__ . '/include/page-head.php';
         <a href="index.php">Home</a><span aria-hidden="true">/</span><a href="pack.php">Packages</a><span aria-hidden="true">/</span><span aria-current="page">Guided Jaisalmer Tours</span>
       </nav>
       <p class="eyebrow">Jaisalmer tours</p>
-      <h1>Guided Jaisalmer Tours</h1>
-      <p>See more of Jaisalmer with a locally arranged guided tour. Choose a shorter heritage walk when time is limited or a fuller day when you want more of the city.</p>
+      <h1>See Jaisalmer with a guide, at your pace.</h1>
+      <p>Choose a focused Fort walk, a half-day exploration or a fuller day across Jaisalmer's heritage areas. Tell us what interests you and how much time you have; the route, guide language and current price are confirmed for your date.</p>
       <div class="actions">
-        <a class="button button-primary" href="contact.php">Ask about availability</a>
-        <a class="button button-light" href="pack.php">Back to packages</a>
+        <a class="button button-primary" href="contact.php?topic=visit-planning">Plan my guided tour</a>
+        <a class="button button-light" href="#guided-options">Compare tour options</a>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="section" id="guided-options">
     <div class="site-shell">
       <div class="section-head">
         <div>
           <p class="eyebrow">Guided city experiences</p>
-          <h2>Choose how much time you have.</h2>
+          <h2>Choose the pace that fits your stay.</h2>
         </div>
         <p>The route can be adjusted around your interests, opening hours and the time available on your travel date.</p>
       </div>
@@ -112,9 +112,9 @@ require __DIR__ . '/include/page-head.php';
       <div class="section-head">
         <div>
           <p class="eyebrow">A practical choice</p>
-          <h2>Why start from the Fort?</h2>
+          <h2>Begin with the place you came to see.</h2>
         </div>
-        <p>Garh Jaisal Haveli is inside Jaisalmer Fort, so the guided experience can begin from the living fort rather than adding a separate hotel transfer just to reach the heritage core.</p>
+        <p>Starting from Garh Jaisal Haveli puts you inside the Fort's lanes already. Ask the hotel to confirm where your guide will meet you, how the route works on foot and whether transport is needed for any stops beyond the Fort.</p>
       </div>
       <div class="planner-grid planner-grid--two">
         <article><strong>Limited time</strong><p>The half-day option keeps the route focused on the fort, heritage areas, havelis and markets.</p></article>
@@ -126,8 +126,8 @@ require __DIR__ . '/include/page-head.php';
   <section class="section experience-cta">
     <div class="site-shell experience-cta-inner">
       <p class="eyebrow">Plan your Jaisalmer stay</p>
-      <h2>See the Fort, then connect it to the city around it.</h2>
-      <p>Ask the hotel about the current guide availability, route, guide language and applicable entry fees.</p>
+      <h2>Give Jaisalmer the time it deserves.</h2>
+      <p>Share your date, preferred language and interests. We will confirm guide availability, the route, current price and any applicable entry fees.</p>
       <div class="actions"><a class="button button-primary" href="contact.php">Contact us</a><a class="button button-secondary" href="desert-safari.php">Explore desert safaris</a></div>
     </div>
   </section>
