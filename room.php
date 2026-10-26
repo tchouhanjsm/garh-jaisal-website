@@ -3,6 +3,7 @@ $activePage = 'rooms';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $bookingUrl = $siteConfig['booking_url'];
 $rooms = require __DIR__ . '/include/rooms-data.php';
+$roomPhotoDetails = require __DIR__ . '/include/room-photo-details.php';
 
 $roomsByFloor = [];
 foreach ($rooms as $room) {
@@ -293,6 +294,14 @@ require __DIR__ . '/include/page-head.php';
         <?php
           $roomSlug = trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($room['name'])), '-');
           $roomId = 'room-' . $roomSlug;
+          $roomPhotoSlides = [[
+              'src' => $room['image'],
+              'alt' => $room['alt'],
+              'caption' => $room['name'],
+          ]];
+          if (isset($roomPhotoDetails[$roomSlug]) && is_array($roomPhotoDetails[$roomSlug])) {
+              $roomPhotoSlides[] = $roomPhotoDetails[$roomSlug];
+          }
         ?>
         <?php
           $roomFeatureKeys = array_values(array_unique(array_map(static function ($feature) {
@@ -303,12 +312,15 @@ require __DIR__ . '/include/page-head.php';
         <article class="room-card" id="<?= htmlspecialchars($roomId, ENT_QUOTES, 'UTF-8') ?>" data-room-floor="<?= htmlspecialchars($normalizeRoomFloor($floorKicker), ENT_QUOTES, 'UTF-8') ?>" data-room-features="<?= htmlspecialchars($roomFeatureData, ENT_QUOTES, 'UTF-8') ?>">
 
           <div class="room-card-media">
-            <img
-              src="<?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>"
-              <?= gj_image_dimension_attributes($room['image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
-              alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>"
-              loading="lazy"
-            >
+            <?php
+            $photoCarousel = [
+                'label' => $room['name'] . ' photos',
+                'variant' => 'room',
+                'slides' => $roomPhotoSlides,
+            ];
+            require __DIR__ . '/include/ui/photo-carousel.php';
+            unset($photoCarousel);
+            ?>
           </div>
 
           <div class="room-card-body">
@@ -354,6 +366,7 @@ require __DIR__ . '/include/page-head.php';
 
           </div>
         </article>
+        <?php unset($roomPhotoSlides); ?>
         <?php endforeach; ?>
 
       </div>
