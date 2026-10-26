@@ -132,6 +132,8 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
+  <?php require __DIR__ . '/include/ui/stay-booking-note.php'; ?>
+
   <section class="section packages-cta"><div class="site-shell"><div class="packages-cta-inner"><p class="eyebrow">Plan with the hotel</p><h2>Confirm the details before you travel.</h2><p>Tour routes, timings, transport, fees and availability can vary. Contact the hotel for the current details for your date.</p><div class="actions"><a class="button button-primary" href="contact.php">Contact Garh Jaisal Haveli</a><a class="button button-secondary" href="direction.php">Plan your arrival</a></div></div></div></section>
 
   <section class="section site-faq car-tours-faq" aria-labelledby="car-tours-faq-title">

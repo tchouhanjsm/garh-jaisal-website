@@ -7,32 +7,27 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-26 |
-| Current phase | Sprint 62 — decision-first comparison for desert and city tours |
-| Verified main SHA | c3326fb320e7b78bd20f70e8829c9e6a54266829 (PR #135 merge commit; Sprint 62 base) |
-| Latest merged PR | [#135 — Multi-photo storytelling across tours, rooms and dining](https://github.com/tchouhanjsm/garh-jaisal-website/pull/135) |
-| PR #135 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40307181583); PHP 7.4/8.2, marketing template, contrast and responsive image contracts |
-| PR #135 non-deploying QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40307181582) |
-| PR #135 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40307181660); artifact/check only, no upload |
-| PR #135 merge-head Browser E2E | [CANCELLED](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40307181617); do not treat as a pass |
-| Recent merged work | PR #132 experience filters; #133 conversion checkpoint; #134 Trip enquiry context; #135 multi-photo storytelling |
-| Active phase branch | `feature/tour-decision-cards-20261026`; Sprint 62 review target (unmerged) |
+| Current phase | Sprint 63 — direct-booking path and room-first discovery |
+| Verified main SHA | 32c59b579ae7e528afe6644e90988892b35b5237 (PR #136 merge commit; Sprint 63 base) |
+| Latest merged PR | [#136 — Decision-first tour comparison cards](https://github.com/tchouhanjsm/garh-jaisal-website/pull/136) |
+| Recent merged work | PR #133 conversion checkpoint; #134 Trip enquiry context; #135 photo storytelling; #136 tour comparison facts |
+| Active phase branch | `feature/direct-booking-path-closure-20261026`; Sprint 63 review target (unmerged) |
 
 
 ## Current phase
 
-**Sprint 62 goal:** help guests compare the existing live desert and city tour offers before opening a detail page.
+**Sprint 63 goal:** make the existing room-booking journey discoverable at the point where a guest chooses to stay or explore experiences.
 
-- Render up to three facts from each experience's existing `at_a_glance` registry on the Desert Safari and Guided Jaisalmer hub cards.
-- Use a reusable, escaped partial with explicit field priorities; do not add prices, clock times, routes or inclusions that are not already in the source.
-- Add the existing Trip shortlist action to the city-tour cards while preserving the detail links and contact destinations.
-- Add browser coverage for fact completeness, preserved actions and mobile overflow.
-- No tour data pack, new photo, cPanel upload or deployment is in scope.
-
+- Add the existing Fort stay guide to the Stay submenu and footer, and link it from Home and the Rooms hero.
+- Give the guide above-the-fold room-availability and room-comparison actions plus a concise, three-step booking path.
+- Add a reusable, restrained room-first note to Packages, Desert Safari, Guided Jaisalmer and Car & City hub pages.
+- Keep the configured booking URL/token and contact routes unchanged; room prices, policies, hours, mail and production configuration remain owner-confirmation gates.
+- No new offer facts, external scripts, deployment or merge authority changes.
 
 ## Latest implementation entry
 
-- [2026-10-26] Sprint 61 / [PR #135](https://github.com/tchouhanjsm/garh-jaisal-website/pull/135) merged at `c3326fb320e7b78bd20f70e8829c9e6a54266829`. Site Checks, non-deploying QA and package preflight passed; merge-head Browser E2E was cancelled.
-- Sprint 62 is prepared on `feature/tour-decision-cards-20261026`; it adds source-backed comparison facts and city-tour shortlist actions, with exact-head CI required before review.
+- [2026-10-26] Sprint 62 / [PR #136](https://github.com/tchouhanjsm/garh-jaisal-website/pull/136) merged at `32c59b579ae7e528afe6644e90988892b35b5237`.
+- Sprint 63 / `feature/direct-booking-path-closure-20261026` introduces the shared room-first note and completes the internal discovery path for the existing stay guide. Exact-head CI is the verification gate.
 
 ## Remaining blockers
 

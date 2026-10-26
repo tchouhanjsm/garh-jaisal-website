@@ -146,6 +146,7 @@ require __DIR__ . '/include/page-head.php';
           <a class="button button-light" href="#room-directory">Explore the rooms</a>
         </div>
         <p class="rooms-hero-note">Inside Jaisalmer Fort · Ground and first-floor rooms</p>
+        <p class="rooms-hero-guide"><a href="book-rooms-in-jaisalmer.php">How direct booking works <span aria-hidden="true">→</span></a></p>
       </div>
 
       <aside class="rooms-hero-summary" aria-label="Stay at a glance">

@@ -3159,3 +3159,63 @@ html { scroll-padding-top: 5rem; }
     animation:none !important;
   }
 }
+
+
+/* Sprint 63 — direct-booking discovery on the stay and experience journeys. */
+.rooms-hero-guide{
+  margin:10px 0 0;
+  font-size:.84rem;
+}
+.rooms-hero-guide a{
+  color:#f1c97e;
+  font-weight:700;
+  text-underline-offset:.2em;
+}
+.stay-booking-note{
+  padding:24px 0;
+  border-block:1px solid var(--line);
+  background:var(--sand-light);
+}
+.stay-booking-note-inner{
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(250px,.65fr);
+  gap:clamp(20px,3vw,36px);
+  align-items:center;
+}
+.stay-booking-note-copy .eyebrow{
+  margin:0 0 8px;
+}
+.stay-booking-note-copy p:last-child{
+  max-width:58rem;
+  margin:0;
+  color:var(--ink);
+  line-height:1.65;
+}
+.stay-booking-note-copy strong{
+  font-weight:800;
+}
+.stay-booking-note-actions{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:10px;
+}
+.stay-booking-note-actions .button{
+  min-height:48px;
+}
+.stay-booking-note-actions .text-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:44px;
+  font-size:.84rem;
+  font-weight:800;
+  text-align:center;
+  text-underline-offset:.2em;
+}
+@media(max-width:760px){
+  .stay-booking-note-inner{
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+}

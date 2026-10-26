@@ -2,6 +2,7 @@
 $activePage = 'rooms';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $bookingUrl = $siteConfig['booking_url'];
+$whatsappUrl = $siteConfig['whatsapp_url'];
 $siteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $pageTitle = 'Staying inside Jaisalmer Fort | Garh Jaisal Haveli';
 $pageDescription = 'A practical guide to staying inside Jaisalmer Fort at Garh Jaisal Haveli: the walk from Fort Parking, rooftop meals, rooms, and desert trips.';
@@ -62,8 +63,46 @@ require __DIR__ . '/include/page-head.php';
       <p class="eyebrow">Stay guide</p>
       <h1><?= htmlspecialchars($headline, ENT_QUOTES, 'UTF-8') ?></h1>
       <p class="guide-lede">Jaisalmer Fort is a living fort. Garh Jaisal Haveli sits inside it, at Fort Kotari Para, so the stay is among the lanes rather than outside the walls.</p>
+      <div class="actions guide-hero-actions">
+        <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check room availability</a>
+        <a class="button button-light" href="room.php">Compare the rooms</a>
+      </div>
+      <p class="guide-hero-contact">Questions about room-specific facilities or arrival? <a href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Message us on WhatsApp</a> or <a href="contact.php">send an enquiry</a>.</p>
     </div>
   </section>
+
+  <section class="section booking-path" aria-labelledby="booking-path-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">A simple booking path</p>
+          <h2 id="booking-path-title">Choose the room, check the dates, then plan the rest.</h2>
+        </div>
+        <p>Room rates and availability are shown in the booking system. Tours, dining and arrival requests should be confirmed with the hotel for your travel dates.</p>
+      </div>
+      <ol class="booking-path-steps">
+        <li>
+          <span aria-hidden="true">01</span>
+          <h3>Compare the rooms</h3>
+          <p>Review room photos and listed facilities before choosing the room that fits your stay.</p>
+          <a href="room.php">Explore the rooms <span aria-hidden="true">→</span></a>
+        </li>
+        <li>
+          <span aria-hidden="true">02</span>
+          <h3>Check your dates</h3>
+          <p>Open the booking system to see the current rate and availability for your dates.</p>
+          <a href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check availability <span aria-hidden="true">↗</span></a>
+        </li>
+        <li>
+          <span aria-hidden="true">03</span>
+          <h3>Plan the extras</h3>
+          <p>Ask the hotel to confirm any desert experience, guided route, dining plan or arrival arrangement before relying on it.</p>
+          <a href="contact.php?topic=visit-planning">Ask about your plans <span aria-hidden="true">→</span></a>
+        </li>
+      </ol>
+    </div>
+  </section>
+
   <section class="section">
     <div class="site-shell guide-layout">
       <nav class="guide-jump" aria-label="On this page">
@@ -73,7 +112,7 @@ require __DIR__ . '/include/page-head.php';
         <a href="#desert">Desert</a>
         <a href="#book">Book</a>
       </nav>
-      <article>
+      <article class="guide-copy">
         <p class="eyebrow" id="arrive">Arrive</p>
         <h2>The last part is on foot.</h2>
         <p>Vehicles cannot enter the fort lanes, so guests continue on foot after Fort Parking. Contact the hotel before travel to confirm current reception hours and ask whether luggage or late-arrival assistance can be arranged; wait for confirmation before relying on it. See the <a href="direction.php">arrival guide</a> or <a href="contact.php?topic=arrival">send an arrival enquiry</a>.</p>

@@ -175,7 +175,9 @@ require __DIR__ . '/include/page-head.php';
     <ul><li>Departure, return and sunset timing for your date</li><li>Transport and pickup or meeting arrangements</li><li>Approximate camel-ride duration and route</li><li>Meal, cultural programme and overnight accommodation inclusions</li><li>Total price, availability and any conditions before payment</li></ul>
   </div>
 </section>
-<section class="section site-faq desert-faq" aria-labelledby="desert-faq-title">
+<?php require __DIR__ . '/include/ui/stay-booking-note.php'; ?>
+
+  <section class="section site-faq desert-faq" aria-labelledby="desert-faq-title">
     <div class="site-shell">
       <div class="section-head">
         <div><p class="eyebrow">Common questions</p><h2 id="desert-faq-title">Questions about choosing a desert safari.</h2></div>

@@ -223,7 +223,7 @@ require __DIR__ . '/include/page-head.php';
       <article class="conversion-journey__card"><span class="conversion-journey__step">02 / DISCOVER</span><h3>Meet the city beyond the postcard</h3><p>Ask about a Fort walk or guided route, with guide language and itinerary confirmed in advance.</p><a href="guided-jaisalmer-tour.php">Compare guided tours ↗</a></article>
       <article class="conversion-journey__card"><span class="conversion-journey__step">03 / DESERT</span><h3>Choose your Thar experience</h3><p>Compare sunset and overnight options, then confirm transport, timings and inclusions.</p><a href="desert-safari.php">Explore desert safaris ↗</a></article>
     </div>
-    <p class="conversion-note">Have a date or travel style in mind? <a href="contact.php?topic=visit-planning">Tell us what you are planning</a>.</p>
+    <p class="conversion-note">Have a date or travel style in mind? <a href="contact.php?topic=visit-planning">Tell us what you are planning</a>. New to booking? <a href="book-rooms-in-jaisalmer.php">Read our guide to staying inside the Fort</a>.</p>
   </div>
 </section>
   <section class="section home-rooms" id="rooms-preview" data-story-reveal aria-labelledby="rooms-preview-title">

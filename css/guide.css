@@ -127,3 +127,84 @@
     padding-top:36px;
   }
 }
+
+
+/* Sprint 63 — make the room-booking path visible before a guest scrolls. */
+.page-hero .guide-hero-contact{
+  max-width:42rem;
+  margin:18px 0 0;
+  color:#ded3c8;
+  font-size:.88rem;
+  line-height:1.6;
+}
+.page-hero .guide-hero-contact a{
+  color:#f1c97e;
+  font-weight:700;
+  text-underline-offset:.2em;
+}
+.guide-hero-actions .button{
+  min-height:48px;
+}
+.booking-path{
+  background:#fff;
+}
+.booking-path-steps{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.booking-path-steps li{
+  min-width:0;
+  padding:clamp(20px,2.6vw,30px);
+  border:1px solid var(--line);
+  background:var(--cream);
+}
+.booking-path-steps li > span{
+  display:inline-grid;
+  place-items:center;
+  width:38px;
+  height:38px;
+  margin-bottom:18px;
+  border:1px solid rgba(120,74,45,.35);
+  border-radius:50%;
+  color:var(--brown);
+  font-size:.76rem;
+  font-weight:800;
+  letter-spacing:.08em;
+}
+.booking-path-steps h3{
+  margin:0 0 9px;
+  color:var(--ink);
+  font-size:1.18rem;
+}
+.booking-path-steps p{
+  margin:0 0 16px;
+  font-size:.9rem;
+}
+.booking-path-steps a{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:44px;
+  color:var(--brown);
+  font-size:.85rem;
+  font-weight:800;
+  text-underline-offset:.2em;
+}
+.guide-hero-contact a:focus-visible,
+.booking-path-steps a:focus-visible{
+  outline:2px solid currentColor;
+  outline-offset:4px;
+}
+@media(max-width:800px){
+  .booking-path-steps{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  .booking-path-steps li{
+    padding:20px;
+  }
+}
