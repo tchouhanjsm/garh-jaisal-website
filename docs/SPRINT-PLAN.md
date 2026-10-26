@@ -60,6 +60,7 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 49 | Exact-head browser evidence and repository reproducibility | ✓ PRs #100 and #101 merged; all nine checks passed on current main `dc1d7653eecc61fec72489015340d61ae8e52386`. Responsive image delivery and committed Playwright lockfile remain follow-up work; see the post-merge disposition in the full audit. |
 | 50 | Responsive image delivery and reproducible browser dependencies | ✓ PRs #102–#104 merged; candidate delivery, Gallery lightbox, breadcrumb fix, pinned Playwright lockfile and layout-aware `sizes` landed. Exact-main PHP/site checks, Browser E2E, package preflight/build and responsive-image review passed on `f810d79547a04c8fe3d5b84612eafdedf88545c0` after PR #105 merged. |
 | 51 | Directions arrival-journey UX refresh | ◐ Improve the hero with an arrival-summary card, add accessible in-page section navigation, style the parking-to-door steps as an ordered route, and add responsive Browser E2E coverage. Preserve `direction.php`, existing map/contact destinations and owner-confirmed copy; verify exact-head CI and screenshot evidence before review approval. |
+| 55 | Structured room/experience/topic enquiry handoff | In PR #129: resolve registered context from a short-lived server-side session token; include allowlisted room/experience/topic labels in the private lead record and owner notification; preserve context during recoverable form retries. |
 
 ---
 
@@ -760,3 +761,16 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Exact-head acceptance: PHP 7.4/8.2 Site Checks, responsive-image review, package preflight, non-deploying Staging QA, full Browser E2E and screenshot/evidence artifacts. PR #110 is open; verification is pending until all four workflows pass on the exact head.
 - No cPanel access, staging upload, merge or production deployment is part of this phase.
 
+
+
+## Sprint 55 — structured enquiry handoff (PR #129)
+
+**Commercial goal:** give the hotel enough trusted context to respond quickly when a guest asks about a particular room, live experience or visit-planning topic.
+
+- Extract existing Contact topics into one shared registry and add a resolver that accepts only known room slugs, published experience details and explicit Contact topics. All display labels come from the server registries.
+- Bind each rendered form to a short-lived opaque token held server-side in the session. Keep multi-tab behaviour bounded, expire tokens after two hours, and trust no posted label/type/slug.
+- Persist the resolved type, slug and label with the existing private lead record. Add the same context to the owner-notification subject and escaped email table so room/experience enquiries are distinguishable without opening every message.
+- On recoverable validation, CAPTCHA, rate-limit or storage errors, return to the original trusted enquiry context. Keep invalid-CSRF/non-POST paths generic and consume the context token only after private storage succeeds.
+- Regression coverage walks the registry, unknown/unsafe slug fallbacks, context-preserving retry URLs, and token presence on the existing room and experience journeys. Browser tests never submit or send an enquiry.
+- Preserve the external booking-engine URL and existing GA4 privacy boundary; no prices, availability, policies or unconfirmed operational facts are introduced.
+- Acceptance is pending until PHP 7.4/8.2 Site Checks, strict image and sitemap checks, responsive-image review, package preflight, non-deploying Staging QA and complete Browser E2E/screenshot artifacts pass on the exact PR head. No cPanel upload or production deployment is part of the phase.

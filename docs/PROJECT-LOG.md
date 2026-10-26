@@ -6,26 +6,27 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-22 |
-| Current phase | Sprint 54 — visual photo library for local Content Studio |
-| Verified main SHA | 2a1797b40716a71ff9ab4b1c3d6e5c6e1d2773dc (PR #115 merge commit) |
-| Latest merged PR | [#115 — keep unapproved landing pages private](https://github.com/tchouhanjsm/garh-jaisal-website/pull/115) |
-| Main Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39733975303) |
-| PR #115 Browser E2E | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39732186406); exact feature head |
-| PR #115 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39732186351); artifact only |
-| PR #115 non-deploying QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/39732186373); not external-host validation |
-| Recent merged work | PR #114 Landing Page Builder; #115 public Draft route guard |
-| Active phase branch | `feat/content-studio-visual-photo-library-20261022`; exact-head CI pending |
+| Last updated | 2026-10-26 |
+| Current phase | Sprint 55 — structured room/experience/topic enquiry handoff |
+| Verified main SHA | 451d34acfa2ad5c09e8d06ac577da480e65de916 (PR #128 merge commit) |
+| Latest merged PR | [#128 — measure successful enquiries and contextual lead starts](https://github.com/tchouhanjsm/garh-jaisal-website/pull/128) |
+| PR #128 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40266287508); PHP 7.4 and 8.2 |
+| PR #128 Browser E2E | [CANCELLED](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40266287564); full suite result not verified |
+| PR #128 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40266287605); package artifact only |
+| PR #128 non-deploying QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40266287555); not external-host validation |
+| Recent merged work | PR #127 conversion-led website/mobile UX; PR #128 success-only enquiry conversion measurement |
+| Active phase branch | feature/structured-enquiry-context-20261026; exact-head acceptance pending |
 
 ## Current phase
 
-**Sprint 54 goal:** let hotel staff visually find and reuse existing source photos without needing to know or type repository file paths.
+**Sprint 55 goal:** carry the guest's selected room, live experience or approved Contact topic from the public form into the hotel's private lead record and email notification.
 
-- Add a local-only `GET /api/assets` inventory with supported raster types, normalized `img/...` paths and file sizes.
-- Exclude generated responsive derivatives, hidden files and symbolic-link paths; keep the local-only loopback boundary and safe image CSP.
-- Reuse one accessible photo picker for tour/blog/landing-page/Gallery hero fields and dynamic landing-page image/text sections.
-- Keep alternative text independent and required; picking a photo never publishes, changes metadata, alters source photos or deploys.
-- Acceptance is pending until PHP 7.4/8.2 Site Checks, strict image/sitemap checks, package preflight, non-deploying QA and complete Browser E2E pass on the exact PR head.
+- Extract Contact topic definitions into a single shared registry; resolve every context from trusted registries, never from posted labels.
+- Issue an opaque, two-hour session-bound context token per form view, with a bounded token set so multiple open tabs retain their own intent.
+- Persist the resolved type, slug and label in the existing private lead record and distinguish the item in the email subject/table.
+- Preserve the known context on recoverable validation/CAPTCHA/rate-limit/storage errors; consume the token only after a lead is stored.
+- Tests cover registry allowlists, unsafe/unknown fallbacks, retry paths and browser token issuance without submitting an actual enquiry.
+- Exact-head PHP 7.4/8.2 checks, strict asset/sitemap checks, package preflight, non-deploying QA and Browser E2E must all pass before this PR is ready for owner review. Production staging/deployment remains owner-controlled.
 
 ## Remaining blockers
 
