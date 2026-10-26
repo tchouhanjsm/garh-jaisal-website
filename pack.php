@@ -21,6 +21,33 @@ $sortExperienceSlugs = static function (&$slugs) use ($visibleExperiences) {
 };
 $sortExperienceSlugs($desertItems);
 $sortExperienceSlugs($guideItems);
+
+$experienceCardCount = count($desertItems) + count($guideItems);
+$experienceCategories = [];
+$experienceDurations = [];
+foreach (array_merge($desertItems, $guideItems) as $slug) {
+    $item = $experiences[$slug];
+    $category = (string) ($item['category'] ?? '');
+    $duration = (string) ($item['duration_type'] ?? '');
+    if ($category !== '' && !in_array($category, $experienceCategories, true)) {
+        $experienceCategories[] = $category;
+    }
+    if ($duration !== '' && $duration !== 'hub' && !in_array($duration, $experienceDurations, true)) {
+        $experienceDurations[] = $duration;
+    }
+}
+$durationOrder = ['half-day' => 10, 'full-day' => 20, 'overnight' => 30];
+usort($experienceDurations, static function ($left, $right) use ($durationOrder) {
+    return ($durationOrder[$left] ?? 999) <=> ($durationOrder[$right] ?? 999);
+});
+$experienceDurationLabel = static function ($duration) {
+    $labels = [
+        'half-day' => 'Half-day',
+        'full-day' => 'Full-day',
+        'overnight' => 'Overnight',
+    ];
+    return $labels[$duration] ?? ucwords(str_replace('-', ' ', (string) $duration));
+};
 ?>
 <!doctype html>
 <html lang="en">
@@ -122,6 +149,53 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
+  <section class="section experience-finder-section" data-experience-finder hidden aria-labelledby="experience-finder-title">
+    <div class="site-shell">
+      <div class="experience-finder-panel">
+        <div class="experience-finder-heading">
+          <p class="eyebrow">Narrow your options</p>
+          <h2 id="experience-finder-title">Find an experience that fits your trip.</h2>
+          <p>Search the published tour descriptions, then narrow by category or the duration type listed for each experience.</p>
+        </div>
+
+        <div class="experience-finder-controls">
+          <label class="experience-finder-search">
+            <span>Search experiences</span>
+            <input type="search" data-experience-search placeholder="Try “camel safari” or “Swiss tent”" autocomplete="off">
+          </label>
+
+          <label class="experience-finder-category">
+            <span>Category</span>
+            <select data-experience-category>
+              <option value="all">All categories</option>
+              <?php foreach ($experienceCategories as $category): ?>
+                <option value="<?= htmlspecialchars($category, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars(ucfirst($category), ENT_QUOTES, 'UTF-8') ?></option>
+              <?php endforeach; ?>
+            </select>
+          </label>
+
+          <label class="experience-finder-duration">
+            <span>Duration type</span>
+            <select data-experience-duration>
+              <option value="all">Any duration</option>
+              <?php foreach ($experienceDurations as $duration): ?>
+                <option value="<?= htmlspecialchars($duration, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($experienceDurationLabel($duration), ENT_QUOTES, 'UTF-8') ?></option>
+              <?php endforeach; ?>
+            </select>
+          </label>
+
+          <button class="experience-finder-reset" type="button" data-experience-reset>Clear filters</button>
+        </div>
+
+        <p class="experience-finder-status" data-experience-result-status role="status" aria-live="polite"><?= $experienceCardCount ?> experiences to explore.</p>
+        <div class="experience-finder-empty" data-experience-empty hidden>
+          <p><strong>No experiences match those filters.</strong> Try a different search or clear the filters to see all published options.</p>
+          <button class="experience-finder-reset" type="button" data-experience-reset>Clear filters</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section" id="desert-options" data-story-reveal aria-labelledby="desert-options-title">
     <div class="site-shell">
       <div class="section-head">
@@ -134,10 +208,11 @@ require __DIR__ . '/include/page-head.php';
 
       <div class="experience-card-grid">
         <?php foreach ($desertItems as $slug): $item = $experiences[$slug]; ?>
-          <article class="experience-card">
+          <article class="experience-card" data-experience-filter-card data-experience-category="<?= htmlspecialchars((string) ($item['category'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" data-experience-duration="<?= htmlspecialchars((string) ($item['duration_type'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
             <a href="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>.php">
               <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy">
               <div>
+                <p class="experience-duration-label"><?= htmlspecialchars($experienceDurationLabel((string) ($item['duration_type'] ?? '')), ENT_QUOTES, 'UTF-8') ?></p>
                 <p class="experience-card-kicker"><?= htmlspecialchars($item['eyebrow'], ENT_QUOTES, 'UTF-8') ?></p>
                 <h3><?= htmlspecialchars($item['h1'], ENT_QUOTES, 'UTF-8') ?></h3>
                 <p><?= htmlspecialchars($item['summary'], ENT_QUOTES, 'UTF-8') ?></p>
@@ -167,10 +242,11 @@ require __DIR__ . '/include/page-head.php';
 
       <div class="experience-card-grid experience-card-grid--two">
         <?php foreach ($guideItems as $slug): $item = $experiences[$slug]; ?>
-          <article class="experience-card">
+          <article class="experience-card" data-experience-filter-card data-experience-category="<?= htmlspecialchars((string) ($item['category'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" data-experience-duration="<?= htmlspecialchars((string) ($item['duration_type'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
             <a href="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>.php">
               <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy">
               <div>
+                <p class="experience-duration-label"><?= htmlspecialchars($experienceDurationLabel((string) ($item['duration_type'] ?? '')), ENT_QUOTES, 'UTF-8') ?></p>
                 <p class="experience-card-kicker"><?= htmlspecialchars($item['eyebrow'], ENT_QUOTES, 'UTF-8') ?></p>
                 <h3><?= htmlspecialchars($item['h1'], ENT_QUOTES, 'UTF-8') ?></h3>
                 <p><?= htmlspecialchars($item['summary'], ENT_QUOTES, 'UTF-8') ?></p>

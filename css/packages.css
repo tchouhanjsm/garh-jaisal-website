@@ -545,3 +545,160 @@
     width:calc(100% - 40px);
   }
 }
+
+
+/* Sprint 58 — registry-backed package discovery controls. */
+main.thar-sunset-story--experiences .experience-finder-section[hidden],
+main.thar-sunset-story--experiences .experience-finder-empty[hidden],
+main.thar-sunset-story--experiences #desert-options[hidden],
+main.thar-sunset-story--experiences #city-options[hidden],
+main.thar-sunset-story--experiences [data-experience-filter-card][hidden]{
+  display:none!important;
+}
+main.thar-sunset-story--experiences .experience-finder-panel{
+  padding:clamp(20px,3vw,34px);
+  border:1px solid rgba(217,164,65,.55);
+  border-radius:var(--radius-card,6px);
+  background:linear-gradient(135deg,#f7efe0,#fffdfa);
+  box-shadow:0 12px 30px rgba(35,26,20,.07);
+}
+main.thar-sunset-story--experiences .experience-finder-heading{
+  max-width:780px;
+}
+main.thar-sunset-story--experiences .experience-finder-heading .eyebrow{
+  margin-bottom:8px;
+  color:#72502c;
+}
+main.thar-sunset-story--experiences .experience-finder-heading h2{
+  margin:0 0 10px;
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:clamp(1.8rem,3vw,2.6rem);
+  line-height:1.15;
+  text-wrap:balance;
+}
+main.thar-sunset-story--experiences .experience-finder-heading p:last-child{
+  margin:0;
+  max-width:68ch;
+  color:#62574e;
+  line-height:1.6;
+}
+main.thar-sunset-story--experiences .experience-finder-controls{
+  display:grid;
+  grid-template-columns:minmax(220px,1.45fr) minmax(150px,.8fr) minmax(150px,.8fr) auto;
+  gap:14px;
+  align-items:end;
+  margin-top:24px;
+}
+main.thar-sunset-story--experiences .experience-finder-controls label{
+  display:grid;
+  gap:7px;
+  min-width:0;
+  color:#4d352a;
+  font-size:.88rem;
+  font-weight:750;
+}
+main.thar-sunset-story--experiences .experience-finder-controls input,
+main.thar-sunset-story--experiences .experience-finder-controls select{
+  width:100%;
+  min-width:0;
+  min-height:48px;
+  padding:11px 12px;
+  border:1px solid rgba(91,26,43,.3);
+  border-radius:5px;
+  background:#fffdfa;
+  color:#231a14;
+  font:inherit;
+}
+main.thar-sunset-story--experiences .experience-finder-reset{
+  display:inline-flex;
+  min-height:44px;
+  align-items:center;
+  justify-content:center;
+  padding:10px 13px;
+  border:1px solid rgba(91,26,43,.32);
+  border-radius:5px;
+  background:#fffdfa;
+  color:#5b1a2b;
+  font:inherit;
+  font-size:.86rem;
+  cursor:pointer;
+}
+main.thar-sunset-story--experiences .experience-finder-reset:hover{
+  border-color:#5b1a2b;
+  background:#efe2d3;
+}
+main.thar-sunset-story--experiences .experience-finder-controls input:focus-visible,
+main.thar-sunset-story--experiences .experience-finder-controls select:focus-visible,
+main.thar-sunset-story--experiences .experience-finder-reset:focus-visible{
+  outline:3px solid #b67b1b;
+  outline-offset:3px;
+}
+main.thar-sunset-story--experiences .experience-finder-status{
+  margin:18px 0 0;
+  color:#62574e;
+  font-size:.9rem;
+  font-weight:750;
+}
+main.thar-sunset-story--experiences .experience-finder-empty{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:12px;
+  padding:14px 16px;
+  border-inline-start:4px solid #b67b1b;
+  background:#fffdfa;
+}
+main.thar-sunset-story--experiences .experience-finder-empty p{
+  margin:0;
+  line-height:1.5;
+}
+main.thar-sunset-story--experiences .experience-duration-label{
+  display:inline-flex;
+  align-items:center;
+  margin:0 0 8px;
+  padding:5px 8px;
+  border:1px solid rgba(91,26,43,.18);
+  border-radius:3px;
+  background:#f7efe0;
+  color:#5b1a2b;
+  font-size:.7rem;
+  font-weight:800;
+  letter-spacing:.06em;
+  line-height:1.2;
+  text-transform:uppercase;
+}
+@media(max-width:1020px){
+  main.thar-sunset-story--experiences .experience-finder-controls{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  }
+  main.thar-sunset-story--experiences .experience-finder-search{
+    grid-column:1/-1;
+  }
+  main.thar-sunset-story--experiences .experience-finder-reset{
+    justify-self:start;
+  }
+}
+@media(max-width:760px){
+  main.thar-sunset-story--experiences .experience-finder-panel{
+    padding:20px 15px;
+  }
+  main.thar-sunset-story--experiences .experience-finder-controls{
+    grid-template-columns:minmax(0,1fr);
+    gap:14px;
+    margin-top:18px;
+  }
+  main.thar-sunset-story--experiences .experience-finder-search{
+    grid-column:auto;
+  }
+  main.thar-sunset-story--experiences .experience-finder-empty{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  main.thar-sunset-story--experiences .experience-card img{
+    transition:none!important;
+  }
+}

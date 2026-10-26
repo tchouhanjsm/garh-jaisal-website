@@ -556,6 +556,68 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Packages: progressively enhance the published experience cards with search and filters.
+  // Draft/hidden registry entries are never rendered into the public list or filter choices.
+  const experienceFinder = document.querySelector('[data-experience-finder]');
+  if (experienceFinder) {
+    const experienceCards = Array.from(document.querySelectorAll('[data-experience-filter-card]'));
+    const categorySections = [
+      document.querySelector('#desert-options'),
+      document.querySelector('#city-options')
+    ].filter(Boolean);
+    const searchInput = experienceFinder.querySelector('[data-experience-search]');
+    const categorySelect = experienceFinder.querySelector('[data-experience-category]');
+    const durationSelect = experienceFinder.querySelector('[data-experience-duration]');
+    const resetButtons = Array.from(experienceFinder.querySelectorAll('[data-experience-reset]'));
+    const resultStatus = experienceFinder.querySelector('[data-experience-result-status]');
+    const emptyState = experienceFinder.querySelector('[data-experience-empty]');
+
+    const normalizeExperienceText = (value) => String(value || '').toLowerCase().replace(/\s+/g, ' ').trim();
+
+    const applyExperienceFilters = () => {
+      const terms = normalizeExperienceText(searchInput ? searchInput.value : '').split(' ').filter(Boolean);
+      const category = categorySelect ? categorySelect.value : 'all';
+      const duration = durationSelect ? durationSelect.value : 'all';
+      let visibleCount = 0;
+
+      experienceCards.forEach((card) => {
+        const cardText = normalizeExperienceText(card.textContent);
+        const matchesSearch = terms.every((term) => cardText.includes(term));
+        const matchesCategory = category === 'all' || card.dataset.experienceCategory === category;
+        const matchesDuration = duration === 'all' || card.dataset.experienceDuration === duration;
+        const visible = matchesSearch && matchesCategory && matchesDuration;
+        card.hidden = !visible;
+        if (visible) visibleCount++;
+      });
+
+      categorySections.forEach((section) => {
+        const cards = Array.from(section.querySelectorAll('[data-experience-filter-card]'));
+        section.hidden = cards.length === 0 || cards.every((card) => card.hidden);
+      });
+
+      if (resultStatus) {
+        resultStatus.textContent = 'Showing ' + visibleCount + ' of ' + experienceCards.length + ' experiences.';
+      }
+      if (emptyState) emptyState.hidden = visibleCount > 0;
+    };
+
+    const resetExperienceFilters = () => {
+      if (searchInput) searchInput.value = '';
+      if (categorySelect) categorySelect.value = 'all';
+      if (durationSelect) durationSelect.value = 'all';
+      applyExperienceFilters();
+    };
+
+    if (experienceCards.length && searchInput && categorySelect && durationSelect) {
+      searchInput.addEventListener('input', applyExperienceFilters);
+      categorySelect.addEventListener('change', applyExperienceFilters);
+      durationSelect.addEventListener('change', applyExperienceFilters);
+      resetButtons.forEach((button) => button.addEventListener('click', resetExperienceFilters));
+      experienceFinder.hidden = false;
+      applyExperienceFilters();
+    }
+  }
+
   // Session-only Trip tray: store product choices, never personal data or form fields.
   const tripTray = document.querySelector('[data-trip-tray]');
   if (tripTray) {
