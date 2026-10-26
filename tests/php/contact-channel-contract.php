@@ -35,7 +35,7 @@ $checks = [
     'roof.php' => ['$hotelPhone = (string) ($siteConfig[\'hotel_phone\'] ?? \'\');'],
     'include/schema.php' => [
         '$telephone = (string) ($siteConfig[\'hotel_phone\'] ?? \'\');',
-        "$phoneDigits = preg_replace('/\\D+/', '', $telephone);",
+        'preg_replace(\'/\\D+/\', \'\', $telephone);',
         "'telephone' => \$telephone,",
     ],
     'include/page-head.php' => ['gj_schema_hotel($siteUrl, $siteConfig)'],
@@ -60,7 +60,7 @@ foreach ($checks as $file => $markers) {
     foreach ($markers as $marker) {
         if (strpos($source, $marker) === false) $errors[] = $file . ' must use shared contact config; missing ' . $marker;
     }
-    foreach ($legacy[$file] as $legacyHref) {
+    foreach (($legacy[$file] ?? []) as $legacyHref) {
         if (strpos($source, $legacyHref) !== false) $errors[] = $file . ' still hard-codes ' . $legacyHref;
     }
 }
