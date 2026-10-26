@@ -110,3 +110,47 @@ test('room booking and enquiry actions remain usable without horizontal overflow
   await firstCard.locator('a.room-enquiry-link').focus();
   await expect(firstCard.locator('a.room-enquiry-link')).toBeFocused();
 });
+
+
+test('room finder combines search, floor and registry-backed feature filters with zero-result recovery', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Room finder interaction contract runs once on desktop-1280');
+
+  const response = await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
+  expect(response, 'Rooms should return an HTTP response').not.toBeNull();
+  expect(response.status(), 'Rooms should load successfully').toBeLessThan(400);
+
+  const finder = page.locator('[data-room-finder]');
+  const visibleCards = page.locator('.room-card:visible');
+  await expect(finder, 'progressively enhanced room finder').toBeVisible();
+  await expect(visibleCards).toHaveCount(EXPECTED_ROOM_COUNT);
+  await expect(finder.locator('[data-room-result-status]')).toHaveText('Showing 7 of 7 rooms.');
+
+  const search = finder.locator('[data-room-search]');
+  await search.fill('BlueSky');
+  await expect(visibleCards).toHaveCount(1);
+  await expect(visibleCards.locator('h3')).toHaveText('BlueSky Room');
+
+  await search.fill('room-name-with-no-match');
+  await expect(visibleCards).toHaveCount(0);
+  await expect(finder.locator('[data-room-empty]')).toBeVisible();
+  await expect(finder.locator('[data-room-result-status]')).toHaveText('Showing 0 of 7 rooms.');
+  await finder.locator('[data-room-reset]').first().click();
+  await expect(visibleCards).toHaveCount(EXPECTED_ROOM_COUNT);
+  await expect(finder.locator('[data-room-empty]')).toBeHidden();
+
+  const windowSeatFilter = finder.locator('button[data-room-filter-feature="window seat"]');
+  await expect(windowSeatFilter, 'feature filter is derived from room data').toBeVisible();
+  await windowSeatFilter.click();
+  await expect(windowSeatFilter).toHaveAttribute('aria-pressed', 'true');
+  await expect(visibleCards).toHaveCount(5);
+
+  await finder.locator('[data-room-floor-filter]').selectOption('ground-floor');
+  await expect(visibleCards).toHaveCount(2);
+  await expect(visibleCards.locator('h3')).toHaveText(['Rising Sun Room', 'Scarlet Room']);
+  await expect(finder.locator('[data-room-result-status]')).toHaveText('Showing 2 of 7 rooms.');
+
+  await finder.locator('[data-room-reset]').first().click();
+  await expect(visibleCards).toHaveCount(EXPECTED_ROOM_COUNT);
+  await expect(finder.locator('[data-room-floor-filter]')).toHaveValue('all');
+  await expect(windowSeatFilter).toHaveAttribute('aria-pressed', 'false');
+});

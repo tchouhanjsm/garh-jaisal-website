@@ -786,3 +786,16 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Give the proof strip a refined, responsive visual treatment while retaining the existing art-directed photo sources, brand palette, no-library rule and reduced-motion/accessibility conventions.
 - Extend the five-viewport hero browser review to verify visible first-screen hierarchy, correct destinations, facts visibility, mobile CTA-dock clearance and zero horizontal overflow.
 - Acceptance: exact-head Site Checks including PHP 7.4/8.2, all browser E2E/screenshots, responsive-image review, and safe package/static checks pass. No cPanel action or production deployment is in scope.
+
+
+## Sprint 57 — searchable room discovery and shortlist UX (PR #131 in review)
+
+**Commercial goal:** help guests compare the existing rooms quickly, so the route from the homepage to a relevant room and then to booking or a room-specific enquiry takes fewer steps.
+
+- Add a progressive-enhancement room finder to the existing Rooms directory: search by room name, description or listed feature; filter by floor; and filter by one registry-backed feature.
+- Build feature choices and room counts directly from `include/rooms-data.php`. Do not duplicate room facts, infer facilities, add prices or imply live availability.
+- Show a live result count, hide empty floor groups and their jump links while filtering, and offer a clear no-results/reset state. With JavaScript disabled, all existing room cards and actions remain available.
+- Preserve every public URL and room anchor, existing photography/captions, room-specific Contact context, booking-engine destination/token, page metadata/schema, trip-shortlist controls and image budgets.
+- Add Playwright coverage for search, combined floor/feature filters, zero-result recovery, reset behavior, keyboard-operable controls and the unchanged booking/enquiry journey. Keep the existing screenshot-sheet and responsive-viewport coverage.
+- Exact-head acceptance: PHP 7.4/8.2 Site Checks, strict image and sitemap checks, responsive-image review, non-deploying QA, package preflight, full Browser E2E and screenshot evidence. Local PHP/Playwright execution must be reported honestly if not run in this connector session.
+- No cPanel action, external staging upload or production deployment is in scope. Owner approval of business facts, visual sign-off and production parity remain separate release gates.
