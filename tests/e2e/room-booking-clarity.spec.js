@@ -66,6 +66,8 @@ test('every room card preserves the primary booking and secondary selected-room 
     expect(enquiryResponse, room.name + ': Contact should return an HTTP response').not.toBeNull();
     expect(enquiryResponse.status(), room.name + ': Contact should load successfully').toBeLessThan(400);
     await expect(page.locator('.contact-room-context strong'), room.name + ': enquiry context').toHaveText(room.name);
+    await expect(page.locator('input[name="enquiry_context_token"]'), room.name + ': opaque context token')
+      .toHaveValue(/^[a-f0-9]{32}$/);
     const message = await page.locator('#message').inputValue();
     expect(message).toContain(room.name);
     expect(message).toContain('current availability, rate and room features');
