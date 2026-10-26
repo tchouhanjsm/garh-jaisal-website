@@ -274,8 +274,22 @@ document.addEventListener('DOMContentLoaded', () => {
         'two-day-itinerary', 'three-day-itinerary', 'honeymoon'
       ];
       let enquiryContext = 'general';
-      if (contactForm.querySelector('.contact-room-context')) {
+      const contextParameters = {};
+      const experienceContext = contactForm.querySelector('.contact-experience-context');
+      const roomContext = contactForm.querySelector('.contact-room-context');
+
+      if (experienceContext) {
+        enquiryContext = 'experience';
+        const experienceSlug = experienceContext.dataset.experienceSlug || '';
+        if (/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(experienceSlug)) {
+          contextParameters.experience_slug = experienceSlug;
+        }
+      } else if (roomContext) {
         enquiryContext = 'room';
+        const roomSlug = roomContext.dataset.roomSlug || '';
+        if (/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(roomSlug)) {
+          contextParameters.room_slug = roomSlug;
+        }
       } else if (requestedTopic === 'arrival' || requestedTopic === 'dining') {
         enquiryContext = requestedTopic;
       } else if (travelPlanningTopics.includes(requestedTopic)) {
@@ -287,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
         page_path: window.location.pathname || '/',
         page_context: 'contact',
         enquiry_context: enquiryContext
-      }, attributionForCurrentPage()));
+      }, contextParameters, attributionForCurrentPage()));
     });
   }
 

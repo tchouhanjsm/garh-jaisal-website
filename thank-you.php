@@ -1,23 +1,26 @@
 <?php
 require_once __DIR__ . '/include/session.php';
+
 $enquiryReceived = !empty($_SESSION['enquiry_received']);
 $enquiryReference = is_string($_SESSION['enquiry_reference'] ?? null) ? $_SESSION['enquiry_reference'] : '';
 $enquiryNotificationSent = !empty($_SESSION['enquiry_notification_sent']);
+
+// Consume the success flag before rendering. Refreshing this page must not emit
+// a second generate_lead event or repeat the one-time enquiry confirmation.
 unset($_SESSION['enquiry_received'], $_SESSION['enquiry_reference'], $_SESSION['enquiry_notification_sent']);
+
+$siteConfig = require __DIR__ . '/include/site-config.php';
+$page = [
+    'title' => 'Thank you | Garh Jaisal Haveli',
+    'description' => 'Confirmation page for an enquiry to Garh Jaisal Haveli.',
+    'path' => '/thank-you.php',
+    'robots' => 'noindex,nofollow',
+    'css' => [],
+];
 ?>
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Thank you | Garh Jaisal Haveli</title>
-  <meta name="robots" content="noindex, nofollow">
-  <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/garh-v2.css">
-</head>
+<?php require __DIR__ . '/include/page-head.php'; ?>
 <body>
 <?php
 $activePage = '';
@@ -42,6 +45,21 @@ include __DIR__ . '/include/header-v2.php';
     <p><a class="button button-primary" href="contact.php">Contact the hotel</a></p>
   </div>
 </main>
+
+<?php if ($enquiryReceived): ?>
+<script>
+  // This confirmation is reached only after mail.php has validated and stored
+  // the enquiry. Never send a guest's contact details or free-text message to GA4.
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'generate_lead', {
+      lead_source: 'hotel_website_contact_form',
+      method: 'contact_form',
+      page_context: 'contact',
+      transport_type: 'beacon'
+    });
+  }
+</script>
+<?php endif; ?>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
 <script src="js/garh-v2.js"></script>
