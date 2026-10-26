@@ -713,7 +713,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const base = sendLink.dataset.whatsappBase || '';
       try {
         const destination = new URL(base, window.location.href);
-        const selections = tripItems.map(item => '- ' + item.title).join('\\n');
+        const selections = tripItems.map(item => '- ' + item.title).join('\n');
         const startDate = tripStartDate ? tripStartDate.value.trim() : '';
         const endDate = tripEndDate ? tripEndDate.value.trim() : '';
         const travellerValue = tripTravellers ? tripTravellers.value.trim() : '';
@@ -727,10 +727,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const travellerCount = travellerValue !== '' && Number.isSafeInteger(Number(travellerValue)) && Number(travellerValue) >= 1
           ? String(Number(travellerValue))
           : 'to be confirmed';
-        const message = "Hello, I'd like to plan a Jaisalmer trip with Garh Jaisal Haveli.\\n" +
-          "Please share current rates, availability and confirmed arrangements for these options:\\n" +
-          selections + "\\nTravel dates: " + dateRange + ".\\nNumber of travellers: " + travellerCount +
-          ".\\nPlease confirm what can be arranged for my dates.";
+        const message = "Hello, I'd like to plan a Jaisalmer trip with Garh Jaisal Haveli.\n" +
+          "Please share current rates, availability and confirmed arrangements for these options:\n" +
+          selections + "\nTravel dates: " + dateRange + ".\nNumber of travellers: " + travellerCount +
+          ".\nPlease confirm what can be arranged for my dates.";
         destination.searchParams.set('text', message);
         sendLink.href = destination.toString();
       } catch {
