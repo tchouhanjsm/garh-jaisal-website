@@ -170,3 +170,127 @@ main.thar-sunset-story--catalogue .product-card-media img{
     margin:8px 8px 0;
   }
 }
+
+
+/* Sprint 56 — the homepage's first screen should answer what, where and next in one glance. */
+main.thar-sunset-story--home .hero-content{
+  max-width:860px;
+  padding-top:clamp(108px,15vh,158px);
+  padding-bottom:clamp(30px,5vh,54px);
+}
+main.thar-sunset-story--home .hero-content > .eyebrow{
+  margin-bottom:12px;
+  color:#f4d6a1;
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+main.thar-sunset-story--home .hero-content h1{
+  max-width:14ch;
+  margin-bottom:18px;
+  font-size:clamp(2.4rem,5vw,3.75rem);
+  line-height:.99;
+  letter-spacing:-.04em;
+  text-wrap:balance;
+}
+main.thar-sunset-story--home .hero-content > p:not(.eyebrow){
+  max-width:54ch;
+  margin-bottom:24px;
+  font-size:clamp(1rem,1.3vw,1.12rem);
+  line-height:1.55;
+  text-wrap:pretty;
+}
+main.thar-sunset-story--home .hero-content .actions{
+  gap:12px;
+}
+main.thar-sunset-story--home .hero-content .actions .button{
+  min-height:50px;
+  letter-spacing:.01em;
+}
+main.thar-sunset-story--home .hero-content .button-primary{
+  box-shadow:0 7px 22px rgba(20,18,43,.2);
+}
+main.thar-sunset-story--home .home-hero-facts{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:0;
+  margin-top:24px;
+  padding:8px;
+  border:1px solid rgba(217,164,65,.7);
+  border-radius:var(--radius-card,6px);
+  background:rgba(247,239,224,.97);
+  box-shadow:0 12px 30px rgba(20,18,43,.18);
+  color:var(--ink);
+}
+main.thar-sunset-story--home .home-hero-facts .at-a-glance__item{
+  padding:9px 14px;
+  border-inline-start:1px solid rgba(91,26,43,.18);
+}
+main.thar-sunset-story--home .home-hero-facts .at-a-glance__item:first-child{
+  border-inline-start:0;
+}
+main.thar-sunset-story--home .home-hero-facts .at-a-glance__label{
+  margin-bottom:4px;
+  color:#72502c;
+  font-size:.68rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  line-height:1.2;
+  text-transform:uppercase;
+}
+main.thar-sunset-story--home .home-hero-facts .at-a-glance__value{
+  color:#231a14;
+  font-size:.98rem;
+  font-weight:700;
+  line-height:1.3;
+}
+@media(max-width:760px){
+  main.thar-sunset-story--home .hero-content{
+    padding-top:clamp(92px,14vh,122px);
+    padding-bottom:28px;
+  }
+  main.thar-sunset-story--home .hero-content h1{
+    max-width:13ch;
+    margin-bottom:16px;
+    font-size:clamp(2.4rem,10vw,2.75rem);
+  }
+  main.thar-sunset-story--home .hero-content > p:not(.eyebrow){
+    margin-bottom:20px;
+    font-size:.98rem;
+    line-height:1.5;
+  }
+  main.thar-sunset-story--home .hero-content .actions{
+    gap:9px;
+  }
+  main.thar-sunset-story--home .hero-content .actions .button{
+    min-height:48px;
+  }
+  main.thar-sunset-story--home .home-hero-facts{
+    margin-top:18px;
+    padding:6px;
+  }
+  main.thar-sunset-story--home .home-hero-facts .at-a-glance__item{
+    padding:8px 7px;
+  }
+  main.thar-sunset-story--home .home-hero-facts .at-a-glance__label{
+    font-size:.62rem;
+    letter-spacing:.08em;
+  }
+  main.thar-sunset-story--home .home-hero-facts .at-a-glance__value{
+    font-size:.76rem;
+    line-height:1.25;
+    overflow-wrap:anywhere;
+  }
+}
+@media(max-width:360px){
+  main.thar-sunset-story--home .hero-content{
+    padding-top:88px;
+    padding-bottom:24px;
+  }
+  main.thar-sunset-story--home .home-hero-facts .at-a-glance__item{
+    padding-inline:5px;
+  }
+  main.thar-sunset-story--home .home-hero-facts .at-a-glance__value{
+    font-size:.72rem;
+  }
+}

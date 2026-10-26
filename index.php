@@ -78,14 +78,13 @@ require __DIR__ . '/include/page-head.php';
   </div>
 
   <div class="site-shell hero-content">
-    <p class="eyebrow">Garh Jaisal Haveli</p>
+    <p class="eyebrow">Heritage stay · Inside Jaisalmer Fort</p>
 
     <h1>Wake up inside Jaisalmer Fort.</h1>
 
     <p>
-      Wake up among the sandstone lanes of the living Fort, then return to a
-      heritage-style room after rooftop dining, a guided city walk or a journey
-      into the Thar.
+      A heritage haveli with individually styled rooms, rooftop dining,
+      guided city walks and Thar Desert experiences.
     </p>
 
     <div class="actions">
@@ -97,25 +96,23 @@ require __DIR__ . '/include/page-head.php';
         Check rooms &amp; rates
       </a>
 
-      <a class="button button-light" href="#start-planning">
-        Plan your Jaisalmer stay
+      <a class="button button-light" href="room.php">
+        Explore the rooms
       </a>
     </div>
-  </div>
-</section>
 
-<section class="site-shell at-a-glance-section home-quick-facts" aria-label="Quick facts about Garh Jaisal Haveli">
-  <?php
-  $atAGlance = [
-      'items' => [
-          ['label' => 'Location', 'value' => 'Inside Jaisalmer Fort'],
-          ['label' => 'Stay', 'value' => count($rooms) . ' heritage rooms'],
-          ['label' => 'Dining', 'value' => 'Rooftop restaurant'],
-          ['label' => 'Experiences', 'value' => 'Desert and guided city tours'],
-      ],
-  ];
-  require __DIR__ . '/include/ui/at-a-glance.php';
-  ?>
+    <?php
+    $atAGlance = [
+        'class' => 'at-a-glance home-hero-facts',
+        'items' => [
+            ['label' => 'Stay', 'value' => count($rooms) . ' heritage rooms'],
+            ['label' => 'Dine', 'value' => 'Rooftop dining'],
+            ['label' => 'Explore', 'value' => 'City &amp; desert tours'],
+        ],
+    ];
+    require __DIR__ . '/include/ui/at-a-glance.php';
+    ?>
+  </div>
 </section>
 
 <section class="home-discovery" aria-label="Explore Garh Jaisal Haveli" data-story-reveal>
