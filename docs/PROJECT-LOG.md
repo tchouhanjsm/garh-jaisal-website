@@ -31,6 +31,7 @@
 
 - [2026-10-26] Sprint 58 / [PR #132 — experience discovery](https://github.com/tchouhanjsm/garh-jaisal-website/pulls/132) adds search and category/duration filters to published Packages cards.
 - Filter choices and duration labels come from the existing experience registry; draft and hidden records remain excluded.
+- Refreshed `sitemap.xml` for the updated public Packages route; strict sitemap validation is part of the exact-head gate.
 - Playwright covers combined filters, zero-result recovery, reset, responsive targets and no-JavaScript card availability.
 - PR #132 exact-head CI is pending; local PHP/Playwright was not run in this connector session.
 - PR #131 merge-head Browser E2E remains in progress at last check; no cPanel or production action occurred.
