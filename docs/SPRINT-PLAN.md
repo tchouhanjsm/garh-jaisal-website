@@ -61,6 +61,7 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 50 | Responsive image delivery and reproducible browser dependencies | ✓ PRs #102–#104 merged; candidate delivery, Gallery lightbox, breadcrumb fix, pinned Playwright lockfile and layout-aware `sizes` landed. Exact-main PHP/site checks, Browser E2E, package preflight/build and responsive-image review passed on `f810d79547a04c8fe3d5b84612eafdedf88545c0` after PR #105 merged. |
 | 51 | Directions arrival-journey UX refresh | ◐ Improve the hero with an arrival-summary card, add accessible in-page section navigation, style the parking-to-door steps as an ordered route, and add responsive Browser E2E coverage. Preserve `direction.php`, existing map/contact destinations and owner-confirmed copy; verify exact-head CI and screenshot evidence before review approval. |
 | 55 | Structured room/experience/topic enquiry handoff | ✓ PR #129 merged at `15585db334be9683b0dc3cc54643ca4a9e317e97`; private lead/email context and retry preservation shipped. Its Browser E2E run was cancelled, so do not treat that run as a pass. |
+| 60 | Trip enquiry completion with optional travel context | ◐ PR #134 in review; optional date-range and traveller-count context is added only to the WhatsApp draft, with validation and no server/session persistence for those fields. |
 
 ---
 
@@ -814,7 +815,7 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - No cPanel upload, external staging deployment, production deployment or new business fact is part of this phase.
 
 
-## Sprint 59 — mid-page experience decision checkpoint (PR #133 in review)
+## Sprint 59 — mid-page experience decision checkpoint (PR #133 merged)
 
 **Commercial goal:** after guests review an experience's itinerary and the included/not-included details, present a clear next step without forcing them to scroll to the final footer CTA.
 
@@ -826,3 +827,17 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Add Playwright coverage across all eight live experience routes for CTA destinations, placement after itinerary/details, hub/non-hub action behavior, synchronized trip selection and responsive/no-overflow controls.
 - Exact-head acceptance: PHP 7.4/8.2 Site Checks, strict image and sitemap checks, responsive-image review, non-deploying QA, package preflight, complete Browser E2E and screenshot/page-sheet evidence. Local PHP/Playwright execution must be reported honestly if not run in this connector session.
 - No cPanel upload, external staging deployment, production deployment or new unapproved business fact is in scope.
+
+
+## Sprint 60 — Trip enquiry completion with optional travel context (PR #134 in review)
+
+**Commercial goal:** make the Trip shortlist draft easier for the hotel to respond to by letting a guest add a travel window and party size before opening WhatsApp, without pretending the site can confirm availability.
+
+- Add optional travel-start, travel-end and traveller-count fields to the existing Trip tray. Keep the current product shortlist, primary booking engine and all existing contact destinations unchanged.
+- Build the WhatsApp draft from the selected options plus the optional context. When details are not provided, use clear "to be confirmed" wording instead of an instruction-like placeholder.
+- Validate that the end date is not earlier than the start date and that any supplied traveller count is a positive whole number. Prevent an invalid draft from opening and focus the field that needs attention.
+- Keep travel details in memory only: do not add them to sessionStorage, server requests, lead records or analytics events. The existing shortlisted product IDs/titles/URLs remain the only persisted Trip tray state; WhatsApp opens a draft that the guest reviews and sends manually.
+- Clear optional details when the shortlist becomes empty. Do not add price, capacity, availability, policy or timing claims, and do not alter the external booking engine URL/token.
+- Add Playwright coverage for the combined room-and-experience draft, valid date/count values, invalid range/count recovery, tab-only persistence boundaries, reload recovery, keyboard behaviour and 390px/mobile overflow.
+- Exact-head acceptance remains PHP 7.4/8.2 Site Checks, responsive-image/static contracts, sitemap/package preflight, non-deploying QA, complete Browser E2E and screenshot/page-sheet evidence. Local PHP/Playwright was not run from the connector session; record CI results without treating cancelled runs as passes.
+- No cPanel upload, external staging deployment, production deployment or owner-only business fact is part of this phase.
