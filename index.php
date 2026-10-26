@@ -29,18 +29,18 @@ $buildHeroPreload = static function ($stem, $media, $fallback) {
     return $descriptor;
 };
 $page = [
-    'title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
-    'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Heritage rooms, rooftop views, dining and desert experiences in the heart of the living fort.',
+    'title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
+    'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences from one base in the Golden City.',
     'path' => '/',
     'preload' => [
         $buildHeroPreload('facade', '(max-width: 767px)', '/img/optimized/v2/facade.webp'),
         $buildHeroPreload('fort-from-roof', '(min-width: 768px)', '/img/optimized/v2/fort-from-roof.webp'),
     ],
-    'og_title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
-    'og_description' => 'Heritage rooms, rooftop views and desert experiences inside Jaisalmer Fort.',
+    'og_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
+    'og_description' => 'Heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences inside Jaisalmer Fort.',
     'og_image' => '/img/v2/facade.jpg',
-    'twitter_title' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
-    'twitter_description' => 'Heritage rooms, rooftop views and desert experiences inside Jaisalmer Fort.',
+    'twitter_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
+    'twitter_description' => 'Heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences inside Jaisalmer Fort.',
     'twitter_image' => '/img/v2/facade.jpg',
     'css' => ['css/thar-sunset-story.css'],
     'schema' => [
@@ -48,7 +48,7 @@ $page = [
             '@type' => 'WebPage',
             '@id' => $schemaPageUrl . '#webpage',
             'url' => $schemaPageUrl,
-            'name' => 'Garh Jaisal Haveli | Stay Inside Jaisalmer Fort',
+            'name' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
             'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
             'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
         ],
@@ -83,8 +83,9 @@ require __DIR__ . '/include/page-head.php';
     <h1>Wake up inside Jaisalmer Fort.</h1>
 
     <p>
-      Wake up among the sandstone lanes of the living Fort, then return to a heritage-style room after rooftop dining, a guided city walk or a journey into the Thar.
-      rooftop dining and desert experiences arranged from the hotel.
+      Wake up among the sandstone lanes of the living Fort, then return to a
+      heritage-style room after rooftop dining, a guided city walk or a journey
+      into the Thar.
     </p>
 
     <div class="actions">
