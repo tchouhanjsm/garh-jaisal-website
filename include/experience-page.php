@@ -164,8 +164,9 @@ require __DIR__ . '/page-head.php';
         require __DIR__ . '/ui/trip-add-button.php';
         ?>
 <?php endif; ?>
-        <a class="button button-light" href="catalogue.php">Build your trip</a>
+        <a class="button button-light" href="catalogue.php">Build your trip shortlist</a>
       </div>
+      <p class="conversion-note experience-enquiry-note">An enquiry is not a confirmed booking. We will confirm current availability, route, timings and inclusions for your date before you decide.</p>
     </div>
   </section>
 
@@ -341,9 +342,9 @@ require __DIR__ . '/page-head.php';
 
   <section class="section experience-cta" data-story-reveal>
     <div class="site-shell experience-cta-inner">
-      <p class="eyebrow">Plan your stay</p>
-      <h2>Stay inside Jaisalmer Fort, then explore beyond it.</h2>
-      <p>Ask the hotel about the latest experience details, availability and arrangements for your travel date.</p>
+      <p class="eyebrow">Plan your experience</p>
+      <h2>Build the day around what you want to discover.</h2>
+      <p>Share your travel date, group size and priorities. We will confirm the current price, route, timings, guide or transport arrangements and exact inclusions before you commit.</p>
       <div class="actions">
         <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceBottomContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
         <a class="button button-secondary" href="room.php">View rooms</a>
