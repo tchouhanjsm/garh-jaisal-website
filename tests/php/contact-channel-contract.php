@@ -43,12 +43,19 @@ $checks = [
     'contact.php' => ["'telephone' => array_values(array_filter(", "'email' => array_values(array_filter("],
 ];
 $legacy = [
-    'contact.php' => ['tel:+917727047567', 'tel:+912992253836', 'mailto:mukeshkila@yahoo.com', 'mailto:info@hotelgarhjaisal.com'],
+    'contact.php' => [
+        'tel:+917727047567',
+        'tel:+912992253836',
+        'mailto:mukeshkila@yahoo.com',
+        'mailto:info@hotelgarhjaisal.com',
+        "'telephone' => ['+91 77270 47567', '+91 2992 253836']",
+        "'email' => ['mukeshkila@yahoo.com', 'info@hotelgarhjaisal.com']",
+    ],
     'direction.php' => ['mailto:info@hotelgarhjaisal.com', 'mailto:mukeshkila@yahoo.com'],
     'roof.php' => ['tel:+917727047567'],
     'include/schema.php' => ["'telephone' => '+91-7727047567'"],
     'restaurant.php' => ["'telephone' => '+91-7727047567'"],
-    'contact.php' => ["'telephone' => ['+91 77270 47567', '+91 2992 253836']", "'email' => ['mukeshkila@yahoo.com', 'info@hotelgarhjaisal.com']"],
+
 ];
 foreach ($checks as $file => $markers) {
     $path = $root . '/' . $file;
