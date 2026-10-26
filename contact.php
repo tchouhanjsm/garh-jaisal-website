@@ -237,9 +237,9 @@ require __DIR__ . '/include/page-head.php';
         <form class="contact-form" action="mail.php" method="post">
           <h2>Send an enquiry</h2>
           <?php if ($contactExperience !== null): ?>
-            <p class="contact-experience-context">Experience enquiry: <strong><?= htmlspecialchars($contactExperience['h1'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your travel date or any specific questions.</p>
+            <p class="contact-experience-context" data-experience-slug="<?= htmlspecialchars((string) $contactExperience['slug'], ENT_QUOTES, 'UTF-8') ?>">Experience enquiry: <strong><?= htmlspecialchars($contactExperience['h1'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your travel date or any specific questions.</p>
           <?php elseif ($contactRoom !== null): ?>
-            <p class="contact-room-context">Room enquiry: <strong><?= htmlspecialchars($contactRoom['name'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your travel dates or any specific questions.</p>
+            <p class="contact-room-context" data-room-slug="<?= htmlspecialchars((string) $requestedRoom, ENT_QUOTES, 'UTF-8') ?>">Room enquiry: <strong><?= htmlspecialchars($contactRoom['name'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your travel dates or any specific questions.</p>
           <?php elseif ($contactTopic !== null): ?>
             <?php if ($contactTopicKey === 'arrival'): ?>
               <p class="contact-topic-context">Enquiry topic: <strong><?= htmlspecialchars($contactTopic['label'], ENT_QUOTES, 'UTF-8') ?></strong>. Add your check-in date and expected arrival time to the draft message so the hotel can advise what may be arranged. Do not rely on meet-and-assist or luggage assistance until the hotel confirms it.</p>
