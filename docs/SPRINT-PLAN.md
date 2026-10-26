@@ -64,7 +64,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 60 | Trip enquiry completion with optional travel context | ✓ PR #134 merged at `686abd3272bdc37031b38855728bd1bd20a89e76`; optional date/count values appear only in the reviewed WhatsApp draft and are not stored by the site. |
 | 61 | Shared photo storytelling for tours, rooms and dining | ✓ PR #135 merged at `c3326fb320e7b78bd20f70e8829c9e6a54266829`; Site Checks, responsive-image contracts, non-deploying staging QA and package preflight passed. Merge-head Browser E2E was cancelled. |
 | 62 | Decision-first comparison on Desert Safari and Guided Jaisalmer hubs | ✓ PR #136 merged at `32c59b579ae7e528afe6644e90988892b35b5237`; reusable registry facts and city-tour shortlist links shipped. |
-| 63 | Direct-booking path and room-first discovery across stay and experience journeys | ◐ Expose the existing stay guide in shared navigation/footer and Home/Rooms, add first-screen booking actions plus a three-step stay guide, and cross-link the room booking step from the Packages, Desert, Guided City and Car & City hubs. Keep booking destination, enquiry semantics and all owner-only policy/price facts unchanged. |
+| 63 | Direct-booking path and room-first discovery across stay and experience journeys | ✓ PR #137 merged at `0facd0fbc2e2b491015c3c67d25fe7a7c50bc35f`; stay guide discoverability and room-first crosslinks shipped. |
+| 64 | Car & City route-first enquiry journey | ◐ Clarify the path into existing guided tours, car arrangements and proposed itinerary enquiries; keep unapproved ideas explicitly non-bookable and preserve contact topics. |
 
 ---
 
@@ -858,3 +859,15 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Add Playwright coverage for next/previous behavior, single-slide active state, all live experience routes, seven room cards, restaurant menu-price guard, no-JavaScript visibility and 320/390/1280/1440px no-overflow.
 - Exact-head acceptance: PHP 7.4/8.2 Site Checks, strict image/sitemap contracts, responsive-image review, package preflight, non-deploying QA, complete Browser E2E and screenshot/page-sheet artifact. Local browser/PHP execution was not run from this connector session; treat only exact-head CI as evidence.
 - No cPanel upload, external staging deployment or production deployment is part of this phase.
+
+
+## Sprint 64 — Car & City route-first enquiry journey (PR pending)
+
+**Commercial goal:** help visitors choose a useful next step quickly while clearly distinguishing existing pages from itinerary ideas that have not been approved as offers.
+
+- Add three high-level routes on the Car & City hub: explore existing guided options, enquire about car arrangements, or browse proposed themes.
+- Separate the existing-options heading from six proposed itinerary ideas, with more explicit enquiry-only wording and topic-specific contact paths.
+- Preserve every public URL, query topic, image path, booking destination/token, metadata/canonical/schema, analytics, trip-list actions, publication guards and contact configuration.
+- Add Playwright checks for the three route choices, six proposal enquiry destinations, non-bookable disclosure, existing room-first booking path, image loading/alt text and 320/390/1280/1440px overflow.
+- Exact-head acceptance: PHP 7.4/8.2 Site Checks, strict image and sitemap checks, package preflight, non-deploying staging QA, Browser E2E and page-sheet artifact. Report any unavailable local checks honestly.
+- No new tour product, operational claim, price, timing, inclusion, policy, dependency, cPanel upload or deployment is introduced. Owner keeps merge and release authority.
