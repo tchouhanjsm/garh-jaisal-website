@@ -117,7 +117,7 @@ test('photo carousels preserve the full image list when JavaScript is disabled',
 
 test('carousel layout does not cause horizontal overflow at the supported viewports', async ({ page }, testInfo) => {
   test.skip(!['mobile-320', 'mobile-390', 'desktop-1280', 'desktop-1440'].includes(testInfo.project.name), 'Supported viewport coverage.');
-  for (const route of ['/swiss-tent-safari.php', '/guided-jaisalmer-tour.php', '/room.php', '/restaurant.php']) {
+  for (const route of ['/swiss-tent-safari.php', '/desert-safari.php', '/guided-jaisalmer-tour.php', '/room.php', '/restaurant.php']) {
     const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
     expect(response).not.toBeNull();
     expect(response.status()).toBeLessThan(400);

@@ -99,6 +99,13 @@ require __DIR__ . '/include/page-head.php';
                 <p class="experience-card-kicker"><?= htmlspecialchars($item['eyebrow'], ENT_QUOTES, 'UTF-8') ?></p>
                 <h2><?= htmlspecialchars($item['h1'], ENT_QUOTES, 'UTF-8') ?></h2>
                 <p><?= htmlspecialchars($item['summary'], ENT_QUOTES, 'UTF-8') ?></p>
+                <?php
+                $experienceCardItem = $item;
+                $experienceCardFactPriority = ['Duration', 'Overnight', 'Accommodation', 'Camel ride', 'Meals', 'Evening', 'Return', 'Focus', 'Best for', 'Guide languages'];
+                $experienceCardFactLimit = 3;
+                require __DIR__ . '/include/ui/experience-card-facts.php';
+                unset($experienceCardItem, $experienceCardFactPriority, $experienceCardFactLimit);
+                ?>
                 <span>View itinerary →</span>
               </div>
             </a>
