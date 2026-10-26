@@ -7,25 +7,33 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-26 |
-| Current phase | Sprint 56 — three-second homepage first impression |
-| Verified main SHA | 15585db334be9683b0dc3cc54643ca4a9e317e97 (PR #129 merge commit) |
-| Latest merged PR | [#129 — preserve structured guest enquiry context](https://github.com/tchouhanjsm/garh-jaisal-website/pull/129) |
-| PR #129 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40269420923); PHP 7.4 and 8.2 |
-| PR #129 Browser E2E | [CANCELLED](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40269420890); full suite result not verified |
-| PR #129 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40269420839); checks package only |
-| PR #129 non-deploying QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40269420860); not an external-host deployment |
-| Recent merged work | PR #127 conversion-led homepage and mobile UX; #128 success-only lead conversion tracking; #129 structured enquiry handoff |
-| Active phase branch | feature/home-first-impression-20261026; exact-head acceptance pending |
+| Current phase | Sprint 57 — searchable room discovery and shortlist UX |
+| Verified main SHA | e1ca0725ed3b3b7aa8ed42135abd9435f08357dd (PR #130 merge commit) |
+| Latest merged PR | [#130 — sharpen three-second homepage first impression](https://github.com/tchouhanjsm/garh-jaisal-website/pull/130) |
+| PR #130 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40276229242); PHP 7.4/8.2 and responsive-image review |
+| PR #130 Browser E2E | [IN PROGRESS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40276229330); merge-head screenshot evidence not confirmed yet |
+| PR #130 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40276229348); artifact/check only, no upload |
+| PR #130 non-deploying QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40276229356); not an external-host deployment |
+| Recent merged work | PR #128 success-only lead conversion tracking; #129 structured enquiry handoff; #130 homepage first impression |
+| Active phase branch | feature/room-discovery-20261026; PR #131 open for review; exact-head acceptance pending |
 
 ## Current phase
 
-**Sprint 56 goal:** make the homepage's first screen communicate property identity, location, offer and next action rapidly.
+**Sprint 57 goal:** make the Rooms page a useful selection tool, not just a long grid of cards.
 
-- Tighten the hero eyebrow and lead copy; maintain the existing art-directed facade and Fort-roof image sources.
-- Keep the booking-engine link as the primary action, use an internal Rooms route for the secondary action, and surface three concise, verified facts.
-- Review initial screen composition across 320, 390, 768, 1280 and 1440 CSS pixels. Preserve the shared responsive image budget and zero-overflow contract.
-- Require exact-head PHP 7.4/8.2 Site Checks, Browser E2E/screenshot evidence and responsive-image review before considering the code review-ready.
-- cPanel upload, external staging and production deployment are explicitly out of scope for this phase.
+- Search the existing room names, descriptions and listed features; combine the search with floor and one feature filter.
+- Generate feature options and room counts from the authoritative room registry; do not create parallel facts or imply current room availability.
+- Keep booking and room-specific enquiry actions prominent, retain all original card content and public routes, and preserve a full-card browsing fallback without JavaScript.
+- Require exact-head PHP 7.4/8.2 checks, responsive-image review, full Browser E2E and screenshot/page-sheet evidence before visual review.
+- cPanel upload, external staging and production deployment are explicitly out of scope.
+
+## Latest implementation entry
+
+- [2026-10-26] Sprint 57 / [PR #131 — searchable room discovery](https://github.com/tchouhanjsm/garh-jaisal-website/pulls/131) adds progressive search and filters sourced from `include/rooms-data.php`.
+- The batch includes live matching counts, empty-state recovery, responsive controls and floor-nav synchronization.
+- Playwright now checks search, combined filters, reset recovery and preserves the existing room-specific enquiry and booking destinations.
+- The exact-head checks for PR #131 are pending; local PHP/Playwright checks were not run in this connector session.
+- PR #130's merged-main Browser E2E remains in progress at the last verified check; no cPanel or production action occurred.
 
 ## Remaining blockers
 

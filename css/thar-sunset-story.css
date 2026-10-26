@@ -294,3 +294,217 @@ main.thar-sunset-story--home .home-hero-facts .at-a-glance__value{
     font-size:.72rem;
   }
 }
+
+
+/* Sprint 57 — progressive room discovery controls, sourced from the room registry. */
+main.thar-sunset-story--rooms .room-finder{
+  margin:22px auto 28px;
+  padding:clamp(18px,2.6vw,30px);
+  border:1px solid var(--story-keyline,rgba(217,164,65,.5));
+  border-radius:var(--radius-card,6px);
+  background:linear-gradient(135deg,rgba(247,239,224,.98),rgba(255,252,246,.98));
+  color:var(--ink,#231a14);
+  box-shadow:0 10px 28px rgba(35,26,20,.07);
+}
+main.thar-sunset-story--rooms .room-finder[hidden],
+main.thar-sunset-story--rooms .room-finder-empty[hidden],
+main.thar-sunset-story--rooms .rooms-floor[hidden],
+main.thar-sunset-story--rooms .rooms-floor-nav-links a[hidden]{
+  display:none!important;
+}
+main.thar-sunset-story--rooms .room-finder-top{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(240px,.72fr);
+  gap:clamp(18px,3vw,36px);
+  align-items:end;
+}
+main.thar-sunset-story--rooms .room-finder-intro .eyebrow{
+  margin-bottom:8px;
+}
+main.thar-sunset-story--rooms .room-finder-intro h3{
+  margin:0 0 10px;
+  font-family:var(--font-display,"Source Serif 4",Georgia,serif);
+  font-size:clamp(1.45rem,2.5vw,2rem);
+  line-height:1.15;
+  text-wrap:balance;
+}
+main.thar-sunset-story--rooms .room-finder-intro p:last-child{
+  max-width:62ch;
+  margin:0;
+  color:#62574e;
+  line-height:1.6;
+}
+main.thar-sunset-story--rooms .room-finder-search,
+main.thar-sunset-story--rooms .room-finder-floor{
+  display:grid;
+  gap:7px;
+  color:#4d352a;
+  font-size:.88rem;
+  font-weight:750;
+}
+main.thar-sunset-story--rooms .room-finder-search input,
+main.thar-sunset-story--rooms .room-finder-floor select{
+  width:100%;
+  min-width:0;
+  min-height:48px;
+  padding:11px 13px;
+  border:1px solid rgba(91,26,43,.3);
+  border-radius:5px;
+  background:#fffdfa;
+  color:#231a14;
+  font:inherit;
+}
+main.thar-sunset-story--rooms .room-finder-controls{
+  display:grid;
+  grid-template-columns:minmax(155px,205px) minmax(0,1fr) auto;
+  gap:18px;
+  align-items:start;
+  margin-top:22px;
+}
+main.thar-sunset-story--rooms .room-feature-filter{
+  min-width:0;
+  margin:0;
+  padding:0;
+  border:0;
+}
+main.thar-sunset-story--rooms .room-feature-filter legend{
+  margin-bottom:9px;
+  color:#4d352a;
+  font-size:.88rem;
+  font-weight:750;
+}
+main.thar-sunset-story--rooms .room-feature-filter-options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+main.thar-sunset-story--rooms .room-filter-chip,
+main.thar-sunset-story--rooms .room-finder-reset{
+  display:inline-flex;
+  min-height:44px;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:8px 12px;
+  border:1px solid rgba(91,26,43,.28);
+  border-radius:5px;
+  background:#fffdfa;
+  color:#5b1a2b;
+  font:inherit;
+  font-size:.85rem;
+  line-height:1.25;
+  text-align:center;
+  cursor:pointer;
+  transition:background-color .16s ease,border-color .16s ease,color .16s ease;
+}
+main.thar-sunset-story--rooms .room-filter-chip small{
+  color:inherit;
+  font-size:.72rem;
+  font-weight:700;
+  opacity:.78;
+  white-space:nowrap;
+}
+main.thar-sunset-story--rooms .room-filter-chip[aria-pressed="true"]{
+  border-color:#5b1a2b;
+  background:#5b1a2b;
+  color:#fff;
+}
+main.thar-sunset-story--rooms .room-filter-chip:hover,
+main.thar-sunset-story--rooms .room-finder-reset:hover{
+  border-color:#5b1a2b;
+  background:#efe2d3;
+  color:#421321;
+}
+main.thar-sunset-story--rooms .room-filter-chip[aria-pressed="true"]:hover{
+  background:#421321;
+  color:#fff;
+}
+main.thar-sunset-story--rooms .room-filter-chip:focus-visible,
+main.thar-sunset-story--rooms .room-finder-reset:focus-visible,
+main.thar-sunset-story--rooms .room-finder-search input:focus-visible,
+main.thar-sunset-story--rooms .room-finder-floor select:focus-visible{
+  outline:3px solid #b67b1b;
+  outline-offset:3px;
+}
+main.thar-sunset-story--rooms .room-finder-reset{
+  align-self:end;
+  white-space:nowrap;
+}
+main.thar-sunset-story--rooms .room-finder-status{
+  margin:18px 0 0;
+  color:#62574e;
+  font-size:.88rem;
+  font-weight:750;
+}
+main.thar-sunset-story--rooms .room-finder-empty{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:12px;
+  padding:14px 16px;
+  border-inline-start:4px solid #b67b1b;
+  background:#fffdfa;
+}
+main.thar-sunset-story--rooms .room-finder-empty p{
+  margin:0;
+  line-height:1.5;
+}
+@media(max-width:900px){
+  main.thar-sunset-story--rooms .room-finder-controls{
+    grid-template-columns:minmax(150px,.45fr) minmax(0,1fr);
+  }
+  main.thar-sunset-story--rooms .room-finder-reset{
+    justify-self:start;
+    grid-column:1/-1;
+  }
+}
+@media(max-width:760px){
+  main.thar-sunset-story--rooms .room-finder{
+    margin:16px auto 22px;
+    padding:18px 15px;
+  }
+  main.thar-sunset-story--rooms .room-finder-top,
+  main.thar-sunset-story--rooms .room-finder-controls{
+    grid-template-columns:minmax(0,1fr);
+    gap:16px;
+  }
+  main.thar-sunset-story--rooms .room-finder-intro h3{
+    font-size:1.55rem;
+  }
+  main.thar-sunset-story--rooms .room-finder-controls{
+    margin-top:18px;
+  }
+  main.thar-sunset-story--rooms .room-finder-reset{
+    grid-column:auto;
+  }
+  main.thar-sunset-story--rooms .room-feature-filter-options{
+    gap:7px;
+  }
+  main.thar-sunset-story--rooms .room-filter-chip{
+    min-height:44px;
+    padding:9px 10px;
+  }
+}
+@media(max-width:360px){
+  main.thar-sunset-story--rooms .room-finder{
+    padding:15px 12px;
+  }
+  main.thar-sunset-story--rooms .room-finder-empty{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  main.thar-sunset-story--rooms .room-finder-empty .room-finder-reset{
+    align-self:flex-start;
+  }
+}
+
+
+/* Keep the new filter controls calm when reduced motion is requested. */
+@media(prefers-reduced-motion:reduce){
+  main.thar-sunset-story--rooms .room-filter-chip,
+  main.thar-sunset-story--rooms .room-finder-reset{
+    transition:none;
+  }
+}

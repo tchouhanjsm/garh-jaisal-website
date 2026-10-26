@@ -12,6 +12,38 @@ $roomCount = count($rooms);
 $floorCount = count($roomsByFloor);
 $roomFloorNames = array_map('strtolower', array_keys($roomsByFloor));
 $roomFloorSummary = $roomFloorNames ? ucfirst(implode(' and ', $roomFloorNames)) : 'See individual room details';
+
+$normalizeRoomFloor = static function ($label) {
+    return trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower((string) $label)), '-');
+};
+
+$roomFeatureCounts = [];
+foreach ($rooms as $room) {
+    $seenFeatures = [];
+    foreach (($room['features'] ?? []) as $feature) {
+        $featureLabel = trim((string) $feature);
+        if ($featureLabel === '') {
+            continue;
+        }
+        $featureKey = strtolower($featureLabel);
+        if (isset($seenFeatures[$featureKey])) {
+            continue;
+        }
+        $seenFeatures[$featureKey] = true;
+        if (!isset($roomFeatureCounts[$featureKey])) {
+            $roomFeatureCounts[$featureKey] = [
+                'key' => $featureKey,
+                'label' => $featureLabel,
+                'count' => 0,
+            ];
+        }
+        $roomFeatureCounts[$featureKey]['count']++;
+    }
+}
+$roomFeatureOptions = array_values($roomFeatureCounts);
+usort($roomFeatureOptions, static function ($left, $right) {
+    return strcasecmp($left['label'], $right['label']);
+});
 ?>
 <!doctype html>
 <html lang="en">
@@ -173,13 +205,60 @@ require __DIR__ . '/include/page-head.php';
       <p>Compare the room descriptions and listed features below. Room facilities vary; use the availability link to check the current rate for your stay.</p>
     </div>
 
+    <section class="site-shell room-finder" data-room-finder hidden aria-labelledby="room-finder-title">
+      <div class="room-finder-top">
+        <div class="room-finder-intro">
+          <p class="eyebrow">Make a shortlist</p>
+          <h3 id="room-finder-title">Find a room by its details.</h3>
+          <p>Search the room names, descriptions or listed features, then combine a floor and feature filter to narrow the selection.</p>
+        </div>
+        <label class="room-finder-search">
+          <span>Search rooms and features</span>
+          <input type="search" data-room-search placeholder="Try “BlueSky” or “window seat”" autocomplete="off">
+        </label>
+      </div>
+
+      <div class="room-finder-controls">
+        <label class="room-finder-floor">
+          <span>Floor</span>
+          <select data-room-floor-filter>
+            <option value="all">All floors</option>
+            <?php foreach ($roomsByFloor as $floorKicker => $floorRooms): ?>
+              <option value="<?= htmlspecialchars($normalizeRoomFloor($floorKicker), ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars(ucwords($floorKicker), ENT_QUOTES, 'UTF-8') ?></option>
+            <?php endforeach; ?>
+          </select>
+        </label>
+
+        <fieldset class="room-feature-filter">
+          <legend>Filter by listed feature</legend>
+          <div class="room-feature-filter-options">
+            <button class="room-filter-chip" type="button" data-room-filter-feature="all" aria-pressed="true">Any feature</button>
+            <?php foreach ($roomFeatureOptions as $roomFeature): ?>
+              <button class="room-filter-chip" type="button" data-room-filter-feature="<?= htmlspecialchars($roomFeature['key'], ENT_QUOTES, 'UTF-8') ?>" aria-pressed="false">
+                <span><?= htmlspecialchars($roomFeature['label'], ENT_QUOTES, 'UTF-8') ?></span>
+                <small><?= (int) $roomFeature['count'] ?> <?= $roomFeature['count'] === 1 ? 'room' : 'rooms' ?></small>
+              </button>
+            <?php endforeach; ?>
+          </div>
+        </fieldset>
+
+        <button class="room-finder-reset" type="button" data-room-reset>Clear filters</button>
+      </div>
+
+      <p class="room-finder-status" data-room-result-status role="status" aria-live="polite"><?= $roomCount ?> rooms to explore.</p>
+      <div class="room-finder-empty" data-room-empty hidden>
+        <p><strong>No rooms match those filters.</strong> Adjust the search or clear the filters to see all rooms.</p>
+        <button class="room-finder-reset" type="button" data-room-reset>Clear filters</button>
+      </div>
+    </section>
+
   <nav class="rooms-floor-nav" aria-label="Browse rooms by floor">
     <div class="site-shell rooms-floor-nav-inner">
       <span class="rooms-floor-nav-label">Browse by floor</span>
       <div class="rooms-floor-nav-links">
         <?php foreach ($roomsByFloor as $floorKicker => $floorRooms): ?>
           <?php $floorId = 'rooms-' . trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($floorKicker)), '-'); ?>
-          <a href="#<?= htmlspecialchars($floorId, ENT_QUOTES, 'UTF-8') ?>" aria-label="Browse <?= htmlspecialchars($floorKicker, ENT_QUOTES, 'UTF-8') ?>, <?= count($floorRooms) ?> rooms">
+          <a href="#<?= htmlspecialchars($floorId, ENT_QUOTES, 'UTF-8') ?>" data-room-floor-link="<?= htmlspecialchars($normalizeRoomFloor($floorKicker), ENT_QUOTES, 'UTF-8') ?>" aria-label="Browse <?= htmlspecialchars($floorKicker, ENT_QUOTES, 'UTF-8') ?>, <?= count($floorRooms) ?> rooms">
             <span><?= htmlspecialchars(ucwords($floorKicker), ENT_QUOTES, 'UTF-8') ?></span>
             <small><?= count($floorRooms) ?> rooms</small>
           </a>
@@ -200,7 +279,7 @@ require __DIR__ . '/include/page-head.php';
     $floorIndex++;
   ?>
   <?php $floorId = 'rooms-' . trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($floorKicker)), '-'); ?>
-  <section id="<?= htmlspecialchars($floorId, ENT_QUOTES, 'UTF-8') ?>" class="<?= htmlspecialchars($floorClass, ENT_QUOTES, 'UTF-8') ?>" data-story-reveal>
+  <section id="<?= htmlspecialchars($floorId, ENT_QUOTES, 'UTF-8') ?>" class="<?= htmlspecialchars($floorClass, ENT_QUOTES, 'UTF-8') ?>" data-room-floor-group="<?= htmlspecialchars($normalizeRoomFloor($floorKicker), ENT_QUOTES, 'UTF-8') ?>" data-story-reveal>
     <div class="site-shell">
 
       <div class="room-floor-heading">
@@ -215,7 +294,13 @@ require __DIR__ . '/include/page-head.php';
           $roomSlug = trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($room['name'])), '-');
           $roomId = 'room-' . $roomSlug;
         ?>
-        <article class="room-card" id="<?= htmlspecialchars($roomId, ENT_QUOTES, 'UTF-8') ?>" data-room-floor="<?= htmlspecialchars(strtolower(str_replace(' ', '-', $floorKicker)), ENT_QUOTES, 'UTF-8') ?>">
+        <?php
+          $roomFeatureKeys = array_values(array_unique(array_map(static function ($feature) {
+              return strtolower(trim((string) $feature));
+          }, $room['features'])));
+          $roomFeatureData = '|' . implode('|', $roomFeatureKeys) . '|';
+        ?>
+        <article class="room-card" id="<?= htmlspecialchars($roomId, ENT_QUOTES, 'UTF-8') ?>" data-room-floor="<?= htmlspecialchars($normalizeRoomFloor($floorKicker), ENT_QUOTES, 'UTF-8') ?>" data-room-features="<?= htmlspecialchars($roomFeatureData, ENT_QUOTES, 'UTF-8') ?>">
 
           <div class="room-card-media">
             <img

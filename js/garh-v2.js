@@ -481,6 +481,81 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+  // Rooms: progressively enhance the directory with registry-backed search and filters.
+  // With JavaScript disabled, every room remains visible and every existing booking/enquiry link works.
+  const roomFinder = document.querySelector('[data-room-finder]');
+  if (roomFinder) {
+    const roomCards = Array.from(document.querySelectorAll('.rooms-page .room-card'));
+    const floorGroups = Array.from(document.querySelectorAll('.rooms-page [data-room-floor-group]'));
+    const floorLinks = Array.from(document.querySelectorAll('.rooms-page [data-room-floor-link]'));
+    const searchInput = roomFinder.querySelector('[data-room-search]');
+    const floorSelect = roomFinder.querySelector('[data-room-floor-filter]');
+    const featureButtons = Array.from(roomFinder.querySelectorAll('[data-room-filter-feature]'));
+    const resetButtons = Array.from(roomFinder.querySelectorAll('[data-room-reset]'));
+    const resultStatus = roomFinder.querySelector('[data-room-result-status]');
+    const emptyState = roomFinder.querySelector('[data-room-empty]');
+    let selectedFeature = 'all';
+
+    const normalizeRoomText = (value) => String(value || '').toLowerCase().replace(/\s+/g, ' ').trim();
+
+    const applyRoomFilters = () => {
+      const query = normalizeRoomText(searchInput ? searchInput.value : '');
+      const selectedFloor = floorSelect ? floorSelect.value : 'all';
+      let visibleCount = 0;
+
+      roomCards.forEach((card) => {
+        const matchesSearch = !query || normalizeRoomText(card.textContent).includes(query);
+        const matchesFloor = selectedFloor === 'all' || card.dataset.roomFloor === selectedFloor;
+        const cardFeatures = (card.dataset.roomFeatures || '').split('|').filter(Boolean);
+        const matchesFeature = selectedFeature === 'all' || cardFeatures.includes(selectedFeature);
+        const visible = matchesSearch && matchesFloor && matchesFeature;
+        card.hidden = !visible;
+        if (visible) visibleCount++;
+      });
+
+      floorGroups.forEach((section) => {
+        section.hidden = section.querySelectorAll('.room-card:not([hidden])').length === 0;
+      });
+      floorLinks.forEach((link) => {
+        const targetId = (link.getAttribute('href') || '').slice(1);
+        const target = targetId ? document.getElementById(targetId) : null;
+        link.hidden = !target || target.hidden;
+      });
+
+      if (resultStatus) {
+        resultStatus.textContent = 'Showing ' + visibleCount + ' of ' + roomCards.length + ' rooms.';
+      }
+      if (emptyState) emptyState.hidden = visibleCount > 0;
+    };
+
+    const resetRoomFilters = () => {
+      if (searchInput) searchInput.value = '';
+      if (floorSelect) floorSelect.value = 'all';
+      selectedFeature = 'all';
+      featureButtons.forEach((button) => {
+        button.setAttribute('aria-pressed', String((button.dataset.roomFilterFeature || 'all') === 'all'));
+      });
+      applyRoomFilters();
+    };
+
+    if (roomCards.length && searchInput && floorSelect && featureButtons.length) {
+      searchInput.addEventListener('input', applyRoomFilters);
+      floorSelect.addEventListener('change', applyRoomFilters);
+      featureButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          selectedFeature = button.dataset.roomFilterFeature || 'all';
+          featureButtons.forEach((candidate) => {
+            candidate.setAttribute('aria-pressed', String(candidate === button));
+          });
+          applyRoomFilters();
+        });
+      });
+      resetButtons.forEach((button) => button.addEventListener('click', resetRoomFilters));
+      roomFinder.hidden = false;
+      applyRoomFilters();
+    }
+  }
+
   // Session-only Trip tray: store product choices, never personal data or form fields.
   const tripTray = document.querySelector('[data-trip-tray]');
   if (tripTray) {
