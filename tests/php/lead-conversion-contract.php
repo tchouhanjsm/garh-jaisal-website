@@ -15,7 +15,7 @@ $expectations = [
     ['thank-you.php uses shared page head', strpos($thankYou, "require __DIR__ . '/include/page-head.php';") !== false],
     ['thank-you remains noindex', strpos($thankYou, "'robots' => 'noindex,nofollow'") !== false],
     ['success event uses GA4 generate_lead', strpos($thankYou, "window.gtag('event', 'generate_lead'") !== false],
-    ['one-time session flags are consumed', strpos($thankYou, "unset($_SESSION['enquiry_received'], $_SESSION['enquiry_reference'], $_SESSION['enquiry_notification_sent']);") !== false],
+    ['one-time session flags are consumed', strpos($thankYou, 'unset($_SESSION[\'enquiry_received\'], $_SESSION[\'enquiry_reference\'], $_SESSION[\'enquiry_notification_sent\']);') !== false],
     ['experience context exposes registered slug only', strpos($contact, 'data-experience-slug=') !== false],
     ['room context exposes validated room slug', strpos($contact, 'data-room-slug=') !== false],
     ['experience intent is classified', strpos($analytics, "enquiryContext = 'experience'") !== false],
@@ -26,7 +26,7 @@ foreach ($expectations as [$description, $passed]) { if (!$passed) $errors[] = $
 $eventPosition = strpos($thankYou, "window.gtag('event', 'generate_lead'");
 $lastSuccessGate = $eventPosition === false ? false : strrpos(substr($thankYou, 0, $eventPosition), '<?php if ($enquiryReceived): ?>');
 $eventClose = $eventPosition === false ? false : strpos($thankYou, '<?php endif; ?>', $eventPosition);
-$consumePosition = strpos($thankYou, "unset($_SESSION['enquiry_received']");
+$consumePosition = strpos($thankYou, 'unset($_SESSION[\'enquiry_received\']');
 if ($eventPosition === false || $lastSuccessGate === false || $eventClose === false || $consumePosition === false || $consumePosition > $eventPosition) {
     $errors[] = 'generate_lead must be gated by a recorded enquiry and the one-time session flag must be consumed first';
 } else {
