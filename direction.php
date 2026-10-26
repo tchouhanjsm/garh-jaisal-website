@@ -6,6 +6,8 @@ $hotelPhone = $siteConfig['hotel_phone'];
 $hotelPhoneDisplay = $siteConfig['hotel_phone_display'];
 $hotelPhoneAlt = $siteConfig['hotel_phone_alt'];
 $hotelPhoneAltDisplay = $siteConfig['hotel_phone_alt_display'];
+$hotelEmail = (string) ($siteConfig['hotel_email'] ?? '');
+$hotelEmailAlt = (string) ($siteConfig['hotel_email_alt'] ?? '');
 $whatsappUrl = $siteConfig['whatsapp_url'];
 $hotelMapsUrl = 'https://maps.app.goo.gl/nAbRiZhv78FSbju48';
 $hotelMapsEmbedUrl = 'https://www.google.com/maps?q=Garh+Jaisal+Haveli%2C+Fort+Kotari+Para%2C+Inside+Jaisalmer+Fort%2C+Jaisalmer%2C+Rajasthan+345001&output=embed';
@@ -309,8 +311,9 @@ require __DIR__ . '/include/page-head.php';
           <a href="tel:<?= htmlspecialchars($hotelPhoneAlt, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($hotelPhoneAltDisplay, ENT_QUOTES, 'UTF-8') ?></a>
         </p>
         <p>
-          <a href="mailto:info@hotelgarhjaisal.com">info@hotelgarhjaisal.com</a><br>
-          <a href="mailto:mukeshkila@yahoo.com">mukeshkila@yahoo.com</a>
+          <?php if ($hotelEmail !== ''): ?><a href="mailto:<?= htmlspecialchars($hotelEmail, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($hotelEmail, ENT_QUOTES, 'UTF-8') ?></a><?php endif; ?>
+          <?php if ($hotelEmail !== '' && $hotelEmailAlt !== ''): ?><br><?php endif; ?>
+          <?php if ($hotelEmailAlt !== ''): ?><a href="mailto:<?= htmlspecialchars($hotelEmailAlt, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($hotelEmailAlt, ENT_QUOTES, 'UTF-8') ?></a><?php endif; ?>
         </p>
         <p>
           <a href="<?= htmlspecialchars($hotelMapsUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Open in Google Maps</a>
