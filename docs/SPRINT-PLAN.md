@@ -61,7 +61,9 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 50 | Responsive image delivery and reproducible browser dependencies | ✓ PRs #102–#104 merged; candidate delivery, Gallery lightbox, breadcrumb fix, pinned Playwright lockfile and layout-aware `sizes` landed. Exact-main PHP/site checks, Browser E2E, package preflight/build and responsive-image review passed on `f810d79547a04c8fe3d5b84612eafdedf88545c0` after PR #105 merged. |
 | 51 | Directions arrival-journey UX refresh | ◐ Improve the hero with an arrival-summary card, add accessible in-page section navigation, style the parking-to-door steps as an ordered route, and add responsive Browser E2E coverage. Preserve `direction.php`, existing map/contact destinations and owner-confirmed copy; verify exact-head CI and screenshot evidence before review approval. |
 | 55 | Structured room/experience/topic enquiry handoff | ✓ PR #129 merged at `15585db334be9683b0dc3cc54643ca4a9e317e97`; private lead/email context and retry preservation shipped. Its Browser E2E run was cancelled, so do not treat that run as a pass. |
-| 60 | Trip enquiry completion with optional travel context | ✓ PR #134 merged at `686abd3272bd37031b38855728bd1bd20a89e76`; optional date/count values appear only in the reviewed WhatsApp draft and are not stored by the site. |
+| 60 | Trip enquiry completion with optional travel context | ✓ PR #134 merged at `686abd3272bdc37031b38855728bd1bd20a89e76`; optional date/count values appear only in the reviewed WhatsApp draft and are not stored by the site. |
+| 61 | Shared photo storytelling for tours, rooms and dining | ✓ PR #135 merged at `c3326fb320e7b78bd20f70e8829c9e6a54266829`; Site Checks, responsive-image contracts, non-deploying staging QA and package preflight passed. Merge-head Browser E2E was cancelled. |
+| 62 | Decision-first comparison on Desert Safari and Guided Jaisalmer hubs | ◐ Add registry-backed at-a-glance facts to existing tour cards, introduce a reusable escaped facts partial, and make city-tour cards shortlistable; test actions and responsive overflow. No new facts or package records. |
 
 ---
 

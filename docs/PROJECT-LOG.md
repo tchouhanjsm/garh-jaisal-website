@@ -7,34 +7,32 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-26 |
-| Current phase | Sprint 61 — shared photo storytelling for tours, rooms and dining |
-| Verified main SHA | 686abd3272bd37031b38855728bd1bd20a89e76 (PR #134 merge commit) |
-| Latest merged PR | [#134 — Trip enquiry completion with optional travel context](https://github.com/tchouhanjsm/garh-jaisal-website/pull/134) |
-| PR #134 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40291811227); PHP 7.4/8.2 and shared source contracts |
-| PR #134 non-deploying QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40291811223) |
-| PR #134 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40291811219); artifact/check only, no upload |
-| PR #134 merge-head Browser E2E | [CANCELLED](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40291811182); do not treat as a pass |
-| Recent merged work | PR #131 room discovery; #132 published experience filters; #133 experience conversion checkpoint; #134 optional Trip enquiry context |
-| Active phase branch | `feature/guest-visual-storytelling-20261026`; PR #135 is the Sprint 61 review target |
+| Current phase | Sprint 62 — decision-first comparison for desert and city tours |
+| Verified main SHA | c3326fb320e7b78bd20f70e8829c9e6a54266829 (PR #135 merge commit; Sprint 62 base) |
+| Latest merged PR | [#135 — Multi-photo storytelling across tours, rooms and dining](https://github.com/tchouhanjsm/garh-jaisal-website/pull/135) |
+| PR #135 Site Checks | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40307181583); PHP 7.4/8.2, marketing template, contrast and responsive image contracts |
+| PR #135 non-deploying QA | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40307181582) |
+| PR #135 package preflight | [PASS](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40307181660); artifact/check only, no upload |
+| PR #135 merge-head Browser E2E | [CANCELLED](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40307181617); do not treat as a pass |
+| Recent merged work | PR #132 experience filters; #133 conversion checkpoint; #134 Trip enquiry context; #135 multi-photo storytelling |
+| Active phase branch | `feature/tour-decision-cards-20261026`; Sprint 62 review target (unmerged) |
 
 
 ## Current phase
 
-**Sprint 61 goal:** make the existing room, dining and tour offers easier to understand visually through a consistent multi-photo experience, rather than shipping isolated page tweaks.
+**Sprint 62 goal:** help guests compare the existing live desert and city tour offers before opening a detail page.
 
-- Reuse a single accessible carousel for the live experience renderer, both tour hubs, every room card and the restaurant photo section.
-- Use the existing published Gallery/experience photo library and preserve the registry's own photo first where the page is a room card.
-- Keep static images visible when JavaScript is unavailable; no autoplay, no new client-side libraries, and keyboard/touch controls with a live photo counter.
-- Keep booking and enquiry actions, trip shortlist behavior, public routes, SEO/schema, menu publication guard and owner-confirmation boundaries unchanged.
-- No cPanel upload, external staging deployment or production deployment is in scope.
+- Render up to three facts from each experience's existing `at_a_glance` registry on the Desert Safari and Guided Jaisalmer hub cards.
+- Use a reusable, escaped partial with explicit field priorities; do not add prices, clock times, routes or inclusions that are not already in the source.
+- Add the existing Trip shortlist action to the city-tour cards while preserving the detail links and contact destinations.
+- Add browser coverage for fact completeness, preserved actions and mobile overflow.
+- No tour data pack, new photo, cPanel upload or deployment is in scope.
 
 
 ## Latest implementation entry
 
-- [2026-10-26] Sprint 60 / [PR #134 — Trip enquiry completion with optional travel context](https://github.com/tchouhanjsm/garh-jaisal-website/pull/134) merged at `686abd3272bd37031b38855728bd1bd20a89e76`. Site Checks, non-deploying QA and package preflight passed on the exact merge SHA; merge-head Browser E2E was cancelled.
-- Sprint 61 / PR #135 introduces `include/ui/photo-carousel.php`, existing-photo collections for tour pages, a secondary photo for each room, a restaurant gallery carousel and route-level Playwright coverage.
-- This work uses images already listed in the public Gallery/experience registry and does not change the restaurant menu's unconfirmed-price guard. No cPanel or production action occurred.
-
+- [2026-10-26] Sprint 61 / [PR #135](https://github.com/tchouhanjsm/garh-jaisal-website/pull/135) merged at `c3326fb320e7b78bd20f70e8829c9e6a54266829`. Site Checks, non-deploying QA and package preflight passed; merge-head Browser E2E was cancelled.
+- Sprint 62 is prepared on `feature/tour-decision-cards-20261026`; it adds source-backed comparison facts and city-tour shortlist actions, with exact-head CI required before review.
 
 ## Remaining blockers
 
