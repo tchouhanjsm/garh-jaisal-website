@@ -159,10 +159,10 @@ require __DIR__ . '/include/page-head.php';
       <h2>Experience Jaisalmer from inside its living Fort.</h2>
 
       <p>
-        Garh Jaisal Haveli is located inside Jaisalmer Fort, surrounded by
-        the sandstone architecture and everyday life of the historic fort.
-        The stay combines heritage-style rooms, rooftop dining and access
-        to Jaisalmer and the desert.
+        Jaisalmer is more than a stop for photographs. Staying inside the
+        Fort lets you step straight into its sandstone lanes, then return to
+        a room with its own character. Add rooftop dining, a guided heritage
+        walk or a desert outing to shape the visit around your interests.
       </p>
 
       <div class="feature-list">
@@ -172,7 +172,8 @@ require __DIR__ . '/include/page-head.php';
           <div>
             <h3>Inside Jaisalmer Fort</h3>
             <p>
-              Stay within the historic fort rather than outside its walls.
+              Make the living Fort part of the stay, not just a place to visit
+              between transfers.
             </p>
           </div>
         </article>
@@ -182,7 +183,8 @@ require __DIR__ . '/include/page-head.php';
           <div>
             <h3>Rooftop views</h3>
             <p>
-              Enjoy rooftop dining and views across the Golden City. Confirm current service times and menu options with the hotel before visiting.
+              Take in the sandstone skyline over a meal. Ask the team to confirm
+              the current menu, service hours and table availability.
             </p>
           </div>
         </article>
@@ -192,7 +194,9 @@ require __DIR__ . '/include/page-head.php';
           <div>
             <h3>Help with arrival</h3>
             <p>
-              Contact the hotel before arrival to ask whether meet-and-assist or luggage help can be arranged; wait for confirmation before relying on any arrangement.
+              Get the practical details before you travel: where vehicles stop,
+              the final walk through the Fort and any assistance that can be
+              confirmed for your arrival time.
             </p>
           </div>
         </article>
@@ -232,7 +236,7 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell">
       <div class="section-head">
         <div><p class="eyebrow">Stay</p><h2 id="rooms-preview-title">Find your room inside the Fort.</h2></div>
-        <p>From colourful rooms to carved interiors, each room has its own character. Explore the current room collection and choose the space that suits your stay.</p>
+        <p>See the rooms before you choose. Compare their character and details, then check current rates, availability and room-specific facilities for your dates.</p>
       </div>
       <div class="cards home-room-cards">
         <?php foreach ($featuredRooms as $room): ?>
@@ -265,9 +269,9 @@ require __DIR__ . '/include/page-head.php';
       <h2 id="rooftop-dining-title">Rooftop dining, with the Golden City around you.</h2>
 
       <p>
-        Visit the rooftop for dining and views across Jaisalmer's sandstone
-        rooftops. Contact the hotel to confirm current service times and menu
-        options before visiting.
+        Take a seat above the sandstone rooftops at Garh Jaisal's Kitchen.
+        Ask about the current dishes, service hours and table availability
+        before you make the evening's plan.
       </p>
 
       <p>
@@ -275,8 +279,8 @@ require __DIR__ . '/include/page-head.php';
       </p>
 
       <div class="actions">
-        <a class="button button-primary" href="roof.php">
-          Explore rooftop dining
+        <a class="button button-primary" href="restaurant.php">
+          Explore the restaurant
         </a>
       </div>
     </div>
@@ -303,8 +307,9 @@ require __DIR__ . '/include/page-head.php';
       </div>
 
       <p>
-        Arrange a desert experience from Garh Jaisal, from a sunset camel
-        safari to an overnight stay among the dunes.
+        Choose the kind of desert memory you want to make: an evening among
+        the dunes, a cultural programme or a night beneath the open sky.
+        Routes, timings and inclusions are confirmed for your date.
       </p>
     </div>
 
