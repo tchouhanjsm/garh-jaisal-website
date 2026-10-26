@@ -631,6 +631,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const countBadge = tripTray.querySelector('[data-trip-count]');
     const status = tripTray.querySelector('[data-trip-status]');
     const sendLink = tripTray.querySelector('[data-trip-send]');
+    const tripStartDate = tripTray.querySelector('[data-trip-start-date]');
+    const tripEndDate = tripTray.querySelector('[data-trip-end-date]');
+    const tripTravellers = tripTray.querySelector('[data-trip-travellers]');
+    const tripDetailsError = tripTray.querySelector('[data-trip-details-error]');
+
+    const validateTripDetails = () => {
+      const startDate = tripStartDate ? tripStartDate.value.trim() : '';
+      const endDate = tripEndDate ? tripEndDate.value.trim() : '';
+      const travellerValue = tripTravellers ? tripTravellers.value.trim() : '';
+      const dateRangeInvalid = Boolean(startDate && endDate && endDate < startDate);
+      const travellerCount = Number(travellerValue);
+      const travellersInvalid = travellerValue !== '' && (
+        !Number.isSafeInteger(travellerCount) || travellerCount < 1
+      );
+      const errors = [];
+
+      if (dateRangeInvalid) {
+        errors.push('Travel end date must be on or after the start date.');
+      }
+      if (travellersInvalid) {
+        errors.push('Enter a whole number of travellers greater than zero, or leave this field blank.');
+      }
+
+      if (tripEndDate) {
+        if (dateRangeInvalid) tripEndDate.setAttribute('aria-invalid', 'true');
+        else tripEndDate.removeAttribute('aria-invalid');
+      }
+      if (tripTravellers) {
+        if (travellersInvalid) tripTravellers.setAttribute('aria-invalid', 'true');
+        else tripTravellers.removeAttribute('aria-invalid');
+      }
+      if (tripDetailsError) {
+        tripDetailsError.textContent = errors.join(' ');
+        tripDetailsError.hidden = errors.length === 0;
+      }
+      return errors.length === 0;
+    };
+
 
     const validTripItem = (item) => Boolean(
       item &&
@@ -675,16 +713,35 @@ document.addEventListener('DOMContentLoaded', () => {
       const base = sendLink.dataset.whatsappBase || '';
       try {
         const destination = new URL(base, window.location.href);
-        const selections = tripItems.map(item => '- ' + item.title).join('\n');
-        const message = "Hello, I'd like to plan a Jaisalmer trip with Garh Jaisal Haveli.\n" +
-          "Please share current rates, availability and confirmed arrangements for these options:\n" +
-          selections + "\nTravel dates: [add dates].\nPlease confirm what can be arranged for my dates.";
+        const selections = tripItems.map(item => '- ' + item.title).join('\\n');
+        const startDate = tripStartDate ? tripStartDate.value.trim() : '';
+        const endDate = tripEndDate ? tripEndDate.value.trim() : '';
+        const travellerValue = tripTravellers ? tripTravellers.value.trim() : '';
+        const dateRange = startDate && endDate
+          ? startDate + ' to ' + endDate
+          : startDate
+            ? startDate + ' (end date to be confirmed)'
+            : endDate
+              ? 'start date to be confirmed, ending ' + endDate
+              : 'to be confirmed';
+        const travellerCount = travellerValue !== '' && Number.isSafeInteger(Number(travellerValue)) && Number(travellerValue) >= 1
+          ? String(Number(travellerValue))
+          : 'to be confirmed';
+        const message = "Hello, I'd like to plan a Jaisalmer trip with Garh Jaisal Haveli.\\n" +
+          "Please share current rates, availability and confirmed arrangements for these options:\\n" +
+          selections + "\\nTravel dates: " + dateRange + ".\\nNumber of travellers: " + travellerCount +
+          ".\\nPlease confirm what can be arranged for my dates.";
         destination.searchParams.set('text', message);
         sendLink.href = destination.toString();
       } catch {
         sendLink.href = base || '#';
       }
+      validateTripDetails();
     };
+
+    [tripStartDate, tripEndDate, tripTravellers].forEach((field) => {
+      if (field) field.addEventListener('input', updateOutboundWhatsApp);
+    });
 
     const refreshAddButtons = () => {
       tripTray.querySelectorAll('[data-trip-add]').forEach((buttonElement) => {
@@ -748,7 +805,13 @@ document.addEventListener('DOMContentLoaded', () => {
         itemsList.append(listItem);
       });
 
-      if (!hasItems) setPanelOpen(false, false);
+      if (!hasItems) {
+        setPanelOpen(false, false);
+        if (tripStartDate) tripStartDate.value = '';
+        if (tripEndDate) tripEndDate.value = '';
+        if (tripTravellers) tripTravellers.value = '';
+        validateTripDetails();
+      }
       updateOutboundWhatsApp();
       refreshAddButtons();
     };
@@ -811,8 +874,20 @@ document.addEventListener('DOMContentLoaded', () => {
       setPanelOpen(false, false);
       renderTripTray();
     });
-    sendLink.addEventListener('click', () => {
-      if (!tripItems.length) return;
+    sendLink.addEventListener('click', (event) => {
+      if (!tripItems.length) {
+        event.preventDefault();
+        return;
+      }
+      if (!validateTripDetails()) {
+        event.preventDefault();
+        if (tripEndDate && tripEndDate.getAttribute('aria-invalid') === 'true') {
+          tripEndDate.focus();
+        } else if (tripTravellers && tripTravellers.getAttribute('aria-invalid') === 'true') {
+          tripTravellers.focus();
+        }
+        return;
+      }
       trackIntentEvent('trip_send_intent', {
         page_path: window.location.pathname || '/',
         page_context: currentPageContext(),
