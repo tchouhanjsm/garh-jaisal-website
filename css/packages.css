@@ -702,3 +702,21 @@ main.thar-sunset-story--experiences .experience-duration-label{
     transition:none!important;
   }
 }
+
+
+/* Sprint 64 — route-first choice architecture for Car & City enquiries. */
+.car-city-choice{background:var(--cream)}
+.car-city-route-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:30px 0 52px}
+.car-city-route{display:grid;grid-template-columns:36px minmax(0,1fr) 20px;align-items:start;gap:14px;min-width:0;padding:22px 20px;border:1px solid var(--line);background:#fff;color:inherit;text-decoration:none;transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease}
+.car-city-route:hover{border-color:#b7a187;box-shadow:0 10px 24px rgba(39,29,21,.07);transform:translateY(-2px)}
+.car-city-route:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.car-city-route-number{display:grid;width:34px;height:34px;place-items:center;border:1px solid #d7c5ae;border-radius:50%;color:var(--brown);font-family:"Source Serif 4",Georgia,"Times New Roman",serif;font-size:.95rem}
+.car-city-route-copy{display:grid;gap:8px;min-width:0}
+.car-city-route-copy strong{font-family:"Source Serif 4",Georgia,"Times New Roman",serif;font-size:1.25rem;font-weight:500;line-height:1.2}
+.car-city-route-copy span{color:var(--muted);font-size:.88rem;line-height:1.55}
+.car-city-route-arrow{align-self:center;color:var(--brown);font-size:1.15rem;font-weight:700}
+.car-city-existing-heading{margin-top:0}
+.tour-ideas-disclaimer{padding:16px 18px;border-inline-start:3px solid #a98250;background:var(--sand-light)}
+.tour-idea-link{min-height:44px;gap:10px}
+@media(max-width:900px){.car-city-route-grid{grid-template-columns:1fr;margin-bottom:40px}.car-city-route{padding:20px}}
+@media(prefers-reduced-motion:reduce){.car-city-route,.car-city-route-arrow{transition:none}.car-city-route:hover{transform:none}}
