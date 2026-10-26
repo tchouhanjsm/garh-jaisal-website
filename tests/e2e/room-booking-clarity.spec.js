@@ -154,3 +154,30 @@ test('room finder combines search, floor and registry-backed feature filters wit
   await expect(finder.locator('[data-room-floor-filter]')).toHaveValue('all');
   await expect(windowSeatFilter).toHaveAttribute('aria-pressed', 'false');
 });
+
+
+test('Rooms directory remains complete when JavaScript enhancement is unavailable', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'No-JavaScript fallback contract runs once on desktop-1280');
+
+  const context = await browser.newContext({
+    baseURL: 'http://127.0.0.1:8080',
+    javaScriptEnabled: false,
+    viewport: { width: 1280, height: 800 },
+  });
+
+  try {
+    const noJsPage = await context.newPage();
+    const response = await noJsPage.goto('/room.php', { waitUntil: 'domcontentloaded' });
+    expect(response, 'Rooms should return an HTTP response without JavaScript').not.toBeNull();
+    expect(response.status(), 'Rooms should load without JavaScript').toBeLessThan(400);
+
+    await expect(noJsPage.locator('[data-room-finder]'), 'finder enhancement stays hidden when JS is disabled')
+      .toBeHidden();
+    await expect(noJsPage.locator('.room-card')).toHaveCount(EXPECTED_ROOM_COUNT);
+    await expect(noJsPage.locator('.room-card a.room-book')).toHaveCount(EXPECTED_ROOM_COUNT);
+    await expect(noJsPage.locator('.room-card a.room-enquiry-link')).toHaveCount(EXPECTED_ROOM_COUNT);
+    await expect(noJsPage.locator('.rooms-floor-nav a[href^="#"]')).toHaveCount(2);
+  } finally {
+    await context.close();
+  }
+});

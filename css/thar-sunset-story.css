@@ -499,3 +499,12 @@ main.thar-sunset-story--rooms .room-finder-empty p{
     align-self:flex-start;
   }
 }
+
+
+/* Keep the new filter controls calm when reduced motion is requested. */
+@media(prefers-reduced-motion:reduce){
+  main.thar-sunset-story--rooms .room-filter-chip,
+  main.thar-sunset-story--rooms .room-finder-reset{
+    transition:none;
+  }
+}
