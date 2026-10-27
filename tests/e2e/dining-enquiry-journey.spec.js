@@ -24,6 +24,36 @@ async function expectDiningEnquiry(page) {
   await expect(page.getByRole('button', { name: 'Send message' })).toBeVisible();
 }
 
+test('restaurant hero eyebrow maintains readable contrast on its dark background', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Hero contrast contract runs once on desktop-1280.');
+  const response = await page.goto('/restaurant.php', { waitUntil: 'domcontentloaded' });
+  expect(response).not.toBeNull();
+  expect(response.status()).toBeLessThan(400);
+
+  const eyebrow = page.locator('.restaurant-hero-copy > .eyebrow');
+  await expect(eyebrow).toBeVisible();
+  const contrast = await eyebrow.evaluate(element => {
+    const rgb = value => {
+      const match = value.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/i);
+      return match ? match.slice(1, 4).map(Number).map(channel => {
+        const srgb = channel / 255;
+        return srgb <= 0.04045 ? srgb / 12.92 : ((srgb + 0.055) / 1.055) ** 2.4;
+      }) : null;
+    };
+    const luminance = value => {
+      const channels = rgb(value);
+      return channels ? 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2] : null;
+    };
+    const foreground = getComputedStyle(element).color;
+    const background = getComputedStyle(element.closest('.restaurant-hero')).backgroundColor;
+    const fg = luminance(foreground);
+    const bg = luminance(background);
+    return { foreground, background, ratio: fg === null || bg === null ? null : (Math.max(fg, bg) + 0.05) / (Math.min(fg, bg) + 0.05) };
+  });
+  expect(contrast.ratio, 'Restaurant hero overline should meet WCAG AA for normal text').not.toBeNull();
+  expect(contrast.ratio).toBeGreaterThanOrEqual(4.5);
+});
+
 test('rooftop and restaurant entry points reach the contextual dining enquiry', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Dining journey runs once on desktop-1280');
 

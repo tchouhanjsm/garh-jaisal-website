@@ -30,7 +30,7 @@ The two largest responsive candidates were `img/responsive/v2/facade-1200.webp` 
 
 The payload audit also identified high-intent templates that used the shared image helper without a responsive `sizes` hint. Sprint 73 adds slot-accurate hints to the Home tent card, restaurant hero, rooftop hero/banner, desert hub hero/cards and guided-tour hero/cards. This enables the browser to select a candidate matching its rendered slot instead of falling back to a full-size 1x image.
 
-The source photos, crop, alt text, public routes and business copy remain unchanged. The existing browser slot test now checks both the rendered source and its `sizes`/responsive `srcset` contract. The refreshed Browser E2E run remains the acceptance gate.
+The source photos, crop, alt text, public routes and business copy remain unchanged. The existing browser slot test now checks both the rendered source and its `sizes`/responsive `srcset` contract. Screenshot review also caught a low-contrast restaurant hero overline on the dark background; the page stylesheet now uses the established light-gold hero color, with a WCAG AA contrast regression assertion. The refreshed Browser E2E run remains the acceptance gate.
 
 ## Verification boundary
 

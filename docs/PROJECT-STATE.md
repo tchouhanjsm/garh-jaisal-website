@@ -22,6 +22,7 @@ Deliver a coherent, premium first impression and a lower-friction direct-booking
 ## Active phase — Sprint 73: responsive image slots across high-intent journeys
 
 - Apply slot-accurate `sizes` hints where Home, Dining, Rooftop, Desert Safari and Guided Tours templates were falling back to the full-resolution/optimized 1x source.
+- Include a screenshot-driven readability fix for the restaurant hero overline and lock its foreground/background contrast in Browser E2E.
 - Use full viewport hints for full-bleed heroes, actual two-column/three-column estimates for option cards, and a contained image size for the rooftop banner.
 - Verify each newly wired slot exposes responsive candidates through the shared helper. Browser tests cover the source and slot hint together so later template changes cannot quietly drop responsive delivery.
 - Preserve image content, alt text, priority/loading semantics and existing routes. Validate layouts and intrinsic dimensions at 320/390/768/1280/1440px.
