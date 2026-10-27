@@ -29,7 +29,7 @@ Deliver a coherent, premium first impression and a lower-friction direct-booking
 2. Review Home, Rooms, Packages/Experiences, Dining, Directions and Contact screenshots at 320/390/768/1280/1440px.
 3. Measure actual image transfer sizes and page-loading metrics rather than assuming file extensions guarantee performance.
 4. Verify keyboard/focus, contrast, reduced motion, form error recovery, responsive controls, canonical/schema/sitemap and route consistency.
-5. Inspect exact-head CI artifacts. Passing CI does not replace human visual review or live-host verification.
+5. Keep sitemap lastmod derived from every registry that affects rendered public pages; inspect exact-head CI artifacts. Passing CI does not replace human visual review or live-host verification.
 
 ## Release blockers requiring owner action
 

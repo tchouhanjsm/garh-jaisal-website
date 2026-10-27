@@ -63,6 +63,8 @@ foreach ($catalogueDefinitions as $definition) {
     }
 }
 $assert(($catalogueDining['trip_group'] ?? '') === 'dining', 'Catalogue rooftop dining belongs to the canonical dining Trip group.');
+$generatorSource = file_get_contents(dirname(__DIR__, 2) . '/scripts/generate-sitemap.php');
+$assert(is_string($generatorSource) && strpos($generatorSource, "'include/catalogue-data.php'") !== false, 'Catalogue lastmod tracks catalogue-specific source data.');
 $rootForDining = dirname(__DIR__, 2);
 $assert(strpos((string) file_get_contents($rootForDining . '/restaurant.php'), "'id' => 'rooftop-dining'") !== false, 'Restaurant menu page offers the canonical Trip dining selection.');
 $assert(strpos((string) file_get_contents($rootForDining . '/roof.php'), "'id' => 'rooftop-dining'") !== false, 'Rooftop page offers the canonical Trip dining selection.');

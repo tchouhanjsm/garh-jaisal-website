@@ -23,7 +23,7 @@
 
 The dedicated restaurant/menu page and rooftop experience page use the same validated Trip item as the catalogue: `rooftop-dining`, “Rooftop dining”, destination `roof.php`, group `dining`. The add action is in the first-screen controls, allowing guests to combine dining with a room or experience without hunting for the catalogue first.
 
-The Trip route remains an enquiry aid, not a reservation. Contact receives only the selected option ID and the server supplies its label. Guests retain the dedicated table request form and WhatsApp draft, while unapproved menu items and prices stay hidden.
+The Trip route remains an enquiry aid, not a reservation. Contact receives only the selected option ID and the server supplies its label. Guests retain the dedicated table request form and WhatsApp draft, while unapproved menu items and prices stay hidden. The sitemap generator also tracks `include/catalogue-data.php` when deriving the catalogue page's lastmod and updates lastmod for the touched dining pages.
 
 ## Verification boundary
 
