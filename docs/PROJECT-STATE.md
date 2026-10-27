@@ -6,20 +6,25 @@ Last updated: 27 October 2026.
 
 Deliver a coherent, premium first impression and a lower-friction direct-booking journey on the existing plain-PHP/cPanel stack. The visual direction remains editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint and local warmth.
 
-## Verified baseline after PR #150
+## Verified baseline after PR #151
 
-- `main` baseline: `7f8785b9860062d4041906f9be1fd3035f2a7488` (PR #150 merge).
-- Guest-journey milestones include #141 custom itinerary enquiries, #143 accessible experience-detail navigation, #144 editorial experience headings, #145 homepage/arrival hierarchy, #146 room comparison, #147 room-shortlist-to-Contact, #148 comparison-to-Trip, #149 unified Trip-to-Contact plus experience-detail handoff, and #150 dining-to-Trip-to-Contact.
-- PR #150's corrected head `fda85a55b73e2fc92c46ade045a4287ba453ce5d` passed Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40493368760) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40493369366) · [Package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40493368827) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40493368740).
-- The Trip tray is session-only; selected IDs resolve server-side, while optional travel dates and traveller count remain outside the Contact URL.
+- `main` baseline: `fb02f83f96698cd1948cdd09e1358c74c661bd56` (PR #151 merge).
+- Guest-journey milestones include #141 custom itinerary enquiries, #143 accessible experience-detail navigation, #144 editorial experience headings, #145 homepage/arrival hierarchy, #146 room comparison, #147 room-shortlist-to-Contact, #148 comparison-to-Trip, #149 unified Trip-to-Contact plus experience-detail handoff, #150 dining-to-Trip-to-Contact, and #151 measured responsive-image quality profiles with byte-budget checks.
+- PR #151's corrected head passed Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40497295876) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40497295673) · [Package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40497295768) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40497295778).
 
-## Active phase — Sprint 72: measured hero-image payload budgets
+## Completed phase — Sprint 72: measured hero-image payload budgets
 
 - The PR #150 browser artifact audited 37 sitemap routes and 149 distinct rendered image URLs in a local PHP/Chromium run (not production measurements).
 - The largest measured responsive candidates were `img/responsive/v2/facade-1200.webp` at 416,592 bytes and `img/responsive/v2/courtyard-1200.webp` at 406,736 bytes.
-- Keep the default responsive-image encoding quality at 82; use a source-scoped quality of 74 only for the façade and directions-courtyard source photos. Original photos and all other sources remain unchanged.
-- Enforce a 350 KiB maximum for those two generated 1200px candidates in Browser E2E using exact filesystem bytes, and record the budget evidence alongside the sitewide image-payload audit.
-- Retain the generated source-vs-variant review sheet and report for visual inspection. Automated byte budgets do not prove acceptable perceived image quality; owner review is required before merge/release.
+- PR #151 added source-scoped quality 74 overrides for those two candidates, retained default quality 82 for other sources, and enforced exact-byte 350 KiB ceilings. Original photographs remain unchanged.
+- Local Chromium payload data is a comparative engineering baseline, not production/CDN or Core Web Vitals evidence. Human visual review of full-size outputs remains required.
+
+## Active phase — Sprint 73: responsive image slots across high-intent journeys
+
+- Apply slot-accurate `sizes` hints where Home, Dining, Rooftop, Desert Safari and Guided Tours templates were falling back to the full-resolution/optimized 1x source.
+- Use full viewport hints for full-bleed heroes, actual two-column/three-column estimates for option cards, and a contained image size for the rooftop banner.
+- Verify each newly wired slot exposes responsive candidates through the shared helper. Browser tests cover the source and slot hint together so later template changes cannot quietly drop responsive delivery.
+- Preserve image content, alt text, priority/loading semantics and existing routes. Validate layouts and intrinsic dimensions at 320/390/768/1280/1440px.
 
 ## Priority sequence
 

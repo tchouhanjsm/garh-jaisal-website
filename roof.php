@@ -58,7 +58,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="roof-page thar-sunset-story thar-sunset-story--dining" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/rest5.jpg" <?= gj_image_dimension_attributes('img/rest5.jpg') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/rest5.jpg" <?= gj_image_dimension_attributes('img/rest5.jpg', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Rooftop dining</p>
@@ -103,7 +103,7 @@ require __DIR__ . '/include/page-head.php';
         <img
           src="img/rest3.jpg"
           alt="Rooftop dining area with views across Jaisalmer"
-          <?= gj_image_dimension_attributes('img/rest3.jpg') ?>
+          <?= gj_image_dimension_attributes('img/rest3.jpg', '(max-width: 760px) 100vw, 1180px') ?>
         >
       </div>
 

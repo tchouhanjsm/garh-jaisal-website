@@ -360,8 +360,7 @@ require __DIR__ . '/include/page-head.php';
       <div class="restaurant-hero-media">
         <img
           src="img/rest2.jpg"
-          width="900"
-          height="600"
+          <?= gj_image_dimension_attributes('img/rest2.jpg', '(max-width: 760px) 100vw, 45vw') ?>
           alt="Rooftop dining area at Garh Jaisal's Kitchen in Jaisalmer"
           fetchpriority="high"
         >

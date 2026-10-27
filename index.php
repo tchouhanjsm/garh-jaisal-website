@@ -344,7 +344,7 @@ require __DIR__ . '/include/page-head.php';
       <article class="card">
         <div class="card-image">
           <img
-            src="img/v2/swiss-tent.webp" <?= gj_image_dimension_attributes('img/v2/swiss-tent.webp') ?>
+            src="img/v2/swiss-tent.webp" <?= gj_image_dimension_attributes('img/v2/swiss-tent.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
             alt="Swiss tent accommodation in the Jaisalmer desert"
             loading="lazy">
         </div>
