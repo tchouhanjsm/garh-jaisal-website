@@ -21,12 +21,22 @@ test('live experience pages show a contextual checkpoint after the itinerary and
     expect(response.status(), route.path + ': should remain available').toBe(200);
 
     if (route.kind === 'hub') {
+      const heroActions = page.locator('.experience-hero-actions');
+      await expect(heroActions.locator('a, button'), route.path + ': hero has two deliberate actions').toHaveCount(2);
       if (route.path === '/desert-safari.php') {
+        await expect(heroActions.locator('a.button-primary'))
+          .toHaveAttribute('href', '#desert-options');
+        await expect(heroActions.getByRole('link', { name: 'Compare safari options' }))
+          .toBeVisible();
+        await expect(heroActions.getByRole('link', { name: 'Check dates & prices' }))
+          .toHaveAttribute('href', 'contact.php?topic=desert-safari');
         await expect(page.getByRole('link', { name: 'Build your trip shortlist' }), route.path + ': hub keeps a clear next step')
           .toHaveAttribute('href', 'catalogue.php');
       } else {
         await expect(page.getByRole('link', { name: 'Plan my guided tour' }), route.path + ': city-tour hub keeps a contextual enquiry')
           .toHaveAttribute('href', 'contact.php?topic=visit-planning');
+        await expect(heroActions.locator('a[href="#guided-options"]')).toHaveText('Compare tour options');
+        await expect(heroActions.getByRole('link', { name: 'Build your trip shortlist' })).toHaveCount(0);
       }
       continue;
     }
@@ -50,6 +60,8 @@ test('live experience pages show a contextual checkpoint after the itinerary and
     await expect(contact).toBeVisible();
     const href = await contact.getAttribute('href');
     expect(href).toBeTruthy();
+    await expect(page.locator('.experience-hero-actions a.button-primary'), route.path + ': hero and post-detail enquiry destinations match')
+      .toHaveAttribute('href', href);
     const destination = new URL(href, page.url());
 
     if (route.contact === 'whatsapp') {
@@ -83,6 +95,9 @@ test('hero and checkpoint Add to Trip buttons stay synchronized', async ({ page 
   test.skip(!['desktop-1280', 'mobile-390'].includes(testInfo.project.name), 'Trip action synchronization runs at desktop and mobile widths');
 
   await page.goto('/swiss-tent-safari.php', { waitUntil: 'domcontentloaded' });
+  const heroActions = page.locator('.experience-hero-actions');
+  await expect(heroActions.locator('a, button')).toHaveCount(2);
+  await expect(heroActions.getByRole('link', { name: 'Build your trip shortlist' })).toHaveCount(0);
   const heroAdd = page.locator('.experience-hero [data-trip-add][data-trip-id="swiss-tent-safari"]');
   const checkpointAdd = page.locator('[data-experience-conversion-checkpoint] [data-trip-add][data-trip-id="swiss-tent-safari"]');
   await expect(heroAdd).toBeVisible();

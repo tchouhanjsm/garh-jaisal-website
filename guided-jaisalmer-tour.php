@@ -72,10 +72,9 @@ require __DIR__ . '/include/page-head.php';
       <p class="eyebrow">Jaisalmer tours</p>
       <h1>See Jaisalmer with a guide, at your pace.</h1>
       <p>Choose a focused Fort walk, a half-day exploration or a fuller day across Jaisalmer's heritage areas. Tell us what interests you and how much time you have; the route, guide language and current price are confirmed for your date.</p>
-      <div class="actions">
+      <div class="actions experience-hero-actions">
         <a class="button button-primary" href="contact.php?topic=visit-planning">Plan my guided tour</a>
         <a class="button button-light" href="#guided-options">Compare tour options</a>
-        <a class="button button-secondary" href="catalogue.php">Build your trip shortlist</a>
       </div>
     </div>
   </section>
@@ -159,6 +158,9 @@ require __DIR__ . '/include/page-head.php';
       <div class="planner-grid planner-grid--two">
         <article><strong>Limited time</strong><p>The half-day option keeps the route focused on the fort, heritage areas, havelis and markets.</p></article>
         <article><strong>More time to explore</strong><p>The full-day option gives the guide more time for context, additional heritage stops and the areas that matter to you.</p></article>
+      </div>
+      <div class="actions guided-tour-planning-actions">
+        <a class="button button-secondary" href="catalogue.php">Build your trip shortlist</a>
       </div>
     </div>
   </section>

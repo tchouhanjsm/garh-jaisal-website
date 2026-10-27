@@ -73,7 +73,7 @@ require __DIR__ . '/include/page-head.php';
       <p class="eyebrow">Desert safari</p>
       <h1>Find the Jaisalmer desert safari that fits your trip.</h1>
       <p>A sunset outing and an overnight stay are very different experiences. Compare the options below, then ask us to confirm the route, transport, timings, accommodation, meals and total price for your date.</p>
-      <div class="actions">
+      <div class="actions experience-hero-actions">
         <a class="button button-primary" href="#desert-options">Compare safari options</a>
         <a class="button button-light" href="contact.php?topic=desert-safari">Check dates &amp; prices</a>
       </div>

@@ -54,6 +54,24 @@
   font-size:clamp(1rem,1.5vw,1.15rem);
 }
 
+/* Keep the hero's next step focused across shared detail pages and the guided-tour hub. */
+.experience-hero-actions{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:stretch;
+  gap:12px;
+}
+.experience-hero-actions > .button,
+.experience-hero-actions > .trip-add-button{
+  display:inline-flex;
+  min-height:48px;
+  align-items:center;
+  justify-content:center;
+  margin:0;
+  text-align:center;
+  white-space:normal;
+}
+
 .experience-breadcrumbs{
   display:flex;
   flex-wrap:wrap;
@@ -764,13 +782,17 @@
   .experience-hero-content h1 {
     font-size: clamp(2.25rem, 9.5vw, 3.7rem);
   }
-  .experience-hero-content .actions {
-    align-items: stretch;
+  .experience-hero-actions{
+    align-items:stretch;
+    flex-direction:column;
+    gap:10px;
   }
-  .experience-hero-content .actions .button {
-    max-width: 100%;
-    white-space: normal;
-    text-align: center;
+  .experience-hero-actions > .button,
+  .experience-hero-actions > .trip-add-button{
+    width:100%;
+    max-width:100%;
+    white-space:normal;
+    text-align:center;
   }
   .experience-timeline li > div {
     overflow-wrap: anywhere;
