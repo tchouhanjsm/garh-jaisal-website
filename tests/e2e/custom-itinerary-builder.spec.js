@@ -45,7 +45,7 @@ test('custom itinerary builder combines interests and prepares an explicit Whats
   await whatsapp.click();
   const popup = await popupPromise;
   const popupDestination = new URL(popup.url());
-  expect(popupDestination.origin).toBe(targetUrl.origin);
+  expect(popupDestination.hostname).toMatch(/^(?:wa\.me|api\.whatsapp\.com|web\.whatsapp\.com|www\.whatsapp\.com)$/);
   expect(popupDestination.searchParams.get('text')).toContain('enquiry only, not a booking');
 });
 

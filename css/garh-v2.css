@@ -3226,30 +3226,3 @@ main.thar-sunset-story--rooms [hidden] {
   display: none !important;
 }
 
-@media (max-width: 380px) {
-  main.thar-sunset-story--rooms .rooms-hero-summary {
-    padding: 12px 14px;
-  }
-
-  main.thar-sunset-story--rooms .rooms-hero-summary > .eyebrow {
-    margin-bottom: 8px;
-  }
-
-  main.thar-sunset-story--rooms .rooms-hero-summary .at-a-glance__item {
-    grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
-    gap: 8px;
-    padding: 7px 0;
-  }
-
-  main.thar-sunset-story--rooms .rooms-hero-summary .at-a-glance__label {
-    font-size: .68rem;
-    line-height: 1.2;
-    letter-spacing: .04em;
-  }
-
-  main.thar-sunset-story--rooms .rooms-hero-summary .at-a-glance__value {
-    font-size: .82rem;
-    line-height: 1.2;
-    overflow-wrap: anywhere;
-  }
-}
