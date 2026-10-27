@@ -928,3 +928,15 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Add source-contract and Browser E2E coverage for all six live experience detail pages, link/target parity, visible sections and 320/390/768/1280/1440px no-overflow.
 - Preserve all registry content, image/alt values, schema, canonical URLs, WhatsApp/Trip-shortlist actions and prices-on-request. Do not fabricate missing operational facts or publish draft/hidden experiences.
 - Acceptance: PR #143 must be retargeted to `main` only after PR #141 merges, then pass exact-head PHP 7.4/8.2 checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA.
+
+
+## Sprint 75 — photo-led, keyboard-accessible room comparison (PR #154)
+
+**Commercial goal:** reduce the visual memory burden in room comparison and make the mobile comparison table usable without a pointer.
+
+- Reuse each selected room card's curated first photo inside the side-by-side comparison matrix, including existing alt text and responsive candidate set; size thumbnails for the narrow comparison column.
+- Give the horizontal table container a visible keyboard focus state, a focusable region role/name, and a concise mobile scroll hint.
+- Keep the existing comparison cap (three rooms), feature data, room-specific enquiries, Contact shortlist token, Trip integration, booking URL/token, public routes, metadata and facts unchanged.
+- Add regression coverage for image identity/alt parity, the comparison region's accessible semantics, inner horizontal scrolling at 320/390px without page overflow, and established room-to-Trip/Contact handoffs.
+- Acceptance: exact-head PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. No local browser/PHP execution is claimed unless actually run.
+- No cPanel upload, staging deployment or production release.

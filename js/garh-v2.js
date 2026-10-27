@@ -651,6 +651,31 @@ document.addEventListener('DOMContentLoaded', () => {
       table.appendChild(thead);
 
       const tbody = document.createElement('tbody');
+      const photoRow = document.createElement('tr');
+      const photoHeading = document.createElement('th');
+      photoHeading.scope = 'row';
+      photoHeading.textContent = 'Room photo';
+      photoRow.appendChild(photoHeading);
+      selectedCards.forEach((card) => {
+        const cell = document.createElement('td');
+        const sourceImage = card.querySelector('.photo-carousel-slide img');
+        if (sourceImage) {
+          // Reuse the first curated room photo and its validated responsive candidates.
+          // The comparison cell is narrower than the directory card, so size for its real slot.
+          const image = sourceImage.cloneNode(false);
+          image.classList.add('room-comparison-photo');
+          image.alt = sourceImage.getAttribute('alt') || (roomName(card) + ' interior');
+          image.setAttribute('sizes', '150px');
+          image.loading = 'lazy';
+          image.decoding = 'async';
+          cell.appendChild(image);
+        } else {
+          cell.textContent = 'Photo unavailable';
+        }
+        photoRow.appendChild(cell);
+      });
+      tbody.appendChild(photoRow);
+
       const appendTextRow = (label, selector) => {
         const row = document.createElement('tr');
         const heading = document.createElement('th');

@@ -31,6 +31,22 @@ test.describe('Room comparison journey', () => {
     await expect(dialog.locator('thead th')).toHaveCount(3);
     await expect(dialog.locator('table')).toContainText(await firstCard.locator('h3').textContent());
     await expect(dialog.locator('table')).toContainText('Listed features');
+
+    const comparisonContent = dialog.locator('[data-room-comparison-content]');
+    await expect(comparisonContent).toHaveAttribute('role', 'region');
+    await expect(comparisonContent).toHaveAttribute('tabindex', '0');
+    await expect(comparisonContent).toHaveAccessibleName('Selected room comparison table');
+    await expect(dialog.locator('#room-comparison-scroll-hint')).toContainText('scroll the table horizontally');
+
+    const photoRow = dialog.locator('tbody tr').filter({ hasText: 'Room photo' });
+    await expect(photoRow).toHaveCount(1);
+    const comparisonPhotos = photoRow.locator('img.room-comparison-photo');
+    await expect(comparisonPhotos).toHaveCount(2);
+    const firstPhoto = firstCard.locator('.photo-carousel-slide img').first();
+    await expect(comparisonPhotos.nth(0)).toHaveAttribute('src', await firstPhoto.getAttribute('src'));
+    await expect(comparisonPhotos.nth(0)).toHaveAttribute('alt', await firstPhoto.getAttribute('alt'));
+    await expect(comparisonPhotos.nth(0)).toHaveAttribute('sizes', '150px');
+    await expect(comparisonPhotos.nth(1)).toHaveAttribute('sizes', '150px');
     const originalBookingHref = await firstCard.locator('.room-book').getAttribute('href');
     await expect(dialog.locator('a.room-comparison-availability').first()).toHaveAttribute('href', originalBookingHref);
     await expect(dialog.locator('[data-room-compare-remove]')).toHaveCount(2);
@@ -71,6 +87,14 @@ test.describe('Room comparison journey', () => {
 
       const dialog = page.locator('[data-room-comparison-dialog]');
       await expect(dialog).toBeVisible();
+      const comparisonContent = dialog.locator('[data-room-comparison-content]');
+      await expect(comparisonContent).toHaveAttribute('tabindex', '0');
+      await comparisonContent.focus();
+      await expect(comparisonContent).toBeFocused();
+      if (width <= 390) {
+        const horizontalScrollAvailable = await comparisonContent.evaluate((element) => element.scrollWidth > element.clientWidth);
+        expect(horizontalScrollAvailable, 'Comparison columns should scroll inside the focused region at ' + width + 'px').toBe(true);
+      }
       const pageWidth = await page.evaluate(() => document.documentElement.scrollWidth);
       expect(pageWidth, 'The page must not overflow horizontally at ' + width + 'px').toBeLessThanOrEqual(width + 1);
       const bounds = await dialog.boundingBox();

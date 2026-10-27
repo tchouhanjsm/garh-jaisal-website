@@ -730,6 +730,24 @@ dialog.room-comparison-dialog::backdrop{
   outline:3px solid var(--focus,#1d4ed8);
   outline-offset:3px;
 }
+.room-comparison-scroll-hint{
+  margin:10px 0 12px;
+  color:#5f5148;
+  font-size:.86rem;
+  line-height:1.5;
+}
+.room-comparison-photo{
+  display:block;
+  width:100%;
+  max-width:160px;
+  height:auto;
+  aspect-ratio:4 / 3;
+  object-fit:cover;
+  object-position:center;
+  border:1px solid rgba(91,26,43,.16);
+  border-radius:4px;
+  background:var(--parchment,#f7efe0);
+}
 .room-comparison-table{
   width:100%;
   min-width:650px;

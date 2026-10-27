@@ -6,12 +6,12 @@ Last updated: 27 October 2026.
 
 Deliver a coherent, premium first impression and a lower-friction direct-booking journey on the existing plain-PHP/cPanel stack. The visual direction remains editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint and local warmth.
 
-## Verified baseline after PR #152
+## Verified baseline after PR #153
 
-- `main` is at `2cea0d7e64b904969b4668e9010666f35ed64632`, the merge commit for PR #152.
-- PR #152 delivered responsive image slot sizing across Home, Dining, Rooftop, Desert Safari and Guided Tours, extended related-card/rooftop image delivery, and improved restaurant hero-overline contrast.
-- The final merge-head workflows all passed on the exact main SHA: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079194) · [Browser E2E/screenshots](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079119) · [Package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079178) · [Non-deploying Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079289).
-- Browser screenshot evidence and the generated cPanel package are CI artifacts only; no package was uploaded, no staging deployment occurred, and no production release was made.
+- `main` is at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`, the merge commit for PR #153.
+- PR #153 simplified experience hero choices and aligned the Desert Safari and Guided Tours hero action contract without changing booking or enquiry destinations.
+- The post-merge workflows passed on the exact main SHA: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394006) · [Browser E2E/screenshots](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393565) · [Package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393646) · [Non-deploying Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394143).
+- Screenshot evidence and the generated cPanel package are CI artifacts only; no package was uploaded, no staging deployment occurred, and no production release was made.
 
 ## Completed phase — Sprint 72: measured hero-image payload budgets
 
@@ -24,12 +24,18 @@ Deliver a coherent, premium first impression and a lower-friction direct-booking
 - The corrected PR head fixed the initial E2E fixture's missing `BASE_URL`; the corrected merge head subsequently passed Browser E2E and screenshots on `2cea0d7e64b904969b4668e9010666f35ed64632`. The earlier failure is resolved, not a current release blocker.
 - The restaurant hero overline now uses the existing light-gold treatment with a WCAG AA contrast regression assertion. Original photos, crops, alt text, public routes and business copy remain unchanged.
 
-## Active phase — Sprint 74: focused experience-action hierarchy
+## Completed phase — Sprint 74: focused experience-action hierarchy (PR #153 merged)
+
+PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experience detail heroes focused on contextual enquiry plus Add to Trip, while preserving lower-page shortlist routes and the Desert Safari/Guided Tours hub alternatives.
+
+## Active phase — Sprint 75: photo-led, keyboard-accessible room comparison
 
 - Reduce choice overload in the first viewport: detail-page heroes keep the contextual enquiry as primary and the session-only “Add to Trip” control as the only secondary action. Remove the redundant catalogue link from individual experiences; global navigation and lower-page discovery paths remain available.
 - The Guided Jaisalmer Tours hub keeps “Plan my guided tour” and “Compare tour options”; card-level Add to Trip and detail-page routes remain intact. Keep the Desert Safari hub's catalogue action because its hero does not add a single experience to the Trip tray.
 - Add exact browser contracts for two purposeful hero actions, matching hero/checkpoint contact destinations, and synchronized Trip toggles at mobile and desktop sizes.
 - Preserve room-booking destinations, contact routing, all public URLs, factual copy, and the rule that an enquiry does not confirm a booking.
+
+Sprint 75 makes the existing selected-room table easier to scan by reusing each selected room's curated first photo, exposing the horizontally scrollable comparison region to keyboard users, and keeping the table responsive without changing room facts or the booking-engine destination.
 
 ## Priority sequence
 

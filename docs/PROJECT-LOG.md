@@ -6,11 +6,11 @@
 
 | Item | Value |
 |---|---|
-| Verified main SHA | `2cea0d7e64b904969b4668e9010666f35ed64632` — PR #152 merged |
-| Active implementation | Sprint 74 — focused experience-action hierarchy |
-| Scope | Reduce competing hero actions on experience detail pages and the Guided Jaisalmer Tours hub without changing conversion destinations |
+| Verified main SHA | `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8` — PR #153 merged |
+| Active implementation | Sprint 75 — photo-led, keyboard-accessible room comparison |
+| Scope | Add room photos to side-by-side comparison and make the horizontal comparison region keyboard-focusable; preserve booking and enquiry destinations |
 | Release boundary | Owner retains merge and release approval; no cPanel upload or staging/production deployment |
-| Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079194) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079119) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079178) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079289) — all passed on that SHA |
+| Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394006) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393565) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393646) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394143) — all passed on that SHA |
 
 ## Recent guest-journey milestones
 
@@ -35,7 +35,7 @@ PR #152 was merged as `2cea0d7e64b904969b4668e9010666f35ed64632`. It applies slo
 - Browser E2E previously caught two test-contract defects (an undersized image expected to have generated candidates, then an undefined `BASE_URL`). Both were corrected before merge. Do not treat those historical failed runs as current failures.
 - The final merge-head Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA all passed on SHA `2cea0d7e64b904969b4668e9010666f35ed64632`.
 
-## Sprint 74 — focused experience-action hierarchy
+## Sprint 74 — focused experience-action hierarchy (completed, PR #153 merged)
 
 The post-merge page sheet revealed competing hero actions on individual experience pages (contextual enquiry, Add to Trip and a separate catalogue link) and the Guided Jaisalmer Tours hub (plan, compare and catalogue). This slice keeps a clear primary enquiry path, retains the session-only Add to Trip action for individual experiences, and preserves the catalogue route elsewhere in the site's navigation and lower-page discovery paths. On the Guided Jaisalmer Tours hub, the hero focuses on enquiry plus the in-page comparison anchor; the tour cards continue to offer details and Trip selection.
 
@@ -55,3 +55,14 @@ Regression coverage verifies action count and destination parity on the live exp
 | P1 | Business-content approval | Menu/prices/hours, policies/privacy, check-in/reception, room rates and verified review quotations need owner approval. |
 | P2 | Human design/accessibility review | Review exact-head artifacts at 320/390/768/1280/1440px, keyboard/focus, contrast, reduced motion and assistive technology. |
 | P1 | Production release | No deployment performed; owner approval remains mandatory. |
+
+
+## Sprint 75 — photo-led, keyboard-accessible room comparison (PR #154 in review)
+
+**Commercial goal:** help guests identify the exact room they are comparing without switching back and forth between card photos and a text-only comparison table.
+
+- Add a photo row sourced from the first already-curated room carousel slide for each selected room. Reuse responsive image candidates and size thumbnails for the comparison column.
+- Make scrollable comparison content a named, keyboard-focusable region and tell mobile guests how to reach columns beyond the viewport.
+- Preserve floor, description, listed-feature rows, two-to-three-room limits, room IDs, session-only Trip behavior, Contact shortlist context, and the exact existing booking-engine destination.
+- Add E2E coverage for photo/source/alt parity, region semantics and mobile horizontal scrolling.
+- No new room/facility claims, rates, availability, routes, schema changes or deployment; owner retains merge and release approval.

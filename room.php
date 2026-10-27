@@ -391,7 +391,8 @@ require __DIR__ . '/include/page-head.php';
         <button class="room-comparison-close" type="button" data-room-comparison-close aria-label="Close room comparison">Close</button>
       </header>
       <p class="room-comparison-status" data-room-comparison-status role="status" aria-live="polite">Choose two or three rooms from the directory to compare.</p>
-      <div class="room-comparison-content" data-room-comparison-content></div>
+      <p class="room-comparison-scroll-hint" id="room-comparison-scroll-hint">On narrow screens, scroll the table horizontally to compare each room column.</p>
+      <div class="room-comparison-content" data-room-comparison-content tabindex="0" role="region" aria-label="Selected room comparison table" aria-describedby="room-comparison-scroll-hint"></div>
       <footer class="room-comparison-footer">
         <a class="room-comparison-enquiry" data-room-comparison-enquiry href="contact.php" hidden>Ask about selected rooms</a>
         <button class="room-comparison-trip" type="button" data-room-comparison-trip hidden>Add room options to Trip</button>
