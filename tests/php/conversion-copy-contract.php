@@ -3,7 +3,7 @@
 $root = dirname(__DIR__, 2);
 $errors = [];
 $required = [
-    'index.php' => ['Wake up inside Jaisalmer Fort.', 'Heritage stay · Inside Jaisalmer Fort', 'individually styled rooms', 'home-hero-facts', 'Explore the rooms', 'conversion-journey', 'conversion-faq', 'Check rooms &amp; rates', 'guided-jaisalmer-tour.php', 'desert-safari.php'],
+    'index.php' => ['Wake up inside Jaisalmer Fort.', 'Heritage stay · Inside Jaisalmer Fort', 'individually styled rooms', 'home-hero-facts', 'Explore the rooms', 'conversion-journey', 'home-planning-panel', 'id="arrival-guide"', 'conversion-faq', 'Check rooms &amp; rates', 'guided-jaisalmer-tour.php', 'desert-safari.php'],
     'about.php' => ['Stay inside the Fort. Feel closer to Jaisalmer.', 'Good hospitality begins before you arrive.', 'conversion-promise'],
     'desert-safari.php' => ['Find the Jaisalmer desert safari that fits your trip.', 'desert-options', 'conversion-checklist', 'Confirm my safari details'],
     'guided-jaisalmer-tour.php' => ['See Jaisalmer with a guide, at your pace.', 'guided-options', 'Plan my guided tour'],
@@ -32,6 +32,23 @@ if (!is_string($css)) {
 }
 $head = file_get_contents($root . '/include/page-head.php');
 if (!is_string($head) || strpos($head, 'css/conversion-system.css') === false) $errors[] = 'Shared page head must load the conversion stylesheet.';
+
+$homeSource = file_get_contents($root . '/index.php');
+if (!is_string($homeSource)) {
+    $errors[] = 'index.php: file could not be read for homepage hierarchy checks';
+} else {
+    if (substr_count($homeSource, 'id="arrival-guide"') !== 1) {
+        $errors[] = 'Homepage must expose one canonical arrival-guide anchor; duplicate arrival sections are not allowed';
+    }
+    if (strpos($homeSource, '<section class="section arrival" id="arrival-guide"') === false
+        || strpos($homeSource, 'Arriving at the fort is part of the experience.') === false) {
+        $errors[] = 'Homepage must retain the detailed, addressable arrival guide section';
+    }
+    if (strpos($homeSource, 'home-planning-panel') === false) {
+        $errors[] = 'Homepage must provide the consolidated editorial planning panel';
+    }
+}
+
 if ($errors) {
     fwrite(STDERR, "FAIL website conversion contract:\n - " . implode("\n - ", $errors) . "\n");
     exit(1);

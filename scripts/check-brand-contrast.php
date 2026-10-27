@@ -10,7 +10,7 @@ $root = dirname(__DIR__);
 $tokenCss = file_get_contents($root . '/css/tokens.css');
 $baseCss = file_get_contents($root . '/css/garh-v2.css');
 $storyCss = file_get_contents($root . '/css/thar-sunset-story.css');
-$brandDoc = file_get_contents($root . '/docs/BRAND.md');
+$brandDoc = file_get_contents($root . '/docs/DESIGN-SYSTEM.md');
 $svgPath = $root . '/img/brand/bastion-line.svg';
 
 if (!is_string($tokenCss) || !is_string($baseCss) || !is_string($storyCss) || !is_string($brandDoc)) {

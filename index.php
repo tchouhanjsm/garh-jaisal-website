@@ -212,18 +212,22 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
-<section class="section conversion-journey" id="start-planning" aria-labelledby="conversion-journey-title">
+<section class="section conversion-journey conversion-journey--editorial" id="start-planning" aria-labelledby="conversion-journey-title">
   <div class="site-shell">
-    <div class="section-head">
-      <div><p class="eyebrow">Build your Jaisalmer stay</p><h2 id="conversion-journey-title">Start with the stay. Add the experiences that matter to you.</h2></div>
-      <p>Planning Rajasthan? Make Jaisalmer one memorable stop in the wider journey. Start with local options and confirm rates, routes and arrangements for your dates.</p>
+    <div class="home-planning-panel">
+      <div class="home-planning-copy">
+        <p class="eyebrow">Plan your stay</p>
+        <h2 id="conversion-journey-title">Begin with the room. Shape the rest around you.</h2>
+        <p>Compare the rooms first, then add a guided Fort walk or a desert experience that fits your time. Routes, rates and availability are confirmed with the hotel for your dates.</p>
+        <p class="home-planning-guide">New to booking directly? <a href="book-rooms-in-jaisalmer.php">Read our guide to staying inside the Fort</a>.</p>
+      </div>
+      <nav class="home-planning-actions" aria-label="Plan the rest of your stay">
+        <a class="button button-primary" href="room.php">Explore the rooms <span aria-hidden="true">↗</span></a>
+        <a class="home-planning-link" href="guided-jaisalmer-tour.php"><span>Guided city walks</span><span aria-hidden="true">↗</span></a>
+        <a class="home-planning-link" href="desert-safari.php"><span>Desert experiences</span><span aria-hidden="true">↗</span></a>
+        <a class="home-planning-contact" href="contact.php?topic=visit-planning">Tell us what you are planning</a>
+      </nav>
     </div>
-    <div class="conversion-journey__grid">
-      <article class="conversion-journey__card"><span class="conversion-journey__step">01 / STAY</span><h3>Make the Fort your base</h3><p>Compare room photos and details, then check current rates, availability and facilities.</p><a href="room.php">Explore the rooms ↗</a></article>
-      <article class="conversion-journey__card"><span class="conversion-journey__step">02 / DISCOVER</span><h3>Meet the city beyond the postcard</h3><p>Ask about a Fort walk or guided route, with guide language and itinerary confirmed in advance.</p><a href="guided-jaisalmer-tour.php">Compare guided tours ↗</a></article>
-      <article class="conversion-journey__card"><span class="conversion-journey__step">03 / DESERT</span><h3>Choose your Thar experience</h3><p>Compare sunset and overnight options, then confirm transport, timings and inclusions.</p><a href="desert-safari.php">Explore desert safaris ↗</a></article>
-    </div>
-    <p class="conversion-note">Have a date or travel style in mind? <a href="contact.php?topic=visit-planning">Tell us what you are planning</a>. New to booking? <a href="book-rooms-in-jaisalmer.php">Read our guide to staying inside the Fort</a>.</p>
   </div>
 </section>
   <section class="section home-rooms" id="rooms-preview" data-story-reveal aria-labelledby="rooms-preview-title">
@@ -390,6 +394,7 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
+
 <section class="section arrival" id="arrival-guide" data-story-reveal aria-labelledby="arrival-guide-title">
   <div class="site-shell">
 
@@ -445,6 +450,7 @@ require __DIR__ . '/include/page-head.php';
 
   </div>
 </section>
+
 <section class="section home-gallery" id="property-gallery" data-story-reveal aria-labelledby="property-gallery-title">
   <div class="site-shell">
 
