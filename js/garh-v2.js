@@ -540,6 +540,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const comparisonContent = comparisonDialog?.querySelector('[data-room-comparison-content]');
     const comparisonClear = comparisonDialog?.querySelector('[data-room-comparison-clear]');
     const comparisonEnquiryLink = comparisonDialog?.querySelector('[data-room-comparison-enquiry]');
+    const comparisonTripButton = comparisonDialog?.querySelector('[data-room-comparison-trip]');
     const comparisonCloseButtons = Array.from(comparisonDialog?.querySelectorAll('[data-room-comparison-close]') || []);
     const selectedRoomIds = new Set();
     let lastSelectedRoomId = null;
@@ -572,6 +573,26 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           comparisonEnquiryLink.href = 'contact.php';
           comparisonEnquiryLink.hidden = true;
+        }
+      }
+
+      if (comparisonTripButton) {
+        if (selectedCards.length >= 2) {
+          const roomSlugs = selectedCards.map((card) => card.id.replace(/^room-/, ''));
+          const roomNames = selectedCards.map(roomName);
+          comparisonTripButton.dataset.tripId = 'room-options-' + roomSlugs.join('-');
+          comparisonTripButton.dataset.tripTitle = 'Room options: ' + roomNames.join(', ');
+          comparisonTripButton.dataset.tripUrl = 'room.php#room-directory';
+          comparisonTripButton.dataset.tripGroup = 'stay';
+          comparisonTripButton.setAttribute('aria-label', 'Add these room options to your Trip: ' + roomNames.join(', '));
+          comparisonTripButton.hidden = false;
+        } else {
+          comparisonTripButton.hidden = true;
+          comparisonTripButton.removeAttribute('data-trip-id');
+          comparisonTripButton.removeAttribute('data-trip-title');
+          comparisonTripButton.removeAttribute('data-trip-url');
+          comparisonTripButton.removeAttribute('data-trip-group');
+          comparisonTripButton.removeAttribute('aria-label');
         }
       }
 
@@ -799,6 +820,28 @@ document.addEventListener('DOMContentLoaded', () => {
         selectedRoomIds.clear();
         lastSelectedRoomId = null;
         renderComparison();
+      });
+      comparisonTripButton?.addEventListener('click', () => {
+        const selectedCards = selectedRoomCards();
+        if (selectedCards.length < 2) return;
+
+        const roomSlugs = selectedCards.map((card) => card.id.replace(/^room-/, ''));
+        const roomNames = selectedCards.map(roomName);
+        const item = {
+          id: 'room-options-' + roomSlugs.join('-'),
+          title: 'Room options: ' + roomNames.join(', '),
+          url: 'room.php#room-directory',
+          group: 'stay'
+        };
+        const request = new CustomEvent('gj:trip-add-item', {
+          detail: { item },
+          cancelable: true
+        });
+        document.dispatchEvent(request);
+        if (request.defaultPrevented) return;
+
+        comparisonDialog?.close();
+        document.querySelector('[data-trip-close]')?.focus();
       });
       comparisonCloseButtons.forEach((button) => button.addEventListener('click', () => comparisonDialog?.close()));
       comparisonDialog?.addEventListener('click', (event) => {
@@ -1119,6 +1162,45 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         persistTripItems();
         renderTripTray();
+      });
+    });
+
+    document.addEventListener('gj:trip-add-item', (event) => {
+      const requestedItem = event.detail && event.detail.item;
+      if (!validTripItem(requestedItem)) {
+        event.preventDefault();
+        status.textContent = 'These room options could not be added to your Trip. Return to the comparison and try again.';
+        return;
+      }
+
+      const item = {
+        id: requestedItem.id,
+        title: requestedItem.title.trim(),
+        url: requestedItem.url,
+        group: requestedItem.group || ''
+      };
+      const remainingItems = item.group
+        ? tripItems.filter((candidate) => candidate.group !== item.group)
+        : tripItems.filter((candidate) => candidate.id !== item.id);
+      if (remainingItems.length >= 12) {
+        event.preventDefault();
+        status.textContent = 'Your Trip has reached 12 options. Remove one before adding another.';
+        return;
+      }
+
+      const replacedStayChoice = item.group === 'stay' && tripItems.some((candidate) => candidate.group === 'stay');
+      tripItems = remainingItems.concat(item);
+      persistTripItems();
+      renderTripTray();
+      setPanelOpen(true, false);
+      status.textContent = replacedStayChoice
+        ? 'Room options added to your Trip. Your previous stay choice was replaced; all other Trip selections were kept.'
+        : 'Room options added to your Trip; all other Trip selections were kept.';
+      trackIntentEvent('add_to_trip', {
+        page_path: window.location.pathname || '/',
+        page_context: currentPageContext(),
+        item_id: item.id,
+        item_name: item.title
       });
     });
 

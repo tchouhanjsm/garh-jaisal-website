@@ -2,55 +2,44 @@
 
 > Tracked source and exact-commit CI are authoritative. Owner retains production release approval.
 
-## Snapshot
+## Latest state — 27 October 2026
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-27 |
-| Current phase | Sprint 68 — accessible experience detail navigation (stacked on Sprint 67) |
-| Verified main SHA | df812a33675a5d31d4ce388629038cf5a7960105 (PR #140 merge commit) |
-| Latest merged PR | [#140 — unified public contact channels and structured data](https://github.com/tchouhanjsm/garh-jaisal-website/pull/140) |
-| Recent merged work | PRs #138 Car & City enquiry discovery, #139 contact-channel source of truth, #140 contact/schema parity |
-| Active phase branch | `feature/experience-detail-navigation-20261027` — Sprint 68 draft PR #143, based on PR #141 |
+| Baseline after PR #148 | `95e43decf5833115c632adebfeee78ee1dd3bbae` |
+| Active implementation | Sprint 70 — Trip Contact fallback + experience-detail handoff |
+| Scope | Mixed Trip options, grouped room comparisons and registry-driven experience details |
+| Release boundary | No live enquiry, cPanel upload, external staging deployment or production deployment |
 
-## Current phase
+## Completed guest-journey milestones
 
-**Sprint 68 goal:** let guests jump directly to the itinerary, inclusions and FAQ on existing live experience detail pages while preserving all current content and enquiry safeguards.
+- **PR #141 — custom itinerary discovery:** open-ended itinerary enquiry builder, reviewable WhatsApp draft, contextual Contact fallback, SEO/sitemap coverage and responsive/browser contracts.
+- **PR #143 — experience section navigation:** accessible, conditional links to sections on live experience detail pages.
+- **PR #144 — editorial headings:** stronger experience-page display typography while preserving routes and facts.
+- **PR #145 — homepage and arrival hierarchy:** reduced repeated promotion, improved page rhythm and restored detailed arrival guidance.
+- **PR #146 — room comparison:** two-to-three-room comparison dialog and preservation of existing room/rate destinations.
+- **PR #147 — room shortlist to Contact:** registry-validated multi-room enquiry with safe retry continuity.
+- **PR #148 — room comparison to Trip:** grouped room options enter the shared tab-only Trip tray while separate experience, transport and dining choices remain selectable.
 
-- Update the shared experience detail template with contextual section links, conditionally rendered for each live page.
-- Add focused source/browser tests for section-target parity and responsive layout.
-- PR #141 is awaiting a successful final browser/screenshot gate. Its prior browser run was cancelled; Site Checks, package preflight and non-deploying QA passed on `be153e41dfbdaf956fce709f1271f8933a3ae07b`. The new exact-head run on `e45a8d770b273ad2c4760c0302f70c957a5cb1be` increases the browser job timeout to 40 minutes. No merge or deployment until the gate completes.
+## Sprint 70 — Unified Trip Contact + experience detail handoff
 
-## Latest implementation entry
+The Trip tray offers Contact as a secondary route while keeping WhatsApp as the primary, reviewable draft. Contact carries selected IDs only; server-side registries provide the labels. Optional travel dates and traveller count remain local to the WhatsApp draft.
 
-- [2026-10-27] PR #140 merged at `df812a33675a5d31d4ce388629038cf5a7960105`. Sprint 65 public contact channels and Sprint 66 structured-data parity are in `main`; Site Checks, package preflight and non-deploying Staging QA passed. Merge-head Browser E2E was cancelled and must not be treated as a pass.
-- Sprint 65–66 / PRs #139–#140 merged the visible contact and structured-data parity slice. Browser screenshot evidence remains absent because the merge-head Browser E2E run was cancelled.
-- Sprint 67 / PR #141 contains the custom-itinerary page, browser-only draft composer, contextual contact fallback, open-ended Car & City links, sitemap and regression contracts. Latest Site Checks, package preflight and non-deploying QA pass; Browser E2E/screenshot evidence is still in progress.
-- Sprint 68 / PR #143 is a draft stacked on #141, for section navigation on the six live experience detail pages. It must be retargeted to `main` after #141 merges and checked against its exact head.
+The Contact resolver also recognises the grouped `room-options-…` ID introduced in PR #148 and rebuilds its label from the room registry. The selected room-comparison choice therefore remains intact as one stay item during the Contact handoff and recoverable form errors.
 
-## Remaining blockers
+Desert and guided-tour hubs expose an explicit “More details” route to each experience's full page. Both hubs stay registry-driven; no new tours, prices, timings, inclusions or availability claims are invented.
+
+## Verification boundary
+
+- Exact-head workflow results are authoritative. Re-check CI on the resolved commit; stale or cancelled runs are not passes.
+- This connector session can inspect and update GitHub source but has not run the PHP or Playwright suites locally.
+- Green CI is not proof that the live cPanel host, CAPTCHA/mail delivery or production routes have been verified.
+
+## Remaining owner-controlled release blockers
 
 | Priority | Item | Status |
 |---|---|---|
-| P1 | External staging/runtime validation | Owner-controlled: HTTPS staging URL and reviewed package SHA, Apache/PHP and MIME/cache behavior, CAPTCHA/mail delivery |
-| P1 | Business-content approvals | Owner input remains needed for menu/prices/hours, booking/cancellation terms, privacy controller/retention, check-in/reception, room rates, and approved reviews |
-| P2 | Human visual/accessibility review | Manual review at 320/390/768/1280/1440px, keyboard/focus, contrast, reduced motion and assistive technology |
-| P2 | Image/caption sign-off | Owner verification of photo subject/caption mapping and responsive crop candidates |
-| P1 | Production parity and release approval | Not verified; no cPanel upload or staging/production deployment performed by this work |
-
-## Safety boundary
-
-Content Studio remains an operator-side local tool, not a hosted CMS. Local “Live” state is not proof of production publication. Never infer external-host readiness from green CI.
-
-## 2026-10-27 — PR #146 and next bulk phase
-
-- PR #146 merged the side-by-side room comparison interaction.
-- Active follow-on: room shortlist → Contact enquiry continuity. This is a complete guest handoff, not a standalone style tweak.
-- Required validation covers allowlisted room IDs, multi-room copy, safe retry URLs, the contact context token, unchanged booking links and responsive dialog behavior.
-- No production deployment or live enquiry submission is performed.
-
-## 2026-10-27 — Unified Trip contact fallback
-
-- The next vertical slice adds a Contact-form route from the session-only Trip tray while retaining WhatsApp as the primary action.
-- Selected IDs are resolved against room, experience and service allowlists. Browser-provided labels are not trusted; optional travel dates/traveller count are not sent in the Contact URL.
-- PHP contract and Playwright coverage verify the mixed shortlist, visible context, safe error retry route and no enquiry submission during navigation.
+| P1 | Host validation | HTTPS staging, deployed package SHA, PHP/Apache behavior, CAPTCHA and mail delivery require real-host verification. |
+| P1 | Business-content approval | Menu/prices/hours, policies/privacy, check-in/reception, room rates and verified review quotations need owner approval. |
+| P2 | Human design/accessibility review | Review exact-head artifacts at 320/390/768/1280/1440px, keyboard/focus, contrast, reduced motion and assistive technology. |
+| P1 | Production release | No deployment performed; owner approval remains mandatory. |

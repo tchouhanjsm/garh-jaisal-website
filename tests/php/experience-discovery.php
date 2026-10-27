@@ -8,6 +8,7 @@ $registry = require $root . '/include/experience-data.php';
 $errors = [];
 $required = [
     'desert-safari.php' => ['sunset-camel-safari', 'cultural-safari', 'sleep-under-the-stars', 'swiss-tent-safari'],
+    'guided-jaisalmer-tour.php' => ['half-day-jaisalmer-tour', 'full-day-jaisalmer-tour'],
     'car-tours.php' => ['guided-jaisalmer-tour', 'fort-walk', 'car-arrangements'],
 ];
 foreach ($required as $path => $ids) {
@@ -19,9 +20,21 @@ foreach ($required as $path => $ids) {
     if (strpos($source, 'catalogue.php') === false || strpos($source, 'Build your trip shortlist') === false) {
         $errors[] = $path . ': missing contextual link to the unified Trip shortlist';
     }
-    if ($path === 'desert-safari.php') {
-        if (strpos($source, 'foreach ($items as $slug)') === false || strpos($source, '\'id\' => $slug') === false || strpos($source, '\'url\' => $slug . \'.php\'') === false) {
-            $errors[] = 'desert-safari.php: shared experience loop must generate each shortlist item from the published slug';
+    if (in_array($path, ['desert-safari.php', 'guided-jaisalmer-tour.php'], true)) {
+        if (strpos($source, 'foreach ($items as $slug)') === false
+            || strpos($source, '\'id\' => $slug') === false
+            || strpos($source, '\'url\' => $slug . \'.php\'') === false
+            || strpos($source, 'experience-card-detail-cta') === false
+            || strpos($source, 'More details →') === false) {
+            $errors[] = $path . ': live experiences must be rendered from the registry with an explicit details-page CTA';
+        }
+        foreach ($ids as $id) {
+            $candidate = $registry[$id] ?? null;
+            if (!is_array($candidate) || ($candidate['status'] ?? '') !== 'live'
+                || ($candidate['duration_type'] ?? 'hub') === 'hub'
+                || !is_file($root . '/' . $id . '.php')) {
+                $errors[] = $path . ': expected live experience detail route missing from the registry: ' . $id;
+            }
         }
     } else {
         foreach ($ids as $id) {

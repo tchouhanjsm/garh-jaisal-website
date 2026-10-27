@@ -48,4 +48,15 @@ test.describe('Unified Trip shortlist to Contact', () => {
       expect(scrollWidth, 'Contact page must not overflow horizontally at ' + width + 'px').toBeLessThanOrEqual(width + 1);
     }
   });
+
+  test('preserves a compared room group through the Contact fallback using trusted room names', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-1280', 'Run grouped-room handoff once on desktop-1280.');
+    const roomOptionId = 'room-options-sweet-purple-room-rising-sun-room';
+    await page.goto('/contact.php?trip%5B0%5D=' + encodeURIComponent(roomOptionId), { waitUntil: 'domcontentloaded' });
+    const context = page.locator('.contact-trip-context');
+    await expect(context).toBeVisible();
+    await expect(context).toContainText('Room options: Sweet Purple Room, Rising Sun Room');
+    await expect(page.locator('#message')).toHaveValue(/Room options: Sweet Purple Room, Rising Sun Room/);
+  });
+
 });

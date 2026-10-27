@@ -76,6 +76,15 @@ if (count($twoRoomSlugs) === 2) {
     parse_str((string) parse_url($retryUrl, PHP_URL_QUERY), $retryQuery);
     $assert(($retryQuery['rooms'] ?? []) === $twoRoomSlugs, 'Room shortlist retry preserves all selected room slugs.');
     $assert(($retryQuery['error'] ?? '') === 'captcha', 'Room shortlist retry preserves the safe error state.');
+
+    $roomOptionId = 'room-options-' . implode('-', $twoRoomSlugs);
+    $roomOptionTrip = gj_resolve_enquiry_context('trip', $roomOptionId);
+    $assert(($roomOptionTrip['type'] ?? '') === 'trip', 'A grouped room comparison resolves as one trusted Trip selection.');
+    $expectedRoomOptionLabel = 'Room options: ' . $roomNamesBySlug[$twoRoomSlugs[0]] . ', ' . $roomNamesBySlug[$twoRoomSlugs[1]];
+    $assert(($roomOptionTrip['label'] ?? '') === $expectedRoomOptionLabel, 'Grouped room labels are reconstructed from the room registry.');
+    $roomOptionRetryUrl = gj_contact_context_return_url($roomOptionTrip, 'invalid');
+    parse_str((string) parse_url($roomOptionRetryUrl, PHP_URL_QUERY), $roomOptionRetryQuery);
+    $assert(($roomOptionRetryQuery['trip'] ?? []) === [$roomOptionId], 'Safe retry preserves the grouped room comparison as one Trip selection.');
 }
 $expectGeneral('experience', 'draft-or-unknown');
 $expectGeneral('topic', 'html-tag-like-value');

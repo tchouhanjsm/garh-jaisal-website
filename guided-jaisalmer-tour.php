@@ -105,7 +105,7 @@ require __DIR__ . '/include/page-head.php';
                 require __DIR__ . '/include/ui/experience-card-facts.php';
                 unset($experienceCardItem, $experienceCardFactPriority, $experienceCardFactLimit);
                 ?>
-                <span>View itinerary →</span>
+                <span class="experience-card-detail-cta">More details →</span>
               </div>
             </a>
             <div class="experience-card-plan-action">

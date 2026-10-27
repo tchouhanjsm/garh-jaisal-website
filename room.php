@@ -394,6 +394,7 @@ require __DIR__ . '/include/page-head.php';
       <div class="room-comparison-content" data-room-comparison-content></div>
       <footer class="room-comparison-footer">
         <a class="room-comparison-enquiry" data-room-comparison-enquiry href="contact.php" hidden>Ask about selected rooms</a>
+        <button class="room-comparison-trip" type="button" data-room-comparison-trip hidden>Add room options to Trip</button>
         <button class="room-comparison-clear" type="button" data-room-comparison-clear>Clear shortlist</button>
         <button class="room-comparison-close-link" type="button" data-room-comparison-close>Return to rooms</button>
       </footer>

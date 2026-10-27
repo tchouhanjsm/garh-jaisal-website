@@ -111,6 +111,50 @@ function gj_resolve_enquiry_context($type, $slug): array
             }
         }
 
+        // Preserve the grouped two/three-room option introduced by room comparison.
+        // Only IDs reconstructed from the room registry are accepted; labels never come from the browser.
+        $roomOptions = [];
+        foreach ((array) $rooms as $room) {
+            if (!is_array($room) || !is_string($room['name'] ?? null)) {
+                continue;
+            }
+            $roomSlug = trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($room['name'])), '-');
+            $roomName = trim($room['name']);
+            if ($roomSlug !== '' && $roomName !== '') {
+                $roomOptions[] = ['slug' => $roomSlug, 'label' => $roomName];
+            }
+        }
+        foreach ($roomOptions as $firstIndex => $firstRoom) {
+            foreach ($roomOptions as $secondIndex => $secondRoom) {
+                if ($firstIndex === $secondIndex) {
+                    continue;
+                }
+                $pair = [$firstRoom, $secondRoom];
+                $pairId = 'room-options-' . implode('-', array_column($pair, 'slug'));
+                if (strlen($pairId) <= 80) {
+                    $tripLookup[$pairId] = [
+                        'slug' => $pairId,
+                        'label' => 'Room options: ' . implode(', ', array_column($pair, 'label')),
+                        'url' => 'room.php#room-directory',
+                    ];
+                }
+                foreach ($roomOptions as $thirdIndex => $thirdRoom) {
+                    if ($thirdIndex === $firstIndex || $thirdIndex === $secondIndex) {
+                        continue;
+                    }
+                    $group = [$firstRoom, $secondRoom, $thirdRoom];
+                    $groupId = 'room-options-' . implode('-', array_column($group, 'slug'));
+                    if (strlen($groupId) <= 80) {
+                        $tripLookup[$groupId] = [
+                            'slug' => $groupId,
+                            'label' => 'Room options: ' . implode(', ', array_column($group, 'label')),
+                            'url' => 'room.php#room-directory',
+                        ];
+                    }
+                }
+            }
+        }
+
         // These are explicit, published trip-tray options rendered outside the main catalogue registry.
         $tripLookup['fort-walk'] = ['slug' => 'fort-walk', 'label' => 'A Walk inside Jaisalmer Fort', 'url' => 'city-tour.php'];
         $tripLookup['transport-desert-pickup'] = ['slug' => 'transport-desert-pickup', 'label' => 'Desert pickup or drop-off', 'url' => 'car-rental.php'];

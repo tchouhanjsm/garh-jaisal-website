@@ -4,46 +4,39 @@ Last updated: 27 October 2026.
 
 ## Current objective
 
-Deliver a coherent, premium first impression and more direct-booking clarity without replacing the plain-PHP/cPanel stack. The working direction is editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint, and local warmth.
+Deliver a coherent, premium first impression and a lower-friction direct-booking journey on the existing plain-PHP/cPanel stack. The visual direction remains editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint and local warmth.
 
-## Verified baseline after PR #147
+## Verified baseline after PR #148
 
-- PR #145 simplified the homepage planning path and restored detailed arrival guidance.
-- PR #146 added side-by-side comparison for the seven current room records.
-- PR #147 connected the room-comparison shortlist to Contact with registry validation and retry-safe context.
+- `main` baseline: `95e43decf5833115c632adebfeee78ee1dd3bbae` (PR #148 merge: room comparison → shared Trip planner).
+- Merged guest-journey work includes #141 custom itinerary enquiries, #143 accessible experience-detail navigation, #144 editorial experience headings, #145 homepage/arrival hierarchy, #146 room comparison, #147 room-shortlist-to-Contact handoff and #148 room comparison → Trip.
+- PR #148 introduced a grouped `room-options-…` Trip item for a two- or three-room comparison. PR #149 must retain that choice in its Contact fallback by resolving the ID and label against the server-side room registry.
 
-## Active phase — Unified Trip to Contact handoff
+## Active phase — Sprint 70: Trip Contact + experience-detail handoff
 
-- Branch: `feature/unified-trip-contact-handoff-20261027`.
-- Offer the session-only Trip tray an alternative to WhatsApp: continue to Contact with the selected room, tour, transport or dining options.
-- Resolve labels from approved registries on the server. Reject unknown, duplicate, malformed or over-limit IDs; do not trust browser-supplied titles.
-- Keep optional travel dates and traveller count out of the Contact URL; those fields remain local to the WhatsApp draft.
-- Preserve WhatsApp as the primary draft route. No automatic submission, booking, server-side Trip storage or deployment.
-- Required gates: PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA.
-
-## Provisional audit scores
-
-These are engineering judgments, not user-research results or a website valuation:
-- Engineering/product foundation: 6.5/10.
-- Visual design maturity: 5.5/10 pending live browser/staging screenshots.
-- Direct-booking journey: 6/10 pending end-to-end and owner UAT.
+- Branch: `feature/unified-trip-contact-handoff-20261027` (PR #149).
+- Add Contact as a secondary path from the session-only Trip tray; keep WhatsApp the primary, reviewable draft.
+- Carry selected IDs only into Contact. Do not put optional travel dates or traveller count in the Contact URL.
+- Resolve every label against server-side room, live experience and reviewed catalogue/transport records. Reject unknown, malformed, duplicate and over-limit selections; never trust browser-supplied titles.
+- Preserve grouped room comparison choices through Contact and safe form retries. Treat the grouped selection as one stay option.
+- On the desert and guided-tour hubs, give each live experience card a clear “More details” route to its full detail page. Keep the hub list registry-driven so additional published experiences appear without hard-coded source-count limits. The detail page retains its itinerary, inclusions, FAQs and its own enquiry actions.
+- No automatic enquiry submission, booking, server-side Trip storage, dependency changes or deployment.
 
 ## Priority sequence
 
-1. Tighten repeated homepage storytelling and consolidate arrival information into one canonical anchor.
-2. Enforce one visual rhythm for typography, spacing, component surfaces, hover/focus and imagery.
-3. Inspect Home, Rooms, Packages/Experiences, Dining, Directions and Contact at 320/390/768/1280/1440px.
-4. Measure real hero image transfer sizes, LCP/CLS, font loading and cache behavior instead of assuming WebP means fast.
-5. Run exact-head CI and inspect screenshots; validate external booking, call, WhatsApp, contact form, CAPTCHA/mail and cPanel behavior on staging.
-6. Keep documentation minimal and current; do not use historical sprint narrative as the operating state.
+1. Complete coherent guest-facing slices across Room, Experience, Dining, Arrival and Contact; avoid isolated cosmetic patches.
+2. Review Home, Rooms, Packages/Experiences, Dining, Directions and Contact screenshots at 320/390/768/1280/1440px.
+3. Measure actual image transfer sizes and page-loading metrics rather than assuming the file extension guarantees performance.
+4. Verify keyboard/focus, contrast, reduced motion, form error recovery, responsive controls, canonical/schema/sitemap and route consistency.
+5. Inspect exact-head CI artifacts. Passing CI does not replace human visual review or live-host verification.
 
-## Release blockers that require owner action
+## Release blockers requiring owner action
 
-- Confirm the production cPanel PHP version and Apache/.htaccess behavior.
-- Approve menu/prices, policies/privacy wording, reception/check-in, room rates and review quotations before publishing them.
-- Confirm staging package SHA, server configuration, real CAPTCHA/mail tests and visual review.
-- Owner explicitly approves production release.
+- Confirm production cPanel PHP version and Apache/.htaccess behavior.
+- Approve menu/prices, booking/cancellation and privacy wording, check-in/reception, room rates and review quotations before publishing.
+- Review staging for HTTPS, booking redirects, CAPTCHA/mail delivery and host-specific behavior.
+- Approve visual/accessibility review and explicitly approve production release.
 
 ## Working agreement
 
-A PR should represent a complete, visible vertical slice. Each relevant PR must include exact-head CI evidence, screenshot/page-sheet evidence, public-route/SEO preservation checks, and an honest list of anything not run. Nobody merges or deploys on the owner's behalf.
+Every PR must deliver a coherent visible slice with exact-head Site Checks, Browser E2E/screenshot evidence, package preflight and non-deploying Staging QA. Do not infer a pass from a cancelled or stale run. Nobody merges or deploys on the owner's behalf.
