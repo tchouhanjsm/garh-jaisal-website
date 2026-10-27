@@ -12,6 +12,34 @@ function gj_resolve_enquiry_context($type, $slug): array
     }
     $type = strtolower(trim($type));
     $slug = trim($slug);
+
+    if ($type === 'rooms') {
+        $roomSlugs = explode(',', $slug);
+        if (count($roomSlugs) < 2 || count($roomSlugs) > 3 || count(array_unique($roomSlugs)) !== count($roomSlugs)) {
+            return gj_general_enquiry_context();
+        }
+
+        $roomContexts = [];
+        foreach ($roomSlugs as $roomSlug) {
+            if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $roomSlug)) {
+                return gj_general_enquiry_context();
+            }
+            $roomContext = gj_resolve_enquiry_context('room', $roomSlug);
+            if (($roomContext['type'] ?? '') !== 'room') {
+                return gj_general_enquiry_context();
+            }
+            $roomContexts[] = $roomContext;
+        }
+
+        return [
+            'type' => 'rooms',
+            'type_label' => 'Room shortlist',
+            'slug' => implode(',', array_column($roomContexts, 'slug')),
+            'label' => implode(', ', array_column($roomContexts, 'label')),
+            'items' => $roomContexts,
+        ];
+    }
+
     if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $slug)) {
         return gj_general_enquiry_context();
     }
@@ -57,7 +85,12 @@ function gj_contact_context_return_url(array $context, string $error = ''): stri
     $query = [];
     $type = (string) ($context['type'] ?? 'general');
     $slug = (string) ($context['slug'] ?? '');
-    if (
+    if ($type === 'rooms') {
+        $resolved = gj_resolve_enquiry_context('rooms', $slug);
+        if (($resolved['type'] ?? '') === 'rooms') {
+            $query['rooms'] = explode(',', $resolved['slug']);
+        }
+    } elseif (
         in_array($type, ['room', 'experience', 'topic'], true)
         && preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $slug)
     ) {
