@@ -48,3 +48,9 @@ Content Studio remains an operator-side local tool, not a hosted CMS. Local “L
 - Active follow-on: room shortlist → Contact enquiry continuity. This is a complete guest handoff, not a standalone style tweak.
 - Required validation covers allowlisted room IDs, multi-room copy, safe retry URLs, the contact context token, unchanged booking links and responsive dialog behavior.
 - No production deployment or live enquiry submission is performed.
+
+## 2026-10-27 — Unified Trip contact fallback
+
+- The next vertical slice adds a Contact-form route from the session-only Trip tray while retaining WhatsApp as the primary action.
+- Selected IDs are resolved against room, experience and service allowlists. Browser-provided labels are not trusted; optional travel dates/traveller count are not sent in the Contact URL.
+- PHP contract and Playwright coverage verify the mixed shortlist, visible context, safe error retry route and no enquiry submission during navigation.
