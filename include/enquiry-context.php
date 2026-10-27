@@ -40,6 +40,144 @@ function gj_resolve_enquiry_context($type, $slug): array
         ];
     }
 
+    if ($type === 'trip') {
+        $tripIds = explode(',', $slug);
+        if (count($tripIds) < 1 || count($tripIds) > 12 || count(array_unique($tripIds)) !== count($tripIds)) {
+            return gj_general_enquiry_context();
+        }
+
+        $catalogue = require __DIR__ . '/catalogue-data.php';
+        $experiences = require __DIR__ . '/experience-data.php';
+        $rooms = require __DIR__ . '/rooms-data.php';
+        $tripLookup = [];
+
+        foreach ((array) $catalogue as $definition) {
+            if (!is_array($definition)) {
+                continue;
+            }
+            $id = (string) ($definition['id'] ?? '');
+            if (!preg_match('/^[a-z0-9][a-z0-9-]{0,79}$/D', $id)) {
+                continue;
+            }
+            $source = (string) ($definition['source'] ?? '');
+            if ($source === 'experience') {
+                $experienceSlug = (string) ($definition['slug'] ?? $id);
+                $candidate = $experiences[$experienceSlug] ?? null;
+                if (!is_array($candidate) || ($candidate['status'] ?? '') !== 'live'
+                    || !is_file(dirname(__DIR__) . '/' . $experienceSlug . '.php')) {
+                    continue;
+                }
+                $label = trim((string) ($candidate['h1'] ?? $candidate['title'] ?? ''));
+                $url = $experienceSlug . '.php';
+            } else {
+                $label = trim((string) ($definition['title'] ?? ''));
+                $url = (string) ($definition['url'] ?? '');
+            }
+            if ($label !== '' && preg_match('/^[a-z0-9-]+\.php(?:#[a-z0-9-]+)?$/iD', $url)) {
+                $tripLookup[$id] = ['slug' => $id, 'label' => $label, 'url' => $url];
+            }
+        }
+
+        // Any live public detail route rendered by the shared experience template can be added from its CTA.
+        foreach ((array) $experiences as $experienceSlug => $experience) {
+            if (!is_array($experience) || ($experience['status'] ?? '') !== 'live'
+                || !is_string($experience['h1'] ?? null)
+                || trim($experience['h1']) === ''
+                || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', (string) $experienceSlug)
+                || !is_file(dirname(__DIR__) . '/' . $experienceSlug . '.php')) {
+                continue;
+            }
+            if (!isset($tripLookup[$experienceSlug])) {
+                $tripLookup[$experienceSlug] = [
+                    'slug' => (string) $experienceSlug,
+                    'label' => trim($experience['h1']),
+                    'url' => $experienceSlug . '.php',
+                ];
+            }
+        }
+
+        // A published room card uses room-{room-slug} so the exact chosen room is retained.
+        foreach ((array) $rooms as $room) {
+            if (!is_array($room) || !is_string($room['name'] ?? null)) {
+                continue;
+            }
+            $roomSlug = trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($room['name'])), '-');
+            if ($roomSlug !== '') {
+                $tripLookup['room-' . $roomSlug] = [
+                    'slug' => 'room-' . $roomSlug,
+                    'label' => trim($room['name']),
+                    'url' => 'room.php#room-' . $roomSlug,
+                ];
+            }
+        }
+
+        // Preserve the grouped two/three-room option introduced by room comparison.
+        // Only IDs reconstructed from the room registry are accepted; labels never come from the browser.
+        $roomOptions = [];
+        foreach ((array) $rooms as $room) {
+            if (!is_array($room) || !is_string($room['name'] ?? null)) {
+                continue;
+            }
+            $roomSlug = trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($room['name'])), '-');
+            $roomName = trim($room['name']);
+            if ($roomSlug !== '' && $roomName !== '') {
+                $roomOptions[] = ['slug' => $roomSlug, 'label' => $roomName];
+            }
+        }
+        foreach ($roomOptions as $firstIndex => $firstRoom) {
+            foreach ($roomOptions as $secondIndex => $secondRoom) {
+                if ($firstIndex === $secondIndex) {
+                    continue;
+                }
+                $pair = [$firstRoom, $secondRoom];
+                $pairId = 'room-options-' . implode('-', array_column($pair, 'slug'));
+                if (strlen($pairId) <= 80) {
+                    $tripLookup[$pairId] = [
+                        'slug' => $pairId,
+                        'label' => 'Room options: ' . implode(', ', array_column($pair, 'label')),
+                        'url' => 'room.php#room-directory',
+                    ];
+                }
+                foreach ($roomOptions as $thirdIndex => $thirdRoom) {
+                    if ($thirdIndex === $firstIndex || $thirdIndex === $secondIndex) {
+                        continue;
+                    }
+                    $group = [$firstRoom, $secondRoom, $thirdRoom];
+                    $groupId = 'room-options-' . implode('-', array_column($group, 'slug'));
+                    if (strlen($groupId) <= 80) {
+                        $tripLookup[$groupId] = [
+                            'slug' => $groupId,
+                            'label' => 'Room options: ' . implode(', ', array_column($group, 'label')),
+                            'url' => 'room.php#room-directory',
+                        ];
+                    }
+                }
+            }
+        }
+
+        // These are explicit, published trip-tray options rendered outside the main catalogue registry.
+        $tripLookup['fort-walk'] = ['slug' => 'fort-walk', 'label' => 'A Walk inside Jaisalmer Fort', 'url' => 'city-tour.php'];
+        $tripLookup['transport-desert-pickup'] = ['slug' => 'transport-desert-pickup', 'label' => 'Desert pickup or drop-off', 'url' => 'car-rental.php'];
+        $tripLookup['transport-intercity'] = ['slug' => 'transport-intercity', 'label' => 'Intercity car journey', 'url' => 'car-rental.php'];
+        $tripLookup['transport-fort-arrival'] = ['slug' => 'transport-fort-arrival', 'label' => 'Arrival at the living Fort', 'url' => 'direction.php'];
+
+        $resolvedItems = [];
+        foreach ($tripIds as $tripId) {
+            if (!preg_match('/^[a-z0-9][a-z0-9-]{0,79}$/D', $tripId) || !isset($tripLookup[$tripId])) {
+                return gj_general_enquiry_context();
+            }
+            $resolvedItems[] = $tripLookup[$tripId];
+        }
+
+        return [
+            'type' => 'trip',
+            'type_label' => 'Trip shortlist',
+            'slug' => implode(',', array_column($resolvedItems, 'slug')),
+            'label' => implode(', ', array_column($resolvedItems, 'label')),
+            'items' => $resolvedItems,
+        ];
+    }
+
     if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $slug)) {
         return gj_general_enquiry_context();
     }
@@ -85,7 +223,12 @@ function gj_contact_context_return_url(array $context, string $error = ''): stri
     $query = [];
     $type = (string) ($context['type'] ?? 'general');
     $slug = (string) ($context['slug'] ?? '');
-    if ($type === 'rooms') {
+    if ($type === 'trip') {
+        $resolved = gj_resolve_enquiry_context('trip', $slug);
+        if (($resolved['type'] ?? '') === 'trip') {
+            $query['trip'] = explode(',', $resolved['slug']);
+        }
+    } elseif ($type === 'rooms') {
         $resolved = gj_resolve_enquiry_context('rooms', $slug);
         if (($resolved['type'] ?? '') === 'rooms') {
             $query['rooms'] = explode(',', $resolved['slug']);

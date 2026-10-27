@@ -44,6 +44,18 @@ $expectGeneral('room', 'unknown-room');
 $expectGeneral('rooms', 'unknown-room,green-room');
 $expectGeneral('rooms', 'green-room,green-room');
 $expectGeneral('rooms', 'green-room');
+$expectGeneral('trip', 'unknown-option');
+$expectGeneral('trip', 'heritage-room-stay,heritage-room-stay');
+
+$tripContext = gj_resolve_enquiry_context('trip', 'heritage-room-stay,sunset-camel-safari,room-sweet-purple-room,fort-walk');
+$assert(($tripContext['type'] ?? '') === 'trip', 'A mixed, allowlisted Trip shortlist resolves.');
+$assert(($tripContext['type_label'] ?? '') === 'Trip shortlist', 'Trip context has an owner-facing type label.');
+$assert(($tripContext['label'] ?? '') === 'Heritage room stay, Sunset Camel Safari in Jaisalmer, Sweet Purple Room, A Walk inside Jaisalmer Fort', 'Trip labels are resolved from approved registries in selected order.');
+$assert(count($tripContext['items'] ?? []) === 4, 'A four-item mixed shortlist returns four validated records.');
+$tripRetryUrl = gj_contact_context_return_url($tripContext, 'invalid');
+parse_str((string) parse_url($tripRetryUrl, PHP_URL_QUERY), $tripRetryQuery);
+$assert(($tripRetryQuery['trip'] ?? []) === ['heritage-room-stay', 'sunset-camel-safari', 'room-sweet-purple-room', 'fort-walk'], 'Trip error retry preserves the selected option IDs in order.');
+$assert(($tripRetryQuery['error'] ?? '') === 'invalid', 'Trip retry preserves only an allowlisted error code.');
 
 $roomSlugs = [];
 $roomNamesBySlug = [];
@@ -64,6 +76,15 @@ if (count($twoRoomSlugs) === 2) {
     parse_str((string) parse_url($retryUrl, PHP_URL_QUERY), $retryQuery);
     $assert(($retryQuery['rooms'] ?? []) === $twoRoomSlugs, 'Room shortlist retry preserves all selected room slugs.');
     $assert(($retryQuery['error'] ?? '') === 'captcha', 'Room shortlist retry preserves the safe error state.');
+
+    $roomOptionId = 'room-options-' . implode('-', $twoRoomSlugs);
+    $roomOptionTrip = gj_resolve_enquiry_context('trip', $roomOptionId);
+    $assert(($roomOptionTrip['type'] ?? '') === 'trip', 'A grouped room comparison resolves as one trusted Trip selection.');
+    $expectedRoomOptionLabel = 'Room options: ' . $roomNamesBySlug[$twoRoomSlugs[0]] . ', ' . $roomNamesBySlug[$twoRoomSlugs[1]];
+    $assert(($roomOptionTrip['label'] ?? '') === $expectedRoomOptionLabel, 'Grouped room labels are reconstructed from the room registry.');
+    $roomOptionRetryUrl = gj_contact_context_return_url($roomOptionTrip, 'invalid');
+    parse_str((string) parse_url($roomOptionRetryUrl, PHP_URL_QUERY), $roomOptionRetryQuery);
+    $assert(($roomOptionRetryQuery['trip'] ?? []) === [$roomOptionId], 'Safe retry preserves the grouped room comparison as one Trip selection.');
 }
 $expectGeneral('experience', 'draft-or-unknown');
 $expectGeneral('topic', 'html-tag-like-value');
@@ -85,6 +106,12 @@ $assert(is_string($contactSource) && strpos($contactSource, 'name="enquiry_conte
 $assert(is_string($contactSource) && strpos($contactSource, 'contact_context_tokens') !== false, 'Context token is session-bound.');
 $assert(is_string($contactSource) && strpos($contactSource, '$contactRooms') !== false && strpos($contactSource, 'contact-rooms-context') !== false, 'Contact renders allowlisted multi-room shortlist context.');
 $assert(is_string($contactSource) && strpos($contactSource, 'Room shortlist enquiry:') !== false, 'Contact explains the selected-room enquiry and current-rate confirmation.');
+$assert(is_string($contactSource) && strpos($contactSource, '$contactTrip') !== false && strpos($contactSource, 'contact-trip-context') !== false, 'Contact accepts and displays the validated cross-category Trip shortlist.');
+$tripTraySource = file_get_contents($root . '/include/ui/trip-tray.php');
+$assert(is_string($tripTraySource) && strpos($tripTraySource, 'data-trip-contact') !== false, 'Trip tray offers a form-based fallback alongside WhatsApp.');
+$assert(is_string($contactSource) && strpos($contactSource, 'Continue to contact form') === false, 'Contact page does not include a Trip tray-only CTA.');
+$tripScriptSource = file_get_contents($root . '/js/garh-v2.js');
+$assert(is_string($tripScriptSource) && strpos($tripScriptSource, "query.append('trip[]', item.id)") !== false, 'Trip tray carries selected IDs only, not optional travel dates, into Contact.');
 $assert(is_string($mailSource) && strpos($mailSource, 'gj_resolve_enquiry_context(') !== false, 'Mail handler validates allowlisted context.');
 $assert(is_string($mailSource) && strpos($mailSource, "'enquiry_context' => [") !== false, 'Private lead record carries context.');
 $assert(is_string($mailSource) && strpos($mailSource, '$subjectContext') !== false && strpos($mailSource, 'type_label') !== false, 'Owner email subject includes trusted type.');

@@ -3226,3 +3226,23 @@ main.thar-sunset-story--rooms [hidden] {
   display: none !important;
 }
 
+/* Alternate Trip handoff: retain WhatsApp as primary while making the contact-form route easy to find. */
+.trip-tray-contact{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(91,26,43,.28);
+  background:#fffdf8;
+  color:var(--garnet,#5b1a2b);
+  text-align:center;
+  text-decoration:none;
+}
+.trip-tray-contact:hover{
+  background:var(--parchment,#f7efe0);
+  border-color:var(--garnet,#5b1a2b);
+}
+.trip-tray-contact:focus-visible{
+  outline:3px solid var(--focus,#1d4ed8);
+  outline-offset:3px;
+}
+.trip-tray-contact[hidden]{display:none!important}

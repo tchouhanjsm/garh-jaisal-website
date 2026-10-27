@@ -929,6 +929,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const countBadge = tripTray.querySelector('[data-trip-count]');
     const status = tripTray.querySelector('[data-trip-status]');
     const sendLink = tripTray.querySelector('[data-trip-send]');
+    const contactLink = tripTray.querySelector('[data-trip-contact]');
     const tripStartDate = tripTray.querySelector('[data-trip-start-date]');
     const tripEndDate = tripTray.querySelector('[data-trip-end-date]');
     const tripTravellers = tripTray.querySelector('[data-trip-travellers]');
@@ -1005,6 +1006,16 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       setPanelOpen(false, true);
     });
+
+    const updateContactHandoff = () => {
+      if (!contactLink) return;
+      const query = new URLSearchParams();
+      tripItems.forEach((item) => query.append('trip[]', item.id));
+      contactLink.hidden = tripItems.length === 0;
+      contactLink.href = tripItems.length
+        ? 'contact.php?' + query.toString()
+        : 'contact.php';
+    };
 
     const updateOutboundWhatsApp = () => {
       if (!sendLink) return;
@@ -1111,6 +1122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         validateTripDetails();
       }
       updateOutboundWhatsApp();
+      updateContactHandoff();
       refreshAddButtons();
     };
 

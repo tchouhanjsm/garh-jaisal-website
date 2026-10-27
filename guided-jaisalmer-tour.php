@@ -75,6 +75,7 @@ require __DIR__ . '/include/page-head.php';
       <div class="actions">
         <a class="button button-primary" href="contact.php?topic=visit-planning">Plan my guided tour</a>
         <a class="button button-light" href="#guided-options">Compare tour options</a>
+        <a class="button button-secondary" href="catalogue.php">Build your trip shortlist</a>
       </div>
     </div>
   </section>
@@ -105,7 +106,7 @@ require __DIR__ . '/include/page-head.php';
                 require __DIR__ . '/include/ui/experience-card-facts.php';
                 unset($experienceCardItem, $experienceCardFactPriority, $experienceCardFactLimit);
                 ?>
-                <span>View itinerary →</span>
+                <span class="experience-card-detail-cta">More details →</span>
               </div>
             </a>
             <div class="experience-card-plan-action">

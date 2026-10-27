@@ -50,6 +50,12 @@ $tripWhatsappBase = (string) ($footerWhatsapp ?? '');
     <div class="trip-tray-actions">
       <button type="button" class="button button-light trip-tray-clear" data-trip-clear hidden>Clear Trip</button>
       <a
+        class="button button-secondary trip-tray-contact"
+        href="contact.php"
+        data-trip-contact
+        hidden
+      >Continue to contact form</a>
+      <a
         class="button button-primary trip-tray-send"
         href="<?= htmlspecialchars($tripWhatsappBase, ENT_QUOTES, 'UTF-8') ?>"
         data-trip-send
@@ -59,7 +65,7 @@ $tripWhatsappBase = (string) ($footerWhatsapp ?? '');
         hidden
       >Prepare enquiry on WhatsApp</a>
     </div>
-    <p class="trip-tray-privacy-note">Selected options stay in this browser tab. Travel dates and traveller count are used only to build the WhatsApp draft and are not saved by this website. WhatsApp opens with a draft for you to review; nothing is sent until you choose to send it there.</p>
+    <p class="trip-tray-privacy-note">Your selected options stay in this browser tab. Choose WhatsApp to review a draft with your optional travel details, or continue to the contact form to carry the selected options into a message. Opening the form does not send an enquiry or reserve anything.</p>
   </aside>
 </div>
 <?php unset($tripWhatsappBase); ?>

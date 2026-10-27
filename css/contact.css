@@ -188,6 +188,7 @@
 /* Room-shortlist handoff: keep selected context visible without overpowering the form. */
 .contact-rooms-context,
 .contact-room-context,
+.contact-trip-context,
 .contact-experience-context,
 .contact-topic-context{
   margin:0;
@@ -203,6 +204,7 @@
 }
 .contact-rooms-context strong,
 .contact-room-context strong,
+.contact-trip-context strong,
 .contact-experience-context strong,
 .contact-topic-context strong{color:var(--garnet,#5b1a2b)}
 .contact-form{
@@ -214,6 +216,7 @@
   .contact-form{padding:clamp(16px,4.5vw,24px)}
   .contact-rooms-context,
   .contact-room-context,
+  .contact-trip-context,
   .contact-experience-context,
   .contact-topic-context{padding:12px 13px}
 }
