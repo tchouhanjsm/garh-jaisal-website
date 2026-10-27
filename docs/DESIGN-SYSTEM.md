@@ -54,4 +54,4 @@ Update the existing canonical stylesheet/component owner before creating another
 
 ## Automated contrast check coverage
 
-The repository checker enforces minimum contrast for documented representative pairs only; it does **not** check every possible rendered CSS combination across every page. Actual page contrast, overlays and text placement still require screenshot and accessibility review.
+The repository checker enforces minimum contrast for documented representative pairs only; it does not check every possible rendered CSS combination across every page. Actual page contrast, overlays and text placement still require screenshot and accessibility review.
