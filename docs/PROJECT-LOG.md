@@ -41,3 +41,10 @@
 ## Safety boundary
 
 Content Studio remains an operator-side local tool, not a hosted CMS. Local “Live” state is not proof of production publication. Never infer external-host readiness from green CI.
+
+## 2026-10-27 — PR #146 and next bulk phase
+
+- PR #146 merged the side-by-side room comparison interaction.
+- Active follow-on: room shortlist → Contact enquiry continuity. This is a complete guest handoff, not a standalone style tweak.
+- Required validation covers allowlisted room IDs, multi-room copy, safe retry URLs, the contact context token, unchanged booking links and responsive dialog behavior.
+- No production deployment or live enquiry submission is performed.
