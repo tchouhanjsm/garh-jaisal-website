@@ -20,6 +20,24 @@ const ENFORCED_RESPONSIVE_VARIANT_BUDGETS = [
   { path: "img/responsive/v2/courtyard-1200.webp", maxBytes: 350 * 1024 },
 ];
 
+test('home and rooftop photo slots reserve dimensions and match their layouts', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Rooftop image-slot contract runs once.');
+  const cases = [
+    { route: '/', selector: '.home-rooftop .media img[src="img/roofslide.webp"]', sizes: '(max-width: 760px) 100vw, 50vw' },
+    { route: '/roof.php', selector: '.cards .card-image img[src="img/roof.webp"]', sizes: '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw' },
+    { route: '/roof.php', selector: '.cards .card-image img[src="img/r2.webp"]', sizes: '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw' },
+    { route: '/roof.php', selector: '.cards .card-image img[src="img/r3.webp"]', sizes: '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw' },
+  ];
+  for (const item of cases) {
+    await page.goto(BASE_URL + item.route, { waitUntil: 'domcontentloaded' });
+    const image = page.locator(item.selector);
+    await expect(image).toHaveCount(1);
+    await expect(image).toHaveAttribute('width', /^[1-9][0-9]*$/);
+    await expect(image).toHaveAttribute('height', /^[1-9][0-9]*$/);
+    await expect(image).toHaveAttribute('sizes', item.sizes);
+  }
+});
+
 test('write deduplicated image payload audit for sitemap routes', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Image payload audit runs once at desktop width');
   test.setTimeout(180_000);

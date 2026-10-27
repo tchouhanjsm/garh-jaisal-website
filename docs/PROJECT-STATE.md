@@ -22,6 +22,9 @@ Deliver a coherent, premium first impression and a lower-friction direct-booking
 ## Active phase — Sprint 73: responsive image slots across high-intent journeys
 
 - Apply slot-accurate `sizes` hints where Home, Dining, Rooftop, Desert Safari and Guided Tours templates were falling back to the full-resolution/optimized 1x source.
+- Extend delivery to the home rooftop feature, rooftop dining photo cards and shared related-experience cards. Add the existing, unmodified rooftop photographs to the responsive-image manifest; runtime advertises candidates only after the existing generator and validation rules accept them.
+- Browser artifact at head `06e132b77593564170ccbe91a8d0c82c381afe75`: 37 local routes, 145 distinct image URLs and 94 measured image resources with non-zero transfer sizes. Largest reviewed candidates were facade-1200 (299,358 transferred bytes) and courtyard-1200 (282,592 transferred bytes). Local observations only, not production/CDN or Core Web Vitals metrics.
+- Guided-tour `j6.jpg` is 370×539 px; the generator correctly skips 480/800/1200 variants instead of upscaling. The regression test preserves its native fallback while full-resolution `j2.jpg` verifies responsive-candidate selection.
 - Include a screenshot-driven readability fix for the restaurant hero overline and lock its foreground/background contrast in Browser E2E.
 - Use full viewport hints for full-bleed heroes, actual two-column/three-column estimates for option cards, and a contained image size for the rooftop banner.
 - Verify each newly wired slot exposes responsive candidates through the shared helper. Browser tests cover the source and slot hint together so later template changes cannot quietly drop responsive delivery.

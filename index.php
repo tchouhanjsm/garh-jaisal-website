@@ -288,11 +288,10 @@ require __DIR__ . '/include/page-head.php';
 
     <div class="media">
       <img
-        src="img/roofslide.webp"
-        width="1600"
-        height="575"
+        src="img/roofslide.webp" <?= gj_image_dimension_attributes('img/roofslide.webp', '(max-width: 760px) 100vw, 50vw') ?>
         alt="Rooftop table at dusk overlooking the lights of Jaisalmer"
-        loading="lazy">
+        loading="lazy"
+        decoding="async">
     </div>
 
   </div>

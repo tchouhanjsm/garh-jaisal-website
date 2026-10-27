@@ -29,8 +29,10 @@ The two largest responsive candidates were `img/responsive/v2/facade-1200.webp` 
 ## Sprint 73 — responsive image slots across high-intent journeys
 
 The payload audit also identified high-intent templates that used the shared image helper without a responsive `sizes` hint. Sprint 73 adds slot-accurate hints to the Home tent card, restaurant hero, rooftop hero/banner, desert hub hero/cards and guided-tour hero/cards. This enables the browser to select a candidate matching its rendered slot instead of falling back to a full-size 1x image.
+- Browser artifact at head `06e132b77593564170ccbe91a8d0c82c381afe75`: 37 local routes, 145 distinct image URLs and 94 measured image resources with non-zero transfer sizes. The largest reviewed candidates were facade-1200 at 299,358 transferred bytes and courtyard-1200 at 282,592 transferred bytes. These are local browser transfer observations, not production/CDN measurements.
+- Browser E2E run 40507151185 failed one slot assertion because `img/j6.jpg` is 370×539 and was correctly skipped as `skipped-no-upscale` for widths 480/800/1200. The regression contract preserves that safe fallback and asserts responsive delivery against full-resolution `j2.jpg` instead.
 
-The source photos, crop, alt text, public routes and business copy remain unchanged. The existing browser slot test now checks both the rendered source and its `sizes`/responsive `srcset` contract. Screenshot review also caught a low-contrast restaurant hero overline on the dark background; the page stylesheet now uses the established light-gold hero color, with a WCAG AA contrast regression assertion. The refreshed Browser E2E run remains the acceptance gate.
+The source photos, crop, alt text, public routes and business copy remain unchanged. The existing browser slot test now checks both the rendered source and its `sizes`/responsive `srcset` contract. Screenshot review also caught a low-contrast restaurant hero overline on the dark background; the page stylesheet now uses the established light-gold hero color, with a WCAG AA contrast regression assertion. The follow-up exact-head Browser E2E run remains the acceptance gate; no pass is claimed until it completes.
 
 ## Verification boundary
 

@@ -136,9 +136,9 @@ require __DIR__ . '/include/page-head.php';
             <img
               src="img/roof.webp"
               alt="Rooftop terrace at sunset with a candlelit table facing Jaisalmer Fort"
-              width="900"
-              height="600"
+              <?= gj_image_dimension_attributes('img/roof.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
               loading="lazy"
+              decoding="async"
             >
           </div>
           <div class="card-body">
@@ -153,9 +153,9 @@ require __DIR__ . '/include/page-head.php';
             <img
               src="img/r2.webp"
               alt="Candlelit rooftop table and cushioned seating looking over Jaisalmer at dusk"
-              width="900"
-              height="600"
+              <?= gj_image_dimension_attributes('img/r2.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
               loading="lazy"
+              decoding="async"
             >
           </div>
           <div class="card-body">
@@ -170,9 +170,9 @@ require __DIR__ . '/include/page-head.php';
             <img
               src="img/r3.webp"
               alt="Evening dining tables on the rooftop terrace with the sandstone fort behind them"
-              width="900"
-              height="600"
+              <?= gj_image_dimension_attributes('img/r3.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
               loading="lazy"
+              decoding="async"
             >
           </div>
           <div class="card-body">
