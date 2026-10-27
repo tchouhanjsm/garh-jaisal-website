@@ -25,10 +25,46 @@ if (is_string($requestedExperience) && preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D
     }
 }
 
+$contactRooms = [];
+$requestedRooms = $_GET['rooms'] ?? [];
+if ($contactExperience === null && is_array($requestedRooms)) {
+    $requestedRoomSlugs = array_values($requestedRooms);
+    $validRoomList = count($requestedRoomSlugs) >= 2 && count($requestedRoomSlugs) <= 3;
+    foreach ($requestedRoomSlugs as $requestedRoomSlug) {
+        if (!is_string($requestedRoomSlug) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $requestedRoomSlug)) {
+            $validRoomList = false;
+            break;
+        }
+    }
+    if ($validRoomList && count(array_unique($requestedRoomSlugs)) === count($requestedRoomSlugs)) {
+        $roomRegistry = require __DIR__ . '/include/rooms-data.php';
+        $roomIndex = [];
+        foreach ($roomRegistry as $candidateRoom) {
+            if (!is_array($candidateRoom) || !is_string($candidateRoom['name'] ?? null)) {
+                continue;
+            }
+            $candidateSlug = trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($candidateRoom['name'])), '-');
+            if ($candidateSlug !== '') {
+                $roomIndex[$candidateSlug] = ['slug' => $candidateSlug, 'name' => trim($candidateRoom['name'])];
+            }
+        }
+        foreach ($requestedRoomSlugs as $requestedRoomSlug) {
+            if (!isset($roomIndex[$requestedRoomSlug])) {
+                $contactRooms = [];
+                break;
+            }
+            $contactRooms[] = $roomIndex[$requestedRoomSlug];
+        }
+    }
+}
+$contactRoomSlugs = array_column($contactRooms, 'slug');
+$contactRoomNames = array_column($contactRooms, 'name');
+
 $contactRoom = null;
 $requestedRoom = $_GET['room'] ?? '';
 if (
     $contactExperience === null
+    && $contactRooms === []
     && is_string($requestedRoom)
     && preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $requestedRoom)
 ) {
@@ -49,6 +85,7 @@ $contactTopicKey = null;
 $requestedTopic = $_GET['topic'] ?? '';
 if (
     $contactExperience === null
+    && $contactRooms === []
     && $contactRoom === null
     && is_string($requestedTopic)
     && isset($contactTopics[$requestedTopic])
@@ -62,6 +99,9 @@ $contactContextSlug = '';
 if ($contactExperience !== null) {
     $contactContextType = 'experience';
     $contactContextSlug = (string) $contactExperience['slug'];
+} elseif ($contactRooms !== []) {
+    $contactContextType = 'rooms';
+    $contactContextSlug = implode(',', $contactRoomSlugs);
 } elseif ($contactRoom !== null) {
     $contactContextType = 'room';
     $contactContextSlug = (string) $requestedRoom;
@@ -74,6 +114,9 @@ $prefilledMessage = '';
 if ($contactExperience !== null) {
     $prefilledMessage = 'Hello, I would like to enquire about ' . $contactExperience['h1']
         . '. Please confirm the current price, availability, timings, arrangements and exact inclusions for my travel date.';
+} elseif ($contactRooms !== []) {
+    $prefilledMessage = 'Hello, I would like to enquire about these rooms: ' . implode(', ', $contactRoomNames)
+        . '. Please confirm the current availability, rate and room-specific facilities for my travel dates.';
 } elseif ($contactRoom !== null) {
     $prefilledMessage = 'Hello, I would like to enquire about ' . $contactRoom['name']
         . '. Please confirm the current availability, rate and room features for my travel dates.';
@@ -247,6 +290,8 @@ require __DIR__ . '/include/page-head.php';
           <h2>Send an enquiry</h2>
           <?php if ($contactExperience !== null): ?>
             <p class="contact-experience-context" data-experience-slug="<?= htmlspecialchars((string) $contactExperience['slug'], ENT_QUOTES, 'UTF-8') ?>">Experience enquiry: <strong><?= htmlspecialchars($contactExperience['h1'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your travel date or any specific questions.</p>
+          <?php elseif ($contactRooms !== []): ?>
+            <p class="contact-rooms-context" data-room-slugs="<?= htmlspecialchars(implode(',', $contactRoomSlugs), ENT_QUOTES, 'UTF-8') ?>">Room shortlist enquiry: <strong><?= htmlspecialchars(implode(', ', $contactRoomNames), ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your travel dates or any specific questions. The hotel will confirm current availability and rates.</p>
           <?php elseif ($contactRoom !== null): ?>
             <p class="contact-room-context" data-room-slug="<?= htmlspecialchars((string) $requestedRoom, ENT_QUOTES, 'UTF-8') ?>">Room enquiry: <strong><?= htmlspecialchars($contactRoom['name'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your travel dates or any specific questions.</p>
           <?php elseif ($contactTopic !== null): ?>
