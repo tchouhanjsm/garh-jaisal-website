@@ -13,7 +13,7 @@ This skill coordinates existing project checks and reviewer judgment. It does no
 
 ## Required workflow
 
-1. Read `docs/PROJECT-LOG.md`, `docs/SMART-CHECK-MATRIX.md`, `package.json`, and the CI workflows in `.github/workflows/` first.
+1. Read `docs/PROJECT-STATE.md`, `docs/TESTING.md`, `package.json`, and the CI workflows in `.github/workflows/` first.
 2. Inspect the diff. Using the matrix, mark each role **primary** (change touches its surface) or **secondary** (it does not).
 3. Review as each role in turn, using the role sections below. If subagents are available, run each role as an independent reviewer so one role's conclusion does not bias another. Otherwise write each role's verdict before reading the next role's checklist.
 4. Run the checks the primary roles select: cheap deterministic checks first, then targeted tests, then the full relevant regression suite.

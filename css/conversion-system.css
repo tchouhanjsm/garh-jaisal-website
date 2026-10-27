@@ -49,3 +49,102 @@ main .section-head > *, main .conversion-journey__card, main .conversion-promise
 }
 @media (max-width: 380px) { .conversion-journey__card, .conversion-promise__grid article { padding: 18px; } .conversion-faq__list summary { padding-block: 15px; font-size: .96rem; } }
 @media (prefers-reduced-motion: reduce) { .conversion-journey__card, .conversion-promise__grid article { transition: none; } .conversion-journey__card:hover, .conversion-promise__grid article:hover { transform: none; } }
+
+
+/* Homepage planning: one composed decision panel instead of repeated 3-card promos. */
+.conversion-journey--editorial{
+  background:linear-gradient(135deg,var(--sand-light,#f5ead8),var(--cream,#fbf7ef) 76%);
+}
+.home-planning-panel{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(250px,.72fr);
+  gap:clamp(24px,4vw,56px);
+  align-items:center;
+  padding:clamp(24px,4.5vw,54px);
+  border:1px solid rgba(91,26,43,.15);
+  background:rgba(255,253,249,.82);
+  box-shadow:0 10px 28px rgba(35,26,20,.045);
+}
+.home-planning-copy{min-width:0}
+.home-planning-copy .eyebrow{margin-bottom:10px}
+.home-planning-copy h2{
+  max-width:17ch;
+  margin:0 0 16px;
+  font-family:var(--font-display,Georgia,serif);
+  font-size:clamp(2rem,3.8vw,3.15rem);
+  font-weight:400;
+  line-height:1.08;
+  letter-spacing:-.03em;
+  text-wrap:balance;
+}
+.home-planning-copy>p:not(.eyebrow){
+  max-width:62ch;
+  color:var(--muted,#655b52);
+  line-height:1.7;
+}
+.home-planning-copy .home-planning-guide{
+  margin:18px 0 0;
+  padding-top:16px;
+  border-top:1px solid var(--line,#ded3c5);
+  font-size:.92rem;
+}
+.home-planning-guide a,.home-planning-contact{
+  color:var(--garnet,#5b1a2b);
+  font-weight:750;
+  text-underline-offset:.22em;
+}
+.home-planning-actions{
+  display:grid;
+  gap:0;
+  min-width:0;
+}
+.home-planning-actions .button{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  width:100%;
+  min-height:52px;
+  margin-bottom:8px;
+  padding-inline:18px;
+  text-align:left;
+}
+.home-planning-link{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  min-width:0;
+  min-height:54px;
+  padding:12px 2px;
+  border-bottom:1px solid var(--line,#ded3c5);
+  color:var(--ink,#231a14);
+  font-weight:650;
+  text-decoration:none;
+}
+.home-planning-link span:last-child{
+  color:var(--garnet,#5b1a2b);
+  font-size:1.15rem;
+  transition:transform .16s ease;
+}
+.home-planning-link:hover span:last-child{transform:translate(2px,-2px)}
+.home-planning-contact{
+  display:inline-flex;
+  align-items:center;
+  min-height:48px;
+  margin-top:8px;
+}
+.home-planning-link:focus-visible,.home-planning-contact:focus-visible,.home-planning-guide a:focus-visible{
+  outline:3px solid var(--focus,#1d4ed8);
+  outline-offset:3px;
+}
+@media(max-width:900px){
+  .home-planning-panel{grid-template-columns:minmax(0,1fr);gap:24px}
+  .home-planning-copy h2{max-width:21ch}
+}
+@media(max-width:760px){
+  .home-planning-panel{padding:clamp(18px,5vw,26px)}
+  .home-planning-actions .button{width:100%;min-height:50px}
+}
+@media(prefers-reduced-motion:reduce){
+  .home-planning-link span:last-child{transition:none}
+}

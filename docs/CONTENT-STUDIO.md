@@ -1,6 +1,6 @@
 # Content Studio runbook (tours, blogs, gallery)
 
-Governing design: `docs/CONTENT-STUDIO-DESIGN.md`. This file is the how-to. Owner merges and deploys; nobody else.
+Governing rules: verified facts in `docs/OWNER-FACTS.md`, public-site architecture and release boundaries in `docs/ARCHITECTURE.md`, and required checks in `docs/TESTING.md`. This file is the Content Studio how-to. Owner merges and deploys; nobody else.
 
 ## What it guarantees
 - Every file lands at an exact path from `content/_paths.json`. Nobody types a destination.
@@ -87,4 +87,4 @@ Quick add is now Title, Photos, Check and approve. Photos can be dragged in. Pag
 
 ## Staff view
 
-Staff use `docs/STAFF-GUIDE.md` and the double-click launchers (`Start-Studio.bat`, `Start-Studio.command`). Screen wording avoids git terms: "Send for review" runs branch, push and pull request internally. This runbook and "Owner tools (Advanced forms)" are for the owner.
+Staff use the plain-language Studio screen and the double-click launchers (`Start-Studio.bat`, `Start-Studio.command`). Screen wording avoids Git terms: "Send for review" creates a branch, pushes it and opens a pull request. This runbook and "Owner tools (Advanced forms)" are for the owner.

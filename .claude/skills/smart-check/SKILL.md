@@ -9,8 +9,8 @@ This Claude Code entrypoint mirrors the canonical project skill at `.agents/skil
 
 Before reviewing, read the canonical skill and matrix:
 - `.agents/skills/smart-check/SKILL.md`
-- `docs/SMART-CHECK-MATRIX.md`
-- `docs/PROJECT-LOG.md`
+- `docs/TESTING.md`
+- `docs/PROJECT-STATE.md`
 - Relevant workflows in `.github/workflows/`
 
 Follow the canonical skill in full. Do not treat this file as an abbreviated alternative. If the two differ, the canonical `.agents/skills/smart-check/SKILL.md` is authoritative.

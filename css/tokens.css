@@ -19,9 +19,9 @@
 
   /* Shared layout geometry */
   --max: 1200px;
-  --content-max: 1200px;
+  --content-max: 1240px;
   --page-gutter: clamp(1rem, 3vw, 2rem);
-  --section-space: clamp(3.5rem, 5.5vw, 5rem);
+  --section-space: clamp(3.5rem, 5.25vw, 4.75rem);
   --card-gap: clamp(1rem, 2.25vw, 1.75rem);
   --reading-measure: 68ch;
 

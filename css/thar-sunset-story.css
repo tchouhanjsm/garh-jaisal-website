@@ -35,7 +35,8 @@ main.thar-sunset-story .article-hero .eyebrow::before{
 
 main.thar-sunset-story--home .hero-overlay{
   background:
-    linear-gradient(180deg,rgba(20,18,43,.06) 8%,rgba(91,26,43,.24) 42%,rgba(20,18,43,.88) 100%);
+    linear-gradient(90deg,rgba(20,18,43,.66) 0%,rgba(20,18,43,.42) 42%,rgba(20,18,43,.08) 82%),
+    linear-gradient(180deg,rgba(20,18,43,.04) 4%,rgba(91,26,43,.12) 42%,rgba(20,18,43,.88) 100%);
 }
 
 main.thar-sunset-story--rooms .page-hero.page-hero--photo::after,
@@ -506,5 +507,116 @@ main.thar-sunset-story--rooms .room-finder-empty p{
   main.thar-sunset-story--rooms .room-filter-chip,
   main.thar-sunset-story--rooms .room-finder-reset{
     transition:none;
+  }
+}
+
+
+/* Home art direction — consistent with the approved sandstone / night-sky identity. */
+main.thar-sunset-story--home .home-discovery{
+  background:var(--parchment);
+  border-bottom:1px solid rgba(91,26,43,.14);
+}
+main.thar-sunset-story--home .home-discovery-link{
+  min-height:88px;
+  padding-inline:clamp(12px,1.8vw,24px);
+  border-color:rgba(91,26,43,.13);
+  transition:background-color .18s ease;
+}
+main.thar-sunset-story--home .home-discovery-link:hover{
+  background:rgba(217,164,65,.09);
+}
+main.thar-sunset-story--home .home-discovery-link strong{
+  font-size:1rem;
+  letter-spacing:-.01em;
+}
+main.thar-sunset-story--home .home-arrival-note{
+  background:#fbf7ef;
+  border-bottom:1px solid rgba(91,26,43,.13);
+}
+main.thar-sunset-story--home .home-arrival-note-copy h2{
+  max-width:18ch;
+  font-family:var(--font-display);
+  font-size:clamp(1.55rem,2.7vw,2.25rem);
+  line-height:1.12;
+  letter-spacing:-.025em;
+}
+main.thar-sunset-story--home .home-arrival-note-copy p{
+  max-width:72ch;
+  color:#51453d;
+  line-height:1.65;
+}
+main.thar-sunset-story--home .home-room-card,
+main.thar-sunset-story--home .home-experiences .card{
+  overflow:hidden;
+  border:1px solid rgba(35,26,20,.11);
+  border-radius:var(--radius-card,6px);
+  background:#fffdf9;
+  box-shadow:0 7px 22px rgba(20,18,43,.055);
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+}
+main.thar-sunset-story--home .home-room-card:hover,
+main.thar-sunset-story--home .home-experiences .card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(91,26,43,.25);
+  box-shadow:0 15px 32px rgba(20,18,43,.1);
+}
+main.thar-sunset-story--home .home-room-card .card-body,
+main.thar-sunset-story--home .home-experiences .card-body{
+  padding:clamp(18px,2vw,25px);
+}
+main.thar-sunset-story--home .home-room-card h3,
+main.thar-sunset-story--home .home-experiences .card h3{
+  font-family:var(--font-display);
+  font-size:clamp(1.45rem,2vw,1.8rem);
+  line-height:1.12;
+  letter-spacing:-.02em;
+}
+main.thar-sunset-story--home .home-room-card .text-link,
+main.thar-sunset-story--home .home-experiences .text-link{
+  display:inline-flex;
+  align-items:center;
+  min-height:44px;
+  color:var(--garnet);
+  text-underline-offset:.24em;
+}
+main.thar-sunset-story--home .home-gallery .gallery-strip figure{
+  background:var(--sand);
+}
+main.thar-sunset-story--home .home-gallery .gallery-strip img{
+  transition:transform .35s ease;
+}
+main.thar-sunset-story--home .home-gallery .gallery-strip figure:hover img{
+  transform:scale(1.025);
+}
+@media(max-width:760px){
+  main.thar-sunset-story--home .hero-overlay{
+    background:
+      linear-gradient(180deg,rgba(20,18,43,.08) 0%,rgba(20,18,43,.18) 32%,rgba(20,18,43,.88) 100%);
+  }
+  main.thar-sunset-story--home .home-discovery-link{
+    min-height:72px;
+    padding-inline:4px;
+  }
+  main.thar-sunset-story--home .home-arrival-note-inner{
+    align-items:stretch;
+    gap:16px;
+  }
+  main.thar-sunset-story--home .home-arrival-note-inner .button{
+    width:100%;
+  }
+  main.thar-sunset-story--home .home-room-card,
+  main.thar-sunset-story--home .home-experiences .card{
+    box-shadow:0 5px 16px rgba(20,18,43,.05);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  main.thar-sunset-story--home .home-room-card,
+  main.thar-sunset-story--home .home-experiences .card,
+  main.thar-sunset-story--home .home-gallery .gallery-strip img{
+    transition:none;
+  }
+  main.thar-sunset-story--home .home-room-card:hover,
+  main.thar-sunset-story--home .home-experiences .card:hover{
+    transform:none;
   }
 }

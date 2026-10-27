@@ -2,7 +2,7 @@
 /**
  * Single source of truth for site navigation (header, mobile menu, footer).
  *
- * Rules (see docs/SITE-ARCHITECTURE.md):
+ * Rules (see docs/ARCHITECTURE.md):
  * - Every parent item is a real page; its submenu never replaces the link.
  * - Only link to pages that exist and are live. Draft or hidden pages stay out.
  * - 'active' lists the $activePage values that highlight the item.

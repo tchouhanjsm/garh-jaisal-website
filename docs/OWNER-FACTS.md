@@ -1,72 +1,40 @@
-# Owner facts (single place to answer)
+# Owner facts — Garh Jaisal Haveli
 
-Fill in what you know. AI assistants read this file and must not guess anything that is blank. Update the date when you change an answer. Do not put passwords or secrets here (this repo is public).
+Last reviewed: 27 October 2026. This is the single source of owner-confirmed facts and unresolved business questions. Do not put passwords, CAPTCHA secrets, private lead data, or server-local configuration in this public repository.
 
-## Decided
-| Topic | Answer | Date |
-|---|---|---|
-| Google Analytics IDs | Keep both: G-0C646S1FQ0 and G-6S5PCEVXH4 | 2026-10-13 |
-| Menu and page structure | Approved (see `docs/SITE-ARCHITECTURE.md`) | 2026-10-12 |
-| Duplicate and orphan pages | Hide unclear ones temporarily; review at the end | 2026-10-12 |
-| Swiss tent facilities | All Swiss tents have a king-size bed, attached bathroom with hot/cold shower, tea and coffee maker, toiletries, study table, full-length mirror and towels. | 2026-10-14 |
-| Guide languages | English, Hindi, Bengali, Italian, French, Spanish and German; ask before promising any additional language. | 2026-10-14 |
-| Car services | SUV and sedan arrangements across Rajasthan and Delhi; drivers can communicate in Hindi and English. Confirm route, vehicle and availability for each booking. | 2026-10-14 |
-| Instagram profile | `https://www.instagram.com/garhjaisal/` | 2026-10-14 |
-| Garh Jaisal's Kitchen Maps destination | `https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8`; use this destination for the restaurant directions QR. Owner also supplied the Google Maps embed URL. | 2026-10-14 |
-| Desert Camp imagery | Owner-provided image assets are in `img/Desert_Camp/`; visually review subject/caption mapping before release. Do not restore removed or unlicensed images. | 2026-10-14 |
-| Jaisalmer Fort walk | Planned walk focuses on Jain temples inside Jaisalmer Fort, the Palace Museum and a heritage street walk. Current price and guide-language availability are confirmed on WhatsApp for the requested date. | 2026-10-14 |
+## Confirmed facts
 
-## Needed to unblock pages
-| # | Question | Answer | Unblocks |
-|---|---|---|---|
-| 1 | Longewala tour: route and stops, distance, duration, start time, vehicle and capacity, guide language, fees included?, meals?, pickup | | `longewala-tour.php` |
-| 2 | Rajasthan tours: which routes, single or multi-day, price shown or "on request" | | `rajasthan-tours.php` |
-| 3 | Is `explore-the-desert` a different full-day product from the sunset safari? If yes, how? | | restore or redirect |
-| 4 | Show "from" prices on room cards? If yes, per room and the wording ("from ₹X per night, taxes extra"?) | | Rooms |
-| 5 | Cancellation and booking policy (your words) | NEEDS OWNER INPUT: owner will supply approved policy wording. Keep policy pages noindex/off-navigation until the text is provided and approved. | `booking-policy.php` |
-| 6 | Privacy: who is the data controller, which email handles requests | | `privacy.php` |
-| 7 | Check-in and check-out times, early-arrival access and luggage storage | NEEDS OWNER INPUT: confirm official times and whether early check-in or luggage storage can be arranged. Do not publish a specific time or promise before approval. | Rooms, Directions, schema |
-| 8 | Real guest reviews you may quote (text, first name, source, date) | | Home, Rooms |
-| 9 | Rooftop kitchen: opening hours, closed days, last seating and same-day cut-off | NEEDS OWNER INPUT: the site is being changed to accept unconfirmed table enquiries. Supply actual service hours, closed days, last seating and cut-off values; the code must not infer a schedule. | Dining and server-only configuration |
-| 10 | Reception hours and late-arrival process (the site previously showed 7:00 AM to 10:30 PM: confirm) | NEEDS OWNER INPUT: confirm current reception hours and whether meet-and-assist or luggage help can be arranged outside those hours. Do not state a fixed advance-notice rule unless approved. | Directions |
-| 11 | Hosting: cPanel PHP version, can the repo be deployed through cPanel Git? | | Sprint 3 |
-| 12 | Photos missing for any page (list pages where you want new images) | Owner-provided Desert Camp photos are available in `img/Desert_Camp/`; continue to request page-specific images where the current library is insufficient. | Design |
-| 13 | Which researched Jaisalmer itinerary themes may become actual offerings? Approve each theme and confirm route/stops, duration, vehicle, guide, access/permissions, fees, inclusions and price | | Car & City Tours and future detail pages |
-| 14 | Which exact Instagram posts/reels should be embedded on the restaurant page? | NEEDS OWNER INPUT: profile URL is confirmed, but specific public post/reel URLs have not been supplied. Keep a lightweight profile link until direct URLs are approved. | `restaurant.php` |
-| 15 | Are the current restaurant menu items and prices still accurate? | NEEDS OWNER INPUT: menu data is being separated into `include/menu-data.php`; prices must remain hidden until live-menu approval. | `include/menu-data.php`, `restaurant.php` |
-| 16 | Current railway-station, airport and local rickshaw transfer fares and journey-time estimates | NEEDS OWNER INPUT: do not publish fixed fares or pickup/travel-time promises until the current route, provider, quote and timing are approved. Confirm details for the requested date. | `direction.php` and future transport enquiry/quote UI |
+- **Property:** Garh Jaisal Haveli is inside Jaisalmer Fort, Rajasthan. Vehicles cannot enter the Fort, so the final approach is on foot through the Fort lanes.
+- **Website stack:** Plain PHP on cPanel/shared hosting. The owner is the only person who approves merges and production releases.
+- **Analytics:** Retain both approved GA4 IDs: `G-0C646S1FQ0` and `G-6S5PCEVXH4`.
+- **Guest contact source of truth:** `include/site-config.php` holds public phone, email, WhatsApp, booking destination and analytics configuration. Preserve current destinations unless the owner explicitly approves a change. Server-only values belong in ignored `include/site-config.local.php` or environment variables.
+- **Guide languages:** English, Hindi, Bengali, Italian, French, Spanish and German. Confirm availability for the requested date; do not promise additional languages without approval.
+- **Vehicle arrangements:** SUV and sedan arrangements may be requested for Rajasthan and Delhi. Confirm route, vehicle, pickup, driver and availability per booking.
+- **Swiss tent facilities:** King-size bed, attached bathroom with hot/cold shower, tea/coffee maker, toiletries, study table, full-length mirror and towels. Confirm any specific property's current setup before promising exceptions.
+- **Fort walk:** The proposed focus is Jain temples inside Jaisalmer Fort, the Palace Museum and a heritage street walk. Price and guide-language availability are confirmed through WhatsApp for the requested date.
+- **Official social profile:** `https://www.instagram.com/garhjaisal/`.
+- **Restaurant directions:** Use the owner-supplied Garh Jaisal's Kitchen Maps destination recorded in restaurant configuration; do not substitute a guessed location.
+- **Desert Camp photos:** Owner-provided assets are stored in `img/Desert_Camp/`. Review each photo and caption mapping; do not restore removed or unlicensed imagery.
 
+## Never publish as confirmed without owner approval
 
-## Research-led tour ideas — not approved offers
+- Room rates, live availability, cancellation terms, check-in/check-out times, early arrival, luggage storage, fixed reception hours, late-arrival assistance or meet-and-assist.
+- Restaurant menu prices, operating hours, closed days, last seating, same-day cut-off or table availability.
+- Tour prices, precise timings, route/stop lists, permissions, wildlife sightings, guide availability, vehicle availability or inclusions.
+- Guest reviews, star ratings, guest counts, founder/family history, and any claim that cannot be traced to a verified source.
+- Proposed itinerary themes are conversation starters, not bookable products. A custom itinerary is an enquiry until the hotel confirms feasibility, visitor rules, transport/guide, timings, fees and final price.
 
-These are candidates for review, not a promise that Garh Jaisal Haveli currently operates or can arrange them. Keep public copy framed as an enquiry until the owner approves each option and its operational details. See `docs/JAISALMER-TOUR-RESEARCH.md` for official destination sources and suggested validation.
+## Open owner decisions
 
-- Havelis and architecture route.
-- Jain temples and Fort architecture visit.
-- Gadisar Lake / Bada Bagh / Vyas Chhatri photography route (may require separate outings).
-- Kuldhara heritage and desert landscape visit.
-- Akal Wood Fossil Park or Desert National Park nature route (separate options; wildlife is never guaranteed).
-- Longewala War Memorial history excursion (visitor requirements and travel logistics must be verified).
+1. **Unconfirmed tours:** For Longewala and Rajasthan-wide trips, confirm routes, stops, duration, vehicle/capacity, guide language, fees, meals and pickup. Keep pages draft/noindex until approved.
+2. **Distinct experiences:** Confirm whether the legacy “explore the desert” route is a separate product or should redirect to a surviving approved offer.
+3. **Rates and policies:** Confirm whether “from” room prices may be displayed, exact cancellation/booking policy wording, and privacy/data-controller/retention wording. Policy pages remain noindex/off-navigation until approved.
+4. **Arrival:** Confirm actual check-in/check-out and reception hours, early-arrival/luggage options, and any late-arrival process. Do not publish fixed times or promises before approval.
+5. **Dining:** Confirm the live menu and prices, opening hours, closed days, last seating, same-day cut-off and party-size constraints before enabling any reservation-like promise.
+6. **Reviews and media:** Supply publishable review text with source/date/permission, and exact public Instagram post/reel URLs if they should be embedded.
+7. **Hosting:** Confirm the production cPanel PHP version and Apache behavior before release. CI compatibility is not proof of the production runtime.
+8. **Transfer estimates:** Confirm current airport/station/rickshaw routes, providers, prices and travel-time estimates before publishing any exact numbers.
 
-## Implementation notes (2026-10-27)
+## Safe handling
 
-- The six Car & City itinerary themes are research-led examples, not an exhaustive product catalogue. Guests may ask about other places or combinations, but every custom route remains an unconfirmed enquiry until the hotel checks feasible routing, visitor access/rules, transport/guide availability, timing, fees and price.
-- The custom itinerary builder should only prepare a WhatsApp message in the visitor's browser. Do not store submitted travel details, create a booking, or imply that the hotel has confirmed a tour.
-
-## Implementation notes (2026-10-26)
-
-- The existing public Contact and Directions pages display primary and alternate phone numbers plus two email destinations. Preserve those established destinations and keep rendered links backed by `include/site-config.php`; change them only after owner confirmation.
-- Shared Hotel, ContactPage and Restaurant JSON-LD telephone/email values must derive from the same public contact configuration as rendered links. Preserve the existing published structured-data phone formatting.
-
-## Implementation notes (2026-10-17)
-
-- A restaurant request is an enquiry, not a confirmed table reservation. Do not label it as confirmed until the hotel checks availability.
-- Provide exact opening hours, closed days, last seating and same-day cut-off before configuring online requests. An empty closed-day list is not verified operating hours.
-- Private enquiry storage needs a confirmed operator-access method, backup/retention policy and approved privacy wording. Test real email delivery on staging.
-- Confirm the current menu items and prices before enabling public price display.
-
-## Backend remediation follow-up (2026-10-17)
-
-- Table requests produce a reference and remain unconfirmed until the hotel replies. Supply real restaurant hours, closed days, last seating, same-day cut-off and online party-size policy before configuring those constraints.
-- Confirm the public menu before enabling `include/menu-data.php` price display.
-- Approve the privacy/controller wording, the lead log operator, backup/retention requirements, and a staging mail test before production use.
+When a fact is blank or uncertain, ask the owner or say it must be confirmed for the guest's date. Never infer business promises from old copy or unverified third-party text. Keep private leads and server secrets out of Git; use staging for mail/CAPTCHA tests, and never send test enquiries to live guest addresses.
