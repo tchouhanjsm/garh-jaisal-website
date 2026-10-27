@@ -24,9 +24,14 @@ test('live experience pages show a contextual checkpoint after the itinerary and
       const heroActions = page.locator('.experience-hero-actions');
       await expect(heroActions.locator('a, button'), route.path + ': hero has two deliberate actions').toHaveCount(2);
       if (route.path === '/desert-safari.php') {
+        await expect(heroActions.locator('a.button-primary'))
+          .toHaveAttribute('href', '#desert-options');
+        await expect(heroActions.getByRole('link', { name: 'Compare safari options' }))
+          .toBeVisible();
+        await expect(heroActions.getByRole('link', { name: 'Check dates & prices' }))
+          .toHaveAttribute('href', 'contact.php?topic=desert-safari');
         await expect(page.getByRole('link', { name: 'Build your trip shortlist' }), route.path + ': hub keeps a clear next step')
           .toHaveAttribute('href', 'catalogue.php');
-        await expect(heroActions.locator('a.button-primary')).toBeVisible();
       } else {
         await expect(page.getByRole('link', { name: 'Plan my guided tour' }), route.path + ': city-tour hub keeps a contextual enquiry')
           .toHaveAttribute('href', 'contact.php?topic=visit-planning');
