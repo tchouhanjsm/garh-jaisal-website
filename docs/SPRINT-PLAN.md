@@ -927,4 +927,16 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Style the index using the existing brand tokens, visible focus, wrapping on small screens, and reduced-motion-safe behavior.
 - Add source-contract and Browser E2E coverage for all six live experience detail pages, link/target parity, visible sections and 320/390/768/1280/1440px no-overflow.
 - Preserve all registry content, image/alt values, schema, canonical URLs, WhatsApp/Trip-shortlist actions and prices-on-request. Do not fabricate missing operational facts or publish draft/hidden experiences.
-- Acceptance: PR #143 must be retargeted to `main` only after PR #141 merges, then pass exact-head PHP 7.4/8.2 checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA.
+- PR #143's implementation was merged into PR #141's feature branch; it will ship with #141 and is subject to #141's exact-head PHP 7.4/8.2 checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. The stacked-branch merge is not a merge to `main`.
+
+
+## Sprint 69 — editorial hero typography for tours and experiences (PR #144)
+
+**Goal:** give the first screen of the Experiences, Car & City Tours and individual tour pages a more distinctive heritage-editorial character without adding another font download or changing operational claims.
+
+- Strengthen the existing Source Serif 4 headline treatment with a clear display weight, balanced line-height and a small saffron/gold rule beneath the primary heading.
+- Apply the shared treatment only to the primary hero headings on the Packages/Experiences hub, Car & City Tours page, live experience detail pages and the Fort walk detail page.
+- Preserve the current responsive type scale, paragraph measure, hero photography, navigation, CTA destinations, schema, metadata, route content, current-price wording and all booking/contact behavior.
+- Add browser coverage for the four public entry points at 320, 390, 768, 1280 and 1440px, including the displayed typeface, title weight, decorative rule and no horizontal overflow.
+- Reuse the already approved Source Serif 4/Inter stack; do not add a dependency, font file, new business fact, service promise or external asset.
+- Acceptance: exact-head PHP 7.4/8.2 Site Checks, Browser E2E and page-sheet evidence, package preflight and non-deploying Staging QA. This PR remains stacked on PR #141 until the parent sprint is merged and accepted.

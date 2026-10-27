@@ -892,3 +892,41 @@ body .footer-bottom {
     overflow-wrap: anywhere;
   }
 }
+
+/* Sprint 69 — make the primary tours and experience headlines feel more
+   editorial while keeping the approved Source Serif 4 stack and existing scale. */
+main :is(
+  .package-hero-content,
+  .experience-hero-content,
+  .tour-detail-hero .page-hero-inner
+) > h1 {
+  font-family: var(--font-display, "Source Serif 4", Georgia, serif);
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+main :is(
+  .package-hero-content,
+  .experience-hero-content,
+  .tour-detail-hero .page-hero-inner
+) > h1::after {
+  content: "";
+  display: block;
+  width: clamp(3.25rem, 8vw, 5rem);
+  height: 3px;
+  margin-block-start: 1rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gold), rgba(217, 164, 65, 0.24));
+}
+
+@media (max-width: 600px) {
+  main :is(
+    .package-hero-content,
+    .experience-hero-content,
+    .tour-detail-hero .page-hero-inner
+  ) > h1::after {
+    margin-block-start: 0.75rem;
+  }
+}
