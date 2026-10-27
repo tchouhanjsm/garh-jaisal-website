@@ -14,10 +14,23 @@ function getSitemapRoutes() {
 
 const routes = getSitemapRoutes();
 const REVIEW_THRESHOLD_BYTES = 250 * 1024;
+const ROOT = path.resolve(__dirname, "../..");
+const ENFORCED_RESPONSIVE_VARIANT_BUDGETS = [
+  { path: "img/responsive/v2/facade-1200.webp", maxBytes: 350 * 1024 },
+  { path: "img/responsive/v2/courtyard-1200.webp", maxBytes: 350 * 1024 },
+];
 
 test('write deduplicated image payload audit for sitemap routes', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Image payload audit runs once at desktop width');
   test.setTimeout(180_000);
+
+  const enforcedVariantBudgets = ENFORCED_RESPONSIVE_VARIANT_BUDGETS.map(budget => {
+    const absolutePath = path.join(ROOT, budget.path);
+    expect(fs.existsSync(absolutePath), `${budget.path} should be generated for the audit`).toBe(true);
+    const bytes = fs.statSync(absolutePath).size;
+    expect(bytes, `${budget.path} should stay within its 350 KiB transfer budget`).toBeLessThanOrEqual(budget.maxBytes);
+    return { ...budget, bytes, status: 'pass' };
+  });
 
   const context = await browser.newContext({
     baseURL: 'http://127.0.0.1:8080',
@@ -144,6 +157,7 @@ test('write deduplicated image payload audit for sitemap routes', async ({ brows
     generatedAt: new Date().toISOString(),
     source: 'local PHP site rendered by Playwright in Chromium; not production measurements',
     viewport: { width: 1280, height: 800 },
+    enforcedVariantBudgets,
     summary,
     images,
   }, null, 2) + '\n');

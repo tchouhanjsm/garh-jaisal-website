@@ -60,3 +60,10 @@ The already accepted same-dimension derivatives remain the only image outputs en
 The homepage uses a portrait facade below 768px and the existing rooftop/fort panorama from 768px upward. Both alternatives use already-checked-in, same-dimension WebP derivatives and retain their separate intrinsic dimensions; the original source photos are unchanged. The panoramic derivative is 388,404 tracked bytes compared with 591,152 bytes for the portrait facade (202,748 bytes, about 34.3%, lower for the desktop/tablet hero selection).
 
 `tests/e2e/home-hero-art-direction.spec.js` locks source selection at 320, 390, 768, 1280 and 1440px, validates dimensions/loading and enforces 600 KiB / 400 KiB tracked-file ceilings. This is an asset-level regression guard, not a total homepage byte budget or a production/Core Web Vitals measurement. The separate resized 480/800/1200px candidate set remains review-only pending owner visual approval.
+
+
+## Sprint 72 — source-scoped responsive hero budgets
+
+The Browser E2E image-payload audit on PR #150 measured `img/responsive/v2/facade-1200.webp` at 416,592 bytes and `img/responsive/v2/courtyard-1200.webp` at 406,736 bytes in a local PHP/Chromium run. These values are the local artifact baseline, not production/CDN measurements.
+
+The responsive-image manifest now supports validated per-source quality overrides. Only `img/v2/facade.jpg` and `img/v2/courtyard.jpg` use quality 74; the default remains 82 for other sources, and all original photographs remain untouched. Browser E2E enforces an exact-file-size ceiling of 350 KiB for each 1200px derivative and records the measured bytes in its artifact. The generator's source/variant sheet is still required for visual review at full image size; passing a size budget is not proof that photographic detail is acceptable.

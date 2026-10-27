@@ -75,7 +75,26 @@ def load_manifest() -> dict[str, Any]:
     savings = float(manifest.get("minimum_savings_percent", 5))
     if not 1 <= quality <= 100 or not 0 <= method <= 6 or not 0 <= savings < 100:
         raise ValueError("Invalid quality, method or minimum_savings_percent setting")
+
+    quality_overrides = manifest.get("quality_overrides", {})
+    if not isinstance(quality_overrides, dict):
+        raise ValueError("quality_overrides must be a source-to-quality object")
+    for override_source, override_quality in quality_overrides.items():
+        if override_source not in sources:
+            raise ValueError(f"quality_overrides source is not listed in sources: {override_source!r}")
+        if (
+            isinstance(override_quality, bool)
+            or not isinstance(override_quality, int)
+            or not 1 <= override_quality <= 100
+        ):
+            raise ValueError(f"Invalid quality override for {override_source!r}: {override_quality!r}")
     return manifest
+
+
+def quality_for_source(manifest: dict[str, Any], source_relative: str) -> int:
+    """Use a narrowly scoped override while preserving the manifest default."""
+    overrides = manifest.get("quality_overrides", {})
+    return int(overrides.get(source_relative, manifest["quality"]))
 
 
 def encode_variant(
@@ -229,11 +248,13 @@ def build() -> dict[str, Any]:
         variants = []
         for width in widths:
             path = output_path(source_relative, width)
-            result = encode_variant(source, path, width, quality, method, minimum_savings)
+            source_quality = quality_for_source(manifest, source_relative)
+            result = encode_variant(source, path, width, source_quality, method, minimum_savings)
             result.update({
                 "target_width": width,
                 "source_width": source_dimensions[0],
                 "source_height": source_dimensions[1],
+                "quality": source_quality,
                 "relative_path": path.relative_to(ROOT).as_posix() if result["status"] == "generated" else None,
             })
             variants.append(result)
@@ -245,6 +266,7 @@ def build() -> dict[str, Any]:
             "source_format": source_format,
             "source_dimensions": source_dimensions,
             "source_bytes": source_bytes,
+            "quality": source_quality,
             "variants": variants,
         }
         rows.append(row)
@@ -284,6 +306,7 @@ def build() -> dict[str, Any]:
             "widths": widths,
             "format": manifest["format"],
             "quality": quality,
+            "quality_overrides": dict(manifest.get("quality_overrides", {})),
             "method": method,
             "minimum_savings_percent": minimum_savings,
             "upscaling": False,

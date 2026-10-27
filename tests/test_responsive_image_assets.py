@@ -24,6 +24,13 @@ class ResponsiveImageAssetTests(unittest.TestCase):
         self.assertEqual(manifest["target_widths"], sorted(set(manifest["target_widths"])))
         self.assertEqual(len(manifest["sources"]), len(set(manifest["sources"])))
         self.assertGreaterEqual(len(manifest["sources"]), 40)
+        self.assertEqual(manifest["quality_overrides"], {
+            "img/v2/facade.jpg": 74,
+            "img/v2/courtyard.jpg": 74,
+        })
+        self.assertEqual(assets.quality_for_source(manifest, "img/v2/facade.jpg"), 74)
+        self.assertEqual(assets.quality_for_source(manifest, "img/v2/courtyard.jpg"), 74)
+        self.assertEqual(assets.quality_for_source(manifest, "img/j2.jpg"), manifest["quality"])
 
     def test_encode_variant_skips_upscaling(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -65,6 +72,35 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             self.assertEqual(result["status"], "skipped-insufficient-savings")
             self.assertFalse(destination.exists())
             self.assertLess(result["attempted_saved_percent"], 99.9)
+
+    def test_manifest_rejects_invalid_quality_overrides(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            image_dir = root / "img"
+            image_dir.mkdir()
+            Image.new("RGB", (640, 320), (20, 30, 40)).save(image_dir / "same.jpg", format="JPEG")
+            manifest_path = root / "manifest.json"
+            base_manifest = {
+                "version": 1,
+                "format": "WEBP",
+                "quality": 82,
+                "method": 6,
+                "minimum_savings_percent": 5,
+                "target_widths": [320, 480],
+                "sources": ["img/same.jpg"],
+            }
+            invalid_overrides = [
+                ({"img/missing.jpg": 74}, "not listed in sources"),
+                ({"img/same.jpg": True}, "Invalid quality override"),
+                ({"img/same.jpg": 101}, "Invalid quality override"),
+            ]
+            with patch.object(assets, "ROOT", root), patch.object(assets, "OUTPUT_ROOT", root / "img" / "responsive"), patch.object(assets, "MANIFEST_PATH", manifest_path):
+                for overrides, expected_error in invalid_overrides:
+                    with self.subTest(overrides=overrides):
+                        manifest = dict(base_manifest, quality_overrides=overrides)
+                        manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+                        with self.assertRaisesRegex(ValueError, expected_error):
+                            assets.load_manifest()
 
     def test_manifest_rejects_source_output_name_collisions(self):
         with tempfile.TemporaryDirectory() as directory:
