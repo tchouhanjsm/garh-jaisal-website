@@ -7,11 +7,11 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-27 |
-| Current phase | Sprint 67–68 parent delivery gate; Sprint 69 editorial typography prepared |
+| Current phase | Sprint 67–68 parent validation; Sprint 69 editorial typography (draft PR #144) |
 | Verified main SHA | df812a33675a5d31d4ce388629038cf5a7960105 (PR #140 merge commit) |
 | Latest merged PR | [#140 — unified public contact channels and structured data](https://github.com/tchouhanjsm/garh-jaisal-website/pull/140) |
 | Recent merged work | PRs #138 Car & City enquiry discovery, #139 contact-channel source of truth, #140 contact/schema parity |
-| Active phase branch | `feature/experience-editorial-heading-20261027` — Sprint 69 branch stacked on PR #141; PR opens after the parent browser gate clears |
+| Active phase branch | `feature/experience-editorial-heading-20261027` — draft PR #144 stacked on PR #141 |
 
 ## Current phase
 
@@ -22,7 +22,7 @@
 - Exact-head checks are rerunning on `7d61e78`: [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40464240577), [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40464240589), [package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40464240652) and [non-deploying Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40464240778). These results are pending at this log revision.
 - No merge or deployment until Browser E2E succeeds and page-sheet/screenshot evidence is available.
 
-**Next phase:** Sprint 69's shared editorial hero heading treatment is prepared on `feature/experience-editorial-heading-20261027`, stacked on the parent head. Its PR will be opened after the parent Browser E2E gate completes to avoid overlapping full browser runs.
+**Next phase:** Sprint 69's shared editorial hero heading treatment is open as draft PR #144 on `feature/custom-itinerary-builder-20261027`. Its four-file diff is isolated from the parent PR. Retarget it to `main` only after PR #141 passes its exact-head Browser E2E/screenshot gate and merges; do not deploy from this stacked branch.
 
 ## Latest implementation entry
 
@@ -30,7 +30,7 @@
 - Sprint 65–66 / PRs #139–#140 merged the visible contact and structured-data parity slice. Browser screenshot evidence remains absent because the merge-head Browser E2E run was cancelled.
 - Sprint 67 / PR #141 contains the custom-itinerary page, browser-only draft composer, contextual contact fallback, open-ended Car & City links, sitemap and regression contracts. Latest Site Checks, package preflight and non-deploying QA pass; Browser E2E/screenshot evidence is still in progress.
 - Sprint 68 / PR #143 was merged into `feature/custom-itinerary-builder-20261027`, so its navigation code is included in PR #141. It is not a standalone merge to `main`; the combined parent PR must pass exact-head checks before these pages ship.
-- Sprint 69 / editorial hero typography is prepared on `feature/experience-editorial-heading-20261027`; its pull request is intentionally waiting for the parent Browser E2E gate before being opened.
+- Sprint 69 / editorial hero typography is draft PR #144, stacked on PR #141 and scoped to the shared tokens, a responsive browser test, and sprint/project docs. It will be retargeted to `main` only after #141 merges.
 
 ## Remaining blockers
 
