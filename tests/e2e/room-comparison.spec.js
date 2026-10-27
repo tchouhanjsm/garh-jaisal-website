@@ -80,3 +80,35 @@ test.describe('Room comparison journey', () => {
     }
   });
 });
+
+  test('carries the selected room shortlist into a trusted contact enquiry', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-1280', 'Run the end-to-end context handoff once.');
+    await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
+    const cards = page.locator('.rooms-page .room-card');
+    const first = cards.nth(0);
+    const second = cards.nth(1);
+    const firstName = (await first.locator('h3').textContent()).trim();
+    const secondName = (await second.locator('h3').textContent()).trim();
+    await first.locator('[data-room-compare-toggle]').click();
+    await second.locator('[data-room-compare-toggle]').click();
+    await second.locator('[data-room-comparison-open]').click();
+
+    const enquiryLink = page.locator('[data-room-comparison-dialog] [data-room-comparison-enquiry]');
+    await expect(enquiryLink).toBeVisible();
+    const targetUrl = new URL(await enquiryLink.getAttribute('href'), 'http://127.0.0.1:8080');
+    expect(targetUrl.pathname).toBe('/contact.php');
+    expect(targetUrl.searchParams.getAll('rooms[]')).toEqual([
+      (await first.getAttribute('id')).replace(/^room-/, ''),
+      (await second.getAttribute('id')).replace(/^room-/, ''),
+    ]);
+
+    await enquiryLink.click();
+    await expect(page).toHaveURL(/\/contact\.php\?rooms/);
+    const context = page.locator('.contact-rooms-context');
+    await expect(context).toBeVisible();
+    await expect(context).toContainText(firstName);
+    await expect(context).toContainText(secondName);
+    await expect(page.locator('#message')).toHaveValue(new RegExp('these rooms: ' + firstName + ', ' + secondName));
+    await expect(page.locator('input[name="enquiry_context_token"]')).toHaveAttribute('value', /[a-f0-9]{32}/);
+  });
+});
