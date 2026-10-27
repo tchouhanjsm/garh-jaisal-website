@@ -75,6 +75,7 @@ require __DIR__ . '/include/page-head.php';
       <div class="actions">
         <a class="button button-primary" href="contact.php?topic=visit-planning">Plan my guided tour</a>
         <a class="button button-light" href="#guided-options">Compare tour options</a>
+        <a class="button button-secondary" href="catalogue.php">Build your trip shortlist</a>
       </div>
     </div>
   </section>
