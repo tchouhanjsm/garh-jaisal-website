@@ -393,6 +393,7 @@ require __DIR__ . '/include/page-head.php';
       <p class="room-comparison-status" data-room-comparison-status role="status" aria-live="polite">Choose two or three rooms from the directory to compare.</p>
       <div class="room-comparison-content" data-room-comparison-content></div>
       <footer class="room-comparison-footer">
+        <a class="room-comparison-enquiry" data-room-comparison-enquiry href="contact.php" hidden>Ask about selected rooms</a>
         <button class="room-comparison-clear" type="button" data-room-comparison-clear>Clear shortlist</button>
         <button class="room-comparison-close-link" type="button" data-room-comparison-close>Return to rooms</button>
       </footer>

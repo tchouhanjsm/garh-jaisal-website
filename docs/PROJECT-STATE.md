@@ -12,12 +12,19 @@ Deliver a coherent, premium first impression and more direct-booking clarity wit
 - PR #145 consolidated the homepage planning path, refined the shared visual rhythm and restored the detailed arrival guide and existing documentation.
 - The next vertical slice is room selection: compare the existing seven room records using only their current descriptions and listed features.
 
-## Active phase — Room comparison (PR #146)
+## Verified baseline after PR #146
 
-- Branch: `feature/room-comparison-journey-20261027`.
-- Add/remove up to three rooms, compare floor, description and listed features in an accessible dialog, and preserve the configured booking-engine link for each room.
-- Comparison selections exist in page memory only; no visitor data is persisted or sent to analytics.
-- Exact-head Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA are required before merge. No deployment is included.
+- Latest merged PR: #146 — room comparison dialog, selected-room state, responsive table and comparison actions, merged on 27 October 2026.
+- The next phase closes the gap from comparison to enquiry: selected rooms travel into Contact as an allowlisted shortlist and remain intact across safe CAPTCHA/form retry paths.
+- No enquiry is created just by comparing rooms. When a guest explicitly selects “Ask about selected rooms,” the room slugs reach Contact and are validated against the existing room registry; only a submitted enquiry is recorded by the existing contact flow.
+
+## Active phase — Room shortlist enquiry handoff
+
+- Branch: `feature/room-shortlist-enquiry-bulk-20261027`.
+- Add a two-to-three-room enquiry CTA inside the comparison dialog.
+- Validate each incoming slug against the room registry; reject duplicates, unknown rooms and lists outside the supported range.
+- Carry trusted shortlist context into the Contact form, prefill a room-specific message, and preserve context on recoverable errors.
+- Required gates: PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. No deployment is included.
 
 ## Provisional audit scores
 

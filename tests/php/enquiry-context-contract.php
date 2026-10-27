@@ -41,6 +41,30 @@ foreach ($topics as $slug => $topic) {
 }
 $expectGeneral('room', str_repeat('.', 5) . '/unrecognised');
 $expectGeneral('room', 'unknown-room');
+$expectGeneral('rooms', 'unknown-room,green-room');
+$expectGeneral('rooms', 'green-room,green-room');
+$expectGeneral('rooms', 'green-room');
+
+$roomSlugs = [];
+$roomNamesBySlug = [];
+foreach ($rooms as $roomRecord) {
+    $roomSlug = trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower((string) ($roomRecord['name'] ?? ''))), '-');
+    if ($roomSlug !== '') {
+        $roomSlugs[] = $roomSlug;
+        $roomNamesBySlug[$roomSlug] = (string) $roomRecord['name'];
+    }
+}
+$twoRoomSlugs = array_slice(array_values(array_unique($roomSlugs)), 0, 2);
+if (count($twoRoomSlugs) === 2) {
+    $shortlistContext = gj_resolve_enquiry_context('rooms', implode(',', $twoRoomSlugs));
+    $assert(($shortlistContext['type'] ?? '') === 'rooms', 'Two valid room slugs resolve as a room shortlist.');
+    $assert(($shortlistContext['type_label'] ?? '') === 'Room shortlist', 'Shortlist context uses a clear owner-facing type label.');
+    $assert(($shortlistContext['label'] ?? '') === implode(', ', array_map(static function ($slug) use ($roomNamesBySlug) { return $roomNamesBySlug[$slug]; }, $twoRoomSlugs)), 'Room shortlist label is derived from the room registry in selected order.');
+    $retryUrl = gj_contact_context_return_url($shortlistContext, 'captcha');
+    parse_str((string) parse_url($retryUrl, PHP_URL_QUERY), $retryQuery);
+    $assert(($retryQuery['rooms'] ?? []) === $twoRoomSlugs, 'Room shortlist retry preserves all selected room slugs.');
+    $assert(($retryQuery['error'] ?? '') === 'captcha', 'Room shortlist retry preserves the safe error state.');
+}
 $expectGeneral('experience', 'draft-or-unknown');
 $expectGeneral('topic', 'html-tag-like-value');
 $expectGeneral(['room'], 'green-room');
@@ -59,6 +83,8 @@ $contactSource = file_get_contents($root . '/contact.php');
 $mailSource = file_get_contents($root . '/mail.php');
 $assert(is_string($contactSource) && strpos($contactSource, 'name="enquiry_context_token"') !== false, 'Contact form includes opaque token.');
 $assert(is_string($contactSource) && strpos($contactSource, 'contact_context_tokens') !== false, 'Context token is session-bound.');
+$assert(is_string($contactSource) && strpos($contactSource, '$contactRooms') !== false && strpos($contactSource, 'contact-rooms-context') !== false, 'Contact renders allowlisted multi-room shortlist context.');
+$assert(is_string($contactSource) && strpos($contactSource, 'Room shortlist enquiry:') !== false, 'Contact explains the selected-room enquiry and current-rate confirmation.');
 $assert(is_string($mailSource) && strpos($mailSource, 'gj_resolve_enquiry_context(') !== false, 'Mail handler validates allowlisted context.');
 $assert(is_string($mailSource) && strpos($mailSource, "'enquiry_context' => [") !== false, 'Private lead record carries context.');
 $assert(is_string($mailSource) && strpos($mailSource, '$subjectContext') !== false && strpos($mailSource, 'type_label') !== false, 'Owner email subject includes trusted type.');

@@ -184,3 +184,36 @@
 .contact-content .contact-layout{align-items:start;gap:clamp(24px,4vw,48px)}
 .contact-content .contact-facts,.contact-content .contact-form{min-width:0}
 @media(max-width:800px){.contact-hero .page-hero-inner{padding-top:36px;padding-bottom:38px}.contact-content .contact-booking-actions{margin-bottom:28px}}
+
+/* Room-shortlist handoff: keep selected context visible without overpowering the form. */
+.contact-rooms-context,
+.contact-room-context,
+.contact-experience-context,
+.contact-topic-context{
+  margin:0;
+  padding:14px 16px;
+  border:1px solid rgba(91,26,43,.18);
+  border-left:4px solid var(--gold-ink,#8a6212);
+  border-radius:6px;
+  background:var(--parchment,#f7efe0);
+  color:var(--ink,#231a14);
+  font-size:.94rem;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+}
+.contact-rooms-context strong,
+.contact-room-context strong,
+.contact-experience-context strong,
+.contact-topic-context strong{color:var(--garnet,#5b1a2b)}
+.contact-form{
+  border-radius:6px;
+  box-shadow:0 12px 34px rgba(20,18,43,.07);
+}
+.contact-form :is(input,textarea){border-radius:5px}
+@media(max-width:760px){
+  .contact-form{padding:clamp(16px,4.5vw,24px)}
+  .contact-rooms-context,
+  .contact-room-context,
+  .contact-experience-context,
+  .contact-topic-context{padding:12px 13px}
+}

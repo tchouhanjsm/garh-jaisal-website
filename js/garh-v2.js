@@ -539,6 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const comparisonStatus = comparisonDialog?.querySelector('[data-room-comparison-status]');
     const comparisonContent = comparisonDialog?.querySelector('[data-room-comparison-content]');
     const comparisonClear = comparisonDialog?.querySelector('[data-room-comparison-clear]');
+    const comparisonEnquiryLink = comparisonDialog?.querySelector('[data-room-comparison-enquiry]');
     const comparisonCloseButtons = Array.from(comparisonDialog?.querySelectorAll('[data-room-comparison-close]') || []);
     const selectedRoomIds = new Set();
     let lastSelectedRoomId = null;
@@ -561,6 +562,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderComparison = () => {
       const selectedCards = selectedRoomCards();
+
+      if (comparisonEnquiryLink) {
+        if (selectedCards.length >= 2) {
+          const query = new URLSearchParams();
+          selectedCards.forEach((card) => query.append('rooms[]', card.id.replace(/^room-/, '')));
+          comparisonEnquiryLink.href = 'contact.php?' + query.toString();
+          comparisonEnquiryLink.hidden = false;
+        } else {
+          comparisonEnquiryLink.href = 'contact.php';
+          comparisonEnquiryLink.hidden = true;
+        }
+      }
 
       roomCards.forEach((card) => {
         const toggle = card.querySelector('[data-room-compare-toggle]');
