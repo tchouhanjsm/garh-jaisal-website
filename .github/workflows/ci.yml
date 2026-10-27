@@ -124,6 +124,9 @@ jobs:
       - name: Test runtime config validation and secret-safe diagnostics
         run: php tests/php/runtime-config-validation.php
 
+      - name: Verify shared contact-channel configuration
+        run: php tests/php/contact-channel-contract.php
+
       - name: Test private lead storage and rate limiting
         run: php tests/php/lead-storage-validation.php
 

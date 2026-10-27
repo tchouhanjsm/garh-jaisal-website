@@ -65,7 +65,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 61 | Shared photo storytelling for tours, rooms and dining | ✓ PR #135 merged at `c3326fb320e7b78bd20f70e8829c9e6a54266829`; Site Checks, responsive-image contracts, non-deploying staging QA and package preflight passed. Merge-head Browser E2E was cancelled. |
 | 62 | Decision-first comparison on Desert Safari and Guided Jaisalmer hubs | ✓ PR #136 merged at `32c59b579ae7e528afe6644e90988892b35b5237`; reusable registry facts and city-tour shortlist links shipped. |
 | 63 | Direct-booking path and room-first discovery across stay and experience journeys | ✓ PR #137 merged at `0facd0fbc2e2b491015c3c67d25fe7a7c50bc35f`; stay guide discoverability and room-first crosslinks shipped. |
-| 64 | Car & City route-first enquiry journey | ◐ Clarify the path into existing guided tours, car arrangements and proposed itinerary enquiries; keep unapproved ideas explicitly non-bookable and preserve contact topics. |
+| 64 | Car & City route-first enquiry journey | ✓ PR #138 merged at `412a34d5a42177d16c449636e572402ca19c1754`; route-first choices and proposed-itinerary disclosures shipped. Browser E2E was cancelled, so screenshot evidence remains pending. |
+| 65 | Contact-channel consistency across Contact, Directions and Rooftop | ◐ Source the current primary/alternate phone numbers and both public email addresses from one config, cover parity across pages, and refresh the affected sitemap dates. Preserve all destinations and do not expose local configuration. |
 
 ---
 
@@ -871,3 +872,15 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Add Playwright checks for the three route choices, six proposal enquiry destinations, non-bookable disclosure, existing room-first booking path, image loading/alt text and 320/390/1280/1440px overflow.
 - Exact-head acceptance: PHP 7.4/8.2 Site Checks, strict image and sitemap checks, package preflight, non-deploying staging QA, Browser E2E and page-sheet artifact. Report any unavailable local checks honestly.
 - No new tour product, operational claim, price, timing, inclusion, policy, dependency, cPanel upload or deployment is introduced. Owner keeps merge and release authority.
+
+
+## Sprint 65 — shared public contact-channel consistency (PR pending)
+
+**Commercial goal:** keep the hotel's existing phone and email paths dependable and consistent wherever guests decide to contact the hotel.
+
+- Use `include/site-config.php` as the source of truth for the existing primary and alternate phone numbers and both email destinations currently shown on Contact and Directions.
+- Replace hard-coded Contact, Directions and Rooftop telephone/email links with escaped configuration-backed output. Preserve all existing public destinations and display order; do not change WhatsApp, booking URL/token, form recipients or private server configuration.
+- Add a PHP source contract and browser regressions for rendered contact-channel parity, HTTP response, and 320/390/1280/1440px horizontal overflow on the three changed journeys.
+- Refresh `sitemap.xml` lastmod values for the changed public routes, then rely on `php scripts/generate-sitemap.php --check` in the existing Site Checks workflow.
+- No additional contact channel, promise, privacy statement, menu fact, booking/policy wording or dependency is introduced. Owner retains production release approval.
+- Acceptance: PHP 7.4/8.2 Site Checks, strict images, sitemap check, package preflight, non-deploying QA, full Browser E2E and screenshot/page-sheet review on the exact PR head.

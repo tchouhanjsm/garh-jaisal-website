@@ -13,6 +13,8 @@ $defaults = [
     'hotel_phone_alt_display' => '+91 2992 253836',
     'whatsapp_url' => 'https://wa.me/917727047567',
     'hotel_email' => 'info@hotelgarhjaisal.com',
+    // Existing secondary public contact address, retained from Contact and Directions.
+    'hotel_email_alt' => 'mukeshkila@yahoo.com',
     'recaptcha_site_key' => '6LcPO8wqAAAAAKCGR-vt2pvgN8d0lj3flL7_DDtY',
     'recaptcha_secret' => '',
     // Owner-approved: keep both GA4 IDs; shared page head loads gtag.js once and configures each ID once.

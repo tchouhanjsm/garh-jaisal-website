@@ -48,6 +48,10 @@ These are candidates for review, not a promise that Garh Jaisal Haveli currently
 - Akal Wood Fossil Park or Desert National Park nature route (separate options; wildlife is never guaranteed).
 - Longewala War Memorial history excursion (visitor requirements and travel logistics must be verified).
 
+## Implementation notes (2026-10-26)
+
+- The existing public Contact and Directions pages display primary and alternate phone numbers plus two email destinations. Preserve those established destinations and keep rendered links backed by `include/site-config.php`; change them only after owner confirmation.
+
 ## Implementation notes (2026-10-17)
 
 - A restaurant request is an enquiry, not a confirmed table reservation. Do not label it as confirmed until the hotel checks availability.

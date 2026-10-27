@@ -4,6 +4,12 @@ require_once __DIR__ . '/include/session.php';
 $activePage = 'contact';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $bookingUrl = $siteConfig['booking_url'];
+$hotelPhone = (string) ($siteConfig['hotel_phone'] ?? '');
+$hotelPhoneDisplay = (string) ($siteConfig['hotel_phone_display'] ?? $hotelPhone);
+$hotelPhoneAlt = (string) ($siteConfig['hotel_phone_alt'] ?? '');
+$hotelPhoneAltDisplay = (string) ($siteConfig['hotel_phone_alt_display'] ?? $hotelPhoneAlt);
+$hotelEmail = (string) ($siteConfig['hotel_email'] ?? '');
+$hotelEmailAlt = (string) ($siteConfig['hotel_email_alt'] ?? '');
 
 $contactExperience = null;
 $requestedExperience = $_GET['experience'] ?? '';
@@ -214,13 +220,14 @@ require __DIR__ . '/include/page-head.php';
         <div class="contact-facts">
           <h2>Phone</h2>
           <p>
-            <a href="tel:+917727047567">+91 77270 47567</a><br>
-            <a href="tel:+912992253836">+91 2992 253836</a>
+            <a href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($hotelPhoneDisplay, ENT_QUOTES, 'UTF-8') ?></a><br>
+            <a href="tel:<?= htmlspecialchars($hotelPhoneAlt, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($hotelPhoneAltDisplay, ENT_QUOTES, 'UTF-8') ?></a>
           </p>
           <h2>Email</h2>
           <p>
-            <a href="mailto:mukeshkila@yahoo.com">mukeshkila@yahoo.com</a><br>
-            <a href="mailto:info@hotelgarhjaisal.com">info@hotelgarhjaisal.com</a>
+            <?php if ($hotelEmailAlt !== ''): ?><a href="mailto:<?= htmlspecialchars($hotelEmailAlt, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($hotelEmailAlt, ENT_QUOTES, 'UTF-8') ?></a><?php endif; ?>
+            <?php if ($hotelEmailAlt !== '' && $hotelEmail !== ''): ?><br><?php endif; ?>
+            <?php if ($hotelEmail !== ''): ?><a href="mailto:<?= htmlspecialchars($hotelEmail, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($hotelEmail, ENT_QUOTES, 'UTF-8') ?></a><?php endif; ?>
           </p>
           <h2>Address</h2>
           <p>Hotel Garh Jaisal Haveli, Fort Kotari Para, Jaisalmer, Rajasthan 345001</p>

@@ -2,6 +2,8 @@
 $activePage = 'dining';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $bookingUrl = $siteConfig['booking_url'];
+$hotelPhone = (string) ($siteConfig['hotel_phone'] ?? '');
+$hotelPhoneDisplay = (string) ($siteConfig['hotel_phone_display'] ?? $hotelPhone);
 $siteUrl = rtrim($siteConfig['site_url'], '/');
 $canonical = $siteUrl . '/roof.php';
 ?>
@@ -114,7 +116,7 @@ require __DIR__ . '/include/page-head.php';
         </p>
         <p>
           <a class="text-link" href="contact.php?topic=dining">Contact the hotel</a>
-          or call <a href="tel:+917727047567">+91 77270 47567</a>.
+          or call <a href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($hotelPhoneDisplay, ENT_QUOTES, 'UTF-8') ?></a>.
           For how to reach the fort, see <a href="direction.php">directions</a>.
         </p>
       </div>
