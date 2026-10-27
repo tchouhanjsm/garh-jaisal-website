@@ -216,6 +216,9 @@ foreach ($urls as $path => $priority) {
         $sourceFiles[] = 'include/gallery-data.php';
     } elseif ($path === '/pack.php' || $path === '/catalogue.php') {
         $sourceFiles[] = 'include/experience-data.php';
+        if ($path === '/catalogue.php') {
+            $sourceFiles[] = 'include/catalogue-data.php';
+        }
     }
 
     // Local Content Studio records have explicit dates so a generated sitemap is

@@ -84,3 +84,79 @@ test('dining guidance, the active reservation form and direct-contact links fit 
   const whatsappBox = await whatsappLink.boundingBox();
   expect(whatsappBox?.height ?? 0, 'WhatsApp action remains large enough to tap').toBeGreaterThanOrEqual(44);
 });
+
+
+test('restaurant and rooftop entry points share one dining Trip option through Contact', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Cross-page dining Trip flow runs once on desktop-1280.');
+  test.setTimeout(60_000);
+
+  const restaurantResponse = await page.goto('/restaurant.php', { waitUntil: 'domcontentloaded' });
+  expect(restaurantResponse).not.toBeNull();
+  expect(restaurantResponse.status()).toBeLessThan(400);
+
+  const restaurantAdd = page.locator('.restaurant-hero [data-trip-add][data-trip-id="rooftop-dining"]');
+  await expect(restaurantAdd).toBeVisible();
+  await expect(restaurantAdd).toHaveAttribute('data-trip-title', 'Rooftop dining');
+  await expect(restaurantAdd).toHaveAttribute('data-trip-url', 'roof.php');
+  await expect(restaurantAdd).toHaveAttribute('data-trip-group', 'dining');
+  await restaurantAdd.click();
+
+  await expect(page.locator('[data-trip-count]')).toHaveText('1');
+  await expect(page.locator('[data-trip-items]')).toContainText('Rooftop dining');
+  // Trip selections update the count without opening the tray automatically; open it as a guest would.
+  await page.locator('[data-trip-toggle]').click();
+  await expect(page.locator('[data-trip-panel]')).toBeVisible();
+
+  // The rooftop page uses the identical ID and dining group, so navigating between pages retains the selection.
+  const roofResponse = await page.goto('/roof.php', { waitUntil: 'domcontentloaded' });
+  expect(roofResponse).not.toBeNull();
+  expect(roofResponse.status()).toBeLessThan(400);
+  const roofAdd = page.locator('.page-hero-inner [data-trip-add][data-trip-id="rooftop-dining"]');
+  await expect(roofAdd).toBeVisible();
+  await expect(roofAdd).toHaveAttribute('data-trip-title', 'Rooftop dining');
+  await expect(roofAdd).toHaveAttribute('data-trip-group', 'dining');
+  await expect(roofAdd).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('[data-trip-count]')).toHaveText('1');
+
+  await page.locator('[data-trip-toggle]').click();
+  const contactLink = page.locator('[data-trip-contact]');
+  await expect(contactLink).toBeVisible();
+  const contactTarget = new URL(await contactLink.getAttribute('href'), 'http://127.0.0.1:8080');
+  expect(contactTarget.pathname).toBe('/contact.php');
+  expect(contactTarget.searchParams.getAll('trip[]')).toEqual(['rooftop-dining']);
+  expect(contactTarget.search).not.toMatch(/date|time|guests|email|phone/i);
+
+  await contactLink.click();
+  const submittedTarget = new URL(page.url());
+  expect(submittedTarget.pathname).toBe('/contact.php');
+  expect(submittedTarget.searchParams.getAll('trip[]')).toEqual(['rooftop-dining']);
+  await expect(page.locator('.contact-trip-context')).toContainText('Rooftop dining');
+  await expect(page.locator('#message')).toHaveValue(/these options for my Jaisalmer trip: Rooftop dining/);
+  await expect(page.locator('form.contact-form')).toBeVisible();
+  await expect(page.locator('#message')).not.toHaveValue(/table is booked|reservation is confirmed/i);
+});
+
+test('dining Trip actions and Contact context fit 320–1440px without horizontal overflow', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Responsive dining Trip layout runs once with explicit viewports.');
+
+  for (const width of [320, 390, 768, 1280, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const route of ['/restaurant.php', '/roof.php', '/contact.php?trip%5B0%5D=rooftop-dining']) {
+      const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+      expect(response, route + ' response at ' + width).not.toBeNull();
+      expect(response.status(), route + ' is available at ' + width).toBeLessThan(400);
+      if (route === '/restaurant.php') {
+        await expect(page.locator('.restaurant-hero [data-trip-add][data-trip-id="rooftop-dining"]')).toBeVisible();
+      } else if (route === '/roof.php') {
+        await expect(page.locator('.page-hero-inner [data-trip-add][data-trip-id="rooftop-dining"]')).toBeVisible();
+      } else {
+        await expect(page.locator('.contact-trip-context')).toContainText('Rooftop dining');
+      }
+      const metrics = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        document: document.documentElement.scrollWidth,
+      }));
+      expect(metrics.document, route + ' must not overflow at ' + width + 'px').toBeLessThanOrEqual(metrics.viewport + 1);
+    }
+  }
+});

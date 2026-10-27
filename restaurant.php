@@ -348,6 +348,11 @@ require __DIR__ . '/include/page-head.php';
         <div class="actions">
           <a class="button button-primary" href="#reserve">Enquire about a table</a>
           <a class="button button-light" href="<?= e($waLink) ?>" target="_blank" rel="noopener">WhatsApp</a>
+          <?php
+          $tripItem = ['id' => 'rooftop-dining', 'title' => 'Rooftop dining', 'url' => 'roof.php', 'group' => 'dining'];
+          $tripButtonClass = 'button button-light';
+          require __DIR__ . '/include/ui/trip-add-button.php';
+          ?>
         </div>
         <p class="restaurant-rooftop-link">Planning a meal or candlelight dinner? <a href="roof.php">Explore the rooftop dining space</a>.</p>
       </div>

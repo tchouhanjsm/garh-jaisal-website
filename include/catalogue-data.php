@@ -71,6 +71,7 @@ return [
         'title' => 'Rooftop dining',
         'description' => 'Plan a rooftop meal at Garh Jaisal’s Kitchen. The menu includes vegetarian, vegan and non-vegetarian dishes; confirm current dishes, prices and table availability directly with the hotel.',
         'url' => 'roof.php',
+        'trip_group' => 'dining',
         'image' => 'img/v2/fort-from-roof.jpg',
         'alt' => 'Rooftop table at dusk overlooking the lights of Jaisalmer',
     ],
