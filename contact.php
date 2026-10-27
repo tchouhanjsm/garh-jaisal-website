@@ -178,8 +178,18 @@ $page = [
             'mainEntity' => [
                 '@type' => 'Hotel',
                 'name' => 'Hotel Garh Jaisal Haveli',
-                'telephone' => ['+91 77270 47567', '+91 2992 253836'],
-                'email' => ['mukeshkila@yahoo.com', 'info@hotelgarhjaisal.com'],
+                'telephone' => array_values(array_filter(
+                    [$hotelPhoneDisplay, $hotelPhoneAltDisplay],
+                    static function ($value) {
+                        return is_string($value) && trim($value) !== '';
+                    }
+                )),
+                'email' => array_values(array_filter(
+                    [$hotelEmailAlt, $hotelEmail],
+                    static function ($value) {
+                        return is_string($value) && trim($value) !== '';
+                    }
+                )),
                 'address' => [
                     '@type' => 'PostalAddress',
                     'streetAddress' => 'Hotel Garh Jaisal Haveli, Fort Kotari Para',

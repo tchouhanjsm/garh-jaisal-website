@@ -33,11 +33,29 @@ $checks = [
         '$hotelEmailAlt = (string) ($siteConfig[\'hotel_email_alt\'] ?? \'\');',
     ],
     'roof.php' => ['$hotelPhone = (string) ($siteConfig[\'hotel_phone\'] ?? \'\');'],
+    'include/schema.php' => [
+        '$telephone = (string) ($siteConfig[\'hotel_phone\'] ?? \'\');',
+        'preg_replace(\'/\\D+/\', \'\', $telephone);',
+        "'telephone' => \$telephone,",
+    ],
+    'include/page-head.php' => ['gj_schema_hotel($siteUrl, $siteConfig)'],
+    'restaurant.php' => ["'telephone' => \$hotelPhoneSchema,"],
+    'contact.php' => ["'telephone' => array_values(array_filter(", "'email' => array_values(array_filter("],
 ];
 $legacy = [
-    'contact.php' => ['tel:+917727047567', 'tel:+912992253836', 'mailto:mukeshkila@yahoo.com', 'mailto:info@hotelgarhjaisal.com'],
+    'contact.php' => [
+        'tel:+917727047567',
+        'tel:+912992253836',
+        'mailto:mukeshkila@yahoo.com',
+        'mailto:info@hotelgarhjaisal.com',
+        "'telephone' => ['+91 77270 47567', '+91 2992 253836']",
+        "'email' => ['mukeshkila@yahoo.com', 'info@hotelgarhjaisal.com']",
+    ],
     'direction.php' => ['mailto:info@hotelgarhjaisal.com', 'mailto:mukeshkila@yahoo.com'],
     'roof.php' => ['tel:+917727047567'],
+    'include/schema.php' => ["'telephone' => '+91-7727047567'"],
+    'restaurant.php' => ["'telephone' => '+91-7727047567'"],
+
 ];
 foreach ($checks as $file => $markers) {
     $path = $root . '/' . $file;
@@ -49,7 +67,7 @@ foreach ($checks as $file => $markers) {
     foreach ($markers as $marker) {
         if (strpos($source, $marker) === false) $errors[] = $file . ' must use shared contact config; missing ' . $marker;
     }
-    foreach ($legacy[$file] as $legacyHref) {
+    foreach (($legacy[$file] ?? []) as $legacyHref) {
         if (strpos($source, $legacyHref) !== false) $errors[] = $file . ' still hard-codes ' . $legacyHref;
     }
 }

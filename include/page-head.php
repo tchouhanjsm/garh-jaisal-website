@@ -114,7 +114,7 @@ foreach ($pageSchema as $schemaNode) {
 }
 $schemaNodes = array_merge(
     [
-        gj_schema_hotel($siteUrl),
+        gj_schema_hotel($siteUrl, $siteConfig),
         gj_schema_website($siteUrl),
     ],
     $pageSchema

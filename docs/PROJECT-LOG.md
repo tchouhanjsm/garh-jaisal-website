@@ -7,24 +7,25 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-26 |
-| Current phase | Sprint 65 — shared public contact-channel consistency |
+| Current phase | Sprint 66 — combined public contact and schema parity |
 | Verified main SHA | 412a34d5a42177d16c449636e572402ca19c1754 (PR #138 merge commit) |
 | Latest merged PR | [#138 — Car & City enquiry discovery](https://github.com/tchouhanjsm/garh-jaisal-website/pull/138) |
 | Recent merged work | PRs #136 tour comparison, #137 direct-booking discovery, #138 Car & City enquiry discovery |
-| Active phase branch | `feature/contact-channel-consistency-20261026` — Sprint 65 review target |
+| Active phase branch | `feature/structured-data-contact-parity-20261026` — PR #140 combined review target against `main` |
 
 ## Current phase
 
-**Sprint 65 goal:** keep the existing telephone and email destinations consistent across Contact, Directions and Rooftop, with the public contact values defined in `include/site-config.php`.
+**Sprint 65–66 goal:** make all public Contact/Directions/Rooftop telephone and email links plus shared Hotel/ContactPage/Restaurant schema details configuration-backed while preserving current destinations and JSON-LD output.
 
-- Preserve both existing phone numbers and both current email destinations.
-- Eliminate hard-coded duplicate links on those pages and add targeted source/browser regression coverage.
-- Refresh the last-modified dates for the affected public pages without changing sitemap inventory or priority.
+- Preserve the existing primary/alternate phone and email destinations in Contact, Directions and Rooftop; derive the shared Hotel and ContactPage/Restaurant schema fields from the same configuration.
+- Add PHP source contracts and browser regressions for visible contact links, JSON-LD parity, and responsive overflow.
+- PR #140 is the combined 15-file candidate targeting `main`. Its exact-head workflows must all finish successfully, including Browser E2E and screenshots, before merge.
 
 ## Latest implementation entry
 
 - [2026-10-26] Sprint 64 / [PR #138](https://github.com/tchouhanjsm/garh-jaisal-website/pull/138) merged at `412a34d5a42177d16c449636e572402ca19c1754`. Site Checks and non-deploying QA passed; Browser E2E was cancelled and must not be treated as a pass.
-- Sprint 65 / `feature/contact-channel-consistency-20261026` centralizes visible Contact/Directions/Rooftop channels, adds source and browser contracts, and refreshes sitemap lastmod dates. Exact-head CI and screenshot evidence are pending.
+- Sprint 65 / PR #139 added the configuration-backed public Contact/Directions/Rooftop links and source/browser contracts. Site Checks, non-deploying Staging QA and package preflight passed; its Browser E2E job remains in progress.
+- Sprint 66 / PR #140 combines the visible-link and JSON-LD parity work into one reviewable 15-file change and targets `main` to start a fresh full exact-head test run.
 
 ## Remaining blockers
 

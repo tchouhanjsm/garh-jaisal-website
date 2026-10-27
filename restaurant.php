@@ -1,6 +1,9 @@
 <?php
 $activePage = 'dining';
 $siteConfig = require __DIR__ . '/include/site-config.php';
+require_once __DIR__ . '/include/schema.php';
+$siteUrl = rtrim((string) ($siteConfig['site_url'] ?? ''), '/');
+$hotelPhoneSchema = gj_schema_hotel($siteUrl, $siteConfig)['telephone'];
 $hotelPhone = $siteConfig['hotel_phone'];
 $hotelPhoneDisplay = $siteConfig['hotel_phone_display'];
 $whatsappUrl = $siteConfig['whatsapp_url'];
@@ -219,7 +222,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$siteUrl = rtrim($siteConfig['site_url'], '/');
 $pageUrl = $siteUrl . '/restaurant.php';
 $heroImage = $siteUrl . '/img/rest2.jpg';
 
@@ -231,7 +233,7 @@ $schema = [
             '@id' => $siteUrl . '/#hotel',
             'name' => 'Hotel Garh Jaisal Haveli',
             'url' => $siteUrl . '/',
-            'telephone' => '+91-7727047567',
+            'telephone' => $hotelPhoneSchema,
             'address' => [
                 '@type' => 'PostalAddress',
                 'streetAddress' => 'Fort Kotari Para, Inside Jaisalmer Fort',
@@ -305,7 +307,6 @@ $schema = [
 <!doctype html>
 <html lang="en">
 <?php
-require_once __DIR__ . '/include/schema.php';
 $faqItems = [
     ['question' => "Where is Garh Jaisal’s Kitchen?", 'answer' => "Garh Jaisal’s Kitchen is located at Fort Kotari Para, inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001."],
     ['question' => "Can menu items and prices change?", 'answer' => "Yes. Menu items and listed prices may change; confirm the current menu and prices with the hotel before visiting."],

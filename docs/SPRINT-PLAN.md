@@ -66,7 +66,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 62 | Decision-first comparison on Desert Safari and Guided Jaisalmer hubs | ✓ PR #136 merged at `32c59b579ae7e528afe6644e90988892b35b5237`; reusable registry facts and city-tour shortlist links shipped. |
 | 63 | Direct-booking path and room-first discovery across stay and experience journeys | ✓ PR #137 merged at `0facd0fbc2e2b491015c3c67d25fe7a7c50bc35f`; stay guide discoverability and room-first crosslinks shipped. |
 | 64 | Car & City route-first enquiry journey | ✓ PR #138 merged at `412a34d5a42177d16c449636e572402ca19c1754`; route-first choices and proposed-itinerary disclosures shipped. Browser E2E was cancelled, so screenshot evidence remains pending. |
-| 65 | Contact-channel consistency across Contact, Directions and Rooftop | ◐ Source the current primary/alternate phone numbers and both public email addresses from one config, cover parity across pages, and refresh the affected sitemap dates. Preserve all destinations and do not expose local configuration. |
+| 65 | Contact-channel consistency across Contact, Directions and Rooftop | ◐ Included in combined PR #140 with exact-head CI pending; PR #139 remains open with its original Browser E2E run in progress. |
+| 66 | Structured-data contact parity | ◐ Combined with Sprint 65 in PR #140; shared Hotel and ContactPage/Restaurant schema values are config-backed with current output preserved. |
 
 ---
 
@@ -884,3 +885,19 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Refresh `sitemap.xml` lastmod values for the changed public routes, then rely on `php scripts/generate-sitemap.php --check` in the existing Site Checks workflow.
 - No additional contact channel, promise, privacy statement, menu fact, booking/policy wording or dependency is introduced. Owner retains production release approval.
 - Acceptance: PHP 7.4/8.2 Site Checks, strict images, sitemap check, package preflight, non-deploying QA, full Browser E2E and screenshot/page-sheet review on the exact PR head.
+
+
+## Sprint 66 — structured-data contact parity (PR pending)
+
+**Technical SEO goal:** keep phone details in structured data aligned with the same public configuration that renders the contact links, without changing the current JSON-LD output.
+
+- Make the shared Hotel entity telephone derive from the configured public phone value, preserving the existing `+91-7727047567` schema representation.
+- Source ContactPage hotel telephone/email arrays from the existing primary/alternate display values and remove remaining hard-coded schema phone strings from the Restaurant page's redundant Hotel node.
+- Extend the PHP source contract and add a browser regression for shared Hotel, ContactPage and Restaurant JSON-LD values. Keep schema node count, IDs, addresses, URLs, visible phone/email destinations and currently emitted values unchanged.
+- No new structured-data claims, prices, reservation guarantees, policies or business facts. No deployment or local server configuration changes.
+- Acceptance: exact-head PHP 7.4/8.2 Site Checks, head snapshot and Browser E2E, package preflight, non-deploying staging QA and screenshot/page-sheet evidence.
+
+
+## Combined release candidate — PR #140
+
+PR #140 now targets `main` and combines Sprint 65 public-contact consistency with Sprint 66 structured-data parity in one 15-file review. This creates a fresh exact-head CI run for both slices together. Do not merge PR #139 separately while its original Browser E2E job is still in progress; if PR #140 passes all required checks and provides screenshot evidence, merge the combined PR and close #139 as superseded if GitHub has not already marked it merged.
