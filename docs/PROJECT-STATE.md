@@ -6,12 +6,18 @@ Last updated: 27 October 2026.
 
 Deliver a coherent, premium first impression and more direct-booking clarity without replacing the plain-PHP/cPanel stack. The working direction is editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint, and local warmth.
 
-## Baseline reviewed for the current bulk change
+## Verified baseline after PR #145
 
-- Baseline `main` SHA: `7cf1c8cc311d4ad0fdc4f0f3a6b5d5c1f97a08a5`.
-- Recent merged feature work includes homepage first-impression, room and experience discovery, photo storytelling, contextual enquiry and contact-channel consistency. The custom itinerary builder is merged.
-- The repository already has shared PHP includes, design tokens, image tooling, SEO/schema utilities and browser tests. The next gain is a coherent visual hierarchy, not a framework rewrite.
-- Active implementation branch: `feature/premium-website-bulk-redesign-20261027`. Update the verified main SHA and active PR reference when this batch merges; the baseline SHA is not a production release identifier.
+- `main` is at `68c49cb6bd9ed0277a1412a74f759183b201dee8` (PR #145 merged on 27 October 2026).
+- PR #145 consolidated the homepage planning path, refined the shared visual rhythm and restored the detailed arrival guide and existing documentation.
+- The next vertical slice is room selection: compare the existing seven room records using only their current descriptions and listed features.
+
+## Active phase — Room comparison (PR #146)
+
+- Branch: `feature/room-comparison-journey-20261027`.
+- Add/remove up to three rooms, compare floor, description and listed features in an accessible dialog, and preserve the configured booking-engine link for each room.
+- Comparison selections exist in page memory only; no visitor data is persisted or sent to analytics.
+- Exact-head Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA are required before merge. No deployment is included.
 
 ## Provisional audit scores
 
