@@ -80,6 +80,54 @@ test.describe('Room comparison journey', () => {
     }
   });
 
+  test('adds compared room options to the shared Trip while preserving experience choices', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-1280', 'Run the cross-page Trip composer integration once.');
+    test.setTimeout(60_000);
+
+    await page.goto('/catalogue.php', { waitUntil: 'domcontentloaded' });
+    await page.locator('[data-product-id="heritage-room-stay"] [data-trip-add]').click();
+
+    await page.goto('/swiss-tent-safari.php', { waitUntil: 'domcontentloaded' });
+    await page.locator('[data-trip-add][data-trip-id="swiss-tent-safari"]').first().click();
+    await expect(page.locator('[data-trip-count]')).toHaveText('2');
+
+    await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
+    const cards = page.locator('.rooms-page .room-card');
+    const first = cards.nth(0);
+    const second = cards.nth(1);
+    const firstName = (await first.locator('h3').innerText()).trim();
+    const secondName = (await second.locator('h3').innerText()).trim();
+
+    await first.locator('[data-room-compare-toggle]').click();
+    await second.locator('[data-room-compare-toggle]').click();
+    await second.locator('[data-room-comparison-open]').click();
+
+    const dialog = page.locator('[data-room-comparison-dialog]');
+    const addRoomOptions = dialog.locator('[data-room-comparison-trip]');
+    await expect(addRoomOptions).toBeVisible();
+    await expect(addRoomOptions).toContainText('Add room options to Trip');
+    await addRoomOptions.click();
+
+    await expect(dialog).toBeHidden();
+    await expect(page.locator('[data-trip-panel]')).toBeVisible();
+    await expect(page.locator('[data-trip-items]')).toContainText('Room options: ' + firstName + ', ' + secondName);
+    await expect(page.locator('[data-trip-items]')).toContainText('Overnight Safari in a Swiss Tent');
+    await expect(page.locator('[data-trip-items]')).not.toContainText('Heritage room stay');
+    await expect(page.locator('[data-trip-close]')).toBeFocused();
+
+    const sendHref = await page.locator('[data-trip-send]').getAttribute('href');
+    const message = new URL(sendHref).searchParams.get('text');
+    expect(message).toContain('Room options: ' + firstName + ', ' + secondName);
+    expect(message).toContain('Overnight Safari in a Swiss Tent');
+
+    const stored = await page.evaluate(() => sessionStorage.getItem('gj-trip-items-v1'));
+    const expectedRoomOptionsId = 'room-options-' + (await first.getAttribute('id')).replace(/^room-/, '') + '-' + (await second.getAttribute('id')).replace(/^room-/, '');
+    expect(stored).toContain(expectedRoomOptionsId);
+    expect(stored).toContain('swiss-tent-safari');
+    expect(stored).not.toContain('2026-11-');
+    expect(stored).not.toContain('"travellers"');
+  });
+
   test('carries the selected room shortlist into a trusted contact enquiry', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop-1280', 'Run the end-to-end context handoff once.');
     await page.goto('/room.php', { waitUntil: 'domcontentloaded' });

@@ -824,5 +824,29 @@ dialog.room-comparison-dialog::backdrop{
 }
 .room-comparison-enquiry:hover{background:var(--accent-hover,#963a08);border-color:var(--accent-hover,#963a08)}
 .room-comparison-enquiry:focus-visible{outline:3px solid var(--focus,#1d4ed8);outline-offset:3px}
-.room-comparison-enquiry[hidden]{display:none!important}
-@media(max-width:760px){.room-comparison-enquiry{width:100%;grid-row:1}}
+.room-comparison-enquiry[hidden],
+.room-comparison-trip[hidden]{display:none!important}
+.room-comparison-trip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:46px;
+  padding:11px 16px;
+  border:1px solid rgba(91,26,43,.35);
+  border-radius:5px;
+  background:#fffdfa;
+  color:var(--garnet,#5b1a2b);
+  font:inherit;
+  font-weight:750;
+  line-height:1.3;
+  text-align:center;
+  cursor:pointer;
+}
+.room-comparison-trip:hover{background:var(--parchment,#f7efe0);border-color:var(--garnet,#5b1a2b)}
+.room-comparison-trip:focus-visible{outline:3px solid var(--focus,#1d4ed8);outline-offset:3px}
+@media(max-width:760px){
+  .room-comparison-enquiry,
+  .room-comparison-trip{width:100%}
+  .room-comparison-enquiry{grid-row:1}
+  .room-comparison-trip{grid-row:2}
+}
