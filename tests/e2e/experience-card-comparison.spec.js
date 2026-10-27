@@ -22,6 +22,10 @@ test('tour discovery cards show registry-backed comparison facts and preserve pl
       await expect(heroActions.locator('a.button-primary')).toHaveAttribute('href', 'contact.php?topic=visit-planning');
       await expect(heroActions.locator('a[href="#guided-options"]')).toHaveText('Compare tour options');
       await expect(heroActions.getByRole('link', { name: 'Build your trip shortlist' })).toHaveCount(0);
+      await expect(page.locator('.guided-tour-planning-actions a'))
+        .toHaveAttribute('href', 'catalogue.php');
+      await expect(page.locator('.guided-tour-planning-actions a'))
+        .toHaveText('Build your trip shortlist');
     }
 
     for (const card of await cards.all()) {

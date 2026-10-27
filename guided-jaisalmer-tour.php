@@ -159,6 +159,9 @@ require __DIR__ . '/include/page-head.php';
         <article><strong>Limited time</strong><p>The half-day option keeps the route focused on the fort, heritage areas, havelis and markets.</p></article>
         <article><strong>More time to explore</strong><p>The full-day option gives the guide more time for context, additional heritage stops and the areas that matter to you.</p></article>
       </div>
+      <div class="actions guided-tour-planning-actions">
+        <a class="button button-secondary" href="catalogue.php">Build your trip shortlist</a>
+      </div>
     </div>
   </section>
 
