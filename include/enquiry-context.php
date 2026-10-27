@@ -78,6 +78,24 @@ function gj_resolve_enquiry_context($type, $slug): array
             }
         }
 
+        // Any live public detail route rendered by the shared experience template can be added from its CTA.
+        foreach ((array) $experiences as $experienceSlug => $experience) {
+            if (!is_array($experience) || ($experience['status'] ?? '') !== 'live'
+                || !is_string($experience['h1'] ?? null)
+                || trim($experience['h1']) === ''
+                || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', (string) $experienceSlug)
+                || !is_file(dirname(__DIR__) . '/' . $experienceSlug . '.php')) {
+                continue;
+            }
+            if (!isset($tripLookup[$experienceSlug])) {
+                $tripLookup[$experienceSlug] = [
+                    'slug' => (string) $experienceSlug,
+                    'label' => trim($experience['h1']),
+                    'url' => $experienceSlug . '.php',
+                ];
+            }
+        }
+
         // A published room card uses room-{room-slug} so the exact chosen room is retained.
         foreach ((array) $rooms as $room) {
             if (!is_array($room) || !is_string($room['name'] ?? null)) {
