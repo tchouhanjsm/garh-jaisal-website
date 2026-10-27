@@ -52,6 +52,20 @@ $assert(($tripContext['type'] ?? '') === 'trip', 'A mixed, allowlisted Trip shor
 $assert(($tripContext['type_label'] ?? '') === 'Trip shortlist', 'Trip context has an owner-facing type label.');
 $assert(($tripContext['label'] ?? '') === 'Heritage room stay, Sunset Camel Safari in Jaisalmer, Sweet Purple Room, A Walk inside Jaisalmer Fort', 'Trip labels are resolved from approved registries in selected order.');
 $assert(count($tripContext['items'] ?? []) === 4, 'A four-item mixed shortlist returns four validated records.');
+$diningContext = gj_resolve_enquiry_context('trip', 'rooftop-dining');
+$assert(($diningContext['type'] ?? '') === 'trip' && ($diningContext['label'] ?? '') === 'Rooftop dining', 'Rooftop dining uses the same trusted registry label from all dining entry points.');
+$catalogueDefinitions = require __DIR__ . '/../../include/catalogue-data.php';
+$catalogueDining = null;
+foreach ($catalogueDefinitions as $definition) {
+    if (($definition['id'] ?? '') === 'rooftop-dining') {
+        $catalogueDining = $definition;
+        break;
+    }
+}
+$assert(($catalogueDining['trip_group'] ?? '') === 'dining', 'Catalogue rooftop dining belongs to the canonical dining Trip group.');
+$rootForDining = dirname(__DIR__, 2);
+$assert(strpos((string) file_get_contents($rootForDining . '/restaurant.php'), "'id' => 'rooftop-dining'") !== false, 'Restaurant menu page offers the canonical Trip dining selection.');
+$assert(strpos((string) file_get_contents($rootForDining . '/roof.php'), "'id' => 'rooftop-dining'") !== false, 'Rooftop page offers the canonical Trip dining selection.');
 $tripRetryUrl = gj_contact_context_return_url($tripContext, 'invalid');
 parse_str((string) parse_url($tripRetryUrl, PHP_URL_QUERY), $tripRetryQuery);
 $assert(($tripRetryQuery['trip'] ?? []) === ['heritage-room-stay', 'sunset-camel-safari', 'room-sweet-purple-room', 'fort-walk'], 'Trip error retry preserves the selected option IDs in order.');
