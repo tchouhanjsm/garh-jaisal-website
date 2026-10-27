@@ -50,3 +50,8 @@ Inspect 320, 390, 768, 1280 and 1440px. Check heading wraps, navigation/dropdown
 ## Change discipline
 
 Update the existing canonical stylesheet/component owner before creating another CSS layer. Search usages before removing selectors. Preserve public routes, the external booking engine destination, schema and verified facts. Passing automated tests does not replace screenshot review.
+
+
+## Automated contrast check coverage
+
+The repository checker enforces minimum contrast for documented representative pairs only; it does **not** check every possible rendered CSS combination across every page. Actual page contrast, overlays and text placement still require screenshot and accessibility review.
