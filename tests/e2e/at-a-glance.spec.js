@@ -62,7 +62,7 @@ test('verified quick facts remain accurate, semantic and responsive on high-inte
 
         const region = page.locator(route.selector);
         await expect(region, route.route + ' quick facts must be rendered').toBeVisible();
-        const facts = region.locator('dl.at-a-glance');
+        const facts = route.route === '/' ? region : region.locator('dl.at-a-glance');
         await expect(facts).toBeVisible();
         await expect(facts.locator('dt')).toHaveCount(route.facts.length);
         await expect(facts.locator('dd')).toHaveCount(route.facts.length);
