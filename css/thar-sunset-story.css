@@ -805,3 +805,24 @@ dialog.room-comparison-dialog::backdrop{
   main.thar-sunset-story--rooms .room-compare-toggle,
   main.thar-sunset-story--rooms .room-compare-open{transition:none}
 }
+
+/* Room shortlist handoff into the existing contextual enquiry form. */
+.room-comparison-enquiry{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:46px;
+  padding:11px 16px;
+  border:1px solid var(--saffron,#b94a0e);
+  border-radius:5px;
+  background:var(--saffron,#b94a0e);
+  color:#fff!important;
+  font-weight:750;
+  line-height:1.3;
+  text-align:center;
+  text-decoration:none!important;
+}
+.room-comparison-enquiry:hover{background:var(--accent-hover,#963a08);border-color:var(--accent-hover,#963a08)}
+.room-comparison-enquiry:focus-visible{outline:3px solid var(--focus,#1d4ed8);outline-offset:3px}
+.room-comparison-enquiry[hidden]{display:none!important}
+@media(max-width:760px){.room-comparison-enquiry{width:100%;grid-row:1}}
