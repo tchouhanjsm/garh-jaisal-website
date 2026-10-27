@@ -340,6 +340,11 @@ require __DIR__ . '/include/page-head.php';
               <?php endforeach; ?>
             </ul>
 
+            <div class="room-card-compare-actions" aria-label="Room comparison">
+              <button class="room-compare-toggle" type="button" data-room-compare-toggle hidden aria-pressed="false">Add to compare</button>
+              <button class="room-compare-open" type="button" data-room-comparison-open hidden>Review comparison</button>
+            </div>
+
             <?php
               $tripItem = [
                   'id' => 'room-' . $roomSlug,
@@ -375,6 +380,24 @@ require __DIR__ . '/include/page-head.php';
   </section>
   <?php endforeach; ?>
   </section><!-- /.rooms-directory -->
+
+  <dialog class="room-comparison-dialog" data-room-comparison-dialog aria-labelledby="room-comparison-title">
+    <div class="room-comparison-dialog-inner">
+      <header class="room-comparison-header">
+        <div>
+          <p class="eyebrow">Your shortlist</p>
+          <h2 id="room-comparison-title">Compare rooms side by side.</h2>
+        </div>
+        <button class="room-comparison-close" type="button" data-room-comparison-close aria-label="Close room comparison">Close</button>
+      </header>
+      <p class="room-comparison-status" data-room-comparison-status role="status" aria-live="polite">Choose two or three rooms from the directory to compare.</p>
+      <div class="room-comparison-content" data-room-comparison-content></div>
+      <footer class="room-comparison-footer">
+        <button class="room-comparison-clear" type="button" data-room-comparison-clear>Clear shortlist</button>
+        <button class="room-comparison-close-link" type="button" data-room-comparison-close>Return to rooms</button>
+      </footer>
+    </div>
+  </dialog>
 
 
   <!-- =====================================================
