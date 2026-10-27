@@ -29,6 +29,14 @@ const responsiveSlots = [
   { route: '/jaisalmer-markets-and-crafts-guide.php', selector: '.article-image img[src="img/j9.jpg"]', sizes: '(max-width: 768px) 100vw, 60vw' },
   { route: '/full-day-jaisalmer-tour.php', selector: '.experience-hero-media img[src="img/j2.jpg"]', sizes: '100vw' },
   { route: '/pack.php', selector: '.package-hero img[src="img/desert11.jpg"]', sizes: '100vw' },
+  { route: '/desert-safari.php', selector: '.experience-hero-media img[src="img/desert3.jpg"]', sizes: '100vw' },
+  { route: '/desert-safari.php', selector: '.experience-card-grid img[src="img/desert7.jpg"]', sizes: CARD_SIZES },
+  { route: '/guided-jaisalmer-tour.php', selector: '.experience-hero-media img[src="img/j5.jpg"]', sizes: '100vw' },
+  { route: '/guided-jaisalmer-tour.php', selector: '.experience-card-grid--two img[src="img/j2.jpg"]', sizes: '(max-width: 760px) 100vw, 50vw' },
+  { route: '/restaurant.php', selector: '.restaurant-hero-media img[src="img/rest2.jpg"]', sizes: '(max-width: 760px) 100vw, 45vw' },
+  { route: '/roof.php', selector: '.page-hero-media img[src="img/rest5.jpg"]', sizes: '100vw' },
+  { route: '/roof.php', selector: '.roof-banner img[src="img/rest3.jpg"]', sizes: '(max-width: 760px) 100vw, 1180px' },
+  { route: '/', selector: '.home-experiences img[src="img/v2/swiss-tent.webp"]', sizes: NARROW_CARD_SIZES },
 ];
 
 const galleryResponsiveSources = [
@@ -57,6 +65,18 @@ const galleryResponsiveSources = [
   'img/Desert_Camp/Tent.jpeg',
   'img/Desert_Camp/Tentout.jpeg',
 ];
+
+test('small tour source does not create unsafe upscaled responsive candidates', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Intrinsic-source fallback contract runs once.');
+  await page.goto(BASE_URL + '/guided-jaisalmer-tour.php', { waitUntil: 'domcontentloaded' });
+  const smallSource = page.locator('.experience-card-grid--two img[src="img/j6.jpg"]');
+  await expect(smallSource).toHaveCount(1);
+  await expect(smallSource).toHaveAttribute('width', '370');
+  await expect(smallSource).toHaveAttribute('height', '539');
+  await expect(smallSource).not.toHaveAttribute('sizes', /.+/);
+  const srcset = await smallSource.getAttribute('srcset');
+  expect(srcset || '').not.toMatch(/\/img\/responsive\//);
+});
 
 test('responsive image candidates receive slot-accurate sizes hints', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Slot contract is asserted once; browser source selection is tested separately');

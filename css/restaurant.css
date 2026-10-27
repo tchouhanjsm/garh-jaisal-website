@@ -9,6 +9,11 @@
   padding:0 0 22px;
 }
 
+/* Keep the overline readable on the dark dining hero instead of inheriting dark body-copy ink. */
+.restaurant-hero-copy > .eyebrow{
+  color:#f4d19a;
+}
+
 .restaurant-hero-grid{
   display:grid;
   grid-template-columns:minmax(0,1fr) minmax(360px,.95fr);

@@ -288,11 +288,10 @@ require __DIR__ . '/include/page-head.php';
 
     <div class="media">
       <img
-        src="img/roofslide.webp"
-        width="1600"
-        height="575"
+        src="img/roofslide.webp" <?= gj_image_dimension_attributes('img/roofslide.webp', '(max-width: 760px) 100vw, 50vw') ?>
         alt="Rooftop table at dusk overlooking the lights of Jaisalmer"
-        loading="lazy">
+        loading="lazy"
+        decoding="async">
     </div>
 
   </div>
@@ -344,7 +343,7 @@ require __DIR__ . '/include/page-head.php';
       <article class="card">
         <div class="card-image">
           <img
-            src="img/v2/swiss-tent.webp" <?= gj_image_dimension_attributes('img/v2/swiss-tent.webp') ?>
+            src="img/v2/swiss-tent.webp" <?= gj_image_dimension_attributes('img/v2/swiss-tent.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
             alt="Swiss tent accommodation in the Jaisalmer desert"
             loading="lazy">
         </div>

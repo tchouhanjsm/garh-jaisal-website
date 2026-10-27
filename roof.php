@@ -58,7 +58,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="roof-page thar-sunset-story thar-sunset-story--dining" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/rest5.jpg" <?= gj_image_dimension_attributes('img/rest5.jpg') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/rest5.jpg" <?= gj_image_dimension_attributes('img/rest5.jpg', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Rooftop dining</p>
@@ -103,7 +103,7 @@ require __DIR__ . '/include/page-head.php';
         <img
           src="img/rest3.jpg"
           alt="Rooftop dining area with views across Jaisalmer"
-          <?= gj_image_dimension_attributes('img/rest3.jpg') ?>
+          <?= gj_image_dimension_attributes('img/rest3.jpg', '(max-width: 760px) 100vw, 1180px') ?>
         >
       </div>
 
@@ -136,9 +136,9 @@ require __DIR__ . '/include/page-head.php';
             <img
               src="img/roof.webp"
               alt="Rooftop terrace at sunset with a candlelit table facing Jaisalmer Fort"
-              width="900"
-              height="600"
+              <?= gj_image_dimension_attributes('img/roof.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
               loading="lazy"
+              decoding="async"
             >
           </div>
           <div class="card-body">
@@ -153,9 +153,9 @@ require __DIR__ . '/include/page-head.php';
             <img
               src="img/r2.webp"
               alt="Candlelit rooftop table and cushioned seating looking over Jaisalmer at dusk"
-              width="900"
-              height="600"
+              <?= gj_image_dimension_attributes('img/r2.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
               loading="lazy"
+              decoding="async"
             >
           </div>
           <div class="card-body">
@@ -170,9 +170,9 @@ require __DIR__ . '/include/page-head.php';
             <img
               src="img/r3.webp"
               alt="Evening dining tables on the rooftop terrace with the sandstone fort behind them"
-              width="900"
-              height="600"
+              <?= gj_image_dimension_attributes('img/r3.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
               loading="lazy"
+              decoding="async"
             >
           </div>
           <div class="card-body">
