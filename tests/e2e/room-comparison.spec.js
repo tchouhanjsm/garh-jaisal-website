@@ -79,7 +79,6 @@ test.describe('Room comparison journey', () => {
       expect(bounds.x + bounds.width, 'Dialog right edge must remain in the viewport at ' + width + 'px').toBeLessThanOrEqual(width + 1);
     }
   });
-});
 
   test('carries the selected room shortlist into a trusted contact enquiry', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop-1280', 'Run the end-to-end context handoff once.');
