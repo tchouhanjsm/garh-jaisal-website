@@ -2,6 +2,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 
+const BASE_URL = 'http://127.0.0.1:8080';
+
 function getSitemapRoutes() {
   const sitemap = fs.readFileSync(path.join(__dirname, '../../sitemap.xml'), 'utf8');
   return [...new Set(
