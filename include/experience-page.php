@@ -163,7 +163,7 @@ require __DIR__ . '/page-head.php';
       <p class="eyebrow"><?= htmlspecialchars($experience['eyebrow'], ENT_QUOTES, 'UTF-8') ?></p>
       <h1><?= htmlspecialchars($experience['h1'], ENT_QUOTES, 'UTF-8') ?></h1>
       <p><?= htmlspecialchars($experience['summary'], ENT_QUOTES, 'UTF-8') ?></p>
-      <div class="actions">
+      <div class="actions experience-hero-actions">
         <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
 <?php if ($isIndexableExperience && ($experience['duration_type'] ?? 'hub') !== 'hub'): ?>
         <?php
@@ -172,7 +172,9 @@ require __DIR__ . '/page-head.php';
         require __DIR__ . '/ui/trip-add-button.php';
         ?>
 <?php endif; ?>
+<?php if ($isIndexableExperience && ($experience['duration_type'] ?? 'hub') === 'hub'): ?>
         <a class="button button-light" href="catalogue.php">Build your trip shortlist</a>
+<?php endif; ?>
       </div>
       <p class="conversion-note experience-enquiry-note">An enquiry is not a confirmed booking. We will confirm current availability, route, timings and inclusions for your date before you decide.</p>
     </div>

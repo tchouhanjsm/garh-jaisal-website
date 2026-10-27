@@ -6,33 +6,34 @@ Last updated: 27 October 2026.
 
 Deliver a coherent, premium first impression and a lower-friction direct-booking journey on the existing plain-PHP/cPanel stack. The visual direction remains editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint and local warmth.
 
-## Verified baseline after PR #151
+## Verified baseline after PR #152
 
-- `main` baseline: `fb02f83f96698cd1948cdd09e1358c74c661bd56` (PR #151 merge).
-- Guest-journey milestones include #141 custom itinerary enquiries, #143 accessible experience-detail navigation, #144 editorial experience headings, #145 homepage/arrival hierarchy, #146 room comparison, #147 room-shortlist-to-Contact, #148 comparison-to-Trip, #149 unified Trip-to-Contact plus experience-detail handoff, #150 dining-to-Trip-to-Contact, and #151 measured responsive-image quality profiles with byte-budget checks.
-- PR #151's corrected head passed Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40497295876) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40497295673) · [Package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40497295768) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40497295778).
+- `main` is at `2cea0d7e64b904969b4668e9010666f35ed64632`, the merge commit for PR #152.
+- PR #152 delivered responsive image slot sizing across Home, Dining, Rooftop, Desert Safari and Guided Tours, extended related-card/rooftop image delivery, and improved restaurant hero-overline contrast.
+- The final merge-head workflows all passed on the exact main SHA: [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079194) · [Browser E2E/screenshots](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079119) · [Package preflight](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079178) · [Non-deploying Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079289).
+- Browser screenshot evidence and the generated cPanel package are CI artifacts only; no package was uploaded, no staging deployment occurred, and no production release was made.
 
 ## Completed phase — Sprint 72: measured hero-image payload budgets
 
-- The PR #150 browser artifact audited 37 sitemap routes and 149 distinct rendered image URLs in a local PHP/Chromium run (not production measurements).
-- The largest measured responsive candidates were `img/responsive/v2/facade-1200.webp` at 416,592 bytes and `img/responsive/v2/courtyard-1200.webp` at 406,736 bytes.
-- PR #151 added source-scoped quality 74 overrides for those two candidates, retained default quality 82 for other sources, and enforced exact-byte 350 KiB ceilings. Original photographs remain unchanged.
-- Local Chromium payload data is a comparative engineering baseline, not production/CDN or Core Web Vitals evidence. Human visual review of full-size outputs remains required.
+- The PR #150 local Chromium artifact audited 37 sitemap routes, 149 distinct rendered image URLs and 118 images with measured transfer size. These are local observations, not production/CDN or Core Web Vitals measurements.
+- PR #151 reduced the two largest reviewed responsive candidates with narrowly scoped quality 74 overrides while preserving the manifest's default quality 82 and 350 KiB candidate size ceilings. Original photographs remain unchanged.
 
-## Active phase — Sprint 73: responsive image slots across high-intent journeys
+## Completed phase — Sprint 73: responsive image slots across high-intent journeys
 
-- Apply slot-accurate `sizes` hints where Home, Dining, Rooftop, Desert Safari and Guided Tours templates were falling back to the full-resolution/optimized 1x source.
-- Extend delivery to the home rooftop feature, rooftop dining photo cards and shared related-experience cards. Add the existing, unmodified rooftop photographs to the responsive-image manifest; runtime advertises candidates only after the existing generator and validation rules accept them.
-- Browser artifact at head `06e132b77593564170ccbe91a8d0c82c381afe75`: 37 local routes, 145 distinct image URLs and 94 measured image resources with non-zero transfer sizes. Largest reviewed candidates were facade-1200 (299,358 transferred bytes) and courtyard-1200 (282,592 transferred bytes). Local observations only, not production/CDN or Core Web Vitals metrics.
-- Guided-tour `j6.jpg` is 370×539 px; the generator correctly skips 480/800/1200 variants instead of upscaling. The regression test preserves its native fallback while full-resolution `j2.jpg` verifies responsive-candidate selection.
-- Include a screenshot-driven readability fix for the restaurant hero overline and lock its foreground/background contrast in Browser E2E.
-- Use full viewport hints for full-bleed heroes, actual two-column/three-column estimates for option cards, and a contained image size for the rooftop banner.
-- Verify each newly wired slot exposes responsive candidates through the shared helper. Browser tests cover the source and slot hint together so later template changes cannot quietly drop responsive delivery.
-- Preserve image content, alt text, priority/loading semantics and existing routes. Validate layouts and intrinsic dimensions at 320/390/768/1280/1440px.
+- PR #152 applied slot-accurate responsive `sizes` hints to Home, Dining, Rooftop, Desert Safari and Guided Tours templates/cards; added existing rooftop sources to the manifest; and retained the generator's no-upscale behavior for undersized originals.
+- The corrected PR head fixed the initial E2E fixture's missing `BASE_URL`; the corrected merge head subsequently passed Browser E2E and screenshots on `2cea0d7e64b904969b4668e9010666f35ed64632`. The earlier failure is resolved, not a current release blocker.
+- The restaurant hero overline now uses the existing light-gold treatment with a WCAG AA contrast regression assertion. Original photos, crops, alt text, public routes and business copy remain unchanged.
+
+## Active phase — Sprint 74: focused experience-action hierarchy
+
+- Reduce choice overload in the first viewport: detail-page heroes keep the contextual enquiry as primary and the session-only “Add to Trip” control as the only secondary action. Remove the redundant catalogue link from individual experiences; global navigation and lower-page discovery paths remain available.
+- The Guided Jaisalmer Tours hub keeps “Plan my guided tour” and “Compare tour options”; card-level Add to Trip and detail-page routes remain intact. Keep the Desert Safari hub's catalogue action because its hero does not add a single experience to the Trip tray.
+- Add exact browser contracts for two purposeful hero actions, matching hero/checkpoint contact destinations, and synchronized Trip toggles at mobile and desktop sizes.
+- Preserve room-booking destinations, contact routing, all public URLs, factual copy, and the rule that an enquiry does not confirm a booking.
 
 ## Priority sequence
 
-1. Complete coherent user-facing journeys and resolve high-impact performance findings using measured browser evidence.
+1. Deliver coherent guest journeys and resolve high-impact performance findings using measured browser evidence.
 2. Review Home, Rooms, Packages/Experiences, Dining, Directions and Contact screenshots at 320/390/768/1280/1440px.
 3. Measure actual image transfer sizes and page-loading metrics rather than assuming file extensions guarantee performance.
 4. Verify keyboard/focus, contrast, reduced motion, form error recovery, responsive controls, canonical/schema/sitemap and route consistency.

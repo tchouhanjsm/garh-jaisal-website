@@ -6,10 +6,11 @@
 
 | Item | Value |
 |---|---|
-| Baseline after PR #151 | `fb02f83f96698cd1948cdd09e1358c74c661bd56` |
-| Active implementation | Sprint 73 — responsive image slots across high-intent journeys |
-| Scope | Wire responsive candidates across Home, Dining, Rooftop, Desert Safari and Guided Tours |
-| Release boundary | Originals untouched; no cPanel upload, staging deployment or production deployment |
+| Verified main SHA | `2cea0d7e64b904969b4668e9010666f35ed64632` — PR #152 merged |
+| Active implementation | Sprint 74 — focused experience-action hierarchy |
+| Scope | Reduce competing hero actions on experience detail pages and the Guided Jaisalmer Tours hub without changing conversion destinations |
+| Release boundary | Owner retains merge and release approval; no cPanel upload or staging/production deployment |
+| Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079194) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079119) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079178) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40529079289) — all passed on that SHA |
 
 ## Recent guest-journey milestones
 
@@ -26,14 +27,19 @@ The PR #150 Browser E2E artifact measured the local PHP site across 37 sitemap r
 
 The two largest responsive candidates were `img/responsive/v2/facade-1200.webp` at 416,592 bytes and `img/responsive/v2/courtyard-1200.webp` at 406,736 bytes. PR #151 added narrowly scoped WebP quality overrides of 74 for those two sources while leaving the manifest default quality at 82. Original photographs stay unchanged. The 350 KiB exact-file-size ceilings passed the final Browser E2E run.
 
-## Sprint 73 — responsive image slots across high-intent journeys
+## Sprint 73 — responsive image slots across high-intent journeys (completed)
 
-The payload audit also identified high-intent templates that used the shared image helper without a responsive `sizes` hint. Sprint 73 adds slot-accurate hints to the Home tent card, restaurant hero, rooftop hero/banner, desert hub hero/cards and guided-tour hero/cards. This enables the browser to select a candidate matching its rendered slot instead of falling back to a full-size 1x image.
-- Browser artifact at head `06e132b77593564170ccbe91a8d0c82c381afe75`: 37 local routes, 145 distinct image URLs and 94 measured image resources with non-zero transfer sizes. The largest reviewed candidates were facade-1200 at 299,358 transferred bytes and courtyard-1200 at 282,592 transferred bytes. These are local browser transfer observations, not production/CDN measurements.
-- Browser E2E run 40507151185 failed one slot assertion because `img/j6.jpg` is 370×539 and was correctly skipped as `skipped-no-upscale` for widths 480/800/1200. The regression contract preserves that safe fallback and asserts responsive delivery against full-resolution `j2.jpg` instead.
-- Browser E2E run 40512057026 on head `e61286152184003165ee5805824d5ed7225490e7` then recorded 590 passed, 605 skipped and one failure: the newly added rooftop-slot test referenced `BASE_URL` without defining it. This was a test-fixture `ReferenceError`; the follow-up adds the explicit local PHP test base URL used by the existing responsive-slot tests. The rerun on the new head remains the acceptance gate.
+PR #152 was merged as `2cea0d7e64b904969b4668e9010666f35ed64632`. It applies slot-accurate `sizes` hints across Home, Dining, Rooftop, Desert Safari and Guided Tours, extends responsive source delivery to the rooftop feature and related experience cards, and corrects the restaurant hero overline contrast. Original photos and public routes remain unchanged.
 
-The source photos, crop, alt text, public routes and business copy remain unchanged. The existing browser slot test now checks both the rendered source and its `sizes`/responsive `srcset` contract. Screenshot review also caught a low-contrast restaurant hero overline on the dark background; the page stylesheet now uses the established light-gold hero color, with a WCAG AA contrast regression assertion. The follow-up exact-head Browser E2E run remains the acceptance gate; no pass is claimed until it completes.
+- The responsive generator correctly avoids upscaling undersized originals; Guided Tours' `img/j6.jpg` remains on its safe native fallback while a full-resolution source exercises responsive candidate delivery.
+- Browser E2E previously caught two test-contract defects (an undersized image expected to have generated candidates, then an undefined `BASE_URL`). Both were corrected before merge. Do not treat those historical failed runs as current failures.
+- The final merge-head Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA all passed on SHA `2cea0d7e64b904969b4668e9010666f35ed64632`.
+
+## Sprint 74 — focused experience-action hierarchy
+
+The post-merge page sheet revealed competing hero actions on individual experience pages (contextual enquiry, Add to Trip and a separate catalogue link) and the Guided Jaisalmer Tours hub (plan, compare and catalogue). This slice keeps a clear primary enquiry path, retains the session-only Add to Trip action for individual experiences, and preserves the catalogue route elsewhere in the site's navigation and lower-page discovery paths. On the Guided Jaisalmer Tours hub, the hero focuses on enquiry plus the in-page comparison anchor; the tour cards continue to offer details and Trip selection.
+
+Regression coverage verifies action count and destination parity on the live experience routes, Trip-toggle synchronization at desktop and mobile sizes, and the guided-tour hub's primary and compare paths. No rates, operational claims, booking URLs, contact destinations or public routes are changed.
 
 ## Verification boundary
 

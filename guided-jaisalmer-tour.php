@@ -72,10 +72,9 @@ require __DIR__ . '/include/page-head.php';
       <p class="eyebrow">Jaisalmer tours</p>
       <h1>See Jaisalmer with a guide, at your pace.</h1>
       <p>Choose a focused Fort walk, a half-day exploration or a fuller day across Jaisalmer's heritage areas. Tell us what interests you and how much time you have; the route, guide language and current price are confirmed for your date.</p>
-      <div class="actions">
+      <div class="actions experience-hero-actions">
         <a class="button button-primary" href="contact.php?topic=visit-planning">Plan my guided tour</a>
         <a class="button button-light" href="#guided-options">Compare tour options</a>
-        <a class="button button-secondary" href="catalogue.php">Build your trip shortlist</a>
       </div>
     </div>
   </section>
