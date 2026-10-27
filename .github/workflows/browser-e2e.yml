@@ -91,6 +91,8 @@ jobs:
             artifacts/seo-inventory/**/*.json
             artifacts/performance-baseline/**/*.json
             artifacts/image-payload-audit/**/*.json
+            artifacts/responsive-image-assets/responsive-image-delivery-report.json
+            artifacts/responsive-image-assets/responsive-image-delivery-review.jpg
             artifacts/image-accessibility/**/*.json
             artifacts/page-layout-inventory/**/*.json
             artifacts/head-snapshot/**/*.json
