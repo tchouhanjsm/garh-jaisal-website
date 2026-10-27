@@ -68,7 +68,8 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 64 | Car & City route-first enquiry journey | ✓ PR #138 merged at `412a34d5a42177d16c449636e572402ca19c1754`; route-first choices and proposed-itinerary disclosures shipped. Browser E2E was cancelled, so screenshot evidence remains pending. |
 | 65 | Contact-channel consistency across Contact, Directions and Rooftop | ✓ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`; existing visible phone/email channels are config-backed. Merge-head Browser E2E was cancelled. |
 | 66 | Structured-data contact parity | ✓ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`; shared Hotel/ContactPage/Restaurant contact values remain config-backed. Merge-head Browser E2E was cancelled. |
-| 67 | Open-ended custom Jaisalmer itinerary discovery | ◐ Implemented in PR #141: custom planner page, guest-written places, browser-local WhatsApp draft, contact fallback and responsive/source contracts. Exact-head CI pending. |
+| 67 | Open-ended custom Jaisalmer itinerary discovery | ◐ PR #141 includes the custom planner and open-ended Car & City route; Site Checks, package preflight and non-deploying QA passed on head `be153e41dfbdaf956fce709f1271f8933a3ae07b`. Its Browser E2E was cancelled before producing a successful final gate; a new run is active on head `e45a8d770b273ad2c4760c0302f70c957a5cb1be` with a 40-minute job timeout. |
+| 68 | Accessible navigation on experience detail pages | ◐ Draft PR #143: contextual in-page navigation is implemented in the shared detail template with source/browser contracts and tablet screenshot coverage; exact-head CI awaits PR #141 merge and retarget to `main`. |
 
 ---
 
@@ -915,3 +916,15 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Add canonical/breadcrumb/FAQ metadata and the page to the existing sitemap without altering unrelated entries.
 - Do not invent services, prices, timings, routes, guide availability, access permissions or vehicle availability. Every selection is an enquiry prompt; the hotel must confirm feasibility, visitor rules, transport, guide, timings, applicable fees and final price.
 - Acceptance: exact-head PHP 7.4/8.2 Site Checks, full Browser E2E/screenshot evidence, package preflight and non-deploying Staging QA. Owner-controlled live staging and production approval remain separate.
+
+
+## Sprint 68 — accessible section navigation on experience detail pages (stacked PR #143)
+
+**Goal:** make the full details already present on experience pages easier to scan, especially on mobile, without weakening the enquiry-only/owner-confirmation wording.
+
+- Add a normal-flow, keyboard-accessible section index to the shared detail template for At a glance, optional Photo gallery, Itinerary, What's included / Before you book, and optional Questions.
+- Render only links for sections available on the current record; use unique IDs and section headings. Do not make the index sticky or add a new dependency.
+- Style the index using the existing brand tokens, visible focus, wrapping on small screens, and reduced-motion-safe behavior.
+- Add source-contract and Browser E2E coverage for all six live experience detail pages, link/target parity, visible sections and 320/390/768/1280/1440px no-overflow.
+- Preserve all registry content, image/alt values, schema, canonical URLs, WhatsApp/Trip-shortlist actions and prices-on-request. Do not fabricate missing operational facts or publish draft/hidden experiences.
+- Acceptance: PR #143 must be retargeted to `main` only after PR #141 merges, then pass exact-head PHP 7.4/8.2 checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA.

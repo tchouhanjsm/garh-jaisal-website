@@ -7,25 +7,26 @@
 | Item | Value |
 |---|---|
 | Last updated | 2026-10-27 |
-| Current phase | Sprint 67 — open-ended custom itinerary discovery |
+| Current phase | Sprint 68 — accessible experience detail navigation (stacked on Sprint 67) |
 | Verified main SHA | df812a33675a5d31d4ce388629038cf5a7960105 (PR #140 merge commit) |
 | Latest merged PR | [#140 — unified public contact channels and structured data](https://github.com/tchouhanjsm/garh-jaisal-website/pull/140) |
 | Recent merged work | PRs #138 Car & City enquiry discovery, #139 contact-channel source of truth, #140 contact/schema parity |
-| Active phase branch | `feature/custom-itinerary-builder-20261027` — Sprint 67 draft PR #141 |
+| Active phase branch | `feature/experience-detail-navigation-20261027` — Sprint 68 draft PR #143, based on PR #141 |
 
 ## Current phase
 
-**Sprint 67 goal:** let guests shape a custom Jaisalmer enquiry beyond the six proposed themes, while keeping the options explicitly non-bookable until the hotel confirms details.
+**Sprint 68 goal:** let guests jump directly to the itinerary, inclusions and FAQ on existing live experience detail pages while preserving all current content and enquiry safeguards.
 
-- Add a standalone custom-itinerary page with multi-select interests, travel context and guest-written stops/preferences.
-- Keep all form data in the browser, render a WhatsApp draft for review, and open WhatsApp only after an explicit guest click.
-- Treat the six themes as examples, never as the complete list of offerings. No invented routes, prices, schedules, guide availability or booking confirmation.
+- Update the shared experience detail template with contextual section links, conditionally rendered for each live page.
+- Add focused source/browser tests for section-target parity and responsive layout.
+- PR #141 is awaiting a successful final browser/screenshot gate. Its prior browser run was cancelled; Site Checks, package preflight and non-deploying QA passed on `be153e41dfbdaf956fce709f1271f8933a3ae07b`. The new exact-head run on `e45a8d770b273ad2c4760c0302f70c957a5cb1be` increases the browser job timeout to 40 minutes. No merge or deployment until the gate completes.
 
 ## Latest implementation entry
 
 - [2026-10-27] PR #140 merged at `df812a33675a5d31d4ce388629038cf5a7960105`. Sprint 65 public contact channels and Sprint 66 structured-data parity are in `main`; Site Checks, package preflight and non-deploying Staging QA passed. Merge-head Browser E2E was cancelled and must not be treated as a pass.
 - Sprint 65–66 / PRs #139–#140 merged the visible contact and structured-data parity slice. Browser screenshot evidence remains absent because the merge-head Browser E2E run was cancelled.
-- Sprint 67 / PR #141 now contains the custom-itinerary page, browser-only draft composer, contextual contact fallback, Car & City open-ended links, sitemap allowlist and regression contracts. Exact-head Site Checks, Browser E2E/screenshots, package preflight and non-deploying QA are pending.
+- Sprint 67 / PR #141 contains the custom-itinerary page, browser-only draft composer, contextual contact fallback, open-ended Car & City links, sitemap and regression contracts. Latest Site Checks, package preflight and non-deploying QA pass; Browser E2E/screenshot evidence is still in progress.
+- Sprint 68 / PR #143 is a draft stacked on #141, for section navigation on the six live experience detail pages. It must be retargeted to `main` after #141 merges and checked against its exact head.
 
 ## Remaining blockers
 

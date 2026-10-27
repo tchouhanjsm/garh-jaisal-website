@@ -17,6 +17,10 @@ const TABLET_ROUTES = new Set([
   '/car-tours.php',
   '/roof.php',
   '/restaurant.php',
+  // Representative details cover the new in-page section navigation at tablet width.
+  '/sunset-camel-safari.php',
+  '/sleep-under-the-stars.php',
+  '/full-day-jaisalmer-tour.php',
 ]);
 
 function routeSlug(route) {

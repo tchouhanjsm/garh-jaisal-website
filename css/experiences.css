@@ -1050,3 +1050,54 @@ main .experience-card > a > .experience-card-media img{
     width:100%;
   }
 }
+
+
+/* Sprint 68 — accessible in-page navigation for experience details. */
+.experience-section-nav{
+  border-block:1px solid var(--line);
+  background:var(--cream);
+}
+.experience-section-nav-inner{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  padding-block:12px;
+}
+.experience-section-nav a{
+  display:inline-flex;
+  min-height:44px;
+  align-items:center;
+  justify-content:center;
+  padding:9px 14px;
+  border:1px solid transparent;
+  border-radius:2px;
+  color:var(--brown);
+  font-size:.86rem;
+  font-weight:650;
+  line-height:1.35;
+  text-decoration:none;
+}
+.experience-section-nav a:hover{
+  border-color:var(--line);
+  background:#fff;
+}
+.experience-section-nav a:focus-visible{
+  outline:3px solid var(--focus,#b28c56);
+  outline-offset:3px;
+  background:#fff;
+}
+#experience-overview,
+#experience-photo-gallery,
+#experience-itinerary,
+#experience-details,
+#experience-faq{
+  scroll-margin-top:24px;
+}
+@media(max-width:600px){
+  .experience-section-nav-inner{gap:6px;padding-block:10px}
+  .experience-section-nav a{flex:1 1 auto;padding:10px 11px;text-align:center}
+}
+@media(prefers-reduced-motion:reduce){
+  .experience-section-nav{scroll-behavior:auto}
+}
