@@ -21,8 +21,13 @@ test('live experience pages show a contextual checkpoint after the itinerary and
     expect(response.status(), route.path + ': should remain available').toBe(200);
 
     if (route.kind === 'hub') {
-      await expect(page.getByRole('link', { name: 'Build your trip shortlist' }), route.path + ': hub keeps a clear next step')
-        .toHaveAttribute('href', 'catalogue.php');
+      if (route.path === '/desert-safari.php') {
+        await expect(page.getByRole('link', { name: 'Build your trip shortlist' }), route.path + ': hub keeps a clear next step')
+          .toHaveAttribute('href', 'catalogue.php');
+      } else {
+        await expect(page.getByRole('link', { name: 'Plan my guided tour' }), route.path + ': city-tour hub keeps a contextual enquiry')
+          .toHaveAttribute('href', 'contact.php?topic=visit-planning');
+      }
       continue;
     }
 
