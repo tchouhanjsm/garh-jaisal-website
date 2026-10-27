@@ -88,7 +88,7 @@ test('home and stay guides do not republish unconfirmed arrival promises', async
       expect(renderedCopy, 'Home must not imply an unverified drinks offering in any section or card').not.toMatch(/quiet drink/i);
       expect(rooftopCopy, 'Home rooftop section must not promise unconfirmed breakfast service').not.toMatch(/\bbreakfast\b/i);
       expect(rooftopCopy, 'Home rooftop section must not imply an unverified drinks offering').not.toMatch(/quiet drink/i);
-      expect(rooftopCopy).toContain('current service times and menu options before visiting.');
+      expect(rooftopCopy).toMatch(/Ask about the current dishes,\s+service hours and table availability\s+before you make the evening's plan\./);
     }
 
     expect(

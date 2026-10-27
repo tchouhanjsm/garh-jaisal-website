@@ -545,7 +545,12 @@ document.addEventListener('DOMContentLoaded', () => {
       let visibleCount = 0;
 
       roomCards.forEach((card) => {
-        const matchesSearch = !query || normalizeRoomText(card.textContent).includes(query);
+        const roomSearchableText = [
+          card.querySelector('h3')?.textContent,
+          card.querySelector('.room-description')?.textContent,
+          ...Array.from(card.querySelectorAll('.room-features li')).map(feature => feature.textContent),
+        ].filter(Boolean).join(' ');
+        const matchesSearch = !query || normalizeRoomText(roomSearchableText).includes(query);
         const matchesFloor = selectedFloor === 'all' || card.dataset.roomFloor === selectedFloor;
         const cardFeatures = (card.dataset.roomFeatures || '').split('|').filter(Boolean);
         const matchesFeature = selectedFeature === 'all' || cardFeatures.includes(selectedFeature);

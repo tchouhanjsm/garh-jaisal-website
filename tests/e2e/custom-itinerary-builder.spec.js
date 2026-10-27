@@ -9,7 +9,8 @@ test('custom itinerary builder combines interests and prepares an explicit Whats
   const whatsapp = page.locator('#custom-itinerary-whatsapp');
   await expect(whatsapp).toHaveAttribute('aria-disabled', 'true');
   const initialUrl = page.url();
-  await whatsapp.click();
+  // The anchor is intentionally disabled until the draft has valid content; invoke its handler directly to verify the guard.
+  await whatsapp.evaluate(link => link.click());
   await expect(page).toHaveURL(initialUrl);
 
   await page.getByLabel('Fort & historic architecture').check();

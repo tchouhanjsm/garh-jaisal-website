@@ -11,12 +11,11 @@ const viewportWidths = [
 const pages = [
   {
     route: '/',
-    selector: '.home-quick-facts',
+    selector: '.home-hero-facts',
     facts: [
-      ['Location', 'Inside Jaisalmer Fort'],
       ['Stay', '7 heritage rooms'],
-      ['Dining', 'Rooftop restaurant'],
-      ['Experiences', 'Desert and guided city tours'],
+      ['Dine', 'Rooftop dining'],
+      ['Explore', 'City & desert tours'],
     ],
   },
   {
@@ -65,8 +64,8 @@ test('verified quick facts remain accurate, semantic and responsive on high-inte
         await expect(region, route.route + ' quick facts must be rendered').toBeVisible();
         const facts = region.locator('dl.at-a-glance');
         await expect(facts).toBeVisible();
-        await expect(facts.locator('dt')).toHaveCount(4);
-        await expect(facts.locator('dd')).toHaveCount(4);
+        await expect(facts.locator('dt')).toHaveCount(route.facts.length);
+        await expect(facts.locator('dd')).toHaveCount(route.facts.length);
 
         const renderedFacts = await facts.evaluate(node => ({
           labels: Array.from(node.querySelectorAll('dt')).map(item => item.textContent.trim()),

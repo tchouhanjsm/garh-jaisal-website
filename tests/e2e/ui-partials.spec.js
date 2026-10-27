@@ -6,7 +6,7 @@ const CTA_CASES = [
   {
     route: '/',
     section: '.final-cta',
-    heading: 'Stay at Garh Jaisal Haveli.',
+    heading: 'Make Jaisalmer more than a stop on the map.',
     links: [
       { label: 'Book your stay', opensNewTab: true },
       { label: 'Contact us', href: 'contact.php' },

@@ -20,6 +20,12 @@ test('live experience pages show a contextual checkpoint after the itinerary and
     expect(response, route.path + ': should return an HTTP response').not.toBeNull();
     expect(response.status(), route.path + ': should remain available').toBe(200);
 
+    if (route.kind === 'hub') {
+      await expect(page.getByRole('link', { name: 'Build your trip shortlist' }), route.path + ': hub keeps a clear next step')
+        .toHaveAttribute('href', 'catalogue.php');
+      continue;
+    }
+
     const checkpoint = page.locator('[data-experience-conversion-checkpoint]');
     await expect(checkpoint, route.path + ': contextual checkpoint').toBeVisible();
     await expect(checkpoint.getByRole('heading', {

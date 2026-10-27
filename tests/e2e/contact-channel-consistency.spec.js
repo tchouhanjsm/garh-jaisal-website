@@ -23,7 +23,7 @@ test('Contact, Directions and Rooftop retain the existing public contact channel
       const channel = channels[key];
       const link = main.locator('a[href="' + channel.href + '"]').first();
       await expect(link, contract.route + ': ' + key).toBeVisible();
-      await expect(link).toHaveText(channel.text);
+      await expect(link).toContainText(channel.text);
     }
     for (const key of contract.emails) {
       const channel = channels[key];

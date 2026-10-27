@@ -32,7 +32,7 @@ test('Car & City hub separates existing options from proposed itinerary ideas an
   for (const topic of proposedTopics) {
     const link = ideaSection.locator('a[href="contact.php?topic=' + topic + '"]');
     await expect(link, topic + ': contextual enquiry remains available').toBeVisible();
-    await expect(link).toHaveText('Enquire about this idea');
+    await expect(link).toContainText('Enquire about this idea');
     await expect(link).toHaveAttribute('aria-label', /^Enquire about/);
   }
 

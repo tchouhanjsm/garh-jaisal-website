@@ -43,7 +43,7 @@ for (const route of routes) {
     const footerBooking = page.locator('.footer-booking-button');
     await expect(footerBooking).toHaveCount(1);
     await expect(footerBooking).toHaveAttribute('href', await page.locator('.nav-book').getAttribute('href'));
-    await expect(footerBooking).toHaveText('Check room availability');
+    await expect(footerBooking).toHaveText('Check dates & current rates');
     await expect(footerBooking).toHaveAttribute('target', '_blank');
     await expect(footerBooking).toHaveAttribute('rel', /noopener/);
 
