@@ -522,8 +522,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  // Rooms: progressively enhance the directory with registry-backed search and filters.
-  // With JavaScript disabled, every room remains visible and every existing booking/enquiry link works.
+  // Rooms: progressively enhance search, filters and side-by-side shortlisting.
+  // No room selection is persisted; every booking link still points to the configured booking engine.
   const roomFinder = document.querySelector('[data-room-finder]');
   if (roomFinder) {
     const roomCards = Array.from(document.querySelectorAll('.rooms-page .room-card'));
@@ -535,9 +535,162 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetButtons = Array.from(roomFinder.querySelectorAll('[data-room-reset]'));
     const resultStatus = roomFinder.querySelector('[data-room-result-status]');
     const emptyState = roomFinder.querySelector('[data-room-empty]');
+    const comparisonDialog = document.querySelector('[data-room-comparison-dialog]');
+    const comparisonStatus = comparisonDialog?.querySelector('[data-room-comparison-status]');
+    const comparisonContent = comparisonDialog?.querySelector('[data-room-comparison-content]');
+    const comparisonClear = comparisonDialog?.querySelector('[data-room-comparison-clear]');
+    const comparisonCloseButtons = Array.from(comparisonDialog?.querySelectorAll('[data-room-comparison-close]') || []);
+    const selectedRoomIds = new Set();
+    let lastSelectedRoomId = null;
     let selectedFeature = 'all';
 
     const normalizeRoomText = (value) => String(value || '').toLowerCase().replace(/\s+/g, ' ').trim();
+    const roomName = (card) => card.querySelector('h3')?.textContent?.trim() || 'Selected room';
+    const selectedRoomCards = () => Array.from(selectedRoomIds)
+      .map((id) => roomCards.find((card) => card.id === id))
+      .filter(Boolean);
+
+    const updateRoomResultStatus = () => {
+      if (!resultStatus) return;
+      const visibleCount = roomCards.filter((card) => !card.hidden).length;
+      const selectionNote = selectedRoomIds.size
+        ? ' ' + selectedRoomIds.size + ' room' + (selectedRoomIds.size === 1 ? '' : 's') + ' selected for comparison.'
+        : '';
+      resultStatus.textContent = 'Showing ' + visibleCount + ' of ' + roomCards.length + ' rooms.' + selectionNote;
+    };
+
+    const renderComparison = () => {
+      const selectedCards = selectedRoomCards();
+
+      roomCards.forEach((card) => {
+        const toggle = card.querySelector('[data-room-compare-toggle]');
+        const openButton = card.querySelector('[data-room-comparison-open]');
+        const selected = selectedRoomIds.has(card.id);
+        if (toggle) {
+          toggle.hidden = false;
+          toggle.setAttribute('aria-pressed', String(selected));
+          toggle.textContent = selected ? 'Remove from compare' : 'Add to compare';
+          toggle.disabled = !selected && selectedRoomIds.size >= 3;
+          toggle.setAttribute('aria-label', (selected ? 'Remove ' : 'Add ') + roomName(card) + (selected ? ' from comparison' : ' to comparison'));
+        }
+        if (openButton) {
+          const canReview = selectedCards.length >= 2 && card.id === lastSelectedRoomId;
+          openButton.hidden = !canReview;
+          openButton.textContent = 'Review comparison (' + selectedCards.length + ')';
+          openButton.setAttribute('aria-label', 'Review comparison of ' + selectedCards.length + ' selected rooms');
+        }
+      });
+
+      updateRoomResultStatus();
+      if (!comparisonContent || !comparisonStatus) return;
+
+      comparisonContent.replaceChildren();
+      if (selectedCards.length < 2) {
+        comparisonStatus.textContent = selectedCards.length === 1
+          ? '1 room selected. Close this panel and add at least one more room to compare.'
+          : 'Choose two or three rooms from the directory to compare.';
+        return;
+      }
+
+      comparisonStatus.textContent = 'Comparing ' + selectedCards.length + ' rooms. Listed details are shown below; check current rates and availability through the booking link.';
+      const table = document.createElement('table');
+      table.className = 'room-comparison-table';
+      table.setAttribute('aria-label', 'Selected room comparison');
+
+      const caption = document.createElement('caption');
+      caption.textContent = 'Room details at a glance';
+      table.appendChild(caption);
+
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+      const firstHeader = document.createElement('th');
+      firstHeader.scope = 'col';
+      firstHeader.textContent = 'Compare';
+      headerRow.appendChild(firstHeader);
+      selectedCards.forEach((card) => {
+        const header = document.createElement('th');
+        header.scope = 'col';
+        header.textContent = roomName(card);
+        headerRow.appendChild(header);
+      });
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      const appendTextRow = (label, selector) => {
+        const row = document.createElement('tr');
+        const heading = document.createElement('th');
+        heading.scope = 'row';
+        heading.textContent = label;
+        row.appendChild(heading);
+        selectedCards.forEach((card) => {
+          const cell = document.createElement('td');
+          cell.textContent = card.querySelector(selector)?.textContent?.trim() || 'Not listed';
+          row.appendChild(cell);
+        });
+        tbody.appendChild(row);
+      };
+
+      appendTextRow('Floor', '.room-kicker');
+      appendTextRow('Description', '.room-description');
+
+      const featureRow = document.createElement('tr');
+      const featureHeading = document.createElement('th');
+      featureHeading.scope = 'row';
+      featureHeading.textContent = 'Listed features';
+      featureRow.appendChild(featureHeading);
+      selectedCards.forEach((card) => {
+        const cell = document.createElement('td');
+        const features = Array.from(card.querySelectorAll('.room-features li'))
+          .map((item) => item.textContent.trim())
+          .filter(Boolean);
+        if (features.length) {
+          const list = document.createElement('ul');
+          list.className = 'room-comparison-feature-list';
+          features.forEach((feature) => {
+            const item = document.createElement('li');
+            item.textContent = feature;
+            list.appendChild(item);
+          });
+          cell.appendChild(list);
+        } else {
+          cell.textContent = 'No features listed';
+        }
+        featureRow.appendChild(cell);
+      });
+      tbody.appendChild(featureRow);
+
+      const actionRow = document.createElement('tr');
+      const actionHeading = document.createElement('th');
+      actionHeading.scope = 'row';
+      actionHeading.textContent = 'Next step';
+      actionRow.appendChild(actionHeading);
+      selectedCards.forEach((card) => {
+        const cell = document.createElement('td');
+        const sourceLink = card.querySelector('.room-book');
+        if (sourceLink) {
+          const link = document.createElement('a');
+          link.className = 'button button-primary room-comparison-availability';
+          link.href = sourceLink.href;
+          link.target = sourceLink.target || '_blank';
+          link.rel = sourceLink.rel || 'noopener';
+          link.textContent = 'Check availability';
+          link.setAttribute('aria-label', 'Check availability for ' + roomName(card));
+          cell.appendChild(link);
+        }
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.className = 'room-comparison-remove';
+        removeButton.dataset.roomCompareRemove = card.id;
+        removeButton.textContent = 'Remove from compare';
+        removeButton.setAttribute('aria-label', 'Remove ' + roomName(card) + ' from comparison');
+        cell.appendChild(removeButton);
+        actionRow.appendChild(cell);
+      });
+      tbody.appendChild(actionRow);
+      table.appendChild(tbody);
+      comparisonContent.appendChild(table);
+    };
 
     const applyRoomFilters = () => {
       const query = normalizeRoomText(searchInput ? searchInput.value : '');
@@ -548,7 +701,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const roomSearchableText = [
           card.querySelector('h3')?.textContent,
           card.querySelector('.room-description')?.textContent,
-          ...Array.from(card.querySelectorAll('.room-features li')).map(feature => feature.textContent),
+          ...Array.from(card.querySelectorAll('.room-features li')).map((feature) => feature.textContent),
         ].filter(Boolean).join(' ');
         const matchesSearch = !query || normalizeRoomText(roomSearchableText).includes(query);
         const matchesFloor = selectedFloor === 'all' || card.dataset.roomFloor === selectedFloor;
@@ -568,10 +721,8 @@ document.addEventListener('DOMContentLoaded', () => {
         link.hidden = !target || target.hidden;
       });
 
-      if (resultStatus) {
-        resultStatus.textContent = 'Showing ' + visibleCount + ' of ' + roomCards.length + ' rooms.';
-      }
       if (emptyState) emptyState.hidden = visibleCount > 0;
+      updateRoomResultStatus();
     };
 
     const resetRoomFilters = () => {
@@ -597,8 +748,53 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
       resetButtons.forEach((button) => button.addEventListener('click', resetRoomFilters));
+
+      roomCards.forEach((card) => {
+        const toggle = card.querySelector('[data-room-compare-toggle]');
+        const openButton = card.querySelector('[data-room-comparison-open]');
+        toggle?.addEventListener('click', () => {
+          if (selectedRoomIds.has(card.id)) {
+            selectedRoomIds.delete(card.id);
+            if (lastSelectedRoomId === card.id) {
+              lastSelectedRoomId = Array.from(selectedRoomIds).at(-1) || null;
+            }
+          } else if (selectedRoomIds.size < 3) {
+            selectedRoomIds.add(card.id);
+            lastSelectedRoomId = card.id;
+          }
+          renderComparison();
+        });
+        openButton?.addEventListener('click', () => {
+          if (comparisonDialog && selectedRoomIds.size >= 2 && !comparisonDialog.open) {
+            renderComparison();
+            comparisonDialog.showModal();
+          }
+        });
+      });
+
+      comparisonContent?.addEventListener('click', (event) => {
+        const removeButton = event.target.closest('[data-room-compare-remove]');
+        if (!removeButton) return;
+        const roomId = removeButton.dataset.roomCompareRemove;
+        selectedRoomIds.delete(roomId);
+        if (lastSelectedRoomId === roomId) {
+          lastSelectedRoomId = Array.from(selectedRoomIds).at(-1) || null;
+        }
+        renderComparison();
+      });
+      comparisonClear?.addEventListener('click', () => {
+        selectedRoomIds.clear();
+        lastSelectedRoomId = null;
+        renderComparison();
+      });
+      comparisonCloseButtons.forEach((button) => button.addEventListener('click', () => comparisonDialog?.close()));
+      comparisonDialog?.addEventListener('click', (event) => {
+        if (event.target === comparisonDialog) comparisonDialog.close();
+      });
+
       roomFinder.hidden = false;
       applyRoomFilters();
+      renderComparison();
     }
   }
 
