@@ -94,7 +94,7 @@ class ResponsiveImageAssetTests(unittest.TestCase):
                 ({"img/same.jpg": True}, "Invalid quality override"),
                 ({"img/same.jpg": 101}, "Invalid quality override"),
             ]
-            with patch.object(assets, "ROOT", root), patch.object(assets, "MANIFEST_PATH", manifest_path):
+            with patch.object(assets, "ROOT", root), patch.object(assets, "OUTPUT_ROOT", root / "img" / "responsive"), patch.object(assets, "MANIFEST_PATH", manifest_path):
                 for overrides, expected_error in invalid_overrides:
                     with self.subTest(overrides=overrides):
                         manifest = dict(base_manifest, quality_overrides=overrides)
