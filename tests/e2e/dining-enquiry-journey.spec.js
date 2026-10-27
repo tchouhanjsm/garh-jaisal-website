@@ -103,6 +103,8 @@ test('restaurant and rooftop entry points share one dining Trip option through C
 
   await expect(page.locator('[data-trip-count]')).toHaveText('1');
   await expect(page.locator('[data-trip-items]')).toContainText('Rooftop dining');
+  // Trip selections update the count without opening the tray automatically; open it as a guest would.
+  await page.locator('[data-trip-toggle]').click();
   await expect(page.locator('[data-trip-panel]')).toBeVisible();
 
   // The rooftop page uses the identical ID and dining group, so navigating between pages retains the selection.
