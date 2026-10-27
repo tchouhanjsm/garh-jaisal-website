@@ -292,7 +292,7 @@ test('experience availability CTAs carry live tour context into the enquiry form
       continue;
     }
 
-    await expect(page.getByRole('link', { name: 'Ask about availability' }))
+    await expect(page.locator('.experience-hero').getByRole('link', { name: 'Ask about availability' }))
       .toHaveAttribute('href', 'contact.php?experience=' + scenario.slug);
     await expect(page.getByRole('link', { name: 'Contact us' }))
       .toHaveAttribute('href', 'contact.php?experience=' + scenario.slug);

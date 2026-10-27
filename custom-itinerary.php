@@ -44,8 +44,10 @@ $page = [
     ],
 ];
 $page['schema'][] = gj_schema_faq($faqItems, $canonical);
-require __DIR__ . '/include/page-head.php';
 ?>
+<!doctype html>
+<html lang="en">
+<?php require __DIR__ . '/include/page-head.php'; ?>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 <main id="main-content" class="custom-itinerary-page" tabindex="-1" data-custom-itinerary-builder data-whatsapp-url="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>">
