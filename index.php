@@ -135,7 +135,7 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
-<section class="home-arrival-note" id="arrival-guide" data-story-reveal aria-labelledby="home-arrival-title">
+<section class="home-arrival-note" data-story-reveal aria-labelledby="home-arrival-title">
   <div class="site-shell home-arrival-note-inner">
     <div class="home-arrival-note-copy">
       <p class="eyebrow">Before you arrive</p>
@@ -394,6 +394,62 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
+
+<section class="section arrival" id="arrival-guide" data-story-reveal aria-labelledby="arrival-guide-title">
+  <div class="site-shell">
+
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Getting here</p>
+        <h2 id="arrival-guide-title">Arriving at the fort is part of the experience.</h2>
+      </div>
+
+      <p>
+        Garh Jaisal Haveli is inside Jaisalmer Fort. Vehicles cannot enter
+        the fort, so your final stretch is on foot through the fort lanes.
+      </p>
+    </div>
+
+    <div class="steps">
+
+      <div class="step">
+        <span>01</span>
+        <strong>Reach Fort Parking</strong>
+        <span>Your vehicle drop-off point outside the fort.</span>
+      </div>
+
+      <div class="step">
+        <span>02</span>
+        <strong>Call the hotel</strong>
+        <span>Let our team know that you have arrived.</span>
+      </div>
+
+      <div class="step">
+        <span>03</span>
+        <strong>Ask about arrival assistance</strong>
+        <span>Contact the hotel before travelling to ask whether help can be arranged; wait for confirmation before relying on it.</span>
+      </div>
+
+      <div class="step">
+        <span>04</span>
+        <strong>Walk to Garh Jaisal</strong>
+        <span>A short walk through the living fort.</span>
+      </div>
+
+    </div>
+
+    <div class="callout">
+      <p>
+        <strong>Before travelling:</strong> Confirm current reception hours and ask whether late-arrival arrangements can be made, or <a href="contact.php?topic=arrival">send an arrival enquiry</a>.
+      </p>
+
+      <a class="button" href="direction.php">
+        Full arrival guide
+      </a>
+    </div>
+
+  </div>
+</section>
 
 <section class="section home-gallery" id="property-gallery" data-story-reveal aria-labelledby="property-gallery-title">
   <div class="site-shell">

@@ -40,8 +40,9 @@ if (!is_string($homeSource)) {
     if (substr_count($homeSource, 'id="arrival-guide"') !== 1) {
         $errors[] = 'Homepage must expose one canonical arrival-guide anchor; duplicate arrival sections are not allowed';
     }
-    if (strpos($homeSource, '<section class="section arrival"') !== false) {
-        $errors[] = 'Homepage must link to the full arrival guide instead of repeating the full step-by-step section';
+    if (strpos($homeSource, '<section class="section arrival" id="arrival-guide"') === false
+        || strpos($homeSource, 'Arriving at the fort is part of the experience.') === false) {
+        $errors[] = 'Homepage must retain the detailed, addressable arrival guide section';
     }
     if (strpos($homeSource, 'home-planning-panel') === false) {
         $errors[] = 'Homepage must provide the consolidated editorial planning panel';
