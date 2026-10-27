@@ -34,7 +34,7 @@ test('restaurant hero eyebrow maintains readable contrast on its dark background
   await expect(eyebrow).toBeVisible();
   const contrast = await eyebrow.evaluate(element => {
     const rgb = value => {
-      const match = value.match(/rgba?\\((\\d+),\\s*(\\d+),\\s*(\\d+)/i);
+      const match = value.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
       return match ? match.slice(1, 4).map(Number).map(channel => {
         const srgb = channel / 255;
         return srgb <= 0.04045 ? srgb / 12.92 : ((srgb + 0.055) / 1.055) ** 2.4;
