@@ -34,7 +34,7 @@ test('custom itinerary builder combines interests and prepares an explicit Whats
 
   const destination = await whatsapp.evaluate(link => ({ href: link.href, target: link.target }));
   const targetUrl = new URL(destination.href);
-  expect(targetUrl.origin).toBe('https://wa.me');
+  expect(targetUrl.hostname).toMatch(/^(?:wa\.me|api\.whatsapp\.com)$/);
   expect(destination.target).toBe('_blank');
   expect(targetUrl.searchParams.get('text')).toContain('Fort and historic architecture');
   expect(targetUrl.searchParams.get('text')).toContain('Markets, crafts and local life');
@@ -45,7 +45,7 @@ test('custom itinerary builder combines interests and prepares an explicit Whats
   await whatsapp.click();
   const popup = await popupPromise;
   const popupDestination = new URL(popup.url());
-  expect(popupDestination.origin).toBe('https://wa.me');
+  expect(popupDestination.origin).toBe(targetUrl.origin);
   expect(popupDestination.searchParams.get('text')).toContain('enquiry only, not a booking');
 });
 

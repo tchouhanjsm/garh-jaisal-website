@@ -255,7 +255,7 @@ function compactSnapshot(snapshot) {
   };
 }
 
-test('sitemap head output matches the frozen pre-refactor baseline', async ({ browser }, testInfo) => {
+test('sitemap head output matches the reviewed public-page metadata baseline', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'SEO head snapshot is captured once on desktop-1280');
   test.setTimeout(240_000);
 
@@ -302,13 +302,13 @@ test('sitemap head output matches the frozen pre-refactor baseline', async ({ br
 
   expect(
     fs.existsSync(FIXTURE_PATH),
-    'Missing committed pre-refactor fixture; capture it before any shared-head migration.'
+    'Missing reviewed public-page metadata fixture; commit it alongside deliberate metadata changes.'
   ).toBe(true);
   const expected = JSON.parse(fs.readFileSync(FIXTURE_PATH, 'utf8'));
-  // This frozen fixture predates the deliberate change from public noindex Draft
-  // pages to HTTP 404. Keep the unchanged public sitemap/head baseline strict;
-  // the current 404 status and generic not-found head are asserted below and in
-  // seo.spec.js. The artifact still records the current private-route status.
+  // This reviewed baseline includes approved copy changes on existing routes. Keep
+  // those routes strict against accidental metadata drift; the current 404 status
+  // and generic not-found head are asserted below and in seo.spec.js. The artifact
+  // still records the current private-route status.
   const frozenBaseline = {
     ...snapshot,
     draftAndHiddenPages: [],
@@ -323,7 +323,7 @@ test('sitemap head output matches the frozen pre-refactor baseline', async ({ br
   ).toEqual(normalizeSocialImageValues(expectedBaseline));
 
   // Keep full current output as an artifact; only the fixture comparison omits
-  // new articles whose metadata and visible-content contracts have their own tests.
+  // newer routes whose metadata and visible-content contracts have their own tests.
   const fullComparable = compactSnapshot(snapshot);
   fs.mkdirSync(path.dirname(ARTIFACT_PATH), { recursive: true });
   const json = JSON.stringify(fullComparable, null, 2) + '\n';

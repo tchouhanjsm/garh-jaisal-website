@@ -254,7 +254,12 @@ test('Rooms page presents all registered rooms with useful comparison and bookin
   for (const name of expectedNames) {
     const card = cards.filter({ has: page.getByRole('heading', { level: 3, name, exact: true }) });
     await expect(card, `Expected registered room card: ${name}`).toHaveCount(1);
-    await expect(card.locator('img')).toHaveAttribute('alt', /\S/);
+    const photoAltTexts = await card.locator('img').evaluateAll(images => images.map(image => image.getAttribute('alt')));
+    expect(photoAltTexts.length, `${name}: room photos should exist`).toBeGreaterThan(0);
+    expect(
+      photoAltTexts.every(alt => typeof alt === 'string' && alt.trim() !== ''),
+      `${name}: every room photo should have descriptive alt text`
+    ).toBe(true);
     await expect(card.locator('.room-features li').first()).toBeVisible();
     await expect(card.getByRole('link', { name: `Check availability for ${name}` })).toHaveAttribute('href', /\S/);
   }

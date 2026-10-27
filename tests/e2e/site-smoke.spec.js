@@ -280,7 +280,7 @@ test('experience availability CTAs carry live tour context into the enquiry form
 
     if (scenario.slug === 'half-day-jaisalmer-tour') {
       const quoteLinks = page.getByRole('link', { name: 'Ask on WhatsApp' });
-      await expect(quoteLinks).toHaveCount(2);
+      await expect(quoteLinks).toHaveCount(3);
       for (const link of await quoteLinks.all()) {
         await expect(link).toHaveAttribute('href', /^https:\/\/wa\.me\//);
         await expect(link).toHaveAttribute('target', '_blank');
