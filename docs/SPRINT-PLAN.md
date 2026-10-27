@@ -68,7 +68,7 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 64 | Car & City route-first enquiry journey | ✓ PR #138 merged at `412a34d5a42177d16c449636e572402ca19c1754`; route-first choices and proposed-itinerary disclosures shipped. Browser E2E was cancelled, so screenshot evidence remains pending. |
 | 65 | Contact-channel consistency across Contact, Directions and Rooftop | ✓ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`; existing visible phone/email channels are config-backed. Merge-head Browser E2E was cancelled. |
 | 66 | Structured-data contact parity | ✓ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`; shared Hotel/ContactPage/Restaurant contact values remain config-backed. Merge-head Browser E2E was cancelled. |
-| 67 | Open-ended custom Jaisalmer itinerary discovery | ◐ Planned in PR #141: offer a configurable, enquiry-only route builder beyond the six inspiration themes; no booking or availability claims. |
+| 67 | Open-ended custom Jaisalmer itinerary discovery | ◐ Implemented in PR #141: custom planner page, guest-written places, browser-local WhatsApp draft, contact fallback and responsive/source contracts. Exact-head CI pending. |
 
 ---
 
@@ -899,9 +899,9 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Acceptance: exact-head PHP 7.4/8.2 Site Checks, head snapshot and Browser E2E, package preflight, non-deploying staging QA and screenshot/page-sheet evidence.
 
 
-## Combined release candidate — PR #140
+## Combined release — PR #140 (merged 2026-10-27)
 
-PR #140 now targets `main` and combines Sprint 65 public-contact consistency with Sprint 66 structured-data parity in one 15-file review. This creates a fresh exact-head CI run for both slices together. Do not merge PR #139 separately while its original Browser E2E job is still in progress; if PR #140 passes all required checks and provides screenshot evidence, merge the combined PR and close #139 as superseded if GitHub has not already marked it merged.
+PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completing Sprints 65–66. Site Checks, package preflight and non-deploying Staging QA passed on the merge SHA. Browser E2E was cancelled on the merge head, so screenshot evidence is still missing and must not be represented as a pass.
 
 
 ## Sprint 67 — open-ended custom Jaisalmer itinerary discovery (PR #141)

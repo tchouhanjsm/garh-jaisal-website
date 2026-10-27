@@ -10,7 +10,7 @@ $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] 
 <?php
 require_once __DIR__ . '/include/schema.php';
 $faqItems = [
-    ['question' => "Which tour ideas can I ask about?", 'answer' => "The page lists existing guided tours, a Fort walk and car arrangements, plus suggested themes around havelis, Jain architecture, Kuldhara, photography and natural history. Suggested themes are enquiry ideas, not confirmed packages."],
+    ['question' => "Which tour ideas can I ask about?", 'answer' => "The six researched themes are examples, not a complete menu. Use the custom itinerary builder to ask about other places or combine interests. All proposed routes remain enquiries until the hotel confirms feasibility and current details."],
     ['question' => "Can the hotel arrange a car for arrival?", 'answer' => "The hotel can arrange a car for arrival or a desert day. Confirm the route, pickup arrangement and current price directly with the hotel."],
     ['question' => "How do I confirm timing and price?", 'answer' => "Contact the hotel with your travel date and intended route to confirm current availability, pickup details and price."],
 ];
@@ -22,7 +22,7 @@ $breadcrumbs = [
 $breadcrumbSchema = gj_schema_breadcrumb_list($siteUrl, '/car-tours.php', $breadcrumbs);
 $page = [
     'title' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
-    'description' => 'Explore guided Jaisalmer city tours and enquire about car arrangements for arrival or a desert day. Confirm route, vehicle and availability directly with the hotel.',
+    'description' => 'Explore guided Jaisalmer city tours, enquire about car arrangements, or build a custom route around your interests. Confirm feasibility and current details directly with the hotel.',
     'path' => '/car-tours.php',
     'og_title' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
     'og_description' => 'Compare existing guided Jaisalmer tour options and enquire about car arrangements. Routes, prices and availability should be confirmed directly.',
@@ -85,9 +85,9 @@ require __DIR__ . '/include/page-head.php';
           <span class="car-city-route-copy"><strong>A car or transfer enquiry</strong><span>Share your route and travel date so the hotel can confirm vehicle and arrangements.</span></span>
           <span class="car-city-route-arrow" aria-hidden="true">→</span>
         </a>
-        <a class="car-city-route" href="#proposed-itineraries">
+        <a class="car-city-route" href="custom-itinerary.php">
           <span class="car-city-route-number">03</span>
-          <span class="car-city-route-copy"><strong>A route built around your interests</strong><span>Browse proposed themes and send an enquiry; these are not confirmed packages.</span></span>
+          <span class="car-city-route-copy"><strong>Build a route around your interests</strong><span>Combine interests or describe any places—not limited to the examples below.</span></span>
           <span class="car-city-route-arrow" aria-hidden="true">→</span>
         </a>
       </div>
@@ -109,9 +109,17 @@ require __DIR__ . '/include/page-head.php';
           <p class="eyebrow">Explore by interest</p>
           <h2 id="tour-ideas-title">More ways to discover Jaisalmer.</h2>
         </div>
-        <p>These researched themes may help shape a private or guided itinerary. They are ideas to enquire about, not confirmed Garh Jaisal packages.</p>
+        <p>The six themes below are starting points, not a fixed menu. Combine interests or describe other places in the custom itinerary builder.</p>
       </div>
-      <p class="tour-ideas-disclaimer">These are conversation starters, not bookable products. The hotel has not published them as confirmed itineraries. Before any commitment, ask the hotel to confirm whether the route can be arranged, current access and visitor rules, transport, guide availability, timings, fees and the final price. Sending an enquiry does not reserve a tour.</p>
+      <p class="tour-ideas-disclaimer">These six themes are conversation starters, not bookable products and not a complete list. The hotel has not published them as confirmed itineraries. Ask the hotel to confirm feasible routes, current access and visitor rules, transport, guide availability, timings, fees and the final price. Sending an enquiry does not reserve a tour.</p>
+      <div class="tour-ideas-custom-builder">
+        <div>
+          <p class="eyebrow">Have a different idea?</p>
+          <h3>Build your own route.</h3>
+          <p>Choose several interests, add places that matter to you, and prepare one enquiry. The hotel will confirm what can be arranged for your dates.</p>
+        </div>
+        <a class="button button-secondary" href="custom-itinerary.php">Build a custom itinerary</a>
+      </div>
       <div class="tour-idea-grid">
         <article class="tour-idea-card">
           <p class="tour-idea-kicker">Architecture & heritage</p>

@@ -13,6 +13,10 @@ return [
         'label' => 'Jaisalmer visit planning',
         'message' => 'Hello, I am planning a visit to Jaisalmer. My travel dates or month are: [add dates]. Planned trip length: [add number of days]. Please share general seasonal considerations and confirm current room, guide and desert options, prices and availability for those dates.',
     ],
+    'custom-itinerary' => [
+        'label' => 'Custom Jaisalmer itinerary enquiry',
+        'message' => 'Hello, I would like to enquire about a custom Jaisalmer itinerary. My travel date or period is: [add date]. Time available: [add time]. Group size: [add number]. Places or interests: [describe your route]. Please confirm route feasibility, current visitor access and rules, transport and guide availability, timings, applicable fees and the final price. I understand this is an enquiry, not a booking.',
+    ],
     'desert-packing' => [
         'label' => 'Desert safari preparation',
         'message' => 'Hello, I am preparing for a Jaisalmer desert safari. My travel date is: [add date]. Planned experience, if known: [add experience]. Please confirm the current inclusions and transport for the selected experience, plus any packing considerations I should check before departure.',

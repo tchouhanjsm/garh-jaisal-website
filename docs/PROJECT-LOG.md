@@ -25,7 +25,7 @@
 
 - [2026-10-27] PR #140 merged at `df812a33675a5d31d4ce388629038cf5a7960105`. Sprint 65 public contact channels and Sprint 66 structured-data parity are in `main`; Site Checks, package preflight and non-deploying Staging QA passed. Merge-head Browser E2E was cancelled and must not be treated as a pass.
 - Sprint 65–66 / PRs #139–#140 merged the visible contact and structured-data parity slice. Browser screenshot evidence remains absent because the merge-head Browser E2E run was cancelled.
-- Sprint 67 / PR #141 opens the custom itinerary builder scope first; implementation and exact-head CI are next.
+- Sprint 67 / PR #141 now contains the custom-itinerary page, browser-only draft composer, contextual contact fallback, Car & City open-ended links, sitemap allowlist and regression contracts. Exact-head Site Checks, Browser E2E/screenshots, package preflight and non-deploying QA are pending.
 
 ## Remaining blockers
 
