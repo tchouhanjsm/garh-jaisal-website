@@ -153,9 +153,9 @@ test('home page surfaces fort arrival constraints and keeps key discovery sectio
     .toHaveAttribute('href', 'contact.php?topic=arrival');
 
   for (const [id, heading] of [
-    ['rooms-preview', 'Rooms shaped by Jaisalmer.'],
-    ['rooftop-dining', 'Meals with the fort around you.'],
-    ['desert-experiences', 'From the fort to the Thar.'],
+    ['rooms-preview', 'Find your room inside the Fort.'],
+    ['rooftop-dining', 'Rooftop dining, with the Golden City around you.'],
+    ['desert-experiences', 'From the Fort to the open Thar.'],
     ['arrival-guide', 'Arriving at the fort is part of the experience.'],
     ['property-gallery', 'A glimpse of Garh Jaisal and its surroundings.'],
   ]) {
@@ -222,7 +222,7 @@ test('Rooms page presents all registered rooms with useful comparison and bookin
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
 
-  await expect(page.getByRole('heading', { level: 1, name: 'Rooms at Garh Jaisal Haveli.' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Find your room inside Jaisalmer Fort.' })).toBeVisible();
   const roomSummary = page.locator('.rooms-hero-summary');
   const roomFacts = roomSummary.locator('dl.at-a-glance');
   await expect(roomFacts).toBeVisible();
@@ -254,7 +254,12 @@ test('Rooms page presents all registered rooms with useful comparison and bookin
   for (const name of expectedNames) {
     const card = cards.filter({ has: page.getByRole('heading', { level: 3, name, exact: true }) });
     await expect(card, `Expected registered room card: ${name}`).toHaveCount(1);
-    await expect(card.locator('img')).toHaveAttribute('alt', /\S/);
+    const photoAltTexts = await card.locator('img').evaluateAll(images => images.map(image => image.getAttribute('alt')));
+    expect(photoAltTexts.length, `${name}: room photos should exist`).toBeGreaterThan(0);
+    expect(
+      photoAltTexts.every(alt => typeof alt === 'string' && alt.trim() !== ''),
+      `${name}: every room photo should have descriptive alt text`
+    ).toBe(true);
     await expect(card.locator('.room-features li').first()).toBeVisible();
     await expect(card.getByRole('link', { name: `Check availability for ${name}` })).toHaveAttribute('href', /\S/);
   }

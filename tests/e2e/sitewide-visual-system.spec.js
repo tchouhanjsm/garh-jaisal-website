@@ -62,6 +62,12 @@ test('shared visual system stays consistent across five viewports and eleven pag
             .map(link => new URL(link.href, document.baseURI).pathname)
             .filter(path => path.endsWith('.css'));
           const rootStyles = window.getComputedStyle(document.documentElement);
+          const baseStylesheetIndex = cssLinks.findIndex(path => path.endsWith('/css/garh-v2.css'));
+          const tokenStylesheetIndex = cssLinks.findIndex(path => path.endsWith('/css/tokens.css'));
+          const conversionStylesheetIndex = cssLinks.findIndex(path => path.endsWith('/css/conversion-system.css'));
+          const routeStylesheets = cssLinks.filter(path => ![
+            '/css/garh-v2.css', '/css/tokens.css', '/css/conversion-system.css'
+          ].includes(path));
           const h1Styles = h1 ? window.getComputedStyle(h1) : null;
           const shellRect = shell?.getBoundingClientRect() || null;
           return {
@@ -74,7 +80,10 @@ test('shared visual system stays consistent across five viewports and eleven pag
             hasShell: Boolean(shell),
             shellLeft: shellRect?.left ?? -1,
             shellRight: shellRect?.right ?? -1,
-            tokensLoadedLast: cssLinks[cssLinks.length - 1]?.endsWith('/css/tokens.css') || false,
+            tokensAfterRouteCSS: baseStylesheetIndex >= 0
+              && tokenStylesheetIndex > baseStylesheetIndex
+              && routeStylesheets.every(path => tokenStylesheetIndex > cssLinks.indexOf(path)),
+            conversionSystemAfterTokens: tokenStylesheetIndex >= 0 && conversionStylesheetIndex > tokenStylesheetIndex,
             tokensPresent: Boolean(rootStyles.getPropertyValue('--page-gutter').trim())
               && Boolean(rootStyles.getPropertyValue('--section-space').trim())
               && Boolean(rootStyles.getPropertyValue('--fs-hero').trim()),
@@ -92,7 +101,8 @@ test('shared visual system stays consistent across five viewports and eleven pag
         expect(state.hasShell, archetype.route + ' uses the shared content rail').toBe(true);
         expect(state.shellLeft, archetype.route + ' content rail must remain inside the viewport').toBeGreaterThanOrEqual(-0.5);
         expect(state.shellRight, archetype.route + ' content rail must remain inside the viewport').toBeLessThanOrEqual(viewport.width + 0.5);
-        expect(state.tokensLoadedLast, archetype.route + ' loads the shared visual system after route CSS').toBe(true);
+        expect(state.tokensAfterRouteCSS, archetype.route + ' loads shared tokens after route-specific CSS').toBe(true);
+        expect(state.conversionSystemAfterTokens, archetype.route + ' loads conversion components after shared tokens').toBe(true);
         expect(state.tokensPresent, archetype.route + ' receives the shared scale tokens').toBe(true);
         expect(state.horizontalOverflow, archetype.route + ' must not introduce horizontal page overflow').toBe(false);
 

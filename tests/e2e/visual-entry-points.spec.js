@@ -14,7 +14,7 @@ test('stay planning, Camping and Fort walk have contextual photo-led entry point
     },
     {
       path: '/city-tour.php',
-      heading: 'A walk through Jaisalmer Fort',
+      heading: 'Discover the stories inside Jaisalmer Fort.',
     },
   ];
 

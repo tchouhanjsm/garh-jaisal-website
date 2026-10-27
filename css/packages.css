@@ -720,3 +720,12 @@ main.thar-sunset-story--experiences .experience-duration-label{
 .tour-idea-link{min-height:44px;gap:10px}
 @media(max-width:900px){.car-city-route-grid{grid-template-columns:1fr;margin-bottom:40px}.car-city-route{padding:20px}}
 @media(prefers-reduced-motion:reduce){.car-city-route,.car-city-route-arrow{transition:none}.car-city-route:hover{transform:none}}
+
+
+/* Sprint 67 — make the inspiration themes explicitly open-ended. */
+.tour-ideas-custom-builder{display:flex;align-items:center;justify-content:space-between;gap:clamp(18px,3vw,36px);margin:24px 0 28px;padding:clamp(20px,3vw,30px);border:1px solid var(--line,#d9c7b2);background:var(--parchment,#f5eee4)}
+.tour-ideas-custom-builder>div{min-width:0;max-width:64ch}
+.tour-ideas-custom-builder h3{margin:4px 0 8px;font-family:var(--font-display,Georgia,serif);font-size:clamp(1.35rem,2.5vw,1.8rem);font-weight:500;line-height:1.2}
+.tour-ideas-custom-builder p:last-child{margin:0;color:var(--muted);line-height:1.65}
+.tour-ideas-custom-builder .button{flex:0 0 auto}
+@media(max-width:680px){.tour-ideas-custom-builder{align-items:stretch;flex-direction:column}.tour-ideas-custom-builder .button{width:100%;text-align:center}}

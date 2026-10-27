@@ -3219,3 +3219,10 @@ html { scroll-padding-top: 5rem; }
     gap:18px;
   }
 }
+
+/* PR #141 browser-check corrections: preserve the semantic hidden state even when
+   room components define their own display values. */
+main.thar-sunset-story--rooms [hidden] {
+  display: none !important;
+}
+

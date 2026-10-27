@@ -54,6 +54,7 @@ $staticPages = [
     ['path' => '/car-rental.php', 'priority' => '0.5'],
     ['path' => '/city-tour.php', 'priority' => '0.5'],
     ['path' => '/car-tours.php', 'priority' => '0.8'],
+    ['path' => '/custom-itinerary.php', 'priority' => '0.7'],
 ];
 
 $urls = [];

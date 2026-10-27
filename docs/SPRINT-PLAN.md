@@ -66,8 +66,10 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 62 | Decision-first comparison on Desert Safari and Guided Jaisalmer hubs | ✓ PR #136 merged at `32c59b579ae7e528afe6644e90988892b35b5237`; reusable registry facts and city-tour shortlist links shipped. |
 | 63 | Direct-booking path and room-first discovery across stay and experience journeys | ✓ PR #137 merged at `0facd0fbc2e2b491015c3c67d25fe7a7c50bc35f`; stay guide discoverability and room-first crosslinks shipped. |
 | 64 | Car & City route-first enquiry journey | ✓ PR #138 merged at `412a34d5a42177d16c449636e572402ca19c1754`; route-first choices and proposed-itinerary disclosures shipped. Browser E2E was cancelled, so screenshot evidence remains pending. |
-| 65 | Contact-channel consistency across Contact, Directions and Rooftop | ◐ Included in combined PR #140 with exact-head CI pending; PR #139 remains open with its original Browser E2E run in progress. |
-| 66 | Structured-data contact parity | ◐ Combined with Sprint 65 in PR #140; shared Hotel and ContactPage/Restaurant schema values are config-backed with current output preserved. |
+| 65 | Contact-channel consistency across Contact, Directions and Rooftop | ✓ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`; existing visible phone/email channels are config-backed. Merge-head Browser E2E was cancelled. |
+| 66 | Structured-data contact parity | ✓ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`; shared Hotel/ContactPage/Restaurant contact values remain config-backed. Merge-head Browser E2E was cancelled. |
+| 67 | Open-ended custom Jaisalmer itinerary discovery | ◐ PR #141 includes the custom planner and open-ended Car & City route; Site Checks, package preflight and non-deploying QA passed on head `be153e41dfbdaf956fce709f1271f8933a3ae07b`. Its Browser E2E was cancelled before producing a successful final gate; a new run is active on head `e45a8d770b273ad2c4760c0302f70c957a5cb1be` with a 40-minute job timeout. |
+| 68 | Accessible navigation on experience detail pages | ◐ Draft PR #143: contextual in-page navigation is implemented in the shared detail template with source/browser contracts and tablet screenshot coverage; exact-head CI awaits PR #141 merge and retarget to `main`. |
 
 ---
 
@@ -898,6 +900,31 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 - Acceptance: exact-head PHP 7.4/8.2 Site Checks, head snapshot and Browser E2E, package preflight, non-deploying staging QA and screenshot/page-sheet evidence.
 
 
-## Combined release candidate — PR #140
+## Combined release — PR #140 (merged 2026-10-27)
 
-PR #140 now targets `main` and combines Sprint 65 public-contact consistency with Sprint 66 structured-data parity in one 15-file review. This creates a fresh exact-head CI run for both slices together. Do not merge PR #139 separately while its original Browser E2E job is still in progress; if PR #140 passes all required checks and provides screenshot evidence, merge the combined PR and close #139 as superseded if GitHub has not already marked it merged.
+PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completing Sprints 65–66. Site Checks, package preflight and non-deploying Staging QA passed on the merge SHA. Browser E2E was cancelled on the merge head, so screenshot evidence is still missing and must not be represented as a pass.
+
+
+## Sprint 67 — open-ended custom Jaisalmer itinerary discovery (PR #141)
+
+**Goal:** turn the six research-led themes on Car & City Tours into inspiration, not a perceived limit on what guests may ask about. Give guests a clear detail/planning page where they can combine interests and describe other places before preparing a WhatsApp enquiry.
+
+- Add a standalone custom-itinerary page with travel period, time available, group size, preferred travel style, multiple interests and free-text places/requests.
+- Build a readable WhatsApp draft in the browser; require the guest to review it and click explicitly before opening WhatsApp. Do not submit or persist form data to the server.
+- Link the Car & City route-first choice and the inspiration section to the new page. Keep the current six themes and their enquiry-only disclaimers.
+- Add source/browser contracts for field handling, multi-selection, message encoding, explicit-click behavior, accessible labels and 320/390/768/1280/1440px layout.
+- Add canonical/breadcrumb/FAQ metadata and the page to the existing sitemap without altering unrelated entries.
+- Do not invent services, prices, timings, routes, guide availability, access permissions or vehicle availability. Every selection is an enquiry prompt; the hotel must confirm feasibility, visitor rules, transport, guide, timings, applicable fees and final price.
+- Acceptance: exact-head PHP 7.4/8.2 Site Checks, full Browser E2E/screenshot evidence, package preflight and non-deploying Staging QA. Owner-controlled live staging and production approval remain separate.
+
+
+## Sprint 68 — accessible section navigation on experience detail pages (stacked PR #143)
+
+**Goal:** make the full details already present on experience pages easier to scan, especially on mobile, without weakening the enquiry-only/owner-confirmation wording.
+
+- Add a normal-flow, keyboard-accessible section index to the shared detail template for At a glance, optional Photo gallery, Itinerary, What's included / Before you book, and optional Questions.
+- Render only links for sections available on the current record; use unique IDs and section headings. Do not make the index sticky or add a new dependency.
+- Style the index using the existing brand tokens, visible focus, wrapping on small screens, and reduced-motion-safe behavior.
+- Add source-contract and Browser E2E coverage for all six live experience detail pages, link/target parity, visible sections and 320/390/768/1280/1440px no-overflow.
+- Preserve all registry content, image/alt values, schema, canonical URLs, WhatsApp/Trip-shortlist actions and prices-on-request. Do not fabricate missing operational facts or publish draft/hidden experiences.
+- Acceptance: PR #143 must be retargeted to `main` only after PR #141 merges, then pass exact-head PHP 7.4/8.2 checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA.

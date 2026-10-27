@@ -178,12 +178,26 @@ require __DIR__ . '/page-head.php';
     </div>
   </section>
 
-  <section class="section experience-overview" data-story-reveal>
+  <nav class="experience-section-nav" aria-label="Experience page sections">
+    <div class="site-shell experience-section-nav-inner">
+      <a href="#experience-overview">At a glance</a>
+      <?php if (count($experienceGallerySlides) > 1): ?>
+        <a href="#experience-photo-gallery">Photo gallery</a>
+      <?php endif; ?>
+      <a href="#experience-itinerary">Itinerary</a>
+      <a href="#experience-details">What's included</a>
+      <?php if (!empty($experience['faq'])): ?>
+        <a href="#experience-faq">Questions</a>
+      <?php endif; ?>
+    </div>
+  </nav>
+
+  <section class="section experience-overview" data-story-reveal id="experience-overview" aria-labelledby="experience-overview-title">
     <div class="site-shell">
       <div class="section-head">
         <div>
           <p class="eyebrow">At a glance</p>
-          <h2>Know what to expect.</h2>
+          <h2 id="experience-overview-title">Know what to expect.</h2>
         </div>
         <p><?= htmlspecialchars($experience['best_for'], ENT_QUOTES, 'UTF-8') ?></p>
       </div>
@@ -200,7 +214,7 @@ require __DIR__ . '/page-head.php';
   </section>
 
   <?php if (count($experienceGallerySlides) > 1): ?>
-    <section class="section experience-photo-gallery" data-story-reveal aria-labelledby="experience-photo-gallery-title">
+    <section class="section experience-photo-gallery" data-story-reveal id="experience-photo-gallery" aria-labelledby="experience-photo-gallery-title">
       <div class="site-shell">
         <div class="section-head">
           <div><p class="eyebrow">Photo gallery</p><h2 id="experience-photo-gallery-title"><?= htmlspecialchars($experienceGalleryTitle, ENT_QUOTES, 'UTF-8') ?></h2></div>
@@ -237,12 +251,12 @@ require __DIR__ . '/page-head.php';
     </section>
   <?php endif; ?>
 
-  <section class="section experience-itinerary" data-story-reveal>
+  <section class="section experience-itinerary" data-story-reveal id="experience-itinerary" aria-labelledby="experience-itinerary-title">
     <div class="site-shell">
       <div class="section-head">
         <div>
           <p class="eyebrow"><?= htmlspecialchars($experience['timeline_label'], ENT_QUOTES, 'UTF-8') ?></p>
-          <h2>Follow the experience.</h2>
+          <h2 id="experience-itinerary-title">Follow the experience.</h2>
         </div>
         <p><?= htmlspecialchars($experience['timeline_note'], ENT_QUOTES, 'UTF-8') ?></p>
       </div>
@@ -261,11 +275,11 @@ require __DIR__ . '/page-head.php';
     </div>
   </section>
 
-  <section class="section experience-details" data-story-reveal>
+  <section class="section experience-details" data-story-reveal id="experience-details" aria-labelledby="experience-details-title">
     <div class="site-shell experience-details-grid">
       <div class="experience-detail-card">
         <p class="eyebrow">Included</p>
-        <h2>What's included</h2>
+        <h2 id="experience-details-title">What's included</h2>
         <ul>
           <?php foreach ($experience['included'] as $item): ?>
             <li><?= htmlspecialchars($item, ENT_QUOTES, 'UTF-8') ?></li>
@@ -294,7 +308,7 @@ require __DIR__ . '/page-head.php';
   <?php endif; ?>
 
   <?php if (!empty($experience['faq'])): ?>
-    <section class="section experience-faq" data-story-reveal>
+    <section class="section experience-faq" data-story-reveal id="experience-faq" aria-label="Questions about this experience">
       <div class="site-shell">
         <?php
         $sectionHead = [

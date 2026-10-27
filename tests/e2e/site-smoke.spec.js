@@ -43,7 +43,7 @@ for (const route of routes) {
     const footerBooking = page.locator('.footer-booking-button');
     await expect(footerBooking).toHaveCount(1);
     await expect(footerBooking).toHaveAttribute('href', await page.locator('.nav-book').getAttribute('href'));
-    await expect(footerBooking).toHaveText('Check room availability');
+    await expect(footerBooking).toHaveText('Check dates & current rates');
     await expect(footerBooking).toHaveAttribute('target', '_blank');
     await expect(footerBooking).toHaveAttribute('rel', /noopener/);
 
@@ -280,7 +280,7 @@ test('experience availability CTAs carry live tour context into the enquiry form
 
     if (scenario.slug === 'half-day-jaisalmer-tour') {
       const quoteLinks = page.getByRole('link', { name: 'Ask on WhatsApp' });
-      await expect(quoteLinks).toHaveCount(2);
+      await expect(quoteLinks).toHaveCount(3);
       for (const link of await quoteLinks.all()) {
         await expect(link).toHaveAttribute('href', /^https:\/\/wa\.me\//);
         await expect(link).toHaveAttribute('target', '_blank');
@@ -292,7 +292,7 @@ test('experience availability CTAs carry live tour context into the enquiry form
       continue;
     }
 
-    await expect(page.getByRole('link', { name: 'Ask about availability' }))
+    await expect(page.locator('.experience-hero').getByRole('link', { name: 'Ask about availability' }))
       .toHaveAttribute('href', 'contact.php?experience=' + scenario.slug);
     await expect(page.getByRole('link', { name: 'Contact us' }))
       .toHaveAttribute('href', 'contact.php?experience=' + scenario.slug);

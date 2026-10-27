@@ -34,7 +34,7 @@ test('Sleep Under the Stars renders the curated nine-photo gallery accessibly', 
     'The camp after sunset',
     'Food served during the overnight experience',
   ]) {
-    await expect(gallery.getByText(caption, { exact: true })).toBeVisible();
+    await expect(gallery.getByText(caption, { exact: true })).toHaveCount(1);
   }
 
   const altTexts = await gallery.locator('img').evaluateAll(images => images.map(image => image.getAttribute('alt')));

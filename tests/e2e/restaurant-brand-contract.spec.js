@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 test('restaurant keeps an emotional hero and light, legible information surfaces', async ({ page }) => {
   await page.goto('/restaurant.php');
   const hero = page.locator('.restaurant-hero');
-  await expect(hero.getByRole('heading', { level: 1, name: 'Rajasthani food on the rooftop.' })).toBeVisible();
+  await expect(hero.getByRole('heading', { level: 1, name: 'Rooftop dining in the heart of Jaisalmer Fort.' })).toBeVisible();
   expect(await hero.evaluate(element => getComputedStyle(element).backgroundImage)).toContain('linear-gradient');
 
   const formCard = page.locator('.restaurant-form-card').first();

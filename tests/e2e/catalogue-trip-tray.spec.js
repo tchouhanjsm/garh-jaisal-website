@@ -50,7 +50,7 @@ test('Trip tray combines a selected room and experience, then prepares travel co
   await expect(page.locator('[data-trip-count]')).toHaveText('1');
 
   await page.goto('/swiss-tent-safari.php', { waitUntil: 'domcontentloaded' });
-  await page.locator('[data-trip-add][data-trip-id="swiss-tent-safari"]').click();
+  await page.locator('[data-trip-add][data-trip-id="swiss-tent-safari"]').first().click();
   await expect(page.locator('[data-trip-count]')).toHaveText('2');
   await page.locator('[data-trip-toggle]').click();
   await expect(page.locator('[data-trip-panel]')).toBeVisible();

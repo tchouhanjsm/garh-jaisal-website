@@ -7,7 +7,7 @@ test.describe('restaurant reservation enquiry readiness', () => {
     const form = reservation.locator('form.restaurant-form');
 
     await expect(reservation).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Reserve a table' })).toHaveAttribute('href', '#reserve');
+    await expect(page.getByRole('link', { name: 'Enquire about a table' })).toHaveAttribute('href', '#reserve');
     await expect(form).toBeVisible();
     for (const selector of ['#name', '#whatsapp', '#email', '#date', '#time', '#guests', '#note', '#consent']) {
       await expect(form.locator(selector), selector + ' is part of the enquiry form').toBeVisible();

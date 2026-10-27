@@ -14,7 +14,7 @@ test('Fort walk describes its intended stops and sends price enquiries to WhatsA
   const response = await page.goto('/city-tour.php', { waitUntil: 'domcontentloaded' });
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
-  await expect(page.getByRole('heading', { level: 1, name: 'A walk through Jaisalmer Fort' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Discover the stories inside Jaisalmer Fort.' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Jain temples inside Jaisalmer Fort' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Palace Museum' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Heritage street walk' })).toBeVisible();
@@ -23,7 +23,7 @@ test('Fort walk describes its intended stops and sends price enquiries to WhatsA
   for (const language of ['English', 'Hindi', 'Bengali', 'Italian', 'French', 'Spanish', 'German']) {
     await expect(languages).toContainText(language);
   }
-  await expectWhatsAppLink(page.getByRole('link', { name: 'Ask about the walk on WhatsApp' }));
+  await expectWhatsAppLink(page.getByRole('link', { name: 'Ask about route, guide & price on WhatsApp' }));
   await expect(page.locator('main')).not.toContainText(/₹\s*[\d,]+|\bINR\s*[\d,]+/i);
 });
 

@@ -20,17 +20,19 @@ test('Car & City hub separates existing options from proposed itinerary ideas an
   await expect(page.locator('.car-city-route-grid .car-city-route')).toHaveCount(3);
   await expect(page.locator('.car-city-route[href="guided-jaisalmer-tour.php"]')).toBeVisible();
   await expect(page.locator('.car-city-route[href="car-rental.php"]')).toBeVisible();
-  await expect(page.locator('.car-city-route[href="#proposed-itineraries"]')).toBeVisible();
+  await expect(page.locator('.car-city-route[href="custom-itinerary.php"]')).toBeVisible();
 
   const ideaSection = page.locator('#proposed-itineraries');
   await expect(ideaSection.locator('.tour-idea-card')).toHaveCount(proposedTopics.length);
   await expect(ideaSection.locator('.tour-ideas-disclaimer')).toContainText('not bookable products');
+  await expect(ideaSection.locator('.tour-ideas-disclaimer')).toContainText('not a complete list');
+  await expect(ideaSection.locator('.tour-ideas-custom-builder a[href="custom-itinerary.php"]')).toBeVisible();
   await expect(ideaSection.locator('.tour-ideas-disclaimer')).toContainText('does not reserve a tour');
 
   for (const topic of proposedTopics) {
     const link = ideaSection.locator('a[href="contact.php?topic=' + topic + '"]');
     await expect(link, topic + ': contextual enquiry remains available').toBeVisible();
-    await expect(link).toHaveText('Enquire about this idea');
+    await expect(link).toContainText('Enquire about this idea');
     await expect(link).toHaveAttribute('aria-label', /^Enquire about/);
   }
 

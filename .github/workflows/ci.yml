@@ -127,6 +127,12 @@ jobs:
       - name: Verify shared contact-channel configuration
         run: php tests/php/contact-channel-contract.php
 
+      - name: Verify custom itinerary builder remains enquiry-only
+        run: php tests/php/custom-itinerary-contract.php
+
+      - name: Verify experience detail section navigation
+        run: php tests/php/experience-detail-navigation-contract.php
+
       - name: Test private lead storage and rate limiting
         run: php tests/php/lead-storage-validation.php
 

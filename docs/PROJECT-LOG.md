@@ -6,26 +6,27 @@
 
 | Item | Value |
 |---|---|
-| Last updated | 2026-10-26 |
-| Current phase | Sprint 66 — combined public contact and schema parity |
-| Verified main SHA | 412a34d5a42177d16c449636e572402ca19c1754 (PR #138 merge commit) |
-| Latest merged PR | [#138 — Car & City enquiry discovery](https://github.com/tchouhanjsm/garh-jaisal-website/pull/138) |
-| Recent merged work | PRs #136 tour comparison, #137 direct-booking discovery, #138 Car & City enquiry discovery |
-| Active phase branch | `feature/structured-data-contact-parity-20261026` — PR #140 combined review target against `main` |
+| Last updated | 2026-10-27 |
+| Current phase | Sprint 68 — accessible experience detail navigation (stacked on Sprint 67) |
+| Verified main SHA | df812a33675a5d31d4ce388629038cf5a7960105 (PR #140 merge commit) |
+| Latest merged PR | [#140 — unified public contact channels and structured data](https://github.com/tchouhanjsm/garh-jaisal-website/pull/140) |
+| Recent merged work | PRs #138 Car & City enquiry discovery, #139 contact-channel source of truth, #140 contact/schema parity |
+| Active phase branch | `feature/experience-detail-navigation-20261027` — Sprint 68 draft PR #143, based on PR #141 |
 
 ## Current phase
 
-**Sprint 65–66 goal:** make all public Contact/Directions/Rooftop telephone and email links plus shared Hotel/ContactPage/Restaurant schema details configuration-backed while preserving current destinations and JSON-LD output.
+**Sprint 68 goal:** let guests jump directly to the itinerary, inclusions and FAQ on existing live experience detail pages while preserving all current content and enquiry safeguards.
 
-- Preserve the existing primary/alternate phone and email destinations in Contact, Directions and Rooftop; derive the shared Hotel and ContactPage/Restaurant schema fields from the same configuration.
-- Add PHP source contracts and browser regressions for visible contact links, JSON-LD parity, and responsive overflow.
-- PR #140 is the combined 15-file candidate targeting `main`. Its exact-head workflows must all finish successfully, including Browser E2E and screenshots, before merge.
+- Update the shared experience detail template with contextual section links, conditionally rendered for each live page.
+- Add focused source/browser tests for section-target parity and responsive layout.
+- PR #141 is awaiting a successful final browser/screenshot gate. Its prior browser run was cancelled; Site Checks, package preflight and non-deploying QA passed on `be153e41dfbdaf956fce709f1271f8933a3ae07b`. The new exact-head run on `e45a8d770b273ad2c4760c0302f70c957a5cb1be` increases the browser job timeout to 40 minutes. No merge or deployment until the gate completes.
 
 ## Latest implementation entry
 
-- [2026-10-26] Sprint 64 / [PR #138](https://github.com/tchouhanjsm/garh-jaisal-website/pull/138) merged at `412a34d5a42177d16c449636e572402ca19c1754`. Site Checks and non-deploying QA passed; Browser E2E was cancelled and must not be treated as a pass.
-- Sprint 65 / PR #139 added the configuration-backed public Contact/Directions/Rooftop links and source/browser contracts. Site Checks, non-deploying Staging QA and package preflight passed; its Browser E2E job remains in progress.
-- Sprint 66 / PR #140 combines the visible-link and JSON-LD parity work into one reviewable 15-file change and targets `main` to start a fresh full exact-head test run.
+- [2026-10-27] PR #140 merged at `df812a33675a5d31d4ce388629038cf5a7960105`. Sprint 65 public contact channels and Sprint 66 structured-data parity are in `main`; Site Checks, package preflight and non-deploying Staging QA passed. Merge-head Browser E2E was cancelled and must not be treated as a pass.
+- Sprint 65–66 / PRs #139–#140 merged the visible contact and structured-data parity slice. Browser screenshot evidence remains absent because the merge-head Browser E2E run was cancelled.
+- Sprint 67 / PR #141 contains the custom-itinerary page, browser-only draft composer, contextual contact fallback, open-ended Car & City links, sitemap and regression contracts. Latest Site Checks, package preflight and non-deploying QA pass; Browser E2E/screenshot evidence is still in progress.
+- Sprint 68 / PR #143 is a draft stacked on #141, for section navigation on the six live experience detail pages. It must be retargeted to `main` after #141 merges and checked against its exact head.
 
 ## Remaining blockers
 

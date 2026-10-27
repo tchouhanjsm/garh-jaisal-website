@@ -1,0 +1,44 @@
+.custom-itinerary-page{overflow-wrap:anywhere}
+.custom-itinerary-hero{padding-block:clamp(36px,6vw,78px);background:linear-gradient(130deg,var(--parchment,#f7f0e6),var(--sand-light,#e6d6c4))}
+.custom-itinerary-hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);align-items:end;gap:clamp(22px,4vw,58px);margin-top:24px}
+.custom-itinerary-page h1,.custom-itinerary-page h2,.custom-itinerary-page h3{font-family:var(--font-display,Georgia,serif);font-weight:500;line-height:1.12}
+.custom-itinerary-hero h1{max-width:15ch;margin:10px 0 18px;font-size:clamp(2.3rem,5.2vw,4.6rem);letter-spacing:-.025em}
+.custom-itinerary-lead{max-width:66ch;color:var(--muted);font-size:clamp(1rem,1.4vw,1.15rem);line-height:1.75}
+.custom-itinerary-hero-note{min-width:0;padding:clamp(20px,3vw,30px);border:1px solid var(--line,#d7c6b4);background:rgba(255,255,255,.55)}
+.custom-itinerary-hero-note h2{font-size:clamp(1.45rem,2.8vw,2rem);margin:8px 0 12px}
+.custom-itinerary-hero-note p:last-child{margin-bottom:0;color:var(--muted);line-height:1.7}
+.custom-itinerary-builder .section-head{margin-bottom:28px}
+.custom-itinerary-content-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(290px,.88fr);align-items:start;gap:clamp(18px,3vw,38px)}
+.custom-itinerary-form,.custom-itinerary-draft-panel{min-width:0;padding:clamp(18px,2.8vw,30px);border:1px solid var(--line,#d7c6b4);background:var(--parchment,#f7f0e6)}
+.custom-itinerary-fieldset{min-width:0;margin:0 0 26px;padding:0;border:0}
+.custom-itinerary-fieldset legend{margin-bottom:8px;font-family:var(--font-display,Georgia,serif);font-size:1.5rem;color:var(--text,#2e2522)}
+.custom-itinerary-field-help{margin:0 0 14px;color:var(--muted);font-size:.9rem;line-height:1.55}
+.custom-itinerary-interest-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.custom-itinerary-interest{display:flex;align-items:flex-start;gap:10px;min-width:0;min-height:58px;padding:14px 12px;border:1px solid var(--line,#d7c6b4);background:rgba(255,255,255,.6);color:var(--text,#302522);line-height:1.45;cursor:pointer;transition:border-color .15s ease,background-color .15s ease}
+.custom-itinerary-interest:has(input:checked){border-color:var(--brown,#6e352d);background:rgba(169,130,80,.12)}
+.custom-itinerary-interest input{flex:0 0 auto;width:18px;height:18px;margin:2px 0 0;accent-color:var(--brown,#6e352d)}
+.custom-itinerary-interest span{min-width:0}
+.custom-itinerary-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:22px}
+.custom-itinerary-field{display:grid;gap:8px;min-width:0;margin-bottom:20px}
+.custom-itinerary-fields .custom-itinerary-field{margin-bottom:0}
+.custom-itinerary-field label,.custom-itinerary-draft-panel>label{font-weight:650;color:var(--text,#302522)}
+.custom-itinerary-field input,.custom-itinerary-field select,.custom-itinerary-field textarea,.custom-itinerary-draft-panel textarea{box-sizing:border-box;display:block;width:100%;min-width:0;max-width:100%;min-height:48px;padding:12px 13px;border:1px solid var(--line,#cdb9a4);border-radius:2px;background:#fffdf9;color:var(--text,#302522);font:inherit;line-height:1.5}
+.custom-itinerary-field textarea,.custom-itinerary-draft-panel textarea{min-height:100px;resize:vertical}
+.custom-itinerary-field input:focus-visible,.custom-itinerary-field select:focus-visible,.custom-itinerary-field textarea:focus-visible,.custom-itinerary-draft-panel textarea:focus-visible,.custom-itinerary-interest:focus-within{outline:3px solid var(--focus,#b28c56);outline-offset:2px}
+.custom-itinerary-privacy-note{padding:14px 16px;border-inline-start:3px solid var(--brown,#6e352d);background:rgba(255,255,255,.55);color:var(--muted);font-size:.9rem;line-height:1.6}
+.custom-itinerary-draft-panel h2{margin:8px 0 12px;font-size:clamp(1.6rem,2.8vw,2.15rem)}
+.custom-itinerary-draft-panel>p:not(.eyebrow){color:var(--muted);line-height:1.65}
+.custom-itinerary-draft-panel textarea{min-height:330px;margin-top:8px;font-size:.94rem;white-space:pre-wrap}
+.custom-itinerary-status{font-size:.9rem;line-height:1.55}
+.custom-itinerary-whatsapp{display:flex;width:100%;align-items:center;justify-content:center;text-align:center}
+.custom-itinerary-whatsapp[aria-disabled="true"]{opacity:.52;cursor:not-allowed;filter:grayscale(.35)}
+.custom-itinerary-contact-link{display:inline-block;margin-top:18px;min-height:44px;line-height:44px;color:var(--brown,#6e352d);text-decoration:underline;text-underline-offset:3px}
+.custom-itinerary-booking-note{padding-top:14px;border-top:1px solid var(--line,#d7c6b4);font-size:.88rem}
+.custom-itinerary-next{background:var(--cream,#fbf8f3)}
+.custom-itinerary-next-inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:28px}
+.custom-itinerary-next-inner h2{max-width:19ch;margin:8px 0 12px;font-size:clamp(1.7rem,3.3vw,2.7rem)}
+.custom-itinerary-next-inner p:not(.eyebrow){max-width:64ch;color:var(--muted);line-height:1.7}
+.custom-itinerary-next-inner .actions{display:flex;flex-wrap:wrap;gap:10px}
+@media(max-width:900px){.custom-itinerary-hero-grid,.custom-itinerary-content-grid,.custom-itinerary-next-inner{grid-template-columns:minmax(0,1fr)}.custom-itinerary-hero-grid{gap:24px}.custom-itinerary-draft-panel textarea{min-height:260px}}
+@media(max-width:600px){.custom-itinerary-hero{padding-block:32px}.custom-itinerary-interest-grid,.custom-itinerary-fields{grid-template-columns:minmax(0,1fr)}.custom-itinerary-interest{min-height:50px}.custom-itinerary-form,.custom-itinerary-draft-panel{padding:16px}.custom-itinerary-next-inner .actions{display:grid;grid-template-columns:minmax(0,1fr)}.custom-itinerary-next-inner .button{width:100%;text-align:center}}
+@media(prefers-reduced-motion:reduce){.custom-itinerary-interest{transition:none}}
