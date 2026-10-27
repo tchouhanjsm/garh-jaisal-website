@@ -66,8 +66,9 @@ Goal: execute the owner-approved 12-week dual-track plan. Ship a meaningful visi
 | 62 | Decision-first comparison on Desert Safari and Guided Jaisalmer hubs | ✓ PR #136 merged at `32c59b579ae7e528afe6644e90988892b35b5237`; reusable registry facts and city-tour shortlist links shipped. |
 | 63 | Direct-booking path and room-first discovery across stay and experience journeys | ✓ PR #137 merged at `0facd0fbc2e2b491015c3c67d25fe7a7c50bc35f`; stay guide discoverability and room-first crosslinks shipped. |
 | 64 | Car & City route-first enquiry journey | ✓ PR #138 merged at `412a34d5a42177d16c449636e572402ca19c1754`; route-first choices and proposed-itinerary disclosures shipped. Browser E2E was cancelled, so screenshot evidence remains pending. |
-| 65 | Contact-channel consistency across Contact, Directions and Rooftop | ◐ Included in combined PR #140 with exact-head CI pending; PR #139 remains open with its original Browser E2E run in progress. |
-| 66 | Structured-data contact parity | ◐ Combined with Sprint 65 in PR #140; shared Hotel and ContactPage/Restaurant schema values are config-backed with current output preserved. |
+| 65 | Contact-channel consistency across Contact, Directions and Rooftop | ✓ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`; existing visible phone/email channels are config-backed. Merge-head Browser E2E was cancelled. |
+| 66 | Structured-data contact parity | ✓ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`; shared Hotel/ContactPage/Restaurant contact values remain config-backed. Merge-head Browser E2E was cancelled. |
+| 67 | Open-ended custom Jaisalmer itinerary discovery | ◐ Planned in PR #141: offer a configurable, enquiry-only route builder beyond the six inspiration themes; no booking or availability claims. |
 
 ---
 
@@ -901,3 +902,16 @@ The visual pass extends the approved bastion motif and architectural photo crop 
 ## Combined release candidate — PR #140
 
 PR #140 now targets `main` and combines Sprint 65 public-contact consistency with Sprint 66 structured-data parity in one 15-file review. This creates a fresh exact-head CI run for both slices together. Do not merge PR #139 separately while its original Browser E2E job is still in progress; if PR #140 passes all required checks and provides screenshot evidence, merge the combined PR and close #139 as superseded if GitHub has not already marked it merged.
+
+
+## Sprint 67 — open-ended custom Jaisalmer itinerary discovery (PR #141)
+
+**Goal:** turn the six research-led themes on Car & City Tours into inspiration, not a perceived limit on what guests may ask about. Give guests a clear detail/planning page where they can combine interests and describe other places before preparing a WhatsApp enquiry.
+
+- Add a standalone custom-itinerary page with travel period, time available, group size, preferred travel style, multiple interests and free-text places/requests.
+- Build a readable WhatsApp draft in the browser; require the guest to review it and click explicitly before opening WhatsApp. Do not submit or persist form data to the server.
+- Link the Car & City route-first choice and the inspiration section to the new page. Keep the current six themes and their enquiry-only disclaimers.
+- Add source/browser contracts for field handling, multi-selection, message encoding, explicit-click behavior, accessible labels and 320/390/768/1280/1440px layout.
+- Add canonical/breadcrumb/FAQ metadata and the page to the existing sitemap without altering unrelated entries.
+- Do not invent services, prices, timings, routes, guide availability, access permissions or vehicle availability. Every selection is an enquiry prompt; the hotel must confirm feasibility, visitor rules, transport, guide, timings, applicable fees and final price.
+- Acceptance: exact-head PHP 7.4/8.2 Site Checks, full Browser E2E/screenshot evidence, package preflight and non-deploying Staging QA. Owner-controlled live staging and production approval remain separate.

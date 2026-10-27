@@ -48,6 +48,11 @@ These are candidates for review, not a promise that Garh Jaisal Haveli currently
 - Akal Wood Fossil Park or Desert National Park nature route (separate options; wildlife is never guaranteed).
 - Longewala War Memorial history excursion (visitor requirements and travel logistics must be verified).
 
+## Implementation notes (2026-10-27)
+
+- The six Car & City itinerary themes are research-led examples, not an exhaustive product catalogue. Guests may ask about other places or combinations, but every custom route remains an unconfirmed enquiry until the hotel checks feasible routing, visitor access/rules, transport/guide availability, timing, fees and price.
+- The custom itinerary builder should only prepare a WhatsApp message in the visitor's browser. Do not store submitted travel details, create a booking, or imply that the hotel has confirmed a tour.
+
 ## Implementation notes (2026-10-26)
 
 - The existing public Contact and Directions pages display primary and alternate phone numbers plus two email destinations. Preserve those established destinations and keep rendered links backed by `include/site-config.php`; change them only after owner confirmation.
