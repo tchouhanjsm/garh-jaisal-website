@@ -21,7 +21,8 @@ const editorialRoutes = fs.readdirSync(root)
 const productionOrigin = 'https://www.hotelgarhjaisal.com';
 const weakLabels = new Set(['here', 'click here', 'read more', 'learn more', 'more', 'details', 'click to read']);
 const reportDir = path.join(process.cwd(), 'artifacts', 'seo-inventory');
-const reportPath = path.join(reportDir, 'editorial-release-readiness.json');
+const sitemapReportPath = path.join(reportDir, 'editorial-sitemap-readiness.json');
+const renderedReportPath = path.join(reportDir, 'editorial-rendered-readiness.json');
 
 function addFinding(findings, type, route, detail) {
   findings.push({ type, route, detail });
@@ -44,7 +45,7 @@ function parseJsonLd(blocks, route, findings) {
 test('editorial release gate: robots and sitemap routes remain canonical and unique', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Publication route inventory runs once.');
   const findings = [];
-  const robotsResponse = await page.request.get('/robots.txt');
+  const robotsResponse = await page.request.get('http://127.0.0.1:8080/robots.txt');
   if (!robotsResponse.ok()) addFinding(findings, 'robots-http-status', '/robots.txt', 'Expected HTTP 2xx; got ' + robotsResponse.status());
   const robots = await robotsResponse.text();
   const sitemapDirectives = [...robots.matchAll(/^\s*Sitemap:\s*(\S+)\s*$/gim)].map(([, value]) => value.trim());
@@ -55,7 +56,7 @@ test('editorial release gate: robots and sitemap routes remain canonical and uni
     addFinding(findings, 'robots-blocks-site', '/robots.txt', 'A blanket Disallow prevents crawling of the public site.');
   }
 
-  const sitemapResponse = await page.request.get('/sitemap.xml');
+  const sitemapResponse = await page.request.get('http://127.0.0.1:8080/sitemap.xml');
   if (!sitemapResponse.ok()) addFinding(findings, 'sitemap-http-status', '/sitemap.xml', 'Expected HTTP 2xx; got ' + sitemapResponse.status());
   const xml = await sitemapResponse.text();
   const blocks = [...xml.matchAll(/<url\b[^>]*>(.*?)<\/url>/gsi)].map(([, value]) => value);
@@ -98,8 +99,8 @@ test('editorial release gate: robots and sitemap routes remain canonical and uni
     findings,
   };
   fs.mkdirSync(reportDir, { recursive: true });
-  fs.writeFileSync(reportPath, JSON.stringify(report, null, 2) + '\n');
-  await testInfo.attach('editorial-sitemap-readiness', { path: reportPath, contentType: 'application/json' });
+  fs.writeFileSync(sitemapReportPath, JSON.stringify(report, null, 2) + '\n');
+  await testInfo.attach('editorial-sitemap-readiness', { path: sitemapReportPath, contentType: 'application/json' });
   expect(findings, JSON.stringify(findings, null, 2)).toEqual([]);
 });
 
@@ -331,8 +332,8 @@ test('editorial release gate: rendered metadata, schema, links and reader anchor
     findings,
   };
   fs.mkdirSync(reportDir, { recursive: true });
-  fs.writeFileSync(reportPath, JSON.stringify(report, null, 2) + '\n');
-  await testInfo.attach('editorial-rendered-seo-readiness', { path: reportPath, contentType: 'application/json' });
+  fs.writeFileSync(renderedReportPath, JSON.stringify(report, null, 2) + '\n');
+  await testInfo.attach('editorial-rendered-seo-readiness', { path: renderedReportPath, contentType: 'application/json' });
   expect(editorialRoutes.length, 'Live editorial wrappers in sitemap').toBeGreaterThanOrEqual(12);
   expect(inventory.length, 'Every live editorial wrapper should be audited').toBe(editorialRoutes.length);
   expect(findings, JSON.stringify(findings, null, 2)).toEqual([]);
