@@ -62,7 +62,7 @@ test.describe('Sprint 21 editorial intent cluster', () => {
     const expectedCards = [
       ['best-time-to-visit-jaisalmer.php', 'Best Time to Visit Jaisalmer'],
       ['how-to-reach-jaisalmer.php', 'How to Reach Jaisalmer'],
-      ['jaisalmer-desert-safari-packing-list.php', 'What to Pack for a Desert Safari'],
+      ['jaisalmer-desert-safari-packing-list.php', 'Jaisalmer Desert Safari Packing List'],
     ];
     for (const [href, title] of expectedCards) {
       const card = grid.locator('a[href="' + href + '"]');
