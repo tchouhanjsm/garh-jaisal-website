@@ -437,7 +437,8 @@ main.thar-sunset-story--rooms .room-finder-status{
   font-size:.88rem;
   font-weight:750;
 }
-main.thar-sunset-story--rooms .room-comparison-shortlist[hidden]{display:none!important}
+main.thar-sunset-story--rooms .room-comparison-shortlist[hidden],
+main.thar-sunset-story--rooms [data-room-shortlist-reveal][hidden]{display:none!important}
 main.thar-sunset-story--rooms .room-comparison-shortlist{
   display:grid;
   grid-template-columns:minmax(0,1fr) auto;

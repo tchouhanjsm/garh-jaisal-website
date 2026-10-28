@@ -175,6 +175,8 @@ test.describe('Room comparison journey', () => {
     await expect(shortlist).toBeVisible();
     await expect(shortlistItems).toHaveCount(2);
     await expect(review).toBeEnabled();
+    const revealSelectedRooms = shortlist.locator('[data-room-shortlist-reveal]');
+    await expect(revealSelectedRooms).toBeHidden();
 
     await page.locator('[data-room-search]').fill('no-matching-room-query-9284');
     await expect(page.locator('[data-room-result-status]')).toContainText('Showing 0 of 7 rooms.');
@@ -184,7 +186,6 @@ test.describe('Room comparison journey', () => {
     await expect(shortlistList).toContainText(await first.locator('h3').textContent());
     await expect(shortlistList).toContainText(await second.locator('h3').textContent());
 
-    const revealSelectedRooms = shortlist.locator('[data-room-shortlist-reveal]');
     await expect(revealSelectedRooms).toBeVisible();
     await revealSelectedRooms.click();
     await expect(page.locator('[data-room-result-status]')).toContainText('Showing 7 of 7 rooms.');
