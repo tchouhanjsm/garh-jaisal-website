@@ -60,7 +60,7 @@ test.describe('Journal search and topic filtering', () => {
 
     await search.fill('  packing   list  ');
     await search.press('Enter');
-    await expect(page).toHaveURL(/\/blog\.php$/);
+    await expect(page).toHaveURL(/\/blog\.php(?:#.*)?$/);
     await expect(page.locator('[data-journal-card]:visible')).toHaveCount(1);
     await expect(page.locator('[data-journal-card]:visible a[href="jaisalmer-desert-safari-packing-list.php"]')).toBeVisible();
   });

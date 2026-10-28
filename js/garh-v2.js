@@ -1546,7 +1546,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const normalizeJournalText = (value) => String(value || '')
       .normalize('NFKC')
       .toLowerCase()
-      .replace(/\\s+/g, ' ')
+      .replace(/\s+/g, ' ')
       .trim();
 
     const updateJournalResults = () => {
