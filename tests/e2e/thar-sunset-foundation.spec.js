@@ -19,8 +19,10 @@ test('Thar Sunset tokens, CTA contrast and responsive navigation remain usable',
     peacock: '#1d7472'
   });
 
-  const eyebrowSize = await page.locator('.eyebrow').first().evaluate(element => parseFloat(getComputedStyle(element).fontSize));
-  expect(eyebrowSize).toBeGreaterThanOrEqual(13);
+  const eyebrow = page.locator('main.thar-sunset-story--home .hero-content > .eyebrow');
+  await expect(eyebrow).toBeVisible();
+  const eyebrowSize = await eyebrow.evaluate(element => parseFloat(getComputedStyle(element).fontSize));
+  expect(eyebrowSize, 'The primary homepage hero eyebrow must remain readable at the current viewport').toBeGreaterThanOrEqual(13);
 
   const primaryAction = page.locator('.button-primary').first();
   const primaryBox = await primaryAction.boundingBox();
