@@ -27,14 +27,19 @@ test.describe('Editorial publication and reader journey', () => {
     await expect(topicNav).toBeVisible();
     for (const [label, anchor] of topics) {
       await expect(topicNav.getByRole('link', { name: label })).toHaveAttribute('href', '#' + anchor);
-      await expect(page.locator('#' + anchor)).toBeVisible();
+      const target = page.locator('#' + anchor);
+      await expect(target).toBeVisible();
+      await expect(target).toHaveClass(/blog-card/);
+      await expect(target.locator(':scope > a[href]')).toHaveCount(1);
     }
 
-    const guideCards = page.locator('.blog-grid > .blog-card:not(.journal-topic-card)');
+    const guideCards = page.locator('.blog-grid > .blog-card');
     expect(await guideCards.count()).toBeGreaterThanOrEqual(12);
     for (const route of sitemapRoutes.filter(value => /-guide\.php$|-itinerary\.php$/.test(value) && !value.endsWith('/jaisalmer-fort-guide.php'))) {
       const slug = path.posix.basename(route);
-      await expect(page.locator('.blog-grid a[href="' + slug + '"]'), slug + ' is linked from the Journal').toBeVisible();
+      const journalLink = page.locator('.blog-grid a[href="' + slug + '"]');
+      await expect(journalLink, slug + ' is linked from the Journal').toHaveCount(1);
+      await expect(journalLink).toBeVisible();
     }
     const canonicals = await page.locator('head link[rel="canonical"]').count();
     expect(canonicals).toBe(1);
@@ -61,7 +66,15 @@ test.describe('Editorial publication and reader journey', () => {
       await expect(page.locator('article.article-content .article-image img')).toHaveAttribute('alt', /\S+/);
       await expect(page.locator('#official-sources')).toBeVisible();
       await expect(page.locator('#official-sources a[href^="https://"]')).not.toHaveCount(0);
-      await expect(page.getByRole('navigation', { name: 'More Jaisalmer travel guides' })).toBeVisible();
+      const discoveryNav = page.getByRole('navigation', { name: 'More Jaisalmer travel guides' });
+      await expect(discoveryNav).toBeVisible();
+      const discoveryLinks = discoveryNav.locator('a[href]');
+      expect(await discoveryLinks.count(), route + ' exposes at least one additional guide').toBeGreaterThan(0);
+      for (const link of await discoveryLinks.all()) {
+        const href = await link.getAttribute('href');
+        expect(href, route + ' discovery link uses a destination').toBeTruthy();
+        await expect(page.locator('a[href="' + href + '"]'), route + ' avoids duplicate navigation to ' + href).toHaveCount(1);
+      }
       await expect(page.locator('.article-next-card')).toHaveCount(3);
       await expect(page.locator('.article-footer-cta')).toBeVisible();
 
