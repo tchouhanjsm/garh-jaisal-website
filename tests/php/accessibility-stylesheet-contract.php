@@ -24,9 +24,8 @@ if (is_string($css)) {
         'animation: none !important',
         'scroll-behavior: auto !important',
         'transition: none !important',
-        '.gallery-item:hover img',
-        '.home-room-card:hover',
-        '.button:hover',
+        '*:hover',
+        'transform: none !important',
     ] as $marker) {
         $assert(strpos($css, $marker) !== false, 'Missing accessibility stylesheet contract marker: ' . $marker);
     }
