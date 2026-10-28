@@ -730,6 +730,37 @@ dialog.room-comparison-dialog::backdrop{
   outline:3px solid var(--focus,#1d4ed8);
   outline-offset:3px;
 }
+.room-comparison-tools{margin:8px 0 2px}
+.room-comparison-difference-control{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  min-height:44px;
+  padding:7px 10px 7px 2px;
+  color:var(--ink,#231a14);
+  font-weight:700;
+  line-height:1.4;
+  cursor:pointer;
+}
+.room-comparison-difference-control[hidden],
+.room-comparison-filter-status[hidden]{display:none!important}
+.room-comparison-difference-control input{
+  width:20px;
+  height:20px;
+  margin:0;
+  accent-color:var(--garnet,#5b1a2b);
+  flex:0 0 20px;
+}
+.room-comparison-difference-control:focus-within{
+  outline:3px solid var(--focus,#1d4ed8);
+  outline-offset:2px;
+}
+.room-comparison-filter-status{
+  margin:2px 0 10px;
+  color:#5f5148;
+  font-size:.88rem;
+  line-height:1.5;
+}
 .room-comparison-scroll-hint{
   margin:10px 0 12px;
   color:#5f5148;
@@ -780,6 +811,17 @@ dialog.room-comparison-dialog::backdrop{
 .room-comparison-table tbody th{
   min-width:115px;
 }
+.room-comparison-feature-state{
+  display:inline-flex;
+  align-items:center;
+  min-height:28px;
+  font-size:.88rem;
+  font-weight:750;
+  line-height:1.35;
+}
+.room-comparison-feature-state--listed{color:#1f643e}
+.room-comparison-feature-state--unlisted{color:#5f5148}
+.room-comparison-table tr[hidden]{display:none}
 .room-comparison-feature-list{
   margin:0;
   padding-left:18px;

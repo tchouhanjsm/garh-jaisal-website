@@ -541,6 +541,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const comparisonClear = comparisonDialog?.querySelector('[data-room-comparison-clear]');
     const comparisonEnquiryLink = comparisonDialog?.querySelector('[data-room-comparison-enquiry]');
     const comparisonTripButton = comparisonDialog?.querySelector('[data-room-comparison-trip]');
+    const comparisonDifferenceControl = comparisonDialog?.querySelector('[data-room-comparison-difference-control]');
+    const comparisonDifferences = comparisonDialog?.querySelector('[data-room-comparison-differences]');
+    const comparisonFilterStatus = comparisonDialog?.querySelector('[data-room-comparison-filter-status]');
     const comparisonCloseButtons = Array.from(comparisonDialog?.querySelectorAll('[data-room-comparison-close]') || []);
     const selectedRoomIds = new Set();
     let lastSelectedRoomId = null;
@@ -551,6 +554,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedRoomCards = () => Array.from(selectedRoomIds)
       .map((id) => roomCards.find((card) => card.id === id))
       .filter(Boolean);
+
+    const applyComparisonFeatureFilter = () => {
+      const rows = Array.from(comparisonContent?.querySelectorAll('[data-room-feature-row]') || []);
+      const showDifferences = Boolean(comparisonDifferences?.checked);
+      const differingCount = rows.filter((row) => row.dataset.roomFeatureDiff === 'true').length;
+
+      rows.forEach((row) => {
+        row.hidden = showDifferences && row.dataset.roomFeatureDiff !== 'true';
+      });
+
+      if (comparisonFilterStatus) {
+        comparisonFilterStatus.hidden = !showDifferences || rows.length === 0;
+        if (showDifferences) {
+          comparisonFilterStatus.textContent = differingCount
+            ? 'Showing ' + differingCount + ' of ' + rows.length + ' listed features that differ across the selected rooms.'
+            : 'No listed feature differences found. Turn off “Show differences only” to review every listed feature.';
+        }
+      }
+    };
 
     const updateRoomResultStatus = () => {
       if (!resultStatus) return;
@@ -620,19 +642,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
       comparisonContent.replaceChildren();
       if (selectedCards.length < 2) {
+        if (comparisonDifferenceControl) comparisonDifferenceControl.hidden = true;
+        if (comparisonDifferences) comparisonDifferences.checked = false;
+        if (comparisonFilterStatus) comparisonFilterStatus.hidden = true;
         comparisonStatus.textContent = selectedCards.length === 1
           ? '1 room selected. Close this panel and add at least one more room to compare.'
           : 'Choose two or three rooms from the directory to compare.';
         return;
       }
 
+      if (comparisonDifferenceControl) comparisonDifferenceControl.hidden = false;
       comparisonStatus.textContent = 'Comparing ' + selectedCards.length + ' rooms. Listed details are shown below; check current rates and availability through the booking link.';
       const table = document.createElement('table');
       table.className = 'room-comparison-table';
       table.setAttribute('aria-label', 'Selected room comparison');
 
       const caption = document.createElement('caption');
-      caption.textContent = 'Room details at a glance';
+      caption.textContent = 'Room details at a glance — Listed features by room';
       table.appendChild(caption);
 
       const thead = document.createElement('thead');
@@ -693,31 +719,48 @@ document.addEventListener('DOMContentLoaded', () => {
       appendTextRow('Floor', '.room-kicker');
       appendTextRow('Description', '.room-description');
 
-      const featureRow = document.createElement('tr');
-      const featureHeading = document.createElement('th');
-      featureHeading.scope = 'row';
-      featureHeading.textContent = 'Listed features';
-      featureRow.appendChild(featureHeading);
-      selectedCards.forEach((card) => {
-        const cell = document.createElement('td');
-        const features = Array.from(card.querySelectorAll('.room-features li'))
+      // Compare every registered/listed feature on the same row so differences are scannable.
+      const featuresByRoom = selectedCards.map((card) => new Map(
+        Array.from(card.querySelectorAll('.room-features li'))
           .map((item) => item.textContent.trim())
-          .filter(Boolean);
-        if (features.length) {
-          const list = document.createElement('ul');
-          list.className = 'room-comparison-feature-list';
-          features.forEach((feature) => {
-            const item = document.createElement('li');
-            item.textContent = feature;
-            list.appendChild(item);
-          });
-          cell.appendChild(list);
-        } else {
-          cell.textContent = 'No features listed';
-        }
-        featureRow.appendChild(cell);
+          .filter(Boolean)
+          .map((feature) => [normalizeRoomText(feature), feature])
+      ));
+      const featureLabels = new Map();
+      featuresByRoom.forEach((features) => {
+        features.forEach((label, key) => {
+          if (!featureLabels.has(key)) featureLabels.set(key, label);
+        });
       });
-      tbody.appendChild(featureRow);
+
+      Array.from(featureLabels.entries())
+        .sort((left, right) => left[1].localeCompare(right[1]))
+        .forEach(([featureKey, featureLabel]) => {
+          const row = document.createElement('tr');
+          row.dataset.roomFeatureRow = '';
+          const heading = document.createElement('th');
+          heading.scope = 'row';
+          heading.textContent = featureLabel;
+          row.appendChild(heading);
+
+          let listedCount = 0;
+          featuresByRoom.forEach((features, roomIndex) => {
+            const listed = features.has(featureKey);
+            if (listed) listedCount += 1;
+            const cell = document.createElement('td');
+            const state = document.createElement('span');
+            state.className = listed
+              ? 'room-comparison-feature-state room-comparison-feature-state--listed'
+              : 'room-comparison-feature-state room-comparison-feature-state--unlisted';
+            state.textContent = listed ? 'Listed' : 'Not listed';
+            state.setAttribute('aria-label', featureLabel + (listed ? ' is listed for ' : ' is not listed for ') + roomName(selectedCards[roomIndex]));
+            cell.appendChild(state);
+            row.appendChild(cell);
+          });
+
+          row.dataset.roomFeatureDiff = String(listedCount > 0 && listedCount < selectedCards.length);
+          tbody.appendChild(row);
+        });
 
       const actionRow = document.createElement('tr');
       const actionHeading = document.createElement('th');
@@ -749,6 +792,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tbody.appendChild(actionRow);
       table.appendChild(tbody);
       comparisonContent.appendChild(table);
+      applyComparisonFeatureFilter();
     };
 
     const applyRoomFilters = () => {
@@ -846,6 +890,7 @@ document.addEventListener('DOMContentLoaded', () => {
         lastSelectedRoomId = null;
         renderComparison();
       });
+      comparisonDifferences?.addEventListener('change', applyComparisonFeatureFilter);
       comparisonTripButton?.addEventListener('click', () => {
         const selectedCards = selectedRoomCards();
         if (selectedCards.length < 2) return;

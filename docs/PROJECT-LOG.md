@@ -2,13 +2,13 @@
 
 > Tracked source and exact-commit CI are authoritative. Owner retains production release approval.
 
-## Latest state — 27 October 2026
+## Latest state — 28 October 2026
 
 | Item | Value |
 |---|---|
 | Verified main SHA | `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8` — PR #153 merged |
-| Active implementation | Sprint 75 — photo-led, keyboard-accessible room comparison |
-| Scope | Add room photos to side-by-side comparison and make the horizontal comparison region keyboard-focusable; preserve booking and enquiry destinations |
+| Active implementation | Sprints 75–77 — room comparison decision support |
+| Scope | Add room photos, align listed features row by row and offer a difference-only filter; preserve booking and enquiry destinations |
 | Release boundary | Owner retains merge and release approval; no cPanel upload or staging/production deployment |
 | Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394006) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393565) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393646) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394143) — all passed on that SHA |
 
@@ -66,3 +66,16 @@ Regression coverage verifies action count and destination parity on the live exp
 - Preserve floor, description, listed-feature rows, two-to-three-room limits, room IDs, session-only Trip behavior, Contact shortlist context, and the exact existing booking-engine destination.
 - Add E2E coverage for photo/source/alt parity, region semantics and mobile horizontal scrolling.
 - No new room/facility claims, rates, availability, routes, schema changes or deployment; owner retains merge and release approval.
+
+
+### Sprint 76 — feature-by-feature room comparison (included in PR #154)
+
+- Replace separate per-room feature lists inside the dialog with an aligned matrix: one row per unique listed feature, each room column labelled “Listed” or “Not listed”.
+- Derive entries solely from the existing room cards/registry; do not imply an unlisted facility is absent.
+- Keep photo, floor, description, availability, remove, Contact and Trip actions intact.
+
+### Sprint 77 — show differences only (included in PR #154)
+
+- Add an accessible checkbox that filters only feature rows whose listed status differs across the selected rooms.
+- Keep non-feature rows and all existing actions in view; the live status announces the number of differing feature rows and clearly handles the no-difference case.
+- Add E2E tests for expected matrix state, checked/unchecked filtering, row visibility and the existing booking/Contact/Trip flows.

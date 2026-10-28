@@ -30,7 +30,7 @@ test.describe('Room comparison journey', () => {
     await expect(dialog.locator('table')).toBeVisible();
     await expect(dialog.locator('thead th')).toHaveCount(3);
     await expect(dialog.locator('table')).toContainText(await firstCard.locator('h3').textContent());
-    await expect(dialog.locator('table')).toContainText('Listed features');
+    await expect(dialog.locator('table')).toContainText('Listed features by room');
 
     const comparisonContent = dialog.locator('[data-room-comparison-content]');
     await expect(comparisonContent).toHaveAttribute('role', 'region');
@@ -47,6 +47,31 @@ test.describe('Room comparison journey', () => {
     await expect(comparisonPhotos.nth(0)).toHaveAttribute('alt', await firstPhoto.getAttribute('alt'));
     await expect(comparisonPhotos.nth(0)).toHaveAttribute('sizes', '150px');
     await expect(comparisonPhotos.nth(1)).toHaveAttribute('sizes', '150px');
+
+    const allFeatureRows = dialog.locator('tr[data-room-feature-row]');
+    const differingFeatureRows = dialog.locator('tr[data-room-feature-row][data-room-feature-diff="true"]');
+    const equalFeatureRows = dialog.locator('tr[data-room-feature-row][data-room-feature-diff="false"]');
+    const allFeatureCount = await allFeatureRows.count();
+    const differingFeatureCount = await differingFeatureRows.count();
+    expect(allFeatureCount, 'Feature-by-feature matrix should render the listed room details').toBeGreaterThan(0);
+    expect(differingFeatureCount, 'These two rooms should expose actual listed-feature differences').toBeGreaterThan(0);
+    expect(allFeatureCount).toBeGreaterThan(differingFeatureCount);
+    await expect(equalFeatureRows.first()).toBeVisible();
+
+    const differenceControl = dialog.locator('[data-room-comparison-difference-control]');
+    const differenceToggle = dialog.locator('[data-room-comparison-differences]');
+    const differenceStatus = dialog.locator('[data-room-comparison-filter-status]');
+    await expect(differenceControl).toBeVisible();
+    await expect(differenceToggle).not.toBeChecked();
+    await differenceToggle.check();
+    await expect(differenceStatus).toBeVisible();
+    await expect(differenceStatus).toContainText('of ' + allFeatureCount + ' listed features');
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(differingFeatureCount);
+    await expect(dialog.locator('tr[data-room-feature-row][data-room-feature-diff="false"]:visible')).toHaveCount(0);
+    await differenceToggle.uncheck();
+    await expect(differenceStatus).toBeHidden();
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(allFeatureCount);
+
     const originalBookingHref = await firstCard.locator('.room-book').getAttribute('href');
     await expect(dialog.locator('a.room-comparison-availability').first()).toHaveAttribute('href', originalBookingHref);
     await expect(dialog.locator('[data-room-compare-remove]')).toHaveCount(2);

@@ -1,6 +1,6 @@
 # Project state and release gates
 
-Last updated: 27 October 2026.
+Last updated: 28 October 2026.
 
 ## Current objective
 
@@ -28,14 +28,13 @@ Deliver a coherent, premium first impression and a lower-friction direct-booking
 
 PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experience detail heroes focused on contextual enquiry plus Add to Trip, while preserving lower-page shortlist routes and the Desert Safari/Guided Tours hub alternatives.
 
-## Active phase — Sprint 75: photo-led, keyboard-accessible room comparison
+## Active phase — Sprints 75–77: room comparison decision support (PR #154)
 
-- Reduce choice overload in the first viewport: detail-page heroes keep the contextual enquiry as primary and the session-only “Add to Trip” control as the only secondary action. Remove the redundant catalogue link from individual experiences; global navigation and lower-page discovery paths remain available.
-- The Guided Jaisalmer Tours hub keeps “Plan my guided tour” and “Compare tour options”; card-level Add to Trip and detail-page routes remain intact. Keep the Desert Safari hub's catalogue action because its hero does not add a single experience to the Trip tray.
-- Add exact browser contracts for two purposeful hero actions, matching hero/checkpoint contact destinations, and synchronized Trip toggles at mobile and desktop sizes.
-- Preserve room-booking destinations, contact routing, all public URLs, factual copy, and the rule that an enquiry does not confirm a booking.
-
-Sprint 75 makes the existing selected-room table easier to scan by reusing each selected room's curated first photo, exposing the horizontally scrollable comparison region to keyboard users, and keeping the table responsive without changing room facts or the booking-engine destination.
+- **Sprint 75 — visual and accessibility foundation:** show each selected room's curated photo in the comparison table and make the horizontally scrollable comparison area keyboard-focusable, named and explained for mobile users.
+- **Sprint 76 — feature-by-feature matrix:** align each existing, registered room feature into its own row, showing “Listed” or “Not listed” for each selected room rather than leaving guests to compare separate unordered lists. “Not listed” is deliberately not a claim that a facility is absent.
+- **Sprint 77 — differences-only view:** add a keyboard-accessible “Show differences only” checkbox that filters feature rows while keeping room photos, floor, description, booking links and the rest of the matrix in place. Recompute rows when rooms are added or removed.
+- Preserve room IDs, the two-to-three-room limit, original photos/alt text, existing features and descriptions, booking-engine URL/token, room-specific Contact handoff, session-only Trip behavior, routes, metadata and schema.
+- Acceptance: exact-head PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. No cPanel upload or deployment.
 
 ## Priority sequence
 

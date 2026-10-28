@@ -940,3 +940,23 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Add regression coverage for image identity/alt parity, the comparison region's accessible semantics, inner horizontal scrolling at 320/390px without page overflow, and established room-to-Trip/Contact handoffs.
 - Acceptance: exact-head PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. No local browser/PHP execution is claimed unless actually run.
 - No cPanel upload, staging deployment or production release.
+
+
+## Sprint 76 — feature-by-feature room comparison matrix (included in PR #154)
+
+**Commercial goal:** help guests scan room differences without having to remember separate bullet lists for each room.
+
+- Render the union of the selected rooms’ existing listed features as one feature per row.
+- Label each room cell “Listed” or “Not listed”, and preserve the distinction between a published fact and an unlisted detail.
+- Keep source data, photo row, description/floor rows, current booking-engine links, comparison cap and Contact/Trip integrations unchanged.
+- Add browser assertions for row/column behavior and keep the existing responsive and accessibility gates.
+
+## Sprint 77 — difference-only room view (included in PR #154)
+
+**Commercial goal:** reduce comparison effort by letting guests hide feature rows that do not help distinguish their chosen rooms.
+
+- Add a labelled, keyboard-operable “Show differences only” checkbox; it filters only the feature rows and does not hide photos, floor/description or next-step actions.
+- Compute row differences from the current selected room cards and recalculate whenever selection changes.
+- Announce the visible differing-row count, and communicate when no listed feature differences exist; “Not listed” is not rewritten as “does not have”.
+- Add E2E coverage for filter on/off, visible-row counts and preservation of current booking, Contact and Trip behavior.
+- Exact-head acceptance: PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. No deployment.
