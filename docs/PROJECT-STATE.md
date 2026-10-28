@@ -39,6 +39,19 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 - Preserve room IDs, the two-to-three-room limit, original photos/alt text, existing features and descriptions, booking-engine URL/token, room-specific Contact handoff, session-only Trip behavior, routes, metadata and schema.
 - Acceptance: exact-head PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. No cPanel upload or deployment.
 
+## Active phase — Sprints 141–150: Compact-phone first-screen completeness (PR #157)
+
+- **Sprint 141 — cascade integrity:** move the 320px hero rules into the homepage story stylesheet that owns the stronger selectors.
+- **Sprint 142 — fact hierarchy:** render Stay and Dine in two readable columns; let Explore span the full second row.
+- **Sprint 143 — viewport geometry:** constrain the smallest-phone hero to the usable first screen instead of inheriting the 620px desktop minimum.
+- **Sprint 144 — action-dock clearance:** keep hero proof points above the fixed mobile CTA dock without hiding booking/contact actions.
+- **Sprint 145 — compact typography:** reduce the smallest-phone heading/body scale and vertical gaps while preserving contrast and booking intent.
+- **Sprint 146 — layout semantics:** retain the three verified facts and meaningful DOM order.
+- **Sprint 147 — browser diagnostics:** report fact-bottom, dock-top and hero-height values on failures.
+- **Sprint 148 — regression guard:** keep strict two-column and first-screen clearance assertions.
+- **Sprint 149 — exact-head validation:** rerun Site Checks, package preflight, non-deploying Staging QA and Browser E2E on the updated SHA.
+- **Sprint 150 — visual review:** retain 320/390/768/1280/1440 screenshot review; CI timing is not proof of field three-second performance.
+
 ## Active phase — Sprints 131–140: Responsive hero delivery and mobile first impression (PR #157)
 
 - **Sprint 131 — image-slot truth:** compare the declared sizes slot to the actual rendered hero geometry.

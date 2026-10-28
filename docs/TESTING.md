@@ -67,6 +67,13 @@ A role that is not directly affected still records a concrete double-check rathe
 - [ ] Owner approves the merge; production release requires separate owner approval.
 
 
+## Compact-phone homepage first-screen contract
+
+- At widths up to 360px, the homepage story stylesheet owns the compact hero rules; generic selectors in earlier stylesheets must not silently lose to the later, more specific theme rules.
+- The 320px facts strip uses two columns, with Explore spanning the second row. Keep Stay, Dine and Explore above the fixed mobile action dock.
+- Keep first-screen assertions strict. On failure, report fact-bottom, dock-top and hero-height values rather than weakening the expectation.
+- Review screenshots at 320px, 390px, 768px, 1280px and 1440px. Human visual review remains required for final crop/composition approval.
+
 ## Responsive hero and smallest-phone regressions
 
 - The Gallery photo hero is full-bleed. Its image sizes attribute must describe 100vw, and its high-priority preload must use the same imagesrcset and imagesizes values as the rendered image.
