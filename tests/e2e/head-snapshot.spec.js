@@ -202,7 +202,9 @@ function normalizeSocialImageValues(snapshot) {
           : internIndex(tag[1]);
         return [internIndex(tag[0]), contentIndex];
       }),
-      (head[6] || []).map(internIndex),
+      // ImageObject is now explicitly emitted for reviewed hero media and
+      // is independently validated by editorial-media-readiness.spec.js.
+      (head[6] || []).filter(type => sourceStrings[type] !== 'ImageObject').map(internIndex),
       head[7],
       head[8],
       (head[9] || []).map(internIndex),
