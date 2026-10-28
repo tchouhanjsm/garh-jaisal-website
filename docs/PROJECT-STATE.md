@@ -51,6 +51,7 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 - **Sprint 148 — regression guard:** keep strict two-column and first-screen clearance assertions.
 - **Sprint 149 — exact-head validation:** rerun Site Checks, package preflight, non-deploying Staging QA and Browser E2E on the updated SHA.
 - **Sprint 150 — visual review:** retain 320/390/768/1280/1440 screenshot review; CI timing is not proof of field three-second performance.
+- **Remediation after Browser E2E run 739:** the captured 320px screenshot confirmed the eyebrow was rendered at 11.52px because the final compact-phone override used `0.72rem`. Keep the existing minimum-size assertion and set the homepage hero eyebrow back to the established `0.8125rem` (13px at the root scale); scope the test to the visible primary hero eyebrow instead of the first arbitrary `.eyebrow` in the DOM. Verify the new exact head before marking the browser gate complete.
 
 ## Active phase — Sprints 131–140: Responsive hero delivery and mobile first impression (PR #157)
 
