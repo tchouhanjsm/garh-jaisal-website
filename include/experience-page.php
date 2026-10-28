@@ -40,6 +40,11 @@ if (!$experience) {
     ];
 }
 
+$experienceHeroAlt = trim((string) ($experience['hero_alt'] ?? ''));
+if ($experienceHeroAlt === '') {
+    throw new RuntimeException('Experience page requires a non-empty hero_alt: ' . (string) ($experience['slug'] ?? 'unknown'));
+}
+
 $activePage = 'packages';
 $siteUrl = rtrim($siteConfig['site_url'], '/');
 $canonical = $siteUrl . '/' . $experience['slug'] . '.php';
@@ -121,10 +126,11 @@ $page = [
     'og_title' => $experience['title'],
     'og_description' => $experience['description'],
     'og_image' => '/' . ltrim($experience['hero_image'], '/'),
-    'og_image_alt' => $experience['hero_alt'],
+    'og_image_alt' => $experienceHeroAlt,
     'twitter_title' => $experience['title'],
     'twitter_description' => $experience['description'],
     'twitter_image' => '/' . ltrim($experience['hero_image'], '/'),
+    'twitter_image_alt' => $experienceHeroAlt,
     'css' => ['css/experiences.css', 'css/thar-sunset-story.css'],
     'schema' => $schemaGraph,
 ];

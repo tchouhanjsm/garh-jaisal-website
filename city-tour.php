@@ -26,6 +26,7 @@ $page = [
     'og_title' => 'Jaisalmer Fort Guided Walk | Garh Jaisal Haveli',
     'og_description' => 'Explore Jaisalmer Fort on foot with a planned heritage route. Ask Garh Jaisal Haveli to confirm guide availability, visitor access, current price and any applicable entry fees for your date.',
     'og_image' => '/img/1.webp',
+    'og_image_alt' => 'Historic sandstone architecture inside Jaisalmer Fort',
     'twitter_title' => 'Jaisalmer Fort Guided Walk | Garh Jaisal Haveli',
     'twitter_description' => 'Explore Jaisalmer Fort on foot with a planned heritage route. Ask Garh Jaisal Haveli to confirm guide availability, visitor access, current price and any applicable entry fees for your date.',
     'twitter_image' => '/img/1.webp',

@@ -179,3 +179,12 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Added PHP coverage for output escaping and same-image/distinct-image fallback rules, plus Browser E2E coverage across Home, Rooms, Packages, Trip Planner, Gallery, About, Directions, Contact, Journal, itinerary, safari and city-tour routes.
 - Wired the PHP contract into the PHP 7.4/8.2 Site Checks workflow and documented the exact-head validation command.
 - No page URLs, canonical paths, booking/contact destinations, business facts or production assets were changed. The batch requires fresh exact-head checks; no staging or production deployment was performed.
+
+
+## Completed phase — Sprints 201–215: sitewide social image metadata completeness
+
+- The shared head now supplies a reviewed description only when a page uses the shared default facade image; custom images cannot accidentally inherit the facade's description.
+- Added source-specific Open Graph descriptions to the remaining static experience/dining pages. Experience and editorial renderers now explicitly send the same image description to both social-card formats and reject empty hero descriptions; Content Studio overlays enforce non-empty hero alt text.
+- Expanded social-image Browser E2E from a fixed shortlist to every live route in the committed sitemap. The historical frozen head baseline ignores only the two image-alt fields now independently verified by that route-complete contract.
+- Updated sitemap `lastmod` for changed static sources and the catalogue's data source. Sitemap generation now accounts for the shared Content Studio page renderer when deriving landing-page freshness.
+- No public URLs, booking destinations, business facts or original photographs changed. Exact-head Site Checks, Browser E2E, package preflight and non-deploying Staging QA remain the release gate; no deployment was performed.

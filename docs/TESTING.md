@@ -112,7 +112,9 @@ A role that is not directly affected still records a concrete double-check rathe
 
 ## Accessible social preview metadata
 
-- Core public routes publish explicit Open Graph image alt text and matching Twitter/X image alt text when both cards reference the same image.
-- If Open Graph and Twitter/X use different image sources, do not reuse one image's alt text for the other unless its own description is configured.
+- Every route in the committed sitemap is covered by the Browser E2E social-image contract. A newly published route automatically joins this coverage.
+- The shared default facade image has a reviewed description; an unrelated custom image must supply a source-specific description instead of inheriting that fallback.
+- When Open Graph and Twitter/X use the same image, their descriptions must match. Distinct images require their own explicit text.
+- Published Content Studio experience, editorial and landing-page records must provide non-empty hero descriptions before the shared renderer accepts them.
 - Run `php tests/php/social-image-alt-contract.php` and `npx playwright test tests/e2e/social-image-metadata.spec.js --project=desktop-1280`.
-- These checks verify metadata delivery and escaping; they do not guarantee that a social network will choose or display the preview exactly as authored.
+- The frozen legacy head snapshot intentionally excludes only the two newly contracted image-alt tags; the sitemap-derived social metadata test validates those fields on every live public route.

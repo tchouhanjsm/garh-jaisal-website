@@ -210,6 +210,7 @@ foreach ($urls as $path => $priority) {
     }
     if (array_key_exists($routeSlug, $studioPages)) {
         $sourceFiles[] = 'include/studio-pages-data.php';
+        $sourceFiles[] = 'include/studio-page.php';
     }
     if ($path === '/blog.php') {
         $sourceFiles[] = 'include/editorial-guides-data.php';

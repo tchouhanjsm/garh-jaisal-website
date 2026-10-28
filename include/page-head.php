@@ -69,7 +69,11 @@ $twitterCard = $page['twitter_card'] ?? 'summary_large_image';
 $twitterTitle = $page['twitter_title'] ?? $pageTitle;
 $twitterDescription = $page['twitter_description'] ?? $pageDescription;
 $ogImageSource = $page['og_image'] ?? '/img/v2/facade.jpg';
-$ogImageAlt = $page['og_image_alt'] ?? null;
+$ogImageAlt = $page['og_image_alt'] ?? (
+    ltrim((string) $ogImageSource, '/') === 'img/v2/facade.jpg'
+        ? 'Carved facade of Garh Jaisal Haveli inside Jaisalmer Fort'
+        : null
+);
 $twitterImageSource = $page['twitter_image'] ?? $ogImageSource;
 $twitterImageAlt = $page['twitter_image_alt'] ?? ($twitterImageSource === $ogImageSource ? $ogImageAlt : null);
 

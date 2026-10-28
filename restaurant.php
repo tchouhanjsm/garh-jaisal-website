@@ -321,6 +321,7 @@ $page = [
     'og_title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
     'og_description' => 'Rajasthani food on the rooftop at Garh Jaisal Haveli inside Jaisalmer Fort.',
     'og_image' => '/img/rest2.jpg',
+    'og_image_alt' => 'Dining space at Garh Jaisal Haveli',
     'twitter_title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
     'twitter_description' => 'Rajasthani food on the rooftop at Garh Jaisal Haveli inside Jaisalmer Fort.',
     'twitter_image' => '/img/rest2.jpg',

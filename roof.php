@@ -25,6 +25,7 @@ $page = [
     'og_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
     'og_description' => "Candlelight dinners and city views at Garh Jaisal's Kitchen, the rooftop restaurant inside Jaisalmer Fort.",
     'og_image' => '/img/rest5.jpg',
+    'og_image_alt' => 'Dining at Garh Jaisal Haveli',
     'twitter_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
     'twitter_description' => "Candlelight dinners and city views at Garh Jaisal's Kitchen, the rooftop restaurant inside Jaisalmer Fort.",
     'twitter_image' => '/img/rest5.jpg',

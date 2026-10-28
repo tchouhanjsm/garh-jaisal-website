@@ -41,6 +41,11 @@ if (!is_array($guide)) {
         'cta_secondary_href' => 'contact.php',
     ];
 }
+$guideHeroAlt = trim((string) ($guide['hero_alt'] ?? ''));
+if ($guideHeroAlt === '') {
+    throw new RuntimeException('Editorial guide requires a non-empty hero_alt: ' . (string) ($guide['slug'] ?? 'unknown'));
+}
+
 $guideTopic = (string) ($guide['topic'] ?? 'trip-planning');
 if (!isset($editorialTopicTaxonomy[$guideTopic])) $guideTopic = 'trip-planning';
 $guideTopicLabel = $editorialTopicTaxonomy[$guideTopic] ?? 'Trip planning';
@@ -129,10 +134,11 @@ $page = [
     'og_title' => $guide['title'],
     'og_description' => $guide['description'],
     'og_image' => '/' . ltrim($guide['hero_image'], '/'),
-    'og_image_alt' => $guide['hero_alt'],
+    'og_image_alt' => $guideHeroAlt,
     'twitter_title' => $guide['title'],
     'twitter_description' => $guide['description'],
     'twitter_image' => '/' . ltrim($guide['hero_image'], '/'),
+    'twitter_image_alt' => $guideHeroAlt,
     'css' => (isset($guide['css']) && is_array($guide['css'])) ? $guide['css'] : ['css/article.css', 'css/thar-sunset-story.css'],
     'schema' => $schemaGraph,
 ];

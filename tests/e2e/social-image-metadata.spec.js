@@ -1,24 +1,16 @@
 const { test, expect } = require('@playwright/test');
+const { getSitemapRoutes } = require('./helpers/sitemap-routes');
 
-const routes = [
-  { path: '/', label: 'Home' },
-  { path: '/room.php', label: 'Rooms' },
-  { path: '/pack.php', label: 'Packages' },
-  { path: '/catalogue.php', label: 'Trip planner' },
-  { path: '/gallery.php', label: 'Gallery' },
-  { path: '/about.php', label: 'About' },
-  { path: '/direction.php', label: 'Directions' },
-  { path: '/contact.php', label: 'Contact' },
-  { path: '/blog.php', label: 'Journal' },
-  { path: '/custom-itinerary.php', label: 'Custom itinerary' },
-  { path: '/desert-safari.php', label: 'Desert safari' },
-  { path: '/car-tours.php', label: 'Car and city tours' },
-  { path: '/guided-jaisalmer-tour.php', label: 'Guided Jaisalmer tours' },
-];
+// Derive coverage from the committed sitemap so newly published routes inherit
+// the same Open Graph and Twitter/X image-description contract automatically.
+const routes = getSitemapRoutes().map(path => ({
+  path,
+  label: path === '/' ? 'Home' : path.slice(1),
+}));
 
-test('core public routes expose accessible social preview image metadata', async ({ page }, testInfo) => {
+test('all sitemap routes expose accessible social preview image metadata', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Social metadata is viewport-independent');
-  test.setTimeout(90_000);
+  test.setTimeout(180_000);
 
   for (const route of routes) {
     const response = await page.goto(route.path, { waitUntil: 'domcontentloaded' });

@@ -42,6 +42,22 @@ $assert(
     'The same image must share its accurate alt text with Twitter/X metadata.'
 );
 
+$defaultImageHtml = $renderHead([]);
+$assert(
+    strpos($defaultImageHtml, 'property="og:image:alt" content="Carved facade of Garh Jaisal Haveli inside Jaisalmer Fort"') !== false,
+    'The shared default facade image must have its reviewed description.'
+);
+$assert(
+    strpos($defaultImageHtml, 'name="twitter:image:alt" content="Carved facade of Garh Jaisal Haveli inside Jaisalmer Fort"') !== false,
+    'The shared default Twitter/X image must inherit the same reviewed description.'
+);
+
+$unmappedImageHtml = $renderHead(['og_image' => '/img/unmapped.jpg']);
+$assert(
+    strpos($unmappedImageHtml, 'property="og:image:alt"') === false,
+    'The default facade description must not be attached to a different, unmapped image.'
+);
+
 $differentImageHtml = $renderHead([
     'og_image' => '/img/open-graph.jpg',
     'og_image_alt' => 'A sandstone facade',
@@ -70,4 +86,4 @@ if ($failures) {
     exit(1);
 }
 
-echo "PASS social image alt contract: shared fallback, distinct-image protection and escaped output.\n";
+echo "PASS social image alt contract: reviewed default, custom-image specificity, distinct-image protection and escaped output.\n";
