@@ -87,6 +87,9 @@ jobs:
       - name: Verify experience publication boundaries
         run: php scripts/check-experience-publication.php
 
+      - name: Verify editorial publication pipeline
+        run: php scripts/check-editorial-publication.php
+
       - name: Verify Content Studio data overlays and publication states
         run: php tests/php/content-studio-registry.php
 
