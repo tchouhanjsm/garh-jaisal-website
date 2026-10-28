@@ -1529,4 +1529,76 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nav.contains(event.target) || button.contains(event.target)) return;
     setMenu(false);
   });
+
+  // Journal discovery is progressive enhancement: public links stay visible
+  // when JavaScript is unavailable.
+  const journalSearchForm = document.querySelector('[data-journal-search-form]');
+  const journalSearchInput = document.querySelector('[data-journal-search-input]');
+  const journalTopicFilter = document.querySelector('[data-journal-topic-filter]');
+  const journalClearButton = document.querySelector('[data-journal-clear]');
+  const journalResults = document.querySelector('[data-journal-results]');
+  const journalEmptyState = document.querySelector('[data-journal-empty]');
+  const journalGrid = document.querySelector('[data-journal-grid]');
+  const journalCards = journalGrid ? Array.from(journalGrid.querySelectorAll('[data-journal-card]')) : [];
+
+  if (journalSearchForm && journalSearchInput && journalTopicFilter &&
+      journalClearButton && journalResults && journalEmptyState && journalGrid && journalCards.length) {
+    const normalizeJournalText = (value) => String(value || '')
+      .normalize('NFKC')
+      .toLowerCase()
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    const updateJournalResults = () => {
+      const query = normalizeJournalText(journalSearchInput.value);
+      const topic = journalTopicFilter.value;
+      const hasActiveFilter = Boolean(query) || topic !== 'all';
+      let visibleCount = 0;
+
+      journalCards.forEach((card) => {
+        const matchesText = !query || normalizeJournalText(card.textContent).includes(query);
+        const matchesTopic = topic === 'all' || card.dataset.journalTopic === topic;
+        const visible = matchesText && matchesTopic;
+        card.hidden = !visible;
+        if (visible) visibleCount += 1;
+      });
+
+      journalResults.textContent = hasActiveFilter
+        ? 'Showing ' + visibleCount + ' of ' + journalCards.length + ' results.'
+        : 'Showing all ' + journalCards.length + ' results.';
+      journalResults.hidden = false;
+      journalClearButton.hidden = !hasActiveFilter;
+      journalEmptyState.hidden = visibleCount !== 0;
+    };
+
+    const resetJournalFilters = () => {
+      journalSearchInput.value = '';
+      journalTopicFilter.value = 'all';
+      updateJournalResults();
+    };
+
+    journalSearchInput.addEventListener('input', updateJournalResults);
+    journalTopicFilter.addEventListener('change', updateJournalResults);
+    journalSearchForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      updateJournalResults();
+    });
+    journalClearButton.addEventListener('click', () => {
+      resetJournalFilters();
+      journalSearchInput.focus();
+    });
+
+    // Topic links remain stable URL fragments rather than a second filter UI.
+    // Clear active filters before following a fragment to keep the target visible.
+    const journalTopicIndex = document.querySelector('.journal-topic-index');
+    if (journalTopicIndex) {
+      journalTopicIndex.querySelectorAll('a[href^="#"]').forEach((link) => {
+        link.addEventListener('click', resetJournalFilters);
+      });
+    }
+
+    journalSearchForm.hidden = false;
+    updateJournalResults();
+  }
+
 });
