@@ -80,4 +80,5 @@ A role that is not directly affected still records a concrete double-check rathe
 - At desktop width, the Gallery hero test asserts that the largest supported responsive candidate is selected and loaded. This guards against a successful page request with an undersized source stretched across a full-width hero.
 - At 320px, the Home quick-facts strip uses two columns, with the third fact spanning both columns. Browser checks verify readable item widths and no document overflow.
 - The primary Home hero eyebrow has a 13px minimum at all configured viewport widths; the strict assertion targets `.hero-content > .eyebrow` so later section labels cannot satisfy it accidentally.
+- Homepage discovery cards must respect `prefers-reduced-motion: reduce`: Playwright emulates the setting and checks both computed transition duration and hover transform.
 - Preserve the original approved photographs. Change resolution/candidate selection only when browser evidence shows the declared slot and selected resource disagree.
