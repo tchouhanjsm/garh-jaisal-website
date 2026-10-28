@@ -646,7 +646,7 @@ function optionalHeroCaption(value) {
 
 function verifyPublishableRecord(type, record) {
   if (type === 'pages') {
-    try { validateLandingPageRecord(record); }
+    try { validateLandingPageRecord({ ...record, status: 'live' }); }
     catch (error) { throw fail(422, 'This landing page is not ready for release: ' + error.message); }
     return;
   }

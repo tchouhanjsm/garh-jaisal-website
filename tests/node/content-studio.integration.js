@@ -648,6 +648,14 @@ async function main() {
   assert.equal(pageRecord.status, 'draft');
   assert.equal(pageRecord.review_status, 'draft');
   assert.equal(pageRecord.sections.length, 5, 'the builder should preserve structured reusable sections');
+  const approvedPageCaption = pageRecord.hero_caption;
+  pageRecord.hero_caption = '';
+  fs.writeFileSync(pageRecordFile, JSON.stringify(pageRecord, null, 2) + '\n');
+  result = await requestJson(STUDIO_URL + '/api/content/pages/' + pageSlug + '/review', 'PATCH', { reviewStatus: 'ready_for_review' });
+  assert.equal(result.response.status, 422, 'a landing page without a reviewed hero caption must not enter review');
+  pageRecord.hero_caption = approvedPageCaption;
+  fs.writeFileSync(pageRecordFile, JSON.stringify(pageRecord, null, 2) + '\n');
+
   assert.doesNotMatch(fs.readFileSync(pageCssFile, 'utf8'), /<script|expression\s*\(|url\s*\(\s*https?:/i, 'generated CSS must contain only approved tokens, not executable author content');
   sitemap = fs.readFileSync(sitemapPath, 'utf8');
   assert.ok(!sitemap.includes('/' + pageSlug + '.php</loc>'), 'landing-page Draft must be absent from sitemap');
