@@ -21,6 +21,7 @@ $page = [
     'og_title' => 'Desert Camping near Jaisalmer | Garh Jaisal Haveli',
     'og_description' => 'Camping at Garh Jaisal Haveli means Sleep Under the Stars or an overnight stay in a Swiss tent in the desert. Ask the hotel for the current price.',
     'og_image' => '/img/v2/swiss-tent.webp',
+    'og_image_alt' => 'White Swiss-style tents at a desert accommodation near Jaisalmer',
     'twitter_title' => 'Desert Camping near Jaisalmer | Garh Jaisal Haveli',
     'twitter_description' => 'Camping at Garh Jaisal Haveli means Sleep Under the Stars or an overnight stay in a Swiss tent in the desert. Ask the hotel for the current price.',
     'twitter_image' => '/img/v2/swiss-tent.webp',

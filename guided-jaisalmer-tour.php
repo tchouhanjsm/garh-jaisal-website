@@ -23,13 +23,14 @@ $faqItems = [
 ];
 $page = [
     'title' => 'Guided Jaisalmer Tours from the Fort | Garh Jaisal Haveli',
-    'description' => 'Explore Jaisalmer with guided half-day and full-day routes from Garh Jaisal Haveli inside the Fort. Compare options and confirm guide availability, language, itinerary and current price for your dates.',
+    'description' => 'Compare half-day and full-day guided Jaisalmer tours from the Fort. Confirm guide availability, language, itinerary and current price.',
     'path' => '/guided-jaisalmer-tour.php',
     'og_title' => 'Guided Jaisalmer Tours from the Fort | Garh Jaisal Haveli',
-    'og_description' => 'Explore Jaisalmer with guided half-day and full-day routes from Garh Jaisal Haveli inside the Fort. Compare options and confirm guide availability, language, itinerary and current price for your dates.',
+    'og_description' => 'Compare half-day and full-day guided Jaisalmer tours from the Fort. Confirm guide availability, language, itinerary and current price.',
     'og_image' => '/img/j5.jpg',
+    'og_image_alt' => 'Carved sandstone balconies on a historic Jaisalmer haveli',
     'twitter_title' => 'Guided Jaisalmer Tours from the Fort | Garh Jaisal Haveli',
-    'twitter_description' => 'Explore Jaisalmer with guided half-day and full-day routes from Garh Jaisal Haveli inside the Fort. Compare options and confirm guide availability, language, itinerary and current price for your dates.',
+    'twitter_description' => 'Compare half-day and full-day guided Jaisalmer tours from the Fort. Confirm guide availability, language, itinerary and current price.',
     'twitter_image' => '/img/j5.jpg',
     'css' => ['css/experiences.css'],
     'schema' => [
@@ -62,7 +63,7 @@ require __DIR__ . '/include/page-head.php';
 <main id="main-content" tabindex="-1">
   <section class="experience-hero">
     <div class="experience-hero-media">
-      <img src="img/j5.jpg" <?= gj_image_dimension_attributes('img/j5.jpg', '100vw') ?> alt="Carved sandstone balconies on a historic Jaisalmer haveli" fetchpriority="high">
+      <img src="img/j5.jpg" <?= gj_image_dimension_attributes('img/j5.jpg', '100vw') ?> alt="Carved sandstone balconies on a historic Jaisalmer haveli" fetchpriority="high" decoding="async">
       <div class="experience-hero-overlay"></div>
     </div>
     <div class="site-shell experience-hero-content">
@@ -93,7 +94,7 @@ require __DIR__ . '/include/page-head.php';
         <?php foreach ($items as $slug): $item = $experiences[$slug]; ?>
           <article class="experience-card">
             <a href="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>.php">
-              <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 760px) 100vw, 50vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy">
+              <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 760px) 100vw, 50vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
               <div>
                 <p class="experience-card-kicker"><?= htmlspecialchars($item['eyebrow'], ENT_QUOTES, 'UTF-8') ?></p>
                 <h2><?= htmlspecialchars($item['h1'], ENT_QUOTES, 'UTF-8') ?></h2>
@@ -192,6 +193,19 @@ require __DIR__ . '/include/page-head.php';
       ?>
     </div>
   </section>
+
+<?php
+$planningPath = [
+    'title' => 'Explore more of Jaisalmer',
+    'intro' => 'Pair a guided walk with an arrival plan or a desert outing. Routes, guide availability and current prices should be confirmed.',
+    'links' => [
+        ['label' => 'Fort walk', 'href' => 'city-tour.php', 'description' => 'Review the Fort walk and its access considerations.'],
+        ['label' => 'Half-day and full-day tours', 'href' => 'car-tours.php', 'description' => 'Compare existing guided and car-arrangement options.'],
+        ['label' => 'Desert experiences', 'href' => 'desert-safari.php', 'description' => 'Plan a camel safari or overnight desert option.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
 <script src="js/garh-v2.js"></script>

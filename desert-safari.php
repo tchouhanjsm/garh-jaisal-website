@@ -23,14 +23,15 @@ $faqItems = [
     ['question' => "How do I confirm the route and inclusions?", 'answer' => "Ask the hotel to confirm the current price, departure details, route, pickup arrangement, availability and exact inclusions for your date."],
 ];
 $page = [
-    'title' => 'Jaisalmer Desert Safari | Sunset Camel Safaris & Overnight Stays',
-    'description' => 'Compare sunset camel safaris, cultural evenings and overnight desert stays planned from Garh Jaisal Haveli inside Jaisalmer Fort. Confirm availability, timing, inclusions and price for your dates.',
+    'title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
+    'description' => 'Compare sunset camel safaris, cultural evenings and overnight stays from Jaisalmer Fort. Confirm timing, inclusions, price and availability.',
     'path' => '/desert-safari.php',
-    'og_title' => 'Jaisalmer Desert Safari | Sunset Camel Safaris & Overnight Stays',
-    'og_description' => 'Compare sunset camel safaris, cultural evenings and overnight desert stays planned from Garh Jaisal Haveli inside Jaisalmer Fort. Confirm availability, timing, inclusions and price for your dates.',
+    'og_title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
+    'og_description' => 'Compare sunset camel safaris, cultural evenings and overnight stays from Jaisalmer Fort. Confirm timing, inclusions, price and availability.',
     'og_image' => '/img/desert3.jpg',
-    'twitter_title' => 'Jaisalmer Desert Safari | Sunset Camel Safaris & Overnight Stays',
-    'twitter_description' => 'Compare sunset camel safaris, cultural evenings and overnight desert stays planned from Garh Jaisal Haveli inside Jaisalmer Fort. Confirm availability, timing, inclusions and price for your dates.',
+    'og_image_alt' => 'Sand dunes in the Thar Desert near Jaisalmer',
+    'twitter_title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
+    'twitter_description' => 'Compare sunset camel safaris, cultural evenings and overnight stays from Jaisalmer Fort. Confirm timing, inclusions, price and availability.',
     'twitter_image' => '/img/desert3.jpg',
     'css' => ['css/experiences.css'],
     'schema' => [
@@ -63,7 +64,7 @@ require __DIR__ . '/include/page-head.php';
 <main id="main-content" tabindex="-1">
   <section class="experience-hero">
     <div class="experience-hero-media">
-      <img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg', '100vw') ?> alt="Sand dunes in the Thar Desert near Jaisalmer" fetchpriority="high">
+      <img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg', '100vw') ?> alt="Sand dunes in the Thar Desert near Jaisalmer" fetchpriority="high" decoding="async">
       <div class="experience-hero-overlay"></div>
     </div>
     <div class="site-shell experience-hero-content">
@@ -94,7 +95,7 @@ require __DIR__ . '/include/page-head.php';
         <?php foreach ($items as $slug): $item = $experiences[$slug]; ?>
           <article class="experience-card">
             <a href="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>.php">
-              <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy">
+              <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
               <div>
                 <p class="experience-card-kicker"><?= htmlspecialchars($item['eyebrow'], ENT_QUOTES, 'UTF-8') ?></p>
                 <h2><?= htmlspecialchars($item['h1'], ENT_QUOTES, 'UTF-8') ?></h2>
@@ -201,6 +202,19 @@ require __DIR__ . '/include/page-head.php';
       <div class="actions"><a class="button button-primary" href="contact.php">Contact us</a><a class="button button-secondary" href="guided-jaisalmer-tour.php">Explore guided city tours</a></div>
     </div>
   </section>
+
+<?php
+$planningPath = [
+    'title' => 'Combine desert time with a Fort stay',
+    'intro' => 'Compare the desert experience with room options and a guided visit, then confirm timing and inclusions for your date.',
+    'links' => [
+        ['label' => 'Overnight desert stays', 'href' => 'camping.php', 'description' => 'Review the tent-stay option and ask about availability.'],
+        ['label' => 'Stay inside Jaisalmer Fort', 'href' => 'room.php', 'description' => 'Compare heritage rooms for the nights around your trip.'],
+        ['label' => 'Guided city tours', 'href' => 'guided-jaisalmer-tour.php', 'description' => 'Plan a Fort and city visit around the desert outing.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
 <script src="js/garh-v2.js"></script>

@@ -1002,3 +1002,97 @@ dialog.room-comparison-dialog::backdrop{
   .room-comparison-enquiry{grid-row:1}
   .room-comparison-trip{grid-row:2}
 }
+
+/* Sprints 141–150 — compact-phone hero hierarchy.
+   The homepage story rules live here and load after garh-v2.css. Keep verified
+   proof points above the fixed mobile action dock at the smallest supported width. */
+@media (max-width: 360px) {
+  main.thar-sunset-story--home .hero {
+    min-height: max(500px, calc(100vh - 180px));
+    min-height: max(500px, calc(100svh - 180px));
+  }
+
+  main.thar-sunset-story--home .hero-content {
+    padding-top: 72px;
+    padding-bottom: 14px;
+  }
+
+  main.thar-sunset-story--home .hero-content > .eyebrow {
+    margin-bottom: 7px;
+    /* Keep the actual 320px computed size above the shared 13px contract. */
+    font-size: 0.8125rem;
+  }
+
+  main.thar-sunset-story--home .hero-content h1 {
+    max-width: 15ch;
+    margin-bottom: 10px;
+    font-size: clamp(1.9rem, 8.6vw, 2.15rem);
+    line-height: 1.08;
+  }
+
+  main.thar-sunset-story--home .hero-content > p:not(.eyebrow) {
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    line-height: 1.38;
+  }
+
+  main.thar-sunset-story--home .hero-content .actions {
+    gap: 7px;
+  }
+
+  main.thar-sunset-story--home .hero-content .actions .button {
+    min-height: 44px;
+    padding-inline: 12px;
+  }
+
+  main.thar-sunset-story--home .home-hero-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+    margin-top: 10px;
+    padding: 4px;
+  }
+
+  main.thar-sunset-story--home .home-hero-facts .at-a-glance__item {
+    min-width: 0;
+    padding: 3px 5px;
+    border-inline-start: 0;
+    border-top: 1px solid rgba(91, 26, 43, 0.16);
+  }
+
+  main.thar-sunset-story--home .home-hero-facts .at-a-glance__item:nth-child(-n+2) {
+    border-top: 0;
+  }
+
+  main.thar-sunset-story--home .home-hero-facts .at-a-glance__item:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+
+  main.thar-sunset-story--home .home-hero-facts .at-a-glance__label {
+    margin-bottom: 2px;
+    font-size: 0.6rem;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+  }
+
+  main.thar-sunset-story--home .home-hero-facts .at-a-glance__value {
+    font-size: 0.72rem;
+    line-height: 1.2;
+    overflow-wrap: normal;
+  }
+}
+
+
+/* Sprint 151 — honor reduced-motion preferences for homepage discovery cards.
+   Preserve hover affordances through color and border changes without translating
+   cards when the visitor has requested reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  main.thar-sunset-story--home .home-room-card,
+  main.thar-sunset-story--home .home-experiences .card {
+    transition: none !important;
+  }
+
+  main.thar-sunset-story--home .home-room-card:hover,
+  main.thar-sunset-story--home .home-experiences .card:hover {
+    transform: none !important;
+  }
+}

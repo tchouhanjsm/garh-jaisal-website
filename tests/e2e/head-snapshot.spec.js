@@ -155,12 +155,12 @@ async function captureHead(page, route, expectedStatus = 'success') {
 function normalizeSocialImageValues(snapshot) {
   // The snapshot and frozen fixture are compact snapshots whose string table
   // may still contain now-unreferenced social-image URLs. Rebuild the table
-  // from referenced values after replacing only og:image/twitter:image values;
-  // this makes the comparison insensitive to reviewed image choices, while
-  // preserving strict comparisons for tag presence/order and all other fields.
+  // from referenced values after replacing reviewed social-image URLs. New image-alt
+  // tags are filtered from this frozen legacy baseline above because the dedicated
+  // route-complete social metadata contract tests their presence and content.
   const source = JSON.parse(JSON.stringify(snapshot));
   const sourceStrings = source.strings || [];
-  const imageKeys = new Set(['og:image', 'twitter:image', 'og:image:alt', 'twitter:image:alt']);
+  const imageKeys = new Set(['og:image', 'twitter:image']);
   const placeholder = '[reviewed social image asset]';
   const strings = [];
   const stringIndexes = new Map();
@@ -192,7 +192,12 @@ function normalizeSocialImageValues(snapshot) {
       internIndex(head[2]),
       internIndex(head[3]),
       internIndex(head[4]),
-      (head[5] || []).map(tag => {
+      (head[5] || [])
+        // Accessible image-description tags are now checked across every sitemap route
+        // by social-image-metadata.spec.js; keep the frozen legacy baseline focused on
+        // its historical fields rather than treating these intentional additions as drift.
+        .filter(tag => !['og:image:alt', 'twitter:image:alt'].includes(sourceStrings[tag[0]]))
+        .map(tag => {
         const key = sourceStrings[tag[0]];
         const contentIndex = imageKeys.has(key)
           ? internValue(placeholder)

@@ -90,14 +90,15 @@ $buildRoomHeroPreload = static function () {
 
 $page = [
     'title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
-    'description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort, including Sweet Purple, Rising Sun, Scarlet, Opium, Red Maharani, Green and BlueSky.',
+    'description' => 'Compare heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort. Review each room\'s features and check availability for your dates.',
     'path' => '/room.php',
     'preload' => [$buildRoomHeroPreload()],
     'og_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
-    'og_description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort.',
+    'og_description' => 'Compare heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort. Review each room\'s features and check availability for your dates.',
     'og_image' => '/img/v2/sitting-room.jpg',
+    'og_image_alt' => 'Sitting room with carved wood at Garh Jaisal Haveli',
     'twitter_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
-    'twitter_description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort.',
+    'twitter_description' => 'Compare heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort. Review each room\'s features and check availability for your dates.',
     'twitter_image' => '/img/v2/sitting-room.jpg',
     'css' => ['css/thar-sunset-story.css'],
     'schema' => [
@@ -508,6 +509,19 @@ $ctaBand = [
 require __DIR__ . '/include/ui/cta-band.php';
 ?>
 
+
+<?php
+$planningPath = [
+    'title' => 'Build the rest of your stay',
+    'intro' => 'Once you have shortlisted a room, plan dining and local experiences around your dates and interests.',
+    'links' => [
+        ['label' => 'Rooftop dining', 'href' => 'roof.php', 'description' => 'Explore rooftop dining and ask about current hours and menu.'],
+        ['label' => 'Desert experiences', 'href' => 'desert-safari.php', 'description' => 'Compare desert options and confirm current inclusions.'],
+        ['label' => 'Arrival guide', 'href' => 'direction.php', 'description' => 'Plan the final walk into Jaisalmer Fort.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>

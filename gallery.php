@@ -8,13 +8,34 @@ $bookingUrl = $siteConfig['booking_url'];
 <?php
 $schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $schemaPageUrl = $schemaSiteUrl . '/gallery.php';
+
+// The hero media is full-bleed. Keep preload candidates and the rendered image's
+// sizes hint aligned so a 1280px slot does not download the smaller 45vw candidate.
+$galleryHeroSrcsetCandidates = [];
+foreach ([480, 800, 1200] as $galleryHeroWidth) {
+    $galleryHeroCandidate = '/img/responsive/v2/rooftop-dusk-' . $galleryHeroWidth . '.webp';
+    $galleryHeroCandidatePath = __DIR__ . $galleryHeroCandidate;
+    if (is_file($galleryHeroCandidatePath) && !is_link($galleryHeroCandidatePath)) {
+        $galleryHeroSrcsetCandidates[] = $galleryHeroCandidate . ' ' . $galleryHeroWidth . 'w';
+    }
+}
+$galleryHeroPreload = [
+    'href' => '/img/v2/rooftop-dusk.jpg',
+    'fetchpriority' => 'high',
+];
+if ($galleryHeroSrcsetCandidates) {
+    $galleryHeroPreload['imagesrcset'] = implode(', ', $galleryHeroSrcsetCandidates);
+    $galleryHeroPreload['imagesizes'] = '100vw';
+}
 $page = [
     'title' => 'Gallery | Garh Jaisal Haveli, Jaisalmer Fort',
     'description' => 'Explore photos of heritage rooms, the haveli, rooftop dining and desert experiences at Garh Jaisal Haveli inside Jaisalmer Fort, Jaisalmer.',
     'path' => '/gallery.php',
+    'preload' => [$galleryHeroPreload],
     'og_title' => 'Gallery | Garh Jaisal Haveli, Jaisalmer Fort',
     'og_description' => 'See the rooms, haveli, desert experiences and dining at Garh Jaisal Haveli.',
     'og_image' => '/img/s1.jpg',
+    'og_image_alt' => 'Interior of Garh Jaisal Haveli',
     'twitter_title' => 'Gallery | Garh Jaisal Haveli, Jaisalmer Fort',
     'twitter_description' => 'See Garh Jaisal Haveli, its rooms, desert experiences and dining.',
     'twitter_image' => '/img/s1.jpg',
@@ -58,7 +79,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="gallery-page" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo gallery-hero">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg', '(max-width: 760px) 100vw, 45vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
       <?php
@@ -161,15 +182,17 @@ require __DIR__ . '/include/page-head.php';
     </section>
   <?php endforeach; ?>
 
-  <dialog class="gallery-lightbox" aria-label="Gallery photo viewer">
+  <dialog class="gallery-lightbox" aria-label="Gallery photo viewer" aria-describedby="gallery-lightbox-instructions">
     <div class="gallery-lightbox-inner">
       <div class="gallery-lightbox-top">
         <p class="eyebrow">Photo viewer</p>
         <button type="button" class="gallery-lightbox-close" data-gallery-close>Close <span aria-hidden="true">×</span></button>
       </div>
+      <p id="gallery-lightbox-instructions" class="gallery-lightbox-help">Use the left and right arrow keys to browse photos. Press Escape to close.</p>
       <figure class="gallery-lightbox-figure">
         <img data-gallery-lightbox-image src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg') ?> alt="Rooftop dining at Garh Jaisal Haveli" loading="lazy" decoding="async">
         <figcaption data-gallery-lightbox-caption></figcaption>
+        <p class="gallery-lightbox-position" data-gallery-lightbox-position role="status" aria-live="polite" aria-atomic="true">Choose a photo to begin.</p>
       </figure>
       <div class="gallery-lightbox-actions">
         <button type="button" data-gallery-previous>Previous photo</button>

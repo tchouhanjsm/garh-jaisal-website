@@ -9,7 +9,7 @@
  *
  * Optional:
  *   robots, og_type, og_image, og_image_alt, og_title, og_description, twitter_card,
- *   twitter_title, twitter_description, twitter_image, css, schema, preload.
+ *   twitter_title, twitter_description, twitter_image, twitter_image_alt, css, schema, preload.
  *
  * The helper emits the complete <head> element. Extra CSS follows
  * css/garh-v2.css. Site-wide Hotel/WebSite JSON-LD nodes are followed by the
@@ -69,8 +69,13 @@ $twitterCard = $page['twitter_card'] ?? 'summary_large_image';
 $twitterTitle = $page['twitter_title'] ?? $pageTitle;
 $twitterDescription = $page['twitter_description'] ?? $pageDescription;
 $ogImageSource = $page['og_image'] ?? '/img/v2/facade.jpg';
-$ogImageAlt = $page['og_image_alt'] ?? null;
+$ogImageAlt = $page['og_image_alt'] ?? (
+    ltrim((string) $ogImageSource, '/') === 'img/v2/facade.jpg'
+        ? 'Carved facade of Garh Jaisal Haveli inside Jaisalmer Fort'
+        : null
+);
 $twitterImageSource = $page['twitter_image'] ?? $ogImageSource;
+$twitterImageAlt = $page['twitter_image_alt'] ?? ($twitterImageSource === $ogImageSource ? $ogImageAlt : null);
 
 $htmlEscape = static function ($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
@@ -162,6 +167,9 @@ $analyticsIds = array_values(array_unique(array_filter(
   <meta name="twitter:title" content="<?= $htmlEscape($twitterTitle) ?>">
   <meta name="twitter:description" content="<?= $htmlEscape($twitterDescription) ?>">
   <meta name="twitter:image" content="<?= $htmlEscape($absoluteAssetUrl($twitterImageSource)) ?>">
+<?php if (is_string($twitterImageAlt) && trim($twitterImageAlt) !== ''): ?>
+  <meta name="twitter:image:alt" content="<?= $htmlEscape(trim($twitterImageAlt)) ?>">
+<?php endif; ?>
 
   <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -177,6 +185,8 @@ $analyticsIds = array_values(array_unique(array_filter(
   <!-- Shared type, spacing and component normalization intentionally follows page CSS. -->
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/conversion-system.css">
+  <!-- User motion preferences override page-specific animation and transition rules. -->
+  <link rel="stylesheet" href="css/accessibility.css">
 <?php foreach ($preloads as $preload): ?>
 <?php if (is_array($preload) && isset($preload['href']) && is_string($preload['href']) && $preload['href'] !== ''): ?>
   <link rel="preload" as="image" href="<?= $htmlEscape($preloadAssetUrl($preload['href'])) ?>"<?php if (isset($preload['media']) && is_string($preload['media']) && preg_match('/^\((?:min|max)-width:\s*[1-9][0-9]*px\)$/D', trim($preload['media']))): ?> media="<?= $htmlEscape(trim($preload['media'])) ?>"<?php endif; ?><?php if (($preload['fetchpriority'] ?? '') === 'high'): ?> fetchpriority="high"<?php endif; ?><?php if (!empty($preload['imagesrcset'])): ?> imagesrcset="<?= $htmlEscape($preload['imagesrcset']) ?>"<?php endif; ?><?php if (!empty($preload['imagesizes'])): ?> imagesizes="<?= $htmlEscape($preload['imagesizes']) ?>"<?php endif; ?>>

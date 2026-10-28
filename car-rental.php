@@ -27,6 +27,7 @@ $page = [
     'og_title' => 'Car for Arrival or a Desert Day | Garh Jaisal Haveli',
     'og_description' => 'Garh Jaisal Haveli can arrange a car for arrival or a desert day. Confirm the arrangement on the contact page. Ask the hotel for the current price.',
     'og_image' => '/img/desert10.jpg',
+    'og_image_alt' => 'A jeep crossing open sand on a desert route near Jaisalmer',
     'twitter_title' => 'Car for Arrival or a Desert Day | Garh Jaisal Haveli',
     'twitter_description' => 'Garh Jaisal Haveli can arrange a car for arrival or a desert day. Confirm the arrangement on the contact page. Ask the hotel for the current price.',
     'twitter_image' => '/img/desert10.jpg',

@@ -603,7 +603,7 @@ foreach ($studioFiles as $studioFile) {
         || !in_array(($record['category'] ?? ''), ['desert', 'city'], true)
         || !is_string($record['title'] ?? null) || !is_string($record['description'] ?? null)
         || !is_string($record['h1'] ?? null) || !is_string($record['hero_image'] ?? null)
-        || !is_string($record['hero_alt'] ?? null) || !is_string($record['summary'] ?? null)
+        || !is_string($record['hero_alt'] ?? null) || trim($record['hero_alt']) === '' || !is_string($record['summary'] ?? null)
         || !is_array($record['at_a_glance'] ?? null) || !is_array($record['timeline'] ?? null)
         || !is_array($record['included'] ?? null) || !is_array($record['not_included'] ?? null)
     ) throw new RuntimeException('Invalid Content Studio experience record: ' . $slug);

@@ -144,7 +144,7 @@ $e = static function ($value) {
           alt="Garh Jaisal Haveli"
           width="42"
           height="42"
-        >
+         decoding="async">
         <span class="brand-copy">
           <strong>Garh Jaisal Haveli</strong>
           <small>Jaisalmer Fort</small>
@@ -237,7 +237,7 @@ $e = static function ($value) {
     rel="noopener"
     aria-label="WhatsApp Garh Jaisal"
   >
-    <img src="img/whatsapp.png" alt="" width="22" height="22">
+    <img src="img/whatsapp.png" alt="" width="22" height="22" decoding="async">
     <span>WhatsApp</span>
   </a>
 </nav>

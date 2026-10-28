@@ -1,0 +1,36 @@
+const { test, expect } = require('@playwright/test');
+
+test('Gallery lightbox supports arrow-key navigation, announces position, and restores focus on close', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Run the keyboard lightbox contract once at desktop width.');
+  const response = await page.goto('/gallery.php', { waitUntil: 'domcontentloaded' });
+  expect(response).not.toBeNull();
+  expect(response.status()).toBe(200);
+  const opener = page.locator('[data-gallery-open]:visible').first();
+  const total = await page.locator('[data-gallery-open]:visible').count();
+  expect(total).toBeGreaterThan(1);
+  await opener.focus();
+  await page.keyboard.press('Enter');
+  const dialog = page.locator('.gallery-lightbox');
+  const position = dialog.locator('[data-gallery-lightbox-position]');
+  const image = dialog.locator('[data-gallery-lightbox-image]');
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveAttribute('aria-describedby', 'gallery-lightbox-instructions');
+  await expect(dialog.locator('#gallery-lightbox-instructions')).toContainText('left and right arrow keys');
+  await expect(position).toHaveAttribute('aria-live', 'polite');
+  await expect(position).toHaveAttribute('aria-atomic', 'true');
+  await expect(position).toHaveText('Photo 1 of ' + total);
+  const secondHref = await page.locator('[data-gallery-open]:visible').nth(1).getAttribute('href');
+  await page.keyboard.press('ArrowRight');
+  await expect(position).toHaveText('Photo 2 of ' + total);
+  await expect.poll(() => image.evaluate((node) => node.currentSrc)).toBe(new URL(secondHref, page.url()).href);
+  await expect.poll(() => image.evaluate((node) => node.complete && node.naturalWidth > 0)).toBe(true);
+  await page.keyboard.press('ArrowLeft');
+  await expect(position).toHaveText('Photo 1 of ' + total);
+  await page.keyboard.press('ArrowLeft');
+  await expect(position).toHaveText('Photo ' + total + ' of ' + total);
+  await page.keyboard.press('ArrowRight');
+  await expect(position).toHaveText('Photo 1 of ' + total);
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+  await expect(opener).toBeFocused();
+});

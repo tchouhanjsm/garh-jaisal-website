@@ -1226,7 +1226,7 @@ $editorialGuides = [
         'slug' => 'jaisalmer-honeymoon-guide',
         'topic' => 'trip-planning',
         'title' => 'Jaisalmer Honeymoon Guide | Fort Stay & Desert Night',
-        'description' => 'Plan a Jaisalmer honeymoon with a heritage stay inside the Fort, rooftop dining and a sunset or overnight desert experience. Confirm arrangements for your dates.',
+        'description' => 'Plan a Jaisalmer honeymoon with a heritage stay inside the Fort, rooftop dining and a sunset or overnight desert experience. Confirm date-specific options.',
         'h1' => 'Plan a Jaisalmer Honeymoon Around a Fort Stay and Desert Night',
         'eyebrow' => 'Couples & honeymoon planning',
         'lede' => 'A heritage stay, a rooftop evening and the right desert experience can shape a memorable Jaisalmer trip. Use this guide to plan the pieces and confirm which arrangements are available for your dates.',
@@ -1846,7 +1846,7 @@ foreach ($studioFiles as $studioFile) {
         || !in_array(($record['status'] ?? ''), ['live', 'draft', 'hidden'], true)
         || !is_string($record['title'] ?? null) || !is_string($record['description'] ?? null)
         || !is_string($record['h1'] ?? null) || !is_string($record['hero_image'] ?? null)
-        || !is_string($record['hero_alt'] ?? null) || !is_array($record['toc'] ?? null)
+        || !is_string($record['hero_alt'] ?? null) || trim($record['hero_alt']) === '' || !is_array($record['toc'] ?? null)
         || !is_array($record['sections'] ?? null) || !is_array($record['sources'] ?? null)
         || !is_array($record['related'] ?? null)
     ) throw new RuntimeException('Invalid Content Studio editorial record: ' . $slug);

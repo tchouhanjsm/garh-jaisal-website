@@ -403,11 +403,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const dialog = gallery.querySelector('.gallery-lightbox');
     const lightboxImage = gallery.querySelector('[data-gallery-lightbox-image]');
     const caption = gallery.querySelector('[data-gallery-lightbox-caption]');
+    const positionStatus = gallery.querySelector('[data-gallery-lightbox-position]');
     const previous = gallery.querySelector('[data-gallery-previous]');
     const next = gallery.querySelector('[data-gallery-next]');
     const pageSize = 6;
+    const prewarmedImages = new Map();
     let activeImages = [];
     let activeIndex = 0;
+    let activeTrigger = null;
 
     const sectionItems = (section) => Array.from(section.querySelectorAll('.gallery-item'));
     const setVisibleCount = (section, requestedCount) => {
@@ -438,6 +441,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const item = link.closest('.gallery-item');
         return Boolean(section && item && !section.hidden && !item.hidden);
       });
+
+    // Warm only adjacent full-size sources after the visitor explicitly opens the viewer.
+    // This keeps the initial gallery load from downloading every original photograph.
+    const prewarmImage = (link) => {
+      if (!link || !link.href || prewarmedImages.has(link.href)) return;
+      const image = new Image();
+      image.decoding = 'async';
+      prewarmedImages.set(link.href, image);
+      image.src = link.href;
+      if (typeof image.decode === 'function') image.decode().catch(() => undefined);
+    };
+
+    const prewarmNeighbors = () => {
+      if (activeImages.length < 2) return;
+      prewarmImage(activeImages[(activeIndex + 1) % activeImages.length]);
+      prewarmImage(activeImages[(activeIndex - 1 + activeImages.length) % activeImages.length]);
+    };
 
     const applyFilter = (category) => {
       sections.forEach((section) => {
@@ -494,8 +514,12 @@ document.addEventListener('DOMContentLoaded', () => {
       lightboxImage.src = link.href;
       lightboxImage.alt = thumbnail.alt;
       caption.textContent = thumbnail.alt;
+      if (positionStatus) {
+        positionStatus.textContent = 'Photo ' + (activeIndex + 1) + ' of ' + activeImages.length;
+      }
       if (previous) previous.disabled = activeImages.length < 2;
       if (next) next.disabled = activeImages.length < 2;
+      prewarmNeighbors();
     };
 
     gallery.querySelectorAll('[data-gallery-open]').forEach((link) => {
@@ -504,6 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         activeImages = visibleImages();
         activeIndex = activeImages.indexOf(link);
+        activeTrigger = link;
         renderLightboxImage(activeIndex);
         dialog.showModal();
       });
@@ -511,9 +536,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     previous?.addEventListener('click', () => renderLightboxImage(activeIndex - 1));
     next?.addEventListener('click', () => renderLightboxImage(activeIndex + 1));
+    dialog?.addEventListener('keydown', (event) => {
+      if (event.altKey || event.ctrlKey || event.metaKey || activeImages.length < 2) return;
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        renderLightboxImage(activeIndex - 1);
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        renderLightboxImage(activeIndex + 1);
+      }
+    });
     gallery.querySelector('[data-gallery-close]')?.addEventListener('click', () => dialog?.close());
     dialog?.addEventListener('click', (event) => {
       if (event.target === dialog) dialog.close();
+    });
+    dialog?.addEventListener('close', () => {
+      const triggerSection = activeTrigger?.closest('[data-gallery-category]');
+      const triggerItem = activeTrigger?.closest('.gallery-item');
+      if (activeTrigger?.isConnected && !triggerSection?.hidden && !triggerItem?.hidden) {
+        activeTrigger.focus({ preventScroll: true });
+        return;
+      }
+      const selectedFilter = filters.find((filter) => filter.getAttribute('aria-pressed') === 'true');
+      selectedFilter?.focus({ preventScroll: true });
     });
 
     applyFilter('all');

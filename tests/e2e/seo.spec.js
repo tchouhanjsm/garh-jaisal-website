@@ -22,10 +22,16 @@ test.describe('technical SEO metadata', () => {
       expect(response.status(), `Unexpected HTTP status for ${route}`).toBeLessThan(400);
 
       await expect(page).toHaveTitle(/\S/);
+      const titleText = (await page.title()).trim();
+      expect(titleText.length, 'Internal title target is 30–60 characters for ' + route).toBeGreaterThanOrEqual(30);
+      expect(titleText.length, 'Internal title target is 30–60 characters for ' + route).toBeLessThanOrEqual(60);
 
       const description = page.locator('head meta[name="description"]');
       await expect(description, 'Expected exactly one meta description').toHaveCount(1);
       await expect(description).toHaveAttribute('content', /\S/);
+      const descriptionText = ((await description.getAttribute('content')) || '').trim();
+      expect(descriptionText.length, 'Internal meta-description target is 120–160 characters for ' + route).toBeGreaterThanOrEqual(120);
+      expect(descriptionText.length, 'Internal meta-description target is 120–160 characters for ' + route).toBeLessThanOrEqual(160);
 
       const canonical = page.locator('head link[rel="canonical"]');
       await expect(canonical, 'Expected exactly one canonical link').toHaveCount(1);
@@ -406,4 +412,49 @@ test('hidden overlap pages return 404 and stay out of public discovery until app
   expect(response.status(), 'Hidden public route must return 404 until approved').toBe(404);
   await expect(page.locator('main h1')).toHaveText('Experience not found');
   await expect(page.locator('main')).not.toContainText(/Explore the Desert is the broader day experience/i);
+});
+
+
+test('high-intent routes expose three contextual internal planning links', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Planning path contracts run once');
+  const planningRoutes = [
+    '/book-rooms-in-jaisalmer.php',
+    '/room.php',
+    '/pack.php',
+    '/direction.php',
+    '/roof.php',
+    '/restaurant.php',
+    '/about.php',
+    '/contact.php',
+    '/desert-safari.php',
+    '/guided-jaisalmer-tour.php',
+    '/city-tour.php',
+  ];
+
+  for (const route of planningRoutes) {
+    const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+    expect(response, `No HTTP response for ${route}`).not.toBeNull();
+    expect(response.status(), `Unexpected HTTP status for ${route}`).toBeLessThan(400);
+
+    const section = page.locator('main section.planning-path');
+    await expect(section, `Expected one contextual planning section on ${route}`).toHaveCount(1);
+    await expect(section).toBeVisible();
+    await expect(section.locator('h2')).toHaveCount(1);
+    await expect(section.locator('nav[aria-label="Related planning pages"] a')).toHaveCount(3);
+
+    const hrefs = await section.locator('nav[aria-label="Related planning pages"] a').evaluateAll(links =>
+      links.map(link => link.getAttribute('href') || '')
+    );
+    expect(new Set(hrefs).size, `Planning destinations should be distinct on ${route}`).toBe(3);
+    expect(
+      hrefs.every(href =>
+        /^[a-z0-9-]+/.test(href)
+        && (href.endsWith('.php') || href.includes('.php?'))
+        && !href.startsWith('//')
+        && !href.startsWith('http')
+        && !href.includes('#')
+      ),
+      `Planning links must stay on internal PHP routes on ${route}`
+    ).toBeTruthy();
+  }
 });

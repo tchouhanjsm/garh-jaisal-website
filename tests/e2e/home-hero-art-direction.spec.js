@@ -116,10 +116,18 @@ test('homepage hero art direction selects responsive images within asset budgets
           actionsClear: actionBounds.bottom <= limit + 1,
           factsClear: factsBounds.bottom <= limit + 1,
           factsVisible: factsBounds.top < window.innerHeight && factsBounds.bottom > 0,
+          factsBottom: Math.round(factsBounds.bottom),
+          dockTop: Math.round(limit),
+          heroHeight: Math.round(document.querySelector('.hero')?.getBoundingClientRect().height || 0),
         };
       });
       expect(firstScreenState.actionsClear, 'The first booking decision must remain above any fixed mobile CTA dock at ' + viewport.width + 'px').toBe(true);
-      expect(firstScreenState.factsClear, 'Hero proof points must not be covered by the fixed mobile CTA dock at ' + viewport.width + 'px').toBe(true);
+      expect(
+        firstScreenState.factsClear,
+        'Hero proof points must clear the fixed mobile CTA dock at ' + viewport.width +
+          'px (facts bottom ' + firstScreenState.factsBottom + 'px, dock top ' + firstScreenState.dockTop +
+          'px, hero height ' + firstScreenState.heroHeight + 'px)'
+      ).toBe(true);
       expect(firstScreenState.factsVisible, 'The key stay/dine/explore facts must be visible on the initial screen at ' + viewport.width + 'px').toBe(true);
 
       const horizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);

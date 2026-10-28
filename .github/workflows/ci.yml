@@ -96,6 +96,9 @@ jobs:
       - name: Verify editorial SEO release readiness across registry, links, robots and sitemap
         run: php tests/php/editorial-release-readiness.php
 
+      - name: Verify accessible social preview image metadata
+        run: php tests/php/social-image-alt-contract.php
+
       - name: Verify Content Studio data overlays and publication states
         run: php tests/php/content-studio-registry.php
 
@@ -111,6 +114,9 @@ jobs:
         run: php tests/php/preload-contract.php
       - name: Test image-dimension cache reuse
         run: php tests/php/image-dimension-cache-contract.php
+
+      - name: Verify shared accessibility preference layer
+        run: php tests/php/accessibility-stylesheet-contract.php
 
       - name: Verify experience discovery shortlist contract
         run: php tests/php/experience-discovery.php

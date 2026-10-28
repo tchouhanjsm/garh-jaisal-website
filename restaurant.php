@@ -315,14 +315,15 @@ $faqItems = [
 ];
 $page = [
     'title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
-    'description' => "Rooftop dining at " . $restaurant['name'] . " inside Jaisalmer Fort. Ask the hotel about the current menu and request a table; confirm hours, dishes and prices before visiting.",
+    'description' => "Enjoy rooftop dining at " . $restaurant['name'] . " inside Jaisalmer Fort. Enquire about a table and confirm current hours, menu and prices.",
     'path' => '/restaurant.php',
     'og_type' => 'website',
     'og_title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
-    'og_description' => 'Rajasthani food on the rooftop at Garh Jaisal Haveli inside Jaisalmer Fort.',
+    'og_description' => "Enjoy rooftop dining at " . $restaurant['name'] . " inside Jaisalmer Fort. Enquire about a table and confirm current hours, menu and prices.",
     'og_image' => '/img/rest2.jpg',
+    'og_image_alt' => 'Dining space at Garh Jaisal Haveli',
     'twitter_title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
-    'twitter_description' => 'Rajasthani food on the rooftop at Garh Jaisal Haveli inside Jaisalmer Fort.',
+    'twitter_description' => "Enjoy rooftop dining at " . $restaurant['name'] . " inside Jaisalmer Fort. Enquire about a table and confirm current hours, menu and prices.",
     'twitter_image' => '/img/rest2.jpg',
     'css' => ['css/restaurant.css'],
     'schema' => array_values(array_filter(
@@ -662,6 +663,19 @@ require __DIR__ . '/include/page-head.php';
       ?>
     </div>
   </section>
+
+<?php
+$planningPath = [
+    'title' => 'Make dining part of your stay',
+    'intro' => 'Review rooftop dining details, compare rooms and contact the hotel to confirm current menu, hours and table options.',
+    'links' => [
+        ['label' => 'Rooftop dining', 'href' => 'roof.php', 'description' => 'Explore the rooftop setting and dinner information.'],
+        ['label' => 'Compare rooms', 'href' => 'room.php', 'description' => 'Check room details and current rates for your dates.'],
+        ['label' => 'Contact the hotel', 'href' => 'contact.php?topic=dining', 'description' => 'Ask about menu, hours or table availability.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>

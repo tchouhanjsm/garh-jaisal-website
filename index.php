@@ -30,17 +30,18 @@ $buildHeroPreload = static function ($stem, $media, $fallback) {
 };
 $page = [
     'title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
-    'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences from one base in the Golden City.',
+    'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
     'path' => '/',
     'preload' => [
         $buildHeroPreload('facade', '(max-width: 767px)', '/img/optimized/v2/facade.webp'),
         $buildHeroPreload('fort-from-roof', '(min-width: 768px)', '/img/optimized/v2/fort-from-roof.webp'),
     ],
     'og_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
-    'og_description' => 'Heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences inside Jaisalmer Fort.',
+    'og_description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
     'og_image' => '/img/v2/facade.jpg',
+    'og_image_alt' => 'Carved facade of Garh Jaisal Haveli inside Jaisalmer Fort',
     'twitter_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
-    'twitter_description' => 'Heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences inside Jaisalmer Fort.',
+    'twitter_description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
     'twitter_image' => '/img/v2/facade.jpg',
     'css' => ['css/thar-sunset-story.css'],
     'schema' => [
@@ -206,7 +207,7 @@ require __DIR__ . '/include/page-head.php';
       <img
         src="img/5.webp" <?= gj_image_dimension_attributes('img/5.webp', '(max-width: 800px) 100vw, 50vw') ?>
         alt="Carved sandstone architecture inside Garh Jaisal Haveli"
-        loading="lazy">
+        loading="lazy" decoding="async">
     </div>
 
   </div>
@@ -320,7 +321,7 @@ require __DIR__ . '/include/page-head.php';
           <img
             src="img/desert7.jpg" <?= gj_image_dimension_attributes('img/desert7.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
             alt="Camel safari at sunset in the Thar Desert near Jaisalmer"
-            loading="lazy">
+            loading="lazy" decoding="async">
         </div>
 
         <div class="card-body">
@@ -345,7 +346,7 @@ require __DIR__ . '/include/page-head.php';
           <img
             src="img/v2/swiss-tent.webp" <?= gj_image_dimension_attributes('img/v2/swiss-tent.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
             alt="Swiss tent accommodation in the Jaisalmer desert"
-            loading="lazy">
+            loading="lazy" decoding="async">
         </div>
 
         <div class="card-body">
@@ -370,7 +371,7 @@ require __DIR__ . '/include/page-head.php';
           <img
             src="img/tent.jpg" <?= gj_image_dimension_attributes('img/tent.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
             alt="People sleeping under a starry desert sky in the Jaisalmer desert"
-            loading="lazy">
+            loading="lazy" decoding="async">
         </div>
 
         <div class="card-body">
@@ -470,35 +471,35 @@ require __DIR__ . '/include/page-head.php';
         <img
           src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg', '(max-width: 760px) 100vw, 50vw') ?>
           alt="Jaisalmer city seen from the fort"
-          loading="lazy">
+          loading="lazy" decoding="async">
       </figure>
 
       <figure>
         <img
           src="img/courtyard.jpg" <?= gj_image_dimension_attributes('img/courtyard.jpg', '(max-width: 760px) 50vw, 28vw') ?>
           alt="Carved sandstone hallway inside a heritage haveli"
-          loading="lazy">
+          loading="lazy" decoding="async">
       </figure>
 
       <figure>
         <img
           src="img/recep1.jpg" <?= gj_image_dimension_attributes('img/recep1.jpg', '(max-width: 760px) 50vw, 28vw') ?>
           alt="Reception area with traditional furnishings at Garh Jaisal Haveli"
-          loading="lazy">
+          loading="lazy" decoding="async">
       </figure>
 
       <figure>
         <img
           src="img/s4.jpg" <?= gj_image_dimension_attributes('img/s4.jpg', '(max-width: 760px) 50vw, 28vw') ?>
           alt="View across Jaisalmer from the rooftop"
-          loading="lazy">
+          loading="lazy" decoding="async">
       </figure>
 
       <figure>
         <img
           src="img/big9.jpg" <?= gj_image_dimension_attributes('img/big9.jpg', '(max-width: 760px) 50vw, 28vw') ?>
           alt="A carved entrance in a historic sandstone building"
-          loading="lazy">
+          loading="lazy" decoding="async">
       </figure>
 
     </div>

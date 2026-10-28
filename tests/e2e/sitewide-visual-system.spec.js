@@ -65,8 +65,11 @@ test('shared visual system stays consistent across five viewports and eleven pag
           const baseStylesheetIndex = cssLinks.findIndex(path => path.endsWith('/css/garh-v2.css'));
           const tokenStylesheetIndex = cssLinks.findIndex(path => path.endsWith('/css/tokens.css'));
           const conversionStylesheetIndex = cssLinks.findIndex(path => path.endsWith('/css/conversion-system.css'));
+          const accessibilityStylesheetIndex = cssLinks.findIndex(path => path.endsWith('/css/accessibility.css'));
+          // The accessibility preference layer intentionally follows route CSS and shared tokens.
+          // It must not be counted as a route stylesheet expected to precede tokens.css.
           const routeStylesheets = cssLinks.filter(path => ![
-            '/css/garh-v2.css', '/css/tokens.css', '/css/conversion-system.css'
+            '/css/garh-v2.css', '/css/tokens.css', '/css/conversion-system.css', '/css/accessibility.css'
           ].includes(path));
           const h1Styles = h1 ? window.getComputedStyle(h1) : null;
           const shellRect = shell?.getBoundingClientRect() || null;
@@ -84,6 +87,8 @@ test('shared visual system stays consistent across five viewports and eleven pag
               && tokenStylesheetIndex > baseStylesheetIndex
               && routeStylesheets.every(path => tokenStylesheetIndex > cssLinks.indexOf(path)),
             conversionSystemAfterTokens: tokenStylesheetIndex >= 0 && conversionStylesheetIndex > tokenStylesheetIndex,
+            accessibilityAfterAllOtherStyles: accessibilityStylesheetIndex >= 0
+              && cssLinks.every((path, index) => path.endsWith('/css/accessibility.css') || index < accessibilityStylesheetIndex),
             tokensPresent: Boolean(rootStyles.getPropertyValue('--page-gutter').trim())
               && Boolean(rootStyles.getPropertyValue('--section-space').trim())
               && Boolean(rootStyles.getPropertyValue('--fs-hero').trim()),
@@ -103,6 +108,7 @@ test('shared visual system stays consistent across five viewports and eleven pag
         expect(state.shellRight, archetype.route + ' content rail must remain inside the viewport').toBeLessThanOrEqual(viewport.width + 0.5);
         expect(state.tokensAfterRouteCSS, archetype.route + ' loads shared tokens after route-specific CSS').toBe(true);
         expect(state.conversionSystemAfterTokens, archetype.route + ' loads conversion components after shared tokens').toBe(true);
+        expect(state.accessibilityAfterAllOtherStyles, archetype.route + ' loads preference overrides after every other stylesheet').toBe(true);
         expect(state.tokensPresent, archetype.route + ' receives the shared scale tokens').toBe(true);
         expect(state.horizontalOverflow, archetype.route + ' must not introduce horizontal page overflow').toBe(false);
 

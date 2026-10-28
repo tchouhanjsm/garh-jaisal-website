@@ -1,0 +1,21 @@
+/* Shared accessibility preferences, loaded after route-level styles. */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body,
+  html:focus-within {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+
+  /* Hover translations/scales are decorative; never move content for reduced-motion users. */
+  *:hover {
+    transform: none !important;
+  }
+}

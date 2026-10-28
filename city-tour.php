@@ -21,13 +21,14 @@ $faqItems = [
 ];
 $page = [
     'title' => 'Jaisalmer Fort Guided Walk | Garh Jaisal Haveli',
-    'description' => 'Explore Jaisalmer Fort on foot with a planned heritage route. Ask Garh Jaisal Haveli to confirm guide availability, visitor access, current price and any applicable entry fees for your date.',
+    'description' => 'Walk Jaisalmer Fort on a planned heritage route. Confirm guide availability, access, price and any entry fees with the hotel for your date.',
     'path' => '/city-tour.php',
     'og_title' => 'Jaisalmer Fort Guided Walk | Garh Jaisal Haveli',
-    'og_description' => 'Explore Jaisalmer Fort on foot with a planned heritage route. Ask Garh Jaisal Haveli to confirm guide availability, visitor access, current price and any applicable entry fees for your date.',
+    'og_description' => 'Walk Jaisalmer Fort on a planned heritage route. Confirm guide availability, access, price and any entry fees with the hotel for your date.',
     'og_image' => '/img/1.webp',
+    'og_image_alt' => 'Historic sandstone architecture inside Jaisalmer Fort',
     'twitter_title' => 'Jaisalmer Fort Guided Walk | Garh Jaisal Haveli',
-    'twitter_description' => 'Explore Jaisalmer Fort on foot with a planned heritage route. Ask Garh Jaisal Haveli to confirm guide availability, visitor access, current price and any applicable entry fees for your date.',
+    'twitter_description' => 'Walk Jaisalmer Fort on a planned heritage route. Confirm guide availability, access, price and any entry fees with the hotel for your date.',
     'twitter_image' => '/img/1.webp',
     'css' => ['css/packages.css', 'css/tour.css'],
     'schema' => [
@@ -146,6 +147,19 @@ require __DIR__ . '/include/page-head.php';
       ?>
     </div>
   </section>
+
+<?php
+$planningPath = [
+    'title' => 'Plan the rest of your route',
+    'intro' => 'Use the Fort walk as one part of your stay, with arrival and itinerary details checked before you travel.',
+    'links' => [
+        ['label' => 'Guided Jaisalmer tours', 'href' => 'guided-jaisalmer-tour.php', 'description' => 'Compare half-day and full-day guided options.'],
+        ['label' => 'Arrival directions', 'href' => 'direction.php', 'description' => 'Read where vehicles stop and how to reach the haveli.'],
+        ['label' => 'Custom itinerary enquiry', 'href' => 'custom-itinerary.php', 'description' => 'Share your interests so the hotel can review possible arrangements.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>

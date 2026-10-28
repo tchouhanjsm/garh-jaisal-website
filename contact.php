@@ -216,7 +216,7 @@ $errorMessages = [
 $errorMessage = $errorMessages[$errorKey] ?? '';
 
 $pageTitle = 'Contact Hotel Garh Jaisal Haveli in Jaisalmer Fort';
-$pageDescription = 'Contact Garh Jaisal Haveli about rooms, arrival, dining and desert or city experiences. Call, email, or send an enquiry to plan your stay inside Jaisalmer Fort.';
+$pageDescription = 'Contact Garh Jaisal Haveli about rooms, arrival, rooftop dining and desert or city experiences. Call, email or send an enquiry for your stay.';
 $canonical = 'https://www.hotelgarhjaisal.com/contact.php';
 ?>
 <!doctype html>
@@ -237,6 +237,7 @@ $page = [
     'og_title' => $pageTitle,
     'og_description' => $pageDescription,
     'og_image' => '/img/v2/sitting-room.jpg',
+    'og_image_alt' => 'Sitting room with carved wood at Garh Jaisal Haveli',
     'twitter_title' => $pageTitle,
     'twitter_description' => $pageDescription,
     'twitter_image' => '/img/v2/sitting-room.jpg',
@@ -384,6 +385,19 @@ require __DIR__ . '/include/page-head.php';
       referrerpolicy="no-referrer-when-downgrade"
       allowfullscreen></iframe>
   </section>
+
+<?php
+$planningPath = [
+    'title' => 'Choose the right next step',
+    'intro' => 'Use the room and planning guides to share a more specific question with the hotel.',
+    'links' => [
+        ['label' => 'Direct booking guide', 'href' => 'book-rooms-in-jaisalmer.php', 'description' => 'Review the booking path and details to confirm.'],
+        ['label' => 'Compare rooms', 'href' => 'room.php', 'description' => 'Check room features and availability for your dates.'],
+        ['label' => 'Plan an experience', 'href' => 'desert-safari.php', 'description' => 'Explore desert options before asking about arrangements.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>

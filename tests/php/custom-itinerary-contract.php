@@ -7,7 +7,7 @@ $requiredMarkers = [
     'car-tours.php' => ['href="custom-itinerary.php"', 'not a complete list', 'tour-ideas-custom-builder'],
     'include/contact-topics.php' => ["'custom-itinerary' =>", 'custom Jaisalmer itinerary'],
     'scripts/generate-sitemap.php' => ["['path' => '/custom-itinerary.php', 'priority' => '0.7']"],
-    'sitemap.xml' => ['https://www.hotelgarhjaisal.com/custom-itinerary.php</loc><lastmod>2026-10-27</lastmod><priority>0.7</priority>'],
+    'sitemap.xml' => ['https://www.hotelgarhjaisal.com/custom-itinerary.php</loc><lastmod>'],
     'js/custom-itinerary.js' => ["querySelectorAll('input[name=\"interests\"]:checked')", "searchParams.set('text', message)", 'aria-disabled', 'new URL(whatsappBase)'],
     'css/custom-itinerary.css' => ['.custom-itinerary-content-grid', '@media(max-width:600px)', 'prefers-reduced-motion'],
 ];
@@ -22,6 +22,24 @@ foreach ($requiredMarkers as $relativePath => $markers) {
         if (strpos($source, $marker) === false) $errors[] = $relativePath . ' is missing required marker: ' . $marker;
     }
 }
+
+$sitemapContent = file_get_contents($root . '/sitemap.xml');
+$sitemapMatch = [];
+$hasValidCustomItineraryLastmod = is_string($sitemapContent)
+    && preg_match(
+        '~<url><loc>https://www\\.hotelgarhjaisal\\.com/custom-itinerary\\.php</loc><lastmod>(\\d{4}-\\d{2}-\\d{2})</lastmod><priority>0\\.7</priority></url>~',
+        $sitemapContent,
+        $sitemapMatch
+    ) === 1
+    && checkdate(
+        (int) substr($sitemapMatch[1], 5, 2),
+        (int) substr($sitemapMatch[1], 8, 2),
+        (int) substr($sitemapMatch[1], 0, 4)
+    );
+if (!$hasValidCustomItineraryLastmod) {
+    $errors[] = 'sitemap.xml custom itinerary route must have a valid lastmod date and retain its reviewed priority.';
+}
+
 $page = file_get_contents($root . '/custom-itinerary.php');
 if (is_string($page)) {
     foreach (['$_POST', 'method="post"', 'file_put_contents(', 'INSERT INTO'] as $forbidden) {

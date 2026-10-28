@@ -19,14 +19,15 @@ $faqItems = [
 ];
 $page = [
     'title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
-    'description' => "Rooftop dining at Garh Jaisal's Kitchen in Jaisalmer: vegetarian, vegan and non-vegetarian meals, candlelight dinners, and views of havelis, palace and lake.",
+    'description' => "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
     'path' => '/roof.php',
     'og_type' => 'website',
     'og_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
-    'og_description' => "Candlelight dinners and city views at Garh Jaisal's Kitchen, the rooftop restaurant inside Jaisalmer Fort.",
+    'og_description' => "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
     'og_image' => '/img/rest5.jpg',
+    'og_image_alt' => 'Dining at Garh Jaisal Haveli',
     'twitter_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
-    'twitter_description' => "Candlelight dinners and city views at Garh Jaisal's Kitchen, the rooftop restaurant inside Jaisalmer Fort.",
+    'twitter_description' => "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
     'twitter_image' => '/img/rest5.jpg',
     'css' => ['css/roof.css', 'css/thar-sunset-story.css'],
     'schema' => [
@@ -201,6 +202,19 @@ require __DIR__ . '/include/page-head.php';
       ?>
     </div>
   </section>
+
+<?php
+$planningPath = [
+    'title' => 'Complete your Fort visit',
+    'intro' => 'Make dining part of a wider stay by checking room availability and planning experiences in advance.',
+    'links' => [
+        ['label' => 'Stay inside the Fort', 'href' => 'room.php', 'description' => 'Compare the rooms and check your dates.'],
+        ['label' => 'Restaurant details', 'href' => 'restaurant.php', 'description' => 'Review dining information and ask about current menu details.'],
+        ['label' => 'Desert experiences', 'href' => 'desert-safari.php', 'description' => 'Explore options for a sunset or overnight outing.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>

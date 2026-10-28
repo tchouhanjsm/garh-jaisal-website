@@ -68,6 +68,90 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 - **Sprint 119 — performance measurement discipline:** capture navigation timing entries for investigation; do not claim a sub-three-second real-user result from local CI timing.
 - **Sprint 120 — first-impression release gate:** run the cross-page Playwright checks on each PR head and review screenshot artifacts before visual approval.
 
+## Active phase — Sprints 121–130: Visual asset and typography evidence (PR #157)
+
+- **Sprint 121 — route image inventory:** inspect first-party and external image sources on high-intent pages.
+- **Sprint 122 — rendered image integrity:** record visible image load state, intrinsic dimensions and the selected responsive `currentSrc`.
+- **Sprint 123 — alternative-text contract:** detect missing `alt` attributes while allowing explicitly decorative empty alternatives.
+- **Sprint 124 — image geometry:** capture rendered box and intrinsic aspect ratio to identify suspicious distortion/cropping candidates.
+- **Sprint 125 — responsive source evidence:** record `src`, `srcset`, `sizes` and `currentSrc` rather than assuming a candidate is used.
+- **Sprint 126 — font declaration audit:** record computed display/body font stacks and font readiness per route.
+- **Sprint 127 — transfer diagnostics:** match resource timing entries to image/font requests when the browser exposes timing data.
+- **Sprint 128 — route coverage:** audit Home, Rooms, Packages, Dining, Directions, Contact, Gallery and Journal.
+- **Sprint 129 — machine-readable evidence:** write JSON under `artifacts/image-accessibility/` for the existing CI artifact uploader.
+- **Sprint 130 — evidence-led optimization:** use the resulting report and screenshot review to choose specific asset, crop or font changes; do not replace photos based on filename guesses.
+
+## Active phase — Sprints 131–140: Responsive hero delivery and mobile first impression (PR #157)
+
+- **Sprint 131 — image-slot truth:** compare the declared sizes slot to the actual rendered hero geometry.
+- **Sprint 132 — Gallery hero correction:** align the full-bleed hero sizing hint with its 100vw rendered slot so desktop does not select a smaller source.
+- **Sprint 133 — responsive hero preload:** preload the same srcset and sizes candidate set used by the Gallery hero, with high fetch priority.
+- **Sprint 134 — preload consistency:** assert that preload candidates and rendered image candidates match to avoid duplicate or mismatched requests.
+- **Sprint 135 — 320px facts hierarchy:** place Home quick facts in two balanced columns with the final item spanning the width on small phones.
+- **Sprint 136 — compact-phone readability:** verify minimum item width, touch-safe layout and no horizontal overflow at 320px.
+- **Sprint 137 — first-viewport asset contract:** fail browser testing if Gallery hero source selection regresses to the 45vw candidate or drops below expected width.
+- **Sprint 138 — image/accessibility regression:** retain alt-attribute, visible-image integrity and font readiness coverage across eight routes.
+- **Sprint 139 — evidence-led performance:** distinguish candidate review thresholds from hard budgets; do not degrade photo quality to win bytes blindly.
+- **Sprint 140 — release verification:** require exact-head PHP 7.4/8.2, Browser E2E, package preflight and non-deploying Staging QA. Human screenshot review remains required for final visual approval.
+
+## Active phase — Sprints 141–150: Compact-phone first-screen completeness (PR #157)
+
+- **Sprint 141 — cascade integrity:** move the 320px hero rules into the homepage story stylesheet that owns the stronger selectors.
+- **Sprint 142 — fact hierarchy:** render Stay and Dine in two readable columns; let Explore span the full second row.
+- **Sprint 143 — viewport geometry:** constrain the smallest-phone hero to the usable first screen instead of inheriting the 620px desktop minimum.
+- **Sprint 144 — action-dock clearance:** keep hero proof points above the fixed mobile CTA dock without hiding booking/contact actions.
+- **Sprint 145 — compact typography:** reduce the smallest-phone heading/body scale and vertical gaps while preserving contrast and booking intent.
+- **Sprint 146 — layout semantics:** retain the three verified facts and meaningful DOM order.
+- **Sprint 147 — browser diagnostics:** report fact-bottom, dock-top and hero-height values on failures.
+- **Sprint 148 — regression guard:** keep strict two-column and first-screen clearance assertions.
+- **Sprint 149 — exact-head validation:** rerun Site Checks, package preflight, non-deploying Staging QA and Browser E2E on the updated SHA.
+- **Sprint 150 — visual review:** retain 320/390/768/1280/1440 screenshot review; CI timing is not proof of field three-second performance.
+
+## Active phase — Sprints 151–155: Reduced-motion and first-screen accessibility (PR #157)
+
+- **Sprint 151 — reduced-motion parity:** remove homepage discovery-card transforms and CSS transitions when `prefers-reduced-motion: reduce` is active; retain non-motion hover affordances.
+- **Sprint 152 — actual preference regression:** emulate the browser reduced-motion preference in Playwright and assert computed transitions and hover transforms instead of merely checking that a media query exists.
+- **Sprint 153 — focused selector contract:** keep the first-screen typography assertion scoped to the visible homepage hero, so a later section label cannot accidentally satisfy it.
+- **Sprint 154 — responsive no-overflow gate:** retain document-width assertions across the configured mobile/tablet/desktop browser projects.
+- **Sprint 155 — release evidence integrity:** use exact-head workflow results only, and keep local timing reports separate from field performance claims.
+- **Remediation after Browser E2E run 739:** the captured 320px screenshot confirmed the eyebrow was rendered at 11.52px because the final compact-phone override used `0.72rem`. Keep the existing minimum-size assertion and set the homepage hero eyebrow back to the established `0.8125rem` (13px at the root scale); scope the test to the visible primary hero eyebrow instead of the first arbitrary `.eyebrow` in the DOM. Verify the new exact head before marking the browser gate complete.
+
+## Active phase — Sprints 156–170: Gallery image UX and sitewide motion preferences (PR #157)
+
+- **Sprint 156 — keyboard-first image browsing:** support Left/Right arrow keys in the native Gallery dialog while keeping the existing Previous/Next buttons and direct-image link fallback.
+- **Sprint 157 — position feedback:** announce the active item as “Photo N of M” through a polite, atomic status region so keyboard and screen-reader users can track movement.
+- **Sprint 158 — predictable focus recovery:** return focus to the image that opened the dialog after Close/Escape; if filtering makes that trigger hidden, recover focus to the active filter instead.
+- **Sprint 159 — neighbor readiness:** after a visitor explicitly opens a photo, prewarm only its adjacent full-size images and decode them where supported. Do not preload the complete gallery during initial page load.
+- **Sprint 160 — source fidelity:** continue using the exact curated original linked to each thumbnail for the full-size viewer; do not remap rooms, experiences or photos by filename.
+- **Sprint 161 — shared motion preference layer:** load a small shared accessibility stylesheet after route/component styles on pages using the common page head.
+- **Sprint 162 — reduced-motion scroll behavior:** replace smooth scrolling, CSS animations and transitions with non-animated behavior when the user requests reduced motion.
+- **Sprint 163 — no-motion hover state:** remove nonessential card, navigation, CTA and Gallery hover transforms under reduced motion while preserving content, focus states and active/inactive colors.
+- **Sprint 164 — route-family browser evidence:** assert the shared preference stylesheet loads last and suppresses transitions across Home, Rooms, Dining and Gallery.
+- **Sprint 165 — rendered hover contract:** emulate reduced motion and assert the Gallery image does not scale on hover; do not rely on stylesheet-marker checks alone.
+- **Sprint 166 — source contract:** test stylesheet existence, shared-head inclusion/order and reduced-motion declarations in PHP CI for PHP 7.4 and 8.2.
+- **Sprint 167 — Gallery interaction regression:** test arrow-key wraparound, live position updates, full-size image resolution, Escape close and focus restoration in Chromium.
+- **Sprint 168 — progressive enhancement:** preserve all curated images, native links and category navigation when JavaScript is disabled.
+- **Sprint 169 — review evidence:** inspect latest exact-head screenshots at mobile and desktop widths and verify the lightbox remains inside the viewport.
+- **Sprint 170 — release gate:** rerun Site Checks, Browser E2E/screenshots, non-deploying Staging QA and package preflight on the same latest PR head. CI evidence is not a production deployment or a field Core Web Vitals result.
+
+## Active phase — Sprints 171–185: Responsive image decoding and cascade-contract recovery (PR #157)
+
+- **Sprint 171 — correct the visual-system contract:** exclude the shared accessibility preference layer from the route-stylesheet group that must precede tokens; keep a separate assertion that the preference layer loads last.
+- **Sprint 172 — keep the cascade strict:** verify the preference stylesheet follows route styles, shared tokens and conversion components rather than moving it earlier to satisfy the old assertion.
+- **Sprint 173 — homepage imagery:** add explicit asynchronous decoding hints to image elements that previously omitted them while retaining high-priority hero hints.
+- **Sprint 174 — package cards:** make asynchronous decoding explicit on lazy-loaded package images.
+- **Sprint 175 — desert discovery:** apply the same decode policy to desert-hub hero and card images without replacing their source or changing slot sizes.
+- **Sprint 176 — guided and car-tour cards:** make image decode behavior consistent across travel-discovery cards.
+- **Sprint 177 — shared header assets:** use the same decode hint for the persistent brand and contact imagery.
+- **Sprint 178 — experience template:** align the shared experience hero with existing high-priority/asynchronous image declarations; retain responsive srcset and sizes.
+- **Sprint 179 — editorial template:** apply the decode hint to the shared guide hero without changing visible editorial content, canonical routes or structured data.
+- **Sprint 180 — reusable hero component:** keep asynchronous decoding consistent for consumers of the shared hero partial.
+- **Sprint 181 — route freshness:** update sitemap lastmod only for directly changed public page sources and live experience/editorial routes whose shared renderer changed.
+- **Sprint 182 — lazy-image policy evidence:** add a Chromium contract across core page families for async decoding on lazy images, explicit alt attributes and no high-priority/lazy contradiction.
+- **Sprint 183 — visual-system regression:** reproduce and fix the stale token-order assertion from Browser E2E run 742 while retaining strict checks for all real route styles.
+- **Sprint 184 — reduced-motion hover parity:** suppress all hover transforms under prefers-reduced-motion without removing focus indicators or hover color contrast.
+- **Sprint 185 — release gate:** validate the exact final PR head with Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. Do not infer a field-performance result from CI timing.
+
 ## Priority sequence
 
 1. Deliver coherent guest journeys and resolve high-impact performance findings using measured browser evidence.
@@ -86,3 +170,39 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 ## Working agreement
 
 Every PR must deliver a coherent visible slice with exact-head Site Checks, Browser E2E/screenshot evidence, package preflight and non-deploying Staging QA. Do not infer a pass from a cancelled or stale run. Nobody merges or deploys on the owner's behalf.
+
+
+## Completed phase — Sprints 186–200: accessible social preview images
+
+- Extended the shared page-head renderer to emit Twitter/X `image:alt` metadata without copying Open Graph alt text onto a different image source.
+- Added source-grounded Open Graph image descriptions for the key public routes covered by this batch; existing approved image files and source mappings remain unchanged.
+- Added PHP coverage for output escaping and same-image/distinct-image fallback rules, plus Browser E2E coverage across Home, Rooms, Packages, Trip Planner, Gallery, About, Directions, Contact, Journal, itinerary, safari and city-tour routes.
+- Wired the PHP contract into the PHP 7.4/8.2 Site Checks workflow and documented the exact-head validation command.
+- No page URLs, canonical paths, booking/contact destinations, business facts or production assets were changed. The batch requires fresh exact-head checks; no staging or production deployment was performed.
+
+
+## Completed phase — Sprints 201–215: sitewide social image metadata completeness
+
+- The shared head now supplies a reviewed description only when a page uses the shared default facade image; custom images cannot accidentally inherit the facade's description.
+- Added source-specific Open Graph descriptions to the remaining static experience/dining pages. Experience and editorial renderers now explicitly send the same image description to both social-card formats and reject empty hero descriptions; Content Studio overlays enforce non-empty hero alt text.
+- Expanded social-image Browser E2E from a fixed shortlist to every live route in the committed sitemap. The historical frozen head baseline ignores only the two image-alt fields now independently verified by that route-complete contract.
+- Updated sitemap `lastmod` for changed static sources and the catalogue's data source. Sitemap generation now accounts for the shared Content Studio page renderer when deriving landing-page freshness.
+- No public URLs, booking destinations, business facts or original photographs changed. Exact-head Site Checks, Browser E2E, package preflight and non-deploying Staging QA remain the release gate; no deployment was performed.
+
+
+## Completed phase — Sprints 216–230: search-snippet quality and metadata alignment
+
+- Trimmed the titles/descriptions identified by the 37-route rendered metadata audit, including Home, Car & City Tours, the Fort walk, Desert Safari, guided tours, Rooms, About, Contact, rooftop dining, restaurant and the honeymoon guide.
+- Kept title and description copy aligned across the core page head and social-preview fields; shortened the Desert Safari title from 64 characters to the project's 30–60 character target.
+- Added sitemap-wide Playwright checks for rendered title length (30–60 characters), meta-description length (120–160 characters), canonical route parity, and indexability. The length bands are internal quality gates, not claims about fixed Google snippet lengths.
+- Updated the approved frozen head snapshot for the intentional copy changes. Further metadata drift remains a test failure instead of being silently normalized.
+- Business details, URLs, booking destinations and image assets are unchanged.
+
+
+## Sprints 231–245 — Contextual planning paths and route-wide E2E recovery
+
+- Fixed the exact-head Browser E2E failure on `book-rooms-in-jaisalmer.php`: its custom rooftop social-card image now has explicit Open Graph and Twitter/X image descriptions instead of relying on the shared facade-image fallback.
+- Added a reusable, output-escaped planning-path component to 11 high-intent routes: booking guide, Rooms, Packages, Directions, Rooftop Dining, Restaurant, About, Contact, Desert Safari, guided tours and the Fort walk.
+- Each route supplies three distinct contextual next steps. The component validates same-site PHP destinations, uses a labelled navigation landmark, and supplies concise link descriptions. Responsive card styling follows the existing conversion design layer and respects reduced-motion preferences.
+- Added a desktop Browser E2E contract for the 11 routes and refreshed the booking-guide sitemap lastmod to match its source revision.
+- This is a repository-local publication and journey improvement, not evidence of ranking gains or field Core Web Vitals. No public URL or booking destination changed; no merge, cPanel upload, staging deployment or production deployment was performed.

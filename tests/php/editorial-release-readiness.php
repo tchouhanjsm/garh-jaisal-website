@@ -47,10 +47,12 @@ foreach ([
     'property="og:description"',
     'property="og:url"',
     'property="og:image"',
+    'property="og:image:alt"',
     'name="twitter:card"',
     'name="twitter:title"',
     'name="twitter:description"',
     'name="twitter:image"',
+    'name="twitter:image:alt"',
 ] as $marker) {
     $assert(strpos($head, $marker) !== false, 'Shared head is missing SEO metadata marker: ' . $marker);
 }

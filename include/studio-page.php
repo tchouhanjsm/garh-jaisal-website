@@ -94,6 +94,10 @@ if ($studioPageHero === '' || $studioPageImage($studioPageHero) === '') {
     return;
 }
 
+if (trim($studioPageHeroAlt) === '') {
+    throw new RuntimeException('Content Studio landing page requires a non-empty hero_alt: ' . $studioPageSlug);
+}
+
 $studioPageCanonical = rtrim((string) ($siteConfig['site_url'] ?? ''), '/') . '/' . $studioPageSlug . '.php';
 $studioPageSchema = [
     '@type' => 'WebPage',
@@ -116,6 +120,7 @@ $page = [
     'twitter_title' => $studioPageTitle,
     'twitter_description' => $studioPageDescription,
     'twitter_image' => '/' . ltrim($studioPageHero, '/'),
+    'twitter_image_alt' => $studioPageHeroAlt,
     'css' => [
         'css/page-builder.css',
         'css/thar-sunset-story.css',

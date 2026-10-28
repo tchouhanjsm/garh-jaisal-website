@@ -26,7 +26,7 @@ $uiHeroBreadcrumbs = isset($uiHero['breadcrumbs']) && is_array($uiHero['breadcru
 <section class="<?= $uiHeroEscape($uiHeroRootClass) ?>">
   <?php if (in_array($uiHeroVariant, ['home', 'photo'], true) && !empty($uiHeroImage['src'])): ?>
     <div class="<?= $uiHeroVariant === 'home' ? 'hero-media' : 'experience-hero-media' ?>">
-      <img src="<?= $uiHeroEscape($uiHeroImage['src']) ?>" alt="<?= $uiHeroEscape($uiHeroImage['alt'] ?? '') ?>"<?php if (isset($uiHeroImage['width']) && is_numeric($uiHeroImage['width'])): ?> width="<?= (int) $uiHeroImage['width'] ?>"<?php endif; ?><?php if (isset($uiHeroImage['height']) && is_numeric($uiHeroImage['height'])): ?> height="<?= (int) $uiHeroImage['height'] ?>"<?php endif; ?><?php if ($uiHeroVariant === 'home'): ?> fetchpriority="high"<?php endif; ?>>
+      <img src="<?= $uiHeroEscape($uiHeroImage['src']) ?>" alt="<?= $uiHeroEscape($uiHeroImage['alt'] ?? '') ?>"<?php if (isset($uiHeroImage['width']) && is_numeric($uiHeroImage['width'])): ?> width="<?= (int) $uiHeroImage['width'] ?>"<?php endif; ?><?php if (isset($uiHeroImage['height']) && is_numeric($uiHeroImage['height'])): ?> height="<?= (int) $uiHeroImage['height'] ?>"<?php endif; ?><?php if ($uiHeroVariant === 'home'): ?> fetchpriority="high"<?php endif; ?> decoding="async">
       <div class="<?= $uiHeroVariant === 'home' ? 'hero-overlay' : 'experience-hero-overlay' ?>"></div>
     </div>
   <?php endif; ?>

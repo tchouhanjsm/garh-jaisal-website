@@ -24,6 +24,7 @@ $page = [
     'og_title' => 'Build a Custom Jaisalmer Itinerary | Garh Jaisal Haveli',
     'og_description' => 'Describe your places, interests and time available. Prepare an enquiry for the hotel to review; this is not a booking or confirmed tour.',
     'og_image' => '/img/jcity.jpg',
+    'og_image_alt' => 'View over Jaisalmer’s historic city from the fort edge',
     'twitter_title' => 'Build a Custom Jaisalmer Itinerary | Garh Jaisal Haveli',
     'twitter_description' => 'Combine interests and suggest your own places for a custom Jaisalmer itinerary enquiry.',
     'twitter_image' => '/img/jcity.jpg',
