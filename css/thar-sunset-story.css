@@ -1019,7 +1019,8 @@ dialog.room-comparison-dialog::backdrop{
 
   main.thar-sunset-story--home .hero-content > .eyebrow {
     margin-bottom: 7px;
-    font-size: 0.72rem;
+    /* Keep the actual 320px computed size above the shared 13px contract. */
+    font-size: 0.8125rem;
   }
 
   main.thar-sunset-story--home .hero-content h1 {
