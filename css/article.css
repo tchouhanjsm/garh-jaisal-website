@@ -202,3 +202,35 @@
     font-size: 1rem;
   }
 }
+
+
+/* Sprint 80 — editorial topic navigation for the Journal archive. */
+.journal-topic-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0 30px;
+}
+.journal-topic-index a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 9px 13px;
+  border: 1px solid var(--line);
+  background: rgba(255, 253, 250, .86);
+  color: var(--brown);
+  font-size: .9rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.journal-topic-index a:hover {
+  border-color: var(--garnet, #5b1a2b);
+  color: var(--garnet, #5b1a2b);
+}
+.journal-topic-index a:focus-visible {
+  outline: 3px solid var(--gold-ink, #8a6212);
+  outline-offset: 3px;
+}
+.journal-topic-card {
+  scroll-margin-top: 7rem;
+}
