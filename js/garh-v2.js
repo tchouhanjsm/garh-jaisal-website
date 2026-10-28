@@ -942,8 +942,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderComparison();
         const remainingRemoveButtons = Array.from(comparisonShortlistItems.querySelectorAll('[data-room-shortlist-remove]'));
         const focusTarget = remainingRemoveButtons[Math.min(removeIndex, remainingRemoveButtons.length - 1)]
-          || comparisonShortlistReview
-          || searchInput;
+          || (selectedRoomIds.size >= 2 ? comparisonShortlistReview : searchInput);
         focusTarget?.focus();
       });
       comparisonShortlistReview?.addEventListener('click', () => {

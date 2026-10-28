@@ -190,9 +190,22 @@ test.describe('Room comparison journey', () => {
     await expect(dialog.locator('table')).toContainText('Listed features by room');
 
     await dialog.locator('[data-room-comparison-close]').first().click();
+    const roomSearch = page.locator('[data-room-search]');
     await shortlist.locator('[data-room-shortlist-clear]').click();
     await expect(shortlist).toBeHidden();
-    await expect(page.locator('[data-room-search]')).toBeFocused();
+    await expect(roomSearch).toBeFocused();
+
+    // The per-room removal path preserves focus as each shortlist item disappears.
+    await roomSearch.fill('');
+    await first.locator('[data-room-compare-toggle]').click();
+    await second.locator('[data-room-compare-toggle]').click();
+    const firstId = await first.getAttribute('id');
+    await shortlist.locator('[data-room-shortlist-remove="' + firstId + '"]').click();
+    await expect(shortlistItems).toHaveCount(1);
+    await expect(shortlistItems.locator('[data-room-shortlist-remove]')).toBeFocused();
+    await shortlistItems.locator('[data-room-shortlist-remove]').click();
+    await expect(shortlist).toBeHidden();
+    await expect(roomSearch).toBeFocused();
   });
 
   test('keeps the compare dialog inside the viewport from mobile through desktop widths', async ({ page }, testInfo) => {
