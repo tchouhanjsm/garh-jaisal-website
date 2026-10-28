@@ -26,7 +26,7 @@ if (!function_exists('gj_image_dimension_attributes')) {
                 && isset($size['width'], $size['height'])
                 && $size['width'] > 0
                 && $size['height'] > 0
-            ) ? [(int) $size[0], (int) $size[1]] : null;
+            ) ? [(int) $size['width'], (int) $size['height']] : null;
         }
 
         if ($dimensionCache[$source] === null) {

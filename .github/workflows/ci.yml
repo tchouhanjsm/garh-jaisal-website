@@ -115,6 +115,9 @@ jobs:
       - name: Test image-dimension cache reuse
         run: php tests/php/image-dimension-cache-contract.php
 
+      - name: Verify safe local image metadata contract
+        run: php tests/php/image-metadata-contract.php
+
       - name: Verify shared accessibility preference layer
         run: php tests/php/accessibility-stylesheet-contract.php
 

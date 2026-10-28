@@ -47,7 +47,11 @@ if ($experienceHeroAlt === '') {
 }
 $experienceHeroCaption = trim((string) ($experience['hero_caption'] ?? ''));
 if ($experienceHeroCaption === '') {
-    throw new RuntimeException('Experience page requires a non-empty hero_caption: ' . (string) ($experience['slug'] ?? 'unknown'));
+    if (!empty($studioAllowDraftPreview)) {
+        $experienceHeroCaption = 'Draft preview image — add a reviewed caption before publishing.';
+    } else {
+        throw new RuntimeException('Experience page requires a non-empty hero_caption: ' . (string) ($experience['slug'] ?? 'unknown'));
+    }
 }
 
 $activePage = 'packages';

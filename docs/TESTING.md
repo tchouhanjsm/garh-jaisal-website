@@ -141,3 +141,7 @@ A role that is not directly affected still records a concrete double-check rathe
 - The `tests/e2e/editorial-media-readiness.spec.js` browser audit covers the 12 live editorial guides and eight live experience pages. It attaches `artifacts/editorial-media-readiness/editorial-media-readiness.json`.
 - The audit checks the rendered image decoded, the figure/hero caption is visible, image alt matches Open Graph and Twitter/X descriptions, the social image matches the rendered hero, and ImageObject URL/text/dimensions match the shared page-head metadata.
 - The shared metadata helper may omit intrinsic dimensions for a valid image format unsupported by the running PHP image library (currently the AVIF fallback case); this exception does not waive browser decode checks.
+
+
+- `php tests/php/image-metadata-contract.php` verifies that the shared image metadata helper returns positive intrinsic metadata for a real local photo and rejects remote, missing, traversal and non-image path inputs.
+- Token-validated Content Studio draft previews may display an explicit “add a reviewed caption before publishing” reminder when the draft has no caption. Live publication checks still require a reviewed caption.

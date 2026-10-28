@@ -48,7 +48,11 @@ if ($guideHeroAlt === '') {
 }
 $guideHeroCaption = trim((string) ($guide['hero_caption'] ?? ''));
 if ($guideHeroCaption === '') {
-    throw new RuntimeException('Editorial guide requires a non-empty hero_caption: ' . (string) ($guide['slug'] ?? 'unknown'));
+    if (!empty($studioAllowDraftPreview)) {
+        $guideHeroCaption = 'Draft preview image — add a reviewed caption before publishing.';
+    } else {
+        throw new RuntimeException('Editorial guide requires a non-empty hero_caption: ' . (string) ($guide['slug'] ?? 'unknown'));
+    }
 }
 
 $guideTopic = (string) ($guide['topic'] ?? 'trip-planning');

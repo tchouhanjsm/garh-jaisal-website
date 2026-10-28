@@ -370,6 +370,8 @@ async function main() {
   assert.equal(response.status, 200, 'preview route should return a rendered PHP page');
   let html = await response.text();
   assert.ok(html.includes('Content Studio Draft Test Tour'), 'preview should render form data through the existing experience renderer');
+  assert.match(html, /class="experience-hero-caption">Draft preview image — add a reviewed caption before publishing\.<\/p>/,
+    'an unpublished draft preview should display a clear editorial caption reminder without weakening live publication requirements');
   assert.match(html, /noindex,follow/, 'preview must be non-indexable');
   const foreignHostPreview = await requestStatusWithHost(PHP_URL + result.body.pagePath, 'example.com');
   assert.equal(foreignHostPreview.statusCode, 404, 'preview route must reject requests with a non-local Host header');
