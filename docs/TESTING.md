@@ -7,6 +7,7 @@ From the repository root:
 ```bash
 php scripts/check-site.php --strict-images
 php scripts/generate-sitemap.php --check
+php tests/php/editorial-release-readiness.php
 php scripts/check-experience-publication.php
 php scripts/check-launch-hardening.php
 php scripts/check-runtime-config.php
