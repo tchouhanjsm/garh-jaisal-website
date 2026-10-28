@@ -237,13 +237,58 @@ require __DIR__ . '/page-head.php';
         <div><p class="eyebrow">From the journal</p><h2 id="journal-discovery-title">Keep exploring Jaisalmer.</h2></div>
         <p>Follow the question you still have, from arriving inside the Fort to choosing a season or shaping time beyond the city.</p>
       </div>
+      <?php
+      // Do not repeat destinations already linked in the article body, its
+      // related cards, sources or enquiry CTAs. This avoids redundant links
+      // while keeping a useful cross-guide rail on every published article.
+      $journalDiscoveryCandidates = [
+          ['href' => 'jaisalmer-fort-guide.php', 'label' => 'Jaisalmer Fort and its living lanes'],
+          ['href' => 'how-to-reach-jaisalmer.php', 'label' => 'How to reach Jaisalmer'],
+          ['href' => 'best-time-to-visit-jaisalmer.php', 'label' => 'Choose a season for your visit'],
+          ['href' => 'jaisalmer-2-day-itinerary.php', 'label' => 'Plan two days in Jaisalmer'],
+          ['href' => 'jaisalmer-3-day-itinerary.php', 'label' => 'Make room for a third day'],
+          ['href' => 'jaisalmer-desert-safari-packing-list.php', 'label' => 'Pack for a desert outing'],
+          ['href' => 'jaisalmer-havelis-guide.php', 'label' => 'Explore sandstone havelis'],
+          ['href' => 'jaisalmer-food-guide.php', 'label' => 'Explore regional food thoughtfully'],
+          ['href' => 'jaisalmer-beyond-the-fort-guide.php', 'label' => 'Plan beyond the Fort'],
+          ['href' => 'jaisalmer-markets-and-crafts-guide.php', 'label' => 'Browse markets and crafts'],
+      ];
+      $journalExistingRoutes = [];
+      $journalValuesToScan = [
+          $guide['sections'] ?? [],
+          $guide['related'] ?? [],
+          $guide['sources'] ?? [],
+          $guide['cta_primary_href'] ?? '',
+          $guide['cta_secondary_href'] ?? '',
+      ];
+      while ($journalValuesToScan) {
+          $journalValue = array_pop($journalValuesToScan);
+          if (is_array($journalValue)) {
+              foreach ($journalValue as $nestedJournalValue) {
+                  $journalValuesToScan[] = $nestedJournalValue;
+              }
+              continue;
+          }
+          if (!is_string($journalValue) || preg_match('#^https?://#i', trim($journalValue))) {
+              continue;
+          }
+          if (preg_match_all('~(?<![A-Za-z0-9])([A-Za-z0-9][A-Za-z0-9._/-]*\\.php(?:\\?[A-Za-z0-9._=%&-]+)?)~', $journalValue, $journalRouteMatches)) {
+              foreach ($journalRouteMatches[1] as $journalRoute) {
+                  $journalRoutePath = parse_url($journalRoute, PHP_URL_PATH);
+                  $journalRouteFile = basename(is_string($journalRoutePath) ? $journalRoutePath : $journalRoute);
+                  $journalExistingRoutes[$journalRouteFile] = true;
+              }
+          }
+      }
+      $journalExistingRoutes[basename((string) $guide['slug'] . '.php')] = true;
+      $journalDiscoveryLinks = array_values(array_filter($journalDiscoveryCandidates, static function ($candidate) use ($journalExistingRoutes) {
+          return !isset($journalExistingRoutes[basename($candidate['href'])]);
+      }));
+      ?>
       <nav class="article-topic-links" aria-label="More Jaisalmer travel guides">
-        <a href="jaisalmer-fort-guide.php">Jaisalmer Fort and its living lanes</a>
-        <a href="how-to-reach-jaisalmer.php">How to reach Jaisalmer</a>
-        <a href="best-time-to-visit-jaisalmer.php">Choose a season for your visit</a>
-        <a href="jaisalmer-2-day-itinerary.php">Plan two days in Jaisalmer</a>
-        <a href="jaisalmer-3-day-itinerary.php">Make room for a third day</a>
-        <a href="jaisalmer-food-guide.php">Explore regional food thoughtfully</a>
+        <?php foreach ($journalDiscoveryLinks as $journalLink): ?>
+          <a href="<?= $escapeGuide($journalLink['href']) ?>"><?= $escapeGuide($journalLink['label']) ?></a>
+        <?php endforeach; ?>
       </nav>
     </div>
   </section>
