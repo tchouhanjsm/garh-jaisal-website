@@ -65,7 +65,7 @@ foreach ($registry as $slug => $guide) {
         foreach (($guide['sources'] ?? []) as $source) {
             $sourceUrl = is_array($source) ? (string) ($source['url'] ?? '') : '';
             $isExternalSource = preg_match('#^https://#i', $sourceUrl) === 1;
-            $isInternalLink = preg_match('#^(?:[A-Za-z0-9][A-Za-z0-9._/-]*\\.php(?:[?#][A-Za-z0-9._?=#%&-]*)?)$#', $sourceUrl) === 1;
+            $isInternalLink = preg_match('~^[A-Za-z0-9][A-Za-z0-9._/-]*\\.php(?:[?][A-Za-z0-9._=%&-]+)?$~', $sourceUrl) === 1;
             $assert(is_array($source) && ($isExternalSource || $isInternalLink), 'Source must be a valid HTTPS citation or internal reference: ' . $slug);
             if ($isExternalSource) {
                 $assert(trim((string) ($source['label'] ?? '')) !== '' && trim((string) ($source['note'] ?? '')) !== '', 'External source needs a descriptive label and editorial context: ' . $slug);
