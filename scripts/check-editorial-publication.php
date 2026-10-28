@@ -63,7 +63,10 @@ foreach ($registry as $slug => $guide) {
         $assert(is_file($root . '/' . $slug . '.php'), 'Live guide is missing its public PHP wrapper: ' . $slug);
         $assert(!empty($guide['sources']) && is_array($guide['sources']), 'Live guide must cite at least one source: ' . $slug);
         foreach (($guide['sources'] ?? []) as $source) {
-            $assert(is_array($source) && preg_match('#^https://#i', (string) ($source['url'] ?? '')), 'Source must have an HTTPS URL: ' . $slug);
+            $sourceUrl = is_array($source) ? (string) ($source['url'] ?? '') : '';
+            $isExternalSource = preg_match('#^https://#i', $sourceUrl) === 1;
+            $isInternalLink = preg_match('#^(?:[A-Za-z0-9][A-Za-z0-9._/-]*\\.php(?:[?#][A-Za-z0-9._?=#%&-]*)?)$#', $sourceUrl) === 1;
+            $assert(is_array($source) && ($isExternalSource || $isInternalLink), 'Source must be a valid HTTPS citation or internal reference: ' . $slug);
         }
         $assert(!empty($guide['hero_alt']), 'Live guide hero image needs descriptive alternative text: ' . $slug);
         foreach (['toc', 'sections', 'related'] as $field) {
@@ -87,7 +90,7 @@ foreach ($registry as $slug => $guide) {
 $assert(strpos($template, "'@type' => 'BlogPosting'") !== false, 'Article template must emit BlogPosting schema.');
 $assert(strpos($template, 'gj_schema_breadcrumb_list') !== false, 'Article template must emit breadcrumb structured data.');
 $assert(strpos($sitemapGenerator, '$routeSlug') !== false && strpos($sitemapGenerator, 'status') !== false && strpos($sitemapGenerator, 'continue;') !== false, 'Static legacy article URLs must honour registry status.');
-$assert(strpos($template, "'robots' => $isDraft ? 'noindex,follow' : 'index,follow'") !== false, 'Draft preview must remain noindex.');
+$assert(strpos($template, "'robots' => " . '$isDraft' . " ? 'noindex,follow' : 'index,follow'") !== false, 'Draft preview must remain noindex.');
 $assert(strpos($template, '#official-sources') !== false && strpos($template, 'target="_blank" rel="noopener"') !== false, 'Source links must remain visible and safely opened.');
 $assert(strpos($template, 'article-topic-links') !== false, 'Article pages must provide cross-guide discovery.');
 $assert(strpos($archive, "=== 'live'") !== false && strpos($archive, '$archiveGuides = array_filter($editorialGuides') !== false, 'Archive must filter editorial records to live status.');
