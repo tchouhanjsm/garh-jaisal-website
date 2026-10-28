@@ -146,6 +146,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
         <div class="field"><label for="tour-best-for">Best suited to *</label><input id="tour-best-for" name="bestFor" required minlength="10" maxlength="400" placeholder="Who is this experience for?"></div>
         <div class="field full"><div class="uploadrow"><div><label for="tour-hero-upload">Upload main photo</label><input id="tour-hero-upload" type="file" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif" data-upload-target="tour-hero-image"><div id="tour-hero-upload-status" class="upload-status">JPG, PNG, WebP or AVIF, maximum 15 MB.</div></div><div><label for="tour-hero-image">Photo path *</label><input id="tour-hero-image" name="heroImage" required placeholder="img/content-studio/... or existing img/ path"><button type="button" class="asset-picker-trigger" data-asset-picker-target="tour-hero-image">Browse existing photos</button></div></div></div>
         <div class="field full"><label for="tour-hero-alt">Photo alternative text *</label><input id="tour-hero-alt" name="heroAlt" required minlength="10" maxlength="240" placeholder="Describe what the photograph actually shows"></div>
+        <div class="field full"><label for="tour-hero-caption">Photo caption for publication</label><textarea id="tour-hero-caption" name="heroCaption" minlength="20" maxlength="180" placeholder="Describe the relevant scene in a short, reviewed caption."></textarea><p class="hint">Required before publishing. Leave blank only while drafting; the private preview will show a reminder.</p></div>
         <div class="field"><label for="tour-duration-label">Duration shown</label><input id="tour-duration-label" name="durationLabel" placeholder="e.g. Afternoon to evening"></div>
         <div class="field"><label for="tour-overnight">Overnight arrangement</label><input id="tour-overnight" name="overnight" placeholder="e.g. No; return to town"></div>
         <div class="field"><label for="tour-camel">Camel ride</label><input id="tour-camel" name="camelRide" placeholder="Only verified details"></div>
@@ -185,6 +186,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
         <div class="field full"><label for="blog-lede">Article introduction *</label><textarea id="blog-lede" name="lede" required minlength="30" maxlength="700" placeholder="Explain what this guide covers and who it helps."></textarea></div>
         <div class="field full"><div class="uploadrow"><div><label for="blog-hero-upload">Upload cover photo</label><input id="blog-hero-upload" type="file" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif" data-upload-target="blog-hero-image"><div id="blog-hero-upload-status" class="upload-status">JPG, PNG, WebP or AVIF, maximum 15 MB.</div></div><div><label for="blog-hero-image">Photo path *</label><input id="blog-hero-image" name="heroImage" required placeholder="img/content-studio/... or existing img/ path"><button type="button" class="asset-picker-trigger" data-asset-picker-target="blog-hero-image">Browse existing photos</button></div></div></div>
         <div class="field full"><label for="blog-hero-alt">Cover photo alternative text *</label><input id="blog-hero-alt" name="heroAlt" required minlength="10" maxlength="240" placeholder="Describe the image, not keywords"></div>
+        <div class="field full"><label for="blog-hero-caption">Cover photo caption for publication</label><textarea id="blog-hero-caption" name="heroCaption" minlength="20" maxlength="180" placeholder="Add a short, accurate caption for the cover photo."></textarea><p class="hint">Required before publishing. Leave blank only while drafting; the private preview will show a reminder.</p></div>
         <div class="field"><label for="blog-card-title">Archive card heading</label><input id="blog-card-title" name="cardTitle" maxlength="140" placeholder="Defaults to article heading"></div>
         <div class="field"><label for="blog-card-description">Archive card description</label><textarea id="blog-card-description" name="cardDescription" maxlength="260" placeholder="Short teaser; defaults to SEO description"></textarea></div>
         <div class="field full">
@@ -230,6 +232,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
           </div>
         </div>
         <div class="field full"><label for="page-hero-alt">Main photo alternative text *</label><input id="page-hero-alt" name="heroAlt" required minlength="10" maxlength="240" placeholder="Describe what is actually visible in the image"></div>
+        <div class="field full"><label for="page-hero-caption">Main photo caption for publication</label><textarea id="page-hero-caption" name="heroCaption" minlength="20" maxlength="180" placeholder="Add a short, reviewed caption for the main photo."></textarea><p class="hint">Required before publishing. Leave blank only while drafting; the private preview will show a reminder.</p></div>
         <div class="field"><label for="page-hero-cta-label">Hero button label</label><input id="page-hero-cta-label" name="heroCtaLabel" maxlength="80" placeholder="e.g. Explore the rooms"></div>
         <div class="field"><label for="page-hero-cta-href">Hero button destination</label><input id="page-hero-cta-href" name="heroCtaHref" placeholder="/room.php or /contact.php"><p class="hint">Internal website pages and section anchors only; external or script URLs are rejected.</p></div>
       </div>
@@ -1036,7 +1039,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
       title:record.h1,slug:record.slug,category:record.category,status:record.status,
       durationType:record.duration_type,menuLabel:record.menu_label,seoTitle:record.title,
       description:record.description,summary:record.summary,eyebrow:record.eyebrow,bestFor:record.best_for,
-      heroImage:record.hero_image,heroAlt:record.hero_alt,durationLabel:glance.Duration,
+      heroImage:record.hero_image,heroAlt:record.hero_alt,heroCaption:record.hero_caption,durationLabel:glance.Duration,
       overnight:glance.Overnight,camelRide:glance['Camel ride'],meals:glance.Meals,
       transport:glance.Transport,returnPlan:glance.Return,timelineNote:record.timeline_note,
       included:(record.included||[]).join('\n'),excluded:(record.not_included||[]).join('\n'),
@@ -1053,7 +1056,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
     const fields={
       h1:record.h1,slug:record.slug,status:record.status,seoTitle:record.title,
       description:record.description,lede:record.lede,eyebrow:record.eyebrow,
-      heroImage:record.hero_image,heroAlt:record.hero_alt,cardTitle:record.archive_title,
+      heroImage:record.hero_image,heroAlt:record.hero_alt,heroCaption:record.hero_caption,cardTitle:record.archive_title,
       cardDescription:record.archive_description,ctaTitle:record.cta_title,ctaText:record.cta_text,
     };
     for(const [name,value] of Object.entries(fields))setField(form,name,value);
@@ -1084,7 +1087,7 @@ dialog.asset-picker::backdrop{background:#0b0a08d9;backdrop-filter:blur(3px)}
     const fields={
       h1:record.h1,slug:record.slug,seoTitle:record.title,description:record.description,
       eyebrow:record.eyebrow,theme:record.theme,heroLayout:record.hero_layout,
-      heroIntro:record.hero_intro,heroImage:record.hero_image,heroAlt:record.hero_alt,
+      heroIntro:record.hero_intro,heroImage:record.hero_image,heroAlt:record.hero_alt,heroCaption:record.hero_caption,
       heroCtaLabel:record.hero_cta_label,heroCtaHref:record.hero_cta_href,status:'draft',
     };
     for(const [name,value] of Object.entries(fields))setField(form,name,value);

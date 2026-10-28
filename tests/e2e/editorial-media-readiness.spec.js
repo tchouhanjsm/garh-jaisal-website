@@ -51,6 +51,9 @@ test('editorial and experience hero media is publish-ready', async ({ page }, te
     await expect(image, route.path + ' hero image has descriptive alternative text').toHaveAttribute('alt', /\S{15,}/);
     await expect(caption, route.path + ' has a visible editorial media caption').toBeVisible();
     await expect(caption).toHaveText(/\S{20,}/);
+    const captionText = (await caption.textContent() || '').trim();
+    expect(captionText.length, route.path + ' caption should meet the 20-character minimum').toBeGreaterThanOrEqual(20);
+    expect(captionText.length, route.path + ' caption should fit the 180-character editorial limit').toBeLessThanOrEqual(180);
     await image.evaluate(img => img.decode());
 
     const rendered = await page.evaluate(({ imageSelector, captionSelector }) => {

@@ -215,3 +215,13 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Added a visible caption to each of the 12 editorial guide hero images and each shared experience hero. Captions remain separate from alt text and are used consistently in the structured data.
 - Strengthened the source publication checks and added a rendered browser audit across 12 editorial routes and eight experience routes. The audit verifies successful image decoding, caption visibility, social-card/hero parity, and ImageObject dimension and text parity.
 - This is a local release-readiness gate, not a claim of live ranking changes or field performance. Original photo files, route URLs, prices and booking destinations remain unchanged.
+
+
+## Sprints 261–275 — Caption-gated Content Studio publishing and renderer recovery
+
+- Fixed the 500 on published editorial guide routes by loading the shared schema helper before constructing the hero ImageObject.
+- Extended Content Studio tour, guide and landing-page forms to capture a reviewed hero caption while keeping captionless Draft creation possible. Private Draft previews display an explicit reminder rather than failing to render.
+- Enforced a 20–180 character caption at Live rendering/publication time for experience, editorial and Studio landing pages; sync-pack validation now raises `RC-24` for Live records without an acceptable caption.
+- Added a release-verification check for stored and visibly rendered captions. Integration coverage now checks Live tour/guide caption rendering, captionless private-preview reminders, and the new authoring fields.
+- Updated the editorial media browser audit to assert the caption length band across the 12 guides and eight experience pages, and added source-order/publication contracts so schema helper order and the caption gate cannot silently regress.
+- These changes harden local publishing; they do not imply a hosting deployment or new live content. No route URLs, business claims, image assets, booking destinations or publication statuses were changed.

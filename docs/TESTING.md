@@ -145,3 +145,4 @@ A role that is not directly affected still records a concrete double-check rathe
 
 - `php tests/php/image-metadata-contract.php` verifies that the shared image metadata helper returns positive intrinsic metadata for a real local photo and rejects remote, missing, traversal and non-image path inputs.
 - Token-validated Content Studio draft previews may display an explicit “add a reviewed caption before publishing” reminder when the draft has no caption. Live publication checks still require a reviewed caption.
+- Verify the three Content Studio caption inputs (tour, guide, landing page), the approved Live tour/guide rendering, and `RC-24` rejection for a Live pack without a 20–180 character caption. The media E2E contract enforces that same length band on all 20 published editorial/experience routes.

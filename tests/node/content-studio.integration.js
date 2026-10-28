@@ -142,6 +142,7 @@ function landingPagePayload(slug, theme = 'heritage') {
     heroIntro: 'A temporary landing page introduction used to confirm the real shared PHP renderer.',
     heroImage: 'img/desert3.jpg',
     heroAlt: 'Camel riders travelling over dunes near Jaisalmer',
+    heroCaption: 'Camel riders cross the dunes near Jaisalmer in this desert scene.',
     heroCtaLabel: 'Contact the hotel',
     heroCtaHref: '/contact.php',
     sections: JSON.stringify([
@@ -163,6 +164,7 @@ function tourPayload(slug, status) {
     summary: 'Temporary tour used to validate the current content authoring pipeline.',
     heroImage: 'img/desert3.jpg',
     heroAlt: 'Camel riders travelling over dunes near Jaisalmer',
+    heroCaption: 'Camel riders cross the dunes near Jaisalmer on a planned desert outing.',
     bestFor: 'Automated verification of the local publishing workflow.',
     timeline: 'Meet the guide | Confirm the meeting point for the selected date.\nExplore the route | Describe the verified itinerary.\nReturn to town | Confirm the final arrangement for the selected date.',
   };
@@ -250,6 +252,9 @@ function verifyContentStudioAuthoringUi() {
   assert.ok(html.includes('Preview PHP-rendered draft'), 'tour and blog authoring must expose the actual PHP-rendered preview');
   assert.ok(html.includes('createPageSection'), 'landing pages must use the guided reusable section builder');
   assert.ok(html.includes('id="asset-picker"') && html.includes("fetch('/api/assets'"), 'Content Studio must expose the visual photo library and its local API');
+  for (const id of ['tour-hero-caption','blog-hero-caption','page-hero-caption']) {
+    assert.ok(html.includes('id="' + id + '"'), 'reviewed hero caption input should exist: ' + id);
+  }
   for (const id of ['tour-hero-image','blog-hero-image','page-hero-image','gallery-src']) {
     assert.ok(html.includes('data-asset-picker-target="' + id + '"'), 'visual photo selection should be available for image field: ' + id);
   }
@@ -356,7 +361,7 @@ async function main() {
   await waitFor(PHP_URL + '/blog.php', phpServer, 'PHP preview server');
 
   // The new preview route renders an unsaved, token-bound draft through the real PHP experience template.
-  let result = await requestJson(STUDIO_URL + '/api/preview', 'POST', { type: 'tours', payload: tourPayload('temporary-preview-input', 'draft') });
+  let result = await requestJson(STUDIO_URL + '/api/preview', 'POST', { type: 'tours', payload: { ...tourPayload('temporary-preview-input', 'draft'), heroCaption: '' } });
   assert.equal(result.response.status, 201, 'a PHP-rendered draft preview should be created: ' + JSON.stringify(result.body));
   assert.match(result.body.pagePath, /^\/tools\/content-studio\/preview\.php\?type=tours&token=[a-f0-9]{24}$/);
   const previewToken = result.body.token;
@@ -389,7 +394,7 @@ async function main() {
 
   // Landing-page previews use the same guarded PHP renderer, generated design-token CSS, and token cleanup as tours/blogs.
   const landingPreview = await requestJson(STUDIO_URL + '/api/preview', 'POST', {
-    type: 'pages', payload: landingPagePayload('temporary-preview-input'),
+    type: 'pages', payload: { ...landingPagePayload('temporary-preview-input'), heroCaption: '' },
   });
   assert.equal(landingPreview.response.status, 201, 'landing-page PHP preview should be created: ' + JSON.stringify(landingPreview.body));
   assert.match(landingPreview.body.pagePath, /^\/tools\/content-studio\/preview\.php\?type=pages&token=[a-f0-9]{24}$/);
@@ -407,6 +412,7 @@ async function main() {
   assert.equal(response.status, 200, 'landing preview should render with the actual PHP landing-page renderer');
   html = await response.text();
   assert.ok(html.includes('Content Studio Landing Page Integration Test'), 'landing preview should render its authored H1');
+  assert.ok(html.includes('<figcaption class="studio-page-hero-caption">Draft preview image — add a reviewed caption before publishing.</figcaption>'), 'landing Draft preview should show the caption reminder without weakening Live publication requirements');
   assert.ok(html.includes('Plan your visit') && html.includes('Common questions'), 'landing preview should render the authored content blocks');
   assert.ok(html.includes('<h2>Plan your visit</h2>') && html.includes('<h2>Common questions</h2>'), 'landing preview must render authored section headings, not only their body content');
   assert.ok(html.includes('css/page-builder.css') && html.includes('css/pages/' + landingPreviewSlug + '.css'), 'landing preview should use shared CSS and the generated page token CSS');
@@ -446,6 +452,7 @@ async function main() {
   assert.equal(response.status, 200, 'new tour should render through the shared PHP renderer');
   html = await response.text();
   assert.ok(html.includes('Content Studio Integration Test Tour'), 'tour H1 should render');
+  assert.ok(html.includes('<p class="experience-hero-caption">Camel riders cross the dunes near Jaisalmer on a planned desert outing.</p>'), 'Live tour should render the reviewed hero caption');
   response = await fetch(PHP_URL + '/catalogue.php');
   assert.equal(response.status, 200);
   assert.ok((await response.text()).includes('Content Studio Integration Test Tour'), 'new tour should appear in Trip Planner');
@@ -540,6 +547,7 @@ async function main() {
     eyebrow: 'Integration test',
     heroImage: 'img/desert3.jpg',
     heroAlt: 'Camel riders travelling over dunes near Jaisalmer',
+    heroCaption: 'Camel riders travel across the dunes near Jaisalmer in the Thar Desert.',
     cardTitle: 'Content Studio Test Guide',
     cardDescription: 'A temporary article card used for CI verification.',
     sections: '## Test section\nThis temporary article body verifies the shared editorial renderer.\n\n## What this checks\n- The archive card comes from the same content record.',
@@ -570,6 +578,7 @@ async function main() {
   html = await response.text();
   assert.ok(html.includes('Content Studio Integration Test Guide'), 'article content should render');
   assert.ok(html.includes('BlogPosting'), 'article structured data should render');
+  assert.ok(html.includes('<figcaption class="article-caption">Camel riders travel across the dunes near Jaisalmer in the Thar Desert.</figcaption>'), 'Live guide should render the reviewed hero caption');
 
   const originalPublishedDate = JSON.parse(fs.readFileSync(recordFiles[2], 'utf8')).date_published;
   const editedBlog = { ...blog, h1: 'Content Studio Integration Test Guide Revised', seoTitle: 'Content Studio Integration Test Guide Revised', cardTitle: 'Content Studio Revised Archive Card' };

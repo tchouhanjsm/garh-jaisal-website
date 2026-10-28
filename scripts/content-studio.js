@@ -634,6 +634,16 @@ function safeManagedRoute(route, type, slug) {
   }
 }
 
+function optionalHeroCaption(value) {
+  if (value === undefined || value === null || value === '') return '';
+  if (typeof value !== 'string') throw fail(400, 'Hero image caption must be text.');
+  const caption = value.trim();
+  if (caption.length < 20 || caption.length > 180) {
+    throw fail(400, 'Hero image caption must contain between 20 and 180 characters.');
+  }
+  return caption;
+}
+
 function verifyPublishableRecord(type, record) {
   if (type === 'pages') {
     try { validateLandingPageRecord(record); }
@@ -657,6 +667,7 @@ function verifyPublishableRecord(type, record) {
     }
     imagePath(record.hero_image);
     textField(record.hero_alt, 'Hero image alternative text', 10, 240);
+    textField(record.hero_caption, 'Hero image caption', 20, 180);
     if (record.facts_confirmed !== true || !/^\d{4}-\d{2}-\d{2}$/.test(String(record.last_verified || ''))) {
       throw fail(422, 'Confirm prices, timings and inclusions with the owner (set "Owner confirmed the facts" to Yes and save) before this tour can be made Live.');
     }
@@ -684,6 +695,7 @@ function verifyPublishableRecord(type, record) {
     }
     imagePath(record.hero_image);
     textField(record.hero_alt, 'Hero image alternative text', 10, 240);
+    textField(record.hero_caption, 'Hero image caption', 20, 180);
     return;
   }
   if (type === 'gallery') {
@@ -925,6 +937,7 @@ function createTour(input, existingSlug = null, previewOnly = false) {
   const summary = textField(input.summary, 'Card summary', 20, 500);
   const heroImage = imagePath(input.heroImage);
   const heroAlt = textField(input.heroAlt, 'Hero image alternative text', 10, 240);
+  const heroCaption = optionalHeroCaption(input.heroCaption);
   const itinerary = pipeRows(input.timeline, 'Itinerary', true, 12).map((row, index) => ({
     step: String(index + 1).padStart(2, '0'),
     title: textField(row[0], 'Itinerary step title', 2, 100),
@@ -942,7 +955,7 @@ function createTour(input, existingSlug = null, previewOnly = false) {
     title: textField(input.seoTitle || h1, 'SEO title', 8, 180),
     description, h1,
     eyebrow: textField(input.eyebrow || (category === 'city' ? 'Jaisalmer tour' : 'Desert experience'), 'Eyebrow', 2, 80),
-    hero_image: heroImage, hero_width: 1280, hero_height: 800, hero_alt: heroAlt,
+    hero_image: heroImage, hero_width: 1280, hero_height: 800, hero_alt: heroAlt, hero_caption: heroCaption,
     summary,
     at_a_glance: {
       Duration: textField(input.durationLabel || durationType, 'Duration label', 2, 100),
@@ -1036,12 +1049,13 @@ function createBlog(input, existingSlug = null, previewOnly = false) {
   const description = textField(input.description, 'SEO description', 40, 300);
   const heroImage = imagePath(input.heroImage);
   const heroAlt = textField(input.heroAlt, 'Hero image alternative text', 10, 240);
+  const heroCaption = optionalHeroCaption(input.heroCaption);
   const record = {
     slug, status: statusValue(input.status), review_status: 'draft',
     title: textField(input.seoTitle || h1, 'SEO title', 8, 180),
     description, h1, eyebrow,
     lede: textField(input.lede, 'Article introduction', 30, 700),
-    hero_image: heroImage, hero_alt: heroAlt,
+    hero_image: heroImage, hero_alt: heroAlt, hero_caption: heroCaption,
     date_published: date, date_modified: date, date_display: displayDate(date),
     archive_title: textField(input.cardTitle || h1, 'Archive card heading', 3, 140),
     archive_description: textField(input.cardDescription || description, 'Archive card description', 10, 260),
@@ -1152,6 +1166,8 @@ function validateLandingPageRecord(record) {
   textField(record.description, 'SEO description', 40, 300);
   imagePath(record.hero_image);
   textField(record.hero_alt, 'Hero image alternative text', 10, 240);
+  if (record.status === 'live') textField(record.hero_caption, 'Hero image caption', 20, 180);
+  else optionalHeroCaption(record.hero_caption);
   if (!PAGE_THEMES[record.theme] || !PAGE_LAYOUTS.includes(record.hero_layout)) throw fail(422, 'Landing page uses an unsupported design preset.');
   parseLandingSections(record.sections);
 }
@@ -1171,6 +1187,7 @@ function createLandingPage(input, existingSlug = null, previewOnly = false) {
   if (!PAGE_LAYOUTS.includes(heroLayout)) throw fail(400, 'Choose an approved hero layout.');
   const heroImage = imagePath(input.heroImage);
   const heroAlt = textField(input.heroAlt, 'Hero image alternative text', 10, 240);
+  const heroCaption = optionalHeroCaption(input.heroCaption);
   const description = textField(input.description, 'SEO description', 40, 300);
   const heroIntro = typeof input.heroIntro === 'string' ? input.heroIntro.trim() : '';
   if (heroIntro.length > 1000) throw fail(400, 'Hero introduction must be 1,000 characters or shorter.');
@@ -1190,6 +1207,7 @@ function createLandingPage(input, existingSlug = null, previewOnly = false) {
     eyebrow,
     hero_image: heroImage,
     hero_alt: heroAlt,
+    hero_caption: heroCaption,
     hero_intro: heroIntro,
     hero_cta_label: heroCtaLabel,
     hero_cta_href: heroCtaHref,

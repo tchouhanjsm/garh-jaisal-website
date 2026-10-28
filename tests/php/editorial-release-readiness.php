@@ -64,6 +64,9 @@ foreach ([
 }
 $assert(strpos($template, "'@type' => 'BlogPosting'") !== false, 'Editorial renderer must emit BlogPosting JSON-LD.');
 $assert(strpos($template, 'gj_schema_image_object') !== false, 'Editorial schema must include shared ImageObject metadata.');
+$schemaRequirePosition = strpos($template, "require_once __DIR__ . '/schema.php';");
+$imageObjectPosition = strpos($template, '$guideHeroImageObject = gj_schema_image_object');
+$assert(is_int($schemaRequirePosition) && is_int($imageObjectPosition) && $schemaRequirePosition < $imageObjectPosition, 'Editorial renderer must load schema helpers before constructing the hero ImageObject.');
 $assert(strpos($template, '<figcaption class="article-caption">') !== false, 'Editorial hero media must have a visible caption.');
 $assert(strpos($imageMetadataHelper, 'realpath') !== false && strpos($imageMetadataHelper, 'is_link') !== false, 'Image helper must enforce regular-file and real-path safeguards.');
 $assert(strpos($template, 'gj_schema_breadcrumb_list') !== false, 'Editorial renderer must emit breadcrumb JSON-LD.');

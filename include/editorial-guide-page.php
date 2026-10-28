@@ -54,12 +54,17 @@ if ($guideHeroCaption === '') {
         throw new RuntimeException('Editorial guide requires a non-empty hero_caption: ' . (string) ($guide['slug'] ?? 'unknown'));
     }
 }
+if (($guide['status'] ?? 'live') === 'live'
+    && (strlen($guideHeroCaption) < 20 || strlen($guideHeroCaption) > 180)) {
+    throw new RuntimeException('Editorial guide hero_caption must contain 20–180 characters: ' . (string) ($guide['slug'] ?? 'unknown'));
+}
 
 $guideTopic = (string) ($guide['topic'] ?? 'trip-planning');
 if (!isset($editorialTopicTaxonomy[$guideTopic])) $guideTopic = 'trip-planning';
 $guideTopicLabel = $editorialTopicTaxonomy[$guideTopic] ?? 'Trip planning';
 $siteUrl = rtrim((string) ($siteConfig['site_url'] ?? ''), '/');
 $canonical = $siteUrl . '/' . $guide['slug'] . '.php';
+require_once __DIR__ . '/schema.php';
 $guideHeroImageObject = gj_schema_image_object($siteUrl, $guide['hero_image'], $guideHeroCaption, $guideHeroAlt);
 $escapeGuide = static function ($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
@@ -70,7 +75,6 @@ $breadcrumbs = [
     ['label' => 'Journal', 'href' => '/blog.php'],
     ['label' => $guideBreadcrumbLabel],
 ];
-require_once __DIR__ . '/schema.php';
 $breadcrumbSchema = gj_schema_breadcrumb_list($siteUrl, '/' . $guide['slug'] . '.php', $breadcrumbs);
 $resolveGuideHref = static function ($value) use ($siteConfig) {
     if ((string) $value === '@booking') return (string) ($siteConfig['booking_url'] ?? '#');

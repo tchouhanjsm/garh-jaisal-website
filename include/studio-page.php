@@ -45,6 +45,17 @@ $studioPageDescription = (string) ($studioPage['description'] ?? '');
 $studioPageH1 = (string) ($studioPage['h1'] ?? $studioPageTitle);
 $studioPageHero = (string) ($studioPage['hero_image'] ?? '');
 $studioPageHeroAlt = (string) ($studioPage['hero_alt'] ?? '');
+$studioPageHeroCaption = trim((string) ($studioPage['hero_caption'] ?? ''));
+if ($studioPageHeroCaption === '') {
+    if ($studioPageIsPrivatePreview) {
+        $studioPageHeroCaption = 'Draft preview image — add a reviewed caption before publishing.';
+    } else {
+        throw new RuntimeException('Content Studio landing page requires a non-empty hero_caption: ' . $studioPageSlug);
+    }
+}
+if (!$studioPageIsPrivatePreview && (strlen($studioPageHeroCaption) < 20 || strlen($studioPageHeroCaption) > 180)) {
+    throw new RuntimeException('Content Studio landing page hero_caption must contain 20–180 characters: ' . $studioPageSlug);
+}
 $studioPageEyebrow = (string) ($studioPage['eyebrow'] ?? 'Garh Jaisal Haveli');
 $studioPageLayout = in_array(($studioPage['hero_layout'] ?? 'split'), ['split', 'centered'], true)
     ? $studioPage['hero_layout']
@@ -99,6 +110,8 @@ if (trim($studioPageHeroAlt) === '') {
 }
 
 $studioPageCanonical = rtrim((string) ($siteConfig['site_url'] ?? ''), '/') . '/' . $studioPageSlug . '.php';
+require_once __DIR__ . '/schema.php';
+$studioPageHeroImageObject = gj_schema_image_object($siteConfig['site_url'] ?? '', $studioPageHero, $studioPageHeroCaption, $studioPageHeroAlt);
 $studioPageSchema = [
     '@type' => 'WebPage',
     '@id' => $studioPageCanonical . '#webpage',
@@ -106,6 +119,7 @@ $studioPageSchema = [
     'name' => $studioPageTitle,
     'description' => $studioPageDescription,
     'inLanguage' => 'en',
+    'primaryImageOfPage' => $studioPageHeroImageObject,
 ];
 $page = [
     'title' => $studioPageTitle . ($studioPageIsDraft ? ' | Draft' : ''),
@@ -153,6 +167,7 @@ include __DIR__ . '/header-v2.php';
       </div>
       <figure class="studio-page-hero-media">
         <img src="<?= $studioPageEscape($studioPageHero) ?>" alt="<?= $studioPageEscape($studioPageHeroAlt) ?>" width="1600" height="1000" fetchpriority="high">
+        <figcaption class="studio-page-hero-caption"><?= $studioPageEscape($studioPageHeroCaption) ?></figcaption>
       </figure>
     </div>
   </section>

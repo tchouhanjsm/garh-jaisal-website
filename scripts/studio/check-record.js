@@ -104,6 +104,13 @@ function checkRecord(record, ctx) {
   // Optional additive fields.
   if (record.timeline_images !== undefined) add('RC-17', 'Unknown field "timeline_images".', 'Use images[] with role "step".');
   if (record.last_verified !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(String(record.last_verified))) add('RC-18', 'last_verified must be YYYY-MM-DD.', 'Use a date.');
+  // Published hero media must have a concise, reviewed caption. Draft previews may use a reminder.
+  if (record.status === 'live' && type !== 'gallery') {
+    const caption = typeof record.hero_caption === 'string' ? record.hero_caption.trim() : '';
+    if (caption.length < 20 || caption.length > 180) {
+      add('RC-24', 'Live content needs a reviewed hero caption of 20–180 characters.', 'Add an accurate caption before approval and export.');
+    }
+  }
   // Facts gate.
   if (record.status === 'live') {
     if (type === 'tour' && record.facts_confirmed !== true) add('RC-19', 'Live tours need facts_confirmed: true.', 'The owner confirms price, timings and inclusions, then sets facts_confirmed and last_verified.');

@@ -24,16 +24,20 @@ $archive = $read('blog.php');
 $sitemapGenerator = $read('scripts/generate-sitemap.php');
 $head = $read('include/page-head.php');
 $articleCss = $read('css/article.css');
+$studioPageRenderer = $read('include/studio-page.php');
+$contentStudioSource = $read('scripts/content-studio.js');
 foreach ([
     'include/editorial-guide-page.php' => $template,
     'blog.php' => $archive,
     'scripts/generate-sitemap.php' => $sitemapGenerator,
     'include/page-head.php' => $head,
     'css/article.css' => $articleCss,
+    'include/studio-page.php' => $studioPageRenderer,
+    'scripts/content-studio.js' => $contentStudioSource,
 ] as $path => $value) {
     $assert(is_string($value), 'Required publication pipeline file missing: ' . $path);
 }
-if (!is_array($registry) || !is_string($template) || !is_string($archive) || !is_string($sitemapGenerator) || !is_string($head) || !is_string($articleCss)) {
+if (!is_array($registry) || !is_string($template) || !is_string($archive) || !is_string($sitemapGenerator) || !is_string($head) || !is_string($articleCss) || !is_string($studioPageRenderer) || !is_string($contentStudioSource)) {
     fwrite(STDERR, implode(PHP_EOL, $failures) . PHP_EOL);
     exit(1);
 }
@@ -148,6 +152,12 @@ foreach ($registry as $slug => $guide) {
 }
 $assert(strpos($template, "'@type' => 'BlogPosting'") !== false, 'Article template must emit BlogPosting schema.');
 $assert(strpos($template, 'gj_schema_image_object') !== false, 'Article image schema must use shared media metadata.');
+$schemaRequirePosition = strpos($template, "require_once __DIR__ . '/schema.php';");
+$imageObjectPosition = strpos($template, '$guideHeroImageObject = gj_schema_image_object');
+$assert(is_int($schemaRequirePosition) && is_int($imageObjectPosition) && $schemaRequirePosition < $imageObjectPosition, 'Article renderer must load schema helpers before building the hero ImageObject.');
+$assert(strpos($contentStudioSource, "textField(record.hero_caption, 'Hero image caption', 20, 180)") !== false, 'Content Studio must block publishing a tour or guide without a reviewed caption.');
+$assert(strpos($studioPageRenderer, 'class="studio-page-hero-caption"') !== false && strpos($studioPageRenderer, 'primaryImageOfPage') !== false, 'Content Studio landing pages must render a caption and matching ImageObject schema.');
+
 $assert(strpos($template, '<figcaption class="article-caption">') !== false, 'Editorial hero image must render its reviewed visible caption.');
 $assert(strpos($template, '$guideHeroCaption') !== false, 'Editorial renderer must require and escape a hero caption.');
 $assert(strpos($template, 'gj_schema_breadcrumb_list') !== false, 'Article template must emit breadcrumb structured data.');

@@ -102,6 +102,17 @@ $renderer = $read($root . '/include/experience-page.php');
 if (strpos($renderer, 'gj_schema_image_object') === false || strpos($renderer, 'experienceHeroCaption') === false) {
     $siteCheckErrors[] = 'Experience renderer must use the shared image schema and caption contract.';
 }
+$studioSource = $read($root . '/scripts/content-studio.js');
+if (strpos($studioSource, "textField(record.hero_caption, 'Hero image caption', 20, 180)") === false) {
+    $siteCheckErrors[] = 'Content Studio must require reviewed hero captions before publishing tours and guides.';
+}
+$guideRenderer = $read($root . '/include/editorial-guide-page.php');
+$schemaRequirePosition = strpos($guideRenderer, "require_once __DIR__ . '/schema.php';");
+$imageObjectPosition = strpos($guideRenderer, '$guideHeroImageObject = gj_schema_image_object');
+if (!is_int($schemaRequirePosition) || !is_int($imageObjectPosition) || $schemaRequirePosition > $imageObjectPosition) {
+    $siteCheckErrors[] = 'Editorial renderer must load schema helpers before constructing the hero ImageObject.';
+}
+
 preg_match_all('#<loc>https?://[^/]+/([^<]*)</loc>#i', $sitemap, $matches);
 $sitemapPaths = array_map('trim', $matches[1] ?? []);
 foreach ($experiences as $slug => $experience) {

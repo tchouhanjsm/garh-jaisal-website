@@ -53,6 +53,10 @@ if ($experienceHeroCaption === '') {
         throw new RuntimeException('Experience page requires a non-empty hero_caption: ' . (string) ($experience['slug'] ?? 'unknown'));
     }
 }
+if (($experience['status'] ?? 'live') === 'live'
+    && (strlen($experienceHeroCaption) < 20 || strlen($experienceHeroCaption) > 180)) {
+    throw new RuntimeException('Experience page hero_caption must contain 20–180 characters: ' . (string) ($experience['slug'] ?? 'unknown'));
+}
 
 $activePage = 'packages';
 $siteUrl = rtrim($siteConfig['site_url'], '/');

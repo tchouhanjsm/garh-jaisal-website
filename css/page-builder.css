@@ -6,12 +6,14 @@
 .studio-page-hero .eyebrow{color:var(--studio-page-accent,var(--sand-light));}
 .studio-page-hero h1{margin:0 0 18px;font-family:"Source Serif 4",Georgia,serif;font-size:clamp(2.8rem,6.5vw,5.8rem);font-weight:400;line-height:1.02;letter-spacing:-.035em;text-wrap:balance;}
 .studio-page-hero-intro{max-width:660px;margin:0 0 26px;color:var(--studio-page-hero-muted,#e5ddd4);font-size:clamp(1rem,1.4vw,1.15rem);line-height:1.8;}
-.studio-page-hero-media{min-width:0;margin:0;overflow:hidden;aspect-ratio:5/4;background:var(--studio-page-surface-alt,var(--sand-light));}
-.studio-page-hero-media img{display:block;width:100%;height:100%;min-height:320px;object-fit:cover;}
+.studio-page-hero-media{min-width:0;margin:0;overflow:hidden;background:var(--studio-page-surface-alt,var(--sand-light));}
+.studio-page-hero-media img{display:block;width:100%;height:auto;aspect-ratio:5/4;min-height:320px;object-fit:cover;}
+.studio-page-hero-caption{margin:0;padding:10px 14px;color:var(--studio-page-muted,var(--muted));background:var(--studio-page-surface-alt,var(--sand-light));font-size:.875rem;line-height:1.5;}
 .studio-page-hero--centered .studio-page-hero-inner{grid-template-columns:1fr;max-width:1040px;text-align:center;}
 .studio-page-hero--centered .studio-page-hero-copy{max-width:900px;margin:0 auto;}
 .studio-page-hero--centered .studio-page-hero-intro{margin-left:auto;margin-right:auto;}
-.studio-page-hero--centered .studio-page-hero-media{width:100%;max-height:560px;aspect-ratio:16/7;}
+.studio-page-hero--centered .studio-page-hero-media{width:100%;max-height:none;}
+.studio-page-hero--centered .studio-page-hero-media img{aspect-ratio:16/7;max-height:560px;}
 .studio-page-section{padding:clamp(42px,6vw,82px) 24px;}
 .studio-page-section-inner{max-width:1120px;margin:0 auto;}
 .studio-page-copy{max-width:820px;}
@@ -45,8 +47,8 @@
 @media(max-width:760px){
  .studio-page-hero-inner,.studio-page-image-text-grid{grid-template-columns:1fr;}
  .studio-page-hero{padding-left:18px;padding-right:18px;}
- .studio-page-hero-media img{min-height:240px;}
- .studio-page-hero--centered .studio-page-hero-media{aspect-ratio:4/3;}
+ .studio-page-hero-media img{min-height:240px;aspect-ratio:4/3;}
+ .studio-page-hero--centered .studio-page-hero-media img{aspect-ratio:4/3;}
  .studio-page-section{padding-left:18px;padding-right:18px;}
  .studio-page-feature-list{grid-template-columns:1fr;}
  .studio-page-image-text--image-right .studio-page-image-text-grid figure,.studio-page-image-text--image-right .studio-page-image-text-grid>div{order:initial;}
