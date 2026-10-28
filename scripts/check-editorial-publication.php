@@ -88,6 +88,50 @@ foreach ($registry as $slug => $guide) {
             $assert(!isset($ids[$id]), 'Duplicate section anchor ' . $id . ' in ' . $slug);
             if ($id !== '') $ids[$id] = true;
         }
+        $availableAnchors = $ids;
+        $availableAnchors['official-sources'] = true;
+        $tocIds = [];
+        foreach (($guide['toc'] ?? []) as $tocItem) {
+            $tocId = is_array($tocItem) ? (string) ($tocItem['id'] ?? '') : '';
+            $tocLabel = is_array($tocItem) ? trim((string) ($tocItem['label'] ?? '')) : '';
+            $assert($tocId !== '' && isset($availableAnchors[$tocId]), 'TOC points to a missing article section: ' . $slug . '#' . $tocId);
+            $assert($tocLabel !== '', 'TOC item needs an accessible label: ' . $slug . '#' . $tocId);
+            $assert(!isset($tocIds[$tocId]), 'Duplicate TOC anchor: ' . $slug . '#' . $tocId);
+            if ($tocId !== '') $tocIds[$tocId] = true;
+        }
+
+        // Validate every internal route referenced by article copy, related
+        // cards, source links or CTAs. External URLs are not treated as paths.
+        $editorialValuesToScan = [
+            $guide['sections'] ?? [],
+            $guide['related'] ?? [],
+            $guide['sources'] ?? [],
+            $guide['cta_primary_href'] ?? '',
+            $guide['cta_secondary_href'] ?? '',
+        ];
+        while ($editorialValuesToScan) {
+            $editorialValue = array_pop($editorialValuesToScan);
+            if (is_array($editorialValue)) {
+                foreach ($editorialValue as $nestedEditorialValue) {
+                    $editorialValuesToScan[] = $nestedEditorialValue;
+                }
+                continue;
+            }
+            if (!is_string($editorialValue) || preg_match('#^https?://#i', trim($editorialValue))) {
+                continue;
+            }
+            if (preg_match_all('~(?<![A-Za-z0-9])([A-Za-z0-9][A-Za-z0-9._/-]*\.php(?:\?[A-Za-z0-9._=%&-]+)?)~', $editorialValue, $routeMatches)) {
+                foreach ($routeMatches[1] as $routeReference) {
+                    $routePath = parse_url($routeReference, PHP_URL_PATH);
+                    $routePath = is_string($routePath) ? ltrim($routePath, '/') : '';
+                    $safeInternalPath = $routePath !== '' && strpos($routePath, '..') === false;
+                    $assert($safeInternalPath, 'Unsafe internal route reference in ' . $slug . ': ' . $routeReference);
+                    if (!$safeInternalPath) continue;
+                    $internalFile = $root . '/' . $routePath;
+                    $assert(is_file($internalFile) && !is_link($internalFile), 'Internal editorial route does not resolve: ' . $slug . ' → ' . $routeReference);
+                }
+            }
+        }
     }
 }
 $assert(strpos($template, "'@type' => 'BlogPosting'") !== false, 'Article template must emit BlogPosting schema.');
