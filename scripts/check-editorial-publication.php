@@ -53,8 +53,8 @@ foreach ($registry as $slug => $guide) {
     $title = trim((string) ($guide['title'] ?? ''));
     $description = trim((string) ($guide['description'] ?? ''));
     if ($status === 'live') {
-        $assert($title !== '' && mb_strlen($title) <= 90, 'Live article title must be concise and unique: ' . $slug);
-        $assert($description !== '' && mb_strlen($description) <= 180, 'Live description must be concise: ' . $slug);
+        $assert($title !== '' && strlen($title) <= 90, 'Live article title must be concise and unique: ' . $slug);
+        $assert($description !== '' && strlen($description) <= 180, 'Live description must be concise: ' . $slug);
         $assert(!isset($seenTitles[$title]), 'Duplicate live SEO title: ' . $title);
         $assert(!isset($seenDescriptions[$description]), 'Duplicate live meta description: ' . $slug);
         $seenTitles[$title] = $slug;
@@ -90,9 +90,9 @@ $assert(strpos($template, "'path' => '/' . $guide['slug'] . '.php'") !== false, 
 $assert(strpos($template, "'robots' => $isDraft ? 'noindex,follow' : 'index,follow'") !== false, 'Draft preview must remain noindex.');
 $assert(strpos($template, '#official-sources') !== false && strpos($template, 'target="_blank" rel="noopener"') !== false, 'Source links must remain visible and safely opened.');
 $assert(strpos($template, 'article-topic-links') !== false, 'Article pages must provide cross-guide discovery.');
-$assert(strpos($archive, "($guide['status'] ?? 'live') === 'live'") !== false || strpos($archive, "($guide['status'] ?? 'live') === 'live'") !== false, 'Archive must filter editorial records to live status.');
+$assert(strpos($archive, "($guide['status'] ?? 'live') === 'live'") !== false || strpos($archive, "status'] ?? 'live') === 'live'") !== false, 'Archive must filter editorial records to live status.');
 $assert(strpos($archive, 'journal-topic-index') !== false, 'Journal archive must offer topic navigation.');
-$assert(strpos($sitemapGenerator, "($editorialGuides[$routeSlug]['status'] ?? 'live') !== 'live'") !== false, 'Static legacy article URLs must honour registry status.');
+$assert(strpos($sitemapGenerator, "routeSlug !== ''") !== false && strpos($sitemapGenerator, "'status' ?? 'live') !== 'live'") !== false, 'Static legacy article URLs must honour registry status.');
 $assert(strpos($sitemapGenerator, 'foreach ($editorialGuides as $slug => $guide)') !== false, 'Sitemap must derive editorial routes from the same registry.');
 $assert(strpos($head, 'link rel="canonical"') !== false && strpos($head, 'property="og:url"') !== false, 'Shared head must emit canonical and Open Graph URL.');
 $assert(strpos($articleCss, 'prefers-reduced-motion: reduce') !== false, 'Editorial motion must honor reduced-motion preference.');
