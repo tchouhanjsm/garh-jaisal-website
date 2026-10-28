@@ -70,6 +70,7 @@ $page = [
     'og_title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
     'og_description' => 'Choose from desert safari experiences and guided Jaisalmer tours arranged from Garh Jaisal Haveli inside Jaisalmer Fort.',
     'og_image' => '/img/desert11.jpg',
+    'og_image_alt' => 'A camel rider travelling across sand dunes in the Thar Desert',
     'twitter_title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
     'twitter_description' => 'Choose from desert safari experiences and guided Jaisalmer tours arranged from Garh Jaisal Haveli inside Jaisalmer Fort.',
     'twitter_image' => '/img/desert11.jpg',

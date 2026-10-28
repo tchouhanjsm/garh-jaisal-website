@@ -108,3 +108,11 @@ A role that is not directly affected still records a concrete double-check rathe
 - `image-decoding-policy.spec.js` checks core public page families for lazy-image `decoding="async"`, explicit `alt` attributes and absence of high-priority lazy images. The JSON report is browser evidence from local PHP/Chromium.
 - Browser E2E run 742 failed because the existing test grouped the newly added final preference layer with route styles. Do not reorder production styles or remove the accessibility layer to make the old assertion pass; update the classification and retain explicit final-order coverage.
 - CI image decode hints are implementation conventions, not a claim of a particular LCP/Core Web Vitals gain. Review selected sources and screenshots for visual fidelity.
+
+
+## Accessible social preview metadata
+
+- Core public routes publish explicit Open Graph image alt text and matching Twitter/X image alt text when both cards reference the same image.
+- If Open Graph and Twitter/X use different image sources, do not reuse one image's alt text for the other unless its own description is configured.
+- Run `php tests/php/social-image-alt-contract.php` and `npx playwright test tests/e2e/social-image-metadata.spec.js --project=desktop-1280`.
+- These checks verify metadata delivery and escaping; they do not guarantee that a social network will choose or display the preview exactly as authored.

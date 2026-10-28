@@ -71,6 +71,7 @@ $twitterDescription = $page['twitter_description'] ?? $pageDescription;
 $ogImageSource = $page['og_image'] ?? '/img/v2/facade.jpg';
 $ogImageAlt = $page['og_image_alt'] ?? null;
 $twitterImageSource = $page['twitter_image'] ?? $ogImageSource;
+$twitterImageAlt = $page['twitter_image_alt'] ?? ($twitterImageSource === $ogImageSource ? $ogImageAlt : null);
 
 $htmlEscape = static function ($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
@@ -162,6 +163,9 @@ $analyticsIds = array_values(array_unique(array_filter(
   <meta name="twitter:title" content="<?= $htmlEscape($twitterTitle) ?>">
   <meta name="twitter:description" content="<?= $htmlEscape($twitterDescription) ?>">
   <meta name="twitter:image" content="<?= $htmlEscape($absoluteAssetUrl($twitterImageSource)) ?>">
+<?php if (is_string($twitterImageAlt) && trim($twitterImageAlt) !== ''): ?>
+  <meta name="twitter:image:alt" content="<?= $htmlEscape(trim($twitterImageAlt)) ?>">
+<?php endif; ?>
 
   <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -170,3 +170,12 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 ## Working agreement
 
 Every PR must deliver a coherent visible slice with exact-head Site Checks, Browser E2E/screenshot evidence, package preflight and non-deploying Staging QA. Do not infer a pass from a cancelled or stale run. Nobody merges or deploys on the owner's behalf.
+
+
+## Completed phase — Sprints 186–200: accessible social preview images
+
+- Extended the shared page-head renderer to emit Twitter/X `image:alt` metadata without copying Open Graph alt text onto a different image source.
+- Added source-grounded Open Graph image descriptions for the key public routes covered by this batch; existing approved image files and source mappings remain unchanged.
+- Added PHP coverage for output escaping and same-image/distinct-image fallback rules, plus Browser E2E coverage across Home, Rooms, Packages, Trip Planner, Gallery, About, Directions, Contact, Journal, itinerary, safari and city-tour routes.
+- Wired the PHP contract into the PHP 7.4/8.2 Site Checks workflow and documented the exact-head validation command.
+- No page URLs, canonical paths, booking/contact destinations, business facts or production assets were changed. The batch requires fresh exact-head checks; no staging or production deployment was performed.

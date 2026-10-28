@@ -35,6 +35,7 @@ $page = [
     'og_title' => 'Gallery | Garh Jaisal Haveli, Jaisalmer Fort',
     'og_description' => 'See the rooms, haveli, desert experiences and dining at Garh Jaisal Haveli.',
     'og_image' => '/img/s1.jpg',
+    'og_image_alt' => 'Interior of Garh Jaisal Haveli',
     'twitter_title' => 'Gallery | Garh Jaisal Haveli, Jaisalmer Fort',
     'twitter_description' => 'See Garh Jaisal Haveli, its rooms, desert experiences and dining.',
     'twitter_image' => '/img/s1.jpg',

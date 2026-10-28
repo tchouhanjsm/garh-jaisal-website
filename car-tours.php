@@ -27,6 +27,7 @@ $page = [
     'og_title' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
     'og_description' => 'Compare existing guided Jaisalmer tour options and enquire about car arrangements. Routes, prices and availability should be confirmed directly.',
     'og_image' => '/img/jcity.jpg',
+    'og_image_alt' => 'View over Jaisalmer’s historic city from the fort edge',
     'twitter_title' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
     'twitter_description' => 'Compare existing guided Jaisalmer tour options and enquire about car arrangements.',
     'twitter_image' => '/img/jcity.jpg',

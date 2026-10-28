@@ -96,6 +96,7 @@ $page = [
     'og_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'og_description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort.',
     'og_image' => '/img/v2/sitting-room.jpg',
+    'og_image_alt' => 'Sitting room with carved wood at Garh Jaisal Haveli',
     'twitter_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'twitter_description' => 'Explore the heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort.',
     'twitter_image' => '/img/v2/sitting-room.jpg',

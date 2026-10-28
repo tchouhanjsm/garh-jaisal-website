@@ -30,6 +30,7 @@ $page = [
     'og_title' => 'Getting to Garh Jaisal Haveli inside Jaisalmer Fort',
     'og_description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival guidance and hotel contact details.',
     'og_image' => '/img/jcity.jpg',
+    'og_image_alt' => 'View over Jaisalmer’s historic city from the fort edge',
     'twitter_title' => 'Getting to Garh Jaisal Haveli inside Jaisalmer Fort',
     'twitter_description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. Check the walking route from Fort Parking, travel notes, and hotel contact details.',
     'twitter_image' => '/img/jcity.jpg',

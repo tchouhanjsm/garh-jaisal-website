@@ -237,6 +237,7 @@ $page = [
     'og_title' => $pageTitle,
     'og_description' => $pageDescription,
     'og_image' => '/img/v2/sitting-room.jpg',
+    'og_image_alt' => 'Sitting room with carved wood at Garh Jaisal Haveli',
     'twitter_title' => $pageTitle,
     'twitter_description' => $pageDescription,
     'twitter_image' => '/img/v2/sitting-room.jpg',

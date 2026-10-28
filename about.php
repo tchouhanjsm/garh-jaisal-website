@@ -15,6 +15,7 @@ $page = [
     'og_title' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
     'og_description' => 'Garh Jaisal Haveli is a heritage stay inside Jaisalmer Fort, with antique character and everyday comfort.',
     'og_image' => '/img/courtyard.jpg',
+    'og_image_alt' => 'Courtyard balconies inside Garh Jaisal Haveli',
     'twitter_title' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
     'twitter_description' => 'A heritage stay inside Jaisalmer Fort, with preserved rooms, rooftop dining and local hospitality.',
     'twitter_image' => '/img/courtyard.jpg',

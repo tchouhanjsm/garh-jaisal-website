@@ -29,6 +29,7 @@ $page = [
     'og_title' => 'Jaisalmer Desert Safari | Sunset Camel Safaris & Overnight Stays',
     'og_description' => 'Compare sunset camel safaris, cultural evenings and overnight desert stays planned from Garh Jaisal Haveli inside Jaisalmer Fort. Confirm availability, timing, inclusions and price for your dates.',
     'og_image' => '/img/desert3.jpg',
+    'og_image_alt' => 'Sand dunes in the Thar Desert near Jaisalmer',
     'twitter_title' => 'Jaisalmer Desert Safari | Sunset Camel Safaris & Overnight Stays',
     'twitter_description' => 'Compare sunset camel safaris, cultural evenings and overnight desert stays planned from Garh Jaisal Haveli inside Jaisalmer Fort. Confirm availability, timing, inclusions and price for your dates.',
     'twitter_image' => '/img/desert3.jpg',

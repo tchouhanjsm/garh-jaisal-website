@@ -64,6 +64,7 @@ $page = [
     'og_title' => $pageTitle,
     'og_description' => $pageDescription,
     'og_image' => '/img/j7.jpg',
+    'og_image_alt' => 'Jaisalmer Fort rising above a public courtyard',
     'twitter_title' => $pageTitle,
     'twitter_description' => $pageDescription,
     'twitter_image' => '/img/j7.jpg',

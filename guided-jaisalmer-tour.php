@@ -28,6 +28,7 @@ $page = [
     'og_title' => 'Guided Jaisalmer Tours from the Fort | Garh Jaisal Haveli',
     'og_description' => 'Explore Jaisalmer with guided half-day and full-day routes from Garh Jaisal Haveli inside the Fort. Compare options and confirm guide availability, language, itinerary and current price for your dates.',
     'og_image' => '/img/j5.jpg',
+    'og_image_alt' => 'Carved sandstone balconies on a historic Jaisalmer haveli',
     'twitter_title' => 'Guided Jaisalmer Tours from the Fort | Garh Jaisal Haveli',
     'twitter_description' => 'Explore Jaisalmer with guided half-day and full-day routes from Garh Jaisal Haveli inside the Fort. Compare options and confirm guide availability, language, itinerary and current price for your dates.',
     'twitter_image' => '/img/j5.jpg',

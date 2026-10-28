@@ -39,6 +39,7 @@ $page = [
     'og_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
     'og_description' => 'Heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences inside Jaisalmer Fort.',
     'og_image' => '/img/v2/facade.jpg',
+    'og_image_alt' => 'Carved facade of Garh Jaisal Haveli inside Jaisalmer Fort',
     'twitter_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
     'twitter_description' => 'Heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences inside Jaisalmer Fort.',
     'twitter_image' => '/img/v2/facade.jpg',
