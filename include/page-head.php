@@ -9,7 +9,7 @@
  *
  * Optional:
  *   robots, og_type, og_image, og_image_alt, og_title, og_description, twitter_card,
- *   twitter_title, twitter_description, twitter_image, css, schema, preload.
+ *   twitter_title, twitter_description, twitter_image, twitter_image_alt, css, schema, preload.
  *
  * The helper emits the complete <head> element. Extra CSS follows
  * css/garh-v2.css. Site-wide Hotel/WebSite JSON-LD nodes are followed by the
