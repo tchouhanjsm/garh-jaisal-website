@@ -119,7 +119,42 @@ test.describe('Room comparison journey', () => {
     await expect(page.locator('[data-room-result-status]')).not.toContainText('selected for comparison');
   });
 
-  test('keeps the compare dialog inside the viewport from mobile through desktop widths', async ({ page }, testInfo) => {
+  test('explains when selected rooms have no listed-feature differences', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-1280', 'Feature comparison edge case runs once on desktop.');
+
+    await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
+    const cards = page.locator('.rooms-page .room-card');
+    const first = cards.nth(0);
+    const second = cards.nth(1);
+
+    // Create a controlled same-feature fixture using the rendered first room's list.
+    const firstFeatureMarkup = await first.locator('.room-features').innerHTML();
+    await second.locator('.room-features').evaluate((element, markup) => {
+      element.innerHTML = markup;
+    }, firstFeatureMarkup);
+
+    await first.locator('[data-room-compare-toggle]').click();
+    await second.locator('[data-room-compare-toggle]').click();
+    await second.locator('[data-room-comparison-open]').click();
+
+    const dialog = page.locator('[data-room-comparison-dialog]');
+    const rows = dialog.locator('tr[data-room-feature-row]');
+    const toggle = dialog.locator('[data-room-comparison-differences]');
+    const status = dialog.locator('[data-room-comparison-filter-status]');
+    await expect(rows).not.toHaveCount(0);
+    await expect(dialog.locator('tr[data-room-feature-row][data-room-feature-diff="true"]')).toHaveCount(0);
+
+    await toggle.check();
+    await expect(status).toBeVisible();
+    await expect(status).toContainText('No listed feature differences found');
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(0);
+
+    await toggle.uncheck();
+    await expect(status).toBeHidden();
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(await rows.count());
+  });
+
+  test('keeps the compare dialog inside the viewport from mobile through desktop widths', async ({ page }, testInfo) =>
     test.skip(testInfo.project.name !== 'desktop-1280', 'Exercise all five design widths in one browser project.');
 
     for (const width of [320, 390, 768, 1280, 1440]) {

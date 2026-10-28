@@ -32,7 +32,7 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 
 - **Sprint 75 — visual and accessibility foundation:** show each selected room's curated photo in the comparison table and make the horizontally scrollable comparison area keyboard-focusable, named and explained for mobile users.
 - **Sprint 76 — feature-by-feature matrix:** align each existing, registered room feature into its own row, showing “Listed” or “Not listed” for each selected room rather than leaving guests to compare separate unordered lists. “Not listed” is deliberately not a claim that a facility is absent.
-- **Sprint 77 — differences-only view:** add a keyboard-accessible “Show differences only” checkbox that filters feature rows while keeping room photos, floor, description, booking links and the rest of the matrix in place. Browser coverage checks both two-room and three-room matrices and verifies the active filter recalculates after a room is removed.
+- **Sprint 77 — differences-only view:** add a keyboard-accessible “Show differences only” checkbox that filters feature rows while keeping room photos, floor, description, booking links and the rest of the matrix in place. Browser coverage checks two-room and three-room matrices, filter recalculation after room removal, and the no-difference state.
 - Preserve room IDs, the two-to-three-room limit, original photos/alt text, existing features and descriptions, booking-engine URL/token, room-specific Contact handoff, session-only Trip behavior, routes, metadata and schema.
 - Acceptance: exact-head PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. No cPanel upload or deployment.
 
