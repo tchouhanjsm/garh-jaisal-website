@@ -51,6 +51,14 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 - **Sprint 148 — regression guard:** keep strict two-column and first-screen clearance assertions.
 - **Sprint 149 — exact-head validation:** rerun Site Checks, package preflight, non-deploying Staging QA and Browser E2E on the updated SHA.
 - **Sprint 150 — visual review:** retain 320/390/768/1280/1440 screenshot review; CI timing is not proof of field three-second performance.
+
+## Active phase — Sprints 151–155: Reduced-motion and first-screen accessibility (PR #157)
+
+- **Sprint 151 — reduced-motion parity:** remove homepage discovery-card transforms and CSS transitions when `prefers-reduced-motion: reduce` is active; retain non-motion hover affordances.
+- **Sprint 152 — actual preference regression:** emulate the browser reduced-motion preference in Playwright and assert computed transitions and hover transforms instead of merely checking that a media query exists.
+- **Sprint 153 — focused selector contract:** keep the first-screen typography assertion scoped to the visible homepage hero, so a later section label cannot accidentally satisfy it.
+- **Sprint 154 — responsive no-overflow gate:** retain document-width assertions across the configured mobile/tablet/desktop browser projects.
+- **Sprint 155 — release evidence integrity:** use exact-head workflow results only, and keep local timing reports separate from field performance claims.
 - **Remediation after Browser E2E run 739:** the captured 320px screenshot confirmed the eyebrow was rendered at 11.52px because the final compact-phone override used `0.72rem`. Keep the existing minimum-size assertion and set the homepage hero eyebrow back to the established `0.8125rem` (13px at the root scale); scope the test to the visible primary hero eyebrow instead of the first arbitrary `.eyebrow` in the DOM. Verify the new exact head before marking the browser gate complete.
 
 ## Active phase — Sprints 131–140: Responsive hero delivery and mobile first impression (PR #157)
