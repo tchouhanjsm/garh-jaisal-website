@@ -118,3 +118,11 @@ A role that is not directly affected still records a concrete double-check rathe
 - Published Content Studio experience, editorial and landing-page records must provide non-empty hero descriptions before the shared renderer accepts them.
 - Run `php tests/php/social-image-alt-contract.php` and `npx playwright test tests/e2e/social-image-metadata.spec.js --project=desktop-1280`.
 - The frozen legacy head snapshot intentionally excludes only the two newly contracted image-alt tags; the sitemap-derived social metadata test validates those fields on every live public route.
+
+
+## Search snippet quality guard
+
+- The sitemap-wide SEO browser test uses an internal editorial target of 30–60 characters for page titles and 120–160 characters for meta descriptions. These are project QA bands, not guaranteed search-engine display limits or ranking factors.
+- The test checks rendered values from every sitemap route, alongside canonical-path and indexability checks. Keep titles and descriptions accurate, distinct and aligned with actual page content.
+- The rendered audit previously identified overlong descriptions on Home, Car & City Tours, the Fort guided walk, Desert Safari, guided city tours, the restaurant, and the honeymoon guide, plus a long Desert Safari title. This batch trims those and pages already at the upper edge of the description target.
+- The frozen head snapshot fixture is updated with the approved copy so further unintended title/description changes remain detectable.

@@ -30,18 +30,18 @@ $buildHeroPreload = static function ($stem, $media, $fallback) {
 };
 $page = [
     'title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
-    'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences from one base in the Golden City.',
+    'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
     'path' => '/',
     'preload' => [
         $buildHeroPreload('facade', '(max-width: 767px)', '/img/optimized/v2/facade.webp'),
         $buildHeroPreload('fort-from-roof', '(min-width: 768px)', '/img/optimized/v2/fort-from-roof.webp'),
     ],
     'og_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
-    'og_description' => 'Heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences inside Jaisalmer Fort.',
+    'og_description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
     'og_image' => '/img/v2/facade.jpg',
     'og_image_alt' => 'Carved facade of Garh Jaisal Haveli inside Jaisalmer Fort',
     'twitter_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
-    'twitter_description' => 'Heritage-style rooms, rooftop dining, guided city walks and Thar Desert experiences inside Jaisalmer Fort.',
+    'twitter_description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
     'twitter_image' => '/img/v2/facade.jpg',
     'css' => ['css/thar-sunset-story.css'],
     'schema' => [

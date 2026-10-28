@@ -22,10 +22,16 @@ test.describe('technical SEO metadata', () => {
       expect(response.status(), `Unexpected HTTP status for ${route}`).toBeLessThan(400);
 
       await expect(page).toHaveTitle(/\S/);
+      const titleText = (await page.title()).trim();
+      expect(titleText.length, 'Internal title target is 30–60 characters for ' + route).toBeGreaterThanOrEqual(30);
+      expect(titleText.length, 'Internal title target is 30–60 characters for ' + route).toBeLessThanOrEqual(60);
 
       const description = page.locator('head meta[name="description"]');
       await expect(description, 'Expected exactly one meta description').toHaveCount(1);
       await expect(description).toHaveAttribute('content', /\S/);
+      const descriptionText = ((await description.getAttribute('content')) || '').trim();
+      expect(descriptionText.length, 'Internal meta-description target is 120–160 characters for ' + route).toBeGreaterThanOrEqual(120);
+      expect(descriptionText.length, 'Internal meta-description target is 120–160 characters for ' + route).toBeLessThanOrEqual(160);
 
       const canonical = page.locator('head link[rel="canonical"]');
       await expect(canonical, 'Expected exactly one canonical link').toHaveCount(1);

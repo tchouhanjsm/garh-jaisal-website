@@ -188,3 +188,12 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Expanded social-image Browser E2E from a fixed shortlist to every live route in the committed sitemap. The historical frozen head baseline ignores only the two image-alt fields now independently verified by that route-complete contract.
 - Updated sitemap `lastmod` for changed static sources and the catalogue's data source. Sitemap generation now accounts for the shared Content Studio page renderer when deriving landing-page freshness.
 - No public URLs, booking destinations, business facts or original photographs changed. Exact-head Site Checks, Browser E2E, package preflight and non-deploying Staging QA remain the release gate; no deployment was performed.
+
+
+## Completed phase — Sprints 216–230: search-snippet quality and metadata alignment
+
+- Trimmed the titles/descriptions identified by the 37-route rendered metadata audit, including Home, Car & City Tours, the Fort walk, Desert Safari, guided tours, Rooms, About, Contact, rooftop dining, restaurant and the honeymoon guide.
+- Kept title and description copy aligned across the core page head and social-preview fields; shortened the Desert Safari title from 64 characters to the project's 30–60 character target.
+- Added sitemap-wide Playwright checks for rendered title length (30–60 characters), meta-description length (120–160 characters), canonical route parity, and indexability. The length bands are internal quality gates, not claims about fixed Google snippet lengths.
+- Updated the approved frozen head snapshot for the intentional copy changes. Further metadata drift remains a test failure instead of being silently normalized.
+- Business details, URLs, booking destinations and image assets are unchanged.

@@ -216,7 +216,7 @@ $errorMessages = [
 $errorMessage = $errorMessages[$errorKey] ?? '';
 
 $pageTitle = 'Contact Hotel Garh Jaisal Haveli in Jaisalmer Fort';
-$pageDescription = 'Contact Garh Jaisal Haveli about rooms, arrival, dining and desert or city experiences. Call, email, or send an enquiry to plan your stay inside Jaisalmer Fort.';
+$pageDescription = 'Contact Garh Jaisal Haveli about rooms, arrival, rooftop dining and desert or city experiences. Call, email or send an enquiry for your stay.';
 $canonical = 'https://www.hotelgarhjaisal.com/contact.php';
 ?>
 <!doctype html>

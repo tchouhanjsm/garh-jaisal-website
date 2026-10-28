@@ -180,7 +180,18 @@
     "/rajasthan-tours.php",
     "Rajasthan Tours from Jaisalmer | Garh Jaisal Haveli — Draft",
     "/explore-the-desert.php",
-    "Explore the Desert near Jaisalmer | Garh Jaisal Haveli"
+    "Explore the Desert near Jaisalmer | Garh Jaisal Haveli",
+    "Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.",
+    "Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and help planning local experiences.",
+    "Explore guided Jaisalmer city tours or enquire about car arrangements. Share your route and dates so the hotel can confirm options.",
+    "Walk Jaisalmer Fort on a planned heritage route. Confirm guide availability, access, price and any entry fees with the hotel for your date.",
+    "Contact Garh Jaisal Haveli about rooms, arrival, rooftop dining and desert or city experiences. Call, email or send an enquiry for your stay.",
+    "Compare sunset camel safaris, cultural evenings and overnight stays from Jaisalmer Fort. Confirm timing, inclusions, price and availability.",
+    "Jaisalmer Desert Safari | Camel Safaris & Overnight Stays",
+    "Compare half-day and full-day guided Jaisalmer tours from the Fort. Confirm guide availability, language, itinerary and current price.",
+    "Enjoy rooftop dining at Garh Jaisal's Kitchen inside Jaisalmer Fort. Enquire about a table and confirm current hours, menu and prices.",
+    "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
+    "Compare heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort. Review each room's features and check availability for your dates."
   ],
   "sitemapRoutes": [
     0,
@@ -214,13 +225,13 @@
     [
       0,
       26,
-      27,
+      180,
       28,
       29,
       [
         [
           30,
-          31
+          180
         ],
         [
           32,
@@ -244,7 +255,7 @@
         ],
         [
           40,
-          31
+          180
         ],
         [
           41,
@@ -271,13 +282,13 @@
     [
       1,
       49,
-      50,
+      181,
       51,
       29,
       [
         [
           30,
-          52
+          181
         ],
         [
           32,
@@ -301,7 +312,7 @@
         ],
         [
           40,
-          54
+          181
         ],
         [
           41,
@@ -571,13 +582,13 @@
     [
       6,
       76,
-      77,
+      182,
       78,
       29,
       [
         [
           30,
-          79
+          182
         ],
         [
           32,
@@ -601,7 +612,7 @@
         ],
         [
           40,
-          80
+          182
         ],
         [
           41,
@@ -636,13 +647,13 @@
     [
       7,
       81,
-      82,
+      183,
       83,
       29,
       [
         [
           30,
-          82
+          183
         ],
         [
           32,
@@ -666,7 +677,7 @@
         ],
         [
           40,
-          82
+          183
         ],
         [
           41,
@@ -700,13 +711,13 @@
     [
       8,
       85,
-      86,
+      184,
       87,
       29,
       [
         [
           30,
-          86
+          184
         ],
         [
           32,
@@ -730,7 +741,7 @@
         ],
         [
           40,
-          86
+          184
         ],
         [
           41,
@@ -883,14 +894,14 @@
     ],
     [
       11,
-      104,
-      105,
+      186,
+      185,
       106,
       29,
       [
         [
           30,
-          105
+          185
         ],
         [
           32,
@@ -898,7 +909,7 @@
         ],
         [
           34,
-          104
+          186
         ],
         [
           35,
@@ -914,7 +925,7 @@
         ],
         [
           40,
-          105
+          185
         ],
         [
           41,
@@ -922,7 +933,7 @@
         ],
         [
           42,
-          104
+          186
         ]
       ],
       [
@@ -1127,13 +1138,13 @@
     [
       15,
       125,
-      126,
+      187,
       127,
       29,
       [
         [
           30,
-          126
+          187
         ],
         [
           32,
@@ -1157,7 +1168,7 @@
         ],
         [
           40,
-          126
+          187
         ],
         [
           41,
@@ -1448,13 +1459,13 @@
     [
       20,
       144,
-      145,
+      188,
       146,
       29,
       [
         [
           30,
-          147
+          188
         ],
         [
           32,
@@ -1478,7 +1489,7 @@
         ],
         [
           40,
-          147
+          188
         ],
         [
           41,
@@ -1520,13 +1531,13 @@
     [
       21,
       150,
-      151,
+      189,
       152,
       29,
       [
         [
           30,
-          153
+          189
         ],
         [
           32,
@@ -1550,7 +1561,7 @@
         ],
         [
           40,
-          153
+          189
         ],
         [
           41,
@@ -1586,13 +1597,13 @@
     [
       22,
       154,
-      155,
+      190,
       156,
       29,
       [
         [
           30,
-          157
+          190
         ],
         [
           32,
@@ -1616,7 +1627,7 @@
         ],
         [
           40,
-          157
+          190
         ],
         [
           41,

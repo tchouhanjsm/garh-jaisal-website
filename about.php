@@ -10,14 +10,14 @@ $schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $schemaPageUrl = $schemaSiteUrl . '/about.php';
 $page = [
     'title' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
-    'description' => 'Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and practical help planning a Jaisalmer visit.',
+    'description' => 'Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and help planning local experiences.',
     'path' => '/about.php',
     'og_title' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
-    'og_description' => 'Garh Jaisal Haveli is a heritage stay inside Jaisalmer Fort, with antique character and everyday comfort.',
+    'og_description' => 'Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and help planning local experiences.',
     'og_image' => '/img/courtyard.jpg',
     'og_image_alt' => 'Courtyard balconies inside Garh Jaisal Haveli',
     'twitter_title' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
-    'twitter_description' => 'A heritage stay inside Jaisalmer Fort, with preserved rooms, rooftop dining and local hospitality.',
+    'twitter_description' => 'Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and help planning local experiences.',
     'twitter_image' => '/img/courtyard.jpg',
     'css' => ['css/about.css'],
     'schema' => [
@@ -26,7 +26,7 @@ $page = [
             '@id' => $schemaPageUrl . '#webpage',
             'url' => $schemaPageUrl,
             'name' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
-            'description' => 'Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and practical help planning a Jaisalmer visit.',
+            'description' => 'Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and help planning local experiences.',
             'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
             'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
             'primaryImageOfPage' => [

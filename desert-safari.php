@@ -23,15 +23,15 @@ $faqItems = [
     ['question' => "How do I confirm the route and inclusions?", 'answer' => "Ask the hotel to confirm the current price, departure details, route, pickup arrangement, availability and exact inclusions for your date."],
 ];
 $page = [
-    'title' => 'Jaisalmer Desert Safari | Sunset Camel Safaris & Overnight Stays',
-    'description' => 'Compare sunset camel safaris, cultural evenings and overnight desert stays planned from Garh Jaisal Haveli inside Jaisalmer Fort. Confirm availability, timing, inclusions and price for your dates.',
+    'title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
+    'description' => 'Compare sunset camel safaris, cultural evenings and overnight stays from Jaisalmer Fort. Confirm timing, inclusions, price and availability.',
     'path' => '/desert-safari.php',
-    'og_title' => 'Jaisalmer Desert Safari | Sunset Camel Safaris & Overnight Stays',
-    'og_description' => 'Compare sunset camel safaris, cultural evenings and overnight desert stays planned from Garh Jaisal Haveli inside Jaisalmer Fort. Confirm availability, timing, inclusions and price for your dates.',
+    'og_title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
+    'og_description' => 'Compare sunset camel safaris, cultural evenings and overnight stays from Jaisalmer Fort. Confirm timing, inclusions, price and availability.',
     'og_image' => '/img/desert3.jpg',
     'og_image_alt' => 'Sand dunes in the Thar Desert near Jaisalmer',
-    'twitter_title' => 'Jaisalmer Desert Safari | Sunset Camel Safaris & Overnight Stays',
-    'twitter_description' => 'Compare sunset camel safaris, cultural evenings and overnight desert stays planned from Garh Jaisal Haveli inside Jaisalmer Fort. Confirm availability, timing, inclusions and price for your dates.',
+    'twitter_title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
+    'twitter_description' => 'Compare sunset camel safaris, cultural evenings and overnight stays from Jaisalmer Fort. Confirm timing, inclusions, price and availability.',
     'twitter_image' => '/img/desert3.jpg',
     'css' => ['css/experiences.css'],
     'schema' => [
