@@ -38,7 +38,14 @@ $assert(is_array($topics) && count($topics) > 0, 'Topic registry is available.')
 foreach ($topics as $slug => $topic) {
     $ctx = gj_resolve_enquiry_context('topic', (string) $slug);
     $assert(($ctx['type'] ?? '') === 'topic' && ($ctx['label'] ?? '') === ($topic['label'] ?? null), 'Topic resolves from registry: ' . $slug);
+    $details = $topic['helpful_details'] ?? null;
+    $assert(is_array($details) && count($details) >= 2, 'Topic provides contextual checklist details: ' . $slug);
+    foreach ((array) $details as $detail) {
+        $assert(is_string($detail) && trim($detail) !== '', 'Topic checklist entry is non-empty text: ' . $slug);
+    }
 }
+$assert(isset($topics['room-availability']), 'Room availability has a dedicated context topic.');
+$assert(isset($topics['car-arrangements']), 'Car arrangements have a dedicated context topic.');
 $expectGeneral('room', str_repeat('.', 5) . '/unrecognised');
 $expectGeneral('room', 'unknown-room');
 $expectGeneral('rooms', 'unknown-room,green-room');
@@ -122,6 +129,7 @@ $assert(is_string($contactSource) && strpos($contactSource, 'name="enquiry_conte
 $assert(is_string($contactSource) && strpos($contactSource, 'contact_context_tokens') !== false, 'Context token is session-bound.');
 $assert(is_string($contactSource) && strpos($contactSource, '$contactRooms') !== false && strpos($contactSource, 'contact-rooms-context') !== false, 'Contact renders allowlisted multi-room shortlist context.');
 $assert(is_string($contactSource) && strpos($contactSource, 'Room shortlist enquiry:') !== false, 'Contact explains the selected-room enquiry and current-rate confirmation.');
+$assert(is_string($contactSource) && strpos($contactSource, 'contact-topic-details') !== false && strpos($contactSource, 'helpful_details') !== false, 'Contact renders escaped topic-specific helpful details.');
 $assert(is_string($contactSource) && strpos($contactSource, '$contactTrip') !== false && strpos($contactSource, 'contact-trip-context') !== false, 'Contact accepts and displays the validated cross-category Trip shortlist.');
 $tripTraySource = file_get_contents($root . '/include/ui/trip-tray.php');
 $assert(is_string($tripTraySource) && strpos($tripTraySource, 'data-trip-contact') !== false, 'Trip tray offers a form-based fallback alongside WhatsApp.');

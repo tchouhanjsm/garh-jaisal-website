@@ -130,14 +130,23 @@ A role that is not directly affected still records a concrete double-check rathe
 
 ## Contextual planning-link regression
 
-- `tests/e2e/seo.spec.js` checks the contextual planning section on all 11 configured high-intent routes.
-- The contract expects one visible section, one heading, three distinct links and same-site PHP destinations; the shared renderer also validates and escapes the page-provided labels, descriptions and paths.
+- `tests/e2e/seo.spec.js` checks the contextual planning section across every route in the committed sitemap.
+- The contract expects one visible section, one heading, three distinct links and either a direct same-site PHP route or a single allowlisted `contact.php?topic=...` destination. The shared renderer validates destinations and escapes labels/descriptions.
 - Review Browser E2E screenshots and failure diagnostics on the exact PR head. Passing local-route checks does not establish live Google indexing, ranking changes or production performance.
 
 
 ## Sitewide planning-path and click-intent regression
 
-- `tests/php/conversion-copy-contract.php` checks exact sitemap/registry parity, three distinct existing same-site destinations per route and absence of self-links.
-- `tests/e2e/seo.spec.js` visits every committed sitemap route and validates the planning-section landmark, heading relationship, three ordered cards, non-empty copy and internal PHP links.
+- `tests/php/conversion-copy-contract.php` checks exact sitemap/registry parity, three existing, distinct destination paths per route and absence of self-links. Direct links must be local PHP routes; enquiry links must match one topic in `include/contact-topics.php`.
+- `tests/e2e/seo.spec.js` visits every committed sitemap route and validates the planning-section landmark, heading relationship, three ordered cards, non-empty copy and the direct-route/allowlisted-topic policy.
 - `tests/e2e/conversion-events.spec.js` verifies that a planning-card click records one `planning_path_click` event through the approved GA4 destinations. It checks source path, destination pathname, position and campaign attribution while asserting that arbitrary query/form values and link query strings are not sent.
 - The event describes an internal navigation click only; it must never be interpreted as a booking, successful enquiry or confirmed reservation.
+
+
+## Context-aware enquiry handoff regression
+
+- `tests/php/enquiry-context-contract.php` validates every enquiry topic, its server-resolved label and its non-empty helpful-detail checklist, including the room-availability and car-arrangements topics.
+- `tests/php/conversion-copy-contract.php` validates that the planning registry's contact destinations use a published allowlisted topic, without accepting arbitrary query parameters.
+- `tests/e2e/contact-topic-guidance.spec.js` checks the visible, three-item checklist and prefilled message for room, car, arrival and dining contexts. An unknown topic must show no topic-specific checklist.
+- `tests/e2e/conversion-events.spec.js` checks that clicking a contextual enquiry card reports only the destination pathname to GA4; it must not send the topic query, email, or arbitrary form fields.
+- Sitemap freshness derives from the shared planning registry, planning renderer and contact-topic source. Run `php scripts/generate-sitemap.php --check` and inspect the exact-head CI artifact before treating the change as validated.

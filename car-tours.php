@@ -65,7 +65,7 @@ require __DIR__ . '/include/page-head.php';
       <p>Choose a guided walk inside Jaisalmer Fort, compare the half-day and full-day city tours, or enquire separately about SUV/sedan pickup, drop-off and intercity journeys across Rajasthan and Delhi. New themed routes remain ideas until the hotel confirms feasibility, access, transport, timings, inclusions and price.</p>
       <div class="actions">
         <a class="button button-primary" href="catalogue.php">Build your trip shortlist</a>
-        <a class="button button-light" href="contact.php?topic=city-tour">Ask about arrangements</a>
+        <a class="button button-light" href="contact.php?topic=fort-guide">Ask about arrangements</a>
       </div>
     </div>
   </section>
@@ -164,7 +164,7 @@ require __DIR__ . '/include/page-head.php';
 
   <?php require __DIR__ . '/include/ui/stay-booking-note.php'; ?>
 
-  <section class="section packages-cta"><div class="site-shell"><div class="packages-cta-inner"><p class="eyebrow">Plan with the hotel</p><h2>Confirm the details before you travel.</h2><p>Tour routes, timings, transport, fees and availability can vary. Contact the hotel for the current details for your date.</p><div class="actions"><a class="button button-primary" href="contact.php">Contact Garh Jaisal Haveli</a><a class="button button-secondary" href="direction.php">Plan your arrival</a></div></div></div></section>
+  <section class="section packages-cta"><div class="site-shell"><div class="packages-cta-inner"><p class="eyebrow">Plan with the hotel</p><h2>Confirm the details before you travel.</h2><p>Tour routes, timings, transport, fees and availability can vary. Contact the hotel for the current details for your date.</p><div class="actions"><a class="button button-primary" href="contact.php?topic=custom-itinerary">Ask about a route</a><a class="button button-secondary" href="direction.php">Plan your arrival</a></div></div></div></section>
 
   <section class="section site-faq car-tours-faq" aria-labelledby="car-tours-faq-title">
     <div class="site-shell">

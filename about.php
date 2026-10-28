@@ -241,7 +241,7 @@ $ctaBand = [
     ],
     'secondary' => [
         'label' => 'Contact the hotel',
-        'href' => 'contact.php',
+        'href' => 'contact.php?topic=custom-itinerary',
         'class' => 'button button-light',
     ],
 ];

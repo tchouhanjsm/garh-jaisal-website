@@ -23,7 +23,7 @@ test.describe('Sprint 21 editorial intent cluster', () => {
     await expect(page.locator('#day1')).toBeVisible();
     await expect(page.locator('#day2')).toContainText('Jain temples');
     await expect(page.locator('#day3')).toContainText('return-transfer arrangement');
-    await expect(page.locator('a[href="jaisalmer-2-day-itinerary.php"]')).toBeVisible();
+    await expect(page.locator('.article-content a[href="jaisalmer-2-day-itinerary.php"]')).toBeVisible();
     await expect(page.locator('#day2 a[href="city-tour.php"]')).toBeVisible();
     await expect(page.locator('#day3 a[href="car-rental.php"]')).toBeVisible();
     await expect(page.locator('.article-footer-cta a.button-primary')).toHaveAttribute('target', '_blank');

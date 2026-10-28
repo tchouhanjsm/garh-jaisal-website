@@ -338,6 +338,18 @@ require __DIR__ . '/include/page-head.php';
               <p class="contact-topic-context">Enquiry topic: <strong><?= htmlspecialchars($contactTopic['label'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your date or any specific questions.</p>
             <?php endif; ?>
           <?php endif; ?>
+          <?php if ($contactTopic !== null && is_array($contactTopic['helpful_details'] ?? null) && $contactTopic['helpful_details'] !== []): ?>
+            <div class="contact-topic-details" aria-labelledby="contact-topic-details-title">
+              <h3 id="contact-topic-details-title">Helpful details to include</h3>
+              <ul>
+                <?php foreach ($contactTopic['helpful_details'] as $helpfulDetail): ?>
+                  <?php if (is_string($helpfulDetail) && trim($helpfulDetail) !== ''): ?>
+                    <li><?= htmlspecialchars(trim($helpfulDetail), ENT_QUOTES, 'UTF-8') ?></li>
+                  <?php endif; ?>
+                <?php endforeach; ?>
+              </ul>
+            </div>
+          <?php endif; ?>
           <?php if ($errorMessage !== ''): ?>
             <p class="contact-error" role="alert"><?= htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8') ?></p>
             <p class="contact-error-help">You can also <a href="tel:<?= htmlspecialchars($siteConfig['hotel_phone'], ENT_QUOTES, 'UTF-8') ?>">call the hotel</a> or <a href="<?= htmlspecialchars($siteConfig['whatsapp_url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">message us on WhatsApp</a>.</p>

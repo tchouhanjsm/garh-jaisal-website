@@ -101,7 +101,7 @@ test.describe('Editorial publication and reader journey', () => {
       for (const link of await discoveryLinks.all()) {
         const href = await link.getAttribute('href');
         expect(href, route + ' discovery link uses a destination').toBeTruthy();
-        await expect(page.locator('a[href="' + href + '"]'), route + ' avoids duplicate navigation to ' + href).toHaveCount(1);
+        await expect(discoveryNav.locator('a[href="' + href + '"]'), route + ' avoids duplicate destinations within discovery navigation: ' + href).toHaveCount(1);
       }
       await expect(page.locator('.article-next-card')).toHaveCount(3);
       await expect(page.locator('.article-footer-cta')).toBeVisible();

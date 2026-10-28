@@ -215,3 +215,14 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Added a `planning_path_click` GA4 intent event with the source path, planning-section title, CTA label, destination pathname and position. It deliberately excludes destination query strings and arbitrary form/query data; this measures navigation intent, not completed bookings.
 - Updated sitemap generation so the shared planning registry contributes to route freshness. Added sitemap-wide browser coverage, a conversion-event privacy check and PHP contract coverage for registry/sitemap parity.
 - The route-wide regression suite must pass on the exact head before the batch is considered validated. No booking destination or published URL changed. No merge, cPanel upload, staging deployment or production deployment was performed.
+
+
+## Sprints 261–275 — Context-aware enquiry handoff and E2E correction
+
+- Converted the sitewide planning paths from generic contact links to reviewed, topic-specific enquiry entry points while retaining three useful next steps per published route.
+- Extended the shared planning renderer to accept only direct same-site PHP routes or a single allowlisted `contact.php?topic=...` value from `include/contact-topics.php`. It rejects unknown topics, extra query keys, self-links and repeated destination paths; all displayed copy is escaped.
+- Added concise “Helpful details to include” checklists to the contact form for published enquiry topics, plus dedicated room-availability and car/transfer topics. Prefilled messages request dates and operational context while making clear that an enquiry is not a confirmed booking.
+- Fixed a broken `contact.php?topic=city-tour` route by using the existing allowlisted Fort-guide context; added contextual contact actions on tours, transport, desert and planning routes.
+- Updated the sitemap generator's shared-source inventory for the planning renderer and topic registry. Extended PHP and Playwright contracts for topic allowlisting, safe fallback, contextual guidance, privacy-safe click tracking and the three-link route contract.
+- Corrected two legacy Browser E2E assertions that accidentally counted planning-card links as duplicate editorial links; those checks now scope to the intended article body or discovery navigation.
+- This continuation is being developed on the existing feature branch after PR #157 was merged by GitHub. No new PR was opened, and no merge, cPanel upload, staging deployment or production deployment is part of this work. Exact-head checks still determine whether the continuation is validated.

@@ -12,7 +12,8 @@ $required = [
     'restaurant.php' => ['Rooftop dining in the heart of Jaisalmer Fort.', 'Enquire about a table'],
     'include/experience-page.php' => ['An enquiry is not a confirmed booking.', 'Build the day around what you want to discover.', "require __DIR__ . '/ui/planning-path.php';"],
     'include/editorial-guide-page.php' => ["require __DIR__ . '/ui/planning-path.php';"],
-    'include/ui/planning-path.php' => ['planning-path-grid', 'Related planning pages', 'htmlspecialchars', 'planning-paths-data.php'],
+    'include/ui/planning-path.php' => ['planning-path-grid', 'Related planning pages', 'htmlspecialchars', 'planning-paths-data.php', 'contact-topics.php', 'allowlisted contact topic'],
+    'include/contact-topics.php' => ['room-availability', 'car-arrangements', 'helpful_details', 'current price'],
     'include/planning-paths-data.php' => ['Reviewed planning destinations', 'same-site PHP pages', 'Review room features'],
     'include/footer-v2.php' => ['Let Jaisalmer begin inside the Fort.', 'Check dates &amp; current rates'],
 ];
@@ -54,6 +55,39 @@ if (!is_string($homeSource)) {
 
 
 // The planning-path registry is a publication contract for every sitemap route.
+$contactTopicsPath = $root . '/include/contact-topics.php';
+$contactTopics = is_file($contactTopicsPath) ? require $contactTopicsPath : [];
+if (!is_array($contactTopics)) {
+    $errors[] = 'include/contact-topics.php must return an allowlist array';
+    $contactTopics = [];
+}
+foreach ($contactTopics as $topicSlug => $topic) {
+    if (
+        !is_string($topicSlug)
+        || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $topicSlug)
+        || !is_array($topic)
+        || trim((string) ($topic['label'] ?? '')) === ''
+        || trim((string) ($topic['message'] ?? '')) === ''
+    ) {
+        $errors[] = 'Contact topic must have a valid slug, label and prefilled message';
+        continue;
+    }
+    $helpfulDetails = $topic['helpful_details'] ?? null;
+    if (!is_array($helpfulDetails) || $helpfulDetails === []) {
+        $errors[] = 'Contact topic needs helpful-details guidance: ' . $topicSlug;
+        continue;
+    }
+    foreach ($helpfulDetails as $detail) {
+        if (!is_string($detail) || trim($detail) === '') {
+            $errors[] = 'Contact helpful detail must be non-empty text: ' . $topicSlug;
+        }
+    }
+}
+foreach (['room-availability', 'car-arrangements'] as $requiredTopic) {
+    if (!isset($contactTopics[$requiredTopic])) {
+        $errors[] = 'Contextual enquiry handoff is missing topic: ' . $requiredTopic;
+    }
+}
 $planningRegistryPath = $root . '/include/planning-paths-data.php';
 if (!is_file($planningRegistryPath)) {
     $errors[] = 'include/planning-paths-data.php: reviewed planning destination registry is missing';
@@ -98,6 +132,7 @@ foreach ($planningRegistry as $route => $entry) {
         continue;
     }
     $hrefs = [];
+    $destinationPaths = [];
     foreach ($links as $link) {
         if (!is_array($link)) {
             $errors[] = 'Planning registry contains a malformed link: ' . $route;
@@ -106,20 +141,36 @@ foreach ($planningRegistry as $route => $entry) {
         $label = trim((string) ($link['label'] ?? ''));
         $href = trim((string) ($link['href'] ?? ''));
         $description = trim((string) ($link['description'] ?? ''));
-        if ($label === '' || $description === '' || preg_match('/^[a-z0-9-]+\\.php$/iD', $href) !== 1) {
-            $errors[] = 'Planning registry links require label, description and same-site PHP path: ' . $route;
+        $destinationPath = parse_url($href, PHP_URL_PATH);
+        $query = parse_url($href, PHP_URL_QUERY);
+        $isDirectRoute = is_string($destinationPath)
+            && preg_match('~^[a-z0-9-]+\\.php$~iD', $destinationPath) === 1
+            && $query === null;
+        $isContextualContact = false;
+        if (
+            is_string($destinationPath)
+            && $destinationPath === 'contact.php'
+            && is_string($query)
+            && preg_match('/^topic=([a-z0-9]+(?:-[a-z0-9]+)*)$/iD', $query, $topicMatch) === 1
+            && isset($contactTopics[$topicMatch[1]])
+        ) {
+            $isContextualContact = true;
+        }
+        if ($label === '' || $description === '' || (!$isDirectRoute && !$isContextualContact)) {
+            $errors[] = 'Planning registry links require copy and a same-site PHP route or allowlisted contact topic: ' . $route;
             continue;
         }
-        if (!is_file($root . '/' . $href)) {
-            $errors[] = 'Planning registry destination does not exist: ' . $href;
+        if (!is_file($root . '/' . $destinationPath)) {
+            $errors[] = 'Planning registry destination does not exist: ' . $destinationPath;
         }
-        if ('/' . $href === $route) {
+        if ('/' . $destinationPath === $route) {
             $errors[] = 'Planning registry must not link a route to itself: ' . $route;
         }
         $hrefs[] = $href;
+        $destinationPaths[] = $destinationPath;
     }
-    if (count(array_unique($hrefs)) !== 3) {
-        $errors[] = 'Planning registry destinations must be distinct: ' . $route;
+    if (count(array_unique($hrefs)) !== 3 || count(array_unique($destinationPaths)) !== 3) {
+        $errors[] = 'Planning registry destinations must be distinct by href and route path: ' . $route;
     }
 }
 

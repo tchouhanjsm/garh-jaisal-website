@@ -19,11 +19,14 @@ if ($planningPathTitle === '' || $planningPathIntro === '' || !is_array($plannin
     throw new InvalidArgumentException('Planning path requires a title, introduction and exactly three links.');
 }
 
+$contactTopics = require __DIR__ . '/../contact-topics.php';
+
 $escapePlanningPath = static function ($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 };
 
 $seenPlanningHrefs = [];
+$seenPlanningDestinationPaths = [];
 foreach ($planningPathLinks as $link) {
     if (!is_array($link)) {
         throw new InvalidArgumentException('Each planning path link must be an array.');
@@ -31,13 +34,25 @@ foreach ($planningPathLinks as $link) {
     $label = trim((string) ($link['label'] ?? ''));
     $href = trim((string) ($link['href'] ?? ''));
     $description = trim((string) ($link['description'] ?? ''));
-    if ($label === '' || $description === '' || preg_match('/^[a-z0-9-]+\.php$/iD', $href) !== 1) {
-        throw new InvalidArgumentException('Planning path links require copy and a same-site PHP destination.');
+    $destinationPath = parse_url($href, PHP_URL_PATH);
+    $isDirectRoute = is_string($destinationPath)
+        && preg_match('/^[a-z0-9-]+\.php$/iD', $destinationPath) === 1
+        && strpos($href, '?') === false;
+    $isContextualContact = preg_match('/^contact\.php\?topic=([a-z0-9]+(?:-[a-z0-9]+)*)$/iD', $href, $topicMatch) === 1
+        && isset($contactTopics[$topicMatch[1]]);
+    if ($label === '' || $description === '' || (!$isDirectRoute && !$isContextualContact)) {
+        throw new InvalidArgumentException('Planning path links require copy and a same-site PHP destination or an allowlisted contact topic.');
     }
-    if (in_array($href, $seenPlanningHrefs, true) || '/' . $href === $planningPathRoute) {
+    if (
+        in_array($href, $seenPlanningHrefs, true)
+        || !is_string($destinationPath)
+        || '/' . $destinationPath === $planningPathRoute
+        || in_array($destinationPath, $seenPlanningDestinationPaths, true)
+    ) {
         throw new InvalidArgumentException('Planning path destinations must be distinct and must not link to the current route.');
     }
     $seenPlanningHrefs[] = $href;
+    $seenPlanningDestinationPaths[] = $destinationPath;
 }
 ?>
 <section class="planning-path section" aria-labelledby="planning-path-title">
@@ -61,4 +76,4 @@ foreach ($planningPathLinks as $link) {
     </nav>
   </div>
 </section>
-<?php unset($planningPathRegistry, $planningPathRoute, $planningPath, $planningPathTitle, $planningPathIntro, $planningPathLinks, $escapePlanningPath, $seenPlanningHrefs, $link, $label, $href, $description); ?>
+<?php unset($planningPathRegistry, $planningPathRoute, $planningPath, $planningPathTitle, $planningPathIntro, $planningPathLinks, $contactTopics, $escapePlanningPath, $seenPlanningHrefs, $seenPlanningDestinationPaths, $destinationPath, $topicMatch, $isDirectRoute, $isContextualContact, $link, $label, $href, $description); ?>

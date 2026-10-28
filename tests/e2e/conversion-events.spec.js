@@ -180,3 +180,34 @@ test('contextual planning-path clicks track a safe internal destination', async 
   expect(planning).not.toHaveProperty('topic');
   expect(planning).not.toHaveProperty('link_url');
 });
+
+
+test('contextual enquiry planning links keep topic queries out of analytics', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Contextual enquiry analytics runs once on desktop-1280');
+  await page.route('https://www.googletagmanager.com/**', route => route.abort());
+  await preventTrackedNavigation(page);
+
+  await page.goto('/room.php?utm_source=google&utm_medium=cpc&utm_campaign=contextual_enquiry&email=private%40example.com&topic=private', {
+    waitUntil: 'domcontentloaded'
+  });
+  const link = page.locator('.planning-path-card').nth(2);
+  await expect(link).toHaveAttribute('href', 'contact.php?topic=room-availability');
+  await link.evaluate(anchor => {
+    anchor.addEventListener('click', event => event.preventDefault(), { once: true });
+  });
+  await link.click();
+
+  const events = await readTrackedEvents(page);
+  const planning = expectRoutedOnce(events, 'planning_path_click', '/room.php', 'rooms');
+  expect(planning.cta_label).toMatch(/ask about room availability/i);
+  expect(planning.planning_path_title).toBe('Build the rest of your stay');
+  expect(planning.destination_path).toBe('/contact.php');
+  expect(planning.destination_path).not.toContain('?');
+  expect(planning.link_position).toBe(3);
+  expect(planning.utm_source).toBe('google');
+  expect(planning.utm_medium).toBe('cpc');
+  expect(planning.utm_campaign).toBe('contextual_enquiry');
+  expect(planning).not.toHaveProperty('topic');
+  expect(planning).not.toHaveProperty('email');
+  expect(planning).not.toHaveProperty('link_url');
+});

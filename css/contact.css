@@ -220,3 +220,31 @@
   .contact-experience-context,
   .contact-topic-context{padding:12px 13px}
 }
+
+
+/* Contextual enquiry checklists help visitors provide useful details without
+   suggesting that an enquiry itself confirms a room, table or tour. */
+.contact-topic-details {
+  margin: 1rem 0 1.25rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line, #ded3c5);
+  border-radius: .45rem;
+  background: var(--sand-light, #f5ead8);
+}
+.contact-topic-details h3 {
+  margin: 0 0 .65rem;
+  color: var(--ink, #231a14);
+  font-size: 1rem;
+  line-height: 1.3;
+}
+.contact-topic-details ul {
+  display: grid;
+  gap: .4rem;
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--muted, #655b52);
+  line-height: 1.5;
+}
+.contact-topic-details li {
+  padding-left: .15rem;
+}

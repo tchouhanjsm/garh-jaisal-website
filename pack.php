@@ -377,7 +377,7 @@ require __DIR__ . '/include/page-head.php';
         <h2>Tell us how much time you have in Jaisalmer.</h2>
         <p>We can help you compare the desert and city experiences available for your dates.</p>
         <div class="actions">
-          <a class="button button-primary" href="contact.php">Contact us</a>
+          <a class="button button-primary" href="contact.php?topic=desert-safari">Ask about current desert options</a>
           <a class="button button-secondary" href="direction.php">Plan your arrival</a>
         </div>
       </div>

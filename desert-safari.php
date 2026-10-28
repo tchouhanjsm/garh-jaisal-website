@@ -161,7 +161,7 @@ require __DIR__ . '/include/page-head.php';
         <article><strong>One evening</strong><p>Choose a sunset camel safari or cultural safari and return to Jaisalmer the same evening.</p></article>
         <article><strong>One night, open sky</strong><p>Choose Sleep Under the Stars for an overnight desert experience without tent accommodation.</p></article>
         <article><strong>One night, tent</strong><p>Choose the Swiss Tent Safari when you prefer tent accommodation and a cultural evening.</p></article>
-        <article><strong>Need help choosing?</strong><p>Ask us to compare the currently available desert options and confirm the current price, route, pickup arrangement and timing for your travel date.</p><a class="text-link" href="contact.php">Ask about desert options →</a><a class="text-link" href="catalogue.php">Build your trip shortlist →</a></article>
+        <article><strong>Need help choosing?</strong><p>Ask us to compare the currently available desert options and confirm the current price, route, pickup arrangement and timing for your travel date.</p><a class="text-link" href="contact.php?topic=desert-safari">Ask about desert options →</a><a class="text-link" href="catalogue.php">Build your trip shortlist →</a></article>
       </div>
     </div>
   </section>
@@ -199,7 +199,7 @@ require __DIR__ . '/include/page-head.php';
       <p class="eyebrow">Plan from the Fort</p>
       <h2>Make the Fort your base, then head for the dunes.</h2>
       <p>Tell us your date and preferred experience. We will confirm the current price, transport, timings and inclusions before you decide.</p>
-      <div class="actions"><a class="button button-primary" href="contact.php">Contact us</a><a class="button button-secondary" href="guided-jaisalmer-tour.php">Explore guided city tours</a></div>
+      <div class="actions"><a class="button button-primary" href="contact.php?topic=desert-safari">Ask about desert options</a><a class="button button-secondary" href="guided-jaisalmer-tour.php">Explore guided city tours</a></div>
     </div>
   </section>
 

@@ -121,7 +121,7 @@ require __DIR__ . '/include/page-head.php';
       </div>
 
       <div class="package-note">
-        <p>Prices and date-specific arrangements need confirmation. <a href="contact.php">Ask the hotel for the current price</a>.</p>
+        <p>Prices and date-specific arrangements need confirmation. <a href="contact.php?topic=desert-safari">Ask the hotel for the current price</a>.</p>
       </div>
     </div>
   </section>

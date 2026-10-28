@@ -403,7 +403,7 @@ test('hidden overlap pages return 404 and stay out of public discovery until app
     if (route === '/desert-safari.php') {
       await expect(page.locator('.route-planner')).not.toContainText(/Explore the Desert is the broader day experience/i);
       await expect(page.locator('.route-planner').getByRole('link', { name: 'Ask about desert options' }))
-        .toHaveAttribute('href', 'contact.php');
+        .toHaveAttribute('href', 'contact.php?topic=desert-safari');
     }
   }
 
@@ -434,12 +434,39 @@ test('all sitemap routes expose three contextual internal planning links', async
     await expect(cards).toHaveCount(3);
     const hrefs = await cards.evaluateAll(links => links.map(link => link.getAttribute('href') || ''));
     expect(new Set(hrefs).size, `Planning destinations should be distinct on ${route}`).toBe(3);
+    const contactTopicSource = fs.readFileSync(path.join(__dirname, '../../include/contact-topics.php'), 'utf8');
+    const allowedContactTopics = new Set(
+      [...contactTopicSource.matchAll(/^    '([^']+)' => \[/gm)].map(([, topic]) => topic)
+    );
+    const validPlanningDestination = href => {
+      let parsed;
+      try {
+        parsed = new URL(href, 'http://127.0.0.1:8080');
+      } catch {
+        return false;
+      }
+      if (
+        parsed.origin !== 'http://127.0.0.1:8080'
+        || parsed.hash !== ''
+        || !/^[a-z0-9-]+\.php$/i.test(parsed.pathname.slice(1))
+      ) {
+        return false;
+      }
+      if (parsed.pathname === '/contact.php') {
+        const topics = parsed.searchParams.getAll('topic');
+        return topics.length === 1
+          && [...parsed.searchParams.keys()].length === 1
+          && allowedContactTopics.has(topics[0])
+          && href === 'contact.php?topic=' + topics[0];
+      }
+      return parsed.search === '' && href === parsed.pathname.slice(1);
+    };
     expect(
-      hrefs.every(href => /^[a-z0-9-]+\.php$/i.test(href)),
-      `Planning destinations must be same-site PHP paths without queries or fragments on ${route}`
+      hrefs.every(validPlanningDestination),
+      `Planning destinations must be same-site PHP routes or allowlisted contact topics on ${route}`
     ).toBeTruthy();
     expect(
-      hrefs.some(href => '/' + href === route),
+      hrefs.some(href => new URL(href, 'http://127.0.0.1:8080').pathname === route),
       `Planning section must not link to its own route on ${route}`
     ).toBe(false);
     await expect(cards.first()).toHaveAttribute('data-planning-path-position', '1');

@@ -198,7 +198,7 @@ $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 $xml .= "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
 foreach ($urls as $path => $priority) {
     $sourceFile = $path === '/' ? 'index.php' : ltrim($path, '/');
-    $sourceFiles = [$sourceFile, 'include/planning-paths-data.php'];
+    $sourceFiles = [$sourceFile, 'include/planning-paths-data.php', 'include/ui/planning-path.php', 'include/contact-topics.php'];
     $routeSlug = $path === '/' ? '' : basename($path, '.php');
     if (array_key_exists($routeSlug, $experiences)) {
         $sourceFiles[] = 'include/experience-data.php';
