@@ -34,7 +34,7 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 - **PR #155:** editorial publication/indexability checks, committed sitemap parity, responsive reader UX, five shared topic groups, topic-ranked related-guide discovery and route/schema/browser contracts.
 - **Release authority:** all merges and staging/production release decisions remain with the owner.
 
-## Active phase — Sprints 91–110: SEO readiness and Journal discovery (PR #156)
+## Active phase — Sprints 91–120: SEO readiness, Journal discovery and first-impression quality (PR #156)
 
 - **Sprint 91 — registry integrity:** validate editorial slugs, statuses, topic assignments and live route ownership across the complete merged registry.
 - **Sprint 92 — crawl policy:** enforce the production sitemap directive, safe robots rules, canonical-origin consistency and valid sitemap lastmod entries.
@@ -57,6 +57,16 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 - **Sprint 108 — predictable matching:** normalize Unicode compatibility forms, case and repeated whitespace before matching visible card copy.
 - **Sprint 109 — filter/navigation interoperability:** reset filters before following a topic fragment so its actual card target remains visible.
 - **Sprint 110 — progressive-enhancement evidence:** add PHP source contracts and Playwright coverage for search/topic intersection, no-match recovery, no-JavaScript fallback and mobile overflow.
+- **Sprint 111 — cross-page first impression:** verify the home, rooms, packages, dining, directions, contact, Journal, gallery and about routes render successfully with a meaningful document title, visible H1 and canonical URL.
+- **Sprint 112 — first-viewport action clarity:** verify the homepage exposes a visible primary booking action and that the hero image loads successfully in Chromium.
+- **Sprint 113 — mobile layout integrity:** check high-intent routes at 320px and 390px for document-level horizontal overflow.
+- **Sprint 114 — responsive route consistency:** confirm desktop routes at 1280px maintain the shared page identity contract and no broken canonical destinations.
+- **Sprint 115 — image delivery evidence:** inspect visible image elements for load failures and record the actual currentSrc rather than inferring delivery from filename extensions.
+- **Sprint 116 — metadata and heading baseline:** catch blank titles, missing canonical links and pages that render without a visible primary heading.
+- **Sprint 117 — primary action resilience:** assert the homepage booking CTA is present and points to the configured booking destination without triggering a booking.
+- **Sprint 118 — navigation route smoke test:** visit representative high-intent page families independently so one template failure is isolated to a route.
+- **Sprint 119 — performance measurement discipline:** capture navigation timing entries for investigation; do not claim a sub-three-second real-user result from local CI timing.
+- **Sprint 120 — first-impression release gate:** run the cross-page Playwright checks on each PR head and review screenshot artifacts before visual approval.
 
 ## Priority sequence
 

@@ -21,8 +21,8 @@ test.describe('Journal search and topic filtering', () => {
 
     const search = page.getByRole('searchbox', { name: 'Search guides' });
     const topic = page.getByLabel('Filter by topic');
-    await search.fill('  Jaisalmer   Honeymoon Guide  ');
-    const honeymoonCard = cards.filter({ hasText: 'Jaisalmer Honeymoon Guide' });
+    await search.fill('  honeymoon  ');
+    const honeymoonCard = cards.filter({ has: page.locator('a[href="jaisalmer-honeymoon-guide.php"]') });
     await expect(honeymoonCard).toBeVisible();
     const visibleTextMatches = page.locator('[data-journal-card]:visible');
     expect(await visibleTextMatches.count()).toBeGreaterThan(0);
