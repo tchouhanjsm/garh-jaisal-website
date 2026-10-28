@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - main
+      - feature/visual-asset-and-typography-audit-20261028
   workflow_dispatch:
     inputs:
       staging_url:
