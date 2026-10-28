@@ -140,7 +140,7 @@ require __DIR__ . '/include/page-head.php';
             'jaisalmer-honeymoon-guide' => 'Jaisalmer Honeymoon Guide',
             'best-time-to-visit-jaisalmer' => 'Best Time to Visit Jaisalmer',
             'how-to-reach-jaisalmer' => 'How to Reach Jaisalmer',
-            'jaisalmer-desert-safari-packing-list' => 'What to Pack for a Desert Safari',
+            'jaisalmer-desert-safari-packing-list' => 'Jaisalmer Desert Safari Packing List',
             'jaisalmer-havelis-guide' => 'Jaisalmer Havelis: Sandstone Architecture',
             'jaisalmer-food-guide' => 'A Food Lover’s Guide to Jaisalmer',
             'jaisalmer-beyond-the-fort-guide' => 'Beyond Jaisalmer Fort',
