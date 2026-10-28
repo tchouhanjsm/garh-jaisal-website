@@ -7,6 +7,7 @@ From the repository root:
 ```bash
 php scripts/check-site.php --strict-images
 php scripts/generate-sitemap.php --check
+php tests/php/editorial-release-readiness.php
 php scripts/check-experience-publication.php
 php scripts/check-launch-hardening.php
 php scripts/check-runtime-config.php
@@ -43,6 +44,9 @@ CI also runs PHP lint, responsive-image validation/review, Content Studio integr
 - Use exact PR-head CI evidence. Cancelled or stale runs are not passes.
 - State anything not run. Automated tests do not validate real cPanel, mail or CAPTCHA delivery.
 
+- Journal discovery checks cover client-side text search and topic filtering, accessible result announcements, no-match recovery, Fort-guide first-card stability, no-JavaScript visibility and mobile control overflow. These filters do not change the canonical URL or public route inventory.
+- First-impression checks cover representative high-intent routes, title/H1/canonical presence, home booking CTA, hero image load state, responsive overflow and navigation timing evidence. Local timing is diagnostic only; sub-three-second performance must be verified with field data or a production-like environment and Core Web Vitals.
+
 ## Visual asset and typography evidence
 
 - Browser E2E writes `artifacts/image-accessibility/visual-asset-audit-<project>.json` for the eight key page families. The report includes image source/currentSrc, intrinsic and rendered dimensions, alt-attribute presence, visible load failures, font stacks/readiness and resource-timing transfer data when available.
@@ -65,7 +69,6 @@ A role that is not directly affected still records a concrete double-check rathe
 - [ ] Required exact-head checks and screenshots are complete.
 - [ ] Owner decisions and staging risks are explicit.
 - [ ] Owner approves the merge; production release requires separate owner approval.
-
 
 ## Compact-phone homepage first-screen contract
 

@@ -93,6 +93,9 @@ jobs:
       - name: Verify editorial taxonomy and related-guide graph
         run: php tests/php/editorial-discovery-graph.php
 
+      - name: Verify editorial SEO release readiness across registry, links, robots and sitemap
+        run: php tests/php/editorial-release-readiness.php
+
       - name: Verify Content Studio data overlays and publication states
         run: php tests/php/content-studio-registry.php
 
