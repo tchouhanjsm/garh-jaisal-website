@@ -177,6 +177,8 @@ $analyticsIds = array_values(array_unique(array_filter(
   <!-- Shared type, spacing and component normalization intentionally follows page CSS. -->
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/conversion-system.css">
+  <!-- User motion preferences override page-specific animation and transition rules. -->
+  <link rel="stylesheet" href="css/accessibility.css">
 <?php foreach ($preloads as $preload): ?>
 <?php if (is_array($preload) && isset($preload['href']) && is_string($preload['href']) && $preload['href'] !== ''): ?>
   <link rel="preload" as="image" href="<?= $htmlEscape($preloadAssetUrl($preload['href'])) ?>"<?php if (isset($preload['media']) && is_string($preload['media']) && preg_match('/^\((?:min|max)-width:\s*[1-9][0-9]*px\)$/D', trim($preload['media']))): ?> media="<?= $htmlEscape(trim($preload['media'])) ?>"<?php endif; ?><?php if (($preload['fetchpriority'] ?? '') === 'high'): ?> fetchpriority="high"<?php endif; ?><?php if (!empty($preload['imagesrcset'])): ?> imagesrcset="<?= $htmlEscape($preload['imagesrcset']) ?>"<?php endif; ?><?php if (!empty($preload['imagesizes'])): ?> imagesizes="<?= $htmlEscape($preload['imagesizes']) ?>"<?php endif; ?>>

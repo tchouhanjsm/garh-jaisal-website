@@ -181,15 +181,17 @@ require __DIR__ . '/include/page-head.php';
     </section>
   <?php endforeach; ?>
 
-  <dialog class="gallery-lightbox" aria-label="Gallery photo viewer">
+  <dialog class="gallery-lightbox" aria-label="Gallery photo viewer" aria-describedby="gallery-lightbox-instructions">
     <div class="gallery-lightbox-inner">
       <div class="gallery-lightbox-top">
         <p class="eyebrow">Photo viewer</p>
         <button type="button" class="gallery-lightbox-close" data-gallery-close>Close <span aria-hidden="true">×</span></button>
       </div>
+      <p id="gallery-lightbox-instructions" class="gallery-lightbox-help">Use the left and right arrow keys to browse photos. Press Escape to close.</p>
       <figure class="gallery-lightbox-figure">
         <img data-gallery-lightbox-image src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg') ?> alt="Rooftop dining at Garh Jaisal Haveli" loading="lazy" decoding="async">
         <figcaption data-gallery-lightbox-caption></figcaption>
+        <p class="gallery-lightbox-position" data-gallery-lightbox-position role="status" aria-live="polite" aria-atomic="true">Choose a photo to begin.</p>
       </figure>
       <div class="gallery-lightbox-actions">
         <button type="button" data-gallery-previous>Previous photo</button>

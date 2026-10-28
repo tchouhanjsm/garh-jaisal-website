@@ -85,3 +85,18 @@ A role that is not directly affected still records a concrete double-check rathe
 - The primary Home hero eyebrow has a 13px minimum at all configured viewport widths; the strict assertion targets `.hero-content > .eyebrow` so later section labels cannot satisfy it accidentally.
 - Homepage discovery cards must respect `prefers-reduced-motion: reduce`: Playwright emulates the setting and checks both computed transition duration and hover transform.
 - Preserve the original approved photographs. Change resolution/candidate selection only when browser evidence shows the declared slot and selected resource disagree.
+
+
+## Gallery lightbox keyboard and image readiness
+
+- Open a photo with the keyboard, move with Left/Right arrows, verify “Photo N of M” is announced, and confirm Previous/Next buttons still work.
+- Confirm arrow navigation wraps at the ends, the selected full-size source resolves, Escape closes the native dialog, and focus returns to the opening thumbnail. If a filter hides the trigger, focus should return to the selected filter.
+- Neighboring full-size images may be prewarmed only after a visitor opens the lightbox; do not front-load every original image.
+- Verify the curated Gallery remains usable without JavaScript and preserves the image-to-source mapping.
+
+## Shared reduced-motion preference
+
+- css/accessibility.css is loaded after page-specific CSS from include/page-head.php so a visitor preference reliably overrides route-level transitions.
+- With Playwright reduced motion set to reduce, verify shared controls have no CSS transition and the Gallery image does not scale on hover. Smooth scrolling and decorative animations must also be disabled.
+- Keep visible keyboard focus and the existing selected/hover color contrast; motion reduction must not hide content or alter booking/contact destinations.
+- The PHP source contract runs under both CI PHP versions; browser behavior is separately tested in Chromium on the exact PR head.

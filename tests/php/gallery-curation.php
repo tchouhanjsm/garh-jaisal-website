@@ -123,11 +123,18 @@ foreach ([
         'data-gallery-more',
         'data-gallery-count',
         'data-gallery-open',
+        'gallery-lightbox-instructions',
+        'data-gallery-lightbox-position',
+        'aria-live="polite"',
     ],
     $scriptPath => [
         'const pageSize = 6;',
         'galleryVisibleCount',
         'visibleImages',
+        'ArrowLeft',
+        'ArrowRight',
+        'prewarmNeighbors',
+        'activeTrigger.focus',
     ],
     $stylePath => [
         '.gallery-item--arch',
@@ -135,6 +142,9 @@ foreach ([
         '.gallery-item--landscape',
         'aspect-ratio: 21 / 9;',
         '.gallery-more:focus-visible',
+        '.gallery-lightbox-help',
+        '.gallery-lightbox-position',
+        '.gallery-lightbox-actions button:disabled',
     ],
 ] as $path => $markers) {
     if (!is_file($path)) {

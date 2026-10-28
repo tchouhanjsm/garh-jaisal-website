@@ -1,0 +1,29 @@
+/* Shared accessibility preferences, loaded after route-level styles. */
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body,
+  html:focus-within {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+
+  .main-nav .nav-book:hover,
+  .contact-dock a:hover,
+  .button:hover,
+  .card:hover .card-image img,
+  .gallery-item:hover img,
+  .gallery-item-label,
+  .home-room-card:hover,
+  .home-experience-card:hover,
+  .home-story-card:hover,
+  .home-discovery-card:hover {
+    transform: none !important;
+  }
+}

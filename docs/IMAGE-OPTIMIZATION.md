@@ -67,3 +67,10 @@ The homepage uses a portrait facade below 768px and the existing rooftop/fort pa
 The Browser E2E image-payload audit on PR #150 measured `img/responsive/v2/facade-1200.webp` at 416,592 bytes and `img/responsive/v2/courtyard-1200.webp` at 406,736 bytes in a local PHP/Chromium run. These values are the local artifact baseline, not production/CDN measurements.
 
 The responsive-image manifest now supports validated per-source quality overrides. Only `img/v2/facade.jpg` and `img/v2/courtyard.jpg` use quality 74; the default remains 82 for other sources, and all original photographs remain untouched. Browser E2E enforces an exact-file-size ceiling of 350 KiB for each 1200px derivative and records the measured bytes in its artifact. The generator's source/variant sheet is still required for visual review at full image size; passing a size budget is not proof that photographic detail is acceptable.
+
+
+## Sprint 159 — Gallery full-size neighbor readiness
+
+- The Gallery keeps server-rendered image links as the source of truth. Full-size images are opened only after an explicit visitor action.
+- After the lightbox opens, the current item’s previous and next full-size sources are prewarmed for smoother navigation; the initial page load does not download every full-resolution original.
+- This leaves source photos untouched and does not claim a field Core Web Vitals or production-network improvement. Validate the interaction against Browser E2E artifacts and review the rendered crop at mobile and desktop widths.

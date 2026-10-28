@@ -116,6 +116,24 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 - **Sprint 155 — release evidence integrity:** use exact-head workflow results only, and keep local timing reports separate from field performance claims.
 - **Remediation after Browser E2E run 739:** the captured 320px screenshot confirmed the eyebrow was rendered at 11.52px because the final compact-phone override used `0.72rem`. Keep the existing minimum-size assertion and set the homepage hero eyebrow back to the established `0.8125rem` (13px at the root scale); scope the test to the visible primary hero eyebrow instead of the first arbitrary `.eyebrow` in the DOM. Verify the new exact head before marking the browser gate complete.
 
+## Active phase — Sprints 156–170: Gallery image UX and sitewide motion preferences (PR #157)
+
+- **Sprint 156 — keyboard-first image browsing:** support Left/Right arrow keys in the native Gallery dialog while keeping the existing Previous/Next buttons and direct-image link fallback.
+- **Sprint 157 — position feedback:** announce the active item as “Photo N of M” through a polite, atomic status region so keyboard and screen-reader users can track movement.
+- **Sprint 158 — predictable focus recovery:** return focus to the image that opened the dialog after Close/Escape; if filtering makes that trigger hidden, recover focus to the active filter instead.
+- **Sprint 159 — neighbor readiness:** after a visitor explicitly opens a photo, prewarm only its adjacent full-size images and decode them where supported. Do not preload the complete gallery during initial page load.
+- **Sprint 160 — source fidelity:** continue using the exact curated original linked to each thumbnail for the full-size viewer; do not remap rooms, experiences or photos by filename.
+- **Sprint 161 — shared motion preference layer:** load a small shared accessibility stylesheet after route/component styles on pages using the common page head.
+- **Sprint 162 — reduced-motion scroll behavior:** replace smooth scrolling, CSS animations and transitions with non-animated behavior when the user requests reduced motion.
+- **Sprint 163 — no-motion hover state:** remove nonessential card, navigation, CTA and Gallery hover transforms under reduced motion while preserving content, focus states and active/inactive colors.
+- **Sprint 164 — route-family browser evidence:** assert the shared preference stylesheet loads last and suppresses transitions across Home, Rooms, Dining and Gallery.
+- **Sprint 165 — rendered hover contract:** emulate reduced motion and assert the Gallery image does not scale on hover; do not rely on stylesheet-marker checks alone.
+- **Sprint 166 — source contract:** test stylesheet existence, shared-head inclusion/order and reduced-motion declarations in PHP CI for PHP 7.4 and 8.2.
+- **Sprint 167 — Gallery interaction regression:** test arrow-key wraparound, live position updates, full-size image resolution, Escape close and focus restoration in Chromium.
+- **Sprint 168 — progressive enhancement:** preserve all curated images, native links and category navigation when JavaScript is disabled.
+- **Sprint 169 — review evidence:** inspect latest exact-head screenshots at mobile and desktop widths and verify the lightbox remains inside the viewport.
+- **Sprint 170 — release gate:** rerun Site Checks, Browser E2E/screenshots, non-deploying Staging QA and package preflight on the same latest PR head. CI evidence is not a production deployment or a field Core Web Vitals result.
+
 ## Priority sequence
 
 1. Deliver coherent guest journeys and resolve high-impact performance findings using measured browser evidence.
