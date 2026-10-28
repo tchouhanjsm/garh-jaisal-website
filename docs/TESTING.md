@@ -43,6 +43,12 @@ CI also runs PHP lint, responsive-image validation/review, Content Studio integr
 - Use exact PR-head CI evidence. Cancelled or stale runs are not passes.
 - State anything not run. Automated tests do not validate real cPanel, mail or CAPTCHA delivery.
 
+## Visual asset and typography evidence
+
+- Browser E2E writes `artifacts/image-accessibility/visual-asset-audit-<project>.json` for the eight key page families. The report includes image source/currentSrc, intrinsic and rendered dimensions, alt-attribute presence, visible load failures, font stacks/readiness and resource-timing transfer data when available.
+- Review image subject, composition, color, authenticity and crop manually against screenshot artifacts before changing source photography. An empty alt is valid for a deliberately decorative image; a missing alt attribute is not.
+- Browser timing is diagnostic. Do not claim field Core Web Vitals or a real-user three-second result from CI.
+
 ## Four-perspective review
 
 1. **Full-stack:** PHP compatibility, escaping, safe inputs/output, secret boundaries, error handling, routes and dependencies.

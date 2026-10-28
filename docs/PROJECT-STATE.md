@@ -39,6 +39,19 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 - Preserve room IDs, the two-to-three-room limit, original photos/alt text, existing features and descriptions, booking-engine URL/token, room-specific Contact handoff, session-only Trip behavior, routes, metadata and schema.
 - Acceptance: exact-head PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. No cPanel upload or deployment.
 
+## Active phase — Sprints 121–130: Visual asset and typography evidence (PR #157)
+
+- **Sprint 121 — route image inventory:** inspect first-party and external image sources on high-intent pages.
+- **Sprint 122 — rendered image integrity:** record visible image load state, intrinsic dimensions and the selected responsive `currentSrc`.
+- **Sprint 123 — alternative-text contract:** detect missing `alt` attributes while allowing explicitly decorative empty alternatives.
+- **Sprint 124 — image geometry:** capture rendered box and intrinsic aspect ratio to identify suspicious distortion/cropping candidates.
+- **Sprint 125 — responsive source evidence:** record `src`, `srcset`, `sizes` and `currentSrc` rather than assuming a candidate is used.
+- **Sprint 126 — font declaration audit:** record computed display/body font stacks and font readiness per route.
+- **Sprint 127 — transfer diagnostics:** match resource timing entries to image/font requests when the browser exposes timing data.
+- **Sprint 128 — route coverage:** audit Home, Rooms, Packages, Dining, Directions, Contact, Gallery and Journal.
+- **Sprint 129 — machine-readable evidence:** write JSON under `artifacts/image-accessibility/` for the existing CI artifact uploader.
+- **Sprint 130 — evidence-led optimization:** use the resulting report and screenshot review to choose specific asset, crop or font changes; do not replace photos based on filename guesses.
+
 ## Priority sequence
 
 1. Deliver coherent guest journeys and resolve high-impact performance findings using measured browser evidence.
