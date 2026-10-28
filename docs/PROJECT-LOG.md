@@ -96,4 +96,5 @@ Regression coverage verifies action count and destination parity on the live exp
 
 - Show a contextual “Show selected rooms” action only while selected cards are hidden by active directory filters.
 - Clear search, floor and feature filters only when the guest activates that action, reveal the selected cards and focus the first selected room's compare control.
+- Re-evaluate recovery-action visibility after each filter update as well as each shortlist edit.
 - Verify this differs from clearing the shortlist: selected room choices remain intact.

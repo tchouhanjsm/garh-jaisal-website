@@ -870,6 +870,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (emptyState) emptyState.hidden = visibleCount > 0;
+      renderComparisonShortlist(selectedRoomCards());
       updateRoomResultStatus();
     };
 
