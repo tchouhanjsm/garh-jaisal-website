@@ -206,6 +206,7 @@ foreach ($urls as $path => $priority) {
     }
     if (array_key_exists($routeSlug, $editorialGuides)) {
         $sourceFiles[] = 'include/editorial-guides-data.php';
+        $sourceFiles[] = 'include/editorial-guide-page.php';
     }
     if (array_key_exists($routeSlug, $studioPages)) {
         $sourceFiles[] = 'include/studio-pages-data.php';
