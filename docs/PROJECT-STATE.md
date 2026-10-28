@@ -226,3 +226,12 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Updated the sitemap generator's shared-source inventory for the planning renderer and topic registry. Extended PHP and Playwright contracts for topic allowlisting, safe fallback, contextual guidance, privacy-safe click tracking and the three-link route contract.
 - Corrected two legacy Browser E2E assertions that accidentally counted planning-card links as duplicate editorial links; those checks now scope to the intended article body or discovery navigation.
 - This continuation is being developed on the existing feature branch after PR #157 was merged by GitHub. No new PR was opened, and no merge, cPanel upload, staging deployment or production deployment is part of this work. Exact-head checks still determine whether the continuation is validated.
+
+
+## Sprints 276–290 — Privacy-safe contextual enquiry handoff analytics
+
+- Added controlled `data-contact-handoff` markers to the primary contact/enquiry actions across high-intent PHP routes and shared experience/footer renderers; the markers identify reviewed contexts rather than deriving labels from arbitrary query values.
+- Added `contact_handoff_click` to the shared delegated event handler. It records the source pathname, current approved campaign attribution, a bounded CTA label, an allowlisted context and the destination pathname only. It never sends the contact destination's query string, topic value, email, name, message or other form fields.
+- Added a route-wide Browser E2E contract for marked contact destinations and a privacy assertion for a contextual arrival link. Extended the existing PHP conversion contract to check that marker values stay inside the shared JavaScript allowlist.
+- Corrected stale Browser E2E expectations after the prior approved topic normalization: guided tours use the `fort-guide` enquiry topic and the About CTA uses `custom-itinerary`. Production destinations were preserved; the test expectations were corrected to the current allowlisted routes.
+- A handoff event is a CTA click, not an enquiry submission, confirmed booking or revenue event. Exact-head Browser E2E and Site Checks remain the validation gate. No merge, cPanel upload, staging deployment or production deployment is part of this phase.

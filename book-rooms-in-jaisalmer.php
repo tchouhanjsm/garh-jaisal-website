@@ -69,7 +69,7 @@ require __DIR__ . '/include/page-head.php';
         <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check room availability</a>
         <a class="button button-light" href="room.php">Compare the rooms</a>
       </div>
-      <p class="guide-hero-contact">Questions about room-specific facilities or arrival? <a href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Message us on WhatsApp</a> or <a href="contact.php">send an enquiry</a>.</p>
+      <p class="guide-hero-contact">Questions about room-specific facilities or arrival? <a href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Message us on WhatsApp</a> or <a data-contact-handoff="visit_planning" href="contact.php?topic=visit-planning">send an enquiry</a>.</p>
     </div>
   </section>
 
@@ -99,7 +99,7 @@ require __DIR__ . '/include/page-head.php';
           <span aria-hidden="true">03</span>
           <h3>Plan the extras</h3>
           <p>Ask the hotel to confirm any desert experience, guided route, dining plan or arrival arrangement before relying on it.</p>
-          <a href="contact.php?topic=visit-planning">Ask about your plans <span aria-hidden="true">→</span></a>
+          <a data-contact-handoff="visit_planning" href="contact.php?topic=visit-planning">Ask about your plans <span aria-hidden="true">→</span></a>
         </li>
       </ol>
     </div>
@@ -117,7 +117,7 @@ require __DIR__ . '/include/page-head.php';
       <article class="guide-copy">
         <p class="eyebrow" id="arrive">Arrive</p>
         <h2>The last part is on foot.</h2>
-        <p>Vehicles cannot enter the fort lanes, so guests continue on foot after Fort Parking. Contact the hotel before travel to confirm current reception hours and ask whether luggage or late-arrival assistance can be arranged; wait for confirmation before relying on it. See the <a href="direction.php">arrival guide</a> or <a href="contact.php?topic=arrival">send an arrival enquiry</a>.</p>
+        <p>Vehicles cannot enter the fort lanes, so guests continue on foot after Fort Parking. Contact the hotel before travel to confirm current reception hours and ask whether luggage or late-arrival assistance can be arranged; wait for confirmation before relying on it. See the <a href="direction.php">arrival guide</a> or <a data-contact-handoff="arrival" href="contact.php?topic=arrival">send an arrival enquiry</a>.</p>
         <p class="eyebrow" id="stay">Stay</p>
         <h2>Rooms inside the haveli.</h2>
         <p>The rooms are Sweet Purple, Rising Sun, Scarlet, Opium, Red Maharani, Green, and BlueSky. Each is different. Sweet Purple has a carved bed and a second bed. Green has a window seat. Rates stay on the booking engine, not on this page. <a href="room.php">See the rooms</a>.</p>
@@ -130,7 +130,7 @@ require __DIR__ . '/include/page-head.php';
         <p>Camel safaris, a night under the stars, and Swiss tent stays are arranged from the hotel. October to March is the busy season. Ask the hotel for the current price before you commit. <a href="pack.php">Desert experiences</a>.</p>
         <p class="eyebrow" id="book">Book</p>
         <h2>Reserve the room, then plan the rest.</h2>
-        <p>Book the room through the hotel’s booking page, or write from the <a href="contact.php">contact form</a>. Desert trips and rooftop dinners are arranged with the hotel after the room is held.</p>
+        <p>Book the room through the hotel’s booking page, or write from the <a data-contact-handoff="room_availability" href="contact.php?topic=room-availability">contact form</a>. Desert trips and rooftop dinners are arranged with the hotel after the room is held.</p>
         <div class="actions">
           <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Book your stay</a>
           <a class="button button-light" href="room.php">See the rooms</a>

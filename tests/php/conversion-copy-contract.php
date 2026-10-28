@@ -3,19 +3,20 @@
 $root = dirname(__DIR__, 2);
 $errors = [];
 $required = [
-    'index.php' => ['Wake up inside Jaisalmer Fort.', 'Heritage stay · Inside Jaisalmer Fort', 'individually styled rooms', 'home-hero-facts', 'Explore the rooms', 'conversion-journey', 'home-planning-panel', 'id="arrival-guide"', 'conversion-faq', 'Check rooms &amp; rates', 'guided-jaisalmer-tour.php', 'desert-safari.php'],
+    'index.php' => ['Wake up inside Jaisalmer Fort.', 'Heritage stay · Inside Jaisalmer Fort', 'individually styled rooms', 'home-hero-facts', 'Explore the rooms', 'conversion-journey', 'home-planning-panel', 'id="arrival-guide"', 'conversion-faq', 'Check rooms &amp; rates', 'guided-jaisalmer-tour.php', 'desert-safari.php', 'data-contact-handoff'],
     'about.php' => ['Stay inside the Fort. Feel closer to Jaisalmer.', 'Good hospitality begins before you arrive.', 'conversion-promise'],
     'desert-safari.php' => ['Find the Jaisalmer desert safari that fits your trip.', 'desert-options', 'conversion-checklist', 'Confirm my safari details'],
     'guided-jaisalmer-tour.php' => ['See Jaisalmer with a guide, at your pace.', 'guided-options', 'Plan my guided tour'],
     'city-tour.php' => ['Discover the stories inside Jaisalmer Fort.', 'Ask about route, guide'],
-    'room.php' => ['Find your room inside Jaisalmer Fort.'],
+    'room.php' => ['Find your room inside Jaisalmer Fort.', 'data-contact-handoff'],
     'restaurant.php' => ['Rooftop dining in the heart of Jaisalmer Fort.', 'Enquire about a table'],
     'include/experience-page.php' => ['An enquiry is not a confirmed booking.', 'Build the day around what you want to discover.', "require __DIR__ . '/ui/planning-path.php';"],
     'include/editorial-guide-page.php' => ["require __DIR__ . '/ui/planning-path.php';"],
     'include/ui/planning-path.php' => ['planning-path-grid', 'Related planning pages', 'htmlspecialchars', 'planning-paths-data.php', 'contact-topics.php', 'allowlisted contact topic'],
     'include/contact-topics.php' => ['room-availability', 'car-arrangements', 'helpful_details', 'current price'],
     'include/planning-paths-data.php' => ['Reviewed planning destinations', 'same-site PHP pages', 'Review room features'],
-    'include/footer-v2.php' => ['Let Jaisalmer begin inside the Fort.', 'Check dates &amp; current rates'],
+    'include/footer-v2.php' => ['Let Jaisalmer begin inside the Fort.', 'Check dates &amp; current rates', 'data-contact-handoff="general"'],
+    'js/garh-v2.js' => ['contactHandoffContexts', 'contact_handoff_click', 'destination_path', 'enquiry_context'],
 ];
 foreach ($required as $relative => $needles) {
     $path = $root . '/' . $relative;
@@ -171,6 +172,60 @@ foreach ($planningRegistry as $route => $entry) {
     }
     if (count(array_unique($hrefs)) !== 3 || count(array_unique($destinationPaths)) !== 3) {
         $errors[] = 'Planning registry destinations must be distinct by href and route path: ' . $route;
+    }
+}
+
+
+// Contextual contact handoffs are production markup, not just an analytics event name.
+$handoffSourcePaths = [
+    'index.php',
+    'room.php',
+    'pack.php',
+    'catalogue.php',
+    'direction.php',
+    'roof.php',
+    'restaurant.php',
+    'book-rooms-in-jaisalmer.php',
+    'camping.php',
+    'car-rental.php',
+    'city-tour.php',
+    'car-tours.php',
+    'custom-itinerary.php',
+    'desert-safari.php',
+    'guided-jaisalmer-tour.php',
+    'include/experience-page.php',
+    'include/ui/experience-conversion-checkpoint.php',
+    'include/footer-v2.php',
+];
+$analyticsSource = file_get_contents($root . '/js/garh-v2.js');
+$allowedHandoffContexts = [];
+if (
+    is_string($analyticsSource)
+    && preg_match('/const contactHandoffContexts = new Set\(\[(.*?)\]\);/s', $analyticsSource, $handoffContextMatch) === 1
+) {
+    preg_match_all('/\'([a-z0-9_]+)\'/D', $handoffContextMatch[1], $handoffContextValues);
+    $allowedHandoffContexts = $handoffContextValues[1] ?? [];
+}
+if ($allowedHandoffContexts === []) {
+    $errors[] = 'Analytics JavaScript must expose the approved contact-handoff context allowlist';
+}
+foreach ($handoffSourcePaths as $relative) {
+    $sourcePath = $root . '/' . $relative;
+    $source = is_file($sourcePath) ? file_get_contents($sourcePath) : false;
+    if (!is_string($source)) {
+        $errors[] = $relative . ': contact handoff source could not be read';
+        continue;
+    }
+    if (strpos($source, 'data-contact-handoff=') === false) {
+        $errors[] = $relative . ': expected a controlled data-contact-handoff marker';
+        continue;
+    }
+    if (preg_match_all('/data-contact-handoff="([a-z0-9_]+)"/', $source, $handoffMarkers)) {
+        foreach ($handoffMarkers[1] as $handoffContext) {
+            if (!in_array($handoffContext, $allowedHandoffContexts, true)) {
+                $errors[] = $relative . ': unapproved contact handoff context: ' . $handoffContext;
+            }
+        }
     }
 }
 

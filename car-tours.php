@@ -65,7 +65,7 @@ require __DIR__ . '/include/page-head.php';
       <p>Choose a guided walk inside Jaisalmer Fort, compare the half-day and full-day city tours, or enquire separately about SUV/sedan pickup, drop-off and intercity journeys across Rajasthan and Delhi. New themed routes remain ideas until the hotel confirms feasibility, access, transport, timings, inclusions and price.</p>
       <div class="actions">
         <a class="button button-primary" href="catalogue.php">Build your trip shortlist</a>
-        <a class="button button-light" href="contact.php?topic=fort-guide">Ask about arrangements</a>
+        <a class="button button-light" data-contact-handoff="fort_guide" href="contact.php?topic=fort-guide">Ask about arrangements</a>
       </div>
     </div>
   </section>
@@ -126,37 +126,37 @@ require __DIR__ . '/include/page-head.php';
           <p class="tour-idea-kicker">Architecture & heritage</p>
           <h3>Golden sandstone havelis</h3>
           <p>A heritage-focused route built around Jaisalmer’s carved havelis and old-city architecture, with stops agreed in advance.</p>
-          <a class="tour-idea-link" href="contact.php?topic=heritage-havelis" aria-label="Enquire about a proposed golden sandstone havelis itinerary">Enquire about this idea <span aria-hidden="true">→</span></a>
+          <a class="tour-idea-link" data-contact-handoff="heritage_havelis" href="contact.php?topic=heritage-havelis" aria-label="Enquire about a proposed golden sandstone havelis itinerary">Enquire about this idea <span aria-hidden="true">→</span></a>
         </article>
         <article class="tour-idea-card">
           <p class="tour-idea-kicker">Fort & sacred architecture</p>
           <h3>Jain temples inside the Fort</h3>
           <p>An architecture-led visit focused on the Jain temples within Jaisalmer Fort, subject to current visitor access and temple rules.</p>
-          <a class="tour-idea-link" href="contact.php?topic=jain-temples" aria-label="Enquire about a proposed Jain temples itinerary">Enquire about this idea <span aria-hidden="true">→</span></a>
+          <a class="tour-idea-link" data-contact-handoff="jain_temples" href="contact.php?topic=jain-temples" aria-label="Enquire about a proposed Jain temples itinerary">Enquire about this idea <span aria-hidden="true">→</span></a>
         </article>
         <article class="tour-idea-card">
           <p class="tour-idea-kicker">Photography & landscapes</p>
           <h3>Lake and cenotaph viewpoints</h3>
           <p>Ask about a photography-friendly route involving Gadisar Lake, Bada Bagh or Vyas Chhatri. These stops may need to be planned as separate outings.</p>
-          <a class="tour-idea-link" href="contact.php?topic=lake-cenotaph-photo" aria-label="Enquire about a proposed lake and cenotaph photography route">Enquire about this idea <span aria-hidden="true">→</span></a>
+          <a class="tour-idea-link" data-contact-handoff="lake_cenotaph_photo" href="contact.php?topic=lake-cenotaph-photo" aria-label="Enquire about a proposed lake and cenotaph photography route">Enquire about this idea <span aria-hidden="true">→</span></a>
         </article>
         <article class="tour-idea-card">
           <p class="tour-idea-kicker">Living history & landscape</p>
           <h3>Kuldhara and the desert edge</h3>
           <p>A proposed heritage outing around Kuldhara and the surrounding landscape. Daylight access, visitor rules and the route must be checked.</p>
-          <a class="tour-idea-link" href="contact.php?topic=kuldhara-landscape" aria-label="Enquire about a proposed Kuldhara and desert landscape route">Enquire about this idea <span aria-hidden="true">→</span></a>
+          <a class="tour-idea-link" data-contact-handoff="kuldhara_landscape" href="contact.php?topic=kuldhara-landscape" aria-label="Enquire about a proposed Kuldhara and desert landscape route">Enquire about this idea <span aria-hidden="true">→</span></a>
         </article>
         <article class="tour-idea-card">
           <p class="tour-idea-kicker">Geology & nature</p>
           <h3>Fossils or desert ecology</h3>
           <p>Ask which natural-history option, if any, can be arranged: Akal Wood Fossil Park or a suitable Desert National Park area visit. Wildlife sightings are never guaranteed.</p>
-          <a class="tour-idea-link" href="contact.php?topic=natural-history" aria-label="Enquire about proposed fossils or desert ecology options">Enquire about this idea <span aria-hidden="true">→</span></a>
+          <a class="tour-idea-link" data-contact-handoff="natural_history" href="contact.php?topic=natural-history" aria-label="Enquire about proposed fossils or desert ecology options">Enquire about this idea <span aria-hidden="true">→</span></a>
         </article>
         <article class="tour-idea-card">
           <p class="tour-idea-kicker">Military history</p>
           <h3>Longewala War Memorial</h3>
           <p>A potential history-focused day excursion. Operational feasibility, visitor requirements, route, transport and total time need confirmation.</p>
-          <a class="tour-idea-link" href="contact.php?topic=longewala-history" aria-label="Enquire about a proposed Longewala War Memorial outing">Enquire about this idea <span aria-hidden="true">→</span></a>
+          <a class="tour-idea-link" data-contact-handoff="longewala_history" href="contact.php?topic=longewala-history" aria-label="Enquire about a proposed Longewala War Memorial outing">Enquire about this idea <span aria-hidden="true">→</span></a>
         </article>
       </div>
     </div>
@@ -164,7 +164,7 @@ require __DIR__ . '/include/page-head.php';
 
   <?php require __DIR__ . '/include/ui/stay-booking-note.php'; ?>
 
-  <section class="section packages-cta"><div class="site-shell"><div class="packages-cta-inner"><p class="eyebrow">Plan with the hotel</p><h2>Confirm the details before you travel.</h2><p>Tour routes, timings, transport, fees and availability can vary. Contact the hotel for the current details for your date.</p><div class="actions"><a class="button button-primary" href="contact.php?topic=custom-itinerary">Ask about a route</a><a class="button button-secondary" href="direction.php">Plan your arrival</a></div></div></div></section>
+  <section class="section packages-cta"><div class="site-shell"><div class="packages-cta-inner"><p class="eyebrow">Plan with the hotel</p><h2>Confirm the details before you travel.</h2><p>Tour routes, timings, transport, fees and availability can vary. Contact the hotel for the current details for your date.</p><div class="actions"><a class="button button-primary" data-contact-handoff="custom_itinerary" href="contact.php?topic=custom-itinerary">Ask about a route</a><a class="button button-secondary" href="direction.php">Plan your arrival</a></div></div></div></section>
 
   <section class="section site-faq car-tours-faq" aria-labelledby="car-tours-faq-title">
     <div class="site-shell">

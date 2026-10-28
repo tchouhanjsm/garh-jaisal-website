@@ -20,7 +20,7 @@ if (
         <p>Ask us to confirm current availability, route, timings and exact inclusions for your travel date. An enquiry is not a confirmed booking.</p>
       </div>
       <div class="actions experience-conversion-checkpoint-actions">
-        <a class="button button-primary experience-conversion-contact" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" <?= !empty($isWhatsAppCityTour) ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
+        <a class="button button-primary experience-conversion-contact" <?= empty($isWhatsAppCityTour) ? 'data-contact-handoff="experience"' : '' ?> href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" <?= !empty($isWhatsAppCityTour) ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
         <?php if (!empty($isIndexableExperience) && ($experience['duration_type'] ?? 'hub') !== 'hub'): ?>
           <?php
           $tripItem = [

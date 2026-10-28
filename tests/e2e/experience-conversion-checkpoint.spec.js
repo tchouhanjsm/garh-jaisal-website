@@ -34,7 +34,7 @@ test('live experience pages show a contextual checkpoint after the itinerary and
           .toHaveAttribute('href', 'catalogue.php');
       } else {
         await expect(page.getByRole('link', { name: 'Plan my guided tour' }), route.path + ': city-tour hub keeps a contextual enquiry')
-          .toHaveAttribute('href', 'contact.php?topic=visit-planning');
+          .toHaveAttribute('href', 'contact.php?topic=fort-guide');
         await expect(heroActions.locator('a[href="#guided-options"]')).toHaveText('Compare tour options');
         await expect(heroActions.getByRole('link', { name: 'Build your trip shortlist' })).toHaveCount(0);
       }

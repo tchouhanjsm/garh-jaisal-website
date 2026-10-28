@@ -381,7 +381,7 @@ require __DIR__ . '/include/page-head.php';
             <a
               class="text-link room-enquiry-link"
               aria-label="Ask about <?= htmlspecialchars($room['name'], ENT_QUOTES, 'UTF-8') ?>"
-              href="contact.php?room=<?= htmlspecialchars($roomSlug, ENT_QUOTES, 'UTF-8') ?>"
+              data-contact-handoff="room" href="contact.php?room=<?= htmlspecialchars($roomSlug, ENT_QUOTES, 'UTF-8') ?>"
             >Ask about this room →</a>
 
           </div>
@@ -415,7 +415,7 @@ require __DIR__ . '/include/page-head.php';
       <p class="room-comparison-scroll-hint" id="room-comparison-scroll-hint">On narrow screens, scroll the table horizontally to compare each room column.</p>
       <div id="room-comparison-content" class="room-comparison-content" data-room-comparison-content tabindex="0" role="region" aria-label="Selected room comparison table" aria-describedby="room-comparison-scroll-hint"></div>
       <footer class="room-comparison-footer">
-        <a class="room-comparison-enquiry" data-room-comparison-enquiry href="contact.php" hidden>Ask about selected rooms</a>
+        <a class="room-comparison-enquiry" data-room-comparison-enquiry data-contact-handoff="room_shortlist" href="contact.php" hidden>Ask about selected rooms</a>
         <button class="room-comparison-trip" type="button" data-room-comparison-trip hidden>Add room options to Trip</button>
         <button class="room-comparison-clear" type="button" data-room-comparison-clear>Clear shortlist</button>
         <button class="room-comparison-close-link" type="button" data-room-comparison-close>Return to rooms</button>

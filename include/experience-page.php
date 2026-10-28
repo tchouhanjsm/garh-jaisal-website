@@ -170,7 +170,7 @@ require __DIR__ . '/page-head.php';
       <h1><?= htmlspecialchars($experience['h1'], ENT_QUOTES, 'UTF-8') ?></h1>
       <p><?= htmlspecialchars($experience['summary'], ENT_QUOTES, 'UTF-8') ?></p>
       <div class="actions experience-hero-actions">
-        <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
+        <a class="button button-primary" <?= !$isWhatsAppCityTour ? 'data-contact-handoff="experience"' : '' ?> href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
 <?php if ($isIndexableExperience && ($experience['duration_type'] ?? 'hub') !== 'hub'): ?>
         <?php
         $tripItem = ['id' => $experience['slug'], 'title' => $experience['h1'], 'url' => $experience['slug'] . '.php'];
@@ -377,7 +377,7 @@ require __DIR__ . '/page-head.php';
       <h2>Build the day around what you want to discover.</h2>
       <p>Share your travel date, group size and priorities. We will confirm the current price, route, timings, guide or transport arrangements and exact inclusions before you commit.</p>
       <div class="actions">
-        <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceBottomContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
+        <a class="button button-primary" <?= !$isWhatsAppCityTour ? 'data-contact-handoff="experience"' : '' ?> href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceBottomContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
         <a class="button button-secondary" href="room.php">View rooms</a>
       </div>
     </div>

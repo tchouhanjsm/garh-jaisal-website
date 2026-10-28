@@ -74,7 +74,7 @@ require __DIR__ . '/include/page-head.php';
       <h1>See Jaisalmer with a guide, at your pace.</h1>
       <p>Choose a focused Fort walk, a half-day exploration or a fuller day across Jaisalmer's heritage areas. Tell us what interests you and how much time you have; the route, guide language and current price are confirmed for your date.</p>
       <div class="actions experience-hero-actions">
-        <a class="button button-primary" href="contact.php?topic=fort-guide">Plan my guided tour</a>
+        <a class="button button-primary" data-contact-handoff="fort_guide" href="contact.php?topic=fort-guide">Plan my guided tour</a>
         <a class="button button-light" href="#guided-options">Compare tour options</a>
       </div>
     </div>
@@ -173,7 +173,7 @@ require __DIR__ . '/include/page-head.php';
       <p class="eyebrow">Plan your Jaisalmer stay</p>
       <h2>Give Jaisalmer the time it deserves.</h2>
       <p>Share your date, preferred language and interests. We will confirm guide availability, the route, current price and any applicable entry fees.</p>
-      <div class="actions"><a class="button button-primary" href="contact.php?topic=fort-guide">Ask about a guided visit</a><a class="button button-secondary" href="desert-safari.php">Explore desert safaris</a></div>
+      <div class="actions"><a class="button button-primary" data-contact-handoff="fort_guide" href="contact.php?topic=fort-guide">Ask about a guided visit</a><a class="button button-secondary" href="desert-safari.php">Explore desert safaris</a></div>
     </div>
   </section>
 

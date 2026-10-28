@@ -211,3 +211,91 @@ test('contextual enquiry planning links keep topic queries out of analytics', as
   expect(planning).not.toHaveProperty('email');
   expect(planning).not.toHaveProperty('link_url');
 });
+
+
+test('contextual contact handoffs track intent without sending destination queries or personal data', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Contact handoff analytics runs once on desktop-1280');
+  await page.route('https://www.googletagmanager.com/**', route => route.abort());
+  await preventTrackedNavigation(page);
+
+  await page.goto('/direction.php?utm_source=google&utm_medium=cpc&utm_campaign=arrival_handoff&email=private%40example.com&topic=private', {
+    waitUntil: 'domcontentloaded'
+  });
+  const link = page.locator('a[data-contact-handoff="arrival"][href="contact.php?topic=arrival"]').first();
+  await expect(link).toBeVisible();
+  await link.evaluate(anchor => {
+    anchor.addEventListener('click', event => event.preventDefault(), { once: true });
+  });
+  await link.click();
+
+  const events = await readTrackedEvents(page);
+  const handoff = expectRoutedOnce(events, 'contact_handoff_click', '/direction.php', 'arrival');
+  expect(handoff.cta_label).toMatch(/arrival/i);
+  expect(handoff.enquiry_context).toBe('arrival');
+  expect(handoff.destination_path).toBe('/contact.php');
+  expect(handoff.destination_path).not.toContain('?');
+  expect(handoff.utm_source).toBe('google');
+  expect(handoff.utm_medium).toBe('cpc');
+  expect(handoff.utm_campaign).toBe('arrival_handoff');
+  expect(handoff).not.toHaveProperty('topic');
+  expect(handoff).not.toHaveProperty('email');
+  expect(handoff).not.toHaveProperty('name');
+  expect(handoff).not.toHaveProperty('message');
+  expect(handoff).not.toHaveProperty('link_url');
+});
+
+test('contact handoff markers resolve to same-site contact destinations and approved contexts', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Contact handoff route contracts run once on desktop-1280');
+  const routes = [
+    '/',
+    '/room.php',
+    '/pack.php',
+    '/catalogue.php',
+    '/direction.php',
+    '/roof.php',
+    '/restaurant.php',
+    '/book-rooms-in-jaisalmer.php',
+    '/camping.php',
+    '/car-rental.php',
+    '/city-tour.php',
+    '/car-tours.php',
+    '/custom-itinerary.php',
+    '/desert-safari.php',
+    '/guided-jaisalmer-tour.php',
+    '/sunset-camel-safari.php',
+    '/half-day-jaisalmer-tour.php',
+    '/full-day-jaisalmer-tour.php'
+  ];
+  const approvedContexts = new Set([
+    'general', 'visit_planning', 'arrival', 'room', 'room_shortlist',
+    'trip_shortlist', 'room_availability', 'dining', 'desert_safari',
+    'desert_packing', 'car_arrangements', 'fort_guide', 'custom_itinerary',
+    'experience', 'two_day_itinerary', 'three_day_itinerary', 'honeymoon',
+    'heritage_havelis', 'jain_temples', 'lake_cenotaph_photo',
+    'kuldhara_landscape', 'natural_history', 'longewala_history'
+  ]);
+
+  for (const route of routes) {
+    const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
+    expect(response, `No HTTP response for ${route}`).not.toBeNull();
+    expect(response.status(), `Unexpected status for ${route}`).toBeLessThan(400);
+    const markers = await page.locator('a[data-contact-handoff]').evaluateAll(anchors =>
+      anchors.map(anchor => {
+        const destination = new URL(anchor.href, window.location.href);
+        return {
+          context: anchor.dataset.contactHandoff || '',
+          href: anchor.getAttribute('href') || '',
+          origin: destination.origin,
+          pathname: destination.pathname
+        };
+      })
+    );
+    expect(markers.length, `${route}: expected at least one marked contact CTA`).toBeGreaterThan(0);
+    for (const marker of markers) {
+      expect(approvedContexts.has(marker.context), `${route}: approved context ${marker.context}`).toBeTruthy();
+      expect(marker.href, `${route}: href points at contact.php`).toMatch(/^contact\.php(?:\?|$)/i);
+      expect(marker.origin, `${route}: contact destination stays same-origin`).toBe(new URL(page.url()).origin);
+      expect(marker.pathname, `${route}: handoff destination is contact.php`).toBe('/contact.php');
+    }
+  }
+});

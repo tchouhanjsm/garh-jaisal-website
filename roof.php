@@ -70,7 +70,7 @@ require __DIR__ . '/include/page-head.php';
       </p>
       <div class="actions">
         <a class="button button-primary" href="restaurant.php#menu">View the menu</a>
-        <a class="button button-light" href="contact.php?topic=dining">Contact the hotel</a>
+        <a class="button button-light" data-contact-handoff="dining" href="contact.php?topic=dining">Contact the hotel</a>
         <?php
           $tripItem = ['id' => 'rooftop-dining', 'title' => 'Rooftop dining', 'url' => 'roof.php', 'group' => 'dining'];
           $tripButtonClass = 'button button-light';
@@ -121,7 +121,7 @@ require __DIR__ . '/include/page-head.php';
           Confirm current menu options and prices with the hotel before you visit.
         </p>
         <p>
-          <a class="text-link" href="contact.php?topic=dining">Contact the hotel</a>
+          <a class="text-link" data-contact-handoff="dining" href="contact.php?topic=dining">Contact the hotel</a>
           or call <a href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($hotelPhoneDisplay, ENT_QUOTES, 'UTF-8') ?></a>.
           For how to reach the fort, see <a href="direction.php">directions</a>.
         </p>

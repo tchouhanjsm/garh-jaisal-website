@@ -76,7 +76,7 @@ require __DIR__ . '/include/page-head.php';
       <p>A sunset outing and an overnight stay are very different experiences. Compare the options below, then ask us to confirm the route, transport, timings, accommodation, meals and total price for your date.</p>
       <div class="actions experience-hero-actions">
         <a class="button button-primary" href="#desert-options">Compare safari options</a>
-        <a class="button button-light" href="contact.php?topic=desert-safari">Check dates &amp; prices</a>
+        <a class="button button-light" data-contact-handoff="desert_safari" href="contact.php?topic=desert-safari">Check dates &amp; prices</a>
       </div>
     </div>
   </section>
@@ -161,7 +161,7 @@ require __DIR__ . '/include/page-head.php';
         <article><strong>One evening</strong><p>Choose a sunset camel safari or cultural safari and return to Jaisalmer the same evening.</p></article>
         <article><strong>One night, open sky</strong><p>Choose Sleep Under the Stars for an overnight desert experience without tent accommodation.</p></article>
         <article><strong>One night, tent</strong><p>Choose the Swiss Tent Safari when you prefer tent accommodation and a cultural evening.</p></article>
-        <article><strong>Need help choosing?</strong><p>Ask us to compare the currently available desert options and confirm the current price, route, pickup arrangement and timing for your travel date.</p><a class="text-link" href="contact.php?topic=desert-safari">Ask about desert options →</a><a class="text-link" href="catalogue.php">Build your trip shortlist →</a></article>
+        <article><strong>Need help choosing?</strong><p>Ask us to compare the currently available desert options and confirm the current price, route, pickup arrangement and timing for your travel date.</p><a class="text-link" data-contact-handoff="desert_safari" href="contact.php?topic=desert-safari">Ask about desert options →</a><a class="text-link" href="catalogue.php">Build your trip shortlist →</a></article>
       </div>
     </div>
   </section>
@@ -171,7 +171,7 @@ require __DIR__ . '/include/page-head.php';
   <div class="site-shell conversion-checklist__layout">
     <div><p class="eyebrow">Before you confirm</p><h2 id="desert-checklist-title">Know what is included, not just what it is called.</h2>
       <p>Desert packages can differ in important ways. Ask us to confirm these details for the exact option and date you are considering.</p>
-      <a class="button button-primary" href="contact.php?topic=desert-safari">Confirm my safari details</a>
+      <a class="button button-primary" data-contact-handoff="desert_safari" href="contact.php?topic=desert-safari">Confirm my safari details</a>
     </div>
     <ul><li>Departure, return and sunset timing for your date</li><li>Transport and pickup or meeting arrangements</li><li>Approximate camel-ride duration and route</li><li>Meal, cultural programme and overnight accommodation inclusions</li><li>Total price, availability and any conditions before payment</li></ul>
   </div>
@@ -199,7 +199,7 @@ require __DIR__ . '/include/page-head.php';
       <p class="eyebrow">Plan from the Fort</p>
       <h2>Make the Fort your base, then head for the dunes.</h2>
       <p>Tell us your date and preferred experience. We will confirm the current price, transport, timings and inclusions before you decide.</p>
-      <div class="actions"><a class="button button-primary" href="contact.php?topic=desert-safari">Ask about desert options</a><a class="button button-secondary" href="guided-jaisalmer-tour.php">Explore guided city tours</a></div>
+      <div class="actions"><a class="button button-primary" data-contact-handoff="desert_safari" href="contact.php?topic=desert-safari">Ask about desert options</a><a class="button button-secondary" href="guided-jaisalmer-tour.php">Explore guided city tours</a></div>
     </div>
   </section>
 

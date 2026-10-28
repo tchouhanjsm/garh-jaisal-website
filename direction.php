@@ -284,7 +284,7 @@ require __DIR__ . '/include/page-head.php';
           <p>From the parking area, follow the walking route through the Fort lanes. If you need pickup or luggage assistance, contact the hotel in advance to confirm what can be arranged.</p>
           <div class="actions">
             <a class="button button-primary" href="<?= htmlspecialchars($hotelMapsUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Open exact hotel pin in Google Maps</a>
-            <a class="button button-secondary" href="contact.php?topic=arrival">Confirm arrival arrangements</a>
+            <a class="button button-secondary" data-contact-handoff="arrival" href="contact.php?topic=arrival">Confirm arrival arrangements</a>
           </div>
         </div>
       </div>
@@ -298,7 +298,7 @@ require __DIR__ . '/include/page-head.php';
         <h2>Confirm your arrival plan.</h2>
         <p>Please contact the hotel before travel to confirm current reception hours, check-in and check-out times, early-arrival access, luggage storage, and arrangements for arrivals outside reception hours. Share your expected arrival time so the team can advise what may be arranged for your date.</p>
         <div class="actions">
-          <a class="button button-primary" href="contact.php?topic=arrival">Contact the hotel</a>
+          <a class="button button-primary" data-contact-handoff="arrival" href="contact.php?topic=arrival">Contact the hotel</a>
           <a class="button button-light" href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">WhatsApp</a>
           <a class="button button-light" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>">Call</a>
         </div>
@@ -328,7 +328,7 @@ require __DIR__ . '/include/page-head.php';
       <div>
         <p class="eyebrow">Questions</p>
         <h2 id="arrival-faq-title">Before you set out.</h2>
-        <p>If your train or flight changes, call, WhatsApp, or send a note through the <a href="contact.php?topic=arrival">arrival enquiry form</a>.</p>
+        <p>If your train or flight changes, call, WhatsApp, or send a note through the <a data-contact-handoff="arrival" href="contact.php?topic=arrival">arrival enquiry form</a>.</p>
       </div>
       <?php
       $faq = [

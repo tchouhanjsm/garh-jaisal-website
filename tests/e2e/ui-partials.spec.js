@@ -42,7 +42,7 @@ const CTA_CASES = [
     heading: 'Come for the fort, stay for the house.',
     links: [
       { label: 'Book your stay', opensNewTab: true },
-      { label: 'Contact the hotel', href: 'contact.php' },
+      { label: 'Contact the hotel', href: 'contact.php?topic=custom-itinerary' },
     ],
   },
   {

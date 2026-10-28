@@ -150,3 +150,11 @@ A role that is not directly affected still records a concrete double-check rathe
 - `tests/e2e/contact-topic-guidance.spec.js` checks the visible, three-item checklist and prefilled message for room, car, arrival and dining contexts. An unknown topic must show no topic-specific checklist.
 - `tests/e2e/conversion-events.spec.js` checks that clicking a contextual enquiry card reports only the destination pathname to GA4; it must not send the topic query, email, or arbitrary form fields.
 - Sitemap freshness derives from the shared planning registry, planning renderer and contact-topic source. Run `php scripts/generate-sitemap.php --check` and inspect the exact-head CI artifact before treating the change as validated.
+
+
+## Privacy-safe contact handoff analytics
+
+- `tests/e2e/conversion-events.spec.js` validates that a contextual contact CTA emits exactly one `contact_handoff_click` event through approved GA4 destinations.
+- The event contract permits the source pathname, CTA label, bounded context, destination pathname and approved campaign attribution only. It must not contain destination query strings/topics, email, name, message, arbitrary query values or complete link URLs.
+- The same test visits the high-intent route batch and confirms marked destinations remain same-origin `contact.php` paths with contexts from the source allowlist. `tests/php/conversion-copy-contract.php` checks that production marker strings belong to the same set.
+- Treat this as an enquiry-entry click only. It does not mean an enquiry was sent or that a room, table, tour or transfer was confirmed.

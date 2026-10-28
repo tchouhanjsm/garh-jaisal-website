@@ -75,7 +75,7 @@ require __DIR__ . '/include/page-head.php';
       <p>Explore the living Fort on foot, with a route that may include Jain temples, the Palace Museum and heritage streets subject to current access and opening rules. Confirm the guide, route and any entry fees before you set out.</p>
       <div class="actions">
         <a class="button button-primary" href="<?= htmlspecialchars($walkWhatsAppUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Ask about route, guide &amp; price on WhatsApp</a>
-        <a class="button button-secondary" href="contact.php?topic=fort-guide">Send a Fort-walk enquiry</a>
+        <a class="button button-secondary" data-contact-handoff="fort_guide" href="contact.php?topic=fort-guide">Send a Fort-walk enquiry</a>
         <a class="button button-outline" href="guided-jaisalmer-tour.php">Compare half-day and full-day tours</a>
       </div>
     </div>

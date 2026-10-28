@@ -141,7 +141,7 @@ require __DIR__ . '/include/page-head.php';
     <div class="home-arrival-note-copy">
       <p class="eyebrow">Before you arrive</p>
       <h2 id="home-arrival-title">Arriving inside the fort</h2>
-      <p><strong>Vehicles cannot enter Jaisalmer Fort.</strong> The final stretch to Garh Jaisal Haveli is on foot through the fort lanes. Contact the hotel before travelling to confirm current reception hours and any late-arrival arrangements, or <a href="contact.php?topic=arrival">send an arrival enquiry</a>.</p>
+      <p><strong>Vehicles cannot enter Jaisalmer Fort.</strong> The final stretch to Garh Jaisal Haveli is on foot through the fort lanes. Contact the hotel before travelling to confirm current reception hours and any late-arrival arrangements, or <a data-contact-handoff="arrival" href="contact.php?topic=arrival">send an arrival enquiry</a>.</p>
     </div>
     <a class="button button-primary" href="direction.php">Read the arrival guide</a>
   </div>
@@ -226,7 +226,7 @@ require __DIR__ . '/include/page-head.php';
         <a class="button button-primary" href="room.php">Explore the rooms <span aria-hidden="true">↗</span></a>
         <a class="home-planning-link" href="guided-jaisalmer-tour.php"><span>Guided city walks</span><span aria-hidden="true">↗</span></a>
         <a class="home-planning-link" href="desert-safari.php"><span>Desert experiences</span><span aria-hidden="true">↗</span></a>
-        <a class="home-planning-contact" href="contact.php?topic=visit-planning">Tell us what you are planning</a>
+        <a class="home-planning-contact" data-contact-handoff="visit_planning" href="contact.php?topic=visit-planning">Tell us what you are planning</a>
       </nav>
     </div>
   </div>
@@ -440,7 +440,7 @@ require __DIR__ . '/include/page-head.php';
 
     <div class="callout">
       <p>
-        <strong>Before travelling:</strong> Confirm current reception hours and ask whether late-arrival arrangements can be made, or <a href="contact.php?topic=arrival">send an arrival enquiry</a>.
+        <strong>Before travelling:</strong> Confirm current reception hours and ask whether late-arrival arrangements can be made, or <a data-contact-handoff="arrival" href="contact.php?topic=arrival">send an arrival enquiry</a>.
       </p>
 
       <a class="button" href="direction.php">
@@ -516,7 +516,7 @@ require __DIR__ . '/include/page-head.php';
       <details><summary>Can I add a guided tour or desert safari?</summary><p>Ask about options for your date. Confirm the route, timing, transport, guide availability, price and inclusions before deciding.</p></details>
       <details><summary>Can I request a rooftop dinner?</summary><p>Send a dining enquiry with your preferred date, time and group size. It is not confirmed until the team confirms current hours and availability.</p></details>
     </div>
-    <p class="conversion-faq__contact">Need a detail checked before booking? <a href="contact.php">Ask the hotel directly</a>.</p>
+    <p class="conversion-faq__contact">Need a detail checked before booking? <a data-contact-handoff="visit_planning" href="contact.php">Ask the hotel directly</a>.</p>
   </div>
 </section>
 <?php

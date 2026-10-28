@@ -259,6 +259,17 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   prepareOutboundLinks();
 
+  // Only controlled intent labels are sent; contact query strings and form
+  // values stay out of analytics, even when the destination is topic-specific.
+  const contactHandoffContexts = new Set([
+    'general', 'visit_planning', 'arrival', 'room', 'room_shortlist',
+    'trip_shortlist', 'room_availability', 'dining', 'desert_safari',
+    'desert_packing', 'car_arrangements', 'fort_guide', 'custom_itinerary',
+    'experience', 'two_day_itinerary', 'three_day_itinerary', 'honeymoon',
+    'heritage_havelis', 'jain_temples', 'lake_cenotaph_photo',
+    'kuldhara_landscape', 'natural_history', 'longewala_history'
+  ]);
+
   document.addEventListener('click', (event) => {
     const anchor = event.target instanceof Element ? event.target.closest('a[href]') : null;
     if (!anchor) return;
@@ -292,6 +303,22 @@ document.addEventListener('DOMContentLoaded', () => {
         destination_path: destination.pathname,
         planning_path_title: (planningHeading?.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80),
         link_position: linkPosition
+      }));
+    }
+
+    const contactHandoffLink = anchor.closest('a[data-contact-handoff]');
+    const contactHandoffContext = contactHandoffLink?.dataset.contactHandoff || '';
+    if (
+      contactHandoffLink &&
+      contactHandoffContexts.has(contactHandoffContext) &&
+      destination.origin === window.location.origin &&
+      destination.pathname === '/contact.php' &&
+      destination.pathname !== (window.location.pathname || '/')
+    ) {
+      trackIntentEvent('contact_handoff_click', Object.assign({}, eventContext, {
+        cta_label: labelForTrackedLink(contactHandoffLink, 'contact'),
+        enquiry_context: contactHandoffContext,
+        destination_path: destination.pathname
       }));
     }
 

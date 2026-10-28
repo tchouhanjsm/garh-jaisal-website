@@ -19,7 +19,7 @@ test('tour discovery cards show registry-backed comparison facts and preserve pl
     if (item.route === '/guided-jaisalmer-tour.php') {
       const heroActions = page.locator('.experience-hero-actions');
       await expect(heroActions.locator('a, button')).toHaveCount(2);
-      await expect(heroActions.locator('a.button-primary')).toHaveAttribute('href', 'contact.php?topic=visit-planning');
+      await expect(heroActions.locator('a.button-primary')).toHaveAttribute('href', 'contact.php?topic=fort-guide');
       await expect(heroActions.locator('a[href="#guided-options"]')).toHaveText('Compare tour options');
       await expect(heroActions.getByRole('link', { name: 'Build your trip shortlist' })).toHaveCount(0);
       await expect(page.locator('.guided-tour-planning-actions a'))
