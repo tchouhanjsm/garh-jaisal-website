@@ -58,10 +58,11 @@ test.describe('Journal search and topic filtering', () => {
     await expect(search).toHaveValue('');
     await expect(page.locator('#food-and-crafts')).toBeVisible();
 
-    await search.fill('packing list');
+    await search.fill('  packing   list  ');
     await search.press('Enter');
     await expect(page).toHaveURL(/\/blog\.php$/);
-    await expect(page.locator('[data-journal-card]:visible')).not.toHaveCount(0);
+    await expect(page.locator('[data-journal-card]:visible')).toHaveCount(1);
+    await expect(page.locator('[data-journal-card]:visible a[href="jaisalmer-desert-safari-packing-list.php"]')).toBeVisible();
   });
 
   test('search controls fit small viewports without horizontal overflow', async ({ page }, testInfo) => {
