@@ -57,4 +57,16 @@ test('Thar Sunset tokens, CTA contrast and responsive navigation remain usable',
 
   const noOverflow = await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth);
   expect(noOverflow, 'foundation must not introduce horizontal overflow').toBe(true);
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const reducedMotionState = await page.locator('main.thar-sunset-story--home .home-room-card').first().evaluate((card) => ({
+    transitionDuration: getComputedStyle(card).transitionDuration,
+    hoverTransform: (() => {
+      card.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+      return getComputedStyle(card).transform;
+    })(),
+  }));
+  expect(reducedMotionState.transitionDuration.split(',').every(value => parseFloat(value) === 0),
+    'Homepage room cards must not animate when reduced motion is requested').toBe(true);
+  expect(reducedMotionState.hoverTransform, 'Reduced-motion hover must not translate the card').toBe('none');
 });
