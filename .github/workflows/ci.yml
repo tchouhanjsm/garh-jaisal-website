@@ -81,10 +81,7 @@ jobs:
       - name: Run site checks
         run: php scripts/check-site.php --strict-images
 
-      - name: Generate deterministic sitemap from the full Git history
-        run: php scripts/generate-sitemap.php
-
-      - name: Verify generated sitemap matches publication status
+      - name: Verify committed sitemap matches publication status and source history
         run: php scripts/generate-sitemap.php --check
 
       - name: Verify experience publication boundaries
