@@ -144,6 +144,7 @@ $assert(strpos($archive, "=== 'live'") !== false && strpos($archive, '$archiveGu
 $assert(strpos($archive, 'journal-topic-index') !== false, 'Journal archive must offer topic navigation.');
 $assert(strpos($sitemapGenerator, '$routeSlug') !== false && strpos($sitemapGenerator, 'status') !== false && strpos($sitemapGenerator, 'continue;') !== false, 'Static legacy article URLs must honour registry status.');
 $assert(strpos($sitemapGenerator, 'foreach ($editorialGuides as $slug => $guide)') !== false, 'Sitemap must derive editorial routes from the same registry.');
+$assert(strpos($sitemapGenerator, "'include/editorial-guide-page.php'") !== false, 'Sitemap lastmod must include changes to the shared article renderer.');
 $assert(strpos($head, 'link rel="canonical"') !== false && strpos($head, 'property="og:url"') !== false, 'Shared head must emit canonical and Open Graph URL.');
 $assert(strpos($articleCss, 'prefers-reduced-motion: reduce') !== false, 'Editorial motion must honor reduced-motion preference.');
 $assert(strpos($articleCss, '@media (max-width: 900px)') !== false && strpos($articleCss, '@media (max-width: 560px)') !== false, 'Archive and article layouts need tablet and narrow mobile rules.');
