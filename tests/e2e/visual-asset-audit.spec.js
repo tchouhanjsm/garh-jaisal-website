@@ -105,6 +105,16 @@ test.describe('Visual asset and typography evidence', () => {
       report.routes.push({ route: route.path, ...routeReport });
     }
 
+    const outputDir = path.join(process.cwd(), 'artifacts', 'image-accessibility');
+    fs.mkdirSync(outputDir, { recursive: true });
+    const outputPath = path.join(outputDir, 'visual-asset-audit-' + testInfo.project.name + '.json');
+    fs.writeFileSync(outputPath, JSON.stringify(report, null, 2) + '\n');
+    testInfo.annotations.push({
+      type: 'visual-asset-audit',
+      description: outputPath,
+    });
+  });
+
   test('Gallery hero selects a full-width responsive candidate and matches its preload', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== desktopProject, 'Gallery hero source-selection contract runs once at desktop width.');
     await page.goto('/gallery.php', { waitUntil: 'domcontentloaded' });
@@ -130,7 +140,7 @@ test.describe('Visual asset and typography evidence', () => {
 
     expect(state.sizes, 'A full-bleed Gallery hero must advertise the full viewport slot').toBe('100vw');
     expect(state.srcset).toContain('rooftop-dusk-1200.webp 1200w');
-    expect(state.currentSrc).toMatch(/rooftop-dusk-1200\\.webp(?:[?#].*)?$/);
+    expect(state.currentSrc).toMatch(/rooftop-dusk-1200\.webp(?:[?#].*)?$/);
     expect(state.naturalWidth).toBeGreaterThanOrEqual(1000);
     expect(state.renderedWidth).toBeGreaterThan(1000);
     expect(state.fetchPriority).toBe('high');
@@ -161,15 +171,5 @@ test.describe('Visual asset and typography evidence', () => {
     expect(layout.thirdColumnStart).toBe('1');
     expect(layout.minItemWidth).toBeGreaterThan(100);
     expect(layout.document).toBeLessThanOrEqual(layout.viewport + 1);
-  });
-
-    const outputDir = path.join(process.cwd(), 'artifacts', 'image-accessibility');
-    fs.mkdirSync(outputDir, { recursive: true });
-    const outputPath = path.join(outputDir, 'visual-asset-audit-' + testInfo.project.name + '.json');
-    fs.writeFileSync(outputPath, JSON.stringify(report, null, 2) + '\n');
-    testInfo.annotations.push({
-      type: 'visual-asset-audit',
-      description: outputPath,
-    });
   });
 });
