@@ -6,6 +6,25 @@ $pageTitle = 'Jaisalmer Travel Guides | Garh Jaisal Haveli';
 $pageDescription = 'Explore practical Jaisalmer travel guides for the Fort, desert safaris, 2- and 3-day itineraries, honeymoon planning and arrival at Garh Jaisal Haveli.';
 $canonical = $siteUrl . '/blog.php';
 $editorialGuides = require __DIR__ . '/include/editorial-guides-data.php';
+$editorialTopicTaxonomy = require __DIR__ . '/include/editorial-topic-taxonomy.php';
+$archiveGuides = array_filter($editorialGuides, static function ($guide) {
+    return is_array($guide) && ($guide['status'] ?? 'live') === 'live';
+});
+// Preserve the established Fort-guide lead card and first viewport/LCP image.
+$featuredGuide = $archiveGuides['jaisalmer-fort-guide'] ?? null;
+if (is_array($featuredGuide)) {
+    unset($archiveGuides['jaisalmer-fort-guide']);
+    $archiveGuides = ['jaisalmer-fort-guide' => $featuredGuide] + $archiveGuides;
+}
+$journalTopicAnchors = [];
+foreach ($archiveGuides as $archiveSlug => $archiveGuide) {
+    if (!is_array($archiveGuide)) continue;
+    $archiveTopic = (string) ($archiveGuide['topic'] ?? 'trip-planning');
+    if (!isset($editorialTopicTaxonomy[$archiveTopic])) $archiveTopic = 'trip-planning';
+    if (!isset($journalTopicAnchors[$archiveTopic])) {
+        $journalTopicAnchors[$archiveTopic] = (string) ($archiveGuide['slug'] ?? $archiveSlug);
+    }
+}
 $buildResponsivePreload = static function ($imageStem, $sizes, $fallback) {
     $srcset = [];
     foreach ([480, 800, 1200] as $candidateWidth) {
@@ -80,10 +99,11 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell">
       <div class="section-head"><div><p class="eyebrow">Start with the useful stuff</p><h2>Guides written around an actual stay.</h2></div><p>These guides use the hotel's current guest information and are designed to answer practical questions before you arrive. Time-sensitive details should always be confirmed for your travel date.</p></div>
       <nav class="journal-topic-index" aria-label="Browse guide topics">
-        <a href="#fort-and-heritage">Fort &amp; heritage</a>
-        <a href="#itineraries">Itineraries</a>
-        <a href="#desert-planning">Desert planning</a>
-        <a href="#food-and-crafts">Food &amp; crafts</a>
+        <?php foreach ($editorialTopicTaxonomy as $topicSlug => $topicLabel): ?>
+          <?php if (isset($journalTopicAnchors[$topicSlug])): ?>
+            <a href="#<?= htmlspecialchars($topicSlug, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($topicLabel, ENT_QUOTES, 'UTF-8') ?></a>
+          <?php endif; ?>
+        <?php endforeach; ?>
       </nav>
       <div class="blog-grid" aria-label="Jaisalmer travel guides">
         <?php
@@ -129,15 +149,6 @@ require __DIR__ . '/include/page-head.php';
             'jaisalmer-beyond-the-fort-guide' => 'Heritage buildings beside the water near Jaisalmer',
             'jaisalmer-markets-and-crafts-guide' => 'Colourful traditional puppets at a Jaisalmer market',
         ];
-        $archiveGuides = array_filter($editorialGuides, static function ($guide) {
-            return is_array($guide) && ($guide['status'] ?? 'live') === 'live';
-        });
-        // Preserve the established Fort-guide lead card and first viewport/LCP image.
-        $featuredGuide = $archiveGuides['jaisalmer-fort-guide'] ?? null;
-        if (is_array($featuredGuide)) {
-            unset($archiveGuides['jaisalmer-fort-guide']);
-            $archiveGuides = ['jaisalmer-fort-guide' => $featuredGuide] + $archiveGuides;
-        }
         foreach ($archiveGuides as $guide):
             $slug = (string) ($guide['slug'] ?? '');
             $isFeatured = $slug === 'jaisalmer-fort-guide';
@@ -149,13 +160,9 @@ require __DIR__ . '/include/page-head.php';
             if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $slug)) continue;
         ?>
           <?php
-          $topicAnchors = [
-              'jaisalmer-fort-guide' => 'fort-and-heritage',
-              'jaisalmer-2-day-itinerary' => 'itineraries',
-              'desert-safari-guide' => 'desert-planning',
-              'jaisalmer-food-guide' => 'food-and-crafts',
-          ];
-          $topicAnchor = $topicAnchors[$slug] ?? '';
+          $cardTopic = (string) ($guide['topic'] ?? 'trip-planning');
+          if (!isset($editorialTopicTaxonomy[$cardTopic])) $cardTopic = 'trip-planning';
+          $topicAnchor = (($journalTopicAnchors[$cardTopic] ?? '') === $slug) ? $cardTopic : '';
           ?>
           <article class="blog-card<?= $isFeatured ? ' blog-card--featured' : '' ?>"<?= $topicAnchor !== '' ? ' id="' . htmlspecialchars($topicAnchor, ENT_QUOTES, 'UTF-8') . '"' : '' ?>>
             <a href="<?= htmlspecialchars($slug . '.php', ENT_QUOTES, 'UTF-8') ?>">

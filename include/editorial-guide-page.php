@@ -5,6 +5,7 @@
  */
 $siteConfig = require __DIR__ . '/site-config.php';
 $editorialGuides = require __DIR__ . '/editorial-guides-data.php';
+$editorialTopicTaxonomy = require __DIR__ . '/editorial-topic-taxonomy.php';
 $studioAllowDraftPreview = isset($studioAllowDraftPreview) && $studioAllowDraftPreview === true;
 $editorialGuideSlug = isset($editorialGuideSlug) && is_string($editorialGuideSlug)
     ? $editorialGuideSlug
@@ -40,6 +41,9 @@ if (!is_array($guide)) {
         'cta_secondary_href' => 'contact.php',
     ];
 }
+$guideTopic = (string) ($guide['topic'] ?? 'trip-planning');
+if (!isset($editorialTopicTaxonomy[$guideTopic])) $guideTopic = 'trip-planning';
+$guideTopicLabel = $editorialTopicTaxonomy[$guideTopic] ?? 'Trip planning';
 $siteUrl = rtrim((string) ($siteConfig['site_url'] ?? ''), '/');
 $canonical = $siteUrl . '/' . $guide['slug'] . '.php';
 $escapeGuide = static function ($value) {
@@ -241,18 +245,42 @@ require __DIR__ . '/page-head.php';
       // Do not repeat destinations already linked in the article body, its
       // related cards, sources or enquiry CTAs. This avoids redundant links
       // while keeping a useful cross-guide rail on every published article.
-      $journalDiscoveryCandidates = [
-          ['href' => 'jaisalmer-fort-guide.php', 'label' => 'Jaisalmer Fort and its living lanes'],
-          ['href' => 'how-to-reach-jaisalmer.php', 'label' => 'How to reach Jaisalmer'],
-          ['href' => 'best-time-to-visit-jaisalmer.php', 'label' => 'Choose a season for your visit'],
-          ['href' => 'jaisalmer-2-day-itinerary.php', 'label' => 'Plan two days in Jaisalmer'],
-          ['href' => 'jaisalmer-3-day-itinerary.php', 'label' => 'Make room for a third day'],
-          ['href' => 'jaisalmer-desert-safari-packing-list.php', 'label' => 'Pack for a desert outing'],
-          ['href' => 'jaisalmer-havelis-guide.php', 'label' => 'Explore sandstone havelis'],
-          ['href' => 'jaisalmer-food-guide.php', 'label' => 'Explore regional food thoughtfully'],
-          ['href' => 'jaisalmer-beyond-the-fort-guide.php', 'label' => 'Plan beyond the Fort'],
-          ['href' => 'jaisalmer-markets-and-crafts-guide.php', 'label' => 'Browse markets and crafts'],
-      ];
+      $journalDiscoveryCandidates = [];
+      $journalCandidateOrder = 0;
+      foreach ($editorialGuides as $candidateSlug => $candidateGuide) {
+          if (
+              !is_string($candidateSlug)
+              || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $candidateSlug)
+              || !is_array($candidateGuide)
+              || ($candidateGuide['status'] ?? 'live') !== 'live'
+              || $candidateSlug === (string) $guide['slug']
+          ) {
+              continue;
+          }
+          $candidateTopic = (string) ($candidateGuide['topic'] ?? 'trip-planning');
+          if (!isset($editorialTopicTaxonomy[$candidateTopic])) $candidateTopic = 'trip-planning';
+          $candidateLabel = trim((string) (
+              $candidateGuide['discovery_label']
+              ?? $candidateGuide['breadcrumb_label']
+              ?? $candidateGuide['h1']
+              ?? $candidateGuide['title']
+              ?? ''
+          ));
+          if ($candidateLabel === '') continue;
+          $journalDiscoveryCandidates[] = [
+              'href' => $candidateSlug . '.php',
+              'label' => $candidateLabel,
+              'topic' => $candidateTopic,
+              'same_topic' => $candidateTopic === $guideTopic,
+              'order' => $journalCandidateOrder++,
+          ];
+      }
+      usort($journalDiscoveryCandidates, static function ($left, $right) {
+          if ($left['same_topic'] !== $right['same_topic']) {
+              return $left['same_topic'] ? -1 : 1;
+          }
+          return $left['order'] <=> $right['order'];
+      });
       $journalExistingRoutes = [];
       $journalValuesToScan = [
           $guide['sections'] ?? [],
@@ -281,13 +309,13 @@ require __DIR__ . '/page-head.php';
           }
       }
       $journalExistingRoutes[basename((string) $guide['slug'] . '.php')] = true;
-      $journalDiscoveryLinks = array_values(array_filter($journalDiscoveryCandidates, static function ($candidate) use ($journalExistingRoutes) {
+      $journalDiscoveryLinks = array_slice(array_values(array_filter($journalDiscoveryCandidates, static function ($candidate) use ($journalExistingRoutes) {
           return !isset($journalExistingRoutes[basename($candidate['href'])]);
-      }));
+      })), 0, 8);
       ?>
-      <nav class="article-topic-links" aria-label="More Jaisalmer travel guides">
+      <nav class="article-topic-links" aria-label="More Jaisalmer travel guides" data-topic="<?= $escapeGuide($guideTopic) ?>">
         <?php foreach ($journalDiscoveryLinks as $journalLink): ?>
-          <a href="<?= $escapeGuide($journalLink['href']) ?>"><?= $escapeGuide($journalLink['label']) ?></a>
+          <a href="<?= $escapeGuide($journalLink['href']) ?>" data-topic="<?= $escapeGuide($journalLink['topic']) ?>"><?= $escapeGuide($journalLink['label']) ?></a>
         <?php endforeach; ?>
       </nav>
     </div>

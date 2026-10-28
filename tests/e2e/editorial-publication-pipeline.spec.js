@@ -10,10 +10,26 @@ const sitemapRoutes = [...sitemap.matchAll(/<loc>\s*(https?:\/\/[^<]+)\s*<\/loc>
   .map(url => url.pathname || '/');
 
 const topics = [
+  ['Trip planning', 'trip-planning'],
   ['Fort & heritage', 'fort-and-heritage'],
   ['Itineraries', 'itineraries'],
   ['Desert planning', 'desert-planning'],
   ['Food & crafts', 'food-and-crafts'],
+];
+
+const editorialRoutes = [
+  '/best-time-to-visit-jaisalmer.php',
+  '/how-to-reach-jaisalmer.php',
+  '/jaisalmer-desert-safari-packing-list.php',
+  '/jaisalmer-fort-guide.php',
+  '/desert-safari-guide.php',
+  '/jaisalmer-2-day-itinerary.php',
+  '/jaisalmer-3-day-itinerary.php',
+  '/jaisalmer-honeymoon-guide.php',
+  '/jaisalmer-havelis-guide.php',
+  '/jaisalmer-food-guide.php',
+  '/jaisalmer-beyond-the-fort-guide.php',
+  '/jaisalmer-markets-and-crafts-guide.php',
 ];
 
 test.describe('Editorial publication and reader journey', () => {
@@ -35,11 +51,17 @@ test.describe('Editorial publication and reader journey', () => {
 
     const guideCards = page.locator('.blog-grid > .blog-card');
     expect(await guideCards.count()).toBeGreaterThanOrEqual(12);
-    for (const route of sitemapRoutes.filter(value => /-guide\.php$|-itinerary\.php$/.test(value) && !value.endsWith('/jaisalmer-fort-guide.php'))) {
+    for (const route of editorialRoutes) {
+      expect(sitemapRoutes, route + ' is included in the committed sitemap').toContain(route);
       const slug = path.posix.basename(route);
       const journalLink = page.locator('.blog-grid a[href="' + slug + '"]');
-      await expect(journalLink, slug + ' is linked from the Journal').toHaveCount(1);
+      await expect(journalLink, slug + ' is linked from the Journal exactly once').toHaveCount(1);
       await expect(journalLink).toBeVisible();
+    }
+    const archiveDestinations = await page.locator('.blog-grid > .blog-card > a[href$=".php"]').evaluateAll(
+      links => links.map(link => link.getAttribute('href'))
+    );
+    expect(new Set(archiveDestinations).size, 'Journal cards should not repeat route destinations').toBe(archiveDestinations.length);
     }
     const canonicals = await page.locator('head link[rel="canonical"]').count();
     expect(canonicals).toBe(1);
@@ -70,6 +92,13 @@ test.describe('Editorial publication and reader journey', () => {
       await expect(discoveryNav).toBeVisible();
       const discoveryLinks = discoveryNav.locator('a[href]');
       expect(await discoveryLinks.count(), route + ' exposes at least one additional guide').toBeGreaterThan(0);
+      const currentTopic = await discoveryNav.getAttribute('data-topic');
+      const candidateTopics = await discoveryLinks.evaluateAll(links => links.map(link => link.getAttribute('data-topic')));
+      let crossTopicSeen = false;
+      for (const candidateTopic of candidateTopics) {
+        if (candidateTopic !== currentTopic) crossTopicSeen = true;
+        else expect(crossTopicSeen, route + ' prioritises same-topic links before cross-topic links').toBe(false);
+      }
       for (const link of await discoveryLinks.all()) {
         const href = await link.getAttribute('href');
         expect(href, route + ' discovery link uses a destination').toBeTruthy();

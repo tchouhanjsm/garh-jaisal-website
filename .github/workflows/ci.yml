@@ -90,6 +90,9 @@ jobs:
       - name: Verify editorial publication pipeline
         run: php scripts/check-editorial-publication.php
 
+      - name: Verify editorial taxonomy and related-guide graph
+        run: php tests/php/editorial-discovery-graph.php
+
       - name: Verify Content Studio data overlays and publication states
         run: php tests/php/content-studio-registry.php
 
