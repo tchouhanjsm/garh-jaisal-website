@@ -7,8 +7,8 @@
 | Item | Value |
 |---|---|
 | Verified main SHA | `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8` — PR #153 merged |
-| Active implementation | Sprints 75–77 — room comparison decision support |
-| Scope | Add room photos, align listed features row by row and offer a difference-only filter; preserve booking and enquiry destinations |
+| Active implementation | Sprints 75–79 — room comparison decision support |
+| Scope | Add room photos, an aligned feature matrix, difference filtering, a filter-proof shortlist and keyboard focus continuity; preserve booking and enquiry destinations |
 | Release boundary | Owner retains merge and release approval; no cPanel upload or staging/production deployment |
 | Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394006) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393565) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393646) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394143) — all passed on that SHA |
 

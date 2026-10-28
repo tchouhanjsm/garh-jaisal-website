@@ -169,7 +169,8 @@ test.describe('Room comparison journey', () => {
     await second.locator('[data-room-compare-toggle]').click();
 
     const shortlist = page.locator('[data-room-comparison-shortlist]');
-    const shortlistItems = shortlist.locator('[data-room-comparison-shortlist-items] li');
+    const shortlistList = shortlist.locator('[data-room-comparison-shortlist-items]');
+    const shortlistItems = shortlistList.locator('li');
     const review = shortlist.locator('[data-room-shortlist-review]');
     await expect(shortlist).toBeVisible();
     await expect(shortlistItems).toHaveCount(2);
@@ -180,8 +181,8 @@ test.describe('Room comparison journey', () => {
     await expect(first).toBeHidden();
     await expect(second).toBeHidden();
     await expect(shortlist).toBeVisible();
-    await expect(shortlistItems).toContainText(await first.locator('h3').textContent());
-    await expect(shortlistItems).toContainText(await second.locator('h3').textContent());
+    await expect(shortlistList).toContainText(await first.locator('h3').textContent());
+    await expect(shortlistList).toContainText(await second.locator('h3').textContent());
 
     await review.click();
     const dialog = page.locator('[data-room-comparison-dialog]');
