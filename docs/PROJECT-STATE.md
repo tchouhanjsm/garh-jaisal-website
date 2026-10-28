@@ -34,7 +34,7 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 - **PR #155:** editorial publication/indexability checks, committed sitemap parity, responsive reader UX, five shared topic groups, topic-ranked related-guide discovery and route/schema/browser contracts.
 - **Release authority:** all merges and staging/production release decisions remain with the owner.
 
-## Active phase — Sprints 91–100: SEO release readiness (single bulk PR)
+## Active phase — Sprints 91–110: SEO readiness and Journal discovery (PR #156)
 
 - **Sprint 91 — registry integrity:** validate editorial slugs, statuses, topic assignments and live route ownership across the complete merged registry.
 - **Sprint 92 — crawl policy:** enforce the production sitemap directive, safe robots rules, canonical-origin consistency and valid sitemap lastmod entries.
@@ -47,6 +47,16 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 - **Sprint 99 — reader UX regression:** exercise Journal/article discovery, keyboard reachability and horizontal-overflow checks at 320, 390, 768, 1280 and 1440px.
 - **Sprint 100 — evidence and release handoff:** produce a rendered route-level JSON audit artifact, run the new PHP contract in both supported CI PHP versions, and document exact-head checks and release boundaries.
 - Acceptance: Site Checks, sitemap parity, the editorial graph/readiness contracts, Browser E2E and screenshots, package preflight and non-deploying Staging QA must be evaluated on the exact final PR head. Never merge or deploy automatically.
+- **Sprint 101 — searchable Journal:** add in-page search across visible guide-card copy while keeping every public link in server-rendered HTML.
+- **Sprint 102 — topic filtering:** combine text search with the shared five-topic taxonomy from the same editorial registry.
+- **Sprint 103 — accessible result status:** announce result counts through a polite live region and make the no-match state clear.
+- **Sprint 104 — filter recovery:** provide a clear action that resets query/topic controls and restores focus to the search input.
+- **Sprint 105 — keyboard and touch usability:** use explicit labels, visible focus and touch-sized controls without a JavaScript dependency.
+- **Sprint 106 — Fort-guide prominence:** keep the Fort guide first in the unfiltered archive and preserve its established fragment and URL.
+- **Sprint 107 — stable SEO identity:** keep archive canonical, metadata, fragments, card destinations and sitemap unchanged by local filtering.
+- **Sprint 108 — predictable matching:** normalize Unicode compatibility forms, case and repeated whitespace before matching visible card copy.
+- **Sprint 109 — filter/navigation interoperability:** reset filters before following a topic fragment so its actual card target remains visible.
+- **Sprint 110 — progressive-enhancement evidence:** add PHP source contracts and Playwright coverage for search/topic intersection, no-match recovery, no-JavaScript fallback and mobile overflow.
 
 ## Priority sequence
 

@@ -187,6 +187,25 @@ foreach ($guides as $slug => $guide) {
     }
 }
 
+
+$journal = is_file($root . '/blog.php') && !is_link($root . '/blog.php') ? file_get_contents($root . '/blog.php') : false;
+$clientScript = is_file($root . '/js/garh-v2.js') && !is_link($root . '/js/garh-v2.js') ? file_get_contents($root . '/js/garh-v2.js') : false;
+$articleCss = is_file($root . '/css/article.css') && !is_link($root . '/css/article.css') ? file_get_contents($root . '/css/article.css') : false;
+$assert(is_string($journal), 'Journal archive must be readable for discovery checks.');
+$assert(is_string($clientScript), 'Shared client script must be readable for Journal discovery checks.');
+$assert(is_string($articleCss), 'Article stylesheet must be readable for Journal discovery checks.');
+if (is_string($journal) && is_string($clientScript) && is_string($articleCss)) {
+    $assert(strpos($journal, 'data-journal-search-form hidden') !== false, 'Journal search controls must stay hidden until progressive enhancement initializes.');
+    $assert(strpos($journal, 'data-journal-search-input') !== false && strpos($journal, 'data-journal-topic-filter') !== false, 'Journal search and topic filters must be present.');
+    $assert(strpos($journal, 'data-journal-card data-journal-topic=') !== false, 'Editorial cards must expose their topic to the shared filter.');
+    $assert(strpos($journal, 'data-journal-grid') !== false && strpos($journal, 'data-journal-empty') !== false, 'Journal grid and no-results state must share a stable contract.');
+    $assert(strpos($journal, "'path' => '/blog.php'") !== false, 'Journal filtering must not change the stable archive canonical path.');
+    $assert(strpos($clientScript, 'normalizeJournalText') !== false && strpos($clientScript, 'journalTopicFilter.addEventListener') !== false, 'Shared client script must normalize queries and filter by topic.');
+    $assert(strpos($clientScript, 'journalClearButton.addEventListener') !== false && strpos($clientScript, 'resetJournalFilters') !== false, 'Journal filters must provide a keyboard-accessible reset/recovery path.');
+    $assert(strpos($clientScript, 'journalTopicIndex.querySelectorAll') !== false, 'Topic fragment links must remain usable while filters are active.');
+    $assert(strpos($articleCss, '.blog-grid > .blog-card[hidden]') !== false && strpos($articleCss, '.journal-search-fields') !== false, 'Filtered cards must be hidden and search controls responsive.');
+}
+
 $summary = 'registry=' . count($guides)
     . ', live-editorial=' . count($liveRoutes)
     . ', topics=' . count($topics)

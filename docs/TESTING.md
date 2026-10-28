@@ -44,6 +44,8 @@ CI also runs PHP lint, responsive-image validation/review, Content Studio integr
 - Use exact PR-head CI evidence. Cancelled or stale runs are not passes.
 - State anything not run. Automated tests do not validate real cPanel, mail or CAPTCHA delivery.
 
+- Journal discovery checks cover client-side text search and topic filtering, accessible result announcements, no-match recovery, Fort-guide first-card stability, no-JavaScript visibility and mobile control overflow. These filters do not change the canonical URL or public route inventory.
+
 ## Four-perspective review
 
 1. **Full-stack:** PHP compatibility, escaping, safe inputs/output, secret boundaries, error handling, routes and dependencies.

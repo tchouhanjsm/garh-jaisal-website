@@ -98,6 +98,31 @@ require __DIR__ . '/include/page-head.php';
   <section class="section" data-story-reveal>
     <div class="site-shell">
       <div class="section-head"><div><p class="eyebrow">Start with the useful stuff</p><h2>Guides written around an actual stay.</h2></div><p>These guides use the hotel's current guest information and are designed to answer practical questions before you arrive. Time-sensitive details should always be confirmed for your travel date.</p></div>
+      <form class="journal-search" role="search" aria-label="Search Jaisalmer travel guides" data-journal-search-form hidden>
+        <div class="journal-search-fields">
+          <div class="journal-search-field">
+            <label for="journal-guide-query">Search guides</label>
+            <input id="journal-guide-query" name="q" type="search" data-journal-search-input autocomplete="off" spellcheck="false" placeholder="Try “honeymoon”, “havelis” or “desert”">
+          </div>
+          <div class="journal-search-field">
+            <label for="journal-topic-filter">Filter by topic</label>
+            <select id="journal-topic-filter" name="topic" data-journal-topic-filter>
+              <option value="all">All topics</option>
+              <?php foreach ($editorialTopicTaxonomy as $topicSlug => $topicLabel): ?>
+                <?php if (isset($journalTopicAnchors[$topicSlug])): ?>
+                  <option value="<?= htmlspecialchars($topicSlug, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($topicLabel, ENT_QUOTES, 'UTF-8') ?></option>
+                <?php endif; ?>
+              <?php endforeach; ?>
+            </select>
+          </div>
+          <button class="journal-search-clear" type="button" data-journal-clear hidden>Clear filters</button>
+        </div>
+        <p class="journal-search-results" data-journal-results role="status" aria-live="polite" aria-atomic="true" hidden></p>
+      </form>
+      <div class="journal-search-empty" data-journal-empty hidden>
+        <h3>No guides match those filters.</h3>
+        <p>Try a broader search or choose a different topic.</p>
+      </div>
       <nav class="journal-topic-index" aria-label="Browse guide topics">
         <?php foreach ($editorialTopicTaxonomy as $topicSlug => $topicLabel): ?>
           <?php if (isset($journalTopicAnchors[$topicSlug])): ?>
@@ -105,7 +130,7 @@ require __DIR__ . '/include/page-head.php';
           <?php endif; ?>
         <?php endforeach; ?>
       </nav>
-      <div class="blog-grid" aria-label="Jaisalmer travel guides">
+      <div class="blog-grid" aria-label="Jaisalmer travel guides" data-journal-grid>
         <?php
         $defaultArchiveTitles = [
             'jaisalmer-fort-guide' => 'Jaisalmer Fort Guide',
@@ -164,7 +189,7 @@ require __DIR__ . '/include/page-head.php';
           if (!isset($editorialTopicTaxonomy[$cardTopic])) $cardTopic = 'trip-planning';
           $topicAnchor = (($journalTopicAnchors[$cardTopic] ?? '') === $slug) ? $cardTopic : '';
           ?>
-          <article class="blog-card<?= $isFeatured ? ' blog-card--featured' : '' ?>"<?= $topicAnchor !== '' ? ' id="' . htmlspecialchars($topicAnchor, ENT_QUOTES, 'UTF-8') . '"' : '' ?>>
+          <article class="blog-card<?= $isFeatured ? ' blog-card--featured' : '' ?>"<?= $topicAnchor !== '' ? ' id="' . htmlspecialchars($topicAnchor, ENT_QUOTES, 'UTF-8') . '"' : '' ?> data-journal-card data-journal-topic="<?= htmlspecialchars($cardTopic, ENT_QUOTES, 'UTF-8') ?>">
             <a href="<?= htmlspecialchars($slug . '.php', ENT_QUOTES, 'UTF-8') ?>">
               <?php if ($cardImage !== ''): ?>
                 <?php $cardImageSizes = $isFeatured ? '(max-width: 900px) 100vw, 60vw' : '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw'; ?>
@@ -179,7 +204,7 @@ require __DIR__ . '/include/page-head.php';
             </a>
           </article>
         <?php endforeach; ?>
-        <article class="blog-card"><a href="book-rooms-in-jaisalmer.php">
+        <article class="blog-card" data-journal-card data-journal-topic="fort-and-heritage"><a href="book-rooms-in-jaisalmer.php">
           <div class="blog-card-body"><p class="blog-card-meta">Staying inside the Fort</p><h2>Staying inside Jaisalmer Fort</h2><p>The last part of the journey is on foot, and a room, a rooftop meal and a desert night can fit together into one stay.</p><span class="text-link">Read the stay guide →</span></div>
         </a></article>
       </div>
