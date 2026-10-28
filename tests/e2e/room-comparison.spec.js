@@ -97,9 +97,12 @@ test.describe('Room comparison journey', () => {
     await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(threeRoomDiffCount);
 
     const secondId = await secondCard.getAttribute('id');
-    await dialog.locator('[data-room-compare-remove="' + secondId + '"]').click();
+    const removeSecondRoom = dialog.locator('[data-room-compare-remove="' + secondId + '"]');
+    await removeSecondRoom.focus();
+    await removeSecondRoom.click();
     await expect(dialog.locator('thead th')).toHaveCount(3);
     await expect(dialog.locator('[data-room-compare-remove]')).toHaveCount(2);
+    await expect(dialog.locator('[data-room-compare-remove]').nth(1)).toBeFocused();
 
     const remainingFeatureRows = dialog.locator('tr[data-room-feature-row]');
     const remainingTotal = await remainingFeatureRows.count();
@@ -154,7 +157,45 @@ test.describe('Room comparison journey', () => {
     await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(await rows.count());
   });
 
-  test('keeps the compare dialog inside the viewport from mobile through desktop widths', async ({ page }, testInfo) =>
+  test('keeps the selected-room shortlist available when filters hide room cards', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-1280', 'Shortlist/filter continuity runs once on desktop.');
+
+    await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
+    const cards = page.locator('.rooms-page .room-card');
+    const first = cards.nth(0);
+    const second = cards.nth(1);
+
+    await first.locator('[data-room-compare-toggle]').click();
+    await second.locator('[data-room-compare-toggle]').click();
+
+    const shortlist = page.locator('[data-room-comparison-shortlist]');
+    const shortlistItems = shortlist.locator('[data-room-comparison-shortlist-items] li');
+    const review = shortlist.locator('[data-room-shortlist-review]');
+    await expect(shortlist).toBeVisible();
+    await expect(shortlistItems).toHaveCount(2);
+    await expect(review).toBeEnabled();
+
+    await page.locator('[data-room-search]').fill('no-matching-room-query-9284');
+    await expect(page.locator('[data-room-result-status]')).toContainText('Showing 0 of 7 rooms.');
+    await expect(first).toBeHidden();
+    await expect(second).toBeHidden();
+    await expect(shortlist).toBeVisible();
+    await expect(shortlistItems).toContainText(await first.locator('h3').textContent());
+    await expect(shortlistItems).toContainText(await second.locator('h3').textContent());
+
+    await review.click();
+    const dialog = page.locator('[data-room-comparison-dialog]');
+    await expect(dialog).toBeVisible();
+    await expect(dialog.locator('thead th')).toHaveCount(3);
+    await expect(dialog.locator('table')).toContainText('Listed features by room');
+
+    await dialog.locator('[data-room-comparison-close]').first().click();
+    await shortlist.locator('[data-room-shortlist-clear]').click();
+    await expect(shortlist).toBeHidden();
+    await expect(page.locator('[data-room-search]')).toBeFocused();
+  });
+
+  test('keeps the compare dialog inside the viewport from mobile through desktop widths', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop-1280', 'Exercise all five design widths in one browser project.');
 
     for (const width of [320, 390, 768, 1280, 1440]) {

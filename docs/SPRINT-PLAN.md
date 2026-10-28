@@ -960,3 +960,21 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Announce the visible differing-row count, and communicate when no listed feature differences exist; “Not listed” is not rewritten as “does not have”.
 - Add E2E coverage for two- and three-room comparisons, filter on/off, recalculation after a selected room is removed, the no-difference edge case, visible-row counts and preservation of current booking, Contact and Trip behavior.
 - Exact-head acceptance: PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. No deployment.
+
+## Sprint 78 — filter-proof room shortlist (included in PR #154)
+
+**Commercial goal:** prevent the selected-room decision path from disappearing when a guest narrows the room directory.
+
+- Add a compact shortlist with selected room names, per-room removal, compare and clear actions.
+- Keep the shortlist visible while search/floor/feature filters hide selected room cards; comparison uses the selected items, not just currently visible results.
+- Preserve active filters when closing or clearing the shortlist. Do not change room data, booking targets or published claims.
+- Add browser coverage for selecting two rooms, filtering to zero results and reopening the comparison from the shortlist.
+
+## Sprint 79 — keyboard focus continuity (included in PR #154)
+
+**Accessibility goal:** keep keyboard and assistive-technology users oriented when comparison content is rebuilt after an edit.
+
+- Restore focus to the next available remove action after a room is removed from the comparison table; fall back to the focusable comparison region if no remove action remains.
+- Return focus to room search when clearing the external shortlist hides its action controls.
+- Verify focus restoration alongside existing matrix, booking, Contact, Trip, responsive-width and filter-hidden shortlist tests.
+- Acceptance remains exact-head PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA; no deployment.

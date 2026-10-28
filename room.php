@@ -248,6 +248,18 @@ require __DIR__ . '/include/page-head.php';
       </div>
 
       <p class="room-finder-status" data-room-result-status role="status" aria-live="polite"><?= $roomCount ?> rooms to explore.</p>
+      <section class="room-comparison-shortlist" data-room-comparison-shortlist hidden aria-labelledby="room-shortlist-heading">
+        <div class="room-comparison-shortlist-copy">
+          <p class="eyebrow">Your room shortlist</p>
+          <h4 id="room-shortlist-heading">Selected rooms</h4>
+          <p data-room-comparison-shortlist-status role="status" aria-live="polite">Choose rooms to start your shortlist.</p>
+          <ul data-room-comparison-shortlist-items></ul>
+        </div>
+        <div class="room-comparison-shortlist-actions">
+          <button class="button button-primary" type="button" data-room-shortlist-review disabled>Compare selected rooms (0/2)</button>
+          <button class="room-finder-reset" type="button" data-room-shortlist-clear>Clear shortlist</button>
+        </div>
+      </section>
       <div class="room-finder-empty" data-room-empty hidden>
         <p><strong>No rooms match those filters.</strong> Adjust the search or clear the filters to see all rooms.</p>
         <button class="room-finder-reset" type="button" data-room-reset>Clear filters</button>

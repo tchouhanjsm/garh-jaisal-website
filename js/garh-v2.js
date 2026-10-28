@@ -535,6 +535,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetButtons = Array.from(roomFinder.querySelectorAll('[data-room-reset]'));
     const resultStatus = roomFinder.querySelector('[data-room-result-status]');
     const emptyState = roomFinder.querySelector('[data-room-empty]');
+    const comparisonShortlist = roomFinder.querySelector('[data-room-comparison-shortlist]');
+    const comparisonShortlistStatus = roomFinder.querySelector('[data-room-comparison-shortlist-status]');
+    const comparisonShortlistItems = roomFinder.querySelector('[data-room-comparison-shortlist-items]');
+    const comparisonShortlistReview = roomFinder.querySelector('[data-room-shortlist-review]');
+    const comparisonShortlistClear = roomFinder.querySelector('[data-room-shortlist-clear]');
     const comparisonDialog = document.querySelector('[data-room-comparison-dialog]');
     const comparisonStatus = comparisonDialog?.querySelector('[data-room-comparison-status]');
     const comparisonContent = comparisonDialog?.querySelector('[data-room-comparison-content]');
@@ -554,6 +559,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const selectedRoomCards = () => Array.from(selectedRoomIds)
       .map((id) => roomCards.find((card) => card.id === id))
       .filter(Boolean);
+
+    const renderComparisonShortlist = (selectedCards) => {
+      if (!comparisonShortlist || !comparisonShortlistItems) return;
+
+      comparisonShortlist.hidden = selectedCards.length === 0;
+      comparisonShortlistItems.replaceChildren();
+      selectedCards.forEach((card) => {
+        const item = document.createElement('li');
+        const name = document.createElement('span');
+        name.textContent = roomName(card);
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'room-comparison-shortlist-remove';
+        remove.dataset.roomShortlistRemove = card.id;
+        remove.textContent = 'Remove';
+        remove.setAttribute('aria-label', 'Remove ' + roomName(card) + ' from your room shortlist');
+        item.append(name, remove);
+        comparisonShortlistItems.appendChild(item);
+      });
+
+      if (comparisonShortlistStatus) {
+        comparisonShortlistStatus.textContent = selectedCards.length === 1
+          ? '1 room selected. Add one more room to compare.'
+          : selectedCards.length + ' rooms selected. You can review this shortlist even when filters hide the room cards.';
+      }
+      if (comparisonShortlistReview) {
+        comparisonShortlistReview.disabled = selectedCards.length < 2;
+        comparisonShortlistReview.textContent = selectedCards.length >= 2
+          ? 'Compare selected rooms (' + selectedCards.length + ')'
+          : 'Compare selected rooms (' + selectedCards.length + '/2)';
+        comparisonShortlistReview.setAttribute('aria-label', selectedCards.length >= 2
+          ? 'Compare ' + selectedCards.length + ' selected rooms'
+          : 'Select at least two rooms to compare');
+      }
+    };
 
     const applyComparisonFeatureFilter = () => {
       const rows = Array.from(comparisonContent?.querySelectorAll('[data-room-feature-row]') || []);
@@ -638,6 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       updateRoomResultStatus();
+      renderComparisonShortlist(selectedCards);
       if (!comparisonContent || !comparisonStatus) return;
 
       comparisonContent.replaceChildren();
@@ -878,12 +919,43 @@ document.addEventListener('DOMContentLoaded', () => {
       comparisonContent?.addEventListener('click', (event) => {
         const removeButton = event.target.closest('[data-room-compare-remove]');
         if (!removeButton) return;
+        const removeIndex = Array.from(comparisonContent.querySelectorAll('[data-room-compare-remove]')).indexOf(removeButton);
         const roomId = removeButton.dataset.roomCompareRemove;
         selectedRoomIds.delete(roomId);
         if (lastSelectedRoomId === roomId) {
           lastSelectedRoomId = Array.from(selectedRoomIds).at(-1) || null;
         }
         renderComparison();
+        const remainingRemoveButtons = Array.from(comparisonContent.querySelectorAll('[data-room-compare-remove]'));
+        const focusTarget = remainingRemoveButtons[Math.min(removeIndex, remainingRemoveButtons.length - 1)] || comparisonContent;
+        focusTarget.focus();
+      });
+      comparisonShortlistItems?.addEventListener('click', (event) => {
+        const removeButton = event.target.closest('[data-room-shortlist-remove]');
+        if (!removeButton) return;
+        const removeIndex = Array.from(comparisonShortlistItems.querySelectorAll('[data-room-shortlist-remove]')).indexOf(removeButton);
+        const roomId = removeButton.dataset.roomShortlistRemove;
+        selectedRoomIds.delete(roomId);
+        if (lastSelectedRoomId === roomId) {
+          lastSelectedRoomId = Array.from(selectedRoomIds).at(-1) || null;
+        }
+        renderComparison();
+        const remainingRemoveButtons = Array.from(comparisonShortlistItems.querySelectorAll('[data-room-shortlist-remove]'));
+        const focusTarget = remainingRemoveButtons[Math.min(removeIndex, remainingRemoveButtons.length - 1)]
+          || comparisonShortlistReview
+          || searchInput;
+        focusTarget?.focus();
+      });
+      comparisonShortlistReview?.addEventListener('click', () => {
+        if (selectedRoomIds.size < 2 || !comparisonDialog || comparisonDialog.open) return;
+        renderComparison();
+        comparisonDialog.showModal();
+      });
+      comparisonShortlistClear?.addEventListener('click', () => {
+        selectedRoomIds.clear();
+        lastSelectedRoomId = null;
+        renderComparison();
+        searchInput?.focus();
       });
       comparisonClear?.addEventListener('click', () => {
         selectedRoomIds.clear();

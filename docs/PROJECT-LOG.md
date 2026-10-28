@@ -79,3 +79,15 @@ Regression coverage verifies action count and destination parity on the live exp
 - Add an accessible checkbox that filters only feature rows whose listed status differs across the selected rooms.
 - Keep non-feature rows and all existing actions in view; the live status announces the number of differing feature rows and clearly handles the no-difference case.
 - Add E2E tests for two- and three-room matrix states, filter on/off, recalculation when a selected room is removed, the no-differences message, row visibility and the existing booking/Contact/Trip flows.
+
+### Sprint 78 — filter-proof shortlist and reliable comparison entry (included in PR #154)
+
+- Keep selected room names and remove controls in a compact shortlist above results, independent of whether directory filters currently hide the selected cards.
+- Provide a single review action that remains usable from the shortlist, plus a clear-shortlist action. Do not reset or weaken the user's active search/filter state.
+- Browser coverage selects two rooms, filters every card out, and verifies the shortlist can still reopen the same comparison and clear itself.
+
+### Sprint 79 — focus continuity during comparison edits (included in PR #154)
+
+- Restore keyboard focus to the next sensible room-removal control after a row-driven removal rebuilds the matrix.
+- Keep focus usable when the last in-dialog removal clears the feature table; after clearing the directory shortlist, return focus to room search.
+- Add E2E assertions for focus restoration and the filter-hidden shortlist journey.
