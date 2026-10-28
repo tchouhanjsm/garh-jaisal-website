@@ -27,6 +27,7 @@ if (!$experience) {
         'hero_width' => 1333,
         'hero_height' => 2000,
         'hero_alt' => 'Garh Jaisal Haveli inside Jaisalmer Fort',
+        'hero_caption' => 'Confirm the details that depend on your travel date before making arrangements.',
         'summary' => 'The experience you requested is not available.',
         'at_a_glance' => [],
         'timeline_label' => 'Itinerary',
@@ -43,6 +44,10 @@ if (!$experience) {
 $experienceHeroAlt = trim((string) ($experience['hero_alt'] ?? ''));
 if ($experienceHeroAlt === '') {
     throw new RuntimeException('Experience page requires a non-empty hero_alt: ' . (string) ($experience['slug'] ?? 'unknown'));
+}
+$experienceHeroCaption = trim((string) ($experience['hero_caption'] ?? ''));
+if ($experienceHeroCaption === '') {
+    throw new RuntimeException('Experience page requires a non-empty hero_caption: ' . (string) ($experience['slug'] ?? 'unknown'));
 }
 
 $activePage = 'packages';
@@ -85,6 +90,9 @@ if ($isWhatsAppCityTour) {
     $experienceContactUrl .= '?experience=' . rawurlencode((string) $experience['slug']);
 }
 
+require_once __DIR__ . '/schema.php';
+$experienceHeroImageObject = gj_schema_image_object($siteUrl, $experience['hero_image'], $experienceHeroCaption, $experienceHeroAlt);
+
 $schemaGraph = [
     [
         '@type' => 'WebPage',
@@ -96,7 +104,7 @@ $schemaGraph = [
         'about' => ['@id' => $siteUrl . '/#hotel'],
         'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
         'inLanguage' => 'en',
-        'primaryImageOfPage' => ['@type' => 'ImageObject', 'url' => $siteUrl . '/' . $experience['hero_image']],
+        'primaryImageOfPage' => $experienceHeroImageObject,
     ],
     [
         '@type' => 'BreadcrumbList',
@@ -150,6 +158,7 @@ require __DIR__ . '/page-head.php';
         fetchpriority="high"
        decoding="async">
       <div class="experience-hero-overlay"></div>
+      <p class="experience-hero-caption"><?= htmlspecialchars($experienceHeroCaption, ENT_QUOTES, 'UTF-8') ?></p>
     </div>
 
     <div class="site-shell experience-hero-content">

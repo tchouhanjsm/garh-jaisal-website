@@ -76,6 +76,8 @@ $ogImageAlt = $page['og_image_alt'] ?? (
 );
 $twitterImageSource = $page['twitter_image'] ?? $ogImageSource;
 $twitterImageAlt = $page['twitter_image_alt'] ?? ($twitterImageSource === $ogImageSource ? $ogImageAlt : null);
+require_once __DIR__ . '/image-metadata.php';
+$ogImageMetadata = gj_local_image_metadata($ogImageSource);
 
 $htmlEscape = static function ($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
@@ -159,6 +161,13 @@ $analyticsIds = array_values(array_unique(array_filter(
   <meta property="og:description" content="<?= $htmlEscape($ogDescription) ?>">
   <meta property="og:url" content="<?= $htmlEscape($canonical) ?>">
   <meta property="og:image" content="<?= $htmlEscape($absoluteAssetUrl($ogImageSource)) ?>">
+<?php if (is_array($ogImageMetadata)): ?>
+  <meta property="og:image:width" content="<?= $htmlEscape($ogImageMetadata['width']) ?>">
+  <meta property="og:image:height" content="<?= $htmlEscape($ogImageMetadata['height']) ?>">
+<?php if ($ogImageMetadata['mime'] !== ''): ?>
+  <meta property="og:image:type" content="<?= $htmlEscape($ogImageMetadata['mime']) ?>">
+<?php endif; ?>
+<?php endif; ?>
 <?php if (is_string($ogImageAlt) && $ogImageAlt !== ''): ?>
   <meta property="og:image:alt" content="<?= $htmlEscape($ogImageAlt) ?>">
 <?php endif; ?>

@@ -6,6 +6,7 @@
  * rendered canonical/robots behavior remains covered by the Playwright suite.
  */
 $root = dirname(__DIR__);
+require_once $root . '/include/image-metadata.php';
 $experiences = require $root . '/include/experience-data.php';
 $nav = require $root . '/include/nav-data.php';
 $siteCheckErrors = [];
@@ -61,6 +62,27 @@ foreach ($experiences as $slug => $experience) {
     if (($experience['slug'] ?? null) !== $slug) {
         $siteCheckErrors[] = 'Experience key/slug mismatch: ' . $slug;
     }
+    if ($status === 'live') {
+        $heroSource = trim((string) ($experience['hero_image'] ?? ''));
+        $safeHeroSource = preg_match('~^img/[A-Za-z0-9._/-]+$~D', $heroSource) === 1
+            && strpos($heroSource, '..') === false
+            && strpos($heroSource, chr(92)) === false;
+        $heroFile = $root . '/' . $heroSource;
+        $heroMetadata = $safeHeroSource ? gj_local_image_metadata($heroSource) : null;
+        $heroExtension = strtolower(pathinfo($heroSource, PATHINFO_EXTENSION));
+        if (!$safeHeroSource || !is_file($heroFile) || is_link($heroFile)) {
+            $siteCheckErrors[] = 'Live experience hero image must be a safe, local regular file: ' . $slug;
+        } elseif (!is_array($heroMetadata) && $heroExtension !== 'avif') {
+            $siteCheckErrors[] = 'Live experience hero image is not decodable by the PHP image metadata helper: ' . $slug;
+        }
+        if (strlen(trim((string) ($experience['hero_alt'] ?? ''))) < 15) {
+            $siteCheckErrors[] = 'Live experience hero alt must describe the subject: ' . $slug;
+        }
+        $captionLength = strlen(trim((string) ($experience['hero_caption'] ?? '')));
+        if ($captionLength < 20 || $captionLength > 180) {
+            $siteCheckErrors[] = 'Live experience hero caption must be useful and concise: ' . $slug;
+        }
+    }
     if ($status === 'live' && !is_file($root . '/' . $file)) {
         $siteCheckErrors[] = 'Live experience page is missing: ' . $file;
     }
@@ -76,6 +98,10 @@ foreach ($experiences as $slug => $experience) {
 }
 
 $sitemap = $read($root . '/sitemap.xml');
+$renderer = $read($root . '/include/experience-page.php');
+if (strpos($renderer, 'gj_schema_image_object') === false || strpos($renderer, 'experienceHeroCaption') === false) {
+    $siteCheckErrors[] = 'Experience renderer must use the shared image schema and caption contract.';
+}
 preg_match_all('#<loc>https?://[^/]+/([^<]*)</loc>#i', $sitemap, $matches);
 $sitemapPaths = array_map('trim', $matches[1] ?? []);
 foreach ($experiences as $slug => $experience) {

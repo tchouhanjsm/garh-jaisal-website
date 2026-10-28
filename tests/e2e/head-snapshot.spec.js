@@ -193,9 +193,7 @@ function normalizeSocialImageValues(snapshot) {
       internIndex(head[3]),
       internIndex(head[4]),
       (head[5] || [])
-        // Accessible image-description tags are now checked across every sitemap route
-        // by social-image-metadata.spec.js; keep the frozen legacy baseline focused on
-        // its historical fields rather than treating these intentional additions as drift.
+        // Accessible image descriptions and intrinsic Open Graph image dimensions/type are checked by dedicated route-wide media tests; keep the frozen legacy baseline focused on its reviewed historical fields rather than treating these intentional additions as drift.
         .filter(tag => !['og:image:alt', 'twitter:image:alt'].includes(sourceStrings[tag[0]]))
         .map(tag => {
         const key = sourceStrings[tag[0]];

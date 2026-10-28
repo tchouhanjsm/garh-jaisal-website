@@ -6,6 +6,7 @@
  * and public route wrappers without requiring a web server.
  */
 $root = dirname(__DIR__);
+require_once $root . '/include/image-metadata.php';
 $failures = [];
 $assert = static function ($condition, $message) use (&$failures) {
     if (!$condition) $failures[] = $message;
@@ -47,7 +48,7 @@ foreach ($registry as $slug => $guide) {
     $assert(($guide['slug'] ?? null) === $slug, 'Registry key/slug mismatch: ' . $slug);
     $status = $guide['status'] ?? 'live';
     $assert(in_array($status, ['live', 'draft', 'hidden'], true), 'Invalid publication status: ' . $slug);
-    foreach (['title', 'description', 'h1', 'lede', 'hero_image', 'hero_alt', 'date_published', 'date_modified', 'date_display'] as $field) {
+    foreach (['title', 'description', 'h1', 'lede', 'hero_image', 'hero_alt', 'hero_caption', 'date_published', 'date_modified', 'date_display'] as $field) {
         $assert(is_string($guide[$field] ?? null) && trim($guide[$field]) !== '', 'Missing required ' . $field . ': ' . $slug);
     }
     $title = trim((string) ($guide['title'] ?? ''));
@@ -72,6 +73,17 @@ foreach ($registry as $slug => $guide) {
             }
         }
         $assert(!empty($guide['hero_alt']), 'Live guide hero image needs descriptive alternative text: ' . $slug);
+        $heroSource = trim((string) ($guide['hero_image'] ?? ''));
+        $safeHeroSource = preg_match('~^img/[A-Za-z0-9._/-]+$~D', $heroSource) === 1
+            && strpos($heroSource, '..') === false
+            && strpos($heroSource, chr(92)) === false;
+        $heroFile = $root . '/' . $heroSource;
+        $heroMetadata = $safeHeroSource ? gj_local_image_metadata($heroSource) : null;
+        $heroExtension = strtolower(pathinfo($heroSource, PATHINFO_EXTENSION));
+        $assert($safeHeroSource && is_file($heroFile) && !is_link($heroFile), 'Live editorial hero image must be a safe, local regular file: ' . $slug . ' → ' . $heroSource);
+        $assert(is_array($heroMetadata) || ($safeHeroSource && is_file($heroFile) && $heroExtension === 'avif'), 'Live editorial hero image must be decodable or use the supported AVIF fallback path: ' . $slug);
+        $assert(strlen(trim((string) ($guide['hero_alt'] ?? ''))) >= 15, 'Live editorial hero alt text should describe the subject rather than a generic image: ' . $slug);
+        $assert(strlen(trim((string) ($guide['hero_caption'] ?? ''))) >= 20 && strlen(trim((string) ($guide['hero_caption'] ?? ''))) <= 180, 'Live editorial hero caption must be useful and concise: ' . $slug);
         foreach (['toc', 'sections', 'related'] as $field) {
             $assert(is_array($guide[$field] ?? null) && count($guide[$field]) > 0, 'Live guide needs non-empty ' . $field . ': ' . $slug);
         }
@@ -135,6 +147,9 @@ foreach ($registry as $slug => $guide) {
     }
 }
 $assert(strpos($template, "'@type' => 'BlogPosting'") !== false, 'Article template must emit BlogPosting schema.');
+$assert(strpos($template, 'gj_schema_image_object') !== false, 'Article image schema must use shared media metadata.');
+$assert(strpos($template, '<figcaption class="article-caption">') !== false, 'Editorial hero image must render its reviewed visible caption.');
+$assert(strpos($template, '$guideHeroCaption') !== false, 'Editorial renderer must require and escape a hero caption.');
 $assert(strpos($template, 'gj_schema_breadcrumb_list') !== false, 'Article template must emit breadcrumb structured data.');
 $assert(strpos($sitemapGenerator, '$routeSlug') !== false && strpos($sitemapGenerator, 'status') !== false && strpos($sitemapGenerator, 'continue;') !== false, 'Static legacy article URLs must honour registry status.');
 $assert(strpos($template, "'robots' => " . '$isDraft' . " ? 'noindex,follow' : 'index,follow'") !== false, 'Draft preview must remain noindex.');

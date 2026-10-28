@@ -206,3 +206,12 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Each route supplies three distinct contextual next steps. The component validates same-site PHP destinations, uses a labelled navigation landmark, and supplies concise link descriptions. Responsive card styling follows the existing conversion design layer and respects reduced-motion preferences.
 - Added a desktop Browser E2E contract for the 11 routes and refreshed the booking-guide sitemap lastmod to match its source revision.
 - This is a repository-local publication and journey improvement, not evidence of ranking gains or field Core Web Vitals. No public URL or booking destination changed; no merge, cPanel upload, staging deployment or production deployment was performed.
+
+
+## Sprints 246–260 — Editorial media readiness
+
+- Added one safe local-image metadata helper shared by rendering, schema and responsive dimension attributes. It rejects path traversal and symlinked image files, and returns measured dimensions/MIME only when the local PHP runtime can decode the asset.
+- Added accurate intrinsic dimension and MIME tags for inspectable local Open Graph images. Editorial BlogPosting/WebPage and experience WebPage nodes now use an ImageObject containing the same canonical media URL, descriptive alt text, reviewed caption and dimensions when available.
+- Added a visible caption to each of the 12 editorial guide hero images and each shared experience hero. Captions remain separate from alt text and are used consistently in the structured data.
+- Strengthened the source publication checks and added a rendered browser audit across 12 editorial routes and eight experience routes. The audit verifies successful image decoding, caption visibility, social-card/hero parity, and ImageObject dimension and text parity.
+- This is a local release-readiness gate, not a claim of live ranking changes or field performance. Original photo files, route URLs, prices and booking destinations remain unchanged.

@@ -25,6 +25,7 @@ if (!is_array($guide)) {
         'lede' => 'This guide is not available.',
         'hero_image' => 'img/v2/facade.jpg',
         'hero_alt' => 'Garh Jaisal Haveli inside Jaisalmer Fort',
+        'hero_caption' => 'Use this guide to plan your visit and confirm details that depend on your travel date.',
         'date_published' => '2026-10-15',
         'date_modified' => '2026-10-15',
         'date_display' => '15 October 2026',
@@ -45,12 +46,17 @@ $guideHeroAlt = trim((string) ($guide['hero_alt'] ?? ''));
 if ($guideHeroAlt === '') {
     throw new RuntimeException('Editorial guide requires a non-empty hero_alt: ' . (string) ($guide['slug'] ?? 'unknown'));
 }
+$guideHeroCaption = trim((string) ($guide['hero_caption'] ?? ''));
+if ($guideHeroCaption === '') {
+    throw new RuntimeException('Editorial guide requires a non-empty hero_caption: ' . (string) ($guide['slug'] ?? 'unknown'));
+}
 
 $guideTopic = (string) ($guide['topic'] ?? 'trip-planning');
 if (!isset($editorialTopicTaxonomy[$guideTopic])) $guideTopic = 'trip-planning';
 $guideTopicLabel = $editorialTopicTaxonomy[$guideTopic] ?? 'Trip planning';
 $siteUrl = rtrim((string) ($siteConfig['site_url'] ?? ''), '/');
 $canonical = $siteUrl . '/' . $guide['slug'] . '.php';
+$guideHeroImageObject = gj_schema_image_object($siteUrl, $guide['hero_image'], $guideHeroCaption, $guideHeroAlt);
 $escapeGuide = static function ($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 };
@@ -100,7 +106,7 @@ $schemaGraph = [
         '@id' => $canonical . '#article',
         'headline' => $guide['schema_headline'] ?? $guide['h1'],
         'description' => $guide['description'],
-        'image' => [$siteUrl . '/' . ltrim($guide['hero_image'], '/')],
+        'image' => [$guideHeroImageObject],
         'datePublished' => $guide['date_published'],
         'dateModified' => $guide['date_modified'],
         'author' => ['@type' => 'Organization', 'name' => 'Hotel Garh Jaisal Haveli', 'url' => $siteUrl . '/'],
@@ -114,6 +120,7 @@ $schemaGraph = [
         'url' => $canonical,
         'name' => $guide['title'],
         'description' => $guide['description'],
+        'primaryImageOfPage' => $guideHeroImageObject,
         'isPartOf' => ['@id' => $siteUrl . '/#website'],
         'about' => ['@id' => $siteUrl . '/#hotel'],
         'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
@@ -180,6 +187,7 @@ require __DIR__ . '/page-head.php';
             alt="<?= $escapeGuide($guide['hero_alt']) ?>"
             fetchpriority="high"
            decoding="async">
+          <figcaption class="article-caption"><?= $escapeGuide($guideHeroCaption) ?></figcaption>
         </figure>
         <?php foreach ($guide['sections'] as $section): ?>
           <section id="<?= $escapeGuide($section['id']) ?>" data-story-reveal>

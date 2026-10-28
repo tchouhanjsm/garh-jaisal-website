@@ -18,13 +18,14 @@ if (!function_exists('gj_image_dimension_attributes')) {
         }
 
         $imagePath = __DIR__ . '/../' . $source;
+        require_once __DIR__ . '/image-metadata.php';
         if (!array_key_exists($source, $dimensionCache)) {
-            $size = is_file($imagePath) ? @getimagesize($imagePath) : false;
+            $size = gj_local_image_metadata($source);
             $dimensionCache[$source] = (
                 is_array($size)
-                && isset($size[0], $size[1])
-                && $size[0] > 0
-                && $size[1] > 0
+                && isset($size['width'], $size['height'])
+                && $size['width'] > 0
+                && $size['height'] > 0
             ) ? [(int) $size[0], (int) $size[1]] : null;
         }
 

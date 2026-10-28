@@ -18,7 +18,15 @@
 .article-content a:hover,.article-content a:focus-visible{text-decoration-color:var(--brown);}
 .article-image{margin:0 0 28px;}
 .article-image img{width:100%;aspect-ratio:16 / 9;object-fit:cover;}
-.article-caption{margin-top:8px;color:var(--muted);font-size:.75rem;}
+.article-caption {
+  margin: 9px 0 0;
+  padding: 0 0 0 12px;
+  border-inline-start: 2px solid var(--line);
+  color: var(--muted);
+  font-size: .82rem;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
 .article-callout{margin:28px 0;padding:22px 24px;border:1px solid var(--line);background:rgba(242,232,216,.72);}
 .article-callout strong{color:var(--ink);}
 .article-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 34px;}
