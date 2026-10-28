@@ -148,7 +148,16 @@ require __DIR__ . '/include/page-head.php';
             $cardImageAlt = (string) ($guide['archive_image_alt'] ?? $defaultArchiveImageAlts[$slug] ?? $guide['hero_alt'] ?? '');
             if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $slug)) continue;
         ?>
-          <article class="blog-card<?= $isFeatured ? ' blog-card--featured' : '' ?>">
+          <?php
+          $topicAnchors = [
+              'jaisalmer-fort-guide' => 'fort-and-heritage',
+              'jaisalmer-2-day-itinerary' => 'itineraries',
+              'desert-safari-guide' => 'desert-planning',
+              'jaisalmer-food-guide' => 'food-and-crafts',
+          ];
+          $topicAnchor = $topicAnchors[$slug] ?? '';
+          ?>
+          <article class="blog-card<?= $isFeatured ? ' blog-card--featured' : '' ?>"<?= $topicAnchor !== '' ? ' id="' . htmlspecialchars($topicAnchor, ENT_QUOTES, 'UTF-8') . '"' : '' ?>>
             <a href="<?= htmlspecialchars($slug . '.php', ENT_QUOTES, 'UTF-8') ?>">
               <?php if ($cardImage !== ''): ?>
                 <?php $cardImageSizes = $isFeatured ? '(max-width: 900px) 100vw, 60vw' : '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw'; ?>
@@ -163,18 +172,6 @@ require __DIR__ . '/include/page-head.php';
             </a>
           </article>
         <?php endforeach; ?>
-        <article class="blog-card journal-topic-card" id="fort-and-heritage"><a href="jaisalmer-fort-guide.php">
-          <div class="blog-card-body"><p class="blog-card-meta">Fort &amp; heritage</p><h2>Start with the living Fort</h2><p>Understand the setting, architecture and practicalities of exploring the sandstone lanes respectfully.</p><span class="text-link">Explore Fort guides →</span></div>
-        </a></article>
-        <article class="blog-card journal-topic-card" id="itineraries"><a href="jaisalmer-2-day-itinerary.php">
-          <div class="blog-card-body"><p class="blog-card-meta">Itineraries</p><h2>Make time for what matters</h2><p>Use flexible two- and three-day outlines to choose priorities before confirming routes and arrangements.</p><span class="text-link">Explore itinerary guides →</span></div>
-        </a></article>
-        <article class="blog-card journal-topic-card" id="desert-planning"><a href="desert-safari-guide.php">
-          <div class="blog-card-body"><p class="blog-card-meta">Desert planning</p><h2>Choose a desert experience thoughtfully</h2><p>Compare formats, prepare for outdoor conditions and confirm the current inclusions for your date.</p><span class="text-link">Explore desert guides →</span></div>
-        </a></article>
-        <article class="blog-card journal-topic-card" id="food-and-crafts"><a href="jaisalmer-food-guide.php">
-          <div class="blog-card-body"><p class="blog-card-meta">Food &amp; crafts</p><h2>Meet the city through its culture</h2><p>Read about regional food, markets, crafts and sandstone architecture with useful questions to take along.</p><span class="text-link">Explore culture guides →</span></div>
-        </a></article>
         <article class="blog-card"><a href="book-rooms-in-jaisalmer.php">
           <div class="blog-card-body"><p class="blog-card-meta">Staying inside the Fort</p><h2>Staying inside Jaisalmer Fort</h2><p>The last part of the journey is on foot, and a room, a rooftop meal and a desert night can fit together into one stay.</p><span class="text-link">Read the stay guide →</span></div>
         </a></article>
