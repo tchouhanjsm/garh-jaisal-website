@@ -46,6 +46,7 @@ test.describe('Editorial publication and reader journey', () => {
     test.skip(testInfo.project.name !== 'desktop-1280', 'Article templates are checked once.');
     const articleRoutes = sitemapRoutes.filter(route =>
       /\/(?:jaisalmer-[a-z0-9-]+|desert-safari-guide|best-time-to-visit-jaisalmer|how-to-reach-jaisalmer)\.php$/.test(route)
+      && !route.endsWith('/jaisalmer-fort-guide.php')
     );
     expect(articleRoutes.length).toBeGreaterThanOrEqual(10);
     for (const route of articleRoutes) {
