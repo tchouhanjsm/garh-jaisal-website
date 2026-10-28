@@ -74,3 +74,10 @@ The responsive-image manifest now supports validated per-source quality override
 - The Gallery keeps server-rendered image links as the source of truth. Full-size images are opened only after an explicit visitor action.
 - After the lightbox opens, the current item’s previous and next full-size sources are prewarmed for smoother navigation; the initial page load does not download every full-resolution original.
 - This leaves source photos untouched and does not claim a field Core Web Vitals or production-network improvement. Validate the interaction against Browser E2E artifacts and review the rendered crop at mobile and desktop widths.
+
+
+## Sprint 173–182 — explicit asynchronous image decoding
+
+- Public page templates and shared hero/header renderers now declare `decoding="async"` on image elements that previously omitted a decode hint. Lazy images keep their existing `loading="lazy"`, width/height, responsive srcset and sizes; high-priority hero images retain their fetch-priority behavior.
+- The change does not remap any source image and does not claim a measured LCP or field Core Web Vitals improvement. The new Browser E2E policy report records which lazy images expose the intended decoding hint.
+- `sitemap.xml` is refreshed from the same registry-aware lastmod policy for directly changed public page sources and pages rendered by the changed experience/editorial templates.

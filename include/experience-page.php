@@ -142,7 +142,7 @@ require __DIR__ . '/page-head.php';
         alt="<?= htmlspecialchars($experience['hero_alt'], ENT_QUOTES, 'UTF-8') ?>"
         <?= gj_image_dimension_attributes($experience['hero_image'], '100vw') ?>
         fetchpriority="high"
-      >
+       decoding="async">
       <div class="experience-hero-overlay"></div>
     </div>
 

@@ -14,16 +14,8 @@
     transition: none !important;
   }
 
-  .main-nav .nav-book:hover,
-  .contact-dock a:hover,
-  .button:hover,
-  .card:hover .card-image img,
-  .gallery-item:hover img,
-  .gallery-item-label,
-  .home-room-card:hover,
-  .home-experience-card:hover,
-  .home-story-card:hover,
-  .home-discovery-card:hover {
+  /* Hover translations/scales are decorative; never move content for reduced-motion users. */
+  *:hover {
     transform: none !important;
   }
 }

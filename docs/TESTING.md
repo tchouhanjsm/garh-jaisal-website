@@ -100,3 +100,11 @@ A role that is not directly affected still records a concrete double-check rathe
 - With Playwright reduced motion set to reduce, verify shared controls have no CSS transition and the Gallery image does not scale on hover. Smooth scrolling and decorative animations must also be disabled.
 - Keep visible keyboard focus and the existing selected/hover color contrast; motion reduction must not hide content or alter booking/contact destinations.
 - The PHP source contract runs under both CI PHP versions; browser behavior is separately tested in Chromium on the exact PR head.
+
+
+## Browser E2E follow-up — stylesheet contract and image decoding
+
+- `sitewide-visual-system.spec.js` treats `css/accessibility.css` as the last preference layer, not as a route stylesheet expected to load before `tokens.css`. It still asserts that every real route stylesheet precedes shared tokens and that the preference layer follows all other CSS.
+- `image-decoding-policy.spec.js` checks core public page families for lazy-image `decoding="async"`, explicit `alt` attributes and absence of high-priority lazy images. The JSON report is browser evidence from local PHP/Chromium.
+- Browser E2E run 742 failed because the existing test grouped the newly added final preference layer with route styles. Do not reorder production styles or remove the accessibility layer to make the old assertion pass; update the classification and retain explicit final-order coverage.
+- CI image decode hints are implementation conventions, not a claim of a particular LCP/Core Web Vitals gain. Review selected sources and screenshots for visual fidelity.

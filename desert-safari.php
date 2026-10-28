@@ -63,7 +63,7 @@ require __DIR__ . '/include/page-head.php';
 <main id="main-content" tabindex="-1">
   <section class="experience-hero">
     <div class="experience-hero-media">
-      <img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg', '100vw') ?> alt="Sand dunes in the Thar Desert near Jaisalmer" fetchpriority="high">
+      <img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg', '100vw') ?> alt="Sand dunes in the Thar Desert near Jaisalmer" fetchpriority="high" decoding="async">
       <div class="experience-hero-overlay"></div>
     </div>
     <div class="site-shell experience-hero-content">
@@ -94,7 +94,7 @@ require __DIR__ . '/include/page-head.php';
         <?php foreach ($items as $slug): $item = $experiences[$slug]; ?>
           <article class="experience-card">
             <a href="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>.php">
-              <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy">
+              <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
               <div>
                 <p class="experience-card-kicker"><?= htmlspecialchars($item['eyebrow'], ENT_QUOTES, 'UTF-8') ?></p>
                 <h2><?= htmlspecialchars($item['h1'], ENT_QUOTES, 'UTF-8') ?></h2>

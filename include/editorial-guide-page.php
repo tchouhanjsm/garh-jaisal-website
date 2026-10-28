@@ -173,7 +173,7 @@ require __DIR__ . '/page-head.php';
             <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($guide['hero_image'], '(max-width: 768px) 100vw, 60vw') : '' ?>
             alt="<?= $escapeGuide($guide['hero_alt']) ?>"
             fetchpriority="high"
-          >
+           decoding="async">
         </figure>
         <?php foreach ($guide['sections'] as $section): ?>
           <section id="<?= $escapeGuide($section['id']) ?>" data-story-reveal>

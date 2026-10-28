@@ -134,6 +134,24 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 - **Sprint 169 — review evidence:** inspect latest exact-head screenshots at mobile and desktop widths and verify the lightbox remains inside the viewport.
 - **Sprint 170 — release gate:** rerun Site Checks, Browser E2E/screenshots, non-deploying Staging QA and package preflight on the same latest PR head. CI evidence is not a production deployment or a field Core Web Vitals result.
 
+## Active phase — Sprints 171–185: Responsive image decoding and cascade-contract recovery (PR #157)
+
+- **Sprint 171 — correct the visual-system contract:** exclude the shared accessibility preference layer from the route-stylesheet group that must precede tokens; keep a separate assertion that the preference layer loads last.
+- **Sprint 172 — keep the cascade strict:** verify the preference stylesheet follows route styles, shared tokens and conversion components rather than moving it earlier to satisfy the old assertion.
+- **Sprint 173 — homepage imagery:** add explicit asynchronous decoding hints to image elements that previously omitted them while retaining high-priority hero hints.
+- **Sprint 174 — package cards:** make asynchronous decoding explicit on lazy-loaded package images.
+- **Sprint 175 — desert discovery:** apply the same decode policy to desert-hub hero and card images without replacing their source or changing slot sizes.
+- **Sprint 176 — guided and car-tour cards:** make image decode behavior consistent across travel-discovery cards.
+- **Sprint 177 — shared header assets:** use the same decode hint for the persistent brand and contact imagery.
+- **Sprint 178 — experience template:** align the shared experience hero with existing high-priority/asynchronous image declarations; retain responsive srcset and sizes.
+- **Sprint 179 — editorial template:** apply the decode hint to the shared guide hero without changing visible editorial content, canonical routes or structured data.
+- **Sprint 180 — reusable hero component:** keep asynchronous decoding consistent for consumers of the shared hero partial.
+- **Sprint 181 — route freshness:** update sitemap lastmod only for directly changed public page sources and live experience/editorial routes whose shared renderer changed.
+- **Sprint 182 — lazy-image policy evidence:** add a Chromium contract across core page families for async decoding on lazy images, explicit alt attributes and no high-priority/lazy contradiction.
+- **Sprint 183 — visual-system regression:** reproduce and fix the stale token-order assertion from Browser E2E run 742 while retaining strict checks for all real route styles.
+- **Sprint 184 — reduced-motion hover parity:** suppress all hover transforms under prefers-reduced-motion without removing focus indicators or hover color contrast.
+- **Sprint 185 — release gate:** validate the exact final PR head with Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. Do not infer a field-performance result from CI timing.
+
 ## Priority sequence
 
 1. Deliver coherent guest journeys and resolve high-impact performance findings using measured browser evidence.
