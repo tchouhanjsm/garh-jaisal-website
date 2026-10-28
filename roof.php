@@ -202,6 +202,19 @@ require __DIR__ . '/include/page-head.php';
       ?>
     </div>
   </section>
+
+<?php
+$planningPath = [
+    'title' => 'Complete your Fort visit',
+    'intro' => 'Make dining part of a wider stay by checking room availability and planning experiences in advance.',
+    'links' => [
+        ['label' => 'Stay inside the Fort', 'href' => 'room.php', 'description' => 'Compare the rooms and check your dates.'],
+        ['label' => 'Restaurant details', 'href' => 'restaurant.php', 'description' => 'Review dining information and ask about current menu details.'],
+        ['label' => 'Desert experiences', 'href' => 'desert-safari.php', 'description' => 'Explore options for a sunset or overnight outing.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>

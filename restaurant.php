@@ -663,6 +663,19 @@ require __DIR__ . '/include/page-head.php';
       ?>
     </div>
   </section>
+
+<?php
+$planningPath = [
+    'title' => 'Make dining part of your stay',
+    'intro' => 'Review rooftop dining details, compare rooms and contact the hotel to confirm current menu, hours and table options.',
+    'links' => [
+        ['label' => 'Rooftop dining', 'href' => 'roof.php', 'description' => 'Explore the rooftop setting and dinner information.'],
+        ['label' => 'Compare rooms', 'href' => 'room.php', 'description' => 'Check room details and current rates for your dates.'],
+        ['label' => 'Contact the hotel', 'href' => 'contact.php?topic=dining', 'description' => 'Ask about menu, hours or table availability.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>

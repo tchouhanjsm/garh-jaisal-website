@@ -509,6 +509,19 @@ $ctaBand = [
 require __DIR__ . '/include/ui/cta-band.php';
 ?>
 
+
+<?php
+$planningPath = [
+    'title' => 'Build the rest of your stay',
+    'intro' => 'Once you have shortlisted a room, plan dining and local experiences around your dates and interests.',
+    'links' => [
+        ['label' => 'Rooftop dining', 'href' => 'roof.php', 'description' => 'Explore rooftop dining and ask about current hours and menu.'],
+        ['label' => 'Desert experiences', 'href' => 'desert-safari.php', 'description' => 'Compare desert options and confirm current inclusions.'],
+        ['label' => 'Arrival guide', 'href' => 'direction.php', 'description' => 'Plan the final walk into Jaisalmer Fort.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>

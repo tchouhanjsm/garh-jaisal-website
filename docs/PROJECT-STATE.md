@@ -197,3 +197,12 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Added sitemap-wide Playwright checks for rendered title length (30–60 characters), meta-description length (120–160 characters), canonical route parity, and indexability. The length bands are internal quality gates, not claims about fixed Google snippet lengths.
 - Updated the approved frozen head snapshot for the intentional copy changes. Further metadata drift remains a test failure instead of being silently normalized.
 - Business details, URLs, booking destinations and image assets are unchanged.
+
+
+## Sprints 231–245 — Contextual planning paths and route-wide E2E recovery
+
+- Fixed the exact-head Browser E2E failure on `book-rooms-in-jaisalmer.php`: its custom rooftop social-card image now has explicit Open Graph and Twitter/X image descriptions instead of relying on the shared facade-image fallback.
+- Added a reusable, output-escaped planning-path component to 11 high-intent routes: booking guide, Rooms, Packages, Directions, Rooftop Dining, Restaurant, About, Contact, Desert Safari, guided tours and the Fort walk.
+- Each route supplies three distinct contextual next steps. The component validates same-site PHP destinations, uses a labelled navigation landmark, and supplies concise link descriptions. Responsive card styling follows the existing conversion design layer and respects reduced-motion preferences.
+- Added a desktop Browser E2E contract for the 11 routes and refreshed the booking-guide sitemap lastmod to match its source revision.
+- This is a repository-local publication and journey improvement, not evidence of ranking gains or field Core Web Vitals. No public URL or booking destination changed; no merge, cPanel upload, staging deployment or production deployment was performed.

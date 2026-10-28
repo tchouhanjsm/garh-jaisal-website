@@ -193,6 +193,19 @@ require __DIR__ . '/include/page-head.php';
       ?>
     </div>
   </section>
+
+<?php
+$planningPath = [
+    'title' => 'Explore more of Jaisalmer',
+    'intro' => 'Pair a guided walk with an arrival plan or a desert outing. Routes, guide availability and current prices should be confirmed.',
+    'links' => [
+        ['label' => 'Fort walk', 'href' => 'city-tour.php', 'description' => 'Review the Fort walk and its access considerations.'],
+        ['label' => 'Half-day and full-day tours', 'href' => 'car-tours.php', 'description' => 'Compare existing guided and car-arrangement options.'],
+        ['label' => 'Desert experiences', 'href' => 'desert-safari.php', 'description' => 'Plan a camel safari or overnight desert option.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
 <script src="js/garh-v2.js"></script>

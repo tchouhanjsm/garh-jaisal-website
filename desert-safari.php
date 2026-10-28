@@ -202,6 +202,19 @@ require __DIR__ . '/include/page-head.php';
       <div class="actions"><a class="button button-primary" href="contact.php">Contact us</a><a class="button button-secondary" href="guided-jaisalmer-tour.php">Explore guided city tours</a></div>
     </div>
   </section>
+
+<?php
+$planningPath = [
+    'title' => 'Combine desert time with a Fort stay',
+    'intro' => 'Compare the desert experience with room options and a guided visit, then confirm timing and inclusions for your date.',
+    'links' => [
+        ['label' => 'Overnight desert stays', 'href' => 'camping.php', 'description' => 'Review the tent-stay option and ask about availability.'],
+        ['label' => 'Stay inside Jaisalmer Fort', 'href' => 'room.php', 'description' => 'Compare heritage rooms for the nights around your trip.'],
+        ['label' => 'Guided city tours', 'href' => 'guided-jaisalmer-tour.php', 'description' => 'Plan a Fort and city visit around the desert outing.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
 <script src="js/garh-v2.js"></script>

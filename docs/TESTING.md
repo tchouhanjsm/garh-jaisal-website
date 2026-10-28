@@ -126,3 +126,10 @@ A role that is not directly affected still records a concrete double-check rathe
 - The test checks rendered values from every sitemap route, alongside canonical-path and indexability checks. Keep titles and descriptions accurate, distinct and aligned with actual page content.
 - The rendered audit previously identified overlong descriptions on Home, Car & City Tours, the Fort guided walk, Desert Safari, guided city tours, the restaurant, and the honeymoon guide, plus a long Desert Safari title. This batch trims those and pages already at the upper edge of the description target.
 - The frozen head snapshot fixture is updated with the approved copy so further unintended title/description changes remain detectable.
+
+
+## Contextual planning-link regression
+
+- `tests/e2e/seo.spec.js` checks the contextual planning section on all 11 configured high-intent routes.
+- The contract expects one visible section, one heading, three distinct links and same-site PHP destinations; the shared renderer also validates and escapes the page-provided labels, descriptions and paths.
+- Review Browser E2E screenshots and failure diagnostics on the exact PR head. Passing local-route checks does not establish live Google indexing, ranking changes or production performance.

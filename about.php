@@ -247,6 +247,19 @@ $ctaBand = [
 ];
 require __DIR__ . '/include/ui/cta-band.php';
 ?>
+
+<?php
+$planningPath = [
+    'title' => 'Explore your stay',
+    'intro' => 'Move from the story of the haveli to the practical details for rooms, arrival and experiences.',
+    'links' => [
+        ['label' => 'Explore the rooms', 'href' => 'room.php', 'description' => 'Compare room features before choosing your dates.'],
+        ['label' => 'Plan your arrival', 'href' => 'direction.php', 'description' => 'Review directions and the final walk inside the Fort.'],
+        ['label' => 'Dining and experiences', 'href' => 'roof.php', 'description' => 'Discover rooftop dining and ask about current options.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>

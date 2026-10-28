@@ -383,6 +383,19 @@ require __DIR__ . '/include/page-head.php';
       </div>
     </div>
   </section>
+
+<?php
+$planningPath = [
+    'title' => 'Plan your Jaisalmer itinerary',
+    'intro' => 'Pair a desert experience with a Fort stay and a guided visit, checking date-specific details with the hotel.',
+    'links' => [
+        ['label' => 'Desert safari options', 'href' => 'desert-safari.php', 'description' => 'Compare camel safaris, cultural evenings and overnight stays.'],
+        ['label' => 'Explore the rooms', 'href' => 'room.php', 'description' => 'Review the heritage rooms and check dates.'],
+        ['label' => 'Guided city tours', 'href' => 'guided-jaisalmer-tour.php', 'description' => 'Compare half-day and full-day guided tour options.'],
+    ],
+];
+require __DIR__ . '/include/ui/planning-path.php';
+?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
