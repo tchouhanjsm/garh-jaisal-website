@@ -231,6 +231,6 @@
   outline: 3px solid var(--gold-ink, #8a6212);
   outline-offset: 3px;
 }
-.journal-topic-card {
+.blog-card[id] {
   scroll-margin-top: 7rem;
 }
