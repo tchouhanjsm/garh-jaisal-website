@@ -8,6 +8,7 @@
 $editorialGuides = [
     'best-time-to-visit-jaisalmer' => [
         'slug' => 'best-time-to-visit-jaisalmer',
+        'topic' => 'trip-planning',
         'title' => 'Best Time to Visit Jaisalmer | Seasons & Trip Planning',
         'description' => 'Choose when to visit Jaisalmer by season, outdoor comfort and the Fort or desert experiences you want to include in your trip.',
         'h1' => 'Best Time to Visit Jaisalmer: Choose a Season for Your Trip',
@@ -134,6 +135,7 @@ $editorialGuides = [
     ],
     'how-to-reach-jaisalmer' => [
         'slug' => 'how-to-reach-jaisalmer',
+        'topic' => 'trip-planning',
         'title' => 'How to Reach Jaisalmer | Air, Rail, Road & Fort Arrival',
         'description' => 'Plan your journey to Jaisalmer by air, rail or road, then prepare for the final walk into Jaisalmer Fort to reach Garh Jaisal Haveli.',
         'h1' => 'How to Reach Jaisalmer and Arrive Inside the Fort',
@@ -255,6 +257,7 @@ $editorialGuides = [
     ],
     'jaisalmer-desert-safari-packing-list' => [
         'slug' => 'jaisalmer-desert-safari-packing-list',
+        'topic' => 'desert-planning',
         'title' => 'Jaisalmer Desert Safari Packing List | What to Bring',
         'description' => 'Use this practical Jaisalmer desert-safari checklist for clothing, footwear, personal essentials and the questions to confirm before departure.',
         'h1' => 'What to Pack for a Jaisalmer Desert Safari',
@@ -396,6 +399,7 @@ $editorialGuides = [
     ],
     'jaisalmer-fort-guide' => [
         'slug' => 'jaisalmer-fort-guide',
+        'topic' => 'fort-and-heritage',
         'title' => 'Jaisalmer Fort Guide | Staying Inside the Living Fort',
         'description' => 'A Jaisalmer Fort guide from Garh Jaisal Haveli covering arrival, walks, guided tours, rooms, rooftop dining and desert plans.',
         'h1' => 'Jaisalmer Fort Guide',
@@ -601,6 +605,7 @@ $editorialGuides = [
     ],
     'desert-safari-guide' => [
         'slug' => 'desert-safari-guide',
+        'topic' => 'desert-planning',
         'title' => 'Jaisalmer Desert Safari Guide | Choose an Experience',
         'description' => 'Compare Jaisalmer desert safari options, from sunset camel rides to sleeping under the stars and Swiss tent stays, and choose what fits your trip.',
         'h1' => 'Desert Safari in Jaisalmer: How to Choose an Experience',
@@ -810,6 +815,7 @@ $editorialGuides = [
     ],
     'jaisalmer-2-day-itinerary' => [
         'slug' => 'jaisalmer-2-day-itinerary',
+        'topic' => 'itineraries',
         'title' => 'Jaisalmer 2-Day Itinerary | Fort, City & Desert',
         'description' => 'A practical 2-day Jaisalmer itinerary built around staying inside Jaisalmer Fort, with time for heritage sightseeing, rooftop dining and a desert experience.',
         'h1' => 'Jaisalmer 2-Day Itinerary',
@@ -1011,6 +1017,7 @@ $editorialGuides = [
     ],
     'jaisalmer-3-day-itinerary' => [
         'slug' => 'jaisalmer-3-day-itinerary',
+        'topic' => 'itineraries',
         'title' => 'Jaisalmer 3-Day Itinerary | Fort, Heritage & Desert',
         'description' => 'Plan three days in Jaisalmer with a Fort stay, guided heritage sightseeing and a desert experience. Compare same-evening and overnight options.',
         'h1' => 'Jaisalmer in 3 Days: A Flexible Fort, Heritage and Desert Itinerary',
@@ -1217,6 +1224,7 @@ $editorialGuides = [
     ],
     'jaisalmer-honeymoon-guide' => [
         'slug' => 'jaisalmer-honeymoon-guide',
+        'topic' => 'trip-planning',
         'title' => 'Jaisalmer Honeymoon Guide | Fort Stay & Desert Night',
         'description' => 'Plan a Jaisalmer honeymoon with a heritage stay inside the Fort, rooftop dining and a sunset or overnight desert experience. Confirm arrangements for your dates.',
         'h1' => 'Plan a Jaisalmer Honeymoon Around a Fort Stay and Desert Night',
@@ -1393,6 +1401,7 @@ $editorialGuides = [
 
     'jaisalmer-havelis-guide' => [
         'slug' => 'jaisalmer-havelis-guide',
+        'topic' => 'fort-and-heritage',
         'title' => 'Jaisalmer Havelis Guide | Sandstone Architecture & Heritage',
         'description' => 'Explore Jaisalmer’s carved sandstone havelis, the details to notice in their architecture, and how to plan a respectful heritage walk.',
         'h1' => 'Jaisalmer Havelis: A Guide to Sandstone Architecture',
@@ -1498,6 +1507,7 @@ $editorialGuides = [
     ],
     'jaisalmer-food-guide' => [
         'slug' => 'jaisalmer-food-guide',
+        'topic' => 'food-and-crafts',
         'title' => 'Jaisalmer Food Guide | Rajasthani Dishes to Discover',
         'description' => 'Discover regional Rajasthani dishes and Jaisalmer food traditions, questions to ask before ordering, and how to confirm the current menu.',
         'h1' => 'A Food Lover’s Guide to Jaisalmer and Rajasthan',
@@ -1612,6 +1622,7 @@ $editorialGuides = [
     ],
     'jaisalmer-beyond-the-fort-guide' => [
         'slug' => 'jaisalmer-beyond-the-fort-guide',
+        'topic' => 'fort-and-heritage',
         'title' => 'Beyond Jaisalmer Fort | Lake, Cenotaphs & Day-Trip Ideas',
         'description' => 'Plan beyond Jaisalmer Fort with ideas for Gadisar Lake, Bada Bagh and wider desert heritage, while confirming access and transport for your date.',
         'h1' => 'Beyond Jaisalmer Fort: Places to Explore Around the Golden City',
@@ -1716,6 +1727,7 @@ $editorialGuides = [
     ],
     'jaisalmer-markets-and-crafts-guide' => [
         'slug' => 'jaisalmer-markets-and-crafts-guide',
+        'topic' => 'food-and-crafts',
         'title' => 'Jaisalmer Markets & Crafts Guide | Shopping with Care',
         'description' => 'Explore Jaisalmer’s bazaars, textiles, embroidery, leatherwork and jewellery, with practical questions for thoughtful shopping and provenance.',
         'h1' => 'Jaisalmer Markets and Crafts: What to Look For',

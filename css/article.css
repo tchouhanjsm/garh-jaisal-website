@@ -131,3 +131,106 @@
 .policy-draft-page .article-content ul {
   margin-top: 10px;
 }
+
+
+/* Sprint 82 — related-guide discovery and comfortable long-form reading. */
+.article-topic-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 20px;
+}
+.article-topic-links a {
+  display: flex;
+  align-items: center;
+  min-height: 58px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-inline-start: 3px solid var(--garnet, #5b1a2b);
+  background: #fffdfa;
+  color: var(--ink);
+  font-weight: 650;
+  line-height: 1.45;
+  text-decoration: none;
+  transition: border-color .18s ease, background-color .18s ease;
+}
+.article-topic-links a:hover {
+  border-color: var(--garnet, #5b1a2b);
+  background: var(--sand-light, #f7efe0);
+}
+.article-topic-links a:focus-visible {
+  outline: 3px solid var(--gold-ink, #8a6212);
+  outline-offset: 3px;
+}
+.article-content {
+  font-size: 1.02rem;
+  line-height: 1.8;
+}
+.article-content h2,
+.article-content h3 {
+  scroll-margin-top: 7rem;
+}
+.article-content img {
+  max-width: 100%;
+  height: auto;
+}
+.article-content figure {
+  min-width: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .blog-card-image img,
+  .article-topic-links a {
+    transition: none;
+  }
+  .blog-card:hover .blog-card-image img {
+    transform: none;
+  }
+}
+@media (max-width: 900px) {
+  .article-topic-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .article-topic-links {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .article-topic-links a {
+    min-height: 48px;
+  }
+  .article-content {
+    font-size: 1rem;
+  }
+}
+
+
+/* Sprint 80 — editorial topic navigation for the Journal archive. */
+.journal-topic-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 24px 0 30px;
+}
+.journal-topic-index a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding: 9px 13px;
+  border: 1px solid var(--line);
+  background: rgba(255, 253, 250, .86);
+  color: var(--brown);
+  font-size: .9rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.journal-topic-index a:hover {
+  border-color: var(--garnet, #5b1a2b);
+  color: var(--garnet, #5b1a2b);
+}
+.journal-topic-index a:focus-visible {
+  outline: 3px solid var(--gold-ink, #8a6212);
+  outline-offset: 3px;
+}
+.blog-card[id] {
+  scroll-margin-top: 7rem;
+}

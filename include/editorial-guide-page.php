@@ -5,6 +5,7 @@
  */
 $siteConfig = require __DIR__ . '/site-config.php';
 $editorialGuides = require __DIR__ . '/editorial-guides-data.php';
+$editorialTopicTaxonomy = require __DIR__ . '/editorial-topic-taxonomy.php';
 $studioAllowDraftPreview = isset($studioAllowDraftPreview) && $studioAllowDraftPreview === true;
 $editorialGuideSlug = isset($editorialGuideSlug) && is_string($editorialGuideSlug)
     ? $editorialGuideSlug
@@ -40,6 +41,9 @@ if (!is_array($guide)) {
         'cta_secondary_href' => 'contact.php',
     ];
 }
+$guideTopic = (string) ($guide['topic'] ?? 'trip-planning');
+if (!isset($editorialTopicTaxonomy[$guideTopic])) $guideTopic = 'trip-planning';
+$guideTopicLabel = $editorialTopicTaxonomy[$guideTopic] ?? 'Trip planning';
 $siteUrl = rtrim((string) ($siteConfig['site_url'] ?? ''), '/');
 $canonical = $siteUrl . '/' . $guide['slug'] . '.php';
 $escapeGuide = static function ($value) {
@@ -228,6 +232,92 @@ require __DIR__ . '/page-head.php';
           </a>
         <?php endforeach; ?>
       </div>
+    </div>
+  </section>
+
+  <section class="section article-related-discovery" data-story-reveal aria-labelledby="journal-discovery-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div><p class="eyebrow">From the journal</p><h2 id="journal-discovery-title">Keep exploring Jaisalmer.</h2></div>
+        <p>Follow the question you still have, from arriving inside the Fort to choosing a season or shaping time beyond the city.</p>
+      </div>
+      <?php
+      // Do not repeat destinations already linked in the article body, its
+      // related cards, sources or enquiry CTAs. This avoids redundant links
+      // while keeping a useful cross-guide rail on every published article.
+      $journalDiscoveryCandidates = [];
+      $journalCandidateOrder = 0;
+      foreach ($editorialGuides as $candidateSlug => $candidateGuide) {
+          if (
+              !is_string($candidateSlug)
+              || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $candidateSlug)
+              || !is_array($candidateGuide)
+              || ($candidateGuide['status'] ?? 'live') !== 'live'
+              || $candidateSlug === (string) $guide['slug']
+          ) {
+              continue;
+          }
+          $candidateTopic = (string) ($candidateGuide['topic'] ?? 'trip-planning');
+          if (!isset($editorialTopicTaxonomy[$candidateTopic])) $candidateTopic = 'trip-planning';
+          $candidateLabel = trim((string) (
+              $candidateGuide['discovery_label']
+              ?? $candidateGuide['breadcrumb_label']
+              ?? $candidateGuide['h1']
+              ?? $candidateGuide['title']
+              ?? ''
+          ));
+          if ($candidateLabel === '') continue;
+          $journalDiscoveryCandidates[] = [
+              'href' => $candidateSlug . '.php',
+              'label' => $candidateLabel,
+              'topic' => $candidateTopic,
+              'same_topic' => $candidateTopic === $guideTopic,
+              'order' => $journalCandidateOrder++,
+          ];
+      }
+      usort($journalDiscoveryCandidates, static function ($left, $right) {
+          if ($left['same_topic'] !== $right['same_topic']) {
+              return $left['same_topic'] ? -1 : 1;
+          }
+          return $left['order'] <=> $right['order'];
+      });
+      $journalExistingRoutes = [];
+      $journalValuesToScan = [
+          $guide['sections'] ?? [],
+          $guide['related'] ?? [],
+          $guide['sources'] ?? [],
+          $guide['cta_primary_href'] ?? '',
+          $guide['cta_secondary_href'] ?? '',
+      ];
+      while ($journalValuesToScan) {
+          $journalValue = array_pop($journalValuesToScan);
+          if (is_array($journalValue)) {
+              foreach ($journalValue as $nestedJournalValue) {
+                  $journalValuesToScan[] = $nestedJournalValue;
+              }
+              continue;
+          }
+          if (!is_string($journalValue) || preg_match('#^https?://#i', trim($journalValue))) {
+              continue;
+          }
+          if (preg_match_all('~(?<![A-Za-z0-9])([A-Za-z0-9][A-Za-z0-9._/-]*\.php(?:\?[A-Za-z0-9._=%&-]+)?)~', $journalValue, $journalRouteMatches)) {
+              foreach ($journalRouteMatches[1] as $journalRoute) {
+                  $journalRoutePath = parse_url($journalRoute, PHP_URL_PATH);
+                  $journalRouteFile = basename(is_string($journalRoutePath) ? $journalRoutePath : $journalRoute);
+                  $journalExistingRoutes[$journalRouteFile] = true;
+              }
+          }
+      }
+      $journalExistingRoutes[basename((string) $guide['slug'] . '.php')] = true;
+      $journalDiscoveryLinks = array_slice(array_values(array_filter($journalDiscoveryCandidates, static function ($candidate) use ($journalExistingRoutes) {
+          return !isset($journalExistingRoutes[basename($candidate['href'])]);
+      })), 0, 8);
+      ?>
+      <nav class="article-topic-links" aria-label="More Jaisalmer travel guides" data-topic="<?= $escapeGuide($guideTopic) ?>">
+        <?php foreach ($journalDiscoveryLinks as $journalLink): ?>
+          <a href="<?= $escapeGuide($journalLink['href']) ?>" data-topic="<?= $escapeGuide($journalLink['topic']) ?>"><?= $escapeGuide($journalLink['label']) ?></a>
+        <?php endforeach; ?>
+      </nav>
     </div>
   </section>
 

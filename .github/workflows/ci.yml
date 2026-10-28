@@ -81,11 +81,17 @@ jobs:
       - name: Run site checks
         run: php scripts/check-site.php --strict-images
 
-      - name: Verify sitemap matches publication status
+      - name: Verify committed sitemap matches publication status and source history
         run: php scripts/generate-sitemap.php --check
 
       - name: Verify experience publication boundaries
         run: php scripts/check-experience-publication.php
+
+      - name: Verify editorial publication pipeline
+        run: php scripts/check-editorial-publication.php
+
+      - name: Verify editorial taxonomy and related-guide graph
+        run: php tests/php/editorial-discovery-graph.php
 
       - name: Verify Content Studio data overlays and publication states
         run: php tests/php/content-studio-registry.php
