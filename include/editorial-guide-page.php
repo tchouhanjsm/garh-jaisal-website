@@ -272,7 +272,7 @@ require __DIR__ . '/page-head.php';
           if (!is_string($journalValue) || preg_match('#^https?://#i', trim($journalValue))) {
               continue;
           }
-          if (preg_match_all('~(?<![A-Za-z0-9])([A-Za-z0-9][A-Za-z0-9._/-]*\\.php(?:\\?[A-Za-z0-9._=%&-]+)?)~', $journalValue, $journalRouteMatches)) {
+          if (preg_match_all('~(?<![A-Za-z0-9])([A-Za-z0-9][A-Za-z0-9._/-]*\.php(?:\?[A-Za-z0-9._=%&-]+)?)~', $journalValue, $journalRouteMatches)) {
               foreach ($journalRouteMatches[1] as $journalRoute) {
                   $journalRoutePath = parse_url($journalRoute, PHP_URL_PATH);
                   $journalRouteFile = basename(is_string($journalRoutePath) ? $journalRoutePath : $journalRoute);
