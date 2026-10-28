@@ -62,7 +62,6 @@ test.describe('Editorial publication and reader journey', () => {
       links => links.map(link => link.getAttribute('href'))
     );
     expect(new Set(archiveDestinations).size, 'Journal cards should not repeat route destinations').toBe(archiveDestinations.length);
-    }
     const canonicals = await page.locator('head link[rel="canonical"]').count();
     expect(canonicals).toBe(1);
     await expect(page.locator('head meta[name="description"]')).toHaveCount(1);

@@ -66,8 +66,8 @@ $assert(strpos($archive, "require __DIR__ . '/include/editorial-topic-taxonomy.p
 $assert(strpos($archive, '$journalTopicAnchors') !== false && strpos($archive, '$editorialTopicTaxonomy as $topicSlug => $topicLabel') !== false, 'Journal topic navigation must be derived from live records.');
 $assert(strpos($archive, '$journalTopicAnchors[$cardTopic]') !== false, 'Topic anchors must target real guide cards rather than duplicate/placeholder cards.');
 $assert(strpos($renderer, '$editorialGuides as $candidateSlug => $candidateGuide') !== false, 'Related discovery candidates must be generated from the editorial registry.');
-$assert(strpos($renderer, "'same_topic' => $candidateTopic === $guideTopic") !== false, 'Related candidates must carry topic relevance for ranking.');
-$assert(strpos($renderer, "return $left['same_topic'] ? -1 : 1;") !== false, 'Related guides must prioritise same-topic candidates.');
+$assert(strpos($renderer, "'same_topic' => " . '$candidateTopic === $guideTopic') !== false, 'Related candidates must carry topic relevance for ranking.');
+$assert(strpos($renderer, "return " . '$left[\'same_topic\'] ? -1 : 1;') !== false, 'Related guides must prioritise same-topic candidates.');
 $assert(strpos($renderer, 'data-topic="<?= $escapeGuide($guideTopic) ?>"') !== false, 'Article discovery nav must expose the current topic.');
 $assert(strpos($renderer, "['href' => 'jaisalmer-fort-guide.php'") === false, 'Related discovery must not regress to a hard-coded guide list.');
 if ($failures) {
