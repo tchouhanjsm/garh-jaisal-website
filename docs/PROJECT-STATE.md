@@ -206,3 +206,12 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Each route supplies three distinct contextual next steps. The component validates same-site PHP destinations, uses a labelled navigation landmark, and supplies concise link descriptions. Responsive card styling follows the existing conversion design layer and respects reduced-motion preferences.
 - Added a desktop Browser E2E contract for the 11 routes and refreshed the booking-guide sitemap lastmod to match its source revision.
 - This is a repository-local publication and journey improvement, not evidence of ranking gains or field Core Web Vitals. No public URL or booking destination changed; no merge, cPanel upload, staging deployment or production deployment was performed.
+
+
+## Sprints 246–260 — Sitewide planning paths and privacy-safe intent measurement
+
+- Expanded the shared planning-path pattern from the initial high-intent pages to all 37 currently published sitemap routes, including the shared experience and editorial renderers.
+- Centralized reviewed link labels, descriptions and destination paths in `include/planning-paths-data.php`. The renderer escapes copy, requires three distinct same-site PHP destinations and rejects self-links.
+- Added a `planning_path_click` GA4 intent event with the source path, planning-section title, CTA label, destination pathname and position. It deliberately excludes destination query strings and arbitrary form/query data; this measures navigation intent, not completed bookings.
+- Updated sitemap generation so the shared planning registry contributes to route freshness. Added sitemap-wide browser coverage, a conversion-event privacy check and PHP contract coverage for registry/sitemap parity.
+- The route-wide regression suite must pass on the exact head before the batch is considered validated. No booking destination or published URL changed. No merge, cPanel upload, staging deployment or production deployment was performed.

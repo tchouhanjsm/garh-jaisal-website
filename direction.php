@@ -390,18 +390,7 @@ $ctaBand = [
 require __DIR__ . '/include/ui/cta-band.php';
 ?>
 
-<?php
-$planningPath = [
-    'title' => 'Ready to plan your stay?',
-    'intro' => 'Use the arrival guide alongside room information and direct contact so practical details can be confirmed before travel.',
-    'links' => [
-        ['label' => 'Compare rooms', 'href' => 'room.php', 'description' => 'Review room features and current availability.'],
-        ['label' => 'Direct booking guide', 'href' => 'book-rooms-in-jaisalmer.php', 'description' => 'Understand the booking steps and what to confirm.'],
-        ['label' => 'Contact the hotel', 'href' => 'contact.php?topic=arrival', 'description' => 'Ask about arrival timing or assistance.'],
-    ],
-];
-require __DIR__ . '/include/ui/planning-path.php';
-?>
+<?php require __DIR__ . '/include/ui/planning-path.php'; ?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>

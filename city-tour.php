@@ -148,18 +148,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-<?php
-$planningPath = [
-    'title' => 'Plan the rest of your route',
-    'intro' => 'Use the Fort walk as one part of your stay, with arrival and itinerary details checked before you travel.',
-    'links' => [
-        ['label' => 'Guided Jaisalmer tours', 'href' => 'guided-jaisalmer-tour.php', 'description' => 'Compare half-day and full-day guided options.'],
-        ['label' => 'Arrival directions', 'href' => 'direction.php', 'description' => 'Read where vehicles stop and how to reach the haveli.'],
-        ['label' => 'Custom itinerary enquiry', 'href' => 'custom-itinerary.php', 'description' => 'Share your interests so the hotel can review possible arrangements.'],
-    ],
-];
-require __DIR__ . '/include/ui/planning-path.php';
-?>
+<?php require __DIR__ . '/include/ui/planning-path.php'; ?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>

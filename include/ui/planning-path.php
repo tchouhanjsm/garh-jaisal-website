@@ -1,12 +1,14 @@
 <?php
 /**
- * Render a contextual three-link planning path for a published route.
- *
- * The calling page supplies $planningPath with a title, intro and three
- * same-site PHP destinations. Links are validated and all output is escaped.
+ * Render the route-specific planning path from the shared reviewed registry.
+ * The component is included inside each public page's main landmark.
  */
-if (!isset($planningPath) || !is_array($planningPath)) {
-    throw new InvalidArgumentException('Planning path requires a configuration array.');
+$planningPathRegistry = require __DIR__ . '/../planning-paths-data.php';
+$planningPathRoute = isset($page['path']) && is_string($page['path']) ? $page['path'] : '';
+$planningPath = $planningPathRegistry[$planningPathRoute] ?? null;
+
+if (!is_array($planningPath)) {
+    return;
 }
 
 $planningPathTitle = trim((string) ($planningPath['title'] ?? ''));
@@ -21,6 +23,7 @@ $escapePlanningPath = static function ($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 };
 
+$seenPlanningHrefs = [];
 foreach ($planningPathLinks as $link) {
     if (!is_array($link)) {
         throw new InvalidArgumentException('Each planning path link must be an array.');
@@ -28,13 +31,13 @@ foreach ($planningPathLinks as $link) {
     $label = trim((string) ($link['label'] ?? ''));
     $href = trim((string) ($link['href'] ?? ''));
     $description = trim((string) ($link['description'] ?? ''));
-    if (
-        $label === ''
-        || $description === ''
-        || preg_match('/^[a-z0-9-]+\.php(?:\?[a-z0-9_=&%-]+)?$/iD', $href) !== 1
-    ) {
-        throw new InvalidArgumentException('Planning path links must have copy and a valid same-site PHP destination.');
+    if ($label === '' || $description === '' || preg_match('/^[a-z0-9-]+\.php$/iD', $href) !== 1) {
+        throw new InvalidArgumentException('Planning path links require copy and a same-site PHP destination.');
     }
+    if (in_array($href, $seenPlanningHrefs, true) || '/' . $href === $planningPathRoute) {
+        throw new InvalidArgumentException('Planning path destinations must be distinct and must not link to the current route.');
+    }
+    $seenPlanningHrefs[] = $href;
 }
 ?>
 <section class="planning-path section" aria-labelledby="planning-path-title">
@@ -46,7 +49,7 @@ foreach ($planningPathLinks as $link) {
     </div>
     <nav class="planning-path-grid" aria-label="Related planning pages">
       <?php foreach ($planningPathLinks as $index => $link): ?>
-        <a class="planning-path-card" href="<?= $escapePlanningPath(trim((string) $link['href'])) ?>">
+        <a class="planning-path-card" href="<?= $escapePlanningPath(trim((string) $link['href'])) ?>" data-planning-path-link data-planning-path-position="<?= (int) ($index + 1) ?>">
           <span class="planning-path-index" aria-hidden="true"><?= sprintf('%02d', $index + 1) ?></span>
           <span class="planning-path-copy">
             <strong><?= $escapePlanningPath(trim((string) $link['label'])) ?></strong>
@@ -58,3 +61,4 @@ foreach ($planningPathLinks as $link) {
     </nav>
   </div>
 </section>
+<?php unset($planningPathRegistry, $planningPathRoute, $planningPath, $planningPathTitle, $planningPathIntro, $planningPathLinks, $escapePlanningPath, $seenPlanningHrefs, $link, $label, $href, $description); ?>

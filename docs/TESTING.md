@@ -133,3 +133,11 @@ A role that is not directly affected still records a concrete double-check rathe
 - `tests/e2e/seo.spec.js` checks the contextual planning section on all 11 configured high-intent routes.
 - The contract expects one visible section, one heading, three distinct links and same-site PHP destinations; the shared renderer also validates and escapes the page-provided labels, descriptions and paths.
 - Review Browser E2E screenshots and failure diagnostics on the exact PR head. Passing local-route checks does not establish live Google indexing, ranking changes or production performance.
+
+
+## Sitewide planning-path and click-intent regression
+
+- `tests/php/conversion-copy-contract.php` checks exact sitemap/registry parity, three distinct existing same-site destinations per route and absence of self-links.
+- `tests/e2e/seo.spec.js` visits every committed sitemap route and validates the planning-section landmark, heading relationship, three ordered cards, non-empty copy and internal PHP links.
+- `tests/e2e/conversion-events.spec.js` verifies that a planning-card click records one `planning_path_click` event through the approved GA4 destinations. It checks source path, destination pathname, position and campaign attribution while asserting that arbitrary query/form values and link query strings are not sent.
+- The event describes an internal navigation click only; it must never be interpreted as a booking, successful enquiry or confirmed reservation.

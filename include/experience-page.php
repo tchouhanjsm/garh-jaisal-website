@@ -382,6 +382,7 @@ require __DIR__ . '/page-head.php';
       </div>
     </div>
   </section>
+<?php require __DIR__ . '/ui/planning-path.php'; ?>
 </main>
 
 <?php include __DIR__ . '/footer-v2.php'; ?>

@@ -275,6 +275,26 @@ document.addEventListener('DOMContentLoaded', () => {
       page_context: currentPageContext()
     }, attributionForCurrentPage());
 
+    const planningPathLink = anchor.closest('a[data-planning-path-link]');
+    if (
+      planningPathLink &&
+      destination.origin === window.location.origin &&
+      /^\/[a-z0-9-]+\.php$/i.test(destination.pathname)
+    ) {
+      const planningSection = planningPathLink.closest('.planning-path');
+      const planningHeading = planningSection?.querySelector('h2');
+      const requestedPosition = Number(planningPathLink.dataset.planningPathPosition);
+      const linkPosition = Number.isInteger(requestedPosition) && requestedPosition >= 1 && requestedPosition <= 3
+        ? requestedPosition
+        : 0;
+      trackIntentEvent('planning_path_click', Object.assign({}, eventContext, {
+        cta_label: labelForTrackedLink(planningPathLink, 'planning'),
+        destination_path: destination.pathname,
+        planning_path_title: (planningHeading?.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80),
+        link_position: linkPosition
+      }));
+    }
+
     if (
       bookingDestination &&
       destination.origin === bookingDestination.origin &&

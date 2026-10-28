@@ -352,6 +352,7 @@ require __DIR__ . '/page-head.php';
   ];
   require __DIR__ . '/ui/cta-band.php';
   ?>
+<?php require __DIR__ . '/ui/planning-path.php'; ?>
 </main>
 <?php include __DIR__ . '/footer-v2.php'; ?>
 <script src="js/garh-v2.js"></script>

@@ -155,6 +155,7 @@ $page['schema'][] = gj_schema_faq($faqItems, $canonical);
       <div class="actions"><a class="button button-secondary" href="guided-jaisalmer-tour.php">Guided city tours</a><a class="button button-secondary" href="desert-safari.php">Desert experiences</a><a class="button button-secondary" href="car-rental.php">Car arrangements</a></div>
     </div>
   </section>
+<?php require __DIR__ . '/include/ui/planning-path.php'; ?>
 </main>
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
 <script src="js/garh-v2.js"></script>

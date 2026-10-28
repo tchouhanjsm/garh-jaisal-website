@@ -142,6 +142,7 @@ require __DIR__ . '/include/page-head.php';
       ?>
     </div>
   </section>
+<?php require __DIR__ . '/include/ui/planning-path.php'; ?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
