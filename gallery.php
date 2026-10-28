@@ -8,10 +8,30 @@ $bookingUrl = $siteConfig['booking_url'];
 <?php
 $schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $schemaPageUrl = $schemaSiteUrl . '/gallery.php';
+
+// The hero media is full-bleed. Keep preload candidates and the rendered image's
+// sizes hint aligned so a 1280px slot does not download the smaller 45vw candidate.
+$galleryHeroSrcsetCandidates = [];
+foreach ([480, 800, 1200] as $galleryHeroWidth) {
+    $galleryHeroCandidate = '/img/responsive/v2/rooftop-dusk-' . $galleryHeroWidth . '.webp';
+    $galleryHeroCandidatePath = __DIR__ . $galleryHeroCandidate;
+    if (is_file($galleryHeroCandidatePath) && !is_link($galleryHeroCandidatePath)) {
+        $galleryHeroSrcsetCandidates[] = $galleryHeroCandidate . ' ' . $galleryHeroWidth . 'w';
+    }
+}
+$galleryHeroPreload = [
+    'href' => '/img/v2/rooftop-dusk.jpg',
+    'fetchpriority' => 'high',
+];
+if ($galleryHeroSrcsetCandidates) {
+    $galleryHeroPreload['imagesrcset'] = implode(', ', $galleryHeroSrcsetCandidates);
+    $galleryHeroPreload['imagesizes'] = '100vw';
+}
 $page = [
     'title' => 'Gallery | Garh Jaisal Haveli, Jaisalmer Fort',
     'description' => 'Explore photos of heritage rooms, the haveli, rooftop dining and desert experiences at Garh Jaisal Haveli inside Jaisalmer Fort, Jaisalmer.',
     'path' => '/gallery.php',
+    'preload' => [$galleryHeroPreload],
     'og_title' => 'Gallery | Garh Jaisal Haveli, Jaisalmer Fort',
     'og_description' => 'See the rooms, haveli, desert experiences and dining at Garh Jaisal Haveli.',
     'og_image' => '/img/s1.jpg',
@@ -58,7 +78,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="gallery-page" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo gallery-hero">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg', '(max-width: 760px) 100vw, 45vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
       <?php

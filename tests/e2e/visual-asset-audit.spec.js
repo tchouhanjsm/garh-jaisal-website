@@ -105,6 +105,64 @@ test.describe('Visual asset and typography evidence', () => {
       report.routes.push({ route: route.path, ...routeReport });
     }
 
+  test('Gallery hero selects a full-width responsive candidate and matches its preload', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== desktopProject, 'Gallery hero source-selection contract runs once at desktop width.');
+    await page.goto('/gallery.php', { waitUntil: 'domcontentloaded' });
+
+    const hero = page.locator('.page-hero-media img').first();
+    await expect(hero).toBeVisible();
+    await expect.poll(() => hero.evaluate((img) => img.complete && img.naturalWidth > 0)).toBe(true);
+
+    const state = await page.evaluate(() => {
+      const img = document.querySelector('.page-hero-media img');
+      const preload = document.querySelector('link[rel="preload"][as="image"][imagesrcset]');
+      return {
+        sizes: img?.getAttribute('sizes') || '',
+        srcset: img?.getAttribute('srcset') || '',
+        currentSrc: img?.currentSrc || '',
+        naturalWidth: img?.naturalWidth || 0,
+        renderedWidth: Math.round(img?.getBoundingClientRect().width || 0),
+        fetchPriority: img?.fetchPriority || '',
+        preloadSizes: preload?.getAttribute('imagesizes') || '',
+        preloadSrcset: preload?.getAttribute('imagesrcset') || '',
+      };
+    });
+
+    expect(state.sizes, 'A full-bleed Gallery hero must advertise the full viewport slot').toBe('100vw');
+    expect(state.srcset).toContain('rooftop-dusk-1200.webp 1200w');
+    expect(state.currentSrc).toMatch(/rooftop-dusk-1200\\.webp(?:[?#].*)?$/);
+    expect(state.naturalWidth).toBeGreaterThanOrEqual(1000);
+    expect(state.renderedWidth).toBeGreaterThan(1000);
+    expect(state.fetchPriority).toBe('high');
+    expect(state.preloadSizes).toBe('100vw');
+    expect(state.preloadSrcset).toContain('rooftop-dusk-1200.webp 1200w');
+    expect(state.preloadSrcset).toBe(state.srcset);
+  });
+
+  test('320px homepage facts use readable two-column hierarchy', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'mobile-320', 'Smallest-phone first-impression contract runs once at 320px.');
+    await page.goto('/index.php', { waitUntil: 'domcontentloaded' });
+
+    const layout = await page.locator('.home-hero-facts').evaluate((facts) => {
+      const style = getComputedStyle(facts);
+      const items = Array.from(facts.querySelectorAll('.at-a-glance__item'));
+      return {
+        columns: style.gridTemplateColumns.split(' ').length,
+        itemCount: items.length,
+        thirdColumnStart: items[2] ? getComputedStyle(items[2]).gridColumnStart : '',
+        minItemWidth: Math.min(...items.map((item) => item.getBoundingClientRect().width)),
+        viewport: document.documentElement.clientWidth,
+        document: document.documentElement.scrollWidth,
+      };
+    });
+
+    expect(layout.columns).toBe(2);
+    expect(layout.itemCount).toBe(3);
+    expect(layout.thirdColumnStart).toBe('1');
+    expect(layout.minItemWidth).toBeGreaterThan(100);
+    expect(layout.document).toBeLessThanOrEqual(layout.viewport + 1);
+  });
+
     const outputDir = path.join(process.cwd(), 'artifacts', 'image-accessibility');
     fs.mkdirSync(outputDir, { recursive: true });
     const outputPath = path.join(outputDir, 'visual-asset-audit-' + testInfo.project.name + '.json');

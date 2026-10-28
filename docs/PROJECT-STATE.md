@@ -39,6 +39,19 @@ PR #153 merged at `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8`. It keeps experienc
 - Preserve room IDs, the two-to-three-room limit, original photos/alt text, existing features and descriptions, booking-engine URL/token, room-specific Contact handoff, session-only Trip behavior, routes, metadata and schema.
 - Acceptance: exact-head PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. No cPanel upload or deployment.
 
+## Active phase — Sprints 131–140: Responsive hero delivery and mobile first impression (PR #157)
+
+- **Sprint 131 — image-slot truth:** compare the declared sizes slot to the actual rendered hero geometry.
+- **Sprint 132 — Gallery hero correction:** align the full-bleed hero sizing hint with its 100vw rendered slot so desktop does not select a smaller source.
+- **Sprint 133 — responsive hero preload:** preload the same srcset and sizes candidate set used by the Gallery hero, with high fetch priority.
+- **Sprint 134 — preload consistency:** assert that preload candidates and rendered image candidates match to avoid duplicate or mismatched requests.
+- **Sprint 135 — 320px facts hierarchy:** place Home quick facts in two balanced columns with the final item spanning the width on small phones.
+- **Sprint 136 — compact-phone readability:** verify minimum item width, touch-safe layout and no horizontal overflow at 320px.
+- **Sprint 137 — first-viewport asset contract:** fail browser testing if Gallery hero source selection regresses to the 45vw candidate or drops below expected width.
+- **Sprint 138 — image/accessibility regression:** retain alt-attribute, visible-image integrity and font readiness coverage across eight routes.
+- **Sprint 139 — evidence-led performance:** distinguish candidate review thresholds from hard budgets; do not degrade photo quality to win bytes blindly.
+- **Sprint 140 — release verification:** require exact-head PHP 7.4/8.2, Browser E2E, package preflight and non-deploying Staging QA. Human screenshot review remains required for final visual approval.
+
 ## Active phase — Sprints 121–130: Visual asset and typography evidence (PR #157)
 
 - **Sprint 121 — route image inventory:** inspect first-party and external image sources on high-intent pages.

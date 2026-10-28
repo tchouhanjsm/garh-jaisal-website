@@ -3246,3 +3246,37 @@ main.thar-sunset-story--rooms [hidden] {
   outline-offset:3px;
 }
 .trip-tray-contact[hidden]{display:none!important}
+
+
+/* Sprints 131–140 — first-impression fixes based on Browser E2E evidence.
+   The homepage quick-facts strip needs a two-column hierarchy on very small phones
+   instead of squeezing three labels and values into narrow equal-width columns. */
+@media (max-width: 380px) {
+  .hero .home-hero-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.375rem;
+    padding: 0.5rem;
+  }
+
+  .hero .home-hero-facts .at-a-glance__item {
+    min-width: 0;
+    padding: 0.25rem 0.375rem;
+  }
+
+  .hero .home-hero-facts .at-a-glance__item:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+
+  .hero .home-hero-facts .at-a-glance__label {
+    margin-block-end: 0.125rem;
+    font-size: 0.66rem;
+    line-height: 1.15;
+    letter-spacing: 0.02em;
+  }
+
+  .hero .home-hero-facts .at-a-glance__value {
+    font-size: 0.78rem;
+    line-height: 1.25;
+    overflow-wrap: normal;
+  }
+}
