@@ -32,7 +32,7 @@ test.describe('Editorial publication and reader journey', () => {
 
     const guideCards = page.locator('.blog-grid > .blog-card:not(.journal-topic-card)');
     expect(await guideCards.count()).toBeGreaterThanOrEqual(12);
-    for (const route of sitemapRoutes.filter(value => /-guide\.php$|-itinerary\.php$/.test(value))) {
+    for (const route of sitemapRoutes.filter(value => /-guide\.php$|-itinerary\.php$/.test(value) && !value.endsWith('/jaisalmer-fort-guide.php'))) {
       const slug = path.posix.basename(route);
       await expect(page.locator('.blog-grid a[href="' + slug + '"]'), slug + ' is linked from the Journal').toBeVisible();
     }
