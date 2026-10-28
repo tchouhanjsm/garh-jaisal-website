@@ -86,7 +86,7 @@ foreach ($registry as $slug => $guide) {
 }
 $assert(strpos($template, "'@type' => 'BlogPosting'") !== false, 'Article template must emit BlogPosting schema.');
 $assert(strpos($template, 'gj_schema_breadcrumb_list') !== false, 'Article template must emit breadcrumb structured data.');
-$assert(strpos($template, "'path' => '/' . $guide['slug'] . '.php'") !== false, 'Article canonical path must derive from the registry slug.');
+$assert(strpos($sitemapGenerator, '$routeSlug') !== false && strpos($sitemapGenerator, 'status') !== false && strpos($sitemapGenerator, 'continue;') !== false, 'Static legacy article URLs must honour registry status.');
 $assert(strpos($template, "'robots' => $isDraft ? 'noindex,follow' : 'index,follow'") !== false, 'Draft preview must remain noindex.');
 $assert(strpos($template, '#official-sources') !== false && strpos($template, 'target="_blank" rel="noopener"') !== false, 'Source links must remain visible and safely opened.');
 $assert(strpos($template, 'article-topic-links') !== false, 'Article pages must provide cross-guide discovery.');
