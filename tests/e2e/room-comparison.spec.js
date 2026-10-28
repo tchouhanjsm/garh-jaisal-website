@@ -30,7 +30,48 @@ test.describe('Room comparison journey', () => {
     await expect(dialog.locator('table')).toBeVisible();
     await expect(dialog.locator('thead th')).toHaveCount(3);
     await expect(dialog.locator('table')).toContainText(await firstCard.locator('h3').textContent());
-    await expect(dialog.locator('table')).toContainText('Listed features');
+    await expect(dialog.locator('table')).toContainText('Listed features by room');
+
+    const comparisonContent = dialog.locator('[data-room-comparison-content]');
+    await expect(comparisonContent).toHaveAttribute('role', 'region');
+    await expect(comparisonContent).toHaveAttribute('tabindex', '0');
+    await expect(comparisonContent).toHaveAccessibleName('Selected room comparison table');
+    await expect(dialog.locator('#room-comparison-scroll-hint')).toContainText('scroll the table horizontally');
+
+    const photoRow = dialog.locator('tbody tr').filter({ hasText: 'Room photo' });
+    await expect(photoRow).toHaveCount(1);
+    const comparisonPhotos = photoRow.locator('img.room-comparison-photo');
+    await expect(comparisonPhotos).toHaveCount(2);
+    const firstPhoto = firstCard.locator('.photo-carousel-slide img').first();
+    await expect(comparisonPhotos.nth(0)).toHaveAttribute('src', await firstPhoto.getAttribute('src'));
+    await expect(comparisonPhotos.nth(0)).toHaveAttribute('alt', await firstPhoto.getAttribute('alt'));
+    await expect(comparisonPhotos.nth(0)).toHaveAttribute('sizes', '150px');
+    await expect(comparisonPhotos.nth(1)).toHaveAttribute('sizes', '150px');
+
+    const allFeatureRows = dialog.locator('tr[data-room-feature-row]');
+    const differingFeatureRows = dialog.locator('tr[data-room-feature-row][data-room-feature-diff="true"]');
+    const equalFeatureRows = dialog.locator('tr[data-room-feature-row][data-room-feature-diff="false"]');
+    const allFeatureCount = await allFeatureRows.count();
+    const differingFeatureCount = await differingFeatureRows.count();
+    expect(allFeatureCount, 'Feature-by-feature matrix should render the listed room details').toBeGreaterThan(0);
+    expect(differingFeatureCount, 'These two rooms should expose actual listed-feature differences').toBeGreaterThan(0);
+    expect(allFeatureCount).toBeGreaterThan(differingFeatureCount);
+    await expect(equalFeatureRows.first()).toBeVisible();
+
+    const differenceControl = dialog.locator('[data-room-comparison-difference-control]');
+    const differenceToggle = dialog.locator('[data-room-comparison-differences]');
+    const differenceStatus = dialog.locator('[data-room-comparison-filter-status]');
+    await expect(differenceControl).toBeVisible();
+    await expect(differenceToggle).not.toBeChecked();
+    await differenceToggle.check();
+    await expect(differenceStatus).toBeVisible();
+    await expect(differenceStatus).toContainText('of ' + allFeatureCount + ' listed features');
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(differingFeatureCount);
+    await expect(dialog.locator('tr[data-room-feature-row][data-room-feature-diff="false"]:visible')).toHaveCount(0);
+    await differenceToggle.uncheck();
+    await expect(differenceStatus).toBeHidden();
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(allFeatureCount);
+
     const originalBookingHref = await firstCard.locator('.room-book').getAttribute('href');
     await expect(dialog.locator('a.room-comparison-availability').first()).toHaveAttribute('href', originalBookingHref);
     await expect(dialog.locator('[data-room-compare-remove]')).toHaveCount(2);
@@ -45,10 +86,33 @@ test.describe('Room comparison journey', () => {
     await openThree.click();
     await expect(dialog.locator('thead th')).toHaveCount(4);
 
+    // Sprint 77: test the filter with three rooms, then prove it recalculates
+    // when a room is removed while the filter remains enabled.
+    const threeRoomRows = dialog.locator('tr[data-room-feature-row]');
+    const threeRoomTotal = await threeRoomRows.count();
+    const threeRoomDiffCount = await dialog.locator('tr[data-room-feature-row][data-room-feature-diff="true"]').count();
+    expect(threeRoomTotal).toBeGreaterThan(0);
+    expect(threeRoomDiffCount).toBeGreaterThan(0);
+    await differenceToggle.check();
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(threeRoomDiffCount);
+
     const secondId = await secondCard.getAttribute('id');
-    await dialog.locator('[data-room-compare-remove="' + secondId + '"]').click();
+    const removeSecondRoom = dialog.locator('[data-room-compare-remove="' + secondId + '"]');
+    await removeSecondRoom.focus();
+    await removeSecondRoom.click();
     await expect(dialog.locator('thead th')).toHaveCount(3);
     await expect(dialog.locator('[data-room-compare-remove]')).toHaveCount(2);
+    await expect(dialog.locator('[data-room-compare-remove]').nth(1)).toBeFocused();
+
+    const remainingFeatureRows = dialog.locator('tr[data-room-feature-row]');
+    const remainingTotal = await remainingFeatureRows.count();
+    const remainingDiffCount = await dialog.locator('tr[data-room-feature-row][data-room-feature-diff="true"]').count();
+    expect(remainingTotal).toBeGreaterThan(0);
+    expect(remainingDiffCount).toBeGreaterThan(0);
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(remainingDiffCount);
+    await expect(differenceStatus).toContainText('of ' + remainingTotal + ' listed features');
+    await differenceToggle.uncheck();
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(remainingTotal);
 
     await dialog.locator('[data-room-comparison-clear]').click();
     await expect(dialog.locator('table')).toHaveCount(0);
@@ -56,6 +120,106 @@ test.describe('Room comparison journey', () => {
     await dialog.locator('[data-room-comparison-close]').first().click();
     await expect(page.locator('[data-room-result-status]')).toContainText('Showing 7 of 7 rooms.');
     await expect(page.locator('[data-room-result-status]')).not.toContainText('selected for comparison');
+  });
+
+  test('explains when selected rooms have no listed-feature differences', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-1280', 'Feature comparison edge case runs once on desktop.');
+
+    await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
+    const cards = page.locator('.rooms-page .room-card');
+    const first = cards.nth(0);
+    const second = cards.nth(1);
+
+    // Create a controlled same-feature fixture using the rendered first room's list.
+    const firstFeatureMarkup = await first.locator('.room-features').innerHTML();
+    await second.locator('.room-features').evaluate((element, markup) => {
+      element.innerHTML = markup;
+    }, firstFeatureMarkup);
+
+    await first.locator('[data-room-compare-toggle]').click();
+    await second.locator('[data-room-compare-toggle]').click();
+    await second.locator('[data-room-comparison-open]').click();
+
+    const dialog = page.locator('[data-room-comparison-dialog]');
+    const rows = dialog.locator('tr[data-room-feature-row]');
+    const toggle = dialog.locator('[data-room-comparison-differences]');
+    const status = dialog.locator('[data-room-comparison-filter-status]');
+    await expect(rows).not.toHaveCount(0);
+    await expect(dialog.locator('tr[data-room-feature-row][data-room-feature-diff="true"]')).toHaveCount(0);
+
+    await toggle.check();
+    await expect(status).toBeVisible();
+    await expect(status).toContainText('No listed feature differences found');
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(0);
+
+    await toggle.uncheck();
+    await expect(status).toBeHidden();
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(await rows.count());
+  });
+
+  test('keeps the selected-room shortlist available when filters hide room cards', async ({ page }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop-1280', 'Shortlist/filter continuity runs once on desktop.');
+
+    await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
+    const cards = page.locator('.rooms-page .room-card');
+    const first = cards.nth(0);
+    const second = cards.nth(1);
+
+    await first.locator('[data-room-compare-toggle]').click();
+    await second.locator('[data-room-compare-toggle]').click();
+
+    const shortlist = page.locator('[data-room-comparison-shortlist]');
+    const shortlistList = shortlist.locator('[data-room-comparison-shortlist-items]');
+    const shortlistItems = shortlistList.locator('li');
+    const review = shortlist.locator('[data-room-shortlist-review]');
+    await expect(shortlist).toBeVisible();
+    await expect(shortlistItems).toHaveCount(2);
+    await expect(review).toBeEnabled();
+    const revealSelectedRooms = shortlist.locator('[data-room-shortlist-reveal]');
+    await expect(revealSelectedRooms).toBeHidden();
+
+    await page.locator('[data-room-search]').fill('no-matching-room-query-9284');
+    await expect(page.locator('[data-room-result-status]')).toContainText('Showing 0 of 7 rooms.');
+    await expect(first).toBeHidden();
+    await expect(second).toBeHidden();
+    await expect(shortlist).toBeVisible();
+    await expect(shortlistList).toContainText(await first.locator('h3').textContent());
+    await expect(shortlistList).toContainText(await second.locator('h3').textContent());
+
+    await expect(revealSelectedRooms).toBeVisible();
+    await revealSelectedRooms.click();
+    await expect(page.locator('[data-room-result-status]')).toContainText('Showing 7 of 7 rooms.');
+    await expect(first).toBeVisible();
+    await expect(second).toBeVisible();
+    await expect(first.locator('[data-room-compare-toggle]')).toBeFocused();
+
+    await page.locator('[data-room-search]').fill('no-matching-room-query-9284');
+    await expect(first).toBeHidden();
+    await expect(second).toBeHidden();
+    await expect(revealSelectedRooms).toBeVisible();
+    await review.click();
+    const dialog = page.locator('[data-room-comparison-dialog]');
+    await expect(dialog).toBeVisible();
+    await expect(dialog.locator('thead th')).toHaveCount(3);
+    await expect(dialog.locator('table')).toContainText('Listed features by room');
+
+    await dialog.locator('[data-room-comparison-close]').first().click();
+    const roomSearch = page.locator('[data-room-search]');
+    await shortlist.locator('[data-room-shortlist-clear]').click();
+    await expect(shortlist).toBeHidden();
+    await expect(roomSearch).toBeFocused();
+
+    // The per-room removal path preserves focus as each shortlist item disappears.
+    await roomSearch.fill('');
+    await first.locator('[data-room-compare-toggle]').click();
+    await second.locator('[data-room-compare-toggle]').click();
+    const firstId = await first.getAttribute('id');
+    await shortlist.locator('[data-room-shortlist-remove="' + firstId + '"]').click();
+    await expect(shortlistItems).toHaveCount(1);
+    await expect(shortlistItems.locator('[data-room-shortlist-remove]')).toBeFocused();
+    await shortlistItems.locator('[data-room-shortlist-remove]').click();
+    await expect(shortlist).toBeHidden();
+    await expect(roomSearch).toBeFocused();
   });
 
   test('keeps the compare dialog inside the viewport from mobile through desktop widths', async ({ page }, testInfo) => {
@@ -71,6 +235,14 @@ test.describe('Room comparison journey', () => {
 
       const dialog = page.locator('[data-room-comparison-dialog]');
       await expect(dialog).toBeVisible();
+      const comparisonContent = dialog.locator('[data-room-comparison-content]');
+      await expect(comparisonContent).toHaveAttribute('tabindex', '0');
+      await comparisonContent.focus();
+      await expect(comparisonContent).toBeFocused();
+      if (width <= 390) {
+        const horizontalScrollAvailable = await comparisonContent.evaluate((element) => element.scrollWidth > element.clientWidth);
+        expect(horizontalScrollAvailable, 'Comparison columns should scroll inside the focused region at ' + width + 'px').toBe(true);
+      }
       const pageWidth = await page.evaluate(() => document.documentElement.scrollWidth);
       expect(pageWidth, 'The page must not overflow horizontally at ' + width + 'px').toBeLessThanOrEqual(width + 1);
       const bounds = await dialog.boundingBox();

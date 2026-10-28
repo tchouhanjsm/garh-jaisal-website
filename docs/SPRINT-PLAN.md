@@ -928,3 +928,63 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Add source-contract and Browser E2E coverage for all six live experience detail pages, link/target parity, visible sections and 320/390/768/1280/1440px no-overflow.
 - Preserve all registry content, image/alt values, schema, canonical URLs, WhatsApp/Trip-shortlist actions and prices-on-request. Do not fabricate missing operational facts or publish draft/hidden experiences.
 - Acceptance: PR #143 must be retargeted to `main` only after PR #141 merges, then pass exact-head PHP 7.4/8.2 checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA.
+
+
+## Sprint 75 — photo-led, keyboard-accessible room comparison (PR #154)
+
+**Commercial goal:** reduce the visual memory burden in room comparison and make the mobile comparison table usable without a pointer.
+
+- Reuse each selected room card's curated first photo inside the side-by-side comparison matrix, including existing alt text and responsive candidate set; size thumbnails for the narrow comparison column.
+- Give the horizontal table container a visible keyboard focus state, a focusable region role/name, and a concise mobile scroll hint.
+- Keep the existing comparison cap (three rooms), feature data, room-specific enquiries, Contact shortlist token, Trip integration, booking URL/token, public routes, metadata and facts unchanged.
+- Add regression coverage for image identity/alt parity, the comparison region's accessible semantics, inner horizontal scrolling at 320/390px without page overflow, and established room-to-Trip/Contact handoffs.
+- Acceptance: exact-head PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. No local browser/PHP execution is claimed unless actually run.
+- No cPanel upload, staging deployment or production release.
+
+
+## Sprint 76 — feature-by-feature room comparison matrix (included in PR #154)
+
+**Commercial goal:** help guests scan room differences without having to remember separate bullet lists for each room.
+
+- Render the union of the selected rooms’ existing listed features as one feature per row.
+- Label each room cell “Listed” or “Not listed”, and preserve the distinction between a published fact and an unlisted detail.
+- Keep source data, photo row, description/floor rows, current booking-engine links, comparison cap and Contact/Trip integrations unchanged.
+- Add browser assertions for row/column behavior and keep the existing responsive and accessibility gates.
+
+## Sprint 77 — difference-only room view (included in PR #154)
+
+**Commercial goal:** reduce comparison effort by letting guests hide feature rows that do not help distinguish their chosen rooms.
+
+- Add a labelled, keyboard-operable “Show differences only” checkbox; it filters only the feature rows and does not hide photos, floor/description or next-step actions.
+- Compute row differences from the current selected room cards and recalculate whenever selection changes.
+- Announce the visible differing-row count, and communicate when no listed feature differences exist; “Not listed” is not rewritten as “does not have”.
+- Add E2E coverage for two- and three-room comparisons, filter on/off, recalculation after a selected room is removed, the no-difference edge case, visible-row counts and preservation of current booking, Contact and Trip behavior.
+- Exact-head acceptance: PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. No deployment.
+
+## Sprint 78 — filter-proof room shortlist (included in PR #154)
+
+**Commercial goal:** prevent the selected-room decision path from disappearing when a guest narrows the room directory.
+
+- Add a compact shortlist with selected room names, per-room removal, compare and clear actions.
+- Keep the shortlist visible while search/floor/feature filters hide selected room cards; comparison uses the selected items, not just currently visible results.
+- Preserve active filters when closing or clearing the shortlist. Do not change room data, booking targets or published claims.
+- Add browser coverage for selecting two rooms, filtering to zero results and reopening the comparison from the shortlist.
+
+## Sprint 79 — keyboard focus continuity (included in PR #154)
+
+**Accessibility goal:** keep keyboard and assistive-technology users oriented when comparison content is rebuilt after an edit.
+
+- Restore focus to the next available remove action after a room is removed from the comparison table; fall back to the focusable comparison region if no remove action remains.
+- Return focus to room search when clearing the external shortlist hides its action controls.
+- Verify focus restoration alongside existing matrix, booking, Contact, Trip, responsive-width and filter-hidden shortlist tests.
+- Acceptance remains exact-head PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA; no deployment.
+
+## Sprint 80 — restore selected rooms to the directory (included in PR #154)
+
+**Commercial goal:** let guests move between the selected shortlist and its original position in the room directory.
+
+- Show a contextual “Show selected rooms” action only while selected cards are hidden by active search, floor or feature filters.
+- Reset the active filters only when requested; preserve the selected room IDs and comparison shortlist.
+- Return keyboard focus to the first selected room's compare control after revealing the cards.
+- Add Browser E2E coverage for zero-result filtering, shortlist persistence, restoring cards and reopening the comparison.
+- No changes to room facts, booking targets, public routes, schema or deployment.

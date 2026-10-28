@@ -437,6 +437,88 @@ main.thar-sunset-story--rooms .room-finder-status{
   font-size:.88rem;
   font-weight:750;
 }
+main.thar-sunset-story--rooms .room-comparison-shortlist[hidden],
+main.thar-sunset-story--rooms [data-room-shortlist-reveal][hidden]{display:none!important}
+main.thar-sunset-story--rooms .room-comparison-shortlist{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:16px 24px;
+  margin-top:14px;
+  padding:18px;
+  border:1px solid rgba(91,26,43,.22);
+  border-inline-start:4px solid #5b1a2b;
+  border-radius:6px;
+  background:#fffdfa;
+}
+main.thar-sunset-story--rooms .room-comparison-shortlist-copy .eyebrow{
+  margin:0 0 3px;
+  color:#795348;
+}
+main.thar-sunset-story--rooms .room-comparison-shortlist h4{
+  margin:0;
+  color:#291c18;
+  font-size:1.12rem;
+}
+main.thar-sunset-story--rooms .room-comparison-shortlist-copy > p:not(.eyebrow){
+  margin:5px 0 0;
+  color:#62574e;
+  font-size:.88rem;
+  line-height:1.5;
+}
+main.thar-sunset-story--rooms .room-comparison-shortlist ul{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:10px 0 0;
+  padding:0;
+  list-style:none;
+}
+main.thar-sunset-story--rooms .room-comparison-shortlist li{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  max-width:100%;
+  padding:6px 8px 6px 11px;
+  border:1px solid rgba(91,26,43,.16);
+  border-radius:4px;
+  background:#f7efe0;
+  color:#291c18;
+  font-size:.88rem;
+}
+main.thar-sunset-story--rooms .room-comparison-shortlist-remove{
+  min-height:32px;
+  padding:4px 5px;
+  border:0;
+  background:transparent;
+  color:#5b1a2b;
+  font:inherit;
+  font-weight:750;
+  text-decoration:underline;
+  text-underline-offset:3px;
+  cursor:pointer;
+}
+main.thar-sunset-story--rooms .room-comparison-shortlist-actions{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:flex-end;
+  gap:9px;
+}
+main.thar-sunset-story--rooms .room-comparison-shortlist-actions button{
+  min-height:44px;
+}
+main.thar-sunset-story--rooms .room-comparison-shortlist-actions [disabled]{
+  cursor:not-allowed;
+  opacity:.55;
+}
+main.thar-sunset-story--rooms .room-comparison-shortlist-review:focus-visible,
+main.thar-sunset-story--rooms .room-comparison-shortlist-remove:focus-visible,
+main.thar-sunset-story--rooms [data-room-shortlist-reveal]:focus-visible,
+main.thar-sunset-story--rooms [data-room-shortlist-clear]:focus-visible{
+  outline:3px solid #b67b1b;
+  outline-offset:3px;
+}
 main.thar-sunset-story--rooms .room-finder-empty{
   display:flex;
   flex-wrap:wrap;
@@ -473,6 +555,16 @@ main.thar-sunset-story--rooms .room-finder-empty p{
   }
   main.thar-sunset-story--rooms .room-finder-intro h3{
     font-size:1.55rem;
+  }
+  main.thar-sunset-story--rooms .room-comparison-shortlist{
+    grid-template-columns:minmax(0,1fr);
+    padding:15px;
+  }
+  main.thar-sunset-story--rooms .room-comparison-shortlist-actions{
+    justify-content:flex-start;
+  }
+  main.thar-sunset-story--rooms .room-comparison-shortlist-actions button{
+    width:100%;
   }
   main.thar-sunset-story--rooms .room-finder-controls{
     margin-top:18px;
@@ -730,6 +822,55 @@ dialog.room-comparison-dialog::backdrop{
   outline:3px solid var(--focus,#1d4ed8);
   outline-offset:3px;
 }
+.room-comparison-tools{margin:8px 0 2px}
+.room-comparison-difference-control{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  min-height:44px;
+  padding:7px 10px 7px 2px;
+  color:var(--ink,#231a14);
+  font-weight:700;
+  line-height:1.4;
+  cursor:pointer;
+}
+.room-comparison-difference-control[hidden],
+.room-comparison-filter-status[hidden]{display:none!important}
+.room-comparison-difference-control input{
+  width:20px;
+  height:20px;
+  margin:0;
+  accent-color:var(--garnet,#5b1a2b);
+  flex:0 0 20px;
+}
+.room-comparison-difference-control:focus-within{
+  outline:3px solid var(--focus,#1d4ed8);
+  outline-offset:2px;
+}
+.room-comparison-filter-status{
+  margin:2px 0 10px;
+  color:#5f5148;
+  font-size:.88rem;
+  line-height:1.5;
+}
+.room-comparison-scroll-hint{
+  margin:10px 0 12px;
+  color:#5f5148;
+  font-size:.86rem;
+  line-height:1.5;
+}
+.room-comparison-photo{
+  display:block;
+  width:100%;
+  max-width:160px;
+  height:auto;
+  aspect-ratio:4 / 3;
+  object-fit:cover;
+  object-position:center;
+  border:1px solid rgba(91,26,43,.16);
+  border-radius:4px;
+  background:var(--parchment,#f7efe0);
+}
 .room-comparison-table{
   width:100%;
   min-width:650px;
@@ -762,6 +903,17 @@ dialog.room-comparison-dialog::backdrop{
 .room-comparison-table tbody th{
   min-width:115px;
 }
+.room-comparison-feature-state{
+  display:inline-flex;
+  align-items:center;
+  min-height:28px;
+  font-size:.88rem;
+  font-weight:750;
+  line-height:1.35;
+}
+.room-comparison-feature-state--listed{color:#1f643e}
+.room-comparison-feature-state--unlisted{color:#5f5148}
+.room-comparison-table tr[hidden]{display:none}
 .room-comparison-feature-list{
   margin:0;
   padding-left:18px;

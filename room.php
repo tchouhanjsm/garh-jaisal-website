@@ -248,6 +248,19 @@ require __DIR__ . '/include/page-head.php';
       </div>
 
       <p class="room-finder-status" data-room-result-status role="status" aria-live="polite"><?= $roomCount ?> rooms to explore.</p>
+      <section class="room-comparison-shortlist" data-room-comparison-shortlist hidden aria-labelledby="room-shortlist-heading">
+        <div class="room-comparison-shortlist-copy">
+          <p class="eyebrow">Your room shortlist</p>
+          <h4 id="room-shortlist-heading">Selected rooms</h4>
+          <p data-room-comparison-shortlist-status role="status" aria-live="polite">Choose rooms to start your shortlist.</p>
+          <ul data-room-comparison-shortlist-items></ul>
+        </div>
+        <div class="room-comparison-shortlist-actions">
+          <button class="button button-primary room-comparison-shortlist-review" type="button" data-room-shortlist-review disabled>Compare selected rooms (0/2)</button>
+          <button class="room-finder-reset" type="button" data-room-shortlist-reveal hidden>Show selected rooms</button>
+          <button class="room-finder-reset" type="button" data-room-shortlist-clear>Clear shortlist</button>
+        </div>
+      </section>
       <div class="room-finder-empty" data-room-empty hidden>
         <p><strong>No rooms match those filters.</strong> Adjust the search or clear the filters to see all rooms.</p>
         <button class="room-finder-reset" type="button" data-room-reset>Clear filters</button>
@@ -391,7 +404,15 @@ require __DIR__ . '/include/page-head.php';
         <button class="room-comparison-close" type="button" data-room-comparison-close aria-label="Close room comparison">Close</button>
       </header>
       <p class="room-comparison-status" data-room-comparison-status role="status" aria-live="polite">Choose two or three rooms from the directory to compare.</p>
-      <div class="room-comparison-content" data-room-comparison-content></div>
+      <div class="room-comparison-tools">
+        <label class="room-comparison-difference-control" data-room-comparison-difference-control hidden>
+          <input type="checkbox" data-room-comparison-differences aria-controls="room-comparison-content">
+          <span>Show differences only</span>
+        </label>
+        <p class="room-comparison-filter-status" data-room-comparison-filter-status role="status" aria-live="polite" hidden></p>
+      </div>
+      <p class="room-comparison-scroll-hint" id="room-comparison-scroll-hint">On narrow screens, scroll the table horizontally to compare each room column.</p>
+      <div id="room-comparison-content" class="room-comparison-content" data-room-comparison-content tabindex="0" role="region" aria-label="Selected room comparison table" aria-describedby="room-comparison-scroll-hint"></div>
       <footer class="room-comparison-footer">
         <a class="room-comparison-enquiry" data-room-comparison-enquiry href="contact.php" hidden>Ask about selected rooms</a>
         <button class="room-comparison-trip" type="button" data-room-comparison-trip hidden>Add room options to Trip</button>
