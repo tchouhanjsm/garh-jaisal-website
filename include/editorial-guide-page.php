@@ -231,6 +231,23 @@ require __DIR__ . '/page-head.php';
     </div>
   </section>
 
+  <section class="section article-related-discovery" data-story-reveal aria-labelledby="journal-discovery-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div><p class="eyebrow">From the journal</p><h2 id="journal-discovery-title">Keep exploring Jaisalmer.</h2></div>
+        <p>Follow the question you still have, from arriving inside the Fort to choosing a season or shaping time beyond the city.</p>
+      </div>
+      <nav class="article-topic-links" aria-label="More Jaisalmer travel guides">
+        <a href="jaisalmer-fort-guide.php">Jaisalmer Fort and its living lanes</a>
+        <a href="how-to-reach-jaisalmer.php">How to reach Jaisalmer</a>
+        <a href="best-time-to-visit-jaisalmer.php">Choose a season for your visit</a>
+        <a href="jaisalmer-2-day-itinerary.php">Plan two days in Jaisalmer</a>
+        <a href="jaisalmer-3-day-itinerary.php">Make room for a third day</a>
+        <a href="jaisalmer-food-guide.php">Explore regional food thoughtfully</a>
+      </nav>
+    </div>
+  </section>
+
   <?php
   $ctaBand = [
       'section_class' => 'section article-footer-cta',
