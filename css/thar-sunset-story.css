@@ -1081,3 +1081,18 @@ dialog.room-comparison-dialog::backdrop{
   }
 }
 
+
+/* Sprint 151 — honor reduced-motion preferences for homepage discovery cards.
+   Preserve hover affordances through color and border changes without translating
+   cards when the visitor has requested reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  main.thar-sunset-story--home .home-room-card,
+  main.thar-sunset-story--home .home-experiences .card {
+    transition: none !important;
+  }
+
+  main.thar-sunset-story--home .home-room-card:hover,
+  main.thar-sunset-story--home .home-experiences .card:hover {
+    transform: none !important;
+  }
+}
