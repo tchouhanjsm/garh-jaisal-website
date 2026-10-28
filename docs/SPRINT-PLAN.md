@@ -958,5 +958,5 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Add a labelled, keyboard-operable “Show differences only” checkbox; it filters only the feature rows and does not hide photos, floor/description or next-step actions.
 - Compute row differences from the current selected room cards and recalculate whenever selection changes.
 - Announce the visible differing-row count, and communicate when no listed feature differences exist; “Not listed” is not rewritten as “does not have”.
-- Add E2E coverage for filter on/off, visible-row counts and preservation of current booking, Contact and Trip behavior.
+- Add E2E coverage for two- and three-room comparisons, filter on/off, recalculation after a selected room is removed, visible-row counts and preservation of current booking, Contact and Trip behavior.
 - Exact-head acceptance: PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA. No deployment.

@@ -78,4 +78,4 @@ Regression coverage verifies action count and destination parity on the live exp
 
 - Add an accessible checkbox that filters only feature rows whose listed status differs across the selected rooms.
 - Keep non-feature rows and all existing actions in view; the live status announces the number of differing feature rows and clearly handles the no-difference case.
-- Add E2E tests for expected matrix state, checked/unchecked filtering, row visibility and the existing booking/Contact/Trip flows.
+- Add E2E tests for two- and three-room matrix states, filter on/off, recalculation when a selected room is removed, row visibility and the existing booking/Contact/Trip flows.

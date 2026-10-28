@@ -86,10 +86,30 @@ test.describe('Room comparison journey', () => {
     await openThree.click();
     await expect(dialog.locator('thead th')).toHaveCount(4);
 
+    // Sprint 77: test the filter with three rooms, then prove it recalculates
+    // when a room is removed while the filter remains enabled.
+    const threeRoomRows = dialog.locator('tr[data-room-feature-row]');
+    const threeRoomTotal = await threeRoomRows.count();
+    const threeRoomDiffCount = await dialog.locator('tr[data-room-feature-row][data-room-feature-diff="true"]').count();
+    expect(threeRoomTotal).toBeGreaterThan(0);
+    expect(threeRoomDiffCount).toBeGreaterThan(0);
+    await differenceToggle.check();
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(threeRoomDiffCount);
+
     const secondId = await secondCard.getAttribute('id');
     await dialog.locator('[data-room-compare-remove="' + secondId + '"]').click();
     await expect(dialog.locator('thead th')).toHaveCount(3);
     await expect(dialog.locator('[data-room-compare-remove]')).toHaveCount(2);
+
+    const remainingFeatureRows = dialog.locator('tr[data-room-feature-row]');
+    const remainingTotal = await remainingFeatureRows.count();
+    const remainingDiffCount = await dialog.locator('tr[data-room-feature-row][data-room-feature-diff="true"]').count();
+    expect(remainingTotal).toBeGreaterThan(0);
+    expect(remainingDiffCount).toBeGreaterThan(0);
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(remainingDiffCount);
+    await expect(differenceStatus).toContainText('of ' + remainingTotal + ' listed features');
+    await differenceToggle.uncheck();
+    await expect(dialog.locator('tr[data-room-feature-row]:visible')).toHaveCount(remainingTotal);
 
     await dialog.locator('[data-room-comparison-clear]').click();
     await expect(dialog.locator('table')).toHaveCount(0);
