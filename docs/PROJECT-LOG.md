@@ -7,7 +7,7 @@
 | Item | Value |
 |---|---|
 | Verified main SHA | `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8` — PR #153 merged |
-| Active implementation | Sprints 75–79 — room comparison decision support |
+| Active implementation | Sprints 75–80 — room comparison decision support |
 | Scope | Add room photos, an aligned feature matrix, difference filtering, a filter-proof shortlist and keyboard focus continuity; preserve booking and enquiry destinations |
 | Release boundary | Owner retains merge and release approval; no cPanel upload or staging/production deployment |
 | Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394006) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393565) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393646) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394143) — all passed on that SHA |
@@ -91,3 +91,9 @@ Regression coverage verifies action count and destination parity on the live exp
 - Restore keyboard focus to the next sensible room-removal control after a row-driven removal rebuilds the matrix.
 - Keep focus usable when the last in-dialog removal clears the feature table; after clearing the directory shortlist, return focus to room search.
 - Add E2E assertions for focus restoration and the filter-hidden shortlist journey.
+
+### Sprint 80 — restore selected rooms to the directory (included in PR #154)
+
+- Show a contextual “Show selected rooms” action only while selected cards are hidden by active directory filters.
+- Clear search, floor and feature filters only when the guest activates that action, reveal the selected cards and focus the first selected room's compare control.
+- Verify this differs from clearing the shortlist: selected room choices remain intact.

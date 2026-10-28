@@ -257,6 +257,7 @@ require __DIR__ . '/include/page-head.php';
         </div>
         <div class="room-comparison-shortlist-actions">
           <button class="button button-primary room-comparison-shortlist-review" type="button" data-room-shortlist-review disabled>Compare selected rooms (0/2)</button>
+          <button class="room-finder-reset" type="button" data-room-shortlist-reveal hidden>Show selected rooms</button>
           <button class="room-finder-reset" type="button" data-room-shortlist-clear>Clear shortlist</button>
         </div>
       </section>

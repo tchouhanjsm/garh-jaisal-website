@@ -184,6 +184,18 @@ test.describe('Room comparison journey', () => {
     await expect(shortlistList).toContainText(await first.locator('h3').textContent());
     await expect(shortlistList).toContainText(await second.locator('h3').textContent());
 
+    const revealSelectedRooms = shortlist.locator('[data-room-shortlist-reveal]');
+    await expect(revealSelectedRooms).toBeVisible();
+    await revealSelectedRooms.click();
+    await expect(page.locator('[data-room-result-status]')).toContainText('Showing 7 of 7 rooms.');
+    await expect(first).toBeVisible();
+    await expect(second).toBeVisible();
+    await expect(first.locator('[data-room-compare-toggle]')).toBeFocused();
+
+    await page.locator('[data-room-search]').fill('no-matching-room-query-9284');
+    await expect(first).toBeHidden();
+    await expect(second).toBeHidden();
+    await expect(revealSelectedRooms).toBeVisible();
     await review.click();
     const dialog = page.locator('[data-room-comparison-dialog]');
     await expect(dialog).toBeVisible();

@@ -513,6 +513,7 @@ main.thar-sunset-story--rooms .room-comparison-shortlist-actions [disabled]{
 }
 main.thar-sunset-story--rooms .room-comparison-shortlist-review:focus-visible,
 main.thar-sunset-story--rooms .room-comparison-shortlist-remove:focus-visible,
+main.thar-sunset-story--rooms [data-room-shortlist-reveal]:focus-visible,
 main.thar-sunset-story--rooms [data-room-shortlist-clear]:focus-visible{
   outline:3px solid #b67b1b;
   outline-offset:3px;

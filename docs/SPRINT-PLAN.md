@@ -978,3 +978,13 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Return focus to room search when clearing the external shortlist hides its action controls.
 - Verify focus restoration alongside existing matrix, booking, Contact, Trip, responsive-width and filter-hidden shortlist tests.
 - Acceptance remains exact-head PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA; no deployment.
+
+## Sprint 80 — restore selected rooms to the directory (included in PR #154)
+
+**Commercial goal:** let guests move between the selected shortlist and its original position in the room directory.
+
+- Show a contextual “Show selected rooms” action only while selected cards are hidden by active search, floor or feature filters.
+- Reset the active filters only when requested; preserve the selected room IDs and comparison shortlist.
+- Return keyboard focus to the first selected room's compare control after revealing the cards.
+- Add Browser E2E coverage for zero-result filtering, shortlist persistence, restoring cards and reopening the comparison.
+- No changes to room facts, booking targets, public routes, schema or deployment.

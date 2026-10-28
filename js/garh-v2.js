@@ -539,6 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const comparisonShortlistStatus = roomFinder.querySelector('[data-room-comparison-shortlist-status]');
     const comparisonShortlistItems = roomFinder.querySelector('[data-room-comparison-shortlist-items]');
     const comparisonShortlistReview = roomFinder.querySelector('[data-room-shortlist-review]');
+    const comparisonShortlistReveal = roomFinder.querySelector('[data-room-shortlist-reveal]');
     const comparisonShortlistClear = roomFinder.querySelector('[data-room-shortlist-clear]');
     const comparisonDialog = document.querySelector('[data-room-comparison-dialog]');
     const comparisonStatus = comparisonDialog?.querySelector('[data-room-comparison-status]');
@@ -578,6 +579,9 @@ document.addEventListener('DOMContentLoaded', () => {
         item.append(name, remove);
         comparisonShortlistItems.appendChild(item);
       });
+
+      const hiddenSelection = selectedCards.some((card) => card.hidden);
+      if (comparisonShortlistReveal) comparisonShortlistReveal.hidden = !hiddenSelection;
 
       if (comparisonShortlistStatus) {
         comparisonShortlistStatus.textContent = selectedCards.length === 1
@@ -949,6 +953,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedRoomIds.size < 2 || !comparisonDialog || comparisonDialog.open) return;
         renderComparison();
         comparisonDialog.showModal();
+      });
+      comparisonShortlistReveal?.addEventListener('click', () => {
+        if (!selectedRoomIds.size) return;
+        resetRoomFilters();
+        const firstSelectedCard = selectedRoomCards()[0];
+        firstSelectedCard?.querySelector('[data-room-compare-toggle]')?.focus();
       });
       comparisonShortlistClear?.addEventListener('click', () => {
         selectedRoomIds.clear();
