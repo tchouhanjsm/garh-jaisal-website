@@ -79,4 +79,5 @@ A role that is not directly affected still records a concrete double-check rathe
 - The Gallery photo hero is full-bleed. Its image sizes attribute must describe 100vw, and its high-priority preload must use the same imagesrcset and imagesizes values as the rendered image.
 - At desktop width, the Gallery hero test asserts that the largest supported responsive candidate is selected and loaded. This guards against a successful page request with an undersized source stretched across a full-width hero.
 - At 320px, the Home quick-facts strip uses two columns, with the third fact spanning both columns. Browser checks verify readable item widths and no document overflow.
+- The primary Home hero eyebrow has a 13px minimum at all configured viewport widths; the strict assertion targets `.hero-content > .eyebrow` so later section labels cannot satisfy it accidentally.
 - Preserve the original approved photographs. Change resolution/candidate selection only when browser evidence shows the declared slot and selected resource disagree.
