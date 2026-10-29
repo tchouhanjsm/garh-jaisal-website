@@ -17,10 +17,14 @@ function getSitemapRoutes() {
 const routes = getSitemapRoutes();
 const REVIEW_THRESHOLD_BYTES = 250 * 1024;
 const ROOT = path.resolve(__dirname, "../..");
-const ENFORCED_RESPONSIVE_VARIANT_BUDGETS = [
-  { path: "img/responsive/v2/facade-1200.webp", maxBytes: 275 * 1024 },
-  { path: "img/responsive/v2/courtyard-1200.webp", maxBytes: 275 * 1024 }
-];
+const RESPONSIVE_IMAGE_MANIFEST = JSON.parse(
+  fs.readFileSync(path.join(ROOT, "scripts/responsive-image-assets-manifest.json"), "utf8")
+);
+const ENFORCED_RESPONSIVE_VARIANT_BUDGETS = Object.entries(
+  RESPONSIVE_IMAGE_MANIFEST.variant_max_bytes || {}
+).map(([path, maxBytes]) => ({ path, maxBytes }));
+const responsiveBudgetFor = (candidatePath) =>
+  RESPONSIVE_IMAGE_MANIFEST.variant_max_bytes?.[candidatePath];
 
 test('home and rooftop photo slots reserve dimensions and match their layouts', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Rooftop image-slot contract runs once.');
@@ -44,8 +48,8 @@ test('Directions LCP hero matches its preload and selects width-appropriate cand
   test.skip(testInfo.project.name !== 'desktop-1280', 'Directions hero selection runs once with controlled mobile/desktop viewports.');
   test.setTimeout(45_000);
   const cases = [
-    { viewport: { width: 390, height: 844 }, file: 'img/responsive/v2/courtyard-480.webp', maxBytes: 75 * 1024 },
-    { viewport: { width: 1280, height: 800 }, file: 'img/responsive/v2/courtyard-1200.webp', maxBytes: 275 * 1024 },
+    { viewport: { width: 390, height: 844 }, file: 'img/responsive/v2/courtyard-480.webp', maxBytes: responsiveBudgetFor('img/responsive/v2/courtyard-480.webp') },
+    { viewport: { width: 1280, height: 800 }, file: 'img/responsive/v2/courtyard-1200.webp', maxBytes: responsiveBudgetFor('img/responsive/v2/courtyard-1200.webp') },
   ];
   for (const item of cases) {
     const context = await browser.newContext({baseURL: BASE_URL, viewport: item.viewport, deviceScaleFactor: 1});
@@ -84,6 +88,7 @@ test('Directions LCP hero matches its preload and selects width-appropriate cand
       expect(Math.abs(state.naturalWidth / state.naturalHeight - 1333 / 2000)).toBeLessThanOrEqual(0.01);
       const normalizeSrcset = value => value.split(',').map(candidate => candidate.trim().replace(/^\/+/, '')).join(', ');
       expect(normalizeSrcset(state.preloadSrcset)).toBe(normalizeSrcset(state.srcset));
+      expect(item.maxBytes, item.file + ' must have a manifest-owned byte budget').toBeGreaterThan(0);
       const bytes = fs.statSync(path.join(ROOT, item.file)).size;
       expect(bytes, item.file + ' should stay under its viewport-specific transfer budget').toBeLessThanOrEqual(item.maxBytes);
     } finally {
@@ -100,8 +105,9 @@ test('write deduplicated image payload audit for sitemap routes', async ({ brows
     const absolutePath = path.join(ROOT, budget.path);
     expect(fs.existsSync(absolutePath), `${budget.path} should be generated for the audit`).toBe(true);
     const bytes = fs.statSync(absolutePath).size;
+    expect(budget.maxBytes, `${budget.path} must have a positive manifest-owned budget`).toBeGreaterThan(0);
     expect(bytes, `${budget.path} should stay within its ${Math.round(budget.maxBytes / 1024)} KiB transfer budget`).toBeLessThanOrEqual(budget.maxBytes);
-    return { ...budget, bytes, status: 'pass' };
+    return { ...budget, bytes, headroomBytes: budget.maxBytes - bytes, status: 'pass' };
   });
 
   const context = await browser.newContext({
@@ -230,6 +236,7 @@ test('write deduplicated image payload audit for sitemap routes', async ({ brows
     source: 'local PHP site rendered by Playwright in Chromium; not production measurements',
     viewport: { width: 1280, height: 800 },
     enforcedVariantBudgets,
+    enforcedVariantBudgetHeadroomBytes: enforcedVariantBudgets.reduce((sum, item) => sum + item.headroomBytes, 0),
     summary,
     images,
   }, null, 2) + '\n');

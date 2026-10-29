@@ -107,7 +107,7 @@ def get_generated_responsive_paths(root: Path = ROOT) -> list[str]:
     """Select manifest-approved responsive variants; reject unlisted files and symlinks."""
     manifest_path = root / "scripts" / "responsive-image-assets-manifest.json"
     output_root = root / "img" / "responsive"
-    if not manifest_path.is_file():
+    if not manifest_path.is_file() or manifest_path.is_symlink():
         raise PackageError("Responsive image asset manifest is missing.")
     if not output_root.exists():
         return []
@@ -142,7 +142,17 @@ def get_generated_responsive_paths(root: Path = ROOT) -> list[str]:
             )
             allowed.add(generated.as_posix())
 
+    variant_max_bytes = manifest.get("variant_max_bytes", {})
+    if not isinstance(variant_max_bytes, dict):
+        raise PackageError("Responsive image byte budgets must be a candidate-path-to-byte-limit object.")
+    for relative, maximum in variant_max_bytes.items():
+        if not isinstance(relative, str) or relative not in allowed:
+            raise PackageError("Responsive image byte budget targets an unlisted candidate: " + str(relative))
+        if isinstance(maximum, bool) or not isinstance(maximum, int) or maximum < 1:
+            raise PackageError("Responsive image byte budget must be a positive integer: " + relative)
+
     actual: list[str] = []
+    actual_bytes: dict[str, int] = {}
     for item in output_root.rglob("*"):
         if item.is_symlink():
             raise PackageError("Symlinks are not allowed in generated responsive images: " + item.relative_to(root).as_posix())
@@ -150,10 +160,64 @@ def get_generated_responsive_paths(root: Path = ROOT) -> list[str]:
             relative = item.relative_to(root).as_posix()
             if relative not in allowed:
                 raise PackageError("Unexpected generated responsive image path: " + relative)
-            if item.suffix.lower() != ".webp" or item.stat().st_size <= 0:
+            size_bytes = item.stat().st_size
+            if item.suffix.lower() != ".webp" or size_bytes <= 0:
                 raise PackageError("Generated responsive image is empty or not WebP: " + relative)
             actual.append(relative)
+            actual_bytes[relative] = size_bytes
+
+    for relative, maximum in sorted(variant_max_bytes.items()):
+        if relative not in actual_bytes:
+            raise PackageError("Budgeted responsive image candidate is missing: " + relative)
+        if actual_bytes[relative] > maximum:
+            raise PackageError(
+                "Responsive image exceeds its manifest byte budget: "
+                + f"{relative} is {actual_bytes[relative]:,} bytes; maximum {maximum:,} bytes."
+            )
     return sorted(actual)
+
+
+def get_responsive_variant_budget_report(
+    generated_paths: list[str], root: Path = ROOT
+) -> list[dict]:
+    """Return exact byte-budget evidence for every protected responsive candidate."""
+    manifest_path = root / "scripts" / "responsive-image-assets-manifest.json"
+    if not manifest_path.is_file() or manifest_path.is_symlink():
+        raise PackageError("Responsive image asset manifest is missing or unsafe.")
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, TypeError, json.JSONDecodeError) as error:
+        raise PackageError("Responsive image manifest is invalid: " + str(error)) from error
+    budgets = manifest.get("variant_max_bytes", {})
+    if not isinstance(budgets, dict):
+        raise PackageError("Responsive image byte budgets must be a candidate-path-to-byte-limit object.")
+
+    available = set(generated_paths)
+    records = []
+    for relative, maximum in sorted(budgets.items()):
+        if not isinstance(relative, str) or relative not in available:
+            raise PackageError("Budgeted responsive image candidate is missing: " + str(relative))
+        if isinstance(maximum, bool) or not isinstance(maximum, int) or maximum < 1:
+            raise PackageError("Responsive image byte budget must be a positive integer: " + relative)
+        candidate = root / relative
+        if candidate.is_symlink() or not candidate.is_file():
+            raise PackageError("Budgeted responsive image is missing or unsafe: " + relative)
+        actual_bytes = candidate.stat().st_size
+        if actual_bytes <= 0:
+            raise PackageError("Budgeted responsive image is empty: " + relative)
+        if actual_bytes > maximum:
+            raise PackageError(
+                "Responsive image exceeds its manifest byte budget: "
+                + f"{relative} is {actual_bytes:,} bytes; maximum {maximum:,} bytes."
+            )
+        records.append({
+            "path": relative,
+            "max_bytes": maximum,
+            "actual_bytes": actual_bytes,
+            "headroom_bytes": maximum - actual_bytes,
+            "status": "pass",
+        })
+    return records
 
 
 def validate_responsive_fallback_sources(
@@ -267,6 +331,7 @@ def build_deployment_package(root: Path, output_dir: Path) -> dict:
         raise PackageError("No generated responsive WebP assets found; run scripts/build-responsive-image-assets.py first.")
     selected = sorted(set(select_runtime_paths(get_tracked_paths(root)) + generated_responsive_paths))
     responsive_fallback_sources = validate_responsive_fallback_sources(selected, root)
+    responsive_variant_budgets = get_responsive_variant_budget_report(generated_responsive_paths, root)
     sitemap_path = root / "sitemap.xml"
     if not sitemap_path.is_file():
         raise PackageError("sitemap.xml is missing.")
@@ -323,6 +388,8 @@ def build_deployment_package(root: Path, output_dir: Path) -> dict:
         "file_count": len(entries),
         "generated_responsive_image_count": len(generated_responsive_paths),
         "responsive_fallback_source_count": len(responsive_fallback_sources),
+        "responsive_variant_budget_count": len(responsive_variant_budgets),
+        "responsive_variant_budgets": responsive_variant_budgets,
         "total_uncompressed_bytes": total_bytes,
         "excluded_server_only_or_development_files": [
             PRIVATE_CONFIG_PATH, EXAMPLE_CONFIG_PATH, ".git/", ".github/",
@@ -369,6 +436,7 @@ def main() -> int:
                 raise PackageError("No generated responsive WebP assets found; run scripts/build-responsive-image-assets.py first.")
             selected = sorted(set(select_runtime_paths(tracked) + generated_responsive_paths))
             responsive_fallback_sources = validate_responsive_fallback_sources(selected, ROOT)
+            responsive_variant_budgets = get_responsive_variant_budget_report(generated_responsive_paths, ROOT)
             sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
             routes = validate_package_paths(selected, sitemap)
             result = {
@@ -376,6 +444,8 @@ def main() -> int:
                 "published_route_count": len(routes),
                 "generated_responsive_image_count": len(generated_responsive_paths),
                 "responsive_fallback_source_count": len(responsive_fallback_sources),
+                "responsive_variant_budget_count": len(responsive_variant_budgets),
+                "responsive_variant_budgets": responsive_variant_budgets,
                 "total_uncompressed_bytes": sum((ROOT / path).stat().st_size for path in selected),
                 "local_config_tracked": False, "development_directories_excluded": True,
             }

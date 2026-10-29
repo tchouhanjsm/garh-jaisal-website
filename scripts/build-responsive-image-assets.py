@@ -88,6 +88,15 @@ def load_manifest() -> dict[str, Any]:
             or not 1 <= override_quality <= 100
         ):
             raise ValueError(f"Invalid quality override for {override_source!r}: {override_quality!r}")
+
+    variant_max_bytes = manifest.get("variant_max_bytes", {})
+    if not isinstance(variant_max_bytes, dict):
+        raise ValueError("variant_max_bytes must be a candidate-path-to-byte-limit object")
+    for variant_path, max_bytes in variant_max_bytes.items():
+        if not isinstance(variant_path, str) or variant_path not in output_paths:
+            raise ValueError(f"variant_max_bytes path is not a generated manifest candidate: {variant_path!r}")
+        if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or max_bytes < 1:
+            raise ValueError(f"Invalid byte budget for {variant_path!r}: {max_bytes!r}")
     return manifest
 
 
@@ -169,6 +178,7 @@ def encode_variant(
     quality: int,
     method: int,
     minimum_savings_percent: float,
+    max_bytes=None,
 ) -> dict[str, Any]:
     with Image.open(source_path) as opened:
         opened.load()
@@ -212,6 +222,18 @@ def encode_variant(
 
     source_bytes = source_path.stat().st_size
     variant_bytes = destination.stat().st_size
+    if max_bytes is not None and variant_bytes > max_bytes:
+        destination.unlink(missing_ok=True)
+        return {
+            "status": "skipped-byte-budget",
+            "width": target_width,
+            "height": target_height,
+            "bytes": None,
+            "saved_bytes": None,
+            "saved_percent": None,
+            "attempted_bytes": variant_bytes,
+            "max_bytes": max_bytes,
+        }
     saved_bytes = source_bytes - variant_bytes
     saved_percent = (saved_bytes / source_bytes * 100) if source_bytes else 0.0
     if saved_bytes <= 0 or saved_percent < minimum_savings_percent:
@@ -313,14 +335,36 @@ def build() -> dict[str, Any]:
         variants = []
         for width in widths:
             path = output_path(source_relative, width)
+            relative_output_path = path.relative_to(ROOT).as_posix()
             source_quality = quality_for_source(manifest, source_relative)
-            result = encode_variant(source, path, width, source_quality, method, minimum_savings)
+            max_bytes = manifest.get("variant_max_bytes", {}).get(relative_output_path)
+            result = encode_variant(
+                source, path, width, source_quality, method, minimum_savings, max_bytes
+            )
+            if max_bytes is not None and result["status"] != "generated":
+                attempted_bytes = result.get("attempted_bytes")
+                attempted = (
+                    f"; encoder attempted {attempted_bytes:,} bytes"
+                    if isinstance(attempted_bytes, int)
+                    else f"; encoder status was {result['status']}"
+                )
+                raise RuntimeError(
+                    f"Enforced responsive image byte budget failed for {relative_output_path}: "
+                    f"maximum {max_bytes:,} bytes{attempted}."
+                )
             result.update({
                 "target_width": width,
                 "source_width": source_dimensions[0],
                 "source_height": source_dimensions[1],
                 "quality": source_quality,
-                "relative_path": path.relative_to(ROOT).as_posix() if result["status"] == "generated" else None,
+                "relative_path": relative_output_path if result["status"] == "generated" else None,
+                "max_bytes": max_bytes,
+                "budget_status": "pass" if max_bytes is not None else "not-enforced",
+                "budget_headroom_bytes": (
+                    max_bytes - result["bytes"]
+                    if max_bytes is not None and result["status"] == "generated"
+                    else None
+                ),
             })
             variants.append(result)
             if result["status"] == "generated":
@@ -353,6 +397,18 @@ def build() -> dict[str, Any]:
 
     review_sheet = build_review_sheet(rows, widths)
     coverage_metrics = summarize_variant_coverage(rows, widths)
+    enforced_variant_budgets = [
+        {
+            "path": variant["relative_path"],
+            "max_bytes": variant["max_bytes"],
+            "actual_bytes": variant["bytes"],
+            "headroom_bytes": variant["budget_headroom_bytes"],
+            "status": variant["budget_status"],
+        }
+        for row in rows
+        for variant in row["variants"]
+        if variant["max_bytes"] is not None
+    ]
     summary = {
         "source_count": len(rows),
         "variants_generated": len(generated_paths),
@@ -365,6 +421,13 @@ def build() -> dict[str, Any]:
             variant["saved_bytes"] for row in rows for variant in row["variants"] if variant["status"] == "generated"
         ),
         "human_visual_review_required": True,
+        "enforced_variant_byte_budget_count": len(enforced_variant_budgets),
+        "enforced_variant_byte_budget_pass_count": sum(
+            1 for item in enforced_variant_budgets if item["status"] == "pass"
+        ),
+        "enforced_variant_byte_budget_headroom_bytes": sum(
+            item["headroom_bytes"] for item in enforced_variant_budgets
+        ),
         **coverage_metrics,
         "required_hero_variant_count": len(required_hero_variants),
         "required_hero_variant_coverage_percent": round(
@@ -378,6 +441,7 @@ def build() -> dict[str, Any]:
             "format": manifest["format"],
             "quality": quality,
             "quality_overrides": dict(manifest.get("quality_overrides", {})),
+            "variant_max_bytes": dict(sorted(manifest.get("variant_max_bytes", {}).items())),
             "method": method,
             "minimum_savings_percent": minimum_savings,
             "upscaling": False,
@@ -388,6 +452,7 @@ def build() -> dict[str, Any]:
         "summary": summary,
         "sources": rows,
         "generated_paths": sorted(generated_paths),
+        "enforced_variant_budgets": enforced_variant_budgets,
         "required_hero_variants": {
             "required": sorted(required_hero_variants),
             "generated": sorted(required_hero_variants & set(generated_paths)),

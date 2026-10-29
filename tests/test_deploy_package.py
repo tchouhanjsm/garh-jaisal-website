@@ -141,6 +141,39 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
                 "img/responsive/v2/facade-800.webp",
             ])
 
+    def test_generated_responsive_paths_enforce_manifest_byte_budgets(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            output = root / "img" / "responsive" / "v2"
+            output.mkdir(parents=True)
+            manifest = {
+                "target_widths": [480, 800],
+                "sources": ["img/v2/facade.jpg"],
+                "variant_max_bytes": {"img/responsive/v2/facade-480.webp": 12},
+            }
+            (root / "scripts" / "responsive-image-assets-manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            (output / "facade-480.webp").write_bytes(b"candidate-over-budget")
+            (output / "facade-800.webp").write_bytes(b"within-list-but-not-budgeted")
+            with self.assertRaisesRegex(PackageError, "exceeds its manifest byte budget"):
+                get_generated_responsive_paths(root)
+
+    def test_generated_responsive_paths_require_budgeted_candidates_to_exist(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            output = root / "img" / "responsive" / "v2"
+            output.mkdir(parents=True)
+            manifest = {
+                "target_widths": [480, 800],
+                "sources": ["img/v2/facade.jpg"],
+                "variant_max_bytes": {"img/responsive/v2/facade-480.webp": 1024},
+            }
+            (root / "scripts" / "responsive-image-assets-manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            (output / "facade-800.webp").write_bytes(b"candidate")
+            with self.assertRaisesRegex(PackageError, "Budgeted responsive image candidate is missing"):
+                get_generated_responsive_paths(root)
+
     def test_generated_responsive_paths_reject_unlisted_file(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -6,6 +6,11 @@
     "img/v2/facade.jpg": 70,
     "img/v2/courtyard.jpg": 70
   },
+  "variant_max_bytes": {
+    "img/responsive/v2/courtyard-480.webp": 76800,
+    "img/responsive/v2/facade-1200.webp": 281600,
+    "img/responsive/v2/courtyard-1200.webp": 281600
+  },
   "method": 6,
   "minimum_savings_percent": 5,
   "target_widths": [

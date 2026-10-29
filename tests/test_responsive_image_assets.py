@@ -31,6 +31,11 @@ class ResponsiveImageAssetTests(unittest.TestCase):
         self.assertEqual(assets.quality_for_source(manifest, "img/v2/facade.jpg"), 70)
         self.assertEqual(assets.quality_for_source(manifest, "img/v2/courtyard.jpg"), 70)
         self.assertEqual(assets.quality_for_source(manifest, "img/j2.jpg"), manifest["quality"])
+        self.assertEqual(manifest["variant_max_bytes"], {
+            "img/responsive/v2/courtyard-480.webp": 76800,
+            "img/responsive/v2/facade-1200.webp": 281600,
+            "img/responsive/v2/courtyard-1200.webp": 281600,
+        })
 
     def test_variant_coverage_report_counts_generated_candidates_and_verified_fallbacks(self):
         rows = [
@@ -63,6 +68,18 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             Image.new("RGB", (320, 180), (80, 120, 160)).save(source, format="PNG")
             result = assets.encode_variant(source, destination, 480, 82, 6, 5.0)
             self.assertEqual(result["status"], "skipped-no-upscale")
+            self.assertFalse(destination.exists())
+
+    def test_encode_variant_rejects_output_above_a_configured_byte_budget(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "source.jpg"
+            destination = root / "source-320.webp"
+            Image.effect_noise((640, 320), 55).convert("RGB").save(source, format="JPEG", quality=96)
+            result = assets.encode_variant(source, destination, 320, 82, 6, 5.0, max_bytes=1)
+            self.assertEqual(result["status"], "skipped-byte-budget")
+            self.assertEqual(result["max_bytes"], 1)
+            self.assertGreater(result["attempted_bytes"], result["max_bytes"])
             self.assertFalse(destination.exists())
 
     def test_encode_variant_preserves_ratio_and_drops_exif(self):
@@ -122,6 +139,34 @@ class ResponsiveImageAssetTests(unittest.TestCase):
                     with self.subTest(overrides=overrides):
                         manifest = dict(base_manifest, quality_overrides=overrides)
                         manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+                        with self.assertRaisesRegex(ValueError, expected_error):
+                            assets.load_manifest()
+
+    def test_manifest_rejects_invalid_variant_byte_budgets(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            image_dir = root / "img"
+            image_dir.mkdir()
+            Image.new("RGB", (640, 320), (20, 30, 40)).save(image_dir / "same.jpg", format="JPEG")
+            manifest_path = root / "manifest.json"
+            base_manifest = {
+                "version": 1,
+                "format": "WEBP",
+                "quality": 82,
+                "method": 6,
+                "minimum_savings_percent": 5,
+                "target_widths": [320, 480],
+                "sources": ["img/same.jpg"],
+            }
+            invalid_budgets = [
+                ({"img/responsive/not-listed.webp": 1000}, "not a generated manifest candidate"),
+                ({"img/responsive/same-320.webp": True}, "Invalid byte budget"),
+                ({"img/responsive/same-320.webp": 0}, "Invalid byte budget"),
+            ]
+            with patch.object(assets, "ROOT", root), patch.object(assets, "OUTPUT_ROOT", root / "img" / "responsive"), patch.object(assets, "MANIFEST_PATH", manifest_path):
+                for budgets, expected_error in invalid_budgets:
+                    with self.subTest(budgets=budgets):
+                        manifest_path.write_text(json.dumps(dict(base_manifest, variant_max_bytes=budgets)), encoding="utf-8")
                         with self.assertRaisesRegex(ValueError, expected_error):
                             assets.load_manifest()
 
