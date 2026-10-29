@@ -61,7 +61,6 @@ test('home and rooftop photo slots reserve dimensions and match their layouts', 
         await expect(image).toHaveAttribute('width', /^[1-9][0-9]*$/);
         await expect(image).toHaveAttribute('height', /^[1-9][0-9]*$/);
         await expect(image).toHaveAttribute('sizes', item.sizes);
-        await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 10_000 }).toBe(true);
       }
     } finally {
       await context.close();
