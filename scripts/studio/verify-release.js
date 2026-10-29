@@ -52,7 +52,7 @@ const meta = (html, re) => { const m = re.exec(html); return m ? m[1] : ''; };
       const captionId = type === 'tour' ? 'experience-hero-caption' : type === 'blog' ? 'article-hero-caption' : 'studio-page-hero-caption';
       const visibleCaption = html.includes('id="' + captionId + '"');
       const linkedCaption = html.includes('aria-describedby="' + captionId + '"') && visibleCaption;
-      const heroTag = (html.match(/<img\b[^>]*aria-describedby="' + captionId + '"[^>]*>/) || [])[0] || '';
+      const heroTag = (html.match(/<img\\b[^>]*>/g) || []).find(tag => tag.includes('aria-describedby="' + captionId + '"')) || '';
       const hasIntrinsicDimensions = /\bwidth="[1-9][0-9]*"/.test(heroTag) && /\bheight="[1-9][0-9]*"/.test(heroTag);
       const usesAsyncDecoding = /\bdecoding="async"/.test(heroTag);
       add(4.1, 'Hero caption is reviewed and visibly rendered', caption.length >= 20 && caption.length <= 180 && visibleCaption, 'stored=' + caption.length + ' visible=' + visibleCaption);
