@@ -52,6 +52,12 @@ if (!function_exists('gj_local_image_metadata')) {
         $parts = explode('/', $relative);
         foreach ($parts as $index => $part) {
             $cursor .= DIRECTORY_SEPARATOR . $part;
+            // Missing files are a normal fallback case for optional responsive
+            // variants. Check before lstat so warning-to-exception handlers stay quiet.
+            if (is_link($cursor) || !file_exists($cursor)) {
+                $cache[$relative] = null;
+                return null;
+            }
             $stat = @lstat($cursor);
             if (!is_array($stat) || is_link($cursor)) {
                 $cache[$relative] = null;

@@ -53,6 +53,16 @@ foreach ($rejected as $candidate) {
     );
 }
 
+$missingPathWarnings = [];
+set_error_handler(static function ($severity, $message) use (&$missingPathWarnings) {
+    $missingPathWarnings[] = $message;
+    return true;
+});
+$missingMetadata = gj_local_image_metadata('img/responsive/v2/does-not-exist-480.webp');
+restore_error_handler();
+$assert($missingMetadata === null, 'A missing optional responsive variant must fail closed.');
+$assert($missingPathWarnings === [], 'A missing optional responsive variant must not emit filesystem warnings.');
+
 $imgRoot = $root . '/img';
 $linkName = '.image-metadata-contract-' . getmypid();
 $linkPath = $imgRoot . '/' . $linkName;
