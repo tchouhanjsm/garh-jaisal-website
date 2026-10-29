@@ -211,7 +211,7 @@ require __DIR__ . '/include/page-head.php';
         <?php foreach ($desertItems as $slug): $item = $experiences[$slug]; ?>
           <article class="experience-card" data-experience-filter-card data-experience-category="<?= htmlspecialchars((string) ($item['category'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" data-experience-duration="<?= htmlspecialchars((string) ($item['duration_type'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
             <a href="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>.php">
-              <img src="<?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($item['hero_image']) : '' ?> <?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
+              <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($item['hero_image']) : '' ?> <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
               <div>
                 <p class="experience-duration-label"><?= htmlspecialchars($experienceDurationLabel((string) ($item['duration_type'] ?? '')), ENT_QUOTES, 'UTF-8') ?></p>
                 <p class="experience-card-kicker"><?= htmlspecialchars($item['eyebrow'], ENT_QUOTES, 'UTF-8') ?></p>
@@ -245,7 +245,7 @@ require __DIR__ . '/include/page-head.php';
         <?php foreach ($guideItems as $slug): $item = $experiences[$slug]; ?>
           <article class="experience-card" data-experience-filter-card data-experience-category="<?= htmlspecialchars((string) ($item['category'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" data-experience-duration="<?= htmlspecialchars((string) ($item['duration_type'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
             <a href="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>.php">
-              <img src="<?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($item['hero_image']) : '' ?> <?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
+              <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($item['hero_image']) : '' ?> <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
               <div>
                 <p class="experience-duration-label"><?= htmlspecialchars($experienceDurationLabel((string) ($item['duration_type'] ?? '')), ENT_QUOTES, 'UTF-8') ?></p>
                 <p class="experience-card-kicker"><?= htmlspecialchars($item['eyebrow'], ENT_QUOTES, 'UTF-8') ?></p>
