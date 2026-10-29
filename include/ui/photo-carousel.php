@@ -78,7 +78,7 @@ foreach ($photoCarouselSourceSlides as $photoCarouselSlide) {
         <figure class="photo-carousel-slide" data-photo-carousel-slide>
           <img
             src="<?= htmlspecialchars($photoCarouselImage['src'], ENT_QUOTES, 'UTF-8') ?>"
-            <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($photoCarouselImage['src'], $photoCarouselVariant === 'room' ? '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 90vw, min(1000px, 100%)') : '' ?>
+            <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($photoCarouselImage['src'], $photoCarouselVariant === 'room' ? '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1000px') : '' ?>
             alt="<?= htmlspecialchars($photoCarouselImage['alt'], ENT_QUOTES, 'UTF-8') ?>"
             loading="lazy"
             decoding="async">

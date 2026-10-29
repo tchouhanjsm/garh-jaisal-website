@@ -16,6 +16,39 @@ $assert = static function ($condition, $message) use (&$failures) {
 $source = 'img/v2/facade.jpg';
 $metadata = gj_local_image_metadata($source);
 $dimensionAttributes = gj_image_dimension_attributes($source);
+$responsiveAttributes = gj_image_dimension_attributes($source, '100vw');
+$preloadDescriptor = gj_image_responsive_preload_descriptor($source, '100vw');
+$assert(
+    gj_image_responsive_preload_descriptor('../include/site-config.php', '100vw') === null,
+    'Responsive image preloads must fail closed for traversal and non-image paths.'
+);
+$assert(
+    gj_image_responsive_preload_descriptor($source, '') === null,
+    'Responsive image preloads must reject an empty sizes hint.'
+);
+if (is_array($preloadDescriptor)) {
+    $assert(($preloadDescriptor['href'] ?? null) === $source, 'Image preload href must use the normalized original fallback path.');
+    $assert(($preloadDescriptor['fetchpriority'] ?? null) === 'high', 'Responsive hero preload must use high fetch priority.');
+    $assert(($preloadDescriptor['imagesizes'] ?? null) === '100vw', 'Responsive preload must preserve the rendered sizes hint.');
+    $assert(is_string($preloadDescriptor['imagesrcset'] ?? null) && $preloadDescriptor['imagesrcset'] !== '', 'Responsive preload must include verified width candidates.');
+    $srcsetMatch = [];
+    $hasRenderedSrcset = preg_match('/\\bsrcset="([^"]+)"/', $responsiveAttributes, $srcsetMatch) === 1;
+    $assert($hasRenderedSrcset, 'Rendered responsive image attributes must expose the candidate list used by its preload.');
+    if ($hasRenderedSrcset) {
+        $normalizeSrcset = static function ($srcset) {
+            $normalized = [];
+            foreach (preg_split('/\\s*,\\s*/', trim($srcset)) as $candidate) {
+                $parts = preg_split('/\\s+/', trim($candidate));
+                $normalized[] = ltrim($parts[0], '/') . ' ' . ($parts[1] ?? '');
+            }
+            return implode(', ', $normalized);
+        };
+        $assert(
+            $normalizeSrcset($srcsetMatch[1]) === $preloadDescriptor['imagesrcset'],
+            'Responsive preload and rendered srcset must use the same verified candidates and widths.'
+        );
+    }
+}
 $assert(
     is_string($dimensionAttributes) && preg_match('/width="[1-9][0-9]*" height="[1-9][0-9]*"/', $dimensionAttributes) === 1,
     'Canonical image helper must emit positive intrinsic dimensions for a trusted local asset.'
@@ -87,6 +120,8 @@ if (is_string($helperSource)) {
     $assert(strpos($helperSource, 'is_link') !== false, 'Image helper must reject symlinked image files.');
     $assert(strpos($helperSource, '$imageRoot . DIRECTORY_SEPARATOR') !== false, 'Resolved images must remain beneath the real img directory.');
     $assert(strpos($helperSource, 'function gj_image_dimension_attributes') !== false, 'The canonical responsive attribute emitter must live in the metadata module.');
+    $assert(strpos($helperSource, 'function gj_image_responsive_candidates') !== false, 'The shared verified candidate resolver must serve responsive markup and preload descriptors.');
+    $assert(strpos($helperSource, 'function gj_image_responsive_preload_descriptor') !== false, 'Responsive image preload descriptors must live beside the canonical image metadata helper.');
     $assert(strpos($helperSource, 'gj_local_image_metadata($candidateSource)') !== false, 'Responsive candidates must use path-safe metadata inspection.');
 }
 $headerSource = file_get_contents($root . '/include/header-v2.php');

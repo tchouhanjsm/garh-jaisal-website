@@ -58,6 +58,10 @@ if (($experience['status'] ?? 'live') === 'live'
     throw new RuntimeException('Experience page hero_caption must contain 20–180 characters: ' . (string) ($experience['slug'] ?? 'unknown'));
 }
 
+require_once __DIR__ . '/image-metadata.php';
+$experienceHeroImageAttributes = gj_image_dimension_attributes($experience['hero_image'], '100vw');
+$experienceHeroPreload = gj_image_responsive_preload_descriptor($experience['hero_image'], '100vw');
+
 $activePage = 'packages';
 $siteUrl = rtrim($siteConfig['site_url'], '/');
 $canonical = $siteUrl . '/' . $experience['slug'] . '.php';
@@ -148,6 +152,7 @@ $page = [
     'twitter_image' => '/' . ltrim($experience['hero_image'], '/'),
     'twitter_image_alt' => $experienceHeroAlt,
     'css' => ['css/experiences.css', 'css/thar-sunset-story.css'],
+    'preload' => is_array($experienceHeroPreload) ? [$experienceHeroPreload] : [],
     'schema' => $schemaGraph,
 ];
 require __DIR__ . '/page-head.php';
@@ -162,7 +167,7 @@ require __DIR__ . '/page-head.php';
       <img
         src="<?= htmlspecialchars($experience['hero_image'], ENT_QUOTES, 'UTF-8') ?>"
         alt="<?= htmlspecialchars($experience['hero_alt'], ENT_QUOTES, 'UTF-8') ?>"
-        <?= gj_image_dimension_attributes($experience['hero_image'], '100vw') ?>
+        <?= $experienceHeroImageAttributes ?>
         fetchpriority="high"
         decoding="async"
         aria-describedby="experience-hero-caption">

@@ -1001,3 +1001,16 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Reject a cPanel package if any manifest original source/fallback is missing, empty, symlinked or outside img/; keep generated responsive variants restricted to the existing allowlist.
 - Validate on exact-head PHP 7.4/8.2 Site Checks, Python generator/package unit tests, Browser E2E and screenshot evidence, package preflight and non-deploying Staging QA.
 - The baseline report measured local Chromium traffic on 37 sitemap routes; it is not field Core Web Vitals. Owner visual review of the regenerated responsive-image comparison sheet remains required. No cPanel upload or deployment.
+
+
+## Sprint 82 — route-wide image delivery and experience LCP preload parity (PR #159)
+
+**Performance goal:** give shared experience-detail heroes the same responsive preload/source-selection treatment as protected homepage, room, catalogue and Directions hero images, while keeping the route-wide mobile/desktop audit bounded by first-render work.
+
+- Add one safe metadata-backed resolver for generated responsive candidates and use it for both rendered `srcset` markup and preload descriptors; do not emit a preload when verified width candidates are unavailable.
+- Add high-priority responsive hero preloads to shared experience detail pages, with the exact same candidate widths and `sizes` value as the rendered hero.
+- Extend the existing LCP test to a published experience route and require exactly one active preload containing the selected candidate, with matching sizes.
+- Make route-wide sitemap auditing decode only initial-viewport images; continue recording off-screen image slots and resource evidence without serially waiting for every eager below-fold photograph.
+- Correct the shared photo-carousel source-size hint to a bounded CSS length; preserve its original fallback, dimensions, captions and alt text.
+- Validate PHP 7.4/8.2 contracts, hero-preload parity, responsive slot sizing, route-wide mobile/desktop audit, package preflight and non-deploying Staging QA on the exact head. Report synthetic browser results separately from field Core Web Vitals.
+- No public route, booking/contact destination, source photograph, sitemap entry or production deployment is changed.

@@ -28,6 +28,7 @@ const responsiveSlots = [
   { route: '/jaisalmer-beyond-the-fort-guide.php', selector: '.article-image img[src="img/j8.jpg"]', sizes: '(max-width: 768px) 100vw, 60vw' },
   { route: '/jaisalmer-markets-and-crafts-guide.php', selector: '.article-image img[src="img/j9.jpg"]', sizes: '(max-width: 768px) 100vw, 60vw' },
   { route: '/full-day-jaisalmer-tour.php', selector: '.experience-hero-media img[src="img/j2.jpg"]', sizes: '100vw' },
+  { route: '/full-day-jaisalmer-tour.php', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/j10.jpg"]', sizes: '(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1000px' },
   { route: '/pack.php', selector: '.package-hero img[src="img/desert11.jpg"]', sizes: '100vw' },
   { route: '/desert-safari.php', selector: '.experience-hero-media img[src="img/desert3.jpg"]', sizes: '100vw' },
   { route: '/desert-safari.php', selector: '.experience-card-grid img[src="img/desert7.jpg"]', sizes: CARD_SIZES },

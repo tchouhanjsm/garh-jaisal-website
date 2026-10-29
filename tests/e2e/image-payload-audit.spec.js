@@ -155,13 +155,14 @@ test('audit every published route for image slots and payloads at mobile and des
         const response = await page.goto(route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
         expect(response, `No HTTP response for ${route} at ${viewport.name}`).not.toBeNull();
         expect(response.status(), `Unexpected HTTP status for ${route} at ${viewport.name}`).toBeLessThan(400);
-        // Await the initially eager/visible images, without blocking on below-fold lazy images or third-party resources.
+        // Decode only images in the initial viewport. Off-screen eager images are recorded
+        // but must not hold the route audit open; this phase targets first-render delivery.
         await page.locator('img').evaluateAll(async images => {
-          const initiallyRequested = images.filter(img => {
+          const initiallyVisible = images.filter(img => {
             const rect = img.getBoundingClientRect();
-            return img.loading !== 'lazy' || (rect.bottom > 0 && rect.top < window.innerHeight);
+            return rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.top < window.innerHeight;
           });
-          await Promise.all(initiallyRequested.map(img => img.decode ? img.decode().catch(() => undefined) : Promise.resolve()));
+          await Promise.all(initiallyVisible.map(img => img.decode ? img.decode().catch(() => undefined) : Promise.resolve()));
         });
         const usage = await page.locator('img').evaluateAll(images => images.map(img => {
           const rect = img.getBoundingClientRect();
@@ -334,15 +335,3 @@ test('representative guest routes decode their LCP image and keep below-fold pho
   }
 });
 
-test('write deduplicated image payload audit for sitemap routes', async ({ browser }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Generate the complete viewport-aware audit only once.');
-  test.setTimeout(360_000);
-  const context = await browser.newContext({ baseURL: BASE_URL, viewport: { width: 1280, height: 800 } });
-  try {
-    const page = await context.newPage();
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
-  } finally {
-    await context.close();
-  }
-  expect(routes.length).toBeGreaterThan(0);
-});

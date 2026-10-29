@@ -19,6 +19,11 @@ const HEROES = [
     expected: () => 'desert3',
     approvedWebpFallback: '/img/2.webp',
   },
+  {
+    route: '/full-day-jaisalmer-tour.php',
+    selector: '.experience-hero-media img',
+    expected: () => 'j2',
+  },
 ];
 
 function responsiveCandidateForPath(pathname) {
@@ -114,10 +119,17 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
         expect(state.declaredHeight, hero.route + ' must reserve intrinsic image height').toBeGreaterThan(0);
         expect(Math.abs((state.declaredWidth / state.declaredHeight) - (state.width / state.height))).toBeLessThan(0.02);
         expect(state.fetchPriority, hero.route + ' LCP image should stay high priority').toBe('high');
+        const matchingPreloads = state.preloads.filter(preload => pathMatchesPreload(preload, state.currentPath));
         expect(
-          state.preloads.some(preload => pathMatchesPreload(preload, state.currentPath)),
-          hero.route + ' must preload the selected image or include it in the preload candidate list'
-        ).toBe(true);
+          matchingPreloads.length,
+          hero.route + ' must preload the selected image or include it in exactly one preload candidate list'
+        ).toBe(1);
+        if (state.sizes) {
+          expect(
+            matchingPreloads[0].imagesizes,
+            hero.route + ' preload sizes must match the rendered image source sizes'
+          ).toBe(state.sizes);
+        }
 
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
         expect(overflow, hero.route + ' must not create horizontal overflow at ' + width + 'px').toBe(false);
