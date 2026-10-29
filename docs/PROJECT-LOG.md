@@ -7,9 +7,9 @@
 | Item | Value |
 |---|---|
 | Verified main SHA | 15afdf46506bdaf3799bde97f47e3296210bb898 — PR #158 merged |
-| Active implementation | Sprint 81 — responsive hero payload budgets, exact LCP preload and fallback-safe package validation |
+| Active implementation | Sprint 83 — eliminate under-resolved experience heroes and enforce their responsive variants at release time |
 | Working branch | feature/image-delivery-budget-guardrails-20261029 |
-| Scope | Reduce the two measured large hero candidates to a 275 KiB budget, preload the Directions hero with its responsive candidate list, report variant/fallback coverage and preserve original sources in cPanel packages |
+| Scope | Keep high-intent hero images resolution-fit at mobile and desktop widths; register their responsive variants as mandatory, apply image byte budgets and preserve original sources in cPanel packages |
 | Release boundary | Owner retains merge and release approval; no cPanel upload, staging deployment or production deployment |
 | Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667258) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667379) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667299) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667390) — all passed on 15afdf46506bdaf3799bde97f47e3296210bb898 |
 
@@ -100,3 +100,20 @@ Regression coverage verifies action count and destination parity on the live exp
 - Clear search, floor and feature filters only when the guest activates that action, reveal the selected cards and focus the first selected room's compare control.
 - Re-evaluate recovery-action visibility after each filter update as well as each shortlist edit.
 - Verify this differs from clearing the shortlist: selected room choices remain intact.
+
+
+## Sprint 82 — shared experience hero preload and viewport audit (PR #159, completed)
+
+- Shared one verified responsive-candidate resolver between rendered image `srcset` attributes and responsive preload descriptors.
+- Added high-priority responsive preloads to shared experience detail pages without changing routes, contact destinations or fallback behavior.
+- Expanded image auditing across 37 sitemap routes at mobile and desktop sizes, with transfer-byte accounting keyed to viewport identity and bounded image-decode waits.
+- Passed Site Checks (PHP 7.4/8.2), Browser E2E/screenshots, package preflight and non-deploying Staging QA on `732ff6a498cc43f7b346f74a4af3a21acc526941`.
+
+## Sprint 83 — experience hero source-fit and mandatory responsive candidates (PR #159, active)
+
+- Replace the 370px-wide half-day tour thumbnail used as a full-bleed hero/card image with the existing 1366px-wide Jaisalmer haveli photograph.
+- Replace the under-resolved sleep-under-the-stars hero with the existing 1280px-wide dusk-camp image and update its alt text/caption to describe the selected asset accurately.
+- Declare both sources as required heroes in the responsive image manifest, require all configured 480/800/1200 candidates in the generator, and add 1200px byte budgets.
+- Add browser assertions for responsive candidate selection and at least 90% source-pixel coverage of the rendered hero slot at 1x density.
+- Add PHP/Python contracts tying experience records to the required source allowlist, minimum intrinsic width and generated variant paths.
+- Validate the exact new head through Site Checks, Browser E2E, package preflight and non-deploying Staging QA. No merge or deployment.

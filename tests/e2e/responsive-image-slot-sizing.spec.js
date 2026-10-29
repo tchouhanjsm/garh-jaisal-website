@@ -67,16 +67,19 @@ const galleryResponsiveSources = [
   'img/Desert_Camp/Tentout.jpeg',
 ];
 
-test('small tour source does not create unsafe upscaled responsive candidates', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Intrinsic-source fallback contract runs once.');
+test('half-day tour card uses a full-resolution responsive source', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Responsive source-fit contract runs once.');
   await page.goto(BASE_URL + '/guided-jaisalmer-tour.php', { waitUntil: 'domcontentloaded' });
-  const smallSource = page.locator('.experience-card-grid--two img[src="img/j6.jpg"]');
-  await expect(smallSource).toHaveCount(1);
-  await expect(smallSource).toHaveAttribute('width', '370');
-  await expect(smallSource).toHaveAttribute('height', '539');
-  await expect(smallSource).not.toHaveAttribute('sizes', /.+/);
-  const srcset = await smallSource.getAttribute('srcset');
-  expect(srcset || '').not.toMatch(/\/img\/responsive\//);
+  const cardImage = page.locator('.experience-card-grid--two img[src="img/j5.jpg"]');
+  await expect(cardImage).toHaveCount(1);
+  await expect(cardImage).toHaveAttribute('width', '1366');
+  await expect(cardImage).toHaveAttribute('height', '768');
+  await expect(cardImage).toHaveAttribute('sizes', '(max-width: 760px) 100vw, 50vw');
+  const srcset = await cardImage.getAttribute('srcset');
+  expect(srcset || '').toContain('/img/responsive/j5-480.webp');
+  expect(srcset || '').toContain('/img/responsive/j5-800.webp');
+  expect(srcset || '').toContain('/img/responsive/j5-1200.webp');
+  expect(srcset || '').not.toContain('img/j6.jpg');
 });
 
 test('responsive image candidates receive slot-accurate sizes hints', async ({ page }, testInfo) => {

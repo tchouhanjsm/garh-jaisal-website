@@ -1014,3 +1014,17 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Correct the shared photo-carousel source-size hint to a bounded CSS length; preserve its original fallback, dimensions, captions and alt text.
 - Validate PHP 7.4/8.2 contracts, hero-preload parity, responsive slot sizing, route-wide mobile/desktop audit, package preflight and non-deploying Staging QA on the exact head. Report synthetic browser results separately from field Core Web Vitals.
 - No public route, booking/contact destination, source photograph, sitemap entry or production deployment is changed.
+
+
+## Sprint 83 — experience hero source-fit and responsive-release coverage (PR #159)
+
+**Performance objective:** remove the two measured hero source-fit defects, without introducing new photography or upscaling any image during asset generation.
+
+- The mobile/desktop image audit showed `img/j6.jpg` (370 × 539) being stretched into the full-bleed half-day-tour hero and detail-card slots. Switch that experience to the existing 1366 × 768 `img/j5.jpg` source, updating alt text and caption to match the image.
+- The sleep-under-the-stars page used `img/sleeping_under_stars/suts.avif`, which has no responsive candidates in the active manifest and is under-resolved at desktop hero width. Use the existing 1280 × 854 dusk-camp photograph `img/sleeping_under_stars/tour_9.jpeg`, with accurate alt text/caption.
+- Make the required hero sources manifest-owned rather than a builder hard-code. Every listed required hero must generate each configured responsive width; a skipped/missing variant blocks the build.
+- Enforce byte ceilings for `j5-1200.webp` (160,000 bytes) and `sleeping_under_stars/tour_9-1200.webp` (80,000 bytes), in addition to existing homepage hero budgets.
+- Extend the LCP browser contract to both routes and require the selected image's intrinsic width to cover at least 90% of its rendered CSS width at 1x density. Add server-side and Python validation so the hero source, manifest allowlist and required variants cannot drift independently.
+- Retain all public routes, image originals, guest-facing itinerary details, booking/contact destinations, SEO structure and existing photo-gallery content.
+- Re-run PHP 7.4/8.2 checks, responsive asset generation, image slot/LCP browser tests, route-wide mobile/desktop audit, package preflight and non-deploying Staging QA on the exact head. The local Chromium audit is synthetic and is not production field Core Web Vitals.
+- Release boundary stays unchanged: no merge, cPanel upload, staging deployment or production deployment.

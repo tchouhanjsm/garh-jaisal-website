@@ -10,6 +10,54 @@ $galleryPath = $root . '/gallery.php';
 $errors = [];
 $checkedGalleryAssets = 0;
 
+$requiredResponsiveHeroSources = [
+    'half-day-jaisalmer-tour' => 'img/j5.jpg',
+    'sleep-under-the-stars' => 'img/sleeping_under_stars/tour_9.jpeg',
+];
+$responsiveManifestPath = $root . '/scripts/responsive-image-assets-manifest.json';
+if (!is_file($responsiveManifestPath)) {
+    $errors[] = 'responsive image manifest is missing';
+    $responsiveManifest = [];
+} else {
+    $responsiveManifest = json_decode((string) file_get_contents($responsiveManifestPath), true);
+    if (!is_array($responsiveManifest)) {
+        $errors[] = 'responsive image manifest must contain valid JSON';
+        $responsiveManifest = [];
+    }
+}
+$manifestSources = isset($responsiveManifest['sources']) && is_array($responsiveManifest['sources'])
+    ? $responsiveManifest['sources']
+    : [];
+$requiredHeroSources = isset($responsiveManifest['required_hero_sources']) && is_array($responsiveManifest['required_hero_sources'])
+    ? $responsiveManifest['required_hero_sources']
+    : [];
+foreach ($requiredResponsiveHeroSources as $slug => $expectedSource) {
+    if (!isset($registry[$slug]) || !is_array($registry[$slug])) {
+        $errors[] = $slug . ': required responsive hero record is missing';
+        continue;
+    }
+    $experience = $registry[$slug];
+    if (($experience['hero_image'] ?? null) !== $expectedSource) {
+        $errors[] = $slug . ': hero image must use the reviewed full-resolution source ' . $expectedSource;
+    }
+    if (!in_array($expectedSource, $manifestSources, true)) {
+        $errors[] = $slug . ': hero source is missing from responsive image generation allowlist';
+    }
+    if (!in_array($expectedSource, $requiredHeroSources, true)) {
+        $errors[] = $slug . ': hero source is not a required responsive release asset';
+    }
+    $imageDimensions = @getimagesize($root . '/' . $expectedSource);
+    if (!is_array($imageDimensions) || !isset($imageDimensions[0]) || $imageDimensions[0] < 1200) {
+        $errors[] = $slug . ': hero source must be at least 1200 pixels wide';
+    }
+    if (trim((string) ($experience['hero_alt'] ?? '')) === '') {
+        $errors[] = $slug . ': hero alt text is required';
+    }
+    if (trim((string) ($experience['hero_caption'] ?? '')) === '') {
+        $errors[] = $slug . ': hero caption is required';
+    }
+}
+
 if (!is_file($registryPath)) {
     fwrite(STDERR, "ERROR missing experience registry\n");
     exit(1);

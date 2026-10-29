@@ -31,11 +31,44 @@ class ResponsiveImageAssetTests(unittest.TestCase):
         self.assertEqual(assets.quality_for_source(manifest, "img/v2/facade.jpg"), 70)
         self.assertEqual(assets.quality_for_source(manifest, "img/v2/courtyard.jpg"), 70)
         self.assertEqual(assets.quality_for_source(manifest, "img/j2.jpg"), manifest["quality"])
+        self.assertEqual(manifest["required_hero_sources"], [
+            "img/v2/facade.jpg",
+            "img/v2/fort-from-roof.jpg",
+            "img/v2/courtyard.jpg",
+            "img/j5.jpg",
+            "img/sleeping_under_stars/tour_9.jpeg",
+        ])
         self.assertEqual(manifest["variant_max_bytes"], {
             "img/responsive/v2/courtyard-480.webp": 76800,
             "img/responsive/v2/facade-1200.webp": 281600,
             "img/responsive/v2/courtyard-1200.webp": 281600,
+            "img/responsive/j5-1200.webp": 160000,
+            "img/responsive/sleeping_under_stars/tour_9-1200.webp": 80000,
         })
+
+    def test_required_hero_sources_generate_all_responsive_width_contracts(self):
+        manifest = assets.load_manifest()
+        required_paths = assets.required_hero_variant_paths(manifest, manifest["target_widths"])
+        self.assertEqual(
+            len(required_paths),
+            len(manifest["required_hero_sources"]) * len(manifest["target_widths"]),
+        )
+        self.assertIn("img/responsive/j5-480.webp", required_paths)
+        self.assertIn("img/responsive/j5-800.webp", required_paths)
+        self.assertIn("img/responsive/j5-1200.webp", required_paths)
+        self.assertIn("img/responsive/sleeping_under_stars/tour_9-480.webp", required_paths)
+        self.assertIn("img/responsive/sleeping_under_stars/tour_9-800.webp", required_paths)
+        self.assertIn("img/responsive/sleeping_under_stars/tour_9-1200.webp", required_paths)
+
+    def test_manifest_rejects_required_hero_sources_outside_the_source_allowlist(self):
+        manifest = assets.load_manifest()
+        manifest["required_hero_sources"].append("img/not-in-the-source-allowlist.jpg")
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "manifest.json"
+            path.write_text(json.dumps(manifest), encoding="utf-8")
+            with patch.object(assets, "MANIFEST_PATH", path):
+                with self.assertRaisesRegex(ValueError, "Required hero source is not listed in sources"):
+                    assets.load_manifest()
 
     def test_variant_coverage_report_counts_generated_candidates_and_verified_fallbacks(self):
         rows = [

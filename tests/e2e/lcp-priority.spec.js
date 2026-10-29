@@ -24,10 +24,20 @@ const HEROES = [
     selector: '.experience-hero-media img',
     expected: () => 'j2',
   },
+  {
+    route: '/half-day-jaisalmer-tour.php',
+    selector: '.experience-hero-media img',
+    expected: () => 'j5',
+  },
+  {
+    route: '/sleep-under-the-stars.php',
+    selector: '.experience-hero-media img',
+    expected: () => 'tour_9',
+  },
 ];
 
 function responsiveCandidateForPath(pathname) {
-  const match = pathname.match(/\/img\/responsive\/(?:v2\/)?([^/]+)-(480|800|1200)\.webp$/);
+  const match = pathname.match(/\/img\/responsive\/(?:[^/]+\/)*([^/]+)-(480|800|1200)\.webp$/);
   return match ? { stem: match[1], width: Number(match[2]) } : null;
 }
 
@@ -83,9 +93,12 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
               }
             }));
           const responsiveOwner = activeSource || img;
+          const renderedWidth = img.getBoundingClientRect().width;
           return {
             currentPath,
             preloads,
+            renderedWidth: Math.round(renderedWidth * 100) / 100,
+            pixelCoverageRatio: renderedWidth > 0 ? img.naturalWidth / renderedWidth : 0,
             width: img.naturalWidth,
             height: img.naturalHeight,
             fetchPriority: img.getAttribute('fetchpriority'),
@@ -115,6 +128,10 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
 
         expect(state.width, hero.route + ' LCP image must decode').toBeGreaterThan(0);
         expect(state.height, hero.route + ' LCP image must decode').toBeGreaterThan(0);
+        expect(
+          state.pixelCoverageRatio,
+          hero.route + ' LCP image must supply at least 90% of the rendered slot width at 1x density'
+        ).toBeGreaterThanOrEqual(0.9);
         expect(state.declaredWidth, hero.route + ' must reserve intrinsic image width').toBeGreaterThan(0);
         expect(state.declaredHeight, hero.route + ' must reserve intrinsic image height').toBeGreaterThan(0);
         expect(Math.abs((state.declaredWidth / state.declaredHeight) - (state.width / state.height))).toBeLessThan(0.02);

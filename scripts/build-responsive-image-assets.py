@@ -30,6 +30,23 @@ def output_path(source_relative: str, target_width: int) -> Path:
     return OUTPUT_ROOT / relative.parent / (relative.stem + f"-{target_width}.webp")
 
 
+DEFAULT_REQUIRED_HERO_SOURCES = (
+    "img/v2/facade.jpg",
+    "img/v2/fort-from-roof.jpg",
+    "img/v2/courtyard.jpg",
+)
+
+
+def required_hero_variant_paths(manifest: dict[str, Any], widths: list[int]) -> set[str]:
+    """Return generated paths that must exist for each manifest-declared high-intent hero."""
+    required_sources = manifest.get("required_hero_sources", list(DEFAULT_REQUIRED_HERO_SOURCES))
+    return {
+        output_path(source, width).relative_to(ROOT).as_posix()
+        for source in required_sources
+        for width in widths
+    }
+
+
 def load_manifest() -> dict[str, Any]:
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     widths = manifest.get("target_widths")
@@ -67,6 +84,17 @@ def load_manifest() -> dict[str, Any]:
             if generated in output_paths:
                 raise ValueError(f"Manifest sources collide on generated output path: {generated}")
             output_paths.add(generated)
+
+    required_hero_sources = manifest.get("required_hero_sources", list(DEFAULT_REQUIRED_HERO_SOURCES))
+    if not isinstance(required_hero_sources, list) or not required_hero_sources:
+        raise ValueError("required_hero_sources must be a non-empty list")
+    if any(not isinstance(source, str) for source in required_hero_sources):
+        raise ValueError("required_hero_sources must contain only manifest source paths")
+    if len(required_hero_sources) != len(set(required_hero_sources)):
+        raise ValueError("required_hero_sources must not contain duplicates")
+    for source in required_hero_sources:
+        if source not in sources:
+            raise ValueError(f"Required hero source is not listed in sources: {source!r}")
 
     if manifest.get("format") != "WEBP":
         raise ValueError("Only the reviewed WEBP format is currently supported")
@@ -383,15 +411,11 @@ def build() -> dict[str, Any]:
     if not generated_paths:
         raise RuntimeError("No responsive image asset passed the byte-saving gate")
 
-    required_hero_variants = {
-        f"img/responsive/v2/{stem}-{width}.webp"
-        for stem in ("facade", "fort-from-roof", "courtyard")
-        for width in widths
-    }
+    required_hero_variants = required_hero_variant_paths(manifest, widths)
     missing_hero_variants = sorted(required_hero_variants - set(generated_paths))
     if missing_hero_variants:
         raise RuntimeError(
-            "Required homepage hero responsive variants failed the savings/width gate: "
+            "Required hero responsive variants failed the savings/width gate: "
             + ", ".join(missing_hero_variants)
         )
 
