@@ -227,6 +227,7 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await expect(page.locator('#page-hero-image')).toHaveValue('img/desert3.jpg');
     await expect(page.locator('#page-hero-alt')).toHaveValue('');
     await page.locator('#page-hero-alt').fill('Camel riders travelling over dunes near Jaisalmer');
+    await page.locator('#page-hero-caption').fill('Camel riders and rippling dunes in the Thar Desert near Jaisalmer.');
     await page.locator('#page-hero-cta-label').fill('Contact the hotel');
     await page.locator('#page-hero-cta-href').fill('/contact.php');
     let pageSection = page.locator('#page-section-list .page-section-editor').nth(0);

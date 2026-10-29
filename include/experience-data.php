@@ -30,7 +30,7 @@ $experiences = [
         'hero_width' => 1366,
         'hero_height' => 768,
         'hero_alt' => 'Sand dunes in the Thar Desert near Jaisalmer',
-        'hero_caption' => 'Compare evening and overnight formats, then confirm the route and details for your date.',
+        'hero_caption' => 'A broad sweep of Thar Desert dunes sets the scene for sunset outings and overnight safari options from Jaisalmer.',
     ],
 
     'guided-jaisalmer-tour' => [
@@ -50,7 +50,7 @@ $experiences = [
         'hero_width' => 1333,
         'hero_height' => 2000,
         'hero_alt' => 'Ornately carved sandstone architecture in Jaisalmer\'s historic centre',
-        'hero_caption' => 'A guided visit can put carved sandstone architecture and the historic streets in context.',
+        'hero_caption' => 'Carved sandstone balconies and historic lanes reward a guided walk through Jaisalmer.',
     ],
 
     'sunset-camel-safari' => [

@@ -16,6 +16,20 @@ usort($items, static function ($a, $b) use ($experiences) {
 <html lang="en">
 <?php
 require_once __DIR__ . '/include/schema.php';
+$guidedHubHeroImage = 'img/j5.jpg';
+$guidedHubHeroAlt = 'Carved sandstone balconies on a historic Jaisalmer haveli';
+$guidedHubHeroCaption = trim((string) ($experiences['guided-jaisalmer-tour']['hero_caption'] ?? ''));
+$guidedHubHeroImageObject = gj_schema_image_object(
+    $siteUrl,
+    $guidedHubHeroImage,
+    $guidedHubHeroCaption,
+    $guidedHubHeroAlt
+);
+$experienceHubMedia = [
+    'source' => $guidedHubHeroImage,
+    'alt' => $guidedHubHeroAlt,
+    'caption' => $guidedHubHeroCaption,
+];
 $faqItems = [
     ['question' => "Which guided tour lengths are listed?", 'answer' => "The hub links to half-day and full-day Jaisalmer tour options, alongside the walk inside Jaisalmer Fort."],
     ['question' => "Can the guided route be adjusted?", 'answer' => "The route can be adjusted around your interests, opening hours and the time available on your travel date."],
@@ -27,11 +41,11 @@ $page = [
     'path' => '/guided-jaisalmer-tour.php',
     'og_title' => 'Guided Jaisalmer Tours from the Fort | Garh Jaisal Haveli',
     'og_description' => 'Compare half-day and full-day guided Jaisalmer tours from the Fort. Confirm guide availability, language, itinerary and current price.',
-    'og_image' => '/img/j5.jpg',
-    'og_image_alt' => 'Carved sandstone balconies on a historic Jaisalmer haveli',
+    'og_image' => '/' . ltrim($guidedHubHeroImage, '/'),
+    'og_image_alt' => $guidedHubHeroAlt,
     'twitter_title' => 'Guided Jaisalmer Tours from the Fort | Garh Jaisal Haveli',
     'twitter_description' => 'Compare half-day and full-day guided Jaisalmer tours from the Fort. Confirm guide availability, language, itinerary and current price.',
-    'twitter_image' => '/img/j5.jpg',
+    'twitter_image' => '/' . ltrim($guidedHubHeroImage, '/'),
     'css' => ['css/experiences.css'],
     'schema' => [
         [
@@ -40,6 +54,7 @@ $page = [
             'url' => $canonical,
             'name' => 'Guided Jaisalmer Tours from the Fort | Garh Jaisal Haveli',
             'description' => 'Explore Jaisalmer with guided half-day and full-day routes from Garh Jaisal Haveli inside the Fort. Compare options and confirm guide availability, language, itinerary and current price for your dates.',
+            'primaryImageOfPage' => $guidedHubHeroImageObject,
             'isPartOf' => ['@id' => $siteUrl . '/#website'],
             'about' => ['@id' => $siteUrl . '/#hotel'],
             'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
@@ -62,10 +77,7 @@ require __DIR__ . '/include/page-head.php';
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 <main id="main-content" tabindex="-1">
   <section class="experience-hero">
-    <div class="experience-hero-media">
-      <img src="img/j5.jpg" <?= gj_image_dimension_attributes('img/j5.jpg', '100vw') ?> alt="Carved sandstone balconies on a historic Jaisalmer haveli" fetchpriority="high" decoding="async">
-      <div class="experience-hero-overlay"></div>
-    </div>
+    <?php require __DIR__ . '/include/ui/experience-hub-media.php'; ?>
     <div class="site-shell experience-hero-content">
       <nav class="experience-breadcrumbs" aria-label="Breadcrumb">
         <a href="index.php">Home</a><span aria-hidden="true">/</span><a href="pack.php">Packages</a><span aria-hidden="true">/</span><span aria-current="page">Guided Jaisalmer Tours</span>

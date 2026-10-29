@@ -102,6 +102,32 @@ $renderer = $read($root . '/include/experience-page.php');
 if (strpos($renderer, 'gj_schema_image_object') === false || strpos($renderer, 'experienceHeroCaption') === false) {
     $siteCheckErrors[] = 'Experience renderer must use the shared image schema and caption contract.';
 }
+
+$hubMediaRenderer = $read($root . '/include/ui/experience-hub-media.php');
+if (
+    strpos($hubMediaRenderer, 'aria-describedby="experience-hero-caption"') === false
+    || strpos($hubMediaRenderer, 'class="experience-hero-caption"') === false
+    || strpos($hubMediaRenderer, 'gj_local_image_metadata($hubMediaSource)') === false
+    || strpos($hubMediaRenderer, "gj_image_dimension_attributes(\$hubMediaSource, '100vw')") === false
+) {
+    $siteCheckErrors[] = 'Experience hub media must use safe local metadata, responsive dimensions and a visible accessible caption.';
+}
+$hubMediaRoutes = [
+    'desert-safari.php' => '$desertSafariHeroImageObject',
+    'guided-jaisalmer-tour.php' => '$guidedHubHeroImageObject',
+];
+foreach ($hubMediaRoutes as $hubFile => $imageObjectVariable) {
+    $hubSource = $read($root . '/' . $hubFile);
+    if (
+        strpos($hubSource, "include/ui/experience-hub-media.php") === false
+        || strpos($hubSource, 'gj_schema_image_object(') === false
+        || strpos($hubSource, "'primaryImageOfPage' => " . $imageObjectVariable) === false
+        || strpos($hubSource, "'og_image' => '/' . ltrim(") === false
+    ) {
+        $siteCheckErrors[] = 'Experience hub must share its reviewed hero media across visible caption, social metadata and ImageObject schema: ' . $hubFile;
+    }
+}
+
 $imageMetadataHelper = $read($root . '/include/image-metadata.php');
 $imageDimensionHelper = $read($root . '/include/header-v2.php');
 if (
