@@ -414,7 +414,7 @@ async function main() {
   assert.equal(response.status, 200, 'landing preview should render with the actual PHP landing-page renderer');
   html = await response.text();
   assert.ok(html.includes('Content Studio Landing Page Integration Test'), 'landing preview should render its authored H1');
-  assert.ok(html.includes('<figcaption class="studio-page-hero-caption">Draft preview image — add a reviewed caption before publishing.</figcaption>'), 'landing Draft preview should show the caption reminder without weakening Live publication requirements');
+  assert.ok(html.includes('<figcaption id="studio-page-hero-caption" class="studio-page-hero-caption">Draft preview image — add a reviewed caption before publishing.</figcaption>'), 'landing Draft preview should show the caption reminder without weakening Live publication requirements');
   assert.ok(html.includes('Plan your visit') && html.includes('Common questions'), 'landing preview should render the authored content blocks');
   assert.ok(html.includes('<h2>Plan your visit</h2>') && html.includes('<h2>Common questions</h2>'), 'landing preview must render authored section headings, not only their body content');
   assert.ok(html.includes('css/page-builder.css') && html.includes('css/pages/' + landingPreviewSlug + '.css'), 'landing preview should use shared CSS and the generated page token CSS');
@@ -468,7 +468,7 @@ async function main() {
   assert.equal(response.status, 200, 'new tour should render through the shared PHP renderer');
   html = await response.text();
   assert.ok(html.includes('Content Studio Integration Test Tour'), 'tour H1 should render');
-  assert.ok(html.includes('<p class="experience-hero-caption">Camel riders cross the dunes near Jaisalmer on a planned desert outing.</p>'), 'Live tour should render the reviewed hero caption');
+  assert.ok(html.includes('<p id="experience-hero-caption" class="experience-hero-caption">Camel riders cross the dunes near Jaisalmer on a planned desert outing.</p>'), 'Live tour should render the reviewed hero caption');
   response = await fetch(PHP_URL + '/catalogue.php');
   assert.equal(response.status, 200);
   assert.ok((await response.text()).includes('Content Studio Integration Test Tour'), 'new tour should appear in Trip Planner');
