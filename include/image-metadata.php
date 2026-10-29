@@ -124,6 +124,10 @@ if (!function_exists('gj_responsive_image_srcset')) {
 
         $relative = ltrim($source, '/');
         $insideImageRoot = substr($relative, 4);
+        // Optimized derivatives share the source asset's responsive output path.
+        if (strncmp($insideImageRoot, 'optimized/', 10) === 0) {
+            $insideImageRoot = substr($insideImageRoot, 10);
+        }
         $directory = dirname($insideImageRoot);
         $stem = pathinfo($insideImageRoot, PATHINFO_FILENAME);
         if ($stem === '' || $stem === '.' || $stem === '..') {
@@ -145,11 +149,17 @@ if (!function_exists('gj_responsive_image_srcset')) {
                 || $metadata['width'] !== $targetWidth
                 || $metadata['height'] < 1
                 || $metadata['width'] >= $sourceMetadata['width']
+                || !is_int($sourceMetadata['bytes'])
+                || !is_int($metadata['bytes'])
+                || $sourceMetadata['bytes'] <= 0
+                || $metadata['bytes'] <= 0
+                || $metadata['bytes'] >= $sourceMetadata['bytes']
+                || abs(($metadata['width'] / $metadata['height']) - ($sourceMetadata['width'] / $sourceMetadata['height'])) > 0.02
             ) {
                 continue;
             }
 
-            $candidates[] = htmlspecialchars($variant, ENT_QUOTES, 'UTF-8') . ' ' . $targetWidth . 'w';
+            $candidates[] = '/' . htmlspecialchars($variant, ENT_QUOTES, 'UTF-8') . ' ' . $targetWidth . 'w';
         }
 
         if (count($candidates) < 2) {

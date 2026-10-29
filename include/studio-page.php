@@ -60,6 +60,9 @@ $studioPageEyebrow = (string) ($studioPage['eyebrow'] ?? 'Garh Jaisal Haveli');
 $studioPageLayout = in_array(($studioPage['hero_layout'] ?? 'split'), ['split', 'centered'], true)
     ? $studioPage['hero_layout']
     : 'split';
+$studioPageHeroSizes = $studioPageLayout === 'centered'
+    ? '100vw'
+    : '(max-width: 760px) 100vw, 50vw';
 $studioPageTheme = in_array(($studioPage['theme'] ?? 'heritage'), ['heritage', 'sandstone', 'desert-night'], true)
     ? $studioPage['theme']
     : 'heritage';
@@ -168,7 +171,8 @@ include __DIR__ . '/header-v2.php';
         <?php endif; ?>
       </div>
       <figure class="studio-page-hero-media">
-        <img src="<?= $studioPageEscape($studioPageHero) ?>" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($studioPageHero) : '' ?> alt="<?= $studioPageEscape($studioPageHeroAlt) ?>"<?php if (is_array($studioPageHeroMetadata)): ?> width="<?= (int) $studioPageHeroMetadata['width'] ?>" height="<?= (int) $studioPageHeroMetadata['height'] ?>"<?php endif; ?> fetchpriority="high" decoding="async" aria-describedby="studio-page-hero-caption">
+        <?php $studioPageHeroSrcset = function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($studioPageHero) : ''; ?>
+        <img src="<?= $studioPageEscape($studioPageHero) ?>" <?= $studioPageHeroSrcset ?><?php if ($studioPageHeroSrcset !== ''): ?> sizes="<?= $studioPageEscape($studioPageHeroSizes) ?>"<?php endif; ?> alt="<?= $studioPageEscape($studioPageHeroAlt) ?>"<?php if (is_array($studioPageHeroMetadata)): ?> width="<?= (int) $studioPageHeroMetadata['width'] ?>" height="<?= (int) $studioPageHeroMetadata['height'] ?>"<?php endif; ?> fetchpriority="high" decoding="async" aria-describedby="studio-page-hero-caption">
         <figcaption id="studio-page-hero-caption" class="studio-page-hero-caption"><?= $studioPageEscape($studioPageHeroCaption) ?></figcaption>
       </figure>
     </div>

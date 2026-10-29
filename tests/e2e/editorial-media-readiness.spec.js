@@ -67,8 +67,12 @@ test('editorial and experience hero media is publish-ready', async ({ page }, te
     }));
     expect(intrinsic.width, route.path + ' hero width should be declared').toBeGreaterThan(0);
     expect(intrinsic.height, route.path + ' hero height should be declared').toBeGreaterThan(0);
-    expect(intrinsic.width, route.path + ' declared width should match the loaded asset').toBe(intrinsic.naturalWidth);
-    expect(intrinsic.height, route.path + ' declared height should match the loaded asset').toBe(intrinsic.naturalHeight);
+    const declaredAspectRatio = intrinsic.width / intrinsic.height;
+    const loadedAspectRatio = intrinsic.naturalWidth / intrinsic.naturalHeight;
+    expect(
+      Math.abs(declaredAspectRatio / loadedAspectRatio - 1),
+      route.path + ' declared dimensions should preserve the loaded responsive asset aspect ratio'
+    ).toBeLessThanOrEqual(0.01);
     expect(intrinsic.decoding, route.path + ' should decode the hero asynchronously').toBe('async');
 
     const rendered = await page.evaluate(({ imageSelector, captionSelector }) => {

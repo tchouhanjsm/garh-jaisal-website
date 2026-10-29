@@ -301,8 +301,11 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
       naturalWidth: image.naturalWidth,
       naturalHeight: image.naturalHeight,
     }));
-    expect(landingHeroSize.width).toBe(landingHeroSize.naturalWidth);
-    expect(landingHeroSize.height).toBe(landingHeroSize.naturalHeight);
+    expect(landingHeroSize.width).toBeGreaterThan(0);
+    expect(landingHeroSize.height).toBeGreaterThan(0);
+    const declaredHeroRatio = landingHeroSize.width / landingHeroSize.height;
+    const loadedHeroRatio = landingHeroSize.naturalWidth / landingHeroSize.naturalHeight;
+    expect(Math.abs(declaredHeroRatio / loadedHeroRatio - 1)).toBeLessThanOrEqual(0.01);
 
     const pageCreateRequestPromise = page.waitForRequest(request => request.url() === studioUrl + '/api/pages' && request.method() === 'POST');
     const pageCreateResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/pages' && response.request().method() === 'POST');

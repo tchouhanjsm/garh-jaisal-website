@@ -102,8 +102,14 @@ $renderer = $read($root . '/include/experience-page.php');
 if (strpos($renderer, 'gj_schema_image_object') === false || strpos($renderer, 'experienceHeroCaption') === false) {
     $siteCheckErrors[] = 'Experience renderer must use the shared image schema and caption contract.';
 }
-if (strpos($renderer, 'gj_responsive_image_srcset') === false || strpos($read($root . '/include/image-metadata.php'), 'function gj_responsive_image_srcset') === false) {
-    $siteCheckErrors[] = 'Experience hero and related cards must use the validated responsive image helper.';
+$imageDimensionHelper = $read($root . '/include/header-v2.php');
+if (
+    strpos($renderer, 'gj_responsive_image_srcset') !== false
+    || strpos($renderer, 'gj_image_dimension_attributes($experience[\'hero_image\']') === false
+    || strpos($imageDimensionHelper, 'function gj_image_dimension_attributes') === false
+    || strpos($imageDimensionHelper, '$candidateBytes >= $responsiveSourceBytes') === false
+) {
+    $siteCheckErrors[] = 'Experience images must use one shared, byte-saving-validated responsive srcset emitter.';
 }
 if (strpos($renderer, 'gj_image_dimension_attributes($experience[\'hero_image\']') === false || strpos($renderer, 'decoding="async"') === false) {
     $siteCheckErrors[] = 'Experience hero must declare intrinsic image dimensions and asynchronous decoding.';

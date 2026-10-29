@@ -69,7 +69,7 @@ require __DIR__ . '/include/page-head.php';
         <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/v2/fort-from-roof.jpg') : '' ?> <?= gj_image_dimension_attributes('img/optimized/v2/fort-from-roof.webp', '100vw') ?>>
       <img
         src="img/optimized/v2/facade.webp"
-        <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/v2/facade.jpg') : '' ?> <?= gj_image_dimension_attributes('img/optimized/v2/facade.webp', '100vw') ?>
+        <?= gj_image_dimension_attributes('img/optimized/v2/facade.webp', '100vw') ?>
         alt=""
         aria-hidden="true"
         fetchpriority="high"
@@ -207,7 +207,7 @@ require __DIR__ . '/include/page-head.php';
 
     <div class="image-panel">
       <img
-        src="img/5.webp" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/5.webp') : '' ?> <?= gj_image_dimension_attributes('img/5.webp', '(max-width: 800px) 100vw, 50vw') ?>
+        src="img/5.webp" <?= gj_image_dimension_attributes('img/5.webp', '(max-width: 800px) 100vw, 50vw') ?>
         alt="Carved sandstone architecture inside Garh Jaisal Haveli"
         loading="lazy" decoding="async">
     </div>
@@ -249,7 +249,7 @@ require __DIR__ . '/include/page-head.php';
           <article class="card home-room-card">
             <div class="card-image">
               <a class="home-room-card-image-link" href="<?= htmlspecialchars($roomDetailsUrl, ENT_QUOTES, 'UTF-8') ?>">
-                <img src="<?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($room['image']) : '' ?> <?= gj_image_dimension_attributes($room['image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
+                <img src="<?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($room['image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
               </a>
             </div>
             <div class="card-body">
@@ -291,7 +291,7 @@ require __DIR__ . '/include/page-head.php';
 
     <div class="media">
       <img
-        src="img/roofslide.webp" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/roofslide.webp') : '' ?> <?= gj_image_dimension_attributes('img/roofslide.webp', '(max-width: 760px) 100vw, 50vw') ?>
+        src="img/roofslide.webp" <?= gj_image_dimension_attributes('img/roofslide.webp', '(max-width: 760px) 100vw, 50vw') ?>
         alt="Rooftop table at dusk overlooking the lights of Jaisalmer"
         loading="lazy"
         decoding="async">
@@ -321,7 +321,7 @@ require __DIR__ . '/include/page-head.php';
       <article class="card">
         <div class="card-image">
           <img
-            src="img/desert7.jpg" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/desert7.jpg') : '' ?> <?= gj_image_dimension_attributes('img/desert7.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
+            src="img/desert7.jpg" <?= gj_image_dimension_attributes('img/desert7.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
             alt="Camel safari at sunset in the Thar Desert near Jaisalmer"
             loading="lazy" decoding="async">
         </div>
@@ -346,7 +346,7 @@ require __DIR__ . '/include/page-head.php';
       <article class="card">
         <div class="card-image">
           <img
-            src="img/v2/swiss-tent.webp" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/v2/swiss-tent.webp') : '' ?> <?= gj_image_dimension_attributes('img/v2/swiss-tent.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
+            src="img/v2/swiss-tent.webp" <?= gj_image_dimension_attributes('img/v2/swiss-tent.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
             alt="Swiss tent accommodation in the Jaisalmer desert"
             loading="lazy" decoding="async">
         </div>
@@ -371,7 +371,7 @@ require __DIR__ . '/include/page-head.php';
       <article class="card">
         <div class="card-image">
           <img
-            src="img/tent.jpg" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/tent.jpg') : '' ?> <?= gj_image_dimension_attributes('img/tent.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
+            src="img/tent.jpg" <?= gj_image_dimension_attributes('img/tent.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
             alt="People sleeping under a starry desert sky in the Jaisalmer desert"
             loading="lazy" decoding="async">
         </div>
@@ -471,35 +471,35 @@ require __DIR__ . '/include/page-head.php';
 
       <figure>
         <img
-          src="img/jcity.jpg" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/jcity.jpg') : '' ?> <?= gj_image_dimension_attributes('img/jcity.jpg', '(max-width: 760px) 100vw, 50vw') ?>
+          src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg', '(max-width: 760px) 100vw, 50vw') ?>
           alt="Jaisalmer city seen from the fort"
           loading="lazy" decoding="async">
       </figure>
 
       <figure>
         <img
-          src="img/courtyard.jpg" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/courtyard.jpg') : '' ?> <?= gj_image_dimension_attributes('img/courtyard.jpg', '(max-width: 760px) 50vw, 28vw') ?>
+          src="img/courtyard.jpg" <?= gj_image_dimension_attributes('img/courtyard.jpg', '(max-width: 760px) 50vw, 28vw') ?>
           alt="Carved sandstone hallway inside a heritage haveli"
           loading="lazy" decoding="async">
       </figure>
 
       <figure>
         <img
-          src="img/recep1.jpg" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/recep1.jpg') : '' ?> <?= gj_image_dimension_attributes('img/recep1.jpg', '(max-width: 760px) 50vw, 28vw') ?>
+          src="img/recep1.jpg" <?= gj_image_dimension_attributes('img/recep1.jpg', '(max-width: 760px) 50vw, 28vw') ?>
           alt="Reception area with traditional furnishings at Garh Jaisal Haveli"
           loading="lazy" decoding="async">
       </figure>
 
       <figure>
         <img
-          src="img/s4.jpg" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/s4.jpg') : '' ?> <?= gj_image_dimension_attributes('img/s4.jpg', '(max-width: 760px) 50vw, 28vw') ?>
+          src="img/s4.jpg" <?= gj_image_dimension_attributes('img/s4.jpg', '(max-width: 760px) 50vw, 28vw') ?>
           alt="View across Jaisalmer from the rooftop"
           loading="lazy" decoding="async">
       </figure>
 
       <figure>
         <img
-          src="img/big9.jpg" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/big9.jpg') : '' ?> <?= gj_image_dimension_attributes('img/big9.jpg', '(max-width: 760px) 50vw, 28vw') ?>
+          src="img/big9.jpg" <?= gj_image_dimension_attributes('img/big9.jpg', '(max-width: 760px) 50vw, 28vw') ?>
           alt="A carved entrance in a historic sandstone building"
           loading="lazy" decoding="async">
       </figure>

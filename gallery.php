@@ -79,7 +79,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="gallery-page" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo gallery-hero">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/v2/rooftop-dusk.jpg" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/v2/rooftop-dusk.jpg') : '' ?> <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
       <?php
@@ -154,7 +154,7 @@ require __DIR__ . '/include/page-head.php';
               <a href="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>" data-gallery-open aria-label="Open full-size image: <?= htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') ?>">
                 <img
                   src="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>"
-                  <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($src) : '' ?> <?= gj_image_dimension_attributes($src, '(max-width: 500px) 100vw, (max-width: 760px) 50vw, (max-width: 1000px) 33vw, 25vw') ?>
+                  <?= gj_image_dimension_attributes($src, '(max-width: 500px) 100vw, (max-width: 760px) 50vw, (max-width: 1000px) 33vw, 25vw') ?>
                   alt="<?= htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') ?>"
                   loading="lazy"
                   decoding="async"
@@ -190,7 +190,7 @@ require __DIR__ . '/include/page-head.php';
       </div>
       <p id="gallery-lightbox-instructions" class="gallery-lightbox-help">Use the left and right arrow keys to browse photos. Press Escape to close.</p>
       <figure class="gallery-lightbox-figure">
-        <img data-gallery-lightbox-image src="img/v2/rooftop-dusk.jpg" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/v2/rooftop-dusk.jpg') : '' ?> <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg') ?> alt="Rooftop dining at Garh Jaisal Haveli" loading="lazy" decoding="async">
+        <img data-gallery-lightbox-image src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg') ?> alt="Rooftop dining at Garh Jaisal Haveli" loading="lazy" decoding="async">
         <figcaption data-gallery-lightbox-caption></figcaption>
         <p class="gallery-lightbox-position" data-gallery-lightbox-position role="status" aria-live="polite" aria-atomic="true">Choose a photo to begin.</p>
       </figure>

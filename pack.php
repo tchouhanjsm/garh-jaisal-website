@@ -102,7 +102,7 @@ require __DIR__ . '/include/page-head.php';
       <img
         src="img/desert11.jpg"
         alt="A camel rider travelling across sand dunes in the Thar Desert"
-        <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/desert11.jpg') : '' ?> <?= gj_image_dimension_attributes('img/desert11.jpg', '100vw') ?>
+        <?= gj_image_dimension_attributes('img/desert11.jpg', '100vw') ?>
         fetchpriority="high"
        decoding="async">
       <div class="package-hero-overlay"></div>
@@ -211,7 +211,7 @@ require __DIR__ . '/include/page-head.php';
         <?php foreach ($desertItems as $slug): $item = $experiences[$slug]; ?>
           <article class="experience-card" data-experience-filter-card data-experience-category="<?= htmlspecialchars((string) ($item['category'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" data-experience-duration="<?= htmlspecialchars((string) ($item['duration_type'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
             <a href="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>.php">
-              <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($item['hero_image']) : '' ?> <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
+              <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
               <div>
                 <p class="experience-duration-label"><?= htmlspecialchars($experienceDurationLabel((string) ($item['duration_type'] ?? '')), ENT_QUOTES, 'UTF-8') ?></p>
                 <p class="experience-card-kicker"><?= htmlspecialchars($item['eyebrow'], ENT_QUOTES, 'UTF-8') ?></p>
@@ -245,7 +245,7 @@ require __DIR__ . '/include/page-head.php';
         <?php foreach ($guideItems as $slug): $item = $experiences[$slug]; ?>
           <article class="experience-card" data-experience-filter-card data-experience-category="<?= htmlspecialchars((string) ($item['category'] ?? ''), ENT_QUOTES, 'UTF-8') ?>" data-experience-duration="<?= htmlspecialchars((string) ($item['duration_type'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
             <a href="<?= htmlspecialchars($slug, ENT_QUOTES, 'UTF-8') ?>.php">
-              <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($item['hero_image']) : '' ?> <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
+              <img src="<?= htmlspecialchars($item['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($item['hero_image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($item['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
               <div>
                 <p class="experience-duration-label"><?= htmlspecialchars($experienceDurationLabel((string) ($item['duration_type'] ?? '')), ENT_QUOTES, 'UTF-8') ?></p>
                 <p class="experience-card-kicker"><?= htmlspecialchars($item['eyebrow'], ENT_QUOTES, 'UTF-8') ?></p>
@@ -306,7 +306,7 @@ require __DIR__ . '/include/page-head.php';
       <div class="experience-card-grid package-guide-grid">
         <article class="experience-card">
           <a href="jaisalmer-fort-guide.php">
-            <img src="img/j7.jpg" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/j7.jpg') : '' ?> <?= gj_image_dimension_attributes('img/j7.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="Jaisalmer Fort rising above a public courtyard" loading="lazy" decoding="async">
+            <img src="img/j7.jpg" <?= gj_image_dimension_attributes('img/j7.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="Jaisalmer Fort rising above a public courtyard" loading="lazy" decoding="async">
             <div>
               <p class="experience-card-kicker">Fort &amp; arrival</p>
               <h3>Explore Jaisalmer Fort</h3>
@@ -317,7 +317,7 @@ require __DIR__ . '/include/page-head.php';
         </article>
         <article class="experience-card">
           <a href="desert-safari-guide.php">
-            <img src="img/desert3.jpg" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/desert3.jpg') : '' ?> <?= gj_image_dimension_attributes('img/desert3.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="Camel riders travelling over the dunes near Jaisalmer" loading="lazy" decoding="async">
+            <img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="Camel riders travelling over the dunes near Jaisalmer" loading="lazy" decoding="async">
             <div>
               <p class="experience-card-kicker">Desert choices</p>
               <h3>Compare desert experiences</h3>
@@ -328,7 +328,7 @@ require __DIR__ . '/include/page-head.php';
         </article>
         <article class="experience-card">
           <a href="jaisalmer-2-day-itinerary.php">
-            <img src="img/1.webp" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/1.webp') : '' ?> <?= gj_image_dimension_attributes('img/1.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="Panoramic view across Jaisalmer&#x27;s sandstone city" loading="lazy" decoding="async">
+            <img src="img/1.webp" <?= gj_image_dimension_attributes('img/1.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="Panoramic view across Jaisalmer&#x27;s sandstone city" loading="lazy" decoding="async">
             <div>
               <p class="experience-card-kicker">Short-stay planning</p>
               <h3>Plan two days in Jaisalmer</h3>

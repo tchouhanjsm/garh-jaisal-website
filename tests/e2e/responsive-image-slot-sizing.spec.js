@@ -83,7 +83,14 @@ test('responsive image candidates receive slot-accurate sizes hints', async ({ p
   test.setTimeout(90_000);
 
   for (const slot of responsiveSlots) {
-    await page.goto(BASE_URL + slot.route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
+    const response = await page.goto(BASE_URL + slot.route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
+    expect(response, slot.route + ' should return source markup').not.toBeNull();
+    const sourceMarkup = await response.text();
+    const mediaTags = sourceMarkup.match(/<(?:img|source)\b[^>]*>/gi) || [];
+    for (const tag of mediaTags) {
+      expect((tag.match(/\bsrcset\s*=/gi) || []).length, slot.route + ' must not emit duplicate srcset attributes').toBeLessThanOrEqual(1);
+      expect((tag.match(/\bsizes\s*=/gi) || []).length, slot.route + ' must not emit duplicate sizes attributes').toBeLessThanOrEqual(1);
+    }
     const image = page.locator(slot.selector);
     await expect(image, slot.route + ' should render ' + slot.selector).toHaveCount(1);
     await expect(image, slot.route + ' sizes hint should match its layout').toHaveAttribute('sizes', slot.sizes);

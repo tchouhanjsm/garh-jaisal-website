@@ -162,7 +162,7 @@ require __DIR__ . '/page-head.php';
       <img
         src="<?= htmlspecialchars($experience['hero_image'], ENT_QUOTES, 'UTF-8') ?>"
         alt="<?= htmlspecialchars($experience['hero_alt'], ENT_QUOTES, 'UTF-8') ?>"
-        <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($experience['hero_image']) : '' ?> <?= gj_image_dimension_attributes($experience['hero_image'], '100vw') ?>
+        <?= gj_image_dimension_attributes($experience['hero_image'], '100vw') ?>
         fetchpriority="high"
         decoding="async"
         aria-describedby="experience-hero-caption">
@@ -374,7 +374,7 @@ require __DIR__ . '/page-head.php';
             <article class="related-card">
               <a href="<?= htmlspecialchars($related['slug'], ENT_QUOTES, 'UTF-8') ?>.php">
                 <span class="related-card-image">
-                  <img src="<?= htmlspecialchars($related['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($related['hero_image']) : '' ?> <?= gj_image_dimension_attributes($related['hero_image'], '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($related['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
+                  <img src="<?= htmlspecialchars($related['hero_image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($related['hero_image'], '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($related['hero_alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
                 </span>
                 <span class="related-card-body">
                   <span class="related-card-kicker"><?= htmlspecialchars($related['eyebrow'], ENT_QUOTES, 'UTF-8') ?></span>
