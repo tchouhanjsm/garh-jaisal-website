@@ -66,10 +66,10 @@ require __DIR__ . '/include/page-head.php';
     <picture class="hero-picture">
       <source
         media="(min-width: 768px)"
-        <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/optimized/v2/fort-from-roof.webp') : '' ?> <?= gj_image_dimension_attributes('img/optimized/v2/fort-from-roof.webp', '100vw') ?>>
+        <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/v2/fort-from-roof.jpg') : '' ?> <?= gj_image_dimension_attributes('img/optimized/v2/fort-from-roof.webp', '100vw') ?>>
       <img
         src="img/optimized/v2/facade.webp"
-        <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/optimized/v2/facade.webp') : '' ?> <?= gj_image_dimension_attributes('img/optimized/v2/facade.webp', '100vw') ?>
+        <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/v2/facade.jpg') : '' ?> <?= gj_image_dimension_attributes('img/optimized/v2/facade.webp', '100vw') ?>
         alt=""
         aria-hidden="true"
         fetchpriority="high"
