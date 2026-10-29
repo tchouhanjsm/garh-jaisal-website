@@ -164,9 +164,10 @@ test('audit every published route for image slots and payloads at mobile and des
           });
           await Promise.all(initiallyVisible.map(img => img.decode ? img.decode().catch(() => undefined) : Promise.resolve()));
         });
-        const usage = await page.locator('img').evaluateAll(images => images.map(img => {
+        const usage = await page.locator('img').evaluateAll((images, viewportName) => images.map(img => {
           const rect = img.getBoundingClientRect();
           return {
+            viewportName,
             route: window.location.pathname,
             viewport: { width: window.innerWidth, height: window.innerHeight },
             src: img.getAttribute('src') || '',
@@ -185,7 +186,7 @@ test('audit every published route for image slots and payloads at mobile and des
             fetchPriority: img.fetchPriority || 'auto',
             visibleAtInitialViewport: rect.bottom > 0 && rect.top < window.innerHeight,
           };
-        }));
+        }), viewport.name);
         imageUsages.push(...usage);
         const resources = await page.evaluate(() => performance.getEntriesByType('resource')
           .filter(entry => /\.(?:avif|gif|jpe?g|png|webp)(?:[?#]|$)/i.test(entry.name))
@@ -224,7 +225,7 @@ test('audit every published route for image slots and payloads at mobile and des
 
   const usageByUrl = new Map();
   for (const usage of imageUsages) {
-    const key = `${usage.viewport.width}x${usage.viewport.height}|${usage.currentSrc || usage.src}`;
+    const key = `${usage.viewportName}|${usage.currentSrc || usage.src}`;
     const existing = usageByUrl.get(key) || { url: usage.currentSrc || usage.src, routes: [], usages: [] };
     if (!existing.routes.includes(usage.route)) existing.routes.push(usage.route);
     existing.usages.push(usage);
