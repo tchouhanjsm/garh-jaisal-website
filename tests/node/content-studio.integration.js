@@ -594,7 +594,7 @@ async function main() {
   html = await response.text();
   assert.ok(html.includes('Content Studio Integration Test Guide'), 'article content should render');
   assert.ok(html.includes('BlogPosting'), 'article structured data should render');
-  assert.ok(html.includes('<figcaption class="article-caption">Camel riders travel across the dunes near Jaisalmer in the Thar Desert.</figcaption>'), 'Live guide should render the reviewed hero caption');
+  assert.ok(html.includes('<figcaption id="article-hero-caption" class="article-caption">Camel riders travel across the dunes near Jaisalmer in the Thar Desert.</figcaption>'), 'Live guide should render the reviewed hero caption');
 
   const originalPublishedDate = JSON.parse(fs.readFileSync(recordFiles[2], 'utf8')).date_published;
   const editedBlog = { ...blog, h1: 'Content Studio Integration Test Guide Revised', seoTitle: 'Content Studio Integration Test Guide Revised', cardTitle: 'Content Studio Revised Archive Card' };
