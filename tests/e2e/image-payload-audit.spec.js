@@ -162,7 +162,15 @@ test('audit every published route for image slots and payloads at mobile and des
             const rect = img.getBoundingClientRect();
             return rect.width > 0 && rect.height > 0 && rect.bottom > 0 && rect.top < window.innerHeight;
           });
-          await Promise.all(initiallyVisible.map(img => img.decode ? img.decode().catch(() => undefined) : Promise.resolve()));
+          await Promise.all(initiallyVisible.map(async img => {
+            if (!img.decode) return;
+            // Broken or stalled image requests must not hold this route-wide audit indefinitely.
+            // The final visible-image assertions still fail if the deadline expires before load.
+            await Promise.race([
+              img.decode().catch(() => undefined),
+              new Promise(resolve => window.setTimeout(resolve, 1500)),
+            ]);
+          }));
         });
         const usage = await page.locator('img').evaluateAll((images, viewportName) => images.map(img => {
           const rect = img.getBoundingClientRect();
