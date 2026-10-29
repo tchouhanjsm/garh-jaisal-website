@@ -249,7 +249,7 @@ require __DIR__ . '/include/page-head.php';
           <article class="card home-room-card">
             <div class="card-image">
               <a class="home-room-card-image-link" href="<?= htmlspecialchars($roomDetailsUrl, ENT_QUOTES, 'UTF-8') ?>">
-                <img src="<?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($room['image']) : '' ?> <?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($room['image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
+                <img src="<?= htmlspecialchars($room['image'], ENT_QUOTES, 'UTF-8') ?>" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($room['image']) : '' ?> <?= gj_image_dimension_attributes($room['image'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?> alt="<?= htmlspecialchars($room['alt'], ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async">
               </a>
             </div>
             <div class="card-body">
