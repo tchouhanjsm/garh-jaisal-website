@@ -7,9 +7,9 @@
 | Item | Value |
 |---|---|
 | Verified main SHA | 15afdf46506bdaf3799bde97f47e3296210bb898 — PR #158 merged |
-| Active implementation | Sprint 83 — eliminate under-resolved experience heroes and enforce their responsive variants at release time |
+| Active implementation | Sprint 84 — remove offscreen image priority waste and enforce responsive-image review thresholds |
 | Working branch | feature/image-delivery-budget-guardrails-20261029 |
-| Scope | Keep high-intent hero images resolution-fit at mobile and desktop widths; register their responsive variants as mandatory, apply image byte budgets and preserve original sources in cPanel packages |
+| Scope | Keep experience heroes resolution-fit; remove the below-fold Journal preload; enforce 250,000-byte budgets for facade and Directions courtyard 1200px variants while preserving original source assets |
 | Release boundary | Owner retains merge and release approval; no cPanel upload, staging deployment or production deployment |
 | Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667258) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667379) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667299) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667390) — all passed on 15afdf46506bdaf3799bde97f47e3296210bb898 |
 
@@ -117,3 +117,11 @@ Regression coverage verifies action count and destination parity on the live exp
 - Add browser assertions for responsive candidate selection and at least 90% source-pixel coverage of the rendered hero slot at 1x density.
 - Add PHP/Python contracts tying experience records to the required source allowlist, minimum intrinsic width and generated variant paths.
 - Validate the exact new head through Site Checks, Browser E2E, package preflight and non-deploying Staging QA. No merge or deployment.
+
+
+## Sprint 84 — offscreen image priority and responsive payload budgets (PR #159, active)
+
+- Latest completed Browser E2E evidence identified the Journal card image `j7` as below the initial viewport at both 390px mobile and 1280px desktop, while the markup still preloaded it and assigned high fetch priority. Sprint 84 moves it to lazy loading and adds a regression assertion.
+- The same 37-route/two-viewport audit measured `facade-1200.webp` at 278,254 bytes and `courtyard-1200.webp` at 269,602 bytes. Introduce a bounded highest-quality-that-fits encoder and reduce both manifest caps to 250,000 bytes; the route-wide audit must then report zero resources above 250 KiB.
+- Re-run exact-head Site Checks (PHP 7.4/8.2), Browser E2E and screenshots, package preflight and non-deploying Staging QA before considering Sprint 84 validated.
+- Release boundary unchanged: owner retains merge approval; no cPanel upload, staging deployment or production deployment.

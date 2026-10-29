@@ -10,7 +10,7 @@ $editorialTopicTaxonomy = require __DIR__ . '/include/editorial-topic-taxonomy.p
 $archiveGuides = array_filter($editorialGuides, static function ($guide) {
     return is_array($guide) && ($guide['status'] ?? 'live') === 'live';
 });
-// Preserve the established Fort-guide lead card and first viewport/LCP image.
+// Preserve the Fort-guide lead-card order. Its image sits below the initial viewport on tested mobile and desktop sizes.
 $featuredGuide = $archiveGuides['jaisalmer-fort-guide'] ?? null;
 if (is_array($featuredGuide)) {
     unset($archiveGuides['jaisalmer-fort-guide']);
@@ -25,24 +25,7 @@ foreach ($archiveGuides as $archiveSlug => $archiveGuide) {
         $journalTopicAnchors[$archiveTopic] = (string) ($archiveGuide['slug'] ?? $archiveSlug);
     }
 }
-$buildResponsivePreload = static function ($imageStem, $sizes, $fallback) {
-    $srcset = [];
-    foreach ([480, 800, 1200] as $candidateWidth) {
-        $candidate = '/img/responsive/' . $imageStem . '-' . $candidateWidth . '.webp';
-        if (is_file(__DIR__ . $candidate) && !is_link(__DIR__ . $candidate)) {
-            $srcset[] = $candidate . ' ' . $candidateWidth . 'w';
-        }
-    }
-    $preload = [
-        'href' => $srcset ? strtok($srcset[0], ' ') : $fallback,
-        'fetchpriority' => 'high',
-    ];
-    if ($srcset) {
-        $preload['imagesrcset'] = implode(', ', $srcset);
-        $preload['imagesizes'] = $sizes;
-    }
-    return $preload;
-};
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -57,9 +40,6 @@ $page = [
     'title' => $pageTitle,
     'description' => $pageDescription,
     'path' => '/blog.php',
-    'preload' => [
-        $buildResponsivePreload('j7', '(max-width: 900px) 100vw, 60vw', '/img/j7.jpg'),
-    ],
     'og_type' => 'website',
     'og_title' => $pageTitle,
     'og_description' => $pageDescription,
@@ -194,7 +174,7 @@ require __DIR__ . '/include/page-head.php';
             <a href="<?= htmlspecialchars($slug . '.php', ENT_QUOTES, 'UTF-8') ?>">
               <?php if ($cardImage !== ''): ?>
                 <?php $cardImageSizes = $isFeatured ? '(max-width: 900px) 100vw, 60vw' : '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw'; ?>
-                <div class="blog-card-image"><img src="<?= htmlspecialchars($cardImage, ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($cardImage, $cardImageSizes) ?> alt="<?= htmlspecialchars($cardImageAlt, ENT_QUOTES, 'UTF-8') ?>" loading="<?= $isFeatured ? 'eager' : 'lazy' ?>" decoding="async"<?= $isFeatured ? ' fetchpriority="high"' : '' ?>></div>
+                <div class="blog-card-image"><img src="<?= htmlspecialchars($cardImage, ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($cardImage, $cardImageSizes) ?> alt="<?= htmlspecialchars($cardImageAlt, ENT_QUOTES, 'UTF-8') ?>" loading="lazy" decoding="async"></div>
               <?php endif; ?>
               <div class="blog-card-body">
                 <p class="blog-card-meta"><?= htmlspecialchars($cardCategory, ENT_QUOTES, 'UTF-8') ?></p>

@@ -28,6 +28,8 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             "img/v2/facade.jpg": 70,
             "img/v2/courtyard.jpg": 70,
         })
+        self.assertEqual(manifest["budget_quality_floor"], 58)
+        self.assertEqual(manifest["budget_quality_step"], 2)
         self.assertEqual(assets.quality_for_source(manifest, "img/v2/facade.jpg"), 70)
         self.assertEqual(assets.quality_for_source(manifest, "img/v2/courtyard.jpg"), 70)
         self.assertEqual(assets.quality_for_source(manifest, "img/j2.jpg"), manifest["quality"])
@@ -40,8 +42,8 @@ class ResponsiveImageAssetTests(unittest.TestCase):
         ])
         self.assertEqual(manifest["variant_max_bytes"], {
             "img/responsive/v2/courtyard-480.webp": 76800,
-            "img/responsive/v2/facade-1200.webp": 281600,
-            "img/responsive/v2/courtyard-1200.webp": 281600,
+            "img/responsive/v2/facade-1200.webp": 250000,
+            "img/responsive/v2/courtyard-1200.webp": 250000,
             "img/responsive/j5-1200.webp": 160000,
             "img/responsive/sleeping_under_stars/tour_9-1200.webp": 80000,
         })
@@ -115,6 +117,30 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             self.assertGreater(result["attempted_bytes"], result["max_bytes"])
             self.assertFalse(destination.exists())
 
+    def test_encode_variant_steps_down_quality_only_until_byte_budget_fits(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "source.jpg"
+            destination = root / "source-320.webp"
+            image = Image.effect_noise((640, 320), 55).convert("RGB")
+            image.save(source, format="JPEG", quality=96)
+
+            result = assets.encode_variant_with_budget(
+                source, destination, 320, 82, 6, 5.0, 18_000,
+                minimum_quality=50, quality_step=2,
+            )
+
+            self.assertEqual(result["status"], "generated")
+            self.assertLessEqual(result["bytes"], 18_000)
+            self.assertLess(result["quality"], 82)
+            self.assertTrue(destination.is_file())
+            attempts = result["quality_attempts"]
+            self.assertGreater(len(attempts), 1)
+            self.assertEqual(attempts[0]["quality"], 82)
+            self.assertGreater(attempts[0]["attempted_bytes"], 18_000)
+            self.assertEqual(attempts[-1]["quality"], result["quality"])
+            self.assertLessEqual(attempts[-1]["attempted_bytes"], 18_000)
+
     def test_encode_variant_preserves_ratio_and_drops_exif(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -172,6 +198,36 @@ class ResponsiveImageAssetTests(unittest.TestCase):
                     with self.subTest(overrides=overrides):
                         manifest = dict(base_manifest, quality_overrides=overrides)
                         manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+                        with self.assertRaisesRegex(ValueError, expected_error):
+                            assets.load_manifest()
+
+    def test_manifest_rejects_invalid_budget_quality_controls(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            image_dir = root / "img"
+            image_dir.mkdir()
+            Image.new("RGB", (640, 320), (20, 30, 40)).save(image_dir / "same.jpg", format="JPEG")
+            manifest_path = root / "manifest.json"
+            base_manifest = {
+                "version": 1,
+                "format": "WEBP",
+                "quality": 82,
+                "method": 6,
+                "minimum_savings_percent": 5,
+                "target_widths": [320, 480],
+                "sources": ["img/same.jpg"],
+                "variant_max_bytes": {"img/responsive/same-320.webp": 50000},
+            }
+            invalid_configs = [
+                ({"budget_quality_floor": 0}, "Invalid budget_quality_floor"),
+                ({"budget_quality_floor": 85}, "Invalid budget_quality_floor"),
+                ({"budget_quality_step": 0}, "Invalid budget_quality_step"),
+                ({"budget_quality_step": True}, "Invalid budget_quality_step"),
+            ]
+            with patch.object(assets, "ROOT", root), patch.object(assets, "OUTPUT_ROOT", root / "img" / "responsive"), patch.object(assets, "MANIFEST_PATH", manifest_path):
+                for config, expected_error in invalid_configs:
+                    with self.subTest(config=config):
+                        manifest_path.write_text(json.dumps(dict(base_manifest, **config)), encoding="utf-8")
                         with self.assertRaisesRegex(ValueError, expected_error):
                             assets.load_manifest()
 

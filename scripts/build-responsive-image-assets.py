@@ -128,6 +128,23 @@ def load_manifest() -> dict[str, Any]:
             raise ValueError(f"variant_max_bytes path is not a generated manifest candidate: {variant_path!r}")
         if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or max_bytes < 1:
             raise ValueError(f"Invalid byte budget for {variant_path!r}: {max_bytes!r}")
+
+    budget_quality_floor = manifest.get("budget_quality_floor", 58)
+    budget_quality_step = manifest.get("budget_quality_step", 2)
+    if isinstance(budget_quality_floor, bool) or not isinstance(budget_quality_floor, int) or not 1 <= budget_quality_floor <= quality:
+        raise ValueError("Invalid budget_quality_floor setting")
+    if isinstance(budget_quality_step, bool) or not isinstance(budget_quality_step, int) or not 1 <= budget_quality_step <= 10:
+        raise ValueError("Invalid budget_quality_step setting")
+    budgeted_sources = {
+        source for source in sources
+        if any(output_path(source, width).relative_to(ROOT).as_posix() in variant_max_bytes for width in widths)
+    }
+    for source in budgeted_sources:
+        starting_quality = quality_overrides.get(source, quality)
+        if starting_quality < budget_quality_floor:
+            raise ValueError(
+                f"budget_quality_floor exceeds the starting quality for budgeted source {source!r}"
+            )
     return manifest
 
 
@@ -290,6 +307,54 @@ def encode_variant(
     }
 
 
+
+def encode_variant_with_budget(
+    source_path: Path,
+    destination: Path,
+    target_width: int,
+    starting_quality: int,
+    method: int,
+    minimum_savings_percent: float,
+    max_bytes: int,
+    minimum_quality: int,
+    quality_step: int,
+) -> dict[str, Any]:
+    """Use the highest tested quality that satisfies a hard variant byte budget."""
+    attempts: list[dict[str, Any]] = []
+    quality = starting_quality
+    last_result: dict[str, Any] = {
+        "status": "skipped-byte-budget",
+        "width": target_width,
+        "height": None,
+        "bytes": None,
+        "saved_bytes": None,
+        "saved_percent": None,
+    }
+
+    while quality >= minimum_quality:
+        result = encode_variant(
+            source_path, destination, target_width, quality, method,
+            minimum_savings_percent, max_bytes
+        )
+        attempts.append({
+            "quality": quality,
+            "status": result.get("status"),
+            "attempted_bytes": result.get("attempted_bytes", result.get("bytes")),
+        })
+        last_result = result
+        if result.get("status") == "generated":
+            result["quality"] = quality
+            result["quality_attempts"] = attempts
+            return result
+        if result.get("status") == "skipped-no-upscale":
+            break
+        quality -= quality_step
+
+    last_result["quality"] = attempts[-1]["quality"] if attempts else starting_quality
+    last_result["quality_attempts"] = attempts
+    return last_result
+
+
 def thumbnail(source: Path, size: tuple[int, int]) -> Image.Image:
     with Image.open(source) as opened:
         opened.load()
@@ -369,16 +434,32 @@ def build() -> dict[str, Any]:
             relative_output_path = path.relative_to(ROOT).as_posix()
             source_quality = quality_for_source(manifest, source_relative)
             max_bytes = manifest.get("variant_max_bytes", {}).get(relative_output_path)
-            result = encode_variant(
-                source, path, width, source_quality, method, minimum_savings, max_bytes
-            )
+            if max_bytes is not None:
+                result = encode_variant_with_budget(
+                    source, path, width, source_quality, method, minimum_savings,
+                    max_bytes, manifest.get("budget_quality_floor", 58),
+                    manifest.get("budget_quality_step", 2)
+                )
+            else:
+                result = encode_variant(
+                    source, path, width, source_quality, method, minimum_savings
+                )
+                result["quality"] = source_quality
+
             if max_bytes is not None and result["status"] != "generated":
                 attempted_bytes = result.get("attempted_bytes")
                 attempted = (
-                    f"; encoder attempted {attempted_bytes:,} bytes"
+                    f"; final attempted size {attempted_bytes:,} bytes at quality {result.get('quality')}"
                     if isinstance(attempted_bytes, int)
-                    else f"; encoder status was {result['status']}"
+                    else f"; final encoder status was {result['status']} at quality {result.get('quality')}"
                 )
+                attempts = result.get("quality_attempts", [])
+                attempt_summary = ", ".join(
+                    f"q{item['quality']}={item.get('attempted_bytes')}"
+                    for item in attempts
+                )
+                if attempt_summary:
+                    attempted += f"; quality ladder: {attempt_summary}"
                 raise RuntimeError(
                     f"Enforced responsive image byte budget failed for {relative_output_path}: "
                     f"maximum {max_bytes:,} bytes{attempted}."
@@ -387,7 +468,7 @@ def build() -> dict[str, Any]:
                 "target_width": width,
                 "source_width": source_dimensions[0],
                 "source_height": source_dimensions[1],
-                "quality": source_quality,
+                "quality": result.get("quality", source_quality),
                 "relative_path": relative_output_path if result["status"] == "generated" else None,
                 "max_bytes": max_bytes,
                 "budget_status": "pass" if max_bytes is not None else "not-enforced",
@@ -429,6 +510,8 @@ def build() -> dict[str, Any]:
             "path": variant["relative_path"],
             "max_bytes": variant["max_bytes"],
             "actual_bytes": variant["bytes"],
+            "quality": variant["quality"],
+            "quality_attempts": variant.get("quality_attempts", []),
             "headroom_bytes": variant["budget_headroom_bytes"],
             "status": variant["budget_status"],
         }
@@ -451,6 +534,9 @@ def build() -> dict[str, Any]:
         "enforced_variant_byte_budget_count": len(enforced_variant_budgets),
         "enforced_variant_byte_budget_pass_count": sum(
             1 for item in enforced_variant_budgets if item["status"] == "pass"
+        ),
+        "budget_quality_adjustment_count": sum(
+            1 for item in enforced_variant_budgets if len(item.get("quality_attempts", [])) > 1 and item["status"] == "pass"
         ),
         "enforced_variant_byte_budget_headroom_bytes": sum(
             item["headroom_bytes"] for item in enforced_variant_budgets

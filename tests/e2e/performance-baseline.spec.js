@@ -207,5 +207,10 @@ test('write rendered performance and asset baseline for sitemap routes', async (
     contentType: 'application/json',
   });
 
+  const belowFoldEagerImages = findings.filter(finding => finding.type === 'below-fold-image-not-lazy');
+  expect(
+    belowFoldEagerImages,
+    'Below-the-fold images must not compete with first-render resources.'
+  ).toEqual([]);
   expect(routeReports.length, 'Every sitemap route should be represented in the performance baseline').toBe(routes.length);
 });

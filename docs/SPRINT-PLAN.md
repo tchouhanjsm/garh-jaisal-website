@@ -1028,3 +1028,17 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Retain all public routes, image originals, guest-facing itinerary details, booking/contact destinations, SEO structure and existing photo-gallery content.
 - Re-run PHP 7.4/8.2 checks, responsive asset generation, image slot/LCP browser tests, route-wide mobile/desktop audit, package preflight and non-deploying Staging QA on the exact head. The local Chromium audit is synthetic and is not production field Core Web Vitals.
 - Release boundary stays unchanged: no merge, cPanel upload, staging deployment or production deployment.
+
+
+## Sprint 84 — eliminate offscreen priority waste and enforce image review thresholds (PR #159)
+
+**Performance goal:** stop fetching below-the-fold editorial photography at high priority and eliminate the two measured responsive-image resources above the 250 KiB review threshold.
+
+- Remove the Journal lead-card image preload and high-priority eager policy. The 390px mobile and 1280px desktop baseline showed `j7` below the initial viewport in both contexts; keep it responsive and lazy until the guest reaches the card.
+- Add a regression contract that the below-fold Journal image has no active image preload or high fetch priority, then verify its responsive derivative still decodes after scrolling into view.
+- Make the performance baseline fail when any below-fold image is not marked lazy, so offscreen eager-image regressions are release-visible rather than report-only.
+- Tighten the facade and Directions courtyard 1200px variants to 250,000 bytes each, below the audit's 256,000-byte (250 KiB) transfer review threshold.
+- Add a bounded quality ladder for budgeted variants: start at the manifest source quality, decrement by two quality points only when a hard byte cap is missed, keep the highest passing quality, record every attempt and fail clearly if the quality-58 floor cannot satisfy a required budget.
+- Enforce zero selected responsive image resources above the audit's 250 KiB review threshold across 37 sitemap routes at 390px mobile and 1280px desktop.
+- Validate manifest controls, quality selection, all required hero variants, PHP 7.4/8.2 checks, Playwright image/performance contracts, package preflight and non-deploying Staging QA on the exact head. Measurements are local synthetic evidence, not production field Core Web Vitals.
+- Preserve source photos, alt text/captions, route structure, SEO metadata, experience content and booking/contact destinations. No merge or deployment.
