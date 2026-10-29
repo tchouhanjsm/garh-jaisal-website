@@ -158,7 +158,8 @@ $assert(is_int($schemaRequirePosition) && is_int($imageObjectPosition) && $schem
 $assert(strpos($contentStudioSource, "textField(record.hero_caption, 'Hero image caption', 20, 180)") !== false, 'Content Studio must block publishing a tour or guide without a reviewed caption.');
 $assert(strpos($studioPageRenderer, 'class="studio-page-hero-caption"') !== false && strpos($studioPageRenderer, 'primaryImageOfPage') !== false, 'Content Studio landing pages must render a caption and matching ImageObject schema.');
 
-$assert(strpos($template, '<figcaption class="article-caption">') !== false, 'Editorial hero image must render its reviewed visible caption.');
+$assert(strpos($template, '<figcaption id="article-hero-caption" class="article-caption">') !== false, 'Editorial hero image must render its reviewed visible caption with a stable accessible ID.');
+$assert(strpos($template, 'aria-describedby="article-hero-caption"') !== false, 'Editorial hero image must reference its visible caption for assistive technology.');
 $assert(strpos($template, '$guideHeroCaption') !== false, 'Editorial renderer must require and escape a hero caption.');
 $assert(strpos($template, 'gj_schema_breadcrumb_list') !== false, 'Article template must emit breadcrumb structured data.');
 $assert(strpos($sitemapGenerator, '$routeSlug') !== false && strpos($sitemapGenerator, 'status') !== false && strpos($sitemapGenerator, 'continue;') !== false, 'Static legacy article URLs must honour registry status.');
