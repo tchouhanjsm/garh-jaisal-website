@@ -190,7 +190,7 @@ require __DIR__ . '/include/page-head.php';
       </div>
       <p id="gallery-lightbox-instructions" class="gallery-lightbox-help">Use the left and right arrow keys to browse photos. Press Escape to close.</p>
       <figure class="gallery-lightbox-figure">
-        <img data-gallery-lightbox-image src="img/v2/rooftop-dusk.jpg" <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg') ?> alt="Rooftop dining at Garh Jaisal Haveli" loading="lazy" decoding="async">
+        <img data-gallery-lightbox-image src="img/v2/rooftop-dusk.jpg" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/v2/rooftop-dusk.jpg') : '' ?> <?= gj_image_dimension_attributes('img/v2/rooftop-dusk.jpg') ?> alt="Rooftop dining at Garh Jaisal Haveli" loading="lazy" decoding="async">
         <figcaption data-gallery-lightbox-caption></figcaption>
         <p class="gallery-lightbox-position" data-gallery-lightbox-position role="status" aria-live="polite" aria-atomic="true">Choose a photo to begin.</p>
       </figure>
