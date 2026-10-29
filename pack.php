@@ -102,7 +102,7 @@ require __DIR__ . '/include/page-head.php';
       <img
         src="img/desert11.jpg"
         alt="A camel rider travelling across sand dunes in the Thar Desert"
-        <?= gj_image_dimension_attributes('img/desert11.jpg', '100vw') ?>
+        <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/desert11.jpg') : '' ?> <?= gj_image_dimension_attributes('img/desert11.jpg', '100vw') ?>
         fetchpriority="high"
        decoding="async">
       <div class="package-hero-overlay"></div>
