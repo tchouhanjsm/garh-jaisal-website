@@ -16,31 +16,56 @@ function getSitemapRoutes() {
 
 const routes = getSitemapRoutes();
 const REVIEW_THRESHOLD_BYTES = 250 * 1024;
-const ROOT = path.resolve(__dirname, "../..");
+const ROOT = path.resolve(__dirname, '../..');
 const RESPONSIVE_IMAGE_MANIFEST = JSON.parse(
-  fs.readFileSync(path.join(ROOT, "scripts/responsive-image-assets-manifest.json"), "utf8")
+  fs.readFileSync(path.join(ROOT, 'scripts/responsive-image-assets-manifest.json'), 'utf8')
 );
 const ENFORCED_RESPONSIVE_VARIANT_BUDGETS = Object.entries(
   RESPONSIVE_IMAGE_MANIFEST.variant_max_bytes || {}
 ).map(([path, maxBytes]) => ({ path, maxBytes }));
-const responsiveBudgetFor = (candidatePath) =>
-  RESPONSIVE_IMAGE_MANIFEST.variant_max_bytes?.[candidatePath];
+const responsiveBudgetFor = candidatePath => RESPONSIVE_IMAGE_MANIFEST.variant_max_bytes?.[candidatePath];
 
-test('home and rooftop photo slots reserve dimensions and match their layouts', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Rooftop image-slot contract runs once.');
+const VIEWPORTS = [
+  { name: 'mobile-390', width: 390, height: 844 },
+  { name: 'desktop-1280', width: 1280, height: 800 },
+];
+const IMAGE_ROUTE_SMOKE = [
+  '/',
+  '/gallery.php',
+  '/room.php',
+  '/pack.php',
+  '/restaurant.php',
+  '/roof.php',
+  '/direction.php',
+  '/guided-jaisalmer-tour.php',
+  '/full-day-jaisalmer-tour.php',
+  '/jaisalmer-fort-guide.php',
+];
+
+test('home and rooftop photo slots reserve dimensions and match their layouts', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Run once with controlled viewport contexts.');
   const cases = [
     { route: '/', selector: '.home-rooftop .media img[src="img/roofslide.webp"]', sizes: '(max-width: 760px) 100vw, 50vw' },
     { route: '/roof.php', selector: '.cards .card-image img[src="img/roof.webp"]', sizes: '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw' },
     { route: '/roof.php', selector: '.cards .card-image img[src="img/r2.webp"]', sizes: '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw' },
     { route: '/roof.php', selector: '.cards .card-image img[src="img/r3.webp"]', sizes: '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw' },
   ];
-  for (const item of cases) {
-    await page.goto(BASE_URL + item.route, { waitUntil: 'domcontentloaded' });
-    const image = page.locator(item.selector);
-    await expect(image).toHaveCount(1);
-    await expect(image).toHaveAttribute('width', /^[1-9][0-9]*$/);
-    await expect(image).toHaveAttribute('height', /^[1-9][0-9]*$/);
-    await expect(image).toHaveAttribute('sizes', item.sizes);
+  for (const viewport of VIEWPORTS) {
+    const context = await browser.newContext({ baseURL: BASE_URL, viewport: { width: viewport.width, height: viewport.height }, deviceScaleFactor: 1 });
+    try {
+      const page = await context.newPage();
+      for (const item of cases) {
+        await page.goto(item.route, { waitUntil: 'domcontentloaded' });
+        const image = page.locator(item.selector);
+        await expect(image, `${item.route}: ${item.selector}`).toHaveCount(1);
+        await expect(image).toHaveAttribute('width', /^[1-9][0-9]*$/);
+        await expect(image).toHaveAttribute('height', /^[1-9][0-9]*$/);
+        await expect(image).toHaveAttribute('sizes', item.sizes);
+        await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 10_000 }).toBe(true);
+      }
+    } finally {
+      await context.close();
+    }
   }
 });
 
@@ -52,10 +77,10 @@ test('Directions LCP hero matches its preload and selects width-appropriate cand
     { viewport: { width: 1280, height: 800 }, file: 'img/responsive/v2/courtyard-1200.webp', maxBytes: responsiveBudgetFor('img/responsive/v2/courtyard-1200.webp') },
   ];
   for (const item of cases) {
-    const context = await browser.newContext({baseURL: BASE_URL, viewport: item.viewport, deviceScaleFactor: 1});
+    const context = await browser.newContext({ baseURL: BASE_URL, viewport: item.viewport, deviceScaleFactor: 1 });
     try {
       const page = await context.newPage();
-      const response = await page.goto('/direction.php', {waitUntil: 'domcontentloaded'});
+      const response = await page.goto('/direction.php', { waitUntil: 'domcontentloaded' });
       expect(response).not.toBeNull();
       expect(response.status()).toBe(200);
       const hero = page.locator('.page-hero-media img').first();
@@ -63,7 +88,8 @@ test('Directions LCP hero matches its preload and selects width-appropriate cand
       await expect.poll(() => hero.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
       const state = await page.evaluate(() => {
         const img = document.querySelector('.page-hero-media img');
-        const preload = document.querySelector('link[rel="preload"][as="image"][imagesrcset]');
+        const preloads = [...document.querySelectorAll('link[rel="preload"][as="image"]')];
+        const preload = preloads.find(link => link.hasAttribute('imagesrcset'));
         return {
           srcset: img?.getAttribute('srcset') || '',
           sizes: img?.getAttribute('sizes') || '',
@@ -72,19 +98,23 @@ test('Directions LCP hero matches its preload and selects width-appropriate cand
           naturalHeight: img?.naturalHeight || 0,
           fetchPriority: img?.fetchPriority || '',
           loading: img?.getAttribute('loading') || '',
+          preloadCount: preloads.length,
           preloadHref: preload?.getAttribute('href') || '',
           preloadSrcset: preload?.getAttribute('imagesrcset') || '',
           preloadSizes: preload?.getAttribute('imagesizes') || '',
+          renderedWidth: img?.getBoundingClientRect().width || 0,
         };
       });
       expect(state.sizes).toBe('100vw');
       expect(state.fetchPriority).toBe('high');
       expect(state.loading).toBe('eager');
+      expect(state.preloadCount).toBe(1);
       expect(state.preloadHref).toBe('/img/v2/courtyard.jpg');
       expect(state.preloadSizes).toBe('100vw');
       expect(state.currentSrc).toContain('/' + item.file);
       expect(state.naturalWidth).toBeGreaterThan(0);
       expect(state.naturalHeight).toBeGreaterThan(0);
+      expect(state.renderedWidth).toBeGreaterThan(0);
       expect(Math.abs(state.naturalWidth / state.naturalHeight - 1333 / 2000)).toBeLessThanOrEqual(0.01);
       const normalizeSrcset = value => value.split(',').map(candidate => candidate.trim().replace(/^\/+/, '')).join(', ');
       expect(normalizeSrcset(state.preloadSrcset)).toBe(normalizeSrcset(state.srcset));
@@ -97,9 +127,9 @@ test('Directions LCP hero matches its preload and selects width-appropriate cand
   }
 });
 
-test('write deduplicated image payload audit for sitemap routes', async ({ browser }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Image payload audit runs once at desktop width');
-  test.setTimeout(180_000);
+test('audit every published route for image slots and payloads at mobile and desktop viewports', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Create controlled mobile and desktop browser contexts only once.');
+  test.setTimeout(360_000);
 
   const enforcedVariantBudgets = ENFORCED_RESPONSIVE_VARIANT_BUDGETS.map(budget => {
     const absolutePath = path.join(ROOT, budget.path);
@@ -110,141 +140,201 @@ test('write deduplicated image payload audit for sitemap routes', async ({ brows
     return { ...budget, bytes, headroomBytes: budget.maxBytes - bytes, status: 'pass' };
   });
 
-  const context = await browser.newContext({
-    baseURL: 'http://127.0.0.1:8080',
-    viewport: { width: 1280, height: 800 },
-  });
-  const page = await context.newPage();
-  const usageByUrl = new Map();
-
-  try {
-    for (const route of routes) {
-      const response = await page.goto(route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
-      expect(response, `No HTTP response for ${route}`).not.toBeNull();
-      expect(response.status(), `Unexpected HTTP status for ${route}`).toBeLessThan(400);
-
-      // Let local eager and initially visible images decode, without waiting on third-party frames/scripts.
-      await page.locator('img').evaluateAll(async images => {
-        const candidates = images.filter(img => {
+  const imageUsages = [];
+  const imageResources = [];
+  const routeResults = [];
+  for (const viewport of VIEWPORTS) {
+    const context = await browser.newContext({
+      baseURL: BASE_URL,
+      viewport: { width: viewport.width, height: viewport.height },
+      deviceScaleFactor: 1,
+    });
+    try {
+      const page = await context.newPage();
+      for (const route of routes) {
+        const response = await page.goto(route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
+        expect(response, `No HTTP response for ${route} at ${viewport.name}`).not.toBeNull();
+        expect(response.status(), `Unexpected HTTP status for ${route} at ${viewport.name}`).toBeLessThan(400);
+        const usage = await page.locator('img').evaluateAll(images => images.map(img => {
           const rect = img.getBoundingClientRect();
-          return img.loading !== 'lazy' || (rect.bottom > 0 && rect.top < window.innerHeight);
-        });
-        await Promise.all(candidates.map(img => img.decode ? img.decode().catch(() => undefined) : Promise.resolve()));
-      });
-
-      const imageUsages = await page.locator('img').evaluateAll(images => images.map((img, index) => ({
-        url: img.currentSrc || img.src || '',
-        route: window.location.pathname,
-        alt: img.getAttribute('alt'),
-        widthAttribute: img.getAttribute('width'),
-        heightAttribute: img.getAttribute('height'),
-        naturalWidth: img.naturalWidth,
-        naturalHeight: img.naturalHeight,
-        loading: img.loading || 'eager',
-        fetchPriority: img.fetchPriority || 'auto',
-        visibleAtInitialViewport: (() => {
-          const rect = img.getBoundingClientRect();
-          return rect.bottom > 0 && rect.top < window.innerHeight;
-        })(),
-        elementIndex: index + 1,
-      })));
-
-      const imageResources = await page.evaluate(() => performance.getEntriesByType('resource')
-        .filter(entry => entry.initiatorType === 'img' || /\.(avif|gif|jpe?g|png|webp)(?:[?#]|$)/i.test(entry.name))
-        .map(entry => ({
-          url: entry.name,
-          transferBytes: entry.transferSize || 0,
-          encodedBytes: entry.encodedBodySize || 0,
-          decodedBytes: entry.decodedBodySize || 0,
-          durationMs: Math.round(entry.duration),
+          return {
+            route: window.location.pathname,
+            viewport: { width: window.innerWidth, height: window.innerHeight },
+            src: img.getAttribute('src') || '',
+            srcset: img.getAttribute('srcset') || '',
+            sizes: img.getAttribute('sizes') || '',
+            currentSrc: img.currentSrc || '',
+            alt: img.getAttribute('alt'),
+            widthAttribute: img.getAttribute('width'),
+            heightAttribute: img.getAttribute('height'),
+            naturalWidth: img.naturalWidth,
+            naturalHeight: img.naturalHeight,
+            complete: img.complete,
+            renderedWidth: Math.round(rect.width * 100) / 100,
+            renderedHeight: Math.round(rect.height * 100) / 100,
+            loading: img.loading || 'eager',
+            fetchPriority: img.fetchPriority || 'auto',
+            visibleAtInitialViewport: rect.bottom > 0 && rect.top < window.innerHeight,
+          };
+        }));
+        imageUsages.push(...usage);
+        const resources = await page.evaluate(() => performance.getEntriesByType('resource')
+          .filter(entry => /\.(?:avif|gif|jpe?g|png|webp)(?:[?#]|$)/i.test(entry.name))
+          .map(entry => ({
+            url: entry.name,
+            transferBytes: entry.transferSize || 0,
+            encodedBytes: entry.encodedBodySize || 0,
+            decodedBytes: entry.decodedBodySize || 0,
+            durationMs: Math.round(entry.duration),
+            initiatorType: entry.initiatorType,
+          })));
+        imageResources.push(...resources.map(resource => ({ ...resource, route, viewport: viewport.name })));
+        const preloads = await page.locator('link[rel="preload"][as="image"]').evaluateAll(links => links.map(link => ({
+          route: window.location.pathname,
+          href: link.getAttribute('href') || '',
+          imagesrcset: link.getAttribute('imagesrcset') || '',
+          imagesizes: link.getAttribute('imagesizes') || '',
+          media: link.getAttribute('media') || '',
+          fetchpriority: link.getAttribute('fetchpriority') || 'auto',
         })));
-
-      const resourceByUrl = new Map();
-      for (const resource of imageResources) {
-        const current = resourceByUrl.get(resource.url);
-        if (!current || resource.transferBytes > current.transferBytes) {
-          resourceByUrl.set(resource.url, resource);
-        }
-      }
-
-      for (const usage of imageUsages) {
-        if (!usage.url) continue;
-        const existing = usageByUrl.get(usage.url) || {
-          url: usage.url,
-          routes: [],
-          usages: [],
-          resource: resourceByUrl.get(usage.url) || null,
-        };
-        if (!existing.routes.includes(route)) existing.routes.push(route);
-        existing.usages.push({
+        const visibleUnprioritized = usage.filter(img => img.visibleAtInitialViewport && img.renderedWidth > 300 && img.fetchPriority !== 'high');
+        const visibleLazy = usage.filter(img => img.visibleAtInitialViewport && img.renderedWidth > 300 && img.loading === 'lazy');
+        routeResults.push({
           route,
-          altPresent: usage.alt !== null,
-          alt: usage.alt,
-          widthAttribute: usage.widthAttribute,
-          heightAttribute: usage.heightAttribute,
-          naturalWidth: usage.naturalWidth,
-          naturalHeight: usage.naturalHeight,
-          loading: usage.loading,
-          fetchPriority: usage.fetchPriority,
-          visibleAtInitialViewport: usage.visibleAtInitialViewport,
-          elementIndex: usage.elementIndex,
+          viewport: viewport.name,
+          imageCount: usage.length,
+          visibleUnprioritized: visibleUnprioritized.map(img => ({ src: img.src, currentSrc: img.currentSrc, width: img.renderedWidth, loading: img.loading, fetchPriority: img.fetchPriority })),
+          visibleLazy: visibleLazy.map(img => ({ src: img.src, currentSrc: img.currentSrc, width: img.renderedWidth, loading: img.loading })),
+          preloads,
         });
-        const candidateResource = resourceByUrl.get(usage.url);
-        if (candidateResource && (!existing.resource || candidateResource.transferBytes > existing.resource.transferBytes)) {
-          existing.resource = candidateResource;
-        }
-        usageByUrl.set(usage.url, existing);
       }
+    } finally {
+      await context.close();
     }
-  } finally {
-    await context.close();
   }
 
-  const images = [...usageByUrl.values()].map(item => {
-    const resource = item.resource;
-    const extensions = item.url.match(/\.([a-z0-9]+)(?:[?#]|$)/i);
+  const usageByUrl = new Map();
+  for (const usage of imageUsages) {
+    const key = `${usage.viewport.width}x${usage.viewport.height}|${usage.currentSrc || usage.src}`;
+    const existing = usageByUrl.get(key) || { url: usage.currentSrc || usage.src, routes: [], usages: [] };
+    if (!existing.routes.includes(usage.route)) existing.routes.push(usage.route);
+    existing.usages.push(usage);
+    usageByUrl.set(key, existing);
+  }
+  const resourceByKey = new Map();
+  for (const resource of imageResources) {
+    const key = `${resource.viewport}|${resource.url}`;
+    const current = resourceByKey.get(key);
+    if (!current || resource.transferBytes > current.transferBytes) resourceByKey.set(key, resource);
+  }
+
+  const images = [...usageByUrl.entries()].map(([key, item]) => {
+    const viewportName = key.split('|')[0];
+    const resource = resourceByKey.get(`${viewportName}|${item.url}`);
+    const usages = item.usages;
+    const knownSlots = usages.filter(usage => usage.renderedWidth > 0);
     return {
       ...item,
-      format: extensions ? extensions[1].toLowerCase() : 'unknown',
       routeCount: item.routes.length,
-      usageCount: item.usages.length,
+      usageCount: usages.length,
+      format: (item.url.match(/\.([a-z0-9]+)(?:[?#]|$)/i) || [null, 'unknown'])[1].toLowerCase(),
       transferBytes: resource?.transferBytes ?? null,
       encodedBytes: resource?.encodedBytes ?? null,
       decodedBytes: resource?.decodedBytes ?? null,
       durationMs: resource?.durationMs ?? null,
+      renderedSlotWidthMin: knownSlots.length ? Math.min(...knownSlots.map(x => x.renderedWidth)) : null,
+      renderedSlotWidthMax: knownSlots.length ? Math.max(...knownSlots.map(x => x.renderedWidth)) : null,
+      selectedPixelsPerCssPixel: usages.filter(x => x.naturalWidth && x.renderedWidth > 0).map(x => ({
+        route: x.route,
+        viewportWidth: x.viewport.width,
+        ratio: Math.round((x.naturalWidth / x.renderedWidth) * 100) / 100,
+      })),
       reviewCandidate: (resource?.transferBytes ?? 0) > REVIEW_THRESHOLD_BYTES,
-      evidenceLimit: 'Chromium resource timing sizes may be zero or unavailable; verify actual file bytes before choosing an optimization.',
+      evidenceLimit: 'Local Chromium/resource timing only; not production traffic or field Core Web Vitals.',
     };
   }).sort((a, b) => (b.transferBytes ?? -1) - (a.transferBytes ?? -1));
 
   const summary = {
     routesChecked: routes.length,
-    uniqueImageUrls: images.length,
-    measuredImages: images.filter(image => image.transferBytes !== null && image.transferBytes > 0).length,
+    viewportsChecked: VIEWPORTS.length,
+    routeViewportChecks: routeResults.length,
+    uniqueImageViewportUrls: images.length,
+    measuredImageResources: imageResources.filter(item => item.transferBytes > 0).length,
     largeImageCandidates: images.filter(image => image.reviewCandidate).length,
     reviewThresholdBytes: REVIEW_THRESHOLD_BYTES,
-    largestImages: images.slice(0, 25),
+    routesWithVisibleLargeImagesNotHighPriority: routeResults.filter(result => result.visibleUnprioritized.length > 0).map(result => ({
+      route: result.route,
+      viewport: result.viewport,
+      images: result.visibleUnprioritized,
+    })),
+    routesWithVisibleLargeLazyImages: routeResults.filter(result => result.visibleLazy.length > 0).map(result => ({
+      route: result.route,
+      viewport: result.viewport,
+      images: result.visibleLazy,
+    })),
   };
 
-  console.log('Deduplicated image payload audit:', JSON.stringify(summary, null, 2));
-
-  const reportDir = path.join(process.cwd(), 'artifacts', 'image-payload-audit');
-  fs.mkdirSync(reportDir, { recursive: true });
-  const reportPath = path.join(reportDir, 'image-payload-audit.json');
-  fs.writeFileSync(reportPath, JSON.stringify({
+  const report = {
     generatedAt: new Date().toISOString(),
-    source: 'local PHP site rendered by Playwright in Chromium; not production measurements',
-    viewport: { width: 1280, height: 800 },
+    source: 'local PHP site rendered by Playwright in Chromium; synthetic local measurements, not production RUM or field Core Web Vitals',
+    viewports: VIEWPORTS,
     enforcedVariantBudgets,
     enforcedVariantBudgetHeadroomBytes: enforcedVariantBudgets.reduce((sum, item) => sum + item.headroomBytes, 0),
     summary,
+    routeResults,
     images,
-  }, null, 2) + '\n');
-
-  await testInfo.attach('image-payload-audit', {
-    path: reportPath,
-    contentType: 'application/json',
-  });
+  };
+  const reportDir = path.join(process.cwd(), 'artifacts', 'image-payload-audit');
+  fs.mkdirSync(reportDir, { recursive: true });
+  const reportPath = path.join(reportDir, 'image-payload-audit.json');
+  fs.writeFileSync(reportPath, JSON.stringify(report, null, 2) + '\n');
+  await testInfo.attach('image-payload-audit', { path: reportPath, contentType: 'application/json' });
 
   expect(routes.length, 'The image audit should cover all sitemap routes').toBeGreaterThan(0);
+  expect(routeResults.length, 'Every published route must be checked at both viewport sizes').toBe(routes.length * VIEWPORTS.length);
+  const failedLoads = imageUsages.filter(image => image.visibleAtInitialViewport && image.renderedWidth > 0 && image.src && (!image.complete || image.naturalWidth < 1));
+  expect(failedLoads.map(image => `${image.route} @${image.viewport.width}px: ${image.src}`), 'Visible images must load at initial viewport').toEqual([]);
+});
+
+test('representative guest routes decode their LCP image and keep below-fold photos lazy', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Run controlled representative route matrix once.');
+  for (const viewport of VIEWPORTS) {
+    const context = await browser.newContext({ baseURL: BASE_URL, viewport: { width: viewport.width, height: viewport.height }, deviceScaleFactor: 1 });
+    try {
+      const page = await context.newPage();
+      for (const route of IMAGE_ROUTE_SMOKE) {
+        await page.goto(route, { waitUntil: 'domcontentloaded' });
+        const hero = page.locator('main img').first();
+        await expect(hero, `${route} should render its first main image`).toHaveCount(1);
+        await expect.poll(() => hero.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 10_000 }).toBe(true);
+        const state = await hero.evaluate(img => ({
+          src: img.currentSrc || img.src,
+          loading: img.loading,
+          fetchPriority: img.fetchPriority,
+          alt: img.getAttribute('alt'),
+          naturalWidth: img.naturalWidth,
+          naturalHeight: img.naturalHeight,
+        }));
+        expect(state.naturalWidth, `${route}: hero should decode`).toBeGreaterThan(0);
+        expect(state.naturalHeight, `${route}: hero dimensions should be valid`).toBeGreaterThan(0);
+        expect(state.alt, `${route}: main image should expose alt text`).not.toBeNull();
+        expect(state.loading, `${route}: hero should not be marked lazy`).not.toBe('lazy');
+      }
+    } finally {
+      await context.close();
+    }
+  }
+});
+
+test('write deduplicated image payload audit for sitemap routes', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Generate the complete viewport-aware audit only once.');
+  test.setTimeout(360_000);
+  const context = await browser.newContext({ baseURL: BASE_URL, viewport: { width: 1280, height: 800 } });
+  try {
+    const page = await context.newPage();
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+  } finally {
+    await context.close();
+  }
+  expect(routes.length).toBeGreaterThan(0);
 });
