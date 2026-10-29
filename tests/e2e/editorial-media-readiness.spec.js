@@ -91,6 +91,8 @@ test('editorial and experience hero media is publish-ready', async ({ page }, te
         title: document.title,
         heroSource: absoluteHero,
         currentSource: image?.currentSrc || '',
+        responsiveSrcset: image?.getAttribute('srcset') || '',
+        responsiveSizes: image?.getAttribute('sizes') || '',
         alt: image?.getAttribute('alt') || '',
         caption: document.querySelector(captionSelector)?.textContent?.trim() || '',
         naturalWidth: image?.naturalWidth || 0,
@@ -119,6 +121,23 @@ test('editorial and experience hero media is publish-ready', async ({ page }, te
     if (rendered.imageObject?.url !== rendered.ogImage) issues.push('image-object-url-does-not-match-social-image');
     if (rendered.imageObject?.caption !== rendered.caption) issues.push('image-object-caption-does-not-match-visible-caption');
     if (rendered.imageObject?.description !== rendered.alt) issues.push('image-object-description-does-not-match-alt');
+    if (rendered.responsiveSrcset) {
+      const candidates = rendered.responsiveSrcset.split(',').map(candidate => {
+        const parts = candidate.trim().split(/\\s+/);
+        return { url: new URL(parts[0], rendered.heroSource), width: Number((parts[1] || '').replace(/w$/, '')) };
+      });
+      const widths = candidates.map(candidate => candidate.width);
+      if (candidates.length < 2 || widths.some(width => !Number.isInteger(width) || width < 1)) {
+        issues.push('responsive-srcset-has-insufficient-or-invalid-width-descriptors');
+      }
+      if (new Set(widths).size !== widths.length || widths.some((width, index) => index > 0 && width <= widths[index - 1])) {
+        issues.push('responsive-srcset-widths-are-not-unique-and-ascending');
+      }
+      if (candidates.some(candidate => candidate.url.origin !== heroUrl.origin || !candidate.url.pathname.startsWith('/img/responsive/'))) {
+        issues.push('responsive-srcset-contains-unsafe-or-unexpected-asset-path');
+      }
+      if (!rendered.responsiveSizes.trim()) issues.push('responsive-srcset-is-missing-sizes');
+    }
 
     const sourceExtension = heroUrl.pathname.split('.').pop().toLowerCase();
     const supportsMetadataDimensions = sourceExtension !== 'avif';
@@ -142,6 +161,8 @@ test('editorial and experience hero media is publish-ready', async ({ page }, te
       title: rendered.title,
       source: heroUrl.pathname,
       currentSource: rendered.currentSource ? new URL(rendered.currentSource).pathname : '',
+      responsiveSrcset: rendered.responsiveSrcset,
+      responsiveSizes: rendered.responsiveSizes,
       naturalWidth: rendered.naturalWidth,
       naturalHeight: rendered.naturalHeight,
       alt: rendered.alt,
