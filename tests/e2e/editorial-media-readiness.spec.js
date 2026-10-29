@@ -127,7 +127,7 @@ test('editorial and experience hero media is publish-ready', async ({ page }, te
     if (rendered.imageObject?.description !== rendered.alt) issues.push('image-object-description-does-not-match-alt');
     if (rendered.responsiveSrcset) {
       const candidates = rendered.responsiveSrcset.split(',').map(candidate => {
-        const parts = candidate.trim().split(/\\s+/);
+        const parts = candidate.trim().split(/\s+/);
         return { url: new URL(parts[0], rendered.heroSource), width: Number((parts[1] || '').replace(/w$/, '')) };
       });
       const widths = candidates.map(candidate => candidate.width);
