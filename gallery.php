@@ -154,7 +154,7 @@ require __DIR__ . '/include/page-head.php';
               <a href="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>" data-gallery-open aria-label="Open full-size image: <?= htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') ?>">
                 <img
                   src="<?= htmlspecialchars($src, ENT_QUOTES, 'UTF-8') ?>"
-                  <?= gj_image_dimension_attributes($src, '(max-width: 500px) 100vw, (max-width: 760px) 50vw, (max-width: 1000px) 33vw, 25vw') ?>
+                  <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($src) : '' ?> <?= gj_image_dimension_attributes($src, '(max-width: 500px) 100vw, (max-width: 760px) 50vw, (max-width: 1000px) 33vw, 25vw') ?>
                   alt="<?= htmlspecialchars($alt, ENT_QUOTES, 'UTF-8') ?>"
                   loading="lazy"
                   decoding="async"
