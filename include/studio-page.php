@@ -168,7 +168,7 @@ include __DIR__ . '/header-v2.php';
         <?php endif; ?>
       </div>
       <figure class="studio-page-hero-media">
-        <img src="<?= $studioPageEscape($studioPageHero) ?>" alt="<?= $studioPageEscape($studioPageHeroAlt) ?>"<?php if (is_array($studioPageHeroMetadata)): ?> width="<?= (int) $studioPageHeroMetadata['width'] ?>" height="<?= (int) $studioPageHeroMetadata['height'] ?>"<?php endif; ?> fetchpriority="high" decoding="async" aria-describedby="studio-page-hero-caption">
+        <img src="<?= $studioPageEscape($studioPageHero) ?>" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($studioPageHero) : '' ?> alt="<?= $studioPageEscape($studioPageHeroAlt) ?>"<?php if (is_array($studioPageHeroMetadata)): ?> width="<?= (int) $studioPageHeroMetadata['width'] ?>" height="<?= (int) $studioPageHeroMetadata['height'] ?>"<?php endif; ?> fetchpriority="high" decoding="async" aria-describedby="studio-page-hero-caption">
         <figcaption id="studio-page-hero-caption" class="studio-page-hero-caption"><?= $studioPageEscape($studioPageHeroCaption) ?></figcaption>
       </figure>
     </div>
