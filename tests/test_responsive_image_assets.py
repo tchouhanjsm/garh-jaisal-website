@@ -29,7 +29,7 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             "img/v2/courtyard.jpg": 70,
         })
         self.assertEqual(assets.quality_for_source(manifest, "img/v2/facade.jpg"), 70)
-        self.assertEqual(assets.quality_for_source(manifest, "img/v2/courtyard.jpg"), 70
+        self.assertEqual(assets.quality_for_source(manifest, "img/v2/courtyard.jpg"), 70)
         self.assertEqual(assets.quality_for_source(manifest, "img/j2.jpg"), manifest["quality"])
 
     def test_variant_coverage_report_counts_generated_candidates_and_verified_fallbacks(self):
