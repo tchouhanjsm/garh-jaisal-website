@@ -160,6 +160,8 @@ $assert(strpos($studioPageRenderer, 'class="studio-page-hero-caption"') !== fals
 
 $assert(strpos($template, '<figcaption id="article-hero-caption" class="article-caption">') !== false, 'Editorial hero image must render its reviewed visible caption with a stable accessible ID.');
 $assert(strpos($template, 'aria-describedby="article-hero-caption"') !== false, 'Editorial hero image must reference its visible caption for assistive technology.');
+$assert(strpos($template, 'gj_image_dimension_attributes($guide[\'hero_image\']') !== false, 'Editorial hero image must declare intrinsic dimensions.');
+$assert(strpos($template, 'decoding="async"') !== false, 'Editorial hero image must use asynchronous decoding.');
 $assert(strpos($template, '$guideHeroCaption') !== false, 'Editorial renderer must require and escape a hero caption.');
 $assert(strpos($template, 'gj_schema_breadcrumb_list') !== false, 'Article template must emit breadcrumb structured data.');
 $assert(strpos($sitemapGenerator, '$routeSlug') !== false && strpos($sitemapGenerator, 'status') !== false && strpos($sitemapGenerator, 'continue;') !== false, 'Static legacy article URLs must honour registry status.');

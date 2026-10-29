@@ -58,6 +58,18 @@ test('editorial and experience hero media is publish-ready', async ({ page }, te
     expect(captionText.length, route.path + ' caption should meet the 20-character minimum').toBeGreaterThanOrEqual(20);
     expect(captionText.length, route.path + ' caption should fit the 180-character editorial limit').toBeLessThanOrEqual(180);
     await image.evaluate(img => img.decode());
+    const intrinsic = await image.evaluate(img => ({
+      width: Number(img.getAttribute('width') || 0),
+      height: Number(img.getAttribute('height') || 0),
+      naturalWidth: img.naturalWidth,
+      naturalHeight: img.naturalHeight,
+      decoding: img.getAttribute('decoding'),
+    }));
+    expect(intrinsic.width, route.path + ' hero width should be declared').toBeGreaterThan(0);
+    expect(intrinsic.height, route.path + ' hero height should be declared').toBeGreaterThan(0);
+    expect(intrinsic.width, route.path + ' declared width should match the loaded asset').toBe(intrinsic.naturalWidth);
+    expect(intrinsic.height, route.path + ' declared height should match the loaded asset').toBe(intrinsic.naturalHeight);
+    expect(intrinsic.decoding, route.path + ' should decode the hero asynchronously').toBe('async');
 
     const rendered = await page.evaluate(({ imageSelector, captionSelector }) => {
       const image = document.querySelector(imageSelector);

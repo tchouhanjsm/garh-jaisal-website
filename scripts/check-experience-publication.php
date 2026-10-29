@@ -102,6 +102,9 @@ $renderer = $read($root . '/include/experience-page.php');
 if (strpos($renderer, 'gj_schema_image_object') === false || strpos($renderer, 'experienceHeroCaption') === false) {
     $siteCheckErrors[] = 'Experience renderer must use the shared image schema and caption contract.';
 }
+if (strpos($renderer, "gj_image_dimension_attributes($experience['hero_image']") === false || strpos($renderer, 'decoding="async"') === false) {
+    $siteCheckErrors[] = 'Experience hero must declare intrinsic image dimensions and asynchronous decoding.';
+}
 $studioSource = $read($root . '/scripts/content-studio.js');
 if (strpos($studioSource, "textField(record.hero_caption, 'Hero image caption', 20, 180)") === false) {
     $siteCheckErrors[] = 'Content Studio must require reviewed hero captions before publishing tours and guides.';

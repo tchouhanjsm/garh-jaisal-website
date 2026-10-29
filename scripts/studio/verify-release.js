@@ -52,8 +52,13 @@ const meta = (html, re) => { const m = re.exec(html); return m ? m[1] : ''; };
       const captionId = type === 'tour' ? 'experience-hero-caption' : type === 'blog' ? 'article-hero-caption' : 'studio-page-hero-caption';
       const visibleCaption = html.includes('id="' + captionId + '"');
       const linkedCaption = html.includes('aria-describedby="' + captionId + '"') && visibleCaption;
+      const heroTag = (html.match(/<img\\b[^>]*aria-describedby="' + captionId + '"[^>]*>/) || [])[0] || '';
+      const hasIntrinsicDimensions = /\\bwidth="[1-9][0-9]*"/.test(heroTag) && /\\bheight="[1-9][0-9]*"/.test(heroTag);
+      const usesAsyncDecoding = /\\bdecoding="async"/.test(heroTag);
       add(4.1, 'Hero caption is reviewed and visibly rendered', caption.length >= 20 && caption.length <= 180 && visibleCaption, 'stored=' + caption.length + ' visible=' + visibleCaption);
       add(4.2, 'Hero image is programmatically associated with its visible caption', linkedCaption, 'captionId=' + captionId + ' linked=' + linkedCaption);
+      add(4.3, 'Hero image declares intrinsic dimensions to reduce layout shift', hasIntrinsicDimensions, 'widthAndHeight=' + hasIntrinsicDimensions);
+      add(4.4, 'Hero image uses asynchronous decoding', usesAsyncDecoding, 'decodingAsync=' + usesAsyncDecoding);
     }
     const robots = meta(html, /<meta name="robots" content="([^"]*)"/);
     add(9, 'Canonical present; robots matches status', /rel="canonical"/.test(html) && (status === 'live' ? !/noindex/.test(robots) : page.status === 404), 'robots=' + robots);
