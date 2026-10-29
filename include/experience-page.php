@@ -162,7 +162,7 @@ require __DIR__ . '/page-head.php';
       <img
         src="<?= htmlspecialchars($experience['hero_image'], ENT_QUOTES, 'UTF-8') ?>"
         alt="<?= htmlspecialchars($experience['hero_alt'], ENT_QUOTES, 'UTF-8') ?>"
-        <?= gj_image_dimension_attributes($experience['hero_image'], '100vw') ?>
+        <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($experience['hero_image']) : '' ?> <?= gj_image_dimension_attributes($experience['hero_image'], '100vw') ?>
         fetchpriority="high"
         decoding="async"
         aria-describedby="experience-hero-caption">
