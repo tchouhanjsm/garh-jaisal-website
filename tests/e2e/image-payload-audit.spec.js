@@ -92,7 +92,7 @@ test('Directions LCP hero matches its preload and selects width-appropriate cand
   }
 });
 
-test('write deduplicated image payload audit for sitemap routes', async ({ browser }, testInfo) => 
+test('write deduplicated image payload audit for sitemap routes', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Image payload audit runs once at desktop width');
   test.setTimeout(180_000);
 
