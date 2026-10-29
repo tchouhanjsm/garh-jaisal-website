@@ -102,14 +102,16 @@ $renderer = $read($root . '/include/experience-page.php');
 if (strpos($renderer, 'gj_schema_image_object') === false || strpos($renderer, 'experienceHeroCaption') === false) {
     $siteCheckErrors[] = 'Experience renderer must use the shared image schema and caption contract.';
 }
+$imageMetadataHelper = $read($root . '/include/image-metadata.php');
 $imageDimensionHelper = $read($root . '/include/header-v2.php');
 if (
     strpos($renderer, 'gj_responsive_image_srcset') !== false
     || strpos($renderer, 'gj_image_dimension_attributes($experience[\'hero_image\']') === false
-    || strpos($imageDimensionHelper, 'function gj_image_dimension_attributes') === false
-    || strpos($imageDimensionHelper, '$candidateBytes >= $responsiveSourceBytes') === false
+    || strpos($imageMetadataHelper, 'function gj_image_dimension_attributes') === false
+    || strpos($imageMetadataHelper, 'gj_local_image_metadata($candidateSource)') === false
+    || strpos($imageDimensionHelper, "require_once __DIR__ . '/image-metadata.php';") === false
 ) {
-    $siteCheckErrors[] = 'Experience images must use one shared, byte-saving-validated responsive srcset emitter.';
+    $siteCheckErrors[] = 'Experience images must use one canonical, byte-saving-validated responsive attribute emitter.';
 }
 if (strpos($renderer, 'gj_image_dimension_attributes($experience[\'hero_image\']') === false || strpos($renderer, 'decoding="async"') === false) {
     $siteCheckErrors[] = 'Experience hero must declare intrinsic image dimensions and asynchronous decoding.';

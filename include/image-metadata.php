@@ -102,70 +102,119 @@ if (!function_exists('gj_local_image_metadata')) {
     }
 }
 
-
 /**
- * Emit a srcset only for verified, locally generated WebP variants.
+ * Return intrinsic dimensions and one validated responsive delivery contract.
  *
- * Variants are optional: the original source remains the fallback until the
- * responsive asset pipeline has generated and validated at least two sizes.
+ * Both width-descriptor candidates and same-size optimized fallbacks are read
+ * through gj_local_image_metadata, so dimensions, MIME, byte size and path
+ * safety are checked by one implementation.
  */
-if (!function_exists('gj_responsive_image_srcset')) {
-    function gj_responsive_image_srcset($source)
+if (!function_exists('gj_image_dimension_attributes')) {
+    function gj_image_dimension_attributes($source, $responsiveSizes = null)
     {
-        if (!function_exists('gj_local_image_metadata') || !is_string($source)) {
+        static $deliveryCache = [];
+
+        if (!is_string($source)) {
             return '';
         }
 
         $source = trim($source);
+        if (
+            preg_match('~^/?img/[A-Za-z0-9._/-]+$~D', $source) !== 1
+            || strpos($source, '..') !== false
+            || strpos($source, chr(92)) !== false
+        ) {
+            return '';
+        }
+
         $sourceMetadata = gj_local_image_metadata($source);
         if (!is_array($sourceMetadata)) {
             return '';
         }
 
-        $relative = ltrim($source, '/');
-        $insideImageRoot = substr($relative, 4);
-        // Optimized derivatives share the source asset's responsive output path.
-        if (strncmp($insideImageRoot, 'optimized/', 10) === 0) {
-            $insideImageRoot = substr($insideImageRoot, 10);
-        }
-        $directory = dirname($insideImageRoot);
-        $stem = pathinfo($insideImageRoot, PATHINFO_FILENAME);
-        if ($stem === '' || $stem === '.' || $stem === '..') {
-            return '';
-        }
+        $sourceKey = $sourceMetadata['path'];
+        $width = $sourceMetadata['width'];
+        $height = $sourceMetadata['height'];
+        $attributes = 'width="' . $width . '" height="' . $height . '"';
 
-        $variantDirectory = 'img/responsive/' . ($directory === '.' ? '' : $directory . '/');
-        $candidates = [];
-        foreach ([480, 800, 1200] as $targetWidth) {
-            if ($sourceMetadata['width'] <= $targetWidth) {
-                continue;
+        // Responsive candidates are opt-in per rendered slot. Only advertise
+        // verified WebP files that preserve ratio and reduce bytes vs fallback.
+        if (is_string($responsiveSizes) && trim($responsiveSizes) !== '') {
+            $responsiveRelative = substr($sourceKey, 4);
+            if (strncmp($responsiveRelative, 'optimized/', 10) === 0) {
+                $responsiveRelative = substr($responsiveRelative, 10);
             }
 
-            $variant = $variantDirectory . $stem . '-' . $targetWidth . '.webp';
-            $metadata = gj_local_image_metadata($variant);
-            if (
-                !is_array($metadata)
-                || $metadata['mime'] !== 'image/webp'
-                || $metadata['width'] !== $targetWidth
-                || $metadata['height'] < 1
-                || $metadata['width'] >= $sourceMetadata['width']
-                || !is_int($sourceMetadata['bytes'])
-                || !is_int($metadata['bytes'])
-                || $sourceMetadata['bytes'] <= 0
-                || $metadata['bytes'] <= 0
-                || $metadata['bytes'] >= $sourceMetadata['bytes']
-                || abs(($metadata['width'] / $metadata['height']) - ($sourceMetadata['width'] / $sourceMetadata['height'])) > 0.02
-            ) {
-                continue;
+            $responsiveInfo = pathinfo($responsiveRelative);
+            $responsiveDirectory = ($responsiveInfo['dirname'] ?? '.') === '.'
+                ? ''
+                : $responsiveInfo['dirname'] . '/';
+            $responsiveSrcset = [];
+
+            foreach ([480, 800, 1200] as $candidateWidth) {
+                if ($candidateWidth >= $width) {
+                    continue;
+                }
+
+                $candidateSource = 'img/responsive/' . $responsiveDirectory . $responsiveInfo['filename'] . '-' . $candidateWidth . '.webp';
+                $candidateMetadata = gj_local_image_metadata($candidateSource);
+                if (
+                    !is_array($candidateMetadata)
+                    || $candidateMetadata['mime'] !== 'image/webp'
+                    || $candidateMetadata['width'] !== $candidateWidth
+                    || $candidateMetadata['height'] < 1
+                    || $candidateMetadata['width'] >= $width
+                    || !is_int($sourceMetadata['bytes'])
+                    || !is_int($candidateMetadata['bytes'])
+                    || $sourceMetadata['bytes'] <= 0
+                    || $candidateMetadata['bytes'] <= 0
+                    || $candidateMetadata['bytes'] >= $sourceMetadata['bytes']
+                    || abs(($candidateMetadata['width'] / $candidateMetadata['height']) - ($width / $height)) > 0.02
+                ) {
+                    continue;
+                }
+
+                $responsiveSrcset[] = '/' . htmlspecialchars($candidateSource, ENT_QUOTES, 'UTF-8') . ' ' . $candidateWidth . 'w';
             }
 
-            $candidates[] = '/' . htmlspecialchars($variant, ENT_QUOTES, 'UTF-8') . ' ' . $targetWidth . 'w';
+            if ($responsiveSrcset) {
+                return $attributes
+                    . ' srcset="' . htmlspecialchars(implode(', ', $responsiveSrcset), ENT_QUOTES, 'UTF-8') . '"'
+                    . ' sizes="' . htmlspecialchars(trim($responsiveSizes), ENT_QUOTES, 'UTF-8') . '"';
+            }
         }
 
-        if (count($candidates) < 2) {
-            return '';
+        // If the input is already the optimized derivative, it cannot benefit
+        // from pointing its own 1x srcset back to another optimized path.
+        if (!array_key_exists($sourceKey, $deliveryCache)) {
+            if (strncmp(substr($sourceKey, 4), 'optimized/', 10) === 0) {
+                $deliveryCache[$sourceKey] = null;
+            } else {
+                $relativeSource = substr($sourceKey, 4);
+                $sourceInfo = pathinfo($relativeSource);
+                $sourceDirectory = ($sourceInfo['dirname'] ?? '.') === '.'
+                    ? ''
+                    : $sourceInfo['dirname'] . '/';
+                $optimizedSource = 'img/optimized/' . $sourceDirectory . $sourceInfo['filename'] . '.webp';
+                $optimizedMetadata = gj_local_image_metadata($optimizedSource);
+                $deliveryCache[$sourceKey] = (
+                    is_array($optimizedMetadata)
+                    && $optimizedMetadata['mime'] === 'image/webp'
+                    && $optimizedMetadata['width'] === $width
+                    && $optimizedMetadata['height'] === $height
+                    && is_int($sourceMetadata['bytes'])
+                    && is_int($optimizedMetadata['bytes'])
+                    && $sourceMetadata['bytes'] > 0
+                    && $optimizedMetadata['bytes'] > 0
+                    && $optimizedMetadata['bytes'] < $sourceMetadata['bytes']
+                ) ? $optimizedSource : null;
+            }
         }
 
-        return 'srcset="' . implode(', ', $candidates) . '"';
+        if ($deliveryCache[$sourceKey] !== null) {
+            $attributes .= ' srcset="/' . htmlspecialchars($deliveryCache[$sourceKey], ENT_QUOTES, 'UTF-8') . ' 1x"';
+        }
+
+        return $attributes;
     }
 }

@@ -115,7 +115,6 @@ if (trim($studioPageHeroAlt) === '') {
 $studioPageCanonical = rtrim((string) ($siteConfig['site_url'] ?? ''), '/') . '/' . $studioPageSlug . '.php';
 require_once __DIR__ . '/schema.php';
 require_once __DIR__ . '/image-metadata.php';
-$studioPageHeroMetadata = gj_local_image_metadata($studioPageHero);
 $studioPageHeroImageObject = gj_schema_image_object($siteConfig['site_url'] ?? '', $studioPageHero, $studioPageHeroCaption, $studioPageHeroAlt);
 $studioPageSchema = [
     '@type' => 'WebPage',
@@ -171,8 +170,8 @@ include __DIR__ . '/header-v2.php';
         <?php endif; ?>
       </div>
       <figure class="studio-page-hero-media">
-        <?php $studioPageHeroSrcset = function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($studioPageHero) : ''; ?>
-        <img src="<?= $studioPageEscape($studioPageHero) ?>" <?= $studioPageHeroSrcset ?><?php if ($studioPageHeroSrcset !== ''): ?> sizes="<?= $studioPageEscape($studioPageHeroSizes) ?>"<?php endif; ?> alt="<?= $studioPageEscape($studioPageHeroAlt) ?>"<?php if (is_array($studioPageHeroMetadata)): ?> width="<?= (int) $studioPageHeroMetadata['width'] ?>" height="<?= (int) $studioPageHeroMetadata['height'] ?>"<?php endif; ?> fetchpriority="high" decoding="async" aria-describedby="studio-page-hero-caption">
+        <?php $studioPageHeroAttributes = gj_image_dimension_attributes($studioPageHero, $studioPageHeroSizes); ?>
+        <img src="<?= $studioPageEscape($studioPageHero) ?>" <?= $studioPageHeroAttributes ?> alt="<?= $studioPageEscape($studioPageHeroAlt) ?>" fetchpriority="high" decoding="async" aria-describedby="studio-page-hero-caption">
         <figcaption id="studio-page-hero-caption" class="studio-page-hero-caption"><?= $studioPageEscape($studioPageHeroCaption) ?></figcaption>
       </figure>
     </div>

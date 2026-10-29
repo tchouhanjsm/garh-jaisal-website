@@ -154,9 +154,10 @@ $assert(strpos($template, "'@type' => 'BlogPosting'") !== false, 'Article templa
 $assert(strpos($template, 'gj_schema_image_object') !== false, 'Article image schema must use shared media metadata.');
 $imageMetadataHelper = $read('include/image-metadata.php');
 $imageDimensionHelper = $read('include/header-v2.php');
-$assert(is_string($imageMetadataHelper) && strpos($imageMetadataHelper, 'function gj_responsive_image_srcset') !== false, 'Standalone responsive image delivery helper must remain available for picture sources and Content Studio heroes.');
-$assert(is_string($imageDimensionHelper) && strpos($imageDimensionHelper, 'function gj_image_dimension_attributes') !== false && strpos($imageDimensionHelper, '$candidateBytes >= $responsiveSourceBytes') !== false, 'Responsive image dimensions and srcset must use the shared byte-saving validator.');
-$assert(strpos($template, 'gj_responsive_image_srcset') === false && strpos($template, 'gj_image_dimension_attributes($guide[\'hero_image\']') !== false, 'Editorial hero must use a single srcset attribute emitter.');
+$assert(is_string($imageMetadataHelper) && strpos($imageMetadataHelper, 'function gj_local_image_metadata') !== false && strpos($imageMetadataHelper, 'function gj_image_dimension_attributes') !== false, 'Shared image metadata and responsive attribute helpers must live together.');
+$assert(is_string($imageMetadataHelper) && strpos($imageMetadataHelper, 'gj_local_image_metadata($candidateSource)') !== false && strpos($imageMetadataHelper, '$candidateMetadata[\'bytes\'] >= $sourceMetadata[\'bytes\']') !== false, 'Responsive candidates must use safe metadata inspection and a byte-saving guard.');
+$assert(is_string($imageDimensionHelper) && strpos($imageDimensionHelper, "require_once __DIR__ . '/image-metadata.php';") !== false && strpos($imageDimensionHelper, 'function gj_image_dimension_attributes') === false, 'Shared header must load one canonical image-delivery helper rather than define a duplicate implementation.');
+$assert(strpos($template, 'gj_responsive_image_srcset') === false && strpos($template, 'gj_image_dimension_attributes($guide[\'hero_image\']') !== false, 'Editorial hero must use the canonical responsive attribute emitter.');
 $schemaRequirePosition = strpos($template, "require_once __DIR__ . '/schema.php';");
 $imageObjectPosition = strpos($template, '$guideHeroImageObject = gj_schema_image_object');
 $assert(is_int($schemaRequirePosition) && is_int($imageObjectPosition) && $schemaRequirePosition < $imageObjectPosition, 'Article renderer must load schema helpers before building the hero ImageObject.');
