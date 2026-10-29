@@ -194,7 +194,7 @@ function normalizeSocialImageValues(snapshot) {
       internIndex(head[4]),
       (head[5] || [])
         // Accessible image descriptions and intrinsic Open Graph image dimensions/type are checked by dedicated route-wide media tests; keep the frozen legacy baseline focused on its reviewed historical fields rather than treating these intentional additions as drift.
-        .filter(tag => !['og:image:alt', 'twitter:image:alt'].includes(sourceStrings[tag[0]]))
+        .filter(tag => !['og:image:alt', 'twitter:image:alt', 'og:image:width', 'og:image:height', 'og:image:type'].includes(sourceStrings[tag[0]]))
         .map(tag => {
         const key = sourceStrings[tag[0]];
         const contentIndex = imageKeys.has(key)

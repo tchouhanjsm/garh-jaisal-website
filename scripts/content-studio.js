@@ -710,6 +710,32 @@ function verifyPublishableRecord(type, record) {
   }
 }
 
+function mediaReadinessForRecord(type, record) {
+  const issues = [];
+  const gallery = type === 'gallery';
+  const media = gallery && record.image && typeof record.image === 'object' ? record.image : record;
+  const source = gallery ? media.src : record.hero_image;
+  const alt = gallery ? media.alt : record.hero_alt;
+  const caption = gallery ? '' : record.hero_caption;
+
+  try {
+    imagePath(source);
+  } catch (_) {
+    issues.push('Choose an existing local image under img/.');
+  }
+  if (typeof alt !== 'string' || alt.trim().length < 10 || alt.trim().length > 240) {
+    issues.push('Add descriptive alternative text (10–240 characters).');
+  }
+  if (!gallery && (typeof caption !== 'string' || caption.trim().length < 20 || caption.trim().length > 180)) {
+    issues.push('Add a reviewed hero caption (20–180 characters).');
+  }
+
+  return {
+    status: issues.length ? 'needs-attention' : 'ready',
+    issues,
+  };
+}
+
 function listManagedContent() {
   const items = [];
   for (const type of ['tours', 'blogs', 'gallery', 'pages']) {
@@ -737,6 +763,7 @@ function listManagedContent() {
               : String(record.eyebrow || (type === 'tours' ? record.category : 'Travel guide')),
           modified: String(record.date_modified || record.date_published || ''),
           pagePath: type === 'gallery' ? '/gallery.php#' + encodeURIComponent(record.category) : '/' + slug + '.php',
+          mediaReadiness: mediaReadinessForRecord(type, record),
           invalid: false,
         });
       } catch (error) {

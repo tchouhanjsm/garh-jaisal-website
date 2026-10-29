@@ -44,6 +44,23 @@ foreach ($rejected as $candidate) {
     );
 }
 
+$imgRoot = $root . '/img';
+$linkName = '.image-metadata-contract-' . getmypid();
+$linkPath = $imgRoot . '/' . $linkName;
+$assert(
+    !file_exists($linkPath) && !is_link($linkPath),
+    'The nested-image symlink test path must be unique and unused.'
+);
+if (function_exists('symlink') && @symlink($imgRoot . '/v2', $linkPath)) {
+    $assert(
+        gj_local_image_metadata('img/' . $linkName . '/facade.jpg') === null,
+        'An otherwise valid image reached through a symlinked parent directory must be rejected.'
+    );
+    @unlink($linkPath);
+} else {
+    $assert(false, 'The runtime must support creating a temporary symlink for the path-safety contract.');
+}
+
 $helperSource = file_get_contents($root . '/include/image-metadata.php');
 $assert(is_string($helperSource), 'Image metadata helper source must be readable for its source-safety contract.');
 if (is_string($helperSource)) {

@@ -194,8 +194,9 @@ require __DIR__ . '/page-head.php';
             <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($guide['hero_image'], '(max-width: 768px) 100vw, 60vw') : '' ?>
             alt="<?= $escapeGuide($guide['hero_alt']) ?>"
             fetchpriority="high"
-           decoding="async">
-          <figcaption class="article-caption"><?= $escapeGuide($guideHeroCaption) ?></figcaption>
+            decoding="async"
+            aria-describedby="article-hero-caption">
+          <figcaption id="article-hero-caption" class="article-caption"><?= $escapeGuide($guideHeroCaption) ?></figcaption>
         </figure>
         <?php foreach ($guide['sections'] as $section): ?>
           <section id="<?= $escapeGuide($section['id']) ?>" data-story-reveal>

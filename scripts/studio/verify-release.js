@@ -47,10 +47,13 @@ const meta = (html, re) => { const m = re.exec(html); return m ? m[1] : ''; };
     const h1s = (html.match(/<h1[\s>]/g) || []).length;
     const title = meta(html, /<title>([^<]*)<\/title>/); const desc = meta(html, /<meta name="description" content="([^"]*)"/);
     add(6, 'One h1, title and description in range', h1s === 1 && title.length > 0 && title.length <= 70 && desc.length >= 110 && desc.length <= 160, 'h1=' + h1s + ' title=' + title.length + ' desc=' + desc.length);
-    if (record && ['tour', 'blog'].includes(type)) {
+    if (record && ['tour', 'blog', 'page'].includes(type)) {
       const caption = typeof record.hero_caption === 'string' ? record.hero_caption.trim() : '';
-      const visibleCaption = html.includes('class="experience-hero-caption"') || html.includes('class="article-caption"');
+      const captionId = type === 'tour' ? 'experience-hero-caption' : type === 'blog' ? 'article-hero-caption' : 'studio-page-hero-caption';
+      const visibleCaption = html.includes('id="' + captionId + '"');
+      const linkedCaption = html.includes('aria-describedby="' + captionId + '"') && visibleCaption;
       add(4.1, 'Hero caption is reviewed and visibly rendered', caption.length >= 20 && caption.length <= 180 && visibleCaption, 'stored=' + caption.length + ' visible=' + visibleCaption);
+      add(4.2, 'Hero image is programmatically associated with its visible caption', linkedCaption, 'captionId=' + captionId + ' linked=' + linkedCaption);
     }
     const robots = meta(html, /<meta name="robots" content="([^"]*)"/);
     add(9, 'Canonical present; robots matches status', /rel="canonical"/.test(html) && (status === 'live' ? !/noindex/.test(robots) : page.status === 404), 'robots=' + robots);

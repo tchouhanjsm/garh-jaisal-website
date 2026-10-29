@@ -111,6 +111,7 @@ if (trim($studioPageHeroAlt) === '') {
 
 $studioPageCanonical = rtrim((string) ($siteConfig['site_url'] ?? ''), '/') . '/' . $studioPageSlug . '.php';
 require_once __DIR__ . '/schema.php';
+$studioPageHeroMetadata = gj_local_image_metadata($studioPageHero);
 $studioPageHeroImageObject = gj_schema_image_object($siteConfig['site_url'] ?? '', $studioPageHero, $studioPageHeroCaption, $studioPageHeroAlt);
 $studioPageSchema = [
     '@type' => 'WebPage',
@@ -166,8 +167,8 @@ include __DIR__ . '/header-v2.php';
         <?php endif; ?>
       </div>
       <figure class="studio-page-hero-media">
-        <img src="<?= $studioPageEscape($studioPageHero) ?>" alt="<?= $studioPageEscape($studioPageHeroAlt) ?>" width="1600" height="1000" fetchpriority="high">
-        <figcaption class="studio-page-hero-caption"><?= $studioPageEscape($studioPageHeroCaption) ?></figcaption>
+        <img src="<?= $studioPageEscape($studioPageHero) ?>" alt="<?= $studioPageEscape($studioPageHeroAlt) ?>"<?php if (is_array($studioPageHeroMetadata)): ?> width="<?= (int) $studioPageHeroMetadata['width'] ?>" height="<?= (int) $studioPageHeroMetadata['height'] ?>"<?php endif; ?> fetchpriority="high" decoding="async" aria-describedby="studio-page-hero-caption">
+        <figcaption id="studio-page-hero-caption" class="studio-page-hero-caption"><?= $studioPageEscape($studioPageHeroCaption) ?></figcaption>
       </figure>
     </div>
   </section>

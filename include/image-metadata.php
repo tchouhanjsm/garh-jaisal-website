@@ -29,14 +29,41 @@ if (!function_exists('gj_local_image_metadata')) {
         }
 
         $root = realpath(dirname(__DIR__));
-        $imageRoot = realpath(dirname(__DIR__) . '/img');
-        $candidate = dirname(__DIR__) . '/' . $relative;
+        if (!is_string($root)) {
+            $cache[$relative] = null;
+            return null;
+        }
+
+        $imageDirectory = $root . DIRECTORY_SEPARATOR . 'img';
+        $imageRoot = realpath($imageDirectory);
         if (
-            !is_string($root)
-            || !is_string($imageRoot)
-            || !is_file($candidate)
-            || is_link($candidate)
+            !is_string($imageRoot)
+            || $imageRoot !== $imageDirectory
+            || is_link($imageDirectory)
         ) {
+            $cache[$relative] = null;
+            return null;
+        }
+
+        // Inspect every path component, not just the final image. A symlinked
+        // parent folder can otherwise escape the approved asset tree.
+        $candidate = $root . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $relative);
+        $cursor = $root;
+        $parts = explode('/', $relative);
+        foreach ($parts as $index => $part) {
+            $cursor .= DIRECTORY_SEPARATOR . $part;
+            $stat = @lstat($cursor);
+            if (!is_array($stat) || is_link($cursor)) {
+                $cache[$relative] = null;
+                return null;
+            }
+            if ($index < count($parts) - 1 && !is_dir($cursor)) {
+                $cache[$relative] = null;
+                return null;
+            }
+        }
+
+        if (!is_file($candidate)) {
             $cache[$relative] = null;
             return null;
         }

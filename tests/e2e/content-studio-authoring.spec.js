@@ -292,6 +292,17 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href="css/page-builder.css"]')).toHaveCount(1);
     await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href="css/pages/' + pagePreviewSlug + '.css"]')).toHaveCount(1);
     await expect.poll(() => landingPreviewFrame.locator('.studio-page-hero-media img').evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
+    const landingHero = landingPreviewFrame.locator('.studio-page-hero-media img');
+    await expect(landingHero).toHaveAttribute('aria-describedby', 'studio-page-hero-caption');
+    await expect(landingPreviewFrame.locator('figcaption#studio-page-hero-caption')).toBeVisible();
+    const landingHeroSize = await landingHero.evaluate(image => ({
+      width: Number(image.getAttribute('width') || 0),
+      height: Number(image.getAttribute('height') || 0),
+      naturalWidth: image.naturalWidth,
+      naturalHeight: image.naturalHeight,
+    }));
+    expect(landingHeroSize.width).toBe(landingHeroSize.naturalWidth);
+    expect(landingHeroSize.height).toBe(landingHeroSize.naturalHeight);
 
     const pageCreateRequestPromise = page.waitForRequest(request => request.url() === studioUrl + '/api/pages' && request.method() === 'POST');
     const pageCreateResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/pages' && response.request().method() === 'POST');
@@ -332,14 +343,18 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await page.getByRole('tab', { name: 'Manage saved content' }).click();
     let tourCard = page.locator('.content-record[data-record-key="tours:' + tourSlug + '"]');
     await expect(tourCard).toContainText('DRAFT');
+    await expect(tourCard.locator('.record-media-status')).toHaveText('MEDIA NEEDS ATTENTION');
+    await expect(tourCard.locator('.record-media-issues')).toContainText('reviewed hero caption');
     await tourCard.getByRole('button', { name: 'Edit' }).click();
     await page.locator('#tour-title').fill('Browser UI test tour revised');
     await page.locator('#tour-summary').fill('A revised summary used to validate editing a saved Content Studio draft record.');
+    await page.locator('#tour-hero-caption').fill('Camel riders travel over the dunes near Jaisalmer during the test tour preview.');
     const updateTourResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/tours/' + tourSlug && response.request().method() === 'PUT');
     await page.getByRole('button', { name: 'Save changes' }).click();
     expect((await updateTourResponsePromise).status()).toBe(200);
     tourCard = page.locator('.content-record[data-record-key="tours:' + tourSlug + '"]');
     await expect(tourCard).toContainText('Browser UI test tour revised');
+    await expect(tourCard.locator('.record-media-status')).toHaveText('MEDIA READY');
     const readyTourResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/tours/' + tourSlug + '/review' && response.request().method() === 'PATCH');
     await tourCard.getByRole('button', { name: 'Ready for review' }).click();
     expect((await readyTourResponsePromise).status()).toBe(200);

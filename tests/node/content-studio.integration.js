@@ -243,6 +243,8 @@ function verifyContentStudioAuthoringUi() {
     assert.ok(html.includes('id="' + id + '"'), 'guided authoring control should exist: ' + id);
   }
   assert.ok(html.includes('id="tab-manage"'), 'saved content manager tab should exist');
+  assert.ok(html.includes('item.mediaReadiness'), 'saved content manager should expose explicit media readiness status');
+  assert.ok(html.includes('MEDIA NEEDS ATTENTION') && html.includes('MEDIA READY'), 'media readiness must be visible and understandable');
   assert.ok(html.includes('card.dataset.recordKey='), 'manager should assign a stable data-record-key identifier to each rendered record');
   assert.ok(html.includes("const method=edit?'PUT':'POST'"), 'the authoring forms should save edits back to the selected record');
   assert.ok(html.includes("method:'PATCH'"), 'the manager should change publication state explicitly');
@@ -435,6 +437,20 @@ async function main() {
   assert.ok(fs.existsSync(routeFiles[0]), 'tour route wrapper should exist');
   assert.equal(JSON.parse(fs.readFileSync(recordFiles[0], 'utf8')).status, 'draft');
   assert.equal(JSON.parse(fs.readFileSync(recordFiles[0], 'utf8')).review_status, 'draft');
+  let mediaRecord = JSON.parse(fs.readFileSync(recordFiles[0], 'utf8'));
+  const reviewedCaption = mediaRecord.hero_caption;
+  mediaRecord.hero_caption = '';
+  fs.writeFileSync(recordFiles[0], JSON.stringify(mediaRecord, null, 2) + '\n');
+  result = await requestJson(STUDIO_URL + '/api/content', 'GET');
+  let managedTour = result.body.items.find(item => item.type === 'tours' && item.slug === slugs[0]);
+  assert.equal(managedTour.mediaReadiness.status, 'needs-attention', 'a Draft without a hero caption should be flagged for the author');
+  assert.ok(managedTour.mediaReadiness.issues.some(issue => issue.includes('reviewed hero caption')), 'readiness should explain the missing caption');
+  mediaRecord.hero_caption = reviewedCaption;
+  fs.writeFileSync(recordFiles[0], JSON.stringify(mediaRecord, null, 2) + '\n');
+  result = await requestJson(STUDIO_URL + '/api/content', 'GET');
+  managedTour = result.body.items.find(item => item.type === 'tours' && item.slug === slugs[0]);
+  assert.equal(managedTour.mediaReadiness.status, 'ready', 'a valid local image, descriptive alt text and reviewed caption should be ready');
+  assert.deepEqual(managedTour.mediaReadiness.issues, []);
   let sitemap = fs.readFileSync(sitemapPath, 'utf8');
   assert.ok(!sitemap.includes('/' + slugs[0] + '.php</loc>'), 'a newly saved draft must not appear in sitemap');
   result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[0] + '/status', 'PATCH', { status: 'live' });

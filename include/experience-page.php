@@ -164,9 +164,10 @@ require __DIR__ . '/page-head.php';
         alt="<?= htmlspecialchars($experience['hero_alt'], ENT_QUOTES, 'UTF-8') ?>"
         <?= gj_image_dimension_attributes($experience['hero_image'], '100vw') ?>
         fetchpriority="high"
-       decoding="async">
+        decoding="async"
+        aria-describedby="experience-hero-caption">
       <div class="experience-hero-overlay"></div>
-      <p class="experience-hero-caption"><?= htmlspecialchars($experienceHeroCaption, ENT_QUOTES, 'UTF-8') ?></p>
+      <p id="experience-hero-caption" class="experience-hero-caption"><?= htmlspecialchars($experienceHeroCaption, ENT_QUOTES, 'UTF-8') ?></p>
     </div>
 
     <div class="site-shell experience-hero-content">
