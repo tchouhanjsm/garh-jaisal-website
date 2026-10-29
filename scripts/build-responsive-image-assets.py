@@ -368,7 +368,7 @@ def build() -> dict[str, Any]:
         **coverage_metrics,
         "required_hero_variant_count": len(required_hero_variants),
         "required_hero_variant_coverage_percent": round(
-            len(required_hero_variants - set(generated_paths)) / len(required_hero_variants) * 100, 3
+            len(required_hero_variants & set(generated_paths)) / len(required_hero_variants) * 100, 3
         ) if required_hero_variants else 100.0,
     }
     report = {
