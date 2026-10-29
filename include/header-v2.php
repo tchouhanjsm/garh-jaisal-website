@@ -1,122 +1,5 @@
 <?php
-if (!function_exists('gj_image_dimension_attributes')) {
-    /**
-     * Return dimensions for a trusted local image and advertise a same-dimension WebP derivative when safe.
-     * Original paths remain the fallback; derivatives are used only when valid and smaller.
-     */
-    function gj_image_dimension_attributes($source, $responsiveSizes = null)
-    {
-        static $dimensionCache = [];
-        static $deliveryCache = [];
-
-        if (
-            !is_string($source)
-            || !preg_match('~^img/[A-Za-z0-9._/-]+$~D', $source)
-            || strpos($source, '..') !== false
-        ) {
-            return '';
-        }
-
-        $imagePath = __DIR__ . '/../' . $source;
-        if (!array_key_exists($source, $dimensionCache)) {
-            $size = is_file($imagePath) ? @getimagesize($imagePath) : false;
-            $dimensionCache[$source] = (
-                is_array($size)
-                && isset($size[0], $size[1])
-                && $size[0] > 0
-                && $size[1] > 0
-            ) ? [(int) $size[0], (int) $size[1]] : null;
-        }
-
-        if ($dimensionCache[$source] === null) {
-            return '';
-        }
-
-        [$width, $height] = $dimensionCache[$source];
-        $attributes = 'width="' . $width . '" height="' . $height . '"';
-
-        // Responsive candidates are opt-in per slot. The source photo is unchanged;
-        // only verified generated derivatives smaller than the fallback are advertised.
-        if (is_string($responsiveSizes) && trim($responsiveSizes) !== '') {
-            $responsiveRelative = substr($source, 4);
-            if (strncmp($responsiveRelative, 'optimized/', 10) === 0) {
-                $responsiveRelative = substr($responsiveRelative, 10);
-            }
-            $responsiveInfo = pathinfo($responsiveRelative);
-            $responsiveDirectory = ($responsiveInfo['dirname'] ?? '.') === '.'
-                ? ''
-                : $responsiveInfo['dirname'] . '/';
-            $responsiveSourceBytes = is_file($imagePath) ? @filesize($imagePath) : false;
-            $responsiveSrcset = [];
-
-            foreach ([480, 800, 1200] as $candidateWidth) {
-                if ($candidateWidth >= $width) {
-                    continue;
-                }
-                $candidateSource = 'img/responsive/' . $responsiveDirectory . $responsiveInfo['filename'] . '-' . $candidateWidth . '.webp';
-                $candidatePath = __DIR__ . '/../' . $candidateSource;
-                $candidateSize = is_file($candidatePath) && !is_link($candidatePath) ? @getimagesize($candidatePath) : false;
-                $candidateBytes = is_file($candidatePath) && !is_link($candidatePath) ? @filesize($candidatePath) : false;
-
-                if (
-                    !is_array($candidateSize)
-                    || !isset($candidateSize[0], $candidateSize[1], $candidateSize[2])
-                    || $candidateSize[0] !== $candidateWidth
-                    || $candidateSize[1] < 1
-                    || !defined('IMAGETYPE_WEBP')
-                    || $candidateSize[2] !== IMAGETYPE_WEBP
-                    || $candidateBytes === false
-                    || $responsiveSourceBytes === false
-                    || $candidateBytes <= 0
-                    || $candidateBytes >= $responsiveSourceBytes
-                    || abs(($candidateSize[0] / $candidateSize[1]) - ($width / $height)) > 0.02
-                ) {
-                    continue;
-                }
-
-                $responsiveSrcset[] = '/' . $candidateSource . ' ' . $candidateWidth . 'w';
-            }
-
-            if ($responsiveSrcset) {
-                return $attributes
-                    . ' srcset="' . htmlspecialchars(implode(', ', $responsiveSrcset), ENT_QUOTES, 'UTF-8') . '"'
-                    . ' sizes="' . htmlspecialchars(trim($responsiveSizes), ENT_QUOTES, 'UTF-8') . '"';
-            }
-        }
-
-        if (!array_key_exists($source, $deliveryCache)) {
-            $relativeSource = substr($source, 4);
-            $sourceInfo = pathinfo($relativeSource);
-            $sourceDirectory = ($sourceInfo['dirname'] ?? '.') === '.'
-                ? ''
-                : $sourceInfo['dirname'] . '/';
-            $optimizedSource = 'img/optimized/' . $sourceDirectory . $sourceInfo['filename'] . '.webp';
-            $optimizedPath = __DIR__ . '/../' . $optimizedSource;
-            $optimizedSize = is_file($optimizedPath) ? @getimagesize($optimizedPath) : false;
-            $sourceBytes = is_file($imagePath) ? @filesize($imagePath) : false;
-            $optimizedBytes = is_file($optimizedPath) ? @filesize($optimizedPath) : false;
-
-            $deliveryCache[$source] = (
-                is_array($optimizedSize)
-                && isset($optimizedSize[0], $optimizedSize[1], $optimizedSize[2])
-                && $optimizedSize[0] === $width
-                && $optimizedSize[1] === $height
-                && defined('IMAGETYPE_WEBP')
-                && $optimizedSize[2] === IMAGETYPE_WEBP
-                && $sourceBytes !== false
-                && $optimizedBytes !== false
-                && $optimizedBytes > 0
-                && $optimizedBytes < $sourceBytes
-            ) ? $optimizedSource : null;
-        }
-
-        if ($deliveryCache[$source] !== null) {
-            $attributes .= ' srcset="' . htmlspecialchars($deliveryCache[$source], ENT_QUOTES, 'UTF-8') . ' 1x"';
-        }
-
-        return $attributes;
-    }
-}
+require_once __DIR__ . '/image-metadata.php';
 
 $siteConfig = require __DIR__ . '/site-config.php';
 $bookingUrl = $bookingUrl ?? $siteConfig['booking_url'];
@@ -211,6 +94,8 @@ $e = static function ($value) {
           href="<?= $e($bookingUrl) ?>"
           target="_blank"
           rel="noopener"
+          data-cta-id="booking-header"
+          data-cta-location="header-desktop"
         >
           Book Now
         </a>
@@ -225,6 +110,8 @@ $e = static function ($value) {
     class="contact-dock-item"
     href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>"
     aria-label="Call Garh Jaisal at <?= htmlspecialchars($hotelPhoneDisplay, ENT_QUOTES, 'UTF-8') ?>"
+    data-cta-id="call-floating-dock"
+    data-cta-location="floating-contact-dock"
   >
     <span class="contact-icon" aria-hidden="true">☎</span>
     <span>Call</span>
@@ -243,8 +130,8 @@ $e = static function ($value) {
 </nav>
 
 <nav class="mobile-cta" aria-label="Quick contact actions">
-  <a href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>" class="mobile-cta-contact">Call</a>
-  <a href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mobile-cta-whatsapp">WhatsApp</a>
-  <a href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mobile-cta-book">Book Now</a>
+  <a href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>" class="mobile-cta-contact" data-cta-id="call-mobile-sticky" data-cta-location="mobile-sticky-bar">Call</a>
+  <a href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mobile-cta-whatsapp" data-cta-id="whatsapp-mobile-sticky" data-cta-location="mobile-sticky-bar">WhatsApp</a>
+  <a href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mobile-cta-book" data-cta-id="booking-mobile-sticky" data-cta-location="mobile-sticky-bar">Book Now</a>
 </nav>
 <?php endif; ?>

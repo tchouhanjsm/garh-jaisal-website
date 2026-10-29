@@ -81,3 +81,12 @@ The responsive-image manifest now supports validated per-source quality override
 - Public page templates and shared hero/header renderers now declare `decoding="async"` on image elements that previously omitted a decode hint. Lazy images keep their existing `loading="lazy"`, width/height, responsive srcset and sizes; high-priority hero images retain their fetch-priority behavior.
 - The change does not remap any source image and does not claim a measured LCP or field Core Web Vitals improvement. The new Browser E2E policy report records which lazy images expose the intended decoding hint.
 - `sitemap.xml` is refreshed from the same registry-aware lastmod policy for directly changed public page sources and pages rendered by the changed experience/editorial templates.
+
+
+## Editorial media readiness — 2026-10-28
+
+- Editorial-guide and experience registries include a reviewed `hero_caption` distinct from image alternative text. Article captions are visibly rendered; experience captions remain visible over the hero image.
+- `include/image-metadata.php` resolves only regular local files rooted under `img/`, rejects unsafe paths and symlinks, and returns dimensions/MIME only when PHP can inspect the image. It never fetches remote URLs or reads arbitrary filesystem paths.
+- The shared page head publishes `og:image:width`, `og:image:height` and `og:image:type` only when local image metadata is available. The shared Schema.org image object uses the same URL, intrinsic dimensions when available, caption and alternative text.
+- The editorial and experience publication checks validate safe local image paths, non-empty descriptive alt text and concise captions. The Browser E2E media audit checks the rendered source, successful image decode, visible caption, social metadata and ImageObject parity across 12 editorial routes and eight experience routes.
+- AVIF files are allowed to omit dimensions when the installed PHP image library cannot inspect them; browser decode still has to succeed. No original photos are replaced or resized in this phase.

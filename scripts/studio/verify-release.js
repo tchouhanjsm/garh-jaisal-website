@@ -47,6 +47,19 @@ const meta = (html, re) => { const m = re.exec(html); return m ? m[1] : ''; };
     const h1s = (html.match(/<h1[\s>]/g) || []).length;
     const title = meta(html, /<title>([^<]*)<\/title>/); const desc = meta(html, /<meta name="description" content="([^"]*)"/);
     add(6, 'One h1, title and description in range', h1s === 1 && title.length > 0 && title.length <= 70 && desc.length >= 110 && desc.length <= 160, 'h1=' + h1s + ' title=' + title.length + ' desc=' + desc.length);
+    if (record && ['tour', 'blog', 'page'].includes(type)) {
+      const caption = typeof record.hero_caption === 'string' ? record.hero_caption.trim() : '';
+      const captionId = type === 'tour' ? 'experience-hero-caption' : type === 'blog' ? 'article-hero-caption' : 'studio-page-hero-caption';
+      const visibleCaption = html.includes('id="' + captionId + '"');
+      const linkedCaption = html.includes('aria-describedby="' + captionId + '"') && visibleCaption;
+      const heroTag = (html.match(/<img\b[^>]*>/g) || []).find(tag => tag.includes('aria-describedby="' + captionId + '"')) || '';
+      const hasIntrinsicDimensions = /\bwidth="[1-9][0-9]*"/.test(heroTag) && /\bheight="[1-9][0-9]*"/.test(heroTag);
+      const usesAsyncDecoding = /\bdecoding="async"/.test(heroTag);
+      add(4.1, 'Hero caption is reviewed and visibly rendered', caption.length >= 20 && caption.length <= 180 && visibleCaption, 'stored=' + caption.length + ' visible=' + visibleCaption);
+      add(4.2, 'Hero image is programmatically associated with its visible caption', linkedCaption, 'captionId=' + captionId + ' linked=' + linkedCaption);
+      add(4.3, 'Hero image declares intrinsic dimensions to reduce layout shift', hasIntrinsicDimensions, 'widthAndHeight=' + hasIntrinsicDimensions);
+      add(4.4, 'Hero image uses asynchronous decoding', usesAsyncDecoding, 'decodingAsync=' + usesAsyncDecoding);
+    }
     const robots = meta(html, /<meta name="robots" content="([^"]*)"/);
     add(9, 'Canonical present; robots matches status', /rel="canonical"/.test(html) && (status === 'live' ? !/noindex/.test(robots) : page.status === 404), 'robots=' + robots);
     const imgs = [...html.matchAll(/<img[^>]+src="([^"]+)"[^>]*>/g)].map(m => ({ src: m[1], tag: m[0] }));

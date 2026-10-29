@@ -27,6 +27,7 @@ if (!$experience) {
         'hero_width' => 1333,
         'hero_height' => 2000,
         'hero_alt' => 'Garh Jaisal Haveli inside Jaisalmer Fort',
+        'hero_caption' => 'Confirm the details that depend on your travel date before making arrangements.',
         'summary' => 'The experience you requested is not available.',
         'at_a_glance' => [],
         'timeline_label' => 'Itinerary',
@@ -43,6 +44,18 @@ if (!$experience) {
 $experienceHeroAlt = trim((string) ($experience['hero_alt'] ?? ''));
 if ($experienceHeroAlt === '') {
     throw new RuntimeException('Experience page requires a non-empty hero_alt: ' . (string) ($experience['slug'] ?? 'unknown'));
+}
+$experienceHeroCaption = trim((string) ($experience['hero_caption'] ?? ''));
+if ($experienceHeroCaption === '') {
+    if (!empty($studioAllowDraftPreview)) {
+        $experienceHeroCaption = 'Draft preview image — add a reviewed caption before publishing.';
+    } else {
+        throw new RuntimeException('Experience page requires a non-empty hero_caption: ' . (string) ($experience['slug'] ?? 'unknown'));
+    }
+}
+if (($experience['status'] ?? 'live') === 'live'
+    && (strlen($experienceHeroCaption) < 20 || strlen($experienceHeroCaption) > 180)) {
+    throw new RuntimeException('Experience page hero_caption must contain 20–180 characters: ' . (string) ($experience['slug'] ?? 'unknown'));
 }
 
 $activePage = 'packages';
@@ -85,6 +98,9 @@ if ($isWhatsAppCityTour) {
     $experienceContactUrl .= '?experience=' . rawurlencode((string) $experience['slug']);
 }
 
+require_once __DIR__ . '/schema.php';
+$experienceHeroImageObject = gj_schema_image_object($siteUrl, $experience['hero_image'], $experienceHeroCaption, $experienceHeroAlt);
+
 $schemaGraph = [
     [
         '@type' => 'WebPage',
@@ -96,7 +112,7 @@ $schemaGraph = [
         'about' => ['@id' => $siteUrl . '/#hotel'],
         'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
         'inLanguage' => 'en',
-        'primaryImageOfPage' => ['@type' => 'ImageObject', 'url' => $siteUrl . '/' . $experience['hero_image']],
+        'primaryImageOfPage' => $experienceHeroImageObject,
     ],
     [
         '@type' => 'BreadcrumbList',
@@ -148,8 +164,10 @@ require __DIR__ . '/page-head.php';
         alt="<?= htmlspecialchars($experience['hero_alt'], ENT_QUOTES, 'UTF-8') ?>"
         <?= gj_image_dimension_attributes($experience['hero_image'], '100vw') ?>
         fetchpriority="high"
-       decoding="async">
+        decoding="async"
+        aria-describedby="experience-hero-caption">
       <div class="experience-hero-overlay"></div>
+      <p id="experience-hero-caption" class="experience-hero-caption"><?= htmlspecialchars($experienceHeroCaption, ENT_QUOTES, 'UTF-8') ?></p>
     </div>
 
     <div class="site-shell experience-hero-content">
@@ -170,7 +188,7 @@ require __DIR__ . '/page-head.php';
       <h1><?= htmlspecialchars($experience['h1'], ENT_QUOTES, 'UTF-8') ?></h1>
       <p><?= htmlspecialchars($experience['summary'], ENT_QUOTES, 'UTF-8') ?></p>
       <div class="actions experience-hero-actions">
-        <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
+        <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" data-cta-id="enquiry-experience-hero" data-cta-location="experience-hero" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
 <?php if ($isIndexableExperience && ($experience['duration_type'] ?? 'hub') !== 'hub'): ?>
         <?php
         $tripItem = ['id' => $experience['slug'], 'title' => $experience['h1'], 'url' => $experience['slug'] . '.php'];
@@ -377,7 +395,7 @@ require __DIR__ . '/page-head.php';
       <h2>Build the day around what you want to discover.</h2>
       <p>Share your travel date, group size and priorities. We will confirm the current price, route, timings, guide or transport arrangements and exact inclusions before you commit.</p>
       <div class="actions">
-        <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceBottomContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
+        <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" data-cta-id="enquiry-experience-bottom" data-cta-location="experience-detail-checkpoint" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceBottomContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
         <a class="button button-secondary" href="room.php">View rooms</a>
       </div>
     </div>

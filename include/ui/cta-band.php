@@ -37,8 +37,10 @@ $uiCtaInnerClass = (string) ($uiCta['inner_class'] ?? 'site-shell cta-band-inner
         <?php
         $uiCtaTarget = (string) ($uiCtaLink['target'] ?? '');
         $uiCtaRel = (string) ($uiCtaLink['rel'] ?? ($uiCtaTarget === '_blank' ? 'noopener' : ''));
+        $uiCtaTrackingId = (string) ($uiCtaLink['tracking_id'] ?? '');
+        $uiCtaTrackingLocation = (string) ($uiCtaLink['tracking_location'] ?? '');
         ?>
-        <a class="<?= $uiCtaEscape($uiCtaLink['class'] ?? 'button button-primary') ?>" href="<?= $uiCtaEscape($uiCtaLink['href'] ?? '#') ?>"<?php if ($uiCtaTarget !== ''): ?> target="<?= $uiCtaEscape($uiCtaTarget) ?>"<?php endif; ?><?php if ($uiCtaRel !== ''): ?> rel="<?= $uiCtaEscape($uiCtaRel) ?>"<?php endif; ?>><?= $uiCtaEscape($uiCtaLink['label'] ?? '') ?></a>
+        <a class="<?= $uiCtaEscape($uiCtaLink['class'] ?? 'button button-primary') ?>" href="<?= $uiCtaEscape($uiCtaLink['href'] ?? '#') ?>"<?php if ($uiCtaTarget !== ''): ?> target="<?= $uiCtaEscape($uiCtaTarget) ?>"<?php endif; ?><?php if ($uiCtaRel !== ''): ?> rel="<?= $uiCtaEscape($uiCtaRel) ?>"<?php endif; ?><?php if (preg_match('/^[a-z0-9]+(?:-[a-z0-9]+){0,7}$/D', $uiCtaTrackingId)): ?> data-cta-id="<?= $uiCtaEscape($uiCtaTrackingId) ?>"<?php endif; ?><?php if (preg_match('/^[a-z0-9]+(?:-[a-z0-9]+){0,7}$/D', $uiCtaTrackingLocation)): ?> data-cta-location="<?= $uiCtaEscape($uiCtaTrackingLocation) ?>"<?php endif; ?>><?= $uiCtaEscape($uiCtaLink['label'] ?? '') ?></a>
       <?php endforeach; ?>
       <?php if (!empty($uiCta['actions_class'])): ?>
         </div>

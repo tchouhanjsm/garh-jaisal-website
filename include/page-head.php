@@ -76,6 +76,8 @@ $ogImageAlt = $page['og_image_alt'] ?? (
 );
 $twitterImageSource = $page['twitter_image'] ?? $ogImageSource;
 $twitterImageAlt = $page['twitter_image_alt'] ?? ($twitterImageSource === $ogImageSource ? $ogImageAlt : null);
+require_once __DIR__ . '/image-metadata.php';
+$ogImageMetadata = gj_local_image_metadata($ogImageSource);
 
 $htmlEscape = static function ($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
@@ -159,6 +161,13 @@ $analyticsIds = array_values(array_unique(array_filter(
   <meta property="og:description" content="<?= $htmlEscape($ogDescription) ?>">
   <meta property="og:url" content="<?= $htmlEscape($canonical) ?>">
   <meta property="og:image" content="<?= $htmlEscape($absoluteAssetUrl($ogImageSource)) ?>">
+<?php if (is_array($ogImageMetadata)): ?>
+  <meta property="og:image:width" content="<?= $htmlEscape($ogImageMetadata['width']) ?>">
+  <meta property="og:image:height" content="<?= $htmlEscape($ogImageMetadata['height']) ?>">
+<?php if ($ogImageMetadata['mime'] !== ''): ?>
+  <meta property="og:image:type" content="<?= $htmlEscape($ogImageMetadata['mime']) ?>">
+<?php endif; ?>
+<?php endif; ?>
 <?php if (is_string($ogImageAlt) && $ogImageAlt !== ''): ?>
   <meta property="og:image:alt" content="<?= $htmlEscape($ogImageAlt) ?>">
 <?php endif; ?>
@@ -189,7 +198,7 @@ $analyticsIds = array_values(array_unique(array_filter(
   <link rel="stylesheet" href="css/accessibility.css">
 <?php foreach ($preloads as $preload): ?>
 <?php if (is_array($preload) && isset($preload['href']) && is_string($preload['href']) && $preload['href'] !== ''): ?>
-  <link rel="preload" as="image" href="<?= $htmlEscape($preloadAssetUrl($preload['href'])) ?>"<?php if (isset($preload['media']) && is_string($preload['media']) && preg_match('/^\((?:min|max)-width:\s*[1-9][0-9]*px\)$/D', trim($preload['media']))): ?> media="<?= $htmlEscape(trim($preload['media'])) ?>"<?php endif; ?><?php if (($preload['fetchpriority'] ?? '') === 'high'): ?> fetchpriority="high"<?php endif; ?><?php if (!empty($preload['imagesrcset'])): ?> imagesrcset="<?= $htmlEscape($preload['imagesrcset']) ?>"<?php endif; ?><?php if (!empty($preload['imagesizes'])): ?> imagesizes="<?= $htmlEscape($preload['imagesizes']) ?>"<?php endif; ?>>
+  <link rel="preload" as="image" href="<?= $htmlEscape($preloadAssetUrl($preload['href'])) ?>"<?php if (isset($preload['media']) && is_string($preload['media']) && preg_match('/^\((?:min|max)-width:\s*[1-9][0-9]*px\)$/D', trim($preload['media']))): ?> media="<?= $htmlEscape(trim($preload['media'])) ?>"<?php endif; ?><?php if (($preload['fetchpriority'] ?? '') === 'high'): ?> fetchpriority="high"<?php endif; ?><?php if (!empty($preload['imagesrcset'])): ?> imagesrcset="<?= $htmlEscape(preg_replace('~(^|,\\s*)/~', '$1', $preload['imagesrcset'])) ?>"<?php endif; ?><?php if (!empty($preload['imagesizes'])): ?> imagesizes="<?= $htmlEscape($preload['imagesizes']) ?>"<?php endif; ?>>
 <?php endif; ?>
 <?php endforeach; ?>
 <?php if ($analyticsIds): ?>

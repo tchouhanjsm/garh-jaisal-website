@@ -66,10 +66,10 @@ require __DIR__ . '/include/page-head.php';
       <h1><?= htmlspecialchars($headline, ENT_QUOTES, 'UTF-8') ?></h1>
       <p class="guide-lede">Jaisalmer Fort is a living fort. Garh Jaisal Haveli sits inside it, at Fort Kotari Para, so the stay is among the lanes rather than outside the walls.</p>
       <div class="actions guide-hero-actions">
-        <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check room availability</a>
+        <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="booking-guide-hero" data-cta-location="booking-guide-hero">Check room availability</a>
         <a class="button button-light" href="room.php">Compare the rooms</a>
       </div>
-      <p class="guide-hero-contact">Questions about room-specific facilities or arrival? <a href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Message us on WhatsApp</a> or <a href="contact.php">send an enquiry</a>.</p>
+      <p class="guide-hero-contact">Questions about room-specific facilities or arrival? <a href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-booking-guide" data-cta-location="booking-guide-hero">Message us on WhatsApp</a> or <a href="contact.php" data-cta-id="enquiry-booking-guide" data-cta-location="booking-guide-hero">send an enquiry</a>.</p>
     </div>
   </section>
 
@@ -93,13 +93,13 @@ require __DIR__ . '/include/page-head.php';
           <span aria-hidden="true">02</span>
           <h3>Check your dates</h3>
           <p>Open the booking system to see the current rate and availability for your dates.</p>
-          <a href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check availability <span aria-hidden="true">↗</span></a>
+          <a href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="booking-guide-step" data-cta-location="booking-path-steps">Check availability <span aria-hidden="true">↗</span></a>
         </li>
         <li>
           <span aria-hidden="true">03</span>
           <h3>Plan the extras</h3>
           <p>Ask the hotel to confirm any desert experience, guided route, dining plan or arrival arrangement before relying on it.</p>
-          <a href="contact.php?topic=visit-planning">Ask about your plans <span aria-hidden="true">→</span></a>
+          <a href="contact.php?topic=visit-planning" data-cta-id="enquiry-booking-guide-extras" data-cta-location="booking-path-steps">Ask about your plans <span aria-hidden="true">→</span></a>
         </li>
       </ol>
     </div>

@@ -68,6 +68,8 @@ test('booking, call and WhatsApp intent events route to both approved GA4 IDs', 
   let events = await readTrackedEvents(page);
   const booking = expectRoutedOnce(events, 'booking_outbound_click', '/contact.php', 'contact');
   expect(booking.cta_label).toMatch(/availability/i);
+  expect(booking.cta_id).toBe('booking-contact-top');
+  expect(booking.cta_location).toBe('contact-booking-actions');
   expect(booking.utm_source).toBe('google');
   expect(booking.utm_medium).toBe('cpc');
   expect(booking.utm_campaign).toBe('fort_offer');
@@ -83,6 +85,32 @@ test('booking, call and WhatsApp intent events route to both approved GA4 IDs', 
   events = await readTrackedEvents(page);
   const whatsapp = expectRoutedOnce(events, 'click_whatsapp', '/contact.php', 'contact');
   expect(whatsapp.cta_label).toBe('whatsapp');
+});
+
+test('first-touch campaign attribution survives internal navigation to a room booking CTA', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'First-touch attribution runs once on desktop-1280');
+  await page.route('https://www.googletagmanager.com/**', route => route.abort());
+  await preventTrackedNavigation(page);
+
+  await page.goto('/jaisalmer-honeymoon-guide.php?utm_source=google&utm_medium=cpc&utm_campaign=fort_offer&email=private%40example.com', { waitUntil: 'domcontentloaded' });
+  await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
+
+  const bookingLink = page.locator('a.room-book').first();
+  const bookingUrl = new URL(await bookingLink.getAttribute('href'), 'https://www.hotelgarhjaisal.com');
+  expect(bookingUrl.searchParams.get('utm_source')).toBe('google');
+  expect(bookingUrl.searchParams.get('utm_medium')).toBe('cpc');
+  expect(bookingUrl.searchParams.get('utm_campaign')).toBe('fort_offer');
+  expect(bookingUrl.searchParams.get('utm_content')).toBe('jaisalmer-honeymoon-guide');
+  expect(bookingUrl.searchParams.has('email')).toBe(false);
+
+  await bookingLink.click();
+  const events = await readTrackedEvents(page);
+  const booking = expectRoutedOnce(events, 'booking_outbound_click', '/room.php', 'rooms');
+  expect(booking.cta_id).toBe('booking-room-card');
+  expect(booking.cta_location).toBe('room-card');
+  expect(booking.utm_source).toBe('google');
+  expect(booking.utm_campaign).toBe('fort_offer');
+  expect(booking).not.toHaveProperty('email');
 });
 
 test('enquiry_start reports room, dining, arrival or general on first form interaction only', async ({ page }, testInfo) => {

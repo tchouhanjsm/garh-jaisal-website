@@ -16,6 +16,24 @@ usort($items, static function ($a, $b) use ($experiences) {
 <html lang="en">
 <?php
 require_once __DIR__ . '/include/schema.php';
+$desertSafariHero = $experiences['desert-safari'] ?? null;
+if (!is_array($desertSafariHero)) {
+    throw new RuntimeException('The Desert Safari hub requires a reviewed experience registry entry.');
+}
+$desertSafariHeroImage = trim((string) ($desertSafariHero['hero_image'] ?? ''));
+$desertSafariHeroAlt = trim((string) ($desertSafariHero['hero_alt'] ?? ''));
+$desertSafariHeroCaption = trim((string) ($desertSafariHero['hero_caption'] ?? ''));
+$desertSafariHeroImageObject = gj_schema_image_object(
+    $siteUrl,
+    $desertSafariHeroImage,
+    $desertSafariHeroCaption,
+    $desertSafariHeroAlt
+);
+$experienceHubMedia = [
+    'source' => $desertSafariHeroImage,
+    'alt' => $desertSafariHeroAlt,
+    'caption' => $desertSafariHeroCaption,
+];
 $faqItems = [
     ['question' => "Which desert options are listed here?", 'answer' => "The hub links to a sunset camel safari, cultural desert evening, Sleep Under the Stars and the Swiss Tent Safari. A separate Camping page explains the two overnight setups."],
     ['question' => "Do desert departure times stay the same all year?", 'answer' => "No. Departure and sunset timings change with the season. Confirm the schedule with the hotel for your travel date."],
@@ -28,11 +46,11 @@ $page = [
     'path' => '/desert-safari.php',
     'og_title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
     'og_description' => 'Compare sunset camel safaris, cultural evenings and overnight stays from Jaisalmer Fort. Confirm timing, inclusions, price and availability.',
-    'og_image' => '/img/desert3.jpg',
-    'og_image_alt' => 'Sand dunes in the Thar Desert near Jaisalmer',
+    'og_image' => '/' . ltrim($desertSafariHeroImage, '/'),
+    'og_image_alt' => $desertSafariHeroAlt,
     'twitter_title' => 'Jaisalmer Desert Safari | Camel Safaris & Overnight Stays',
     'twitter_description' => 'Compare sunset camel safaris, cultural evenings and overnight stays from Jaisalmer Fort. Confirm timing, inclusions, price and availability.',
-    'twitter_image' => '/img/desert3.jpg',
+    'twitter_image' => '/' . ltrim($desertSafariHeroImage, '/'),
     'css' => ['css/experiences.css'],
     'schema' => [
         [
@@ -41,6 +59,7 @@ $page = [
             'url' => $canonical,
             'name' => 'Desert Safari in Jaisalmer | Camel Safari & Overnight Experiences',
             'description' => 'Compare sunset camel safaris, cultural evenings and overnight desert stays planned from Garh Jaisal Haveli inside Jaisalmer Fort. Confirm availability, timing, inclusions and price for your dates.',
+            'primaryImageOfPage' => $desertSafariHeroImageObject,
             'isPartOf' => ['@id' => $siteUrl . '/#website'],
             'about' => ['@id' => $siteUrl . '/#hotel'],
             'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
@@ -63,10 +82,7 @@ require __DIR__ . '/include/page-head.php';
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 <main id="main-content" tabindex="-1">
   <section class="experience-hero">
-    <div class="experience-hero-media">
-      <img src="img/desert3.jpg" <?= gj_image_dimension_attributes('img/desert3.jpg', '100vw') ?> alt="Sand dunes in the Thar Desert near Jaisalmer" fetchpriority="high" decoding="async">
-      <div class="experience-hero-overlay"></div>
-    </div>
+    <?php require __DIR__ . '/include/ui/experience-hub-media.php'; ?>
     <div class="site-shell experience-hero-content">
       <nav class="experience-breadcrumbs" aria-label="Breadcrumb">
         <a href="index.php">Home</a><span aria-hidden="true">/</span><a href="pack.php">Packages</a><span aria-hidden="true">/</span><span aria-current="page">Desert Safari</span>

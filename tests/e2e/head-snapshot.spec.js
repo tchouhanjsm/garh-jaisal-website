@@ -193,10 +193,8 @@ function normalizeSocialImageValues(snapshot) {
       internIndex(head[3]),
       internIndex(head[4]),
       (head[5] || [])
-        // Accessible image-description tags are now checked across every sitemap route
-        // by social-image-metadata.spec.js; keep the frozen legacy baseline focused on
-        // its historical fields rather than treating these intentional additions as drift.
-        .filter(tag => !['og:image:alt', 'twitter:image:alt'].includes(sourceStrings[tag[0]]))
+        // Accessible image descriptions and intrinsic Open Graph image dimensions/type are checked by dedicated route-wide media tests; keep the frozen legacy baseline focused on its reviewed historical fields rather than treating these intentional additions as drift.
+        .filter(tag => !['og:image:alt', 'twitter:image:alt', 'og:image:width', 'og:image:height', 'og:image:type'].includes(sourceStrings[tag[0]]))
         .map(tag => {
         const key = sourceStrings[tag[0]];
         const contentIndex = imageKeys.has(key)
@@ -204,7 +202,9 @@ function normalizeSocialImageValues(snapshot) {
           : internIndex(tag[1]);
         return [internIndex(tag[0]), contentIndex];
       }),
-      (head[6] || []).map(internIndex),
+      // ImageObject is now explicitly emitted for reviewed hero media and
+      // is independently validated by editorial-media-readiness.spec.js.
+      (head[6] || []).filter(type => sourceStrings[type] !== 'ImageObject').map(internIndex),
       head[7],
       head[8],
       (head[9] || []).map(internIndex),

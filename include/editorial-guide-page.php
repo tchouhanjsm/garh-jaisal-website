@@ -25,6 +25,7 @@ if (!is_array($guide)) {
         'lede' => 'This guide is not available.',
         'hero_image' => 'img/v2/facade.jpg',
         'hero_alt' => 'Garh Jaisal Haveli inside Jaisalmer Fort',
+        'hero_caption' => 'Use this guide to plan your visit and confirm details that depend on your travel date.',
         'date_published' => '2026-10-15',
         'date_modified' => '2026-10-15',
         'date_display' => '15 October 2026',
@@ -45,12 +46,26 @@ $guideHeroAlt = trim((string) ($guide['hero_alt'] ?? ''));
 if ($guideHeroAlt === '') {
     throw new RuntimeException('Editorial guide requires a non-empty hero_alt: ' . (string) ($guide['slug'] ?? 'unknown'));
 }
+$guideHeroCaption = trim((string) ($guide['hero_caption'] ?? ''));
+if ($guideHeroCaption === '') {
+    if (!empty($studioAllowDraftPreview)) {
+        $guideHeroCaption = 'Draft preview image — add a reviewed caption before publishing.';
+    } else {
+        throw new RuntimeException('Editorial guide requires a non-empty hero_caption: ' . (string) ($guide['slug'] ?? 'unknown'));
+    }
+}
+if (($guide['status'] ?? 'live') === 'live'
+    && (strlen($guideHeroCaption) < 20 || strlen($guideHeroCaption) > 180)) {
+    throw new RuntimeException('Editorial guide hero_caption must contain 20–180 characters: ' . (string) ($guide['slug'] ?? 'unknown'));
+}
 
 $guideTopic = (string) ($guide['topic'] ?? 'trip-planning');
 if (!isset($editorialTopicTaxonomy[$guideTopic])) $guideTopic = 'trip-planning';
 $guideTopicLabel = $editorialTopicTaxonomy[$guideTopic] ?? 'Trip planning';
 $siteUrl = rtrim((string) ($siteConfig['site_url'] ?? ''), '/');
 $canonical = $siteUrl . '/' . $guide['slug'] . '.php';
+require_once __DIR__ . '/schema.php';
+$guideHeroImageObject = gj_schema_image_object($siteUrl, $guide['hero_image'], $guideHeroCaption, $guideHeroAlt);
 $escapeGuide = static function ($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 };
@@ -60,7 +75,6 @@ $breadcrumbs = [
     ['label' => 'Journal', 'href' => '/blog.php'],
     ['label' => $guideBreadcrumbLabel],
 ];
-require_once __DIR__ . '/schema.php';
 $breadcrumbSchema = gj_schema_breadcrumb_list($siteUrl, '/' . $guide['slug'] . '.php', $breadcrumbs);
 $resolveGuideHref = static function ($value) use ($siteConfig) {
     if ((string) $value === '@booking') return (string) ($siteConfig['booking_url'] ?? '#');
@@ -100,7 +114,7 @@ $schemaGraph = [
         '@id' => $canonical . '#article',
         'headline' => $guide['schema_headline'] ?? $guide['h1'],
         'description' => $guide['description'],
-        'image' => [$siteUrl . '/' . ltrim($guide['hero_image'], '/')],
+        'image' => [$guideHeroImageObject],
         'datePublished' => $guide['date_published'],
         'dateModified' => $guide['date_modified'],
         'author' => ['@type' => 'Organization', 'name' => 'Hotel Garh Jaisal Haveli', 'url' => $siteUrl . '/'],
@@ -114,6 +128,7 @@ $schemaGraph = [
         'url' => $canonical,
         'name' => $guide['title'],
         'description' => $guide['description'],
+        'primaryImageOfPage' => $guideHeroImageObject,
         'isPartOf' => ['@id' => $siteUrl . '/#website'],
         'about' => ['@id' => $siteUrl . '/#hotel'],
         'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
@@ -179,7 +194,9 @@ require __DIR__ . '/page-head.php';
             <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($guide['hero_image'], '(max-width: 768px) 100vw, 60vw') : '' ?>
             alt="<?= $escapeGuide($guide['hero_alt']) ?>"
             fetchpriority="high"
-           decoding="async">
+            decoding="async"
+            aria-describedby="article-hero-caption">
+          <figcaption id="article-hero-caption" class="article-caption"><?= $escapeGuide($guideHeroCaption) ?></figcaption>
         </figure>
         <?php foreach ($guide['sections'] as $section): ?>
           <section id="<?= $escapeGuide($section['id']) ?>" data-story-reveal>
@@ -341,6 +358,8 @@ require __DIR__ . '/page-head.php';
           'class' => 'button button-primary',
           'target' => $guide['cta_primary_target'] ?? '',
           'rel' => $guide['cta_primary_rel'] ?? '',
+          'tracking_id' => 'editorial-primary-cta',
+          'tracking_location' => 'editorial-guide-cta',
       ],
       'secondary' => [
           'label' => $guide['cta_secondary_label'],
@@ -348,6 +367,8 @@ require __DIR__ . '/page-head.php';
           'class' => 'button button-secondary',
           'target' => $guide['cta_secondary_target'] ?? '',
           'rel' => $guide['cta_secondary_rel'] ?? '',
+          'tracking_id' => 'editorial-secondary-cta',
+          'tracking_location' => 'editorial-guide-cta',
       ],
   ];
   require __DIR__ . '/ui/cta-band.php';

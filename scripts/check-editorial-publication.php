@@ -6,6 +6,7 @@
  * and public route wrappers without requiring a web server.
  */
 $root = dirname(__DIR__);
+require_once $root . '/include/image-metadata.php';
 $failures = [];
 $assert = static function ($condition, $message) use (&$failures) {
     if (!$condition) $failures[] = $message;
@@ -23,16 +24,20 @@ $archive = $read('blog.php');
 $sitemapGenerator = $read('scripts/generate-sitemap.php');
 $head = $read('include/page-head.php');
 $articleCss = $read('css/article.css');
+$studioPageRenderer = $read('include/studio-page.php');
+$contentStudioSource = $read('scripts/content-studio.js');
 foreach ([
     'include/editorial-guide-page.php' => $template,
     'blog.php' => $archive,
     'scripts/generate-sitemap.php' => $sitemapGenerator,
     'include/page-head.php' => $head,
     'css/article.css' => $articleCss,
+    'include/studio-page.php' => $studioPageRenderer,
+    'scripts/content-studio.js' => $contentStudioSource,
 ] as $path => $value) {
     $assert(is_string($value), 'Required publication pipeline file missing: ' . $path);
 }
-if (!is_array($registry) || !is_string($template) || !is_string($archive) || !is_string($sitemapGenerator) || !is_string($head) || !is_string($articleCss)) {
+if (!is_array($registry) || !is_string($template) || !is_string($archive) || !is_string($sitemapGenerator) || !is_string($head) || !is_string($articleCss) || !is_string($studioPageRenderer) || !is_string($contentStudioSource)) {
     fwrite(STDERR, implode(PHP_EOL, $failures) . PHP_EOL);
     exit(1);
 }
@@ -47,7 +52,7 @@ foreach ($registry as $slug => $guide) {
     $assert(($guide['slug'] ?? null) === $slug, 'Registry key/slug mismatch: ' . $slug);
     $status = $guide['status'] ?? 'live';
     $assert(in_array($status, ['live', 'draft', 'hidden'], true), 'Invalid publication status: ' . $slug);
-    foreach (['title', 'description', 'h1', 'lede', 'hero_image', 'hero_alt', 'date_published', 'date_modified', 'date_display'] as $field) {
+    foreach (['title', 'description', 'h1', 'lede', 'hero_image', 'hero_alt', 'hero_caption', 'date_published', 'date_modified', 'date_display'] as $field) {
         $assert(is_string($guide[$field] ?? null) && trim($guide[$field]) !== '', 'Missing required ' . $field . ': ' . $slug);
     }
     $title = trim((string) ($guide['title'] ?? ''));
@@ -72,6 +77,17 @@ foreach ($registry as $slug => $guide) {
             }
         }
         $assert(!empty($guide['hero_alt']), 'Live guide hero image needs descriptive alternative text: ' . $slug);
+        $heroSource = trim((string) ($guide['hero_image'] ?? ''));
+        $safeHeroSource = preg_match('~^img/[A-Za-z0-9._/-]+$~D', $heroSource) === 1
+            && strpos($heroSource, '..') === false
+            && strpos($heroSource, chr(92)) === false;
+        $heroFile = $root . '/' . $heroSource;
+        $heroMetadata = $safeHeroSource ? gj_local_image_metadata($heroSource) : null;
+        $heroExtension = strtolower(pathinfo($heroSource, PATHINFO_EXTENSION));
+        $assert($safeHeroSource && is_file($heroFile) && !is_link($heroFile), 'Live editorial hero image must be a safe, local regular file: ' . $slug . ' → ' . $heroSource);
+        $assert(is_array($heroMetadata) || ($safeHeroSource && is_file($heroFile) && $heroExtension === 'avif'), 'Live editorial hero image must be decodable or use the supported AVIF fallback path: ' . $slug);
+        $assert(strlen(trim((string) ($guide['hero_alt'] ?? ''))) >= 15, 'Live editorial hero alt text should describe the subject rather than a generic image: ' . $slug);
+        $assert(strlen(trim((string) ($guide['hero_caption'] ?? ''))) >= 20 && strlen(trim((string) ($guide['hero_caption'] ?? ''))) <= 180, 'Live editorial hero caption must be useful and concise: ' . $slug);
         foreach (['toc', 'sections', 'related'] as $field) {
             $assert(is_array($guide[$field] ?? null) && count($guide[$field]) > 0, 'Live guide needs non-empty ' . $field . ': ' . $slug);
         }
@@ -135,6 +151,24 @@ foreach ($registry as $slug => $guide) {
     }
 }
 $assert(strpos($template, "'@type' => 'BlogPosting'") !== false, 'Article template must emit BlogPosting schema.');
+$assert(strpos($template, 'gj_schema_image_object') !== false, 'Article image schema must use shared media metadata.');
+$imageMetadataHelper = $read('include/image-metadata.php');
+$imageDimensionHelper = $read('include/header-v2.php');
+$assert(is_string($imageMetadataHelper) && strpos($imageMetadataHelper, 'function gj_local_image_metadata') !== false && strpos($imageMetadataHelper, 'function gj_image_dimension_attributes') !== false, 'Shared image metadata and responsive attribute helpers must live together.');
+$assert(is_string($imageMetadataHelper) && strpos($imageMetadataHelper, 'gj_local_image_metadata($candidateSource)') !== false && strpos($imageMetadataHelper, '$candidateMetadata[\'bytes\'] >= $sourceMetadata[\'bytes\']') !== false, 'Responsive candidates must use safe metadata inspection and a byte-saving guard.');
+$assert(is_string($imageDimensionHelper) && strpos($imageDimensionHelper, "require_once __DIR__ . '/image-metadata.php';") !== false && strpos($imageDimensionHelper, 'function gj_image_dimension_attributes') === false, 'Shared header must load one canonical image-delivery helper rather than define a duplicate implementation.');
+$assert(strpos($template, 'gj_responsive_image_srcset') === false && strpos($template, 'gj_image_dimension_attributes($guide[\'hero_image\']') !== false, 'Editorial hero must use the canonical responsive attribute emitter.');
+$schemaRequirePosition = strpos($template, "require_once __DIR__ . '/schema.php';");
+$imageObjectPosition = strpos($template, '$guideHeroImageObject = gj_schema_image_object');
+$assert(is_int($schemaRequirePosition) && is_int($imageObjectPosition) && $schemaRequirePosition < $imageObjectPosition, 'Article renderer must load schema helpers before building the hero ImageObject.');
+$assert(strpos($contentStudioSource, "textField(record.hero_caption, 'Hero image caption', 20, 180)") !== false, 'Content Studio must block publishing a tour or guide without a reviewed caption.');
+$assert(strpos($studioPageRenderer, 'class="studio-page-hero-caption"') !== false && strpos($studioPageRenderer, 'primaryImageOfPage') !== false, 'Content Studio landing pages must render a caption and matching ImageObject schema.');
+
+$assert(strpos($template, '<figcaption id="article-hero-caption" class="article-caption">') !== false, 'Editorial hero image must render its reviewed visible caption with a stable accessible ID.');
+$assert(strpos($template, 'aria-describedby="article-hero-caption"') !== false, 'Editorial hero image must reference its visible caption for assistive technology.');
+$assert(strpos($template, 'gj_image_dimension_attributes($guide[\'hero_image\']') !== false, 'Editorial hero image must declare intrinsic dimensions.');
+$assert(strpos($template, 'decoding="async"') !== false, 'Editorial hero image must use asynchronous decoding.');
+$assert(strpos($template, '$guideHeroCaption') !== false, 'Editorial renderer must require and escape a hero caption.');
 $assert(strpos($template, 'gj_schema_breadcrumb_list') !== false, 'Article template must emit breadcrumb structured data.');
 $assert(strpos($sitemapGenerator, '$routeSlug') !== false && strpos($sitemapGenerator, 'status') !== false && strpos($sitemapGenerator, 'continue;') !== false, 'Static legacy article URLs must honour registry status.');
 $assert(strpos($template, "'robots' => " . '$isDraft' . " ? 'noindex,follow' : 'index,follow'") !== false, 'Draft preview must remain noindex.');

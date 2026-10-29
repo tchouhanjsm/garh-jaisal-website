@@ -83,8 +83,8 @@ require __DIR__ . '/include/page-head.php';
             Garh Jaisal Haveli is inside the fort. Cars stop at Fort Parking, then it is a short walk through the lanes. Contact the hotel before travel to ask whether arrival or luggage assistance can be arranged.
           </p>
           <div class="actions">
-            <a class="button button-primary" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>">Call <?= htmlspecialchars($hotelPhoneDisplay, ENT_QUOTES, 'UTF-8') ?></a>
-            <a class="button button-light" href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">WhatsApp the hotel</a>
+            <a class="button button-primary" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>" data-cta-id="call-arrival-hero" data-cta-location="arrival-hero">Call <?= htmlspecialchars($hotelPhoneDisplay, ENT_QUOTES, 'UTF-8') ?></a>
+            <a class="button button-light" href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-arrival-hero" data-cta-location="arrival-hero">WhatsApp the hotel</a>
           </div>
         </div>
 
@@ -230,7 +230,7 @@ require __DIR__ . '/include/page-head.php';
             In those hours, rickshaws are often not allowed inside the fort because the lanes are narrow and crowded. Contact the hotel to ask whether walking or luggage assistance can be arranged, and confirm before relying on it. Outside those hours, rickshaws often go inside the fort.
           </p>
         </div>
-        <a class="button button-primary" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>">Call when you arrive</a>
+        <a class="button button-primary" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>" data-cta-id="call-arrival-notice" data-cta-location="arrival-notice">Call when you arrive</a>
       </div>
     </div>
   </section>
@@ -284,7 +284,7 @@ require __DIR__ . '/include/page-head.php';
           <p>From the parking area, follow the walking route through the Fort lanes. If you need pickup or luggage assistance, contact the hotel in advance to confirm what can be arranged.</p>
           <div class="actions">
             <a class="button button-primary" href="<?= htmlspecialchars($hotelMapsUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Open exact hotel pin in Google Maps</a>
-            <a class="button button-secondary" href="contact.php?topic=arrival">Confirm arrival arrangements</a>
+            <a class="button button-secondary" href="contact.php?topic=arrival" data-cta-id="enquiry-arrival-confirm" data-cta-location="arrival-access">Confirm arrival arrangements</a>
           </div>
         </div>
       </div>
@@ -298,9 +298,9 @@ require __DIR__ . '/include/page-head.php';
         <h2>Confirm your arrival plan.</h2>
         <p>Please contact the hotel before travel to confirm current reception hours, check-in and check-out times, early-arrival access, luggage storage, and arrangements for arrivals outside reception hours. Share your expected arrival time so the team can advise what may be arranged for your date.</p>
         <div class="actions">
-          <a class="button button-primary" href="contact.php?topic=arrival">Contact the hotel</a>
-          <a class="button button-light" href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">WhatsApp</a>
-          <a class="button button-light" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>">Call</a>
+          <a class="button button-primary" href="contact.php?topic=arrival" data-cta-id="enquiry-arrival-footer" data-cta-location="arrival-contact-panel">Contact the hotel</a>
+          <a class="button button-light" href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-arrival-footer" data-cta-location="arrival-contact-panel">WhatsApp</a>
+          <a class="button button-light" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>" data-cta-id="call-arrival-footer" data-cta-location="arrival-contact-panel">Call</a>
         </div>
       </div>
       <address class="arrival-address">

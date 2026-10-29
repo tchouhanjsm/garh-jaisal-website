@@ -55,6 +55,43 @@ function gj_schema_website($siteUrl)
     ];
 }
 
+
+/**
+ * Build page-image structured data from a curated local asset.
+ * Intrinsic dimensions are included only when PHP can decode the file safely.
+ */
+function gj_schema_image_object($siteUrl, $source, $caption = '', $alt = '')
+{
+    require_once __DIR__ . '/image-metadata.php';
+
+    $baseUrl = rtrim((string) $siteUrl, '/');
+    $asset = trim((string) $source);
+    $metadata = gj_local_image_metadata($asset);
+    $imageUrl = preg_match('#^https://#i', $asset)
+        ? $asset
+        : $baseUrl . '/' . ltrim($asset, '/');
+
+    $image = [
+        '@type' => 'ImageObject',
+        'url' => $imageUrl,
+        'contentUrl' => $imageUrl,
+    ];
+    if (is_array($metadata)) {
+        $image['width'] = $metadata['width'];
+        $image['height'] = $metadata['height'];
+        if ($metadata['mime'] !== '') {
+            $image['encodingFormat'] = $metadata['mime'];
+        }
+    }
+    if (is_string($caption) && trim($caption) !== '') {
+        $image['caption'] = trim($caption);
+    }
+    if (is_string($alt) && trim($alt) !== '') {
+        $image['description'] = trim($alt);
+    }
+    return $image;
+}
+
 /**
  * Build FAQPage structured data from the exact Q&A array rendered on the page.
  * Returns no node when no valid visible questions are supplied.

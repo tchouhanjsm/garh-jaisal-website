@@ -297,9 +297,9 @@ require __DIR__ . '/include/page-head.php';
   <section class="section contact-content">
     <div class="site-shell">
       <div class="actions contact-booking-actions">
-        <a class="button button-primary contact-booking-button" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check room availability</a>
-        <a class="button button-secondary contact-arrival-link" href="direction.php">Plan your arrival</a>
-        <a class="button button-secondary contact-whatsapp-button" href="<?= htmlspecialchars($siteConfig['whatsapp_url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Message on WhatsApp</a>
+        <a class="button button-primary contact-booking-button" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="booking-contact-top" data-cta-location="contact-booking-actions">Check room availability</a>
+        <a class="button button-secondary contact-arrival-link" href="direction.php" data-cta-id="arrival-contact-top" data-cta-location="contact-booking-actions">Plan your arrival</a>
+        <a class="button button-secondary contact-whatsapp-button" href="<?= htmlspecialchars($siteConfig['whatsapp_url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-contact-top" data-cta-location="contact-booking-actions">Message on WhatsApp</a>
       </div>
 
       <div class="contact-layout">

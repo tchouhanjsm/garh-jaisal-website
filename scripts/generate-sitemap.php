@@ -263,6 +263,19 @@ $sitemapPath = $root . '/sitemap.xml';
 if (in_array('--check', $argv, true)) {
     $current = is_file($sitemapPath) ? file_get_contents($sitemapPath) : false;
     if (!is_string($current) || $current !== $xml) {
+        $currentLines = is_string($current) ? explode("\n", str_replace("\r\n", "\n", $current)) : [];
+        $expectedLines = explode("\n", $xml);
+        $lineCount = max(count($currentLines), count($expectedLines));
+        for ($lineIndex = 0; $lineIndex < $lineCount; $lineIndex++) {
+            $actualLine = $currentLines[$lineIndex] ?? null;
+            $expectedLine = $expectedLines[$lineIndex] ?? null;
+            if ($actualLine !== $expectedLine) {
+                fwrite(STDERR, 'ERROR sitemap.xml is stale at line ' . ($lineIndex + 1) . PHP_EOL);
+                fwrite(STDERR, '  expected: ' . ($expectedLine === null ? '[missing]' : $expectedLine) . PHP_EOL);
+                fwrite(STDERR, '  actual:   ' . ($actualLine === null ? '[missing]' : $actualLine) . PHP_EOL);
+                break;
+            }
+        }
         fwrite(STDERR, "ERROR sitemap.xml is stale. Run: php scripts/generate-sitemap.php\n");
         exit(1);
     }

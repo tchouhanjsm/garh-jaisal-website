@@ -79,6 +79,20 @@ $assert(
     'A separately configured Twitter/X image must use its own explicit alt text.'
 );
 
+$dimensionHtml = $renderHead([
+    'og_image' => '/img/v2/facade.jpg',
+    'og_image_alt' => 'Carved facade of Garh Jaisal Haveli inside Jaisalmer Fort',
+]);
+$assert(
+    (bool) preg_match('/property="og:image:width" content="[1-9][0-9]*"/', $dimensionHtml)
+    && (bool) preg_match('/property="og:image:height" content="[1-9][0-9]*"/', $dimensionHtml),
+    'A decodable local social image must expose its actual intrinsic dimensions.'
+);
+$assert(
+    strpos($dimensionHtml, 'property="og:image:type" content="image/jpeg"') !== false,
+    'A decodable local social image must expose its actual MIME type.'
+);
+
 if ($failures) {
     foreach ($failures as $failure) {
         fwrite(STDERR, 'FAIL ' . $failure . PHP_EOL);

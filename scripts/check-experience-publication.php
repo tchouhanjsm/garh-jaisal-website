@@ -6,6 +6,7 @@
  * rendered canonical/robots behavior remains covered by the Playwright suite.
  */
 $root = dirname(__DIR__);
+require_once $root . '/include/image-metadata.php';
 $experiences = require $root . '/include/experience-data.php';
 $nav = require $root . '/include/nav-data.php';
 $siteCheckErrors = [];
@@ -61,6 +62,27 @@ foreach ($experiences as $slug => $experience) {
     if (($experience['slug'] ?? null) !== $slug) {
         $siteCheckErrors[] = 'Experience key/slug mismatch: ' . $slug;
     }
+    if ($status === 'live') {
+        $heroSource = trim((string) ($experience['hero_image'] ?? ''));
+        $safeHeroSource = preg_match('~^img/[A-Za-z0-9._/-]+$~D', $heroSource) === 1
+            && strpos($heroSource, '..') === false
+            && strpos($heroSource, chr(92)) === false;
+        $heroFile = $root . '/' . $heroSource;
+        $heroMetadata = $safeHeroSource ? gj_local_image_metadata($heroSource) : null;
+        $heroExtension = strtolower(pathinfo($heroSource, PATHINFO_EXTENSION));
+        if (!$safeHeroSource || !is_file($heroFile) || is_link($heroFile)) {
+            $siteCheckErrors[] = 'Live experience hero image must be a safe, local regular file: ' . $slug;
+        } elseif (!is_array($heroMetadata) && $heroExtension !== 'avif') {
+            $siteCheckErrors[] = 'Live experience hero image is not decodable by the PHP image metadata helper: ' . $slug;
+        }
+        if (strlen(trim((string) ($experience['hero_alt'] ?? ''))) < 15) {
+            $siteCheckErrors[] = 'Live experience hero alt must describe the subject: ' . $slug;
+        }
+        $captionLength = strlen(trim((string) ($experience['hero_caption'] ?? '')));
+        if ($captionLength < 20 || $captionLength > 180) {
+            $siteCheckErrors[] = 'Live experience hero caption must be useful and concise: ' . $slug;
+        }
+    }
     if ($status === 'live' && !is_file($root . '/' . $file)) {
         $siteCheckErrors[] = 'Live experience page is missing: ' . $file;
     }
@@ -76,6 +98,61 @@ foreach ($experiences as $slug => $experience) {
 }
 
 $sitemap = $read($root . '/sitemap.xml');
+$renderer = $read($root . '/include/experience-page.php');
+if (strpos($renderer, 'gj_schema_image_object') === false || strpos($renderer, 'experienceHeroCaption') === false) {
+    $siteCheckErrors[] = 'Experience renderer must use the shared image schema and caption contract.';
+}
+
+$hubMediaRenderer = $read($root . '/include/ui/experience-hub-media.php');
+if (
+    strpos($hubMediaRenderer, 'aria-describedby="experience-hero-caption"') === false
+    || strpos($hubMediaRenderer, 'class="experience-hero-caption"') === false
+    || strpos($hubMediaRenderer, 'gj_local_image_metadata($hubMediaSource)') === false
+    || strpos($hubMediaRenderer, "gj_image_dimension_attributes(\$hubMediaSource, '100vw')") === false
+) {
+    $siteCheckErrors[] = 'Experience hub media must use safe local metadata, responsive dimensions and a visible accessible caption.';
+}
+$hubMediaRoutes = [
+    'desert-safari.php' => '$desertSafariHeroImageObject',
+    'guided-jaisalmer-tour.php' => '$guidedHubHeroImageObject',
+];
+foreach ($hubMediaRoutes as $hubFile => $imageObjectVariable) {
+    $hubSource = $read($root . '/' . $hubFile);
+    if (
+        strpos($hubSource, "include/ui/experience-hub-media.php") === false
+        || strpos($hubSource, 'gj_schema_image_object(') === false
+        || strpos($hubSource, "'primaryImageOfPage' => " . $imageObjectVariable) === false
+        || strpos($hubSource, "'og_image' => '/' . ltrim(") === false
+    ) {
+        $siteCheckErrors[] = 'Experience hub must share its reviewed hero media across visible caption, social metadata and ImageObject schema: ' . $hubFile;
+    }
+}
+
+$imageMetadataHelper = $read($root . '/include/image-metadata.php');
+$imageDimensionHelper = $read($root . '/include/header-v2.php');
+if (
+    strpos($renderer, 'gj_responsive_image_srcset') !== false
+    || strpos($renderer, 'gj_image_dimension_attributes($experience[\'hero_image\']') === false
+    || strpos($imageMetadataHelper, 'function gj_image_dimension_attributes') === false
+    || strpos($imageMetadataHelper, 'gj_local_image_metadata($candidateSource)') === false
+    || strpos($imageDimensionHelper, "require_once __DIR__ . '/image-metadata.php';") === false
+) {
+    $siteCheckErrors[] = 'Experience images must use one canonical, byte-saving-validated responsive attribute emitter.';
+}
+if (strpos($renderer, 'gj_image_dimension_attributes($experience[\'hero_image\']') === false || strpos($renderer, 'decoding="async"') === false) {
+    $siteCheckErrors[] = 'Experience hero must declare intrinsic image dimensions and asynchronous decoding.';
+}
+$studioSource = $read($root . '/scripts/content-studio.js');
+if (strpos($studioSource, "textField(record.hero_caption, 'Hero image caption', 20, 180)") === false) {
+    $siteCheckErrors[] = 'Content Studio must require reviewed hero captions before publishing tours and guides.';
+}
+$guideRenderer = $read($root . '/include/editorial-guide-page.php');
+$schemaRequirePosition = strpos($guideRenderer, "require_once __DIR__ . '/schema.php';");
+$imageObjectPosition = strpos($guideRenderer, '$guideHeroImageObject = gj_schema_image_object');
+if (!is_int($schemaRequirePosition) || !is_int($imageObjectPosition) || $schemaRequirePosition > $imageObjectPosition) {
+    $siteCheckErrors[] = 'Editorial renderer must load schema helpers before constructing the hero ImageObject.';
+}
+
 preg_match_all('#<loc>https?://[^/]+/([^<]*)</loc>#i', $sitemap, $matches);
 $sitemapPaths = array_map('trim', $matches[1] ?? []);
 foreach ($experiences as $slug => $experience) {

@@ -25,15 +25,18 @@ $sitemapPath = $root . '/sitemap.xml';
 $robotsPath = $root . '/robots.txt';
 $templatePath = $root . '/include/editorial-guide-page.php';
 $headPath = $root . '/include/page-head.php';
+$imageMetadataPath = $root . '/include/image-metadata.php';
 $sitemap = is_file($sitemapPath) && !is_link($sitemapPath) ? file_get_contents($sitemapPath) : false;
 $robots = is_file($robotsPath) && !is_link($robotsPath) ? file_get_contents($robotsPath) : false;
 $template = is_file($templatePath) && !is_link($templatePath) ? file_get_contents($templatePath) : false;
 $head = is_file($headPath) && !is_link($headPath) ? file_get_contents($headPath) : false;
+$imageMetadataHelper = is_file($imageMetadataPath) && !is_link($imageMetadataPath) ? file_get_contents($imageMetadataPath) : false;
 $assert(is_string($sitemap) && trim($sitemap) !== '', 'Committed sitemap.xml must exist and be non-empty.');
 $assert(is_string($robots) && trim($robots) !== '', 'robots.txt must exist and be non-empty.');
 $assert(is_string($template), 'Shared editorial guide renderer is missing.');
 $assert(is_string($head), 'Shared page-head renderer is missing.');
-if (!is_array($guides) || !is_array($topics) || !is_string($sitemap) || !is_string($robots) || !is_string($template) || !is_string($head) || !is_array($siteParts)) {
+$assert(is_string($imageMetadataHelper), 'Shared safe image-metadata helper is missing.');
+if (!is_array($guides) || !is_array($topics) || !is_string($sitemap) || !is_string($robots) || !is_string($template) || !is_string($head) || !is_string($imageMetadataHelper) || !is_array($siteParts)) {
     fwrite(STDERR, "FAIL editorial SEO release readiness: a required source file or registry is unavailable.\n");
     exit(1);
 }
@@ -48,6 +51,9 @@ foreach ([
     'property="og:url"',
     'property="og:image"',
     'property="og:image:alt"',
+    'property="og:image:width"',
+    'property="og:image:height"',
+    'property="og:image:type"',
     'name="twitter:card"',
     'name="twitter:title"',
     'name="twitter:description"',
@@ -57,6 +63,13 @@ foreach ([
     $assert(strpos($head, $marker) !== false, 'Shared head is missing SEO metadata marker: ' . $marker);
 }
 $assert(strpos($template, "'@type' => 'BlogPosting'") !== false, 'Editorial renderer must emit BlogPosting JSON-LD.');
+$assert(strpos($template, 'gj_schema_image_object') !== false, 'Editorial schema must include shared ImageObject metadata.');
+$schemaRequirePosition = strpos($template, "require_once __DIR__ . '/schema.php';");
+$imageObjectPosition = strpos($template, '$guideHeroImageObject = gj_schema_image_object');
+$assert(is_int($schemaRequirePosition) && is_int($imageObjectPosition) && $schemaRequirePosition < $imageObjectPosition, 'Editorial renderer must load schema helpers before constructing the hero ImageObject.');
+$assert(strpos($template, '<figcaption id="article-hero-caption" class="article-caption">') !== false, 'Editorial hero media must have a visible caption with a stable accessible ID.');
+$assert(strpos($template, 'aria-describedby="article-hero-caption"') !== false, 'Editorial hero image must reference its visible caption for assistive technology.');
+$assert(strpos($imageMetadataHelper, 'realpath') !== false && strpos($imageMetadataHelper, 'is_link') !== false, 'Image helper must enforce regular-file and real-path safeguards.');
 $assert(strpos($template, 'gj_schema_breadcrumb_list') !== false, 'Editorial renderer must emit breadcrumb JSON-LD.');
 $assert(strpos($template, "'datePublished' =>") !== false && strpos($template, "'dateModified' =>") !== false, 'BlogPosting must expose publication and modification dates.');
 $assert(strpos($template, "'robots' => ") !== false && strpos($template, "'index,follow'") !== false && strpos($template, "'noindex,follow'") !== false, 'Editorial visibility must control indexability.');

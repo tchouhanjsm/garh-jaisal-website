@@ -1123,3 +1123,32 @@ main .experience-card > a > .experience-card-media img{
 @media(prefers-reduced-motion:reduce){
   .experience-section-nav{scroll-behavior:auto}
 }
+
+
+/* Image captions are readable without competing with the hero's primary action. */
+.experience-hero-caption {
+  position: absolute;
+  inset-inline-end: clamp(14px, calc((100vw - 1180px) / 2), 64px);
+  bottom: 14px;
+  z-index: 2;
+  max-width: min(48ch, calc(100% - 28px));
+  margin: 0;
+  padding: 8px 11px;
+  border: 1px solid rgba(255, 255, 255, .28);
+  border-radius: 3px;
+  background: rgba(27, 19, 14, .88);
+  color: #fff;
+  font-size: .76rem;
+  line-height: 1.45;
+}
+@media (max-width: 760px) {
+  .experience-hero-caption {
+    inset-inline-end: 12px;
+    bottom: 10px;
+    max-width: min(28ch, calc(100% - 24px));
+    font-size: .72rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .experience-hero-caption { transition: none; }
+}

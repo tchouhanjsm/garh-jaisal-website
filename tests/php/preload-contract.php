@@ -53,7 +53,7 @@ $assert(
     'The desktop image preload must include its validated media query and high priority.'
 );
 $assert(
-    strpos($html, 'imagesrcset="/img/responsive/v2/facade-480.webp 480w, /img/responsive/v2/facade-800.webp 800w" imagesizes="100vw"') !== false,
+    strpos($html, 'imagesrcset="img/responsive/v2/facade-480.webp 480w, img/responsive/v2/facade-800.webp 800w" imagesizes="100vw"') !== false,
     'Responsive image preloads must carry a candidate list and matching sizes.'
 );
 $assert(

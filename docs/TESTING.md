@@ -133,3 +133,16 @@ A role that is not directly affected still records a concrete double-check rathe
 - `tests/e2e/seo.spec.js` checks the contextual planning section on all 11 configured high-intent routes.
 - The contract expects one visible section, one heading, three distinct links and same-site PHP destinations; the shared renderer also validates and escapes the page-provided labels, descriptions and paths.
 - Review Browser E2E screenshots and failure diagnostics on the exact PR head. Passing local-route checks does not establish live Google indexing, ranking changes or production performance.
+
+
+## Editorial media release gate
+
+- Run `php scripts/check-editorial-publication.php` and `php scripts/check-experience-publication.php` to validate hero-image paths, regular-file safety, alternative text and captions against the content registries.
+- The `tests/e2e/editorial-media-readiness.spec.js` browser audit covers the 12 live editorial guides and eight live experience pages. It attaches `artifacts/editorial-media-readiness/editorial-media-readiness.json`.
+- The audit checks the rendered image decoded, the figure/hero caption is visible, image alt matches Open Graph and Twitter/X descriptions, the social image matches the rendered hero, and ImageObject URL/text/dimensions match the shared page-head metadata.
+- The shared metadata helper may omit intrinsic dimensions for a valid image format unsupported by the running PHP image library (currently the AVIF fallback case); this exception does not waive browser decode checks.
+
+
+- `php tests/php/image-metadata-contract.php` verifies that the shared image metadata helper returns positive intrinsic metadata for a real local photo and rejects remote, missing, traversal and non-image path inputs.
+- Token-validated Content Studio draft previews may display an explicit “add a reviewed caption before publishing” reminder when the draft has no caption. Live publication checks still require a reviewed caption.
+- Verify the three Content Studio caption inputs (tour, guide, landing page), the approved Live tour/guide rendering, and `RC-24` rejection for a Live pack without a 20–180 character caption. The media E2E contract enforces that same length band on all 20 published editorial/experience routes.
