@@ -155,6 +155,14 @@ test('audit every published route for image slots and payloads at mobile and des
         const response = await page.goto(route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
         expect(response, `No HTTP response for ${route} at ${viewport.name}`).not.toBeNull();
         expect(response.status(), `Unexpected HTTP status for ${route} at ${viewport.name}`).toBeLessThan(400);
+        // Await the initially eager/visible images, without blocking on below-fold lazy images or third-party resources.
+        await page.locator('img').evaluateAll(async images => {
+          const initiallyRequested = images.filter(img => {
+            const rect = img.getBoundingClientRect();
+            return img.loading !== 'lazy' || (rect.bottom > 0 && rect.top < window.innerHeight);
+          });
+          await Promise.all(initiallyRequested.map(img => img.decode ? img.decode().catch(() => undefined) : Promise.resolve()));
+        });
         const usage = await page.locator('img').evaluateAll(images => images.map(img => {
           const rect = img.getBoundingClientRect();
           return {
