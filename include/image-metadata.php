@@ -101,3 +101,61 @@ if (!function_exists('gj_local_image_metadata')) {
         return $metadata;
     }
 }
+
+
+/**
+ * Emit a srcset only for verified, locally generated WebP variants.
+ *
+ * Variants are optional: the original source remains the fallback until the
+ * responsive asset pipeline has generated and validated at least two sizes.
+ */
+if (!function_exists('gj_responsive_image_srcset')) {
+    function gj_responsive_image_srcset($source)
+    {
+        if (!function_exists('gj_local_image_metadata') || !is_string($source)) {
+            return '';
+        }
+
+        $source = trim($source);
+        $sourceMetadata = gj_local_image_metadata($source);
+        if (!is_array($sourceMetadata)) {
+            return '';
+        }
+
+        $relative = ltrim($source, '/');
+        $insideImageRoot = substr($relative, 4);
+        $directory = dirname($insideImageRoot);
+        $stem = pathinfo($insideImageRoot, PATHINFO_FILENAME);
+        if ($stem === '' || $stem === '.' || $stem === '..') {
+            return '';
+        }
+
+        $variantDirectory = 'img/responsive/' . ($directory === '.' ? '' : $directory . '/');
+        $candidates = [];
+        foreach ([480, 800, 1200] as $targetWidth) {
+            if ($sourceMetadata['width'] <= $targetWidth) {
+                continue;
+            }
+
+            $variant = $variantDirectory . $stem . '-' . $targetWidth . '.webp';
+            $metadata = gj_local_image_metadata($variant);
+            if (
+                !is_array($metadata)
+                || $metadata['mime'] !== 'image/webp'
+                || $metadata['width'] !== $targetWidth
+                || $metadata['height'] < 1
+                || $metadata['width'] >= $sourceMetadata['width']
+            ) {
+                continue;
+            }
+
+            $candidates[] = htmlspecialchars($variant, ENT_QUOTES, 'UTF-8') . ' ' . $targetWidth . 'w';
+        }
+
+        if (count($candidates) < 2) {
+            return '';
+        }
+
+        return 'srcset="' . implode(', ', $candidates) . '"';
+    }
+}
