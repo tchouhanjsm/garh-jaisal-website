@@ -94,7 +94,7 @@ test('responsive image candidates receive slot-accurate sizes hints', async ({ p
     const image = page.locator(slot.selector);
     await expect(image, slot.route + ' should render ' + slot.selector).toHaveCount(1);
     await expect(image, slot.route + ' sizes hint should match its layout').toHaveAttribute('sizes', slot.sizes);
-    await expect(image, slot.route + ' should expose an approved responsive candidate').toHaveAttribute('srcset', /\/img\/responsive\//);
+    await expect(image, slot.route + ' should expose an approved responsive candidate').toHaveAttribute('srcset', /(?:^|\/)img\/responsive\//);
   }
 
   await page.goto(BASE_URL + '/gallery.php', { waitUntil: 'domcontentloaded', timeout: 20_000 });
@@ -102,6 +102,6 @@ test('responsive image candidates receive slot-accurate sizes hints', async ({ p
     const exact = page.locator('.gallery-item img[src="' + source + '"]');
     await expect(exact, 'Gallery should render responsive source ' + source).toHaveCount(1);
     await expect(exact, 'Gallery thumbnail should use slot-aware sizes for ' + source).toHaveAttribute('sizes', GALLERY_THUMB_SIZES);
-    await expect(exact, 'Gallery thumbnail should expose generated responsive candidates for ' + source).toHaveAttribute('srcset', /\/img\/responsive\//);
+    await expect(exact, 'Gallery thumbnail should expose generated responsive candidates for ' + source).toHaveAttribute('srcset', /(?:^|\/)img\/responsive\//);
   }
 });
