@@ -231,7 +231,7 @@ require __DIR__ . '/include/page-head.php';
           <article class="catalogue-compare-card">
             <img
               src="<?= htmlspecialchars($campImage, ENT_QUOTES, 'UTF-8') ?>"
-              <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($campImage, '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') : '' ?>
+              <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset($campImage) : '' ?> <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($campImage, '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') : '' ?>
               alt="<?= htmlspecialchars($campImageAlt, ENT_QUOTES, 'UTF-8') ?>"
               loading="lazy"
               decoding="async"
