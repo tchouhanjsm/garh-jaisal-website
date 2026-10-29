@@ -143,7 +143,7 @@ require __DIR__ . '/include/page-head.php';
           Compare the room photos and details, then check current rates, availability and room-specific facilities for your dates.
         </p>
         <div class="rooms-hero-actions">
-          <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check availability</a>
+          <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="booking-rooms-hero" data-cta-location="rooms-hero">Check availability</a>
           <a class="button button-light" href="#room-directory">Explore the rooms</a>
         </div>
         <p class="rooms-hero-note">Inside Jaisalmer Fort · Ground and first-floor rooms</p>
@@ -280,7 +280,7 @@ require __DIR__ . '/include/page-head.php';
           </a>
         <?php endforeach; ?>
       </div>
-      <a class="rooms-floor-nav-book" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Check availability</a>
+      <a class="rooms-floor-nav-book" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="booking-rooms-floor-nav" data-cta-location="room-floor-navigation">Check availability</a>
     </div>
   </nav>
 
@@ -375,6 +375,8 @@ require __DIR__ . '/include/page-head.php';
               href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
               target="_blank"
               rel="noopener"
+              data-cta-id="booking-room-card"
+              data-cta-location="room-card"
             >
               Check availability
             </a>
@@ -382,6 +384,8 @@ require __DIR__ . '/include/page-head.php';
               class="text-link room-enquiry-link"
               aria-label="Ask about <?= htmlspecialchars($room['name'], ENT_QUOTES, 'UTF-8') ?>"
               href="contact.php?room=<?= htmlspecialchars($roomSlug, ENT_QUOTES, 'UTF-8') ?>"
+              data-cta-id="enquiry-room-card"
+              data-cta-location="room-card"
             >Ask about this room →</a>
 
           </div>

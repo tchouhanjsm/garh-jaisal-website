@@ -93,7 +93,9 @@ require __DIR__ . '/include/page-head.php';
         class="button button-primary"
         href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
         target="_blank"
-        rel="noopener">
+        rel="noopener"
+        data-cta-id="booking-home-hero"
+        data-cta-location="home-hero">
         Check rooms &amp; rates
       </a>
 
@@ -226,7 +228,7 @@ require __DIR__ . '/include/page-head.php';
         <a class="button button-primary" href="room.php">Explore the rooms <span aria-hidden="true">↗</span></a>
         <a class="home-planning-link" href="guided-jaisalmer-tour.php"><span>Guided city walks</span><span aria-hidden="true">↗</span></a>
         <a class="home-planning-link" href="desert-safari.php"><span>Desert experiences</span><span aria-hidden="true">↗</span></a>
-        <a class="home-planning-contact" href="contact.php?topic=visit-planning">Tell us what you are planning</a>
+        <a class="home-planning-contact" href="contact.php?topic=visit-planning" data-cta-id="enquiry-home-planning" data-cta-location="home-planning">Tell us what you are planning</a>
       </nav>
     </div>
   </div>
@@ -516,7 +518,7 @@ require __DIR__ . '/include/page-head.php';
       <details><summary>Can I add a guided tour or desert safari?</summary><p>Ask about options for your date. Confirm the route, timing, transport, guide availability, price and inclusions before deciding.</p></details>
       <details><summary>Can I request a rooftop dinner?</summary><p>Send a dining enquiry with your preferred date, time and group size. It is not confirmed until the team confirms current hours and availability.</p></details>
     </div>
-    <p class="conversion-faq__contact">Need a detail checked before booking? <a href="contact.php">Ask the hotel directly</a>.</p>
+    <p class="conversion-faq__contact">Need a detail checked before booking? <a href="contact.php" data-cta-id="enquiry-home-footer" data-cta-location="home-final-cta">Ask the hotel directly</a>.</p>
   </div>
 </section>
 <?php

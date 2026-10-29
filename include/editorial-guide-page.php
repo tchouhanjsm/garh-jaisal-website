@@ -358,6 +358,8 @@ require __DIR__ . '/page-head.php';
           'class' => 'button button-primary',
           'target' => $guide['cta_primary_target'] ?? '',
           'rel' => $guide['cta_primary_rel'] ?? '',
+          'tracking_id' => 'editorial-primary-cta',
+          'tracking_location' => 'editorial-guide-cta',
       ],
       'secondary' => [
           'label' => $guide['cta_secondary_label'],
@@ -365,6 +367,8 @@ require __DIR__ . '/page-head.php';
           'class' => 'button button-secondary',
           'target' => $guide['cta_secondary_target'] ?? '',
           'rel' => $guide['cta_secondary_rel'] ?? '',
+          'tracking_id' => 'editorial-secondary-cta',
+          'tracking_location' => 'editorial-guide-cta',
       ],
   ];
   require __DIR__ . '/ui/cta-band.php';

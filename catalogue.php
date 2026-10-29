@@ -157,7 +157,7 @@ require __DIR__ . '/include/page-head.php';
       <p>Shortlist rooms, desert experiences, guided tours, transport or rooftop dining. Ask us to confirm current rates and arrangements for your dates.</p>
       <div class="actions">
         <a class="button button-primary" href="#trip-products">Explore the options</a>
-        <a class="button button-light" href="contact.php">Ask the hotel</a>
+        <a class="button button-light" href="contact.php" data-cta-id="enquiry-catalogue-hero" data-cta-location="catalogue-hero">Ask the hotel</a>
       </div>
       <section class="catalogue-hero-facts" aria-label="Trip planning quick facts">
         <?php
@@ -329,7 +329,7 @@ require __DIR__ . '/include/page-head.php';
       <p>The Trip tray stays in this browser tab. When you are ready, it opens WhatsApp with the selected options in a draft message for you to review.</p>
       <div class="actions">
         <a class="button button-primary" href="#trip-products">Add an option</a>
-        <a class="button button-light" href="contact.php">Send a general enquiry instead</a>
+        <a class="button button-light" href="contact.php" data-cta-id="enquiry-catalogue-footer" data-cta-location="catalogue-next-step">Send a general enquiry instead</a>
       </div>
     </div>
   </section>

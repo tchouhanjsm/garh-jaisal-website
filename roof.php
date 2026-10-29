@@ -81,6 +81,8 @@ require __DIR__ . '/include/page-head.php';
           href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
           target="_blank"
           rel="noopener"
+          data-cta-id="booking-rooftop-dining"
+          data-cta-location="rooftop-dining-hero"
         >Book a stay</a>
       </div>
     </div>

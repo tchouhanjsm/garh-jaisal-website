@@ -563,7 +563,7 @@ require __DIR__ . '/include/page-head.php';
         <p class="eyebrow eyebrow-light">Reserve</p>
         <h2>Plan your table.</h2>
         <p>For same-day enquiries, call <a href="tel:<?= e($hotelPhone) ?>"><?= e($hotelPhoneDisplay) ?></a> or message us on WhatsApp.</p>
-        <a class="button button-light" href="<?= e($waLink) ?>" target="_blank" rel="noopener">Message on WhatsApp</a>
+        <a class="button button-light" href="<?= e($waLink) ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-restaurant-reserve" data-cta-location="restaurant-reservation">Message on WhatsApp</a>
       </div>
 
       <div class="restaurant-form-card">
@@ -582,8 +582,8 @@ require __DIR__ . '/include/page-head.php';
             <h3 id="reservation-unavailable-heading">Enquire about a table</h3>
             <p>Online table requests aren't available on this page right now. Please call or message the hotel to ask about table availability.</p>
             <div class="restaurant-reservation-actions">
-              <a class="button button-primary" href="tel:<?= e($hotelPhone) ?>">Call the hotel</a>
-              <a class="button button-secondary" href="<?= e($waLink) ?>" target="_blank" rel="noopener">Ask on WhatsApp</a>
+              <a class="button button-primary" href="tel:<?= e($hotelPhone) ?>" data-cta-id="call-restaurant-reserve" data-cta-location="restaurant-reservation">Call the hotel</a>
+              <a class="button button-secondary" href="<?= e($waLink) ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-restaurant-follow-up" data-cta-location="restaurant-request-status">Ask on WhatsApp</a>
               <a class="button button-secondary" href="contact.php?topic=dining">Send a dining enquiry</a>
             </div>
           </div>

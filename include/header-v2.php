@@ -212,6 +212,8 @@ $e = static function ($value) {
           href="<?= $e($bookingUrl) ?>"
           target="_blank"
           rel="noopener"
+          data-cta-id="booking-header"
+          data-cta-location="header-desktop"
         >
           Book Now
         </a>
@@ -226,6 +228,8 @@ $e = static function ($value) {
     class="contact-dock-item"
     href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>"
     aria-label="Call Garh Jaisal at <?= htmlspecialchars($hotelPhoneDisplay, ENT_QUOTES, 'UTF-8') ?>"
+    data-cta-id="call-floating-dock"
+    data-cta-location="floating-contact-dock"
   >
     <span class="contact-icon" aria-hidden="true">☎</span>
     <span>Call</span>
@@ -244,8 +248,8 @@ $e = static function ($value) {
 </nav>
 
 <nav class="mobile-cta" aria-label="Quick contact actions">
-  <a href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>" class="mobile-cta-contact">Call</a>
-  <a href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mobile-cta-whatsapp">WhatsApp</a>
-  <a href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mobile-cta-book">Book Now</a>
+  <a href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>" class="mobile-cta-contact" data-cta-id="call-mobile-sticky" data-cta-location="mobile-sticky-bar">Call</a>
+  <a href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mobile-cta-whatsapp" data-cta-id="whatsapp-mobile-sticky" data-cta-location="mobile-sticky-bar">WhatsApp</a>
+  <a href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mobile-cta-book" data-cta-id="booking-mobile-sticky" data-cta-location="mobile-sticky-bar">Book Now</a>
 </nav>
 <?php endif; ?>

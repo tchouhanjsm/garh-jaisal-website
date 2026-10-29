@@ -154,6 +154,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return (label || kind).slice(0, 80);
   };
 
+  const ctaMetadataForLink = (anchor) => {
+    const metadata = {};
+    const id = anchor.getAttribute('data-cta-id') || '';
+    const location = anchor.getAttribute('data-cta-location') || '';
+    if (/^[a-z0-9]+(?:-[a-z0-9]+){0,7}$/.test(id)) metadata.cta_id = id;
+    if (/^[a-z0-9]+(?:-[a-z0-9]+){0,7}$/.test(location)) metadata.cta_location = location;
+    return metadata;
+  };
+
   // Keep only non-sensitive campaign fields. Never forward arbitrary query parameters or form data.
   const attributionKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'];
   const safeCampaignValue = (value, fallback) => (
@@ -161,18 +170,50 @@ document.addEventListener('DOMContentLoaded', () => {
       ? value.trim()
       : fallback
   );
+  const attributionStorageKey = 'gj_conversion_attribution_v1';
   const attributionForCurrentPage = () => {
     const incoming = new URLSearchParams(window.location.search);
     const route = (window.location.pathname.split('/').filter(Boolean).pop() || 'index.php')
       .replace(/\.php$/i, '')
       .toLowerCase()
       .replace(/[^a-z0-9._-]/g, '-');
-    return {
+
+    // Keep campaign attribution for this tab's journey, not only the landing URL.
+    // Read only the four allowlisted campaign values; never copy arbitrary query data.
+    try {
+      const stored = JSON.parse(window.sessionStorage.getItem(attributionStorageKey) || 'null');
+      if (stored && typeof stored === 'object' && attributionKeys.every(key =>
+        typeof stored[key] === 'string' && /^[A-Za-z0-9._-]{1,80}$/.test(stored[key])
+      )) {
+        return {
+          utm_source: stored.utm_source,
+          utm_medium: stored.utm_medium,
+          utm_campaign: stored.utm_campaign,
+          utm_content: stored.utm_content
+        };
+      }
+    } catch {
+      // Storage can be unavailable in restricted browser contexts; use page-local values.
+    }
+
+    const attribution = {
       utm_source: safeCampaignValue(incoming.get('utm_source'), 'hotel_website'),
       utm_medium: safeCampaignValue(incoming.get('utm_medium'), 'website'),
       utm_campaign: safeCampaignValue(incoming.get('utm_campaign'), 'direct_booking'),
       utm_content: safeCampaignValue(incoming.get('utm_content'), route || 'home')
     };
+    const hasTaggedCampaign = attributionKeys.some(key => {
+      const value = incoming.get(key);
+      return typeof value === 'string' && /^[A-Za-z0-9._-]{1,80}$/.test(value.trim());
+    });
+    if (hasTaggedCampaign) {
+      try {
+        window.sessionStorage.setItem(attributionStorageKey, JSON.stringify(attribution));
+      } catch {
+        // Analytics must not depend on browser storage permission.
+      }
+    }
+    return attribution;
   };
   const isWhatsAppHost = (hostname) => ['wa.me', 'whatsapp.com', 'api.whatsapp.com']
     .includes(String(hostname || '').toLowerCase());
@@ -280,22 +321,29 @@ document.addEventListener('DOMContentLoaded', () => {
       destination.origin === bookingDestination.origin &&
       destination.pathname === bookingDestination.pathname
     ) {
-      trackIntentEvent('booking_outbound_click', Object.assign({}, eventContext, {
+      trackIntentEvent('booking_outbound_click', Object.assign({}, eventContext, ctaMetadataForLink(anchor), {
         cta_label: labelForTrackedLink(anchor, 'booking')
       }));
       return;
     }
 
     if (destination.protocol === 'tel:') {
-      trackIntentEvent('click_to_call', Object.assign({}, eventContext, {
+      trackIntentEvent('click_to_call', Object.assign({}, eventContext, ctaMetadataForLink(anchor), {
         cta_label: labelForTrackedLink(anchor, 'call')
       }));
       return;
     }
 
     if (['wa.me', 'whatsapp.com', 'api.whatsapp.com'].includes(destination.hostname.toLowerCase())) {
-      trackIntentEvent('click_whatsapp', Object.assign({}, eventContext, {
+      trackIntentEvent('click_whatsapp', Object.assign({}, eventContext, ctaMetadataForLink(anchor), {
         cta_label: labelForTrackedLink(anchor, 'whatsapp')
+      }));
+      return;
+    }
+
+    if (destination.origin === window.location.origin && /\/contact\.php$/i.test(destination.pathname)) {
+      trackIntentEvent('contact_enquiry_click', Object.assign({}, eventContext, ctaMetadataForLink(anchor), {
+        cta_label: labelForTrackedLink(anchor, 'enquiry')
       }));
     }
   }, true);
