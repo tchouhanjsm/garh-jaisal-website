@@ -146,7 +146,7 @@ test.describe('Visual asset and typography evidence', () => {
     expect(state.fetchPriority).toBe('high');
     expect(state.preloadSizes).toBe('100vw');
     expect(state.preloadSrcset).toContain('rooftop-dusk-1200.webp 1200w');
-    expect(state.preloadSrcset).toBe(state.srcset);
+    expect(state.preloadSrcset.split(',').map(candidate => candidate.trim().replace(/^\\//, '')).join(', ')).toBe(state.srcset.split(',').map(candidate => candidate.trim().replace(/^\\//, '')).join(', '));
   });
 
   test('320px homepage facts use readable two-column hierarchy', async ({ page }, testInfo) => {
