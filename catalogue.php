@@ -148,7 +148,7 @@ require __DIR__ . '/include/page-head.php';
 <main id="main-content" class="catalogue-page thar-sunset-story thar-sunset-story--catalogue" tabindex="-1">
   <section class="catalogue-hero" aria-labelledby="catalogue-title">
     <div class="catalogue-hero-media" aria-hidden="true">
-      <img src="img/2.webp" <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes('img/2.webp', '100vw') : '' ?> alt="" fetchpriority="high" decoding="async">
+      <img src="img/2.webp" <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/2.webp') : '' ?> <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes('img/2.webp', '100vw') : '' ?> alt="" fetchpriority="high" decoding="async">
     </div>
     <div class="catalogue-hero-overlay"></div>
     <div class="site-shell catalogue-hero-content">
