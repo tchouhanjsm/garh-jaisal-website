@@ -111,6 +111,7 @@ if (trim($studioPageHeroAlt) === '') {
 
 $studioPageCanonical = rtrim((string) ($siteConfig['site_url'] ?? ''), '/') . '/' . $studioPageSlug . '.php';
 require_once __DIR__ . '/schema.php';
+require_once __DIR__ . '/image-metadata.php';
 $studioPageHeroMetadata = gj_local_image_metadata($studioPageHero);
 $studioPageHeroImageObject = gj_schema_image_object($siteConfig['site_url'] ?? '', $studioPageHero, $studioPageHeroCaption, $studioPageHeroAlt);
 $studioPageSchema = [
