@@ -988,3 +988,16 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Return keyboard focus to the first selected room's compare control after revealing the cards.
 - Add Browser E2E coverage for zero-result filtering, shortlist persistence, restoring cards and reopening the comparison.
 - No changes to room facts, booking targets, public routes, schema or deployment.
+
+
+## Sprint 81 — LCP responsive-image budgets and fallback-safe release packaging
+
+**Performance goal:** reduce the largest measured hero downloads without sacrificing responsive source selection, layout stability or the original-image fallback.
+
+- Lower the two reviewed responsive hero candidate quality overrides from 74 to 70, retaining WebP generation, source preservation, no-upscaling checks and the original image files.
+- Enforce a 275 KiB file-size ceiling for img/responsive/v2/facade-1200.webp and img/responsive/v2/courtyard-1200.webp; verify the Directions page selects courtyard-480.webp at a 390px viewport and courtyard-1200.webp at 1280px.
+- Add explicit high-priority responsive preload for the Directions LCP hero. Assert rendered srcset, sizes, currentSrc and preload imagesrcset remain aligned.
+- Make the responsive-image build report generated-candidate coverage, skipped-width reasons, source-fallback verification and required-hero variant coverage explicit.
+- Reject a cPanel package if any manifest original source/fallback is missing, empty, symlinked or outside img/; keep generated responsive variants restricted to the existing allowlist.
+- Validate on exact-head PHP 7.4/8.2 Site Checks, Python generator/package unit tests, Browser E2E and screenshot evidence, package preflight and non-deploying Staging QA.
+- The baseline report measured local Chromium traffic on 37 sitemap routes; it is not field Core Web Vitals. Owner visual review of the regenerated responsive-image comparison sheet remains required. No cPanel upload or deployment.

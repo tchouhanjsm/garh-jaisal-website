@@ -156,6 +156,51 @@ def get_generated_responsive_paths(root: Path = ROOT) -> list[str]:
     return sorted(actual)
 
 
+def validate_responsive_fallback_sources(
+    selected_paths: list[str], root: Path = ROOT
+) -> list[str]:
+    """Require every manifest original to remain packageable as a safe fallback."""
+    manifest_path = root / "scripts" / "responsive-image-assets-manifest.json"
+    if not manifest_path.is_file() or manifest_path.is_symlink():
+        raise PackageError("Responsive image asset manifest is missing or unsafe.")
+    try:
+        sources = json.loads(manifest_path.read_text(encoding="utf-8"))["sources"]
+    except (OSError, KeyError, TypeError, json.JSONDecodeError) as error:
+        raise PackageError("Responsive image manifest is invalid: " + str(error)) from error
+    if not isinstance(sources, list) or not sources or any(not isinstance(item, str) for item in sources):
+        raise PackageError("Responsive image manifest must define fallback source paths.")
+    if len(sources) != len(set(sources)):
+        raise PackageError("Responsive image fallback source paths must be unique.")
+
+    selected = set(selected_paths)
+    verified: list[str] = []
+    missing: list[str] = []
+    root_resolved = root.resolve()
+    image_root = root / "img"
+    if image_root.is_symlink() or not image_root.is_dir():
+        raise PackageError("Original image fallback directory is missing or is a symlink.")
+    for source in sources:
+        pure = PurePosixPath(source)
+        if pure.is_absolute() or len(pure.parts) < 2 or pure.parts[0] != "img" or ".." in pure.parts or "\\" in source:
+            raise PackageError("Unsafe responsive image fallback source path: " + source)
+        candidate = root.joinpath(*pure.parts)
+        cursor = root_resolved
+        for part in pure.parts:
+            cursor = cursor / part
+            if cursor.is_symlink():
+                raise PackageError("Responsive image fallback must not use symlinks: " + source)
+        if not candidate.is_file() or candidate.stat().st_size <= 0:
+            raise PackageError("Responsive image fallback source is missing or empty: " + source)
+        if not candidate.resolve().is_relative_to(image_root.resolve()):
+            raise PackageError("Responsive image fallback escapes the approved img directory: " + source)
+        verified.append(source)
+        if source not in selected:
+            missing.append(source)
+    if missing:
+        raise PackageError("Responsive image fallback sources are missing from the runtime package: " + ", ".join(sorted(missing)))
+    return sorted(verified)
+
+
 def sitemap_route_targets(sitemap_text: str) -> list[tuple[str, str]]:
     locations = re.findall(
         r"<loc>\s*(https?://[^<]+)\s*</loc>", sitemap_text, flags=re.IGNORECASE
@@ -221,6 +266,7 @@ def build_deployment_package(root: Path, output_dir: Path) -> dict:
     if not generated_responsive_paths:
         raise PackageError("No generated responsive WebP assets found; run scripts/build-responsive-image-assets.py first.")
     selected = sorted(set(select_runtime_paths(get_tracked_paths(root)) + generated_responsive_paths))
+    responsive_fallback_sources = validate_responsive_fallback_sources(selected, root)
     sitemap_path = root / "sitemap.xml"
     if not sitemap_path.is_file():
         raise PackageError("sitemap.xml is missing.")
@@ -276,6 +322,7 @@ def build_deployment_package(root: Path, output_dir: Path) -> dict:
         "published_routes": [route or "/" for route, _ in routes],
         "file_count": len(entries),
         "generated_responsive_image_count": len(generated_responsive_paths),
+        "responsive_fallback_source_count": len(responsive_fallback_sources),
         "total_uncompressed_bytes": total_bytes,
         "excluded_server_only_or_development_files": [
             PRIVATE_CONFIG_PATH, EXAMPLE_CONFIG_PATH, ".git/", ".github/",
@@ -321,12 +368,14 @@ def main() -> int:
             if not generated_responsive_paths:
                 raise PackageError("No generated responsive WebP assets found; run scripts/build-responsive-image-assets.py first.")
             selected = sorted(set(select_runtime_paths(tracked) + generated_responsive_paths))
+            responsive_fallback_sources = validate_responsive_fallback_sources(selected, ROOT)
             sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
             routes = validate_package_paths(selected, sitemap)
             result = {
                 "status": "PASS", "mode": "check-only", "file_count": len(selected),
                 "published_route_count": len(routes),
                 "generated_responsive_image_count": len(generated_responsive_paths),
+                "responsive_fallback_source_count": len(responsive_fallback_sources),
                 "total_uncompressed_bytes": sum((ROOT / path).stat().st_size for path in selected),
                 "local_config_tracked": False, "development_directories_excluded": True,
             }

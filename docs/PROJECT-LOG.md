@@ -2,15 +2,16 @@
 
 > Tracked source and exact-commit CI are authoritative. Owner retains production release approval.
 
-## Latest state — 28 October 2026
+## Latest state — 29 October 2026
 
 | Item | Value |
 |---|---|
-| Verified main SHA | `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8` — PR #153 merged |
-| Active implementation | Sprints 75–80 — room comparison decision support |
-| Scope | Add room photos, an aligned feature matrix, difference filtering, a filter-proof shortlist and keyboard focus continuity; preserve booking and enquiry destinations |
-| Release boundary | Owner retains merge and release approval; no cPanel upload or staging/production deployment |
-| Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394006) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393565) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393646) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394143) — all passed on that SHA |
+| Verified main SHA | 15afdf46506bdaf3799bde97f47e3296210bb898 — PR #158 merged |
+| Active implementation | Sprint 81 — responsive hero payload budgets, exact LCP preload and fallback-safe package validation |
+| Working branch | feature/image-delivery-budget-guardrails-20261029 |
+| Scope | Reduce the two measured large hero candidates to a 275 KiB budget, preload the Directions hero with its responsive candidate list, report variant/fallback coverage and preserve original sources in cPanel packages |
+| Release boundary | Owner retains merge and release approval; no cPanel upload, staging deployment or production deployment |
+| Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667258) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667379) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667299) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667390) — all passed on 15afdf46506bdaf3799bde97f47e3296210bb898 |
 
 ## Recent guest-journey milestones
 
@@ -20,6 +21,7 @@
 - **PR #148 — room comparison to Trip:** grouped room options enter the shared tab-only Trip tray while separate choices remain selectable.
 - **PR #149 — Trip to Contact + experience details:** mixed shortlist Contact fallback, room-option server resolution and full experience-detail links from desert/guided-tour hubs.
 - **PR #150 — dining to shared Trip:** same validated `rooftop-dining` selection across restaurant, rooftop and catalogue pages, through to Contact. The corrected head passed all four required workflows.
+- **PR #158 — editorial media readiness:** safe local image metadata, responsive delivery contracts, shared ImageObject schema, visible captions and caption-gated Content Studio publishing. Site Checks, Browser E2E, package preflight and non-deploying Staging QA passed on the merged main SHA.
 
 ## Completed Sprint 72 — measured responsive hero-image budgets
 

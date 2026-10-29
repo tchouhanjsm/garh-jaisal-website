@@ -3,8 +3,8 @@
   "format": "WEBP",
   "quality": 82,
   "quality_overrides": {
-    "img/v2/facade.jpg": 74,
-    "img/v2/courtyard.jpg": 74
+    "img/v2/facade.jpg": 70,
+    "img/v2/courtyard.jpg": 70
   },
   "method": 6,
   "minimum_savings_percent": 5,

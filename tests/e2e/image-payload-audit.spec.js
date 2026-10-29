@@ -18,8 +18,8 @@ const routes = getSitemapRoutes();
 const REVIEW_THRESHOLD_BYTES = 250 * 1024;
 const ROOT = path.resolve(__dirname, "../..");
 const ENFORCED_RESPONSIVE_VARIANT_BUDGETS = [
-  { path: "img/responsive/v2/facade-1200.webp", maxBytes: 350 * 1024 },
-  { path: "img/responsive/v2/courtyard-1200.webp", maxBytes: 350 * 1024 },
+  { path: "img/responsive/v2/facade-1200.webp", maxBytes: 275 * 1024 },
+  { path: "img/responsive/v2/courtyard-1200.webp", maxBytes: 275 * 1024 }
 ];
 
 test('home and rooftop photo slots reserve dimensions and match their layouts', async ({ page }, testInfo) => {
@@ -40,7 +40,59 @@ test('home and rooftop photo slots reserve dimensions and match their layouts', 
   }
 });
 
-test('write deduplicated image payload audit for sitemap routes', async ({ browser }, testInfo) => {
+test('Directions LCP hero matches its preload and selects width-appropriate candidates', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Directions hero selection runs once with controlled mobile/desktop viewports.');
+  test.setTimeout(45_000);
+  const cases = [
+    { viewport: { width: 390, height: 844 }, file: 'img/responsive/v2/courtyard-480.webp', maxBytes: 75 * 1024 },
+    { viewport: { width: 1280, height: 800 }, file: 'img/responsive/v2/courtyard-1200.webp', maxBytes: 275 * 1024 },
+  ];
+  for (const item of cases) {
+    const context = await browser.newContext({baseURL: BASE_URL, viewport: item.viewport, deviceScaleFactor: 1});
+    try {
+      const page = await context.newPage();
+      const response = await page.goto('/direction.php', {waitUntil: 'domcontentloaded'});
+      expect(response).not.toBeNull();
+      expect(response.status()).toBe(200);
+      const hero = page.locator('.page-hero-media img').first();
+      await expect(hero).toBeVisible();
+      await expect.poll(() => hero.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+      const state = await page.evaluate(() => {
+        const img = document.querySelector('.page-hero-media img');
+        const preload = document.querySelector('link[rel="preload"][as="image"][imagesrcset]');
+        return {
+          srcset: img?.getAttribute('srcset') || '',
+          sizes: img?.getAttribute('sizes') || '',
+          currentSrc: img?.currentSrc || '',
+          naturalWidth: img?.naturalWidth || 0,
+          naturalHeight: img?.naturalHeight || 0,
+          fetchPriority: img?.fetchPriority || '',
+          loading: img?.getAttribute('loading') || '',
+          preloadHref: preload?.getAttribute('href') || '',
+          preloadSrcset: preload?.getAttribute('imagesrcset') || '',
+          preloadSizes: preload?.getAttribute('imagesizes') || '',
+        };
+      });
+      expect(state.sizes).toBe('100vw');
+      expect(state.fetchPriority).toBe('high');
+      expect(state.loading).toBe('eager');
+      expect(state.preloadHref).toBe('/img/v2/courtyard.jpg');
+      expect(state.preloadSizes).toBe('100vw');
+      expect(state.currentSrc).toContain('/' + item.file);
+      expect(state.naturalWidth).toBeGreaterThan(0);
+      expect(state.naturalHeight).toBeGreaterThan(0);
+      expect(Math.abs(state.naturalWidth / state.naturalHeight - 1333 / 2000)).toBeLessThanOrEqual(0.01);
+      const normalizeSrcset = value => value.split(',').map(candidate => candidate.trim().replace(/^\/+/, '')).join(', ');
+      expect(normalizeSrcset(state.preloadSrcset)).toBe(normalizeSrcset(state.srcset));
+      const bytes = fs.statSync(path.join(ROOT, item.file)).size;
+      expect(bytes, item.file + ' should stay under its viewport-specific transfer budget').toBeLessThanOrEqual(item.maxBytes);
+    } finally {
+      await context.close();
+    }
+  }
+});
+
+test('write deduplicated image payload audit for sitemap routes', async ({ browser }, testInfo) => 
   test.skip(testInfo.project.name !== 'desktop-1280', 'Image payload audit runs once at desktop width');
   test.setTimeout(180_000);
 
@@ -48,7 +100,7 @@ test('write deduplicated image payload audit for sitemap routes', async ({ brows
     const absolutePath = path.join(ROOT, budget.path);
     expect(fs.existsSync(absolutePath), `${budget.path} should be generated for the audit`).toBe(true);
     const bytes = fs.statSync(absolutePath).size;
-    expect(bytes, `${budget.path} should stay within its 350 KiB transfer budget`).toBeLessThanOrEqual(budget.maxBytes);
+    expect(bytes, `${budget.path} should stay within its ${Math.round(budget.maxBytes / 1024)} KiB transfer budget`).toBeLessThanOrEqual(budget.maxBytes);
     return { ...budget, bytes, status: 'pass' };
   });
 

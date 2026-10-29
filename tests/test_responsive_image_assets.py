@@ -25,12 +25,35 @@ class ResponsiveImageAssetTests(unittest.TestCase):
         self.assertEqual(len(manifest["sources"]), len(set(manifest["sources"])))
         self.assertGreaterEqual(len(manifest["sources"]), 40)
         self.assertEqual(manifest["quality_overrides"], {
-            "img/v2/facade.jpg": 74,
-            "img/v2/courtyard.jpg": 74,
+            "img/v2/facade.jpg": 70,
+            "img/v2/courtyard.jpg": 70,
         })
-        self.assertEqual(assets.quality_for_source(manifest, "img/v2/facade.jpg"), 74)
-        self.assertEqual(assets.quality_for_source(manifest, "img/v2/courtyard.jpg"), 74)
+        self.assertEqual(assets.quality_for_source(manifest, "img/v2/facade.jpg"), 70)
+        self.assertEqual(assets.quality_for_source(manifest, "img/v2/courtyard.jpg"), 70
         self.assertEqual(assets.quality_for_source(manifest, "img/j2.jpg"), manifest["quality"])
+
+    def test_variant_coverage_report_counts_generated_candidates_and_verified_fallbacks(self):
+        rows = [
+            {"source": "img/wide.jpg", "source_bytes": 1000, "source_dimensions": [1200, 600],
+             "variants": [{"target_width": 480, "status": "generated"}, {"target_width": 800, "status": "generated"}]},
+            {"source": "img/partial.jpg", "source_bytes": 800, "source_dimensions": [600, 400],
+             "variants": [{"target_width": 480, "status": "generated"}, {"target_width": 800, "status": "skipped-no-upscale"}]},
+            {"source": "img/small.jpg", "source_bytes": 200, "source_dimensions": [320, 180],
+             "variants": [{"target_width": 480, "status": "skipped-no-upscale"}, {"target_width": 800, "status": "skipped-no-upscale"}]},
+        ]
+        summary = assets.summarize_variant_coverage(rows, [480, 800])
+        self.assertEqual(summary["variant_opportunities"], 6)
+        self.assertEqual(summary["responsive_variant_coverage_percent"], 50.0)
+        self.assertEqual(summary["sources_with_complete_variant_coverage"], 1)
+        self.assertEqual(summary["sources_with_partial_variant_coverage"], 1)
+        self.assertEqual(summary["sources_fallback_only"], 1)
+        self.assertEqual(summary["fallback_variant_opportunities"], 3)
+        self.assertEqual(summary["fallback_opportunities_with_verified_source"], 3)
+        self.assertEqual(summary["fallback_coverage_percent"], 100.0)
+        self.assertEqual(summary["variant_status_counts"], {"generated": 3, "skipped-no-upscale": 3})
+        self.assertEqual(rows[1]["generated_widths"], [480])
+        self.assertEqual(rows[1]["fallback_widths"], [800])
+        self.assertEqual(rows[2]["responsive_variant_coverage_percent"], 0.0)
 
     def test_encode_variant_skips_upscaling(self):
         with tempfile.TemporaryDirectory() as directory:

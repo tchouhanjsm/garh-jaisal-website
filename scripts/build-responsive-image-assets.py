@@ -97,6 +97,71 @@ def quality_for_source(manifest: dict[str, Any], source_relative: str) -> int:
     return int(overrides.get(source_relative, manifest["quality"]))
 
 
+def summarize_variant_coverage(rows: list[dict[str, Any]], widths: list[int]) -> dict[str, Any]:
+    """Report generated-candidate coverage and verify skipped widths retain source fallbacks."""
+    width_count = len(widths)
+    variants = [variant for row in rows for variant in row.get("variants", [])]
+    generated = [variant for variant in variants if variant.get("status") == "generated"]
+    skipped = [variant for variant in variants if variant.get("status") != "generated"]
+    status_counts: dict[str, int] = {}
+    for variant in variants:
+        status = str(variant.get("status", "unknown"))
+        status_counts[status] = status_counts.get(status, 0) + 1
+
+    complete_sources = partial_sources = fallback_only_sources = 0
+    verified_fallback_opportunities = 0
+    for row in rows:
+        dimensions = row.get("source_dimensions")
+        verified = (
+            isinstance(row.get("source_bytes"), int)
+            and row["source_bytes"] > 0
+            and isinstance(dimensions, (list, tuple))
+            and len(dimensions) == 2
+            and all(isinstance(value, int) and value > 0 for value in dimensions)
+        )
+        row_variants = row.get("variants", [])
+        generated_widths = sorted(
+            int(item["target_width"]) for item in row_variants
+            if item.get("status") == "generated" and isinstance(item.get("target_width"), int)
+        )
+        fallback_widths = sorted(
+            int(item["target_width"]) for item in row_variants
+            if item.get("status") != "generated" and isinstance(item.get("target_width"), int)
+        )
+        row["generated_widths"] = generated_widths
+        row["fallback_widths"] = fallback_widths
+        row["responsive_variant_coverage_percent"] = round(
+            len(generated_widths) / width_count * 100, 3
+        ) if width_count else 100.0
+        row["source_fallback_verified"] = verified
+        if len(generated_widths) == width_count:
+            complete_sources += 1
+        elif generated_widths:
+            partial_sources += 1
+        else:
+            fallback_only_sources += 1
+        if verified:
+            verified_fallback_opportunities += len(fallback_widths)
+
+    opportunities = len(rows) * width_count
+    fallback_opportunities = len(skipped)
+    return {
+        "variant_opportunities": opportunities,
+        "responsive_variant_coverage_percent": round(
+            len(generated) / opportunities * 100, 3
+        ) if opportunities else 100.0,
+        "sources_with_complete_variant_coverage": complete_sources,
+        "sources_with_partial_variant_coverage": partial_sources,
+        "sources_fallback_only": fallback_only_sources,
+        "fallback_variant_opportunities": fallback_opportunities,
+        "fallback_opportunities_with_verified_source": verified_fallback_opportunities,
+        "fallback_coverage_percent": round(
+            verified_fallback_opportunities / fallback_opportunities * 100, 3
+        ) if fallback_opportunities else 100.0,
+        "variant_status_counts": dict(sorted(status_counts.items())),
+    }
+
+
 def encode_variant(
     source_path: Path,
     destination: Path,
@@ -276,7 +341,7 @@ def build() -> dict[str, Any]:
 
     required_hero_variants = {
         f"img/responsive/v2/{stem}-{width}.webp"
-        for stem in ("facade", "fort-from-roof")
+        for stem in ("facade", "fort-from-roof", "courtyard")
         for width in widths
     }
     missing_hero_variants = sorted(required_hero_variants - set(generated_paths))
@@ -287,6 +352,7 @@ def build() -> dict[str, Any]:
         )
 
     review_sheet = build_review_sheet(rows, widths)
+    coverage_metrics = summarize_variant_coverage(rows, widths)
     summary = {
         "source_count": len(rows),
         "variants_generated": len(generated_paths),
@@ -299,6 +365,11 @@ def build() -> dict[str, Any]:
             variant["saved_bytes"] for row in rows for variant in row["variants"] if variant["status"] == "generated"
         ),
         "human_visual_review_required": True,
+        **coverage_metrics,
+        "required_hero_variant_count": len(required_hero_variants),
+        "required_hero_variant_coverage_percent": round(
+            len(required_hero_variants - set(generated_paths)) / len(required_hero_variants) * 100, 3
+        ) if required_hero_variants else 100.0,
     }
     report = {
         "generated_by": "scripts/build-responsive-image-assets.py",
@@ -317,6 +388,12 @@ def build() -> dict[str, Any]:
         "summary": summary,
         "sources": rows,
         "generated_paths": sorted(generated_paths),
+        "required_hero_variants": {
+            "required": sorted(required_hero_variants),
+            "generated": sorted(required_hero_variants & set(generated_paths)),
+            "missing": missing_hero_variants,
+            "coverage_percent": summary["required_hero_variant_coverage_percent"],
+        },
         "review_sheet": review_sheet.relative_to(ROOT).as_posix() if review_sheet else None,
     }
     report_path = REPORT_DIR / "responsive-image-delivery-report.json"
