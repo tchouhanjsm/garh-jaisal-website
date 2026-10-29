@@ -106,7 +106,7 @@ require __DIR__ . '/include/page-head.php';
         <img
           src="img/rest3.jpg"
           alt="Rooftop dining area with views across Jaisalmer"
-          <?= gj_image_dimension_attributes('img/rest3.jpg', '(max-width: 760px) 100vw, 1180px') ?>
+          <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/rest3.jpg') : '' ?> <?= gj_image_dimension_attributes('img/rest3.jpg', '(max-width: 760px) 100vw, 1180px') ?>
         >
       </div>
 
@@ -139,7 +139,7 @@ require __DIR__ . '/include/page-head.php';
             <img
               src="img/roof.webp"
               alt="Rooftop terrace at sunset with a candlelit table facing Jaisalmer Fort"
-              <?= gj_image_dimension_attributes('img/roof.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
+              <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/roof.webp') : '' ?> <?= gj_image_dimension_attributes('img/roof.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
               loading="lazy"
               decoding="async"
             >
@@ -156,7 +156,7 @@ require __DIR__ . '/include/page-head.php';
             <img
               src="img/r2.webp"
               alt="Candlelit rooftop table and cushioned seating looking over Jaisalmer at dusk"
-              <?= gj_image_dimension_attributes('img/r2.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
+              <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/r2.webp') : '' ?> <?= gj_image_dimension_attributes('img/r2.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
               loading="lazy"
               decoding="async"
             >
@@ -173,7 +173,7 @@ require __DIR__ . '/include/page-head.php';
             <img
               src="img/r3.webp"
               alt="Evening dining tables on the rooftop terrace with the sandstone fort behind them"
-              <?= gj_image_dimension_attributes('img/r3.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
+              <?= function_exists('gj_responsive_image_srcset') ? gj_responsive_image_srcset('img/r3.webp') : '' ?> <?= gj_image_dimension_attributes('img/r3.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
               loading="lazy"
               decoding="async"
             >
