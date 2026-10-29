@@ -10,6 +10,16 @@ $galleryPath = $root . '/gallery.php';
 $errors = [];
 $checkedGalleryAssets = 0;
 
+if (!is_file($registryPath)) {
+    fwrite(STDERR, "ERROR missing experience registry\n");
+    exit(1);
+}
+$registry = require $registryPath;
+if (!is_array($registry)) {
+    fwrite(STDERR, "ERROR experience registry must return an array\n");
+    exit(1);
+}
+
 $requiredResponsiveHeroSources = [
     'half-day-jaisalmer-tour' => 'img/j5.jpg',
     'sleep-under-the-stars' => 'img/sleeping_under_stars/tour_9.jpeg',
@@ -56,16 +66,6 @@ foreach ($requiredResponsiveHeroSources as $slug => $expectedSource) {
     if (trim((string) ($experience['hero_caption'] ?? '')) === '') {
         $errors[] = $slug . ': hero caption is required';
     }
-}
-
-if (!is_file($registryPath)) {
-    fwrite(STDERR, "ERROR missing experience registry\n");
-    exit(1);
-}
-$registry = require $registryPath;
-if (!is_array($registry)) {
-    fwrite(STDERR, "ERROR experience registry must return an array\n");
-    exit(1);
 }
 
 $requiredExperienceAssets = [

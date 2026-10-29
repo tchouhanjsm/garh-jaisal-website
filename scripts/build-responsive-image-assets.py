@@ -39,7 +39,9 @@ DEFAULT_REQUIRED_HERO_SOURCES = (
 
 def required_hero_variant_paths(manifest: dict[str, Any], widths: list[int]) -> set[str]:
     """Return generated paths that must exist for each manifest-declared high-intent hero."""
-    required_sources = manifest.get("required_hero_sources", list(DEFAULT_REQUIRED_HERO_SOURCES))
+    required_sources = manifest.get("required_hero_sources")
+    if required_sources is None:
+        required_sources = [source for source in DEFAULT_REQUIRED_HERO_SOURCES if source in manifest.get("sources", [])]
     return {
         output_path(source, width).relative_to(ROOT).as_posix()
         for source in required_sources
@@ -85,16 +87,17 @@ def load_manifest() -> dict[str, Any]:
                 raise ValueError(f"Manifest sources collide on generated output path: {generated}")
             output_paths.add(generated)
 
-    required_hero_sources = manifest.get("required_hero_sources", list(DEFAULT_REQUIRED_HERO_SOURCES))
-    if not isinstance(required_hero_sources, list) or not required_hero_sources:
-        raise ValueError("required_hero_sources must be a non-empty list")
-    if any(not isinstance(source, str) for source in required_hero_sources):
-        raise ValueError("required_hero_sources must contain only manifest source paths")
-    if len(required_hero_sources) != len(set(required_hero_sources)):
-        raise ValueError("required_hero_sources must not contain duplicates")
-    for source in required_hero_sources:
-        if source not in sources:
-            raise ValueError(f"Required hero source is not listed in sources: {source!r}")
+    if "required_hero_sources" in manifest:
+        required_hero_sources = manifest["required_hero_sources"]
+        if not isinstance(required_hero_sources, list) or not required_hero_sources:
+            raise ValueError("required_hero_sources must be a non-empty list")
+        if any(not isinstance(source, str) for source in required_hero_sources):
+            raise ValueError("required_hero_sources must contain only manifest source paths")
+        if len(required_hero_sources) != len(set(required_hero_sources)):
+            raise ValueError("required_hero_sources must not contain duplicates")
+        for source in required_hero_sources:
+            if source not in sources:
+                raise ValueError(f"Required hero source is not listed in sources: {source!r}")
 
     if manifest.get("format") != "WEBP":
         raise ValueError("Only the reviewed WEBP format is currently supported")
