@@ -115,6 +115,107 @@ if (!function_exists('gj_local_image_metadata')) {
  * through gj_local_image_metadata, so dimensions, MIME, byte size and path
  * safety are checked by one implementation.
  */
+/**
+ * Return only generated responsive candidates that pass the same source,
+ * MIME, intrinsic-width, aspect-ratio and byte-saving checks as HTML delivery.
+ * The structured result is shared by the img srcset and its preload descriptor.
+ */
+if (!function_exists('gj_image_responsive_candidates')) {
+    function gj_image_responsive_candidates($source)
+    {
+        if (!is_string($source)) {
+            return [];
+        }
+
+        $sourceMetadata = gj_local_image_metadata($source);
+        if (!is_array($sourceMetadata)) {
+            return [];
+        }
+
+        $sourceKey = $sourceMetadata['path'];
+        $sourceWidth = $sourceMetadata['width'];
+        $sourceHeight = $sourceMetadata['height'];
+        $responsiveRelative = substr($sourceKey, 4);
+        if (strncmp($responsiveRelative, 'optimized/', 10) === 0) {
+            $responsiveRelative = substr($responsiveRelative, 10);
+        }
+
+        $responsiveInfo = pathinfo($responsiveRelative);
+        $responsiveDirectory = ($responsiveInfo['dirname'] ?? '.') === '.'
+            ? ''
+            : $responsiveInfo['dirname'] . '/';
+        $candidates = [];
+
+        foreach ([480, 800, 1200] as $candidateWidth) {
+            if ($candidateWidth >= $sourceWidth) {
+                continue;
+            }
+
+            $candidateSource = 'img/responsive/' . $responsiveDirectory . $responsiveInfo['filename'] . '-' . $candidateWidth . '.webp';
+            $candidateMetadata = gj_local_image_metadata($candidateSource);
+            if (
+                !is_array($candidateMetadata)
+                || $candidateMetadata['mime'] !== 'image/webp'
+                || $candidateMetadata['width'] !== $candidateWidth
+                || $candidateMetadata['height'] < 1
+                || $candidateMetadata['width'] >= $sourceWidth
+                || !is_int($sourceMetadata['bytes'])
+                || !is_int($candidateMetadata['bytes'])
+                || $sourceMetadata['bytes'] <= 0
+                || $candidateMetadata['bytes'] <= 0
+                || $candidateMetadata['bytes'] >= $sourceMetadata['bytes']
+                || abs(($candidateMetadata['width'] / $candidateMetadata['height']) - ($sourceWidth / $sourceHeight)) > 0.02
+            ) {
+                continue;
+            }
+
+            $candidates[] = [
+                'path' => $candidateSource,
+                'width' => $candidateWidth,
+                'bytes' => $candidateMetadata['bytes'],
+            ];
+        }
+
+        return $candidates;
+    }
+}
+
+/**
+ * Build a high-priority preload from the exact candidate list used by rendered
+ * image markup. Return null when no verified width-descriptor candidate exists,
+ * avoiding a preload that could duplicate an optimized fallback request.
+ */
+if (!function_exists('gj_image_responsive_preload_descriptor')) {
+    function gj_image_responsive_preload_descriptor($source, $responsiveSizes = '100vw')
+    {
+        if (!is_string($responsiveSizes) || trim($responsiveSizes) === '') {
+            return null;
+        }
+
+        $metadata = gj_local_image_metadata($source);
+        if (!is_array($metadata)) {
+            return null;
+        }
+
+        $candidates = gj_image_responsive_candidates($metadata['path']);
+        if (!$candidates) {
+            return null;
+        }
+
+        $srcset = [];
+        foreach ($candidates as $candidate) {
+            $srcset[] = $candidate['path'] . ' ' . $candidate['width'] . 'w';
+        }
+
+        return [
+            'href' => $metadata['path'],
+            'fetchpriority' => 'high',
+            'imagesrcset' => implode(', ', $srcset),
+            'imagesizes' => trim($responsiveSizes),
+        ];
+    }
+}
+
 if (!function_exists('gj_image_dimension_attributes')) {
     function gj_image_dimension_attributes($source, $responsiveSizes = null)
     {
@@ -143,44 +244,12 @@ if (!function_exists('gj_image_dimension_attributes')) {
         $height = $sourceMetadata['height'];
         $attributes = 'width="' . $width . '" height="' . $height . '"';
 
-        // Responsive candidates are opt-in per rendered slot. Only advertise
-        // verified WebP files that preserve ratio and reduce bytes vs fallback.
+        // Use the shared verified candidate list for both rendering and preloading.
         if (is_string($responsiveSizes) && trim($responsiveSizes) !== '') {
-            $responsiveRelative = substr($sourceKey, 4);
-            if (strncmp($responsiveRelative, 'optimized/', 10) === 0) {
-                $responsiveRelative = substr($responsiveRelative, 10);
-            }
-
-            $responsiveInfo = pathinfo($responsiveRelative);
-            $responsiveDirectory = ($responsiveInfo['dirname'] ?? '.') === '.'
-                ? ''
-                : $responsiveInfo['dirname'] . '/';
+            $responsiveCandidates = gj_image_responsive_candidates($sourceKey);
             $responsiveSrcset = [];
-
-            foreach ([480, 800, 1200] as $candidateWidth) {
-                if ($candidateWidth >= $width) {
-                    continue;
-                }
-
-                $candidateSource = 'img/responsive/' . $responsiveDirectory . $responsiveInfo['filename'] . '-' . $candidateWidth . '.webp';
-                $candidateMetadata = gj_local_image_metadata($candidateSource);
-                if (
-                    !is_array($candidateMetadata)
-                    || $candidateMetadata['mime'] !== 'image/webp'
-                    || $candidateMetadata['width'] !== $candidateWidth
-                    || $candidateMetadata['height'] < 1
-                    || $candidateMetadata['width'] >= $width
-                    || !is_int($sourceMetadata['bytes'])
-                    || !is_int($candidateMetadata['bytes'])
-                    || $sourceMetadata['bytes'] <= 0
-                    || $candidateMetadata['bytes'] <= 0
-                    || $candidateMetadata['bytes'] >= $sourceMetadata['bytes']
-                    || abs(($candidateMetadata['width'] / $candidateMetadata['height']) - ($width / $height)) > 0.02
-                ) {
-                    continue;
-                }
-
-                $responsiveSrcset[] = '/' . htmlspecialchars($candidateSource, ENT_QUOTES, 'UTF-8') . ' ' . $candidateWidth . 'w';
+            foreach ($responsiveCandidates as $candidate) {
+                $responsiveSrcset[] = '/' . htmlspecialchars($candidate['path'], ENT_QUOTES, 'UTF-8') . ' ' . $candidate['width'] . 'w';
             }
 
             if ($responsiveSrcset) {

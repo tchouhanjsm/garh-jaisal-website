@@ -30,6 +30,25 @@ def output_path(source_relative: str, target_width: int) -> Path:
     return OUTPUT_ROOT / relative.parent / (relative.stem + f"-{target_width}.webp")
 
 
+DEFAULT_REQUIRED_HERO_SOURCES = (
+    "img/v2/facade.jpg",
+    "img/v2/fort-from-roof.jpg",
+    "img/v2/courtyard.jpg",
+)
+
+
+def required_hero_variant_paths(manifest: dict[str, Any], widths: list[int]) -> set[str]:
+    """Return generated paths that must exist for each manifest-declared high-intent hero."""
+    required_sources = manifest.get("required_hero_sources")
+    if required_sources is None:
+        required_sources = [source for source in DEFAULT_REQUIRED_HERO_SOURCES if source in manifest.get("sources", [])]
+    return {
+        output_path(source, width).relative_to(ROOT).as_posix()
+        for source in required_sources
+        for width in widths
+    }
+
+
 def load_manifest() -> dict[str, Any]:
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     widths = manifest.get("target_widths")
@@ -68,6 +87,18 @@ def load_manifest() -> dict[str, Any]:
                 raise ValueError(f"Manifest sources collide on generated output path: {generated}")
             output_paths.add(generated)
 
+    if "required_hero_sources" in manifest:
+        required_hero_sources = manifest["required_hero_sources"]
+        if not isinstance(required_hero_sources, list) or not required_hero_sources:
+            raise ValueError("required_hero_sources must be a non-empty list")
+        if any(not isinstance(source, str) for source in required_hero_sources):
+            raise ValueError("required_hero_sources must contain only manifest source paths")
+        if len(required_hero_sources) != len(set(required_hero_sources)):
+            raise ValueError("required_hero_sources must not contain duplicates")
+        for source in required_hero_sources:
+            if source not in sources:
+                raise ValueError(f"Required hero source is not listed in sources: {source!r}")
+
     if manifest.get("format") != "WEBP":
         raise ValueError("Only the reviewed WEBP format is currently supported")
     quality = int(manifest.get("quality", QUALITY))
@@ -88,6 +119,32 @@ def load_manifest() -> dict[str, Any]:
             or not 1 <= override_quality <= 100
         ):
             raise ValueError(f"Invalid quality override for {override_source!r}: {override_quality!r}")
+
+    variant_max_bytes = manifest.get("variant_max_bytes", {})
+    if not isinstance(variant_max_bytes, dict):
+        raise ValueError("variant_max_bytes must be a candidate-path-to-byte-limit object")
+    for variant_path, max_bytes in variant_max_bytes.items():
+        if not isinstance(variant_path, str) or variant_path not in output_paths:
+            raise ValueError(f"variant_max_bytes path is not a generated manifest candidate: {variant_path!r}")
+        if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or max_bytes < 1:
+            raise ValueError(f"Invalid byte budget for {variant_path!r}: {max_bytes!r}")
+
+    budget_quality_floor = manifest.get("budget_quality_floor", 58)
+    budget_quality_step = manifest.get("budget_quality_step", 2)
+    if isinstance(budget_quality_floor, bool) or not isinstance(budget_quality_floor, int) or not 1 <= budget_quality_floor <= quality:
+        raise ValueError("Invalid budget_quality_floor setting")
+    if isinstance(budget_quality_step, bool) or not isinstance(budget_quality_step, int) or not 1 <= budget_quality_step <= 10:
+        raise ValueError("Invalid budget_quality_step setting")
+    budgeted_sources = {
+        source for source in sources
+        if any(output_path(source, width).relative_to(ROOT).as_posix() in variant_max_bytes for width in widths)
+    }
+    for source in budgeted_sources:
+        starting_quality = quality_overrides.get(source, quality)
+        if starting_quality < budget_quality_floor:
+            raise ValueError(
+                f"budget_quality_floor exceeds the starting quality for budgeted source {source!r}"
+            )
     return manifest
 
 
@@ -97,6 +154,71 @@ def quality_for_source(manifest: dict[str, Any], source_relative: str) -> int:
     return int(overrides.get(source_relative, manifest["quality"]))
 
 
+def summarize_variant_coverage(rows: list[dict[str, Any]], widths: list[int]) -> dict[str, Any]:
+    """Report generated-candidate coverage and verify skipped widths retain source fallbacks."""
+    width_count = len(widths)
+    variants = [variant for row in rows for variant in row.get("variants", [])]
+    generated = [variant for variant in variants if variant.get("status") == "generated"]
+    skipped = [variant for variant in variants if variant.get("status") != "generated"]
+    status_counts: dict[str, int] = {}
+    for variant in variants:
+        status = str(variant.get("status", "unknown"))
+        status_counts[status] = status_counts.get(status, 0) + 1
+
+    complete_sources = partial_sources = fallback_only_sources = 0
+    verified_fallback_opportunities = 0
+    for row in rows:
+        dimensions = row.get("source_dimensions")
+        verified = (
+            isinstance(row.get("source_bytes"), int)
+            and row["source_bytes"] > 0
+            and isinstance(dimensions, (list, tuple))
+            and len(dimensions) == 2
+            and all(isinstance(value, int) and value > 0 for value in dimensions)
+        )
+        row_variants = row.get("variants", [])
+        generated_widths = sorted(
+            int(item["target_width"]) for item in row_variants
+            if item.get("status") == "generated" and isinstance(item.get("target_width"), int)
+        )
+        fallback_widths = sorted(
+            int(item["target_width"]) for item in row_variants
+            if item.get("status") != "generated" and isinstance(item.get("target_width"), int)
+        )
+        row["generated_widths"] = generated_widths
+        row["fallback_widths"] = fallback_widths
+        row["responsive_variant_coverage_percent"] = round(
+            len(generated_widths) / width_count * 100, 3
+        ) if width_count else 100.0
+        row["source_fallback_verified"] = verified
+        if len(generated_widths) == width_count:
+            complete_sources += 1
+        elif generated_widths:
+            partial_sources += 1
+        else:
+            fallback_only_sources += 1
+        if verified:
+            verified_fallback_opportunities += len(fallback_widths)
+
+    opportunities = len(rows) * width_count
+    fallback_opportunities = len(skipped)
+    return {
+        "variant_opportunities": opportunities,
+        "responsive_variant_coverage_percent": round(
+            len(generated) / opportunities * 100, 3
+        ) if opportunities else 100.0,
+        "sources_with_complete_variant_coverage": complete_sources,
+        "sources_with_partial_variant_coverage": partial_sources,
+        "sources_fallback_only": fallback_only_sources,
+        "fallback_variant_opportunities": fallback_opportunities,
+        "fallback_opportunities_with_verified_source": verified_fallback_opportunities,
+        "fallback_coverage_percent": round(
+            verified_fallback_opportunities / fallback_opportunities * 100, 3
+        ) if fallback_opportunities else 100.0,
+        "variant_status_counts": dict(sorted(status_counts.items())),
+    }
+
+
 def encode_variant(
     source_path: Path,
     destination: Path,
@@ -104,6 +226,7 @@ def encode_variant(
     quality: int,
     method: int,
     minimum_savings_percent: float,
+    max_bytes=None,
 ) -> dict[str, Any]:
     with Image.open(source_path) as opened:
         opened.load()
@@ -147,6 +270,18 @@ def encode_variant(
 
     source_bytes = source_path.stat().st_size
     variant_bytes = destination.stat().st_size
+    if max_bytes is not None and variant_bytes > max_bytes:
+        destination.unlink(missing_ok=True)
+        return {
+            "status": "skipped-byte-budget",
+            "width": target_width,
+            "height": target_height,
+            "bytes": None,
+            "saved_bytes": None,
+            "saved_percent": None,
+            "attempted_bytes": variant_bytes,
+            "max_bytes": max_bytes,
+        }
     saved_bytes = source_bytes - variant_bytes
     saved_percent = (saved_bytes / source_bytes * 100) if source_bytes else 0.0
     if saved_bytes <= 0 or saved_percent < minimum_savings_percent:
@@ -170,6 +305,54 @@ def encode_variant(
         "saved_bytes": saved_bytes,
         "saved_percent": round(saved_percent, 3),
     }
+
+
+
+def encode_variant_with_budget(
+    source_path: Path,
+    destination: Path,
+    target_width: int,
+    starting_quality: int,
+    method: int,
+    minimum_savings_percent: float,
+    max_bytes: int,
+    minimum_quality: int,
+    quality_step: int,
+) -> dict[str, Any]:
+    """Use the highest tested quality that satisfies a hard variant byte budget."""
+    attempts: list[dict[str, Any]] = []
+    quality = starting_quality
+    last_result: dict[str, Any] = {
+        "status": "skipped-byte-budget",
+        "width": target_width,
+        "height": None,
+        "bytes": None,
+        "saved_bytes": None,
+        "saved_percent": None,
+    }
+
+    while quality >= minimum_quality:
+        result = encode_variant(
+            source_path, destination, target_width, quality, method,
+            minimum_savings_percent, max_bytes
+        )
+        attempts.append({
+            "quality": quality,
+            "status": result.get("status"),
+            "attempted_bytes": result.get("attempted_bytes", result.get("bytes")),
+        })
+        last_result = result
+        if result.get("status") == "generated":
+            result["quality"] = quality
+            result["quality_attempts"] = attempts
+            return result
+        if result.get("status") == "skipped-no-upscale":
+            break
+        quality -= quality_step
+
+    last_result["quality"] = attempts[-1]["quality"] if attempts else starting_quality
+    last_result["quality_attempts"] = attempts
+    return last_result
 
 
 def thumbnail(source: Path, size: tuple[int, int]) -> Image.Image:
@@ -248,14 +431,52 @@ def build() -> dict[str, Any]:
         variants = []
         for width in widths:
             path = output_path(source_relative, width)
+            relative_output_path = path.relative_to(ROOT).as_posix()
             source_quality = quality_for_source(manifest, source_relative)
-            result = encode_variant(source, path, width, source_quality, method, minimum_savings)
+            max_bytes = manifest.get("variant_max_bytes", {}).get(relative_output_path)
+            if max_bytes is not None:
+                result = encode_variant_with_budget(
+                    source, path, width, source_quality, method, minimum_savings,
+                    max_bytes, manifest.get("budget_quality_floor", 58),
+                    manifest.get("budget_quality_step", 2)
+                )
+            else:
+                result = encode_variant(
+                    source, path, width, source_quality, method, minimum_savings
+                )
+                result["quality"] = source_quality
+
+            if max_bytes is not None and result["status"] != "generated":
+                attempted_bytes = result.get("attempted_bytes")
+                attempted = (
+                    f"; final attempted size {attempted_bytes:,} bytes at quality {result.get('quality')}"
+                    if isinstance(attempted_bytes, int)
+                    else f"; final encoder status was {result['status']} at quality {result.get('quality')}"
+                )
+                attempts = result.get("quality_attempts", [])
+                attempt_summary = ", ".join(
+                    f"q{item['quality']}={item.get('attempted_bytes')}"
+                    for item in attempts
+                )
+                if attempt_summary:
+                    attempted += f"; quality ladder: {attempt_summary}"
+                raise RuntimeError(
+                    f"Enforced responsive image byte budget failed for {relative_output_path}: "
+                    f"maximum {max_bytes:,} bytes{attempted}."
+                )
             result.update({
                 "target_width": width,
                 "source_width": source_dimensions[0],
                 "source_height": source_dimensions[1],
-                "quality": source_quality,
-                "relative_path": path.relative_to(ROOT).as_posix() if result["status"] == "generated" else None,
+                "quality": result.get("quality", source_quality),
+                "relative_path": relative_output_path if result["status"] == "generated" else None,
+                "max_bytes": max_bytes,
+                "budget_status": "pass" if max_bytes is not None else "not-enforced",
+                "budget_headroom_bytes": (
+                    max_bytes - result["bytes"]
+                    if max_bytes is not None and result["status"] == "generated"
+                    else None
+                ),
             })
             variants.append(result)
             if result["status"] == "generated":
@@ -274,19 +495,30 @@ def build() -> dict[str, Any]:
     if not generated_paths:
         raise RuntimeError("No responsive image asset passed the byte-saving gate")
 
-    required_hero_variants = {
-        f"img/responsive/v2/{stem}-{width}.webp"
-        for stem in ("facade", "fort-from-roof")
-        for width in widths
-    }
+    required_hero_variants = required_hero_variant_paths(manifest, widths)
     missing_hero_variants = sorted(required_hero_variants - set(generated_paths))
     if missing_hero_variants:
         raise RuntimeError(
-            "Required homepage hero responsive variants failed the savings/width gate: "
+            "Required hero responsive variants failed the savings/width gate: "
             + ", ".join(missing_hero_variants)
         )
 
     review_sheet = build_review_sheet(rows, widths)
+    coverage_metrics = summarize_variant_coverage(rows, widths)
+    enforced_variant_budgets = [
+        {
+            "path": variant["relative_path"],
+            "max_bytes": variant["max_bytes"],
+            "actual_bytes": variant["bytes"],
+            "quality": variant["quality"],
+            "quality_attempts": variant.get("quality_attempts", []),
+            "headroom_bytes": variant["budget_headroom_bytes"],
+            "status": variant["budget_status"],
+        }
+        for row in rows
+        for variant in row["variants"]
+        if variant["max_bytes"] is not None
+    ]
     summary = {
         "source_count": len(rows),
         "variants_generated": len(generated_paths),
@@ -299,6 +531,21 @@ def build() -> dict[str, Any]:
             variant["saved_bytes"] for row in rows for variant in row["variants"] if variant["status"] == "generated"
         ),
         "human_visual_review_required": True,
+        "enforced_variant_byte_budget_count": len(enforced_variant_budgets),
+        "enforced_variant_byte_budget_pass_count": sum(
+            1 for item in enforced_variant_budgets if item["status"] == "pass"
+        ),
+        "budget_quality_adjustment_count": sum(
+            1 for item in enforced_variant_budgets if len(item.get("quality_attempts", [])) > 1 and item["status"] == "pass"
+        ),
+        "enforced_variant_byte_budget_headroom_bytes": sum(
+            item["headroom_bytes"] for item in enforced_variant_budgets
+        ),
+        **coverage_metrics,
+        "required_hero_variant_count": len(required_hero_variants),
+        "required_hero_variant_coverage_percent": round(
+            len(required_hero_variants & set(generated_paths)) / len(required_hero_variants) * 100, 3
+        ) if required_hero_variants else 100.0,
     }
     report = {
         "generated_by": "scripts/build-responsive-image-assets.py",
@@ -307,6 +554,7 @@ def build() -> dict[str, Any]:
             "format": manifest["format"],
             "quality": quality,
             "quality_overrides": dict(manifest.get("quality_overrides", {})),
+            "variant_max_bytes": dict(sorted(manifest.get("variant_max_bytes", {}).items())),
             "method": method,
             "minimum_savings_percent": minimum_savings,
             "upscaling": False,
@@ -317,6 +565,13 @@ def build() -> dict[str, Any]:
         "summary": summary,
         "sources": rows,
         "generated_paths": sorted(generated_paths),
+        "enforced_variant_budgets": enforced_variant_budgets,
+        "required_hero_variants": {
+            "required": sorted(required_hero_variants),
+            "generated": sorted(required_hero_variants & set(generated_paths)),
+            "missing": missing_hero_variants,
+            "coverage_percent": summary["required_hero_variant_coverage_percent"],
+        },
         "review_sheet": review_sheet.relative_to(ROOT).as_posix() if review_sheet else None,
     }
     report_path = REPORT_DIR / "responsive-image-delivery-report.json"

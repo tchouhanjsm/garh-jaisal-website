@@ -9,6 +9,7 @@ from scripts.build_deploy_package import (
     PRIVATE_CONFIG_PATH,
     get_generated_responsive_paths,
     select_runtime_paths,
+    validate_responsive_fallback_sources,
     sitemap_route_targets,
     validate_package_paths,
 )
@@ -86,6 +87,43 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
                 "<urlset><url><loc>https://www.hotelgarhjaisal.com/%2e%2e/secret.php</loc></url></urlset>"
             )
 
+    def test_responsive_fallback_sources_must_be_regular_files_in_the_runtime_package(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            source_dir = root / "img" / "v2"
+            source_dir.mkdir(parents=True)
+            (source_dir / "facade.jpg").write_bytes(b"original-fallback")
+            (source_dir / "courtyard.jpg").write_bytes(b"original-fallback")
+            (root / "scripts" / "responsive-image-assets-manifest.json").write_text(json.dumps({
+                "target_widths": [480, 800, 1200],
+                "sources": ["img/v2/facade.jpg", "img/v2/courtyard.jpg"],
+            }), encoding="utf-8")
+            selected = ["img/v2/facade.jpg", "img/v2/courtyard.jpg"]
+            self.assertEqual(validate_responsive_fallback_sources(selected, root),
+                             ["img/v2/courtyard.jpg", "img/v2/facade.jpg"])
+            with self.assertRaisesRegex(PackageError, "missing from the runtime package"):
+                validate_responsive_fallback_sources(["img/v2/facade.jpg"], root)
+
+    def test_responsive_fallback_source_symlink_is_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            source_dir = root / "img" / "v2"
+            source_dir.mkdir(parents=True)
+            outside = root / "outside.jpg"
+            outside.write_bytes(b"outside")
+            (root / "scripts" / "responsive-image-assets-manifest.json").write_text(json.dumps({
+                "target_widths": [480],
+                "sources": ["img/v2/facade.jpg"],
+            }), encoding="utf-8")
+            try:
+                (source_dir / "facade.jpg").symlink_to(outside)
+            except (OSError, NotImplementedError):
+                self.skipTest("Temporary symlinks are unavailable on this runner")
+            with self.assertRaisesRegex(PackageError, "must not use symlinks"):
+                validate_responsive_fallback_sources(["img/v2/facade.jpg"], root)
+
     def test_generated_responsive_paths_are_selected_from_manifest(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -102,6 +140,39 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
                 "img/responsive/v2/facade-480.webp",
                 "img/responsive/v2/facade-800.webp",
             ])
+
+    def test_generated_responsive_paths_enforce_manifest_byte_budgets(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            output = root / "img" / "responsive" / "v2"
+            output.mkdir(parents=True)
+            manifest = {
+                "target_widths": [480, 800],
+                "sources": ["img/v2/facade.jpg"],
+                "variant_max_bytes": {"img/responsive/v2/facade-480.webp": 12},
+            }
+            (root / "scripts" / "responsive-image-assets-manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            (output / "facade-480.webp").write_bytes(b"candidate-over-budget")
+            (output / "facade-800.webp").write_bytes(b"within-list-but-not-budgeted")
+            with self.assertRaisesRegex(PackageError, "exceeds its manifest byte budget"):
+                get_generated_responsive_paths(root)
+
+    def test_generated_responsive_paths_require_budgeted_candidates_to_exist(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            output = root / "img" / "responsive" / "v2"
+            output.mkdir(parents=True)
+            manifest = {
+                "target_widths": [480, 800],
+                "sources": ["img/v2/facade.jpg"],
+                "variant_max_bytes": {"img/responsive/v2/facade-480.webp": 1024},
+            }
+            (root / "scripts" / "responsive-image-assets-manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            (output / "facade-800.webp").write_bytes(b"candidate")
+            with self.assertRaisesRegex(PackageError, "Budgeted responsive image candidate is missing"):
+                get_generated_responsive_paths(root)
 
     def test_generated_responsive_paths_reject_unlisted_file(self):
         with tempfile.TemporaryDirectory() as directory:

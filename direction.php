@@ -34,6 +34,14 @@ $page = [
     'twitter_title' => 'Getting to Garh Jaisal Haveli inside Jaisalmer Fort',
     'twitter_description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. Check the walking route from Fort Parking, travel notes, and hotel contact details.',
     'twitter_image' => '/img/jcity.jpg',
+    'preload' => [
+        [
+            'href' => 'img/v2/courtyard.jpg',
+            'fetchpriority' => 'high',
+            'imagesrcset' => '/img/responsive/v2/courtyard-480.webp 480w, /img/responsive/v2/courtyard-800.webp 800w, /img/responsive/v2/courtyard-1200.webp 1200w',
+            'imagesizes' => '100vw',
+        ],
+    ],
     'css' => ['css/arrival.css'],
     'schema' => [
         [
@@ -71,7 +79,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="arrival-page" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo arrival-hero">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/v2/courtyard.jpg" <?= gj_image_dimension_attributes('img/v2/courtyard.jpg', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/v2/courtyard.jpg" <?= gj_image_dimension_attributes('img/v2/courtyard.jpg', '100vw') ?> alt="" aria-hidden="true" loading="eager" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner arrival-hero-inner">
       <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>

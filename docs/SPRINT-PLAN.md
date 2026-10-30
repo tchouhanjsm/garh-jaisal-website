@@ -988,3 +988,70 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Return keyboard focus to the first selected room's compare control after revealing the cards.
 - Add Browser E2E coverage for zero-result filtering, shortlist persistence, restoring cards and reopening the comparison.
 - No changes to room facts, booking targets, public routes, schema or deployment.
+
+
+## Sprint 81 — LCP responsive-image budgets and fallback-safe release packaging
+
+**Performance goal:** reduce the largest measured hero downloads without sacrificing responsive source selection, layout stability or the original-image fallback.
+
+- Lower the two reviewed responsive hero candidate quality overrides from 74 to 70, retaining WebP generation, source preservation, no-upscaling checks and the original image files.
+- Enforce a 275 KiB file-size ceiling for img/responsive/v2/facade-1200.webp and img/responsive/v2/courtyard-1200.webp; verify the Directions page selects courtyard-480.webp at a 390px viewport and courtyard-1200.webp at 1280px.
+- Add explicit high-priority responsive preload for the Directions LCP hero. Assert rendered srcset, sizes, currentSrc and preload imagesrcset remain aligned.
+- Make the responsive-image build report generated-candidate coverage, skipped-width reasons, source-fallback verification and required-hero variant coverage explicit.
+- Reject a cPanel package if any manifest original source/fallback is missing, empty, symlinked or outside img/; keep generated responsive variants restricted to the existing allowlist.
+- Validate on exact-head PHP 7.4/8.2 Site Checks, Python generator/package unit tests, Browser E2E and screenshot evidence, package preflight and non-deploying Staging QA.
+- The baseline report measured local Chromium traffic on 37 sitemap routes; it is not field Core Web Vitals. Owner visual review of the regenerated responsive-image comparison sheet remains required. No cPanel upload or deployment.
+
+
+## Sprint 82 — route-wide image delivery and experience LCP preload parity (PR #159)
+
+**Performance goal:** give shared experience-detail heroes the same responsive preload/source-selection treatment as protected homepage, room, catalogue and Directions hero images, while keeping the route-wide mobile/desktop audit bounded by first-render work.
+
+- Add one safe metadata-backed resolver for generated responsive candidates and use it for both rendered `srcset` markup and preload descriptors; do not emit a preload when verified width candidates are unavailable.
+- Add high-priority responsive hero preloads to shared experience detail pages, with the exact same candidate widths and `sizes` value as the rendered hero.
+- Extend the existing LCP test to a published experience route and require exactly one active preload containing the selected candidate, with matching sizes.
+- Make route-wide sitemap auditing decode only initial-viewport images; continue recording off-screen image slots and resource evidence without serially waiting for every eager below-fold photograph.
+- Correct the shared photo-carousel source-size hint to a bounded CSS length; preserve its original fallback, dimensions, captions and alt text.
+- Validate PHP 7.4/8.2 contracts, hero-preload parity, responsive slot sizing, route-wide mobile/desktop audit, package preflight and non-deploying Staging QA on the exact head. Report synthetic browser results separately from field Core Web Vitals.
+- No public route, booking/contact destination, source photograph, sitemap entry or production deployment is changed.
+
+
+## Sprint 83 — experience hero source-fit and responsive-release coverage (PR #159)
+
+**Performance objective:** remove the two measured hero source-fit defects, without introducing new photography or upscaling any image during asset generation.
+
+- The mobile/desktop image audit showed `img/j6.jpg` (370 × 539) being stretched into the full-bleed half-day-tour hero and detail-card slots. Switch that experience to the existing 1366 × 768 `img/j5.jpg` source, updating alt text and caption to match the image.
+- The sleep-under-the-stars page used `img/sleeping_under_stars/suts.avif`, which has no responsive candidates in the active manifest and is under-resolved at desktop hero width. Use the existing 1280 × 854 dusk-camp photograph `img/sleeping_under_stars/tour_9.jpeg`, with accurate alt text/caption.
+- Make the required hero sources manifest-owned rather than a builder hard-code. Every listed required hero must generate each configured responsive width; a skipped/missing variant blocks the build.
+- Enforce byte ceilings for `j5-1200.webp` (160,000 bytes) and `sleeping_under_stars/tour_9-1200.webp` (80,000 bytes), in addition to existing homepage hero budgets.
+- Extend the LCP browser contract to both routes and require the selected image's intrinsic width to cover at least 90% of its rendered CSS width at 1x density. Add server-side and Python validation so the hero source, manifest allowlist and required variants cannot drift independently.
+- Retain all public routes, image originals, guest-facing itinerary details, booking/contact destinations, SEO structure and existing photo-gallery content.
+- Re-run PHP 7.4/8.2 checks, responsive asset generation, image slot/LCP browser tests, route-wide mobile/desktop audit, package preflight and non-deploying Staging QA on the exact head. The local Chromium audit is synthetic and is not production field Core Web Vitals.
+- Release boundary stays unchanged: no merge, cPanel upload, staging deployment or production deployment.
+
+
+## Sprint 84 — eliminate offscreen priority waste and enforce image review thresholds (PR #159)
+
+**Performance goal:** stop fetching below-the-fold editorial photography at high priority and eliminate the two measured responsive-image resources above the 250 KiB review threshold.
+
+- Remove the Journal lead-card image preload and high-priority eager policy. The 390px mobile and 1280px desktop baseline showed `j7` below the initial viewport in both contexts; keep it responsive and lazy until the guest reaches the card.
+- Add a regression contract that the below-fold Journal image has no active image preload or high fetch priority, then verify its responsive derivative still decodes after scrolling into view.
+- Make the performance baseline fail when any below-fold image is not marked lazy, so offscreen eager-image regressions are release-visible rather than report-only.
+- Tighten the facade and Directions courtyard 1200px variants to 250,000 bytes each, below the audit's 256,000-byte (250 KiB) transfer review threshold.
+- Add a bounded quality ladder for budgeted variants: start at the manifest source quality, decrement by two quality points only when a hard byte cap is missed, keep the highest passing quality, record every attempt and fail clearly if the quality-58 floor cannot satisfy a required budget.
+- Enforce zero selected responsive image resources above the audit's 250 KiB review threshold across 37 sitemap routes at 390px mobile and 1280px desktop.
+- Validate manifest controls, quality selection, all required hero variants, PHP 7.4/8.2 checks, Playwright image/performance contracts, package preflight and non-deploying Staging QA on the exact head. Measurements are local synthetic evidence, not production field Core Web Vitals.
+- Preserve source photos, alt text/captions, route structure, SEO metadata, experience content and booking/contact destinations. No merge or deployment.
+
+
+## Sprint 85 — source-size-accurate carousel delivery and truthful image auditing (PR #159)
+
+**Performance objective:** remove the audited room-gallery source under-selection and make responsive-image reports describe the actual selected source pixels and true initial-viewport intersection.
+
+- Replace the room carousel's 33vw desktop hint: the final audit measured a 563px room-photo slot at 1280px, while 33vw advertised only about 422px and selected the 480px derivative. Use the layout's 100vw single-column rule through 1080px and a capped 45vw desktop rule that selects the 800px source for the measured two-column card.
+- Give experience/editorial galleries a 95vw desktop source-size hint to reflect the site-shell gallery slot; keep the rooftop carousel tied to its CSS max-width of 980px.
+- Extend browser coverage to load representative room and experience carousel photos at 390px and 1280px, parse the selected `w` descriptor and require at least 90% source-pixel coverage of the rendered slot.
+- Correct image-payload audit coverage to use the selected srcset width descriptor for source-pixel ratios. Report density-corrected `naturalWidth` separately so a `sizes`-derived CSS width is never presented as the file's physical pixel width.
+- Require both horizontal and vertical viewport intersection when classifying visible images; apply the same rule to the rendered performance baseline so off-canvas carousel slides are not misreported as initial-viewport media.
+- Validate updated source selection, route-wide 37-route/two-viewport audit, LCP preload coverage, all existing guest journeys, PHP 7.4/8.2 Site Checks, package preflight and non-deploying Staging QA on the exact PR head.
+- Preserve the original photography, gallery order, captions, alt text, public routes, booking/contact destinations, SEO metadata and all existing byte budgets. No merge, cPanel upload, staging deployment or production deployment.

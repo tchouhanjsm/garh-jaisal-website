@@ -2,6 +2,8 @@ const { test, expect } = require('@playwright/test');
 
 const BASE_URL = 'http://127.0.0.1:8080';
 const GALLERY_THUMB_SIZES = '(max-width: 500px) 100vw, (max-width: 760px) 50vw, (max-width: 1000px) 33vw, 25vw';
+const ROOM_CAROUSEL_SIZES = '(max-width: 1080px) 100vw, min(45vw, 600px)';
+const EXPERIENCE_CAROUSEL_SIZES = '(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 95vw';
 const CARD_SIZES = '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw';
 const NARROW_CARD_SIZES = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw';
 
@@ -28,6 +30,8 @@ const responsiveSlots = [
   { route: '/jaisalmer-beyond-the-fort-guide.php', selector: '.article-image img[src="img/j8.jpg"]', sizes: '(max-width: 768px) 100vw, 60vw' },
   { route: '/jaisalmer-markets-and-crafts-guide.php', selector: '.article-image img[src="img/j9.jpg"]', sizes: '(max-width: 768px) 100vw, 60vw' },
   { route: '/full-day-jaisalmer-tour.php', selector: '.experience-hero-media img[src="img/j2.jpg"]', sizes: '100vw' },
+  { route: '/full-day-jaisalmer-tour.php', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/j10.jpg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
+  { route: '/room.php', selector: '.room-card .photo-carousel-slide img[src="img/maharaniroom.jpg"]', sizes: ROOM_CAROUSEL_SIZES },
   { route: '/pack.php', selector: '.package-hero img[src="img/desert11.jpg"]', sizes: '100vw' },
   { route: '/desert-safari.php', selector: '.experience-hero-media img[src="img/desert3.jpg"]', sizes: '100vw' },
   { route: '/desert-safari.php', selector: '.experience-card-grid img[src="img/desert7.jpg"]', sizes: CARD_SIZES },
@@ -66,16 +70,19 @@ const galleryResponsiveSources = [
   'img/Desert_Camp/Tentout.jpeg',
 ];
 
-test('small tour source does not create unsafe upscaled responsive candidates', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Intrinsic-source fallback contract runs once.');
+test('half-day tour card uses a full-resolution responsive source', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Responsive source-fit contract runs once.');
   await page.goto(BASE_URL + '/guided-jaisalmer-tour.php', { waitUntil: 'domcontentloaded' });
-  const smallSource = page.locator('.experience-card-grid--two img[src="img/j6.jpg"]');
-  await expect(smallSource).toHaveCount(1);
-  await expect(smallSource).toHaveAttribute('width', '370');
-  await expect(smallSource).toHaveAttribute('height', '539');
-  await expect(smallSource).not.toHaveAttribute('sizes', /.+/);
-  const srcset = await smallSource.getAttribute('srcset');
-  expect(srcset || '').not.toMatch(/\/img\/responsive\//);
+  const cardImage = page.locator('.experience-card-grid--two img[src="img/j5.jpg"]');
+  await expect(cardImage).toHaveCount(1);
+  await expect(cardImage).toHaveAttribute('width', '1366');
+  await expect(cardImage).toHaveAttribute('height', '768');
+  await expect(cardImage).toHaveAttribute('sizes', '(max-width: 760px) 100vw, 50vw');
+  const srcset = await cardImage.getAttribute('srcset');
+  expect(srcset || '').toContain('/img/responsive/j5-480.webp');
+  expect(srcset || '').toContain('/img/responsive/j5-800.webp');
+  expect(srcset || '').toContain('/img/responsive/j5-1200.webp');
+  expect(srcset || '').not.toContain('img/j6.jpg');
 });
 
 test('responsive image candidates receive slot-accurate sizes hints', async ({ page }, testInfo) => {
@@ -103,5 +110,70 @@ test('responsive image candidates receive slot-accurate sizes hints', async ({ p
     await expect(exact, 'Gallery should render responsive source ' + source).toHaveCount(1);
     await expect(exact, 'Gallery thumbnail should use slot-aware sizes for ' + source).toHaveAttribute('sizes', GALLERY_THUMB_SIZES);
     await expect(exact, 'Gallery thumbnail should expose generated responsive candidates for ' + source).toHaveAttribute('srcset', /(?:^|\/)img\/responsive\//);
+  }
+});
+
+test('room and experience carousel source candidates cover their rendered image slots', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Run controlled mobile and desktop source-selection contexts once.');
+  test.setTimeout(60_000);
+
+  const cases = [
+    { route: '/room.php', selector: '.room-card .photo-carousel-slide img[src="img/maharaniroom.jpg"]', sizes: ROOM_CAROUSEL_SIZES },
+    { route: '/full-day-jaisalmer-tour.php', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/j10.jpg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
+  ];
+
+  for (const width of [390, 1280]) {
+    const context = await browser.newContext({
+      baseURL: BASE_URL,
+      viewport: { width, height: width < 768 ? 844 : 800 },
+      deviceScaleFactor: 1,
+      isMobile: width <= 390,
+      hasTouch: width <= 390,
+    });
+    try {
+      const page = await context.newPage();
+      for (const item of cases) {
+        const response = await page.goto(item.route, { waitUntil: 'domcontentloaded', timeout: 20_000 });
+        expect(response, item.route + ' must respond for carousel source selection').not.toBeNull();
+        expect(response.status(), item.route + ' must return a successful response').toBeLessThan(400);
+        const image = page.locator(item.selector);
+        await expect(image, item.route + ' must render its representative carousel image').toHaveCount(1);
+        await image.scrollIntoViewIfNeeded();
+        await expect.poll(
+          () => image.evaluate(img => img.complete && img.naturalWidth > 0),
+          { timeout: 15_000 }
+        ).toBe(true);
+        const state = await image.evaluate(img => {
+          const currentPath = new URL(img.currentSrc || img.src, document.baseURI).pathname;
+          const sourceSet = img.getAttribute('srcset') || '';
+          const selectedCandidate = sourceSet.split(',').map(candidate => {
+            const parts = candidate.trim().split(/\s+/);
+            try {
+              return new URL(parts[0], document.baseURI).pathname === currentPath
+                ? { descriptor: parts[1] || '' }
+                : null;
+            } catch {
+              return null;
+            }
+          }).find(Boolean);
+          const widthDescriptor = (selectedCandidate?.descriptor || '').match(/^([1-9][0-9]*)w$/);
+          const rect = img.getBoundingClientRect();
+          return {
+            sizes: img.getAttribute('sizes') || '',
+            selectedSourceWidth: widthDescriptor ? Number(widthDescriptor[1]) : 0,
+            selectedSourceDescriptor: selectedCandidate?.descriptor || '',
+            renderedWidth: rect.width,
+          };
+        });
+        expect(state.sizes, item.route + ' must advertise the shared carousel slot size').toBe(item.sizes);
+        expect(state.selectedSourceDescriptor, item.route + ' must select a width-descriptor responsive candidate').toMatch(/^[1-9][0-9]*w$/);
+        expect(
+          state.selectedSourceWidth / state.renderedWidth,
+          item.route + ' selected source pixels must cover at least 90% of the rendered slot'
+        ).toBeGreaterThanOrEqual(0.9);
+      }
+    } finally {
+      await context.close();
+    }
   }
 });

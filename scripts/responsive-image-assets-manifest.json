@@ -3,8 +3,15 @@
   "format": "WEBP",
   "quality": 82,
   "quality_overrides": {
-    "img/v2/facade.jpg": 74,
-    "img/v2/courtyard.jpg": 74
+    "img/v2/facade.jpg": 70,
+    "img/v2/courtyard.jpg": 70
+  },
+  "variant_max_bytes": {
+    "img/responsive/v2/courtyard-480.webp": 76800,
+    "img/responsive/v2/facade-1200.webp": 250000,
+    "img/responsive/v2/courtyard-1200.webp": 250000,
+    "img/responsive/j5-1200.webp": 160000,
+    "img/responsive/sleeping_under_stars/tour_9-1200.webp": 80000
   },
   "method": 6,
   "minimum_savings_percent": 5,
@@ -99,5 +106,14 @@
     "img/v2/rooftop-dusk.jpg",
     "img/v2/sitting-room.jpg",
     "img/v2/swiss-tent.webp"
-  ]
+  ],
+  "required_hero_sources": [
+    "img/v2/facade.jpg",
+    "img/v2/fort-from-roof.jpg",
+    "img/v2/courtyard.jpg",
+    "img/j5.jpg",
+    "img/sleeping_under_stars/tour_9.jpeg"
+  ],
+  "budget_quality_floor": 58,
+  "budget_quality_step": 2
 }

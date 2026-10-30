@@ -19,10 +19,25 @@ const HEROES = [
     expected: () => 'desert3',
     approvedWebpFallback: '/img/2.webp',
   },
+  {
+    route: '/full-day-jaisalmer-tour.php',
+    selector: '.experience-hero-media img',
+    expected: () => 'j2',
+  },
+  {
+    route: '/half-day-jaisalmer-tour.php',
+    selector: '.experience-hero-media img',
+    expected: () => 'j5',
+  },
+  {
+    route: '/sleep-under-the-stars.php',
+    selector: '.experience-hero-media img',
+    expected: () => 'tour_9',
+  },
 ];
 
 function responsiveCandidateForPath(pathname) {
-  const match = pathname.match(/\/img\/responsive\/(?:v2\/)?([^/]+)-(480|800|1200)\.webp$/);
+  const match = pathname.match(/\/img\/responsive\/(?:[^/]+\/)*([^/]+)-(480|800|1200)\.webp$/);
   return match ? { stem: match[1], width: Number(match[2]) } : null;
 }
 
@@ -78,9 +93,28 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
               }
             }));
           const responsiveOwner = activeSource || img;
+          const renderedWidth = img.getBoundingClientRect().width;
+          const sourceSet = responsiveOwner.getAttribute('srcset') || img.getAttribute('srcset') || '';
+          const selectedCandidate = sourceSet.split(',').map(candidate => {
+            const parts = candidate.trim().split(/\s+/);
+            try {
+              return new URL(parts[0], document.baseURI).pathname === currentPath
+                ? { descriptor: parts[1] || '' }
+                : null;
+            } catch {
+              return null;
+            }
+          }).find(Boolean);
+          const widthDescriptor = (selectedCandidate?.descriptor || '').match(/^([1-9][0-9]*)w$/);
+          const selectedSourceWidth = widthDescriptor ? Number(widthDescriptor[1]) : img.naturalWidth;
           return {
             currentPath,
             preloads,
+            renderedWidth: Math.round(renderedWidth * 100) / 100,
+            selectedSourceWidth,
+            selectedSourceDescriptor: selectedCandidate?.descriptor || '',
+            pixelCoverageRatio: renderedWidth > 0 ? selectedSourceWidth / renderedWidth : 0,
+            densityCorrectedNaturalWidth: img.naturalWidth,
             width: img.naturalWidth,
             height: img.naturalHeight,
             fetchPriority: img.getAttribute('fetchpriority'),
@@ -110,14 +144,25 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
 
         expect(state.width, hero.route + ' LCP image must decode').toBeGreaterThan(0);
         expect(state.height, hero.route + ' LCP image must decode').toBeGreaterThan(0);
+        expect(
+          state.pixelCoverageRatio,
+          hero.route + ' selected source pixels must cover at least 90% of the rendered slot width at 1x density'
+        ).toBeGreaterThanOrEqual(0.9);
         expect(state.declaredWidth, hero.route + ' must reserve intrinsic image width').toBeGreaterThan(0);
         expect(state.declaredHeight, hero.route + ' must reserve intrinsic image height').toBeGreaterThan(0);
         expect(Math.abs((state.declaredWidth / state.declaredHeight) - (state.width / state.height))).toBeLessThan(0.02);
         expect(state.fetchPriority, hero.route + ' LCP image should stay high priority').toBe('high');
+        const matchingPreloads = state.preloads.filter(preload => pathMatchesPreload(preload, state.currentPath));
         expect(
-          state.preloads.some(preload => pathMatchesPreload(preload, state.currentPath)),
-          hero.route + ' must preload the selected image or include it in the preload candidate list'
-        ).toBe(true);
+          matchingPreloads.length,
+          hero.route + ' must preload the selected image or include it in exactly one preload candidate list'
+        ).toBe(1);
+        if (state.sizes) {
+          expect(
+            matchingPreloads[0].imagesizes,
+            hero.route + ' preload sizes must match the rendered image source sizes'
+          ).toBe(state.sizes);
+        }
 
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
         expect(overflow, hero.route + ' must not create horizontal overflow at ' + width + 'px').toBe(false);
@@ -128,7 +173,7 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
   }
 });
 
-test('Journal featured image is eager, dimension-stable and preloaded on desktop', async ({ browser }, testInfo) => {
+test('Journal lead-card image stays lazy and is not preloaded while below the initial viewport', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'This contract creates its own desktop context');
   const context = await browser.newContext({
     baseURL: BASE_URL,
@@ -144,46 +189,50 @@ test('Journal featured image is eager, dimension-stable and preloaded on desktop
 
     const image = page.locator('.blog-card--featured img');
     await expect(image).toBeVisible();
-    await expect(image).toHaveAttribute('loading', 'eager');
-    await image.evaluate(img => img.decode());
-
-    const state = await image.evaluate(img => ({
-      path: new URL(img.currentSrc || img.src, document.baseURI).pathname,
-      width: Number(img.getAttribute('width')),
-      height: Number(img.getAttribute('height')),
-      decodedWidth: img.naturalWidth,
-      decodedHeight: img.naturalHeight,
-      srcset: img.getAttribute('srcset') || '',
-      sizes: img.getAttribute('sizes') || '',
-      preloads: Array.from(document.querySelectorAll('link[rel="preload"][as="image"]'))
-        .filter(link => !link.media || window.matchMedia(link.media).matches)
-        .map(link => ({
+    const initial = await image.evaluate(img => {
+      const rect = img.getBoundingClientRect();
+      return {
+        top: rect.top,
+        bottom: rect.bottom,
+        viewportHeight: window.innerHeight,
+        loading: img.loading,
+        fetchPriority: img.fetchPriority || 'auto',
+        width: Number(img.getAttribute('width')),
+        height: Number(img.getAttribute('height')),
+        srcset: img.getAttribute('srcset') || '',
+        sizes: img.getAttribute('sizes') || '',
+        preloads: Array.from(document.querySelectorAll('link[rel="preload"][as="image"]')).map(link => ({
           href: new URL(link.href, document.baseURI).pathname,
           srcset: link.getAttribute('imagesrcset') || '',
-          sizes: link.getAttribute('imagesizes') || '',
         })),
+      };
+    });
+
+    expect(initial.bottom > 0 && initial.top < initial.viewportHeight, 'Journal lead-card media should remain below the initial viewport').toBe(false);
+    expect(initial.loading).toBe('lazy');
+    expect(initial.fetchPriority).toBe('auto');
+    expect(initial.srcset).toMatch(/img\/responsive\/j7-480\.webp/);
+    expect(initial.sizes).toBe('(max-width: 900px) 100vw, 60vw');
+    expect(initial.width).toBeGreaterThan(0);
+    expect(initial.height).toBeGreaterThan(0);
+    expect(initial.preloads.some(preload =>
+      /j7/.test(preload.href) || /\/img\/responsive\/j7-/.test(preload.srcset)
+    ), 'A below-fold card image must not occupy the image-preload slot').toBe(false);
+
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate(img => img.decode());
+    const loaded = await image.evaluate(img => ({
+      path: new URL(img.currentSrc || img.src, document.baseURI).pathname,
+      naturalWidth: img.naturalWidth,
+      naturalHeight: img.naturalHeight,
     }));
-    expect(state.path).toMatch(/^\/img\/responsive\/j7-(480|800|1200)\.webp$/);
-    expect(state.srcset).not.toBe('');
-    expect(state.srcset.split(',').some(candidate => {
-      try { return new URL(candidate.trim().split(/\s+/)[0], BASE_URL).pathname === state.path; } catch { return false; }
-    })).toBe(true);
-    expect(state.sizes).toBe('(max-width: 900px) 100vw, 60vw');
-    expect(state.preloads.some(preload =>
-      preload.srcset.split(',').some(candidate => {
-        try { return new URL(candidate.trim().split(/\s+/)[0], BASE_URL).pathname === state.path; } catch { return false; }
-      }) && preload.sizes === state.sizes
-    )).toBe(true);
-    expect(state.width).toBeGreaterThan(0);
-    expect(state.height).toBeGreaterThan(0);
-    expect(state.decodedWidth).toBeGreaterThan(0);
-    expect(state.decodedHeight).toBeGreaterThan(0);
-    expect(Math.abs((state.width / state.height) - (state.decodedWidth / state.decodedHeight))).toBeLessThan(0.02);
+    expect(loaded.path).toMatch(/^\/img\/responsive\/j7-(480|800|1200)\.webp$/);
+    expect(loaded.naturalWidth).toBeGreaterThan(0);
+    expect(loaded.naturalHeight).toBeGreaterThan(0);
   } finally {
     await context.close();
   }
 });
-
 
 test('high-intent page photography selects generated responsive candidates with sizes hints', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Responsive image delivery spotcheck creates its own viewport contexts');

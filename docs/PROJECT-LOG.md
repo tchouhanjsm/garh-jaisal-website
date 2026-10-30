@@ -2,15 +2,16 @@
 
 > Tracked source and exact-commit CI are authoritative. Owner retains production release approval.
 
-## Latest state — 28 October 2026
+## Latest state — 29 October 2026
 
 | Item | Value |
 |---|---|
-| Verified main SHA | `0f0ebe35c20e3a82d6c01d1ab6807cf3802395d8` — PR #153 merged |
-| Active implementation | Sprints 75–80 — room comparison decision support |
-| Scope | Add room photos, an aligned feature matrix, difference filtering, a filter-proof shortlist and keyboard focus continuity; preserve booking and enquiry destinations |
-| Release boundary | Owner retains merge and release approval; no cPanel upload or staging/production deployment |
-| Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394006) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393565) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540393646) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40540394143) — all passed on that SHA |
+| Verified main SHA | 15afdf46506bdaf3799bde97f47e3296210bb898 — PR #158 merged |
+| Active implementation | Sprint 85 — source-size-accurate carousel delivery and truthful responsive-image auditing |
+| Working branch | feature/image-delivery-budget-guardrails-20261029 |
+| Scope | Correct room/experience carousel source-size hints; report physical selected-source pixels accurately; classify initial viewport visibility in both dimensions; preserve the 250,000-byte variant budgets |
+| Release boundary | Owner retains merge and release approval; no cPanel upload, staging deployment or production deployment |
+| Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667258) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667379) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667299) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667390) — all passed on 15afdf46506bdaf3799bde97f47e3296210bb898 |
 
 ## Recent guest-journey milestones
 
@@ -20,6 +21,7 @@
 - **PR #148 — room comparison to Trip:** grouped room options enter the shared tab-only Trip tray while separate choices remain selectable.
 - **PR #149 — Trip to Contact + experience details:** mixed shortlist Contact fallback, room-option server resolution and full experience-detail links from desert/guided-tour hubs.
 - **PR #150 — dining to shared Trip:** same validated `rooftop-dining` selection across restaurant, rooftop and catalogue pages, through to Contact. The corrected head passed all four required workflows.
+- **PR #158 — editorial media readiness:** safe local image metadata, responsive delivery contracts, shared ImageObject schema, visible captions and caption-gated Content Studio publishing. Site Checks, Browser E2E, package preflight and non-deploying Staging QA passed on the merged main SHA.
 
 ## Completed Sprint 72 — measured responsive hero-image budgets
 
@@ -98,3 +100,44 @@ Regression coverage verifies action count and destination parity on the live exp
 - Clear search, floor and feature filters only when the guest activates that action, reveal the selected cards and focus the first selected room's compare control.
 - Re-evaluate recovery-action visibility after each filter update as well as each shortlist edit.
 - Verify this differs from clearing the shortlist: selected room choices remain intact.
+
+
+## Sprint 82 — shared experience hero preload and viewport audit (PR #159, completed)
+
+- Shared one verified responsive-candidate resolver between rendered image `srcset` attributes and responsive preload descriptors.
+- Added high-priority responsive preloads to shared experience detail pages without changing routes, contact destinations or fallback behavior.
+- Expanded image auditing across 37 sitemap routes at mobile and desktop sizes, with transfer-byte accounting keyed to viewport identity and bounded image-decode waits.
+- Passed Site Checks (PHP 7.4/8.2), Browser E2E/screenshots, package preflight and non-deploying Staging QA on `732ff6a498cc43f7b346f74a4af3a21acc526941`.
+
+## Sprint 83 — experience hero source-fit and mandatory responsive candidates (PR #159, active)
+
+- Replace the 370px-wide half-day tour thumbnail used as a full-bleed hero/card image with the existing 1366px-wide Jaisalmer haveli photograph.
+- Replace the under-resolved sleep-under-the-stars hero with the existing 1280px-wide dusk-camp image and update its alt text/caption to describe the selected asset accurately.
+- Declare both sources as required heroes in the responsive image manifest, require all configured 480/800/1200 candidates in the generator, and add 1200px byte budgets.
+- Add browser assertions for responsive candidate selection and at least 90% source-pixel coverage of the rendered hero slot at 1x density.
+- Add PHP/Python contracts tying experience records to the required source allowlist, minimum intrinsic width and generated variant paths.
+- Validate the exact new head through Site Checks, Browser E2E, package preflight and non-deploying Staging QA. No merge or deployment.
+
+
+## Sprint 84 — offscreen image priority and responsive payload budgets (PR #159, active)
+
+- Latest completed Browser E2E evidence identified the Journal card image `j7` as below the initial viewport at both 390px mobile and 1280px desktop, while the markup still preloaded it and assigned high fetch priority. Sprint 84 moves it to lazy loading and adds a regression assertion.
+- The same 37-route/two-viewport audit measured `facade-1200.webp` at 278,254 bytes and `courtyard-1200.webp` at 269,602 bytes. Introduce a bounded highest-quality-that-fits encoder and reduce both manifest caps to 250,000 bytes; the route-wide audit must then report zero resources above 250 KiB.
+- Re-run exact-head Site Checks (PHP 7.4/8.2), Browser E2E and screenshots, package preflight and non-deploying Staging QA before considering Sprint 84 validated.
+- Release boundary unchanged: owner retains merge approval; no cPanel upload, staging deployment or production deployment.
+
+ 
+## Sprint 84 — offscreen image priority and responsive payload budgets (completed in PR #159)
+
+- Removed the below-fold Journal lead-card preload/high-priority policy while keeping responsive loading available on scroll.
+- Added a quality-ladder encoder for the five manifest-owned hard byte limits. The final artifact reports all five budgets passing, with 89,304 bytes of combined headroom.
+- The final image audit checked 37 sitemap routes at 390px and 1280px, recording 272 unique image/viewport URLs and 397 measurable image-resource observations. No selected resource exceeded the 256,000-byte review threshold.
+- Exact-head Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA all passed on `42e9922c52aad0ea95043d05d52d0d1536c9e034`. Browser E2E recorded 622 passed tests; measurements remain synthetic local Chromium evidence, not production field Core Web Vitals.
+
+## Sprint 85 — source-size-accurate carousel delivery and truthful image auditing (active in PR #159)
+
+- The Sprint 84 image report showed the room carousel's 33vw hint underestimating a 563px desktop slot, causing a 480px derivative to be selected where the available 800px source should be used.
+- Correct shared variant-specific `sizes` values for room, experience/editorial and rooftop carousels.
+- Derive source-pixel coverage from the selected responsive width descriptor, not density-corrected `naturalWidth`; keep the latter as a separate diagnostic.
+- Classify initial-viewport image visibility using both horizontal and vertical intersection in the image audit and performance baseline.
+- Revalidate all image, performance, PHP, package and staging contracts on the new exact head before the next sprint.
