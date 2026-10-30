@@ -206,6 +206,14 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
         }
         record(schemaBlocks.length > 0, 'Page must emit structured data.', { route, viewport: viewport.width });
 
+        const initialImageVisibility = await page.locator('img').evaluateAll(nodes => nodes.map(img => {
+          const rect = img.getBoundingClientRect();
+          const style = getComputedStyle(img);
+          return rect.width > 0 && rect.height > 0
+            && rect.right > 0 && rect.left < window.innerWidth
+            && rect.bottom > 0 && rect.top < window.innerHeight
+            && style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0;
+        }));
         const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
         for (let top = 0; top < pageHeight; top += 700) {
           await page.evaluate(value => window.scrollTo(0, value), top);
@@ -258,10 +266,7 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
             devicePixelRatio: window.devicePixelRatio || 1,
             loading: img.loading || 'eager',
             fetchPriority: img.fetchPriority || 'auto',
-            visibleAtInitialViewport: rect.width > 0 && rect.height > 0
-              && rect.right > 0 && rect.left < window.innerWidth
-              && rect.bottom > 0 && rect.top < window.innerHeight
-              && style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0,
+            visibleAtInitialViewport: initialImageVisibility[index - 1] === true,
             loaded: img.complete && img.naturalWidth > 0 && img.naturalHeight > 0,
             rendered: style.display !== 'none' && style.visibility !== 'hidden' && img.getClientRects().length > 0,
           };
@@ -272,6 +277,8 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
           href: link.href || '',
           imagesrcset: link.getAttribute('imagesrcset') || '',
           imagesizes: link.getAttribute('imagesizes') || '',
+          media: link.getAttribute('media') || '',
+          active: !link.media || window.matchMedia(link.media).matches,
           fetchpriority: link.getAttribute('fetchpriority') || '',
         })));
         for (const img of images) {
@@ -297,9 +304,10 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
             } catch { /* Invalid image URLs are covered by the existing load assertion. */ }
           }
         }
-        const preloadKeys = result.preloads.map(preload => [preload.href, preload.imagesrcset, preload.imagesizes].join('|'));
-        record(new Set(preloadKeys).size === preloadKeys.length, 'Duplicate image preloads were emitted.', { route, viewport: viewport.width, preloads: result.preloads });
-        for (const preload of result.preloads) {
+        const activePreloads = result.preloads.filter(preload => preload.active);
+        const preloadKeys = activePreloads.map(preload => [preload.href, preload.imagesrcset, preload.imagesizes].join('|'));
+        record(new Set(preloadKeys).size === preloadKeys.length, 'Duplicate active image preloads were emitted.', { route, viewport: viewport.width, preloads: activePreloads });
+        for (const preload of activePreloads) {
           const preloadSet = normalizedSrcset(preload.imagesrcset, BASE_URL);
           const matchingImages = images.filter(img => {
             if (preload.imagesrcset) {
