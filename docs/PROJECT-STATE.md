@@ -229,7 +229,7 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 
 ## Active implementation — Premium homepage storytelling (Milestones 1–2)
 
-- **Branch:** `feature/home-premium-storytelling-20261030`, based on main `da806a67f7369d33eb15969d28c0386819cef7dc`.
+- **PR:** [#161](https://github.com/tchouhanjsm/garh-jaisal-website/pull/161) — open for review. **Branch:** `feature/home-premium-storytelling-20261030`, based on main `da806a67f7369d33eb15969d28c0386819cef7dc`.
 - **Milestone 1:** refine the homepage hero art direction and responsive visual hierarchy using the existing Fort/facade photography, established brand tokens and the current responsive-image pipeline.
 - **Milestone 2:** complete the guest-facing story with a dedicated Jaisalmer discovery section and transparent planning-confidence content; retain the existing room, rooftop, desert, arrival, gallery, FAQ and final conversion journeys.
 - Move the existing Trip planning panel after accommodation and experience discovery so it acts as a considered next step rather than interrupting the story.

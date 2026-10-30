@@ -50,10 +50,10 @@ if (!is_string($homeSource)) {
 
     $homeSectionOrder = [
         'class="hero"',
-        'class="home-city-discovery"',
+        'id="city-discovery"',
         'id="start-planning"',
         'id="arrival-guide"',
-        'class="home-planning-confidence"',
+        'id="planning-confidence"',
         'class="conversion-faq"',
     ];
     $previousPosition = -1;

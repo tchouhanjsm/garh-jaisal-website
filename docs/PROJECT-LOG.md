@@ -143,11 +143,11 @@ Regression coverage verifies action count and destination parity on the live exp
 - Revalidate all image, performance, PHP, package and staging contracts on the new exact head before the next sprint.
 
 
-## Homepage premium storytelling — Milestones 1 and 2
+## Homepage premium storytelling — Milestones 1 and 2 (PR #161)
 
 - Existing homepage foundations were retained: the configured booking engine, registered rooms, rooftop dining, desert-experience cards, arrival guide, gallery, FAQs, footer CTA and session-only Trip/Contact journeys.
 - The new homepage city-discovery section links to the existing guided Jaisalmer and car-tour destinations; it does not create new tour products or imply availability.
 - The new planning-confidence layer explains the verified Fort vehicle restriction, room-specific differences and date-dependent tour confirmation. It is not a substitute for verified guest reviews; review proof remains owner-data gated.
 - The existing Trip planning panel is repositioned after the core discovery sequence.
-- Exact-head Site Checks, Browser E2E/screenshots, sitemap parity, package preflight and non-deploying Staging QA must pass before merge. Human screenshot review remains required; local browser timings are not field Core Web Vitals.
+- PR [#161](https://github.com/tchouhanjsm/garh-jaisal-website/pull/161) is open for review. Exact-head Site Checks, Browser E2E/screenshots, sitemap parity, package preflight and non-deploying Staging QA must pass before merge. Human screenshot review remains required; local browser timings are not field Core Web Vitals.
 - No cPanel upload, staging deployment or production release is included.
