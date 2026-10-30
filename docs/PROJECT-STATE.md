@@ -244,3 +244,14 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Keep attribution limited to the existing allowlisted UTM fields. Never forward email, topic, name, message or arbitrary query parameters to analytics.
 - Preserve first-screen proof-point clearance at 320px, with the existing fixed mobile booking dock remaining unobstructed.
 - PR #160's independent staging-release-provenance work is paused on its retained branch while this homepage PR is the sole active PR. Rebase and resume it only after #161 is merged.
+
+
+## Phase 4 — Premium Directions and arrival experience (PR #161)
+
+- Extend the same active implementation branch with a complete Directions page experience batch; do not create a second open PR.
+- Apply a route-scoped visual system across the arrival hero, quick guide, travel choices, walking route, mobility information, map, FAQs and booking close.
+- Add a progressive-enhancement driver note with a one-action copy control. Its content is limited to the approved hotel address, Fort Parking drop-off, approximately 300-metre / 5–6-minute walk, uneven cobbles/short stair sections and the existing exact hotel map pin.
+- Add stable tracking metadata to the Directions booking CTA. Browser coverage confirms outbound booking intent, both approved analytics destinations, allowlisted UTM attribution and exclusion of private query values; it does not claim a completed reservation.
+- Preserve the Directions public URL, canonical/schema, exact pin, map embed, phone/WhatsApp/contact destinations, transfer and mobility caveats, rickshaw-hours wording, existing FAQ answers and original imagery.
+- Add PHP source contract, multi-viewport browser assertions, copy/progressive-enhancement tests and the sitemap lastmod update.
+- Re-run PHP 7.4/8.2 Site Checks, sitemap validation, responsive Browser E2E/screenshots, package preflight and non-deploying Staging QA on the exact final PR head. Human visual review remains required; no deployment is part of this phase.

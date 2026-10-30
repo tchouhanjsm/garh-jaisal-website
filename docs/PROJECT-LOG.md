@@ -7,9 +7,9 @@
 | Item | Value |
 |---|---|
 | Verified main SHA | da806a67f7369d33eb15969d28c0386819cef7dc — PR #159 merged |
-| Active implementation | Premium homepage storytelling — Milestones 1 and 2 on `feature/home-premium-storytelling-20261030` |
+| Active implementation | Premium homepage and arrival experience — Milestones 1–2 + Phases 3–4 on `feature/home-premium-storytelling-20261030` |
 | Working branch | `feature/home-premium-storytelling-20261030` (based on `da806a67f7369d33eb15969d28c0386819cef7dc`) |
-| Scope | Premium hero art direction, Fort-to-city storytelling, clear room-section booking CTA, privacy-safe booking-intent attribution and responsive/browser regression coverage; preserve existing booking and enquiry journeys |
+| Scope | Premium homepage storytelling, direct-booking CTA measurement, and route-complete Directions/arrival experience with driver-ready copy, responsive art direction and booking-intent coverage |
 | Release boundary | Owner retains merge and release approval; no cPanel upload, staging deployment or production deployment |
 | Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667258) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667379) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667299) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667390) — all passed on 15afdf46506bdaf3799bde97f47e3296210bb898 |
 
@@ -161,3 +161,16 @@ Regression coverage verifies action count and destination parity on the live exp
 - Fixed the 320px compact hero collision with the fixed mobile action dock by restoring the previously tuned compact type scale and spacing.
 - Updated the shared CTA test to reflect the approved closing headline.
 - No new booking integration, offer, review, pricing promise, public route or deployment is introduced.
+
+
+## Phase 4 — Premium Directions and arrival experience (PR #161)
+
+**Guest outcome:** visitors can understand the Fort's last-mile arrival before travelling, give a driver the right drop-off point and continue to the existing direct-booking path.
+
+- Refresh the full Directions page as one coherent visual system: premium arrival hero/quick facts, in-page navigation, parking-to-door sequence, transfer choices, rickshaw restriction notice, walking/mobility clarity, map panel, contact details, FAQs and closing conversion band.
+- Add an on-page driver note using only verified arrival details: Fort Kotari Para address, vehicle restriction inside the Fort, Fort Parking drop-off, approximately 300 metres / 5–6 minutes on foot, uneven cobbles and short stair sections, and the exact existing Google Maps hotel pin.
+- Add an accessible copy action with clipboard support and a legacy fallback. The address and arrival instructions remain readable when JavaScript is unavailable.
+- Instrument the existing arrival-page booking button with stable CTA metadata and extend the outbound-intent test. Keep attribution allowlisted; do not forward email, topic or other private query values, and do not emit a reservation-success event.
+- Add a PHP source contract, expanded multi-viewport E2E, progressive-enhancement coverage and the Directions sitemap freshness update.
+- Preserve the public route, canonical/schema, map pin/embed, phone/WhatsApp/enquiry destinations, business facts and original photographs. No cPanel upload, staging deployment or production release is included.
+- Exact-head CI must pass after the batch commit; owner visual review remains a release gate.

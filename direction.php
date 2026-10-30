@@ -11,6 +11,14 @@ $hotelEmailAlt = (string) ($siteConfig['hotel_email_alt'] ?? '');
 $whatsappUrl = $siteConfig['whatsapp_url'];
 $hotelMapsUrl = 'https://maps.app.goo.gl/nAbRiZhv78FSbju48';
 $hotelMapsEmbedUrl = 'https://www.google.com/maps?q=Garh+Jaisal+Haveli%2C+Fort+Kotari+Para%2C+Inside+Jaisalmer+Fort%2C+Jaisalmer%2C+Rajasthan+345001&output=embed';
+$arrivalAddress = 'Fort Kotari Para, Inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001';
+$arrivalDriverNote = implode("\n", [
+    'Garh Jaisal Haveli',
+    $arrivalAddress,
+    'Vehicles cannot enter Jaisalmer Fort. Please use Fort Parking as the drop-off point.',
+    'From Fort Parking, the final walk is approximately 300 metres (5–6 minutes) through narrow fort lanes with uneven cobbles and short stair sections.',
+    'Exact hotel map pin: ' . $hotelMapsUrl,
+]);
 ?>
 <!doctype html>
 <html lang="en">
@@ -42,7 +50,7 @@ $page = [
             'imagesizes' => '100vw',
         ],
     ],
-    'css' => ['css/arrival.css'],
+    'css' => ['css/arrival.css', 'css/arrival-experience.css'],
     'schema' => [
         [
             '@type' => 'WebPage',
@@ -167,6 +175,19 @@ require __DIR__ . '/include/page-head.php';
           <p>Call or WhatsApp the hotel before arrival to confirm current reception hours, share your ETA, and ask what arrival assistance can be arranged.</p>
         </article>
       </div>
+
+      <aside class="arrival-driver-card" aria-labelledby="arrival-driver-title">
+        <div class="arrival-driver-card__copy">
+          <p class="eyebrow">For your driver</p>
+          <h3 id="arrival-driver-title">Share the right drop-off point.</h3>
+          <p>Vehicles cannot enter Jaisalmer Fort. Use Fort Parking as the drop-off point, then follow the final walk to the haveli through the fort lanes.</p>
+          <p class="arrival-driver-card__address"><?= htmlspecialchars($arrivalAddress, ENT_QUOTES, 'UTF-8') ?></p>
+        </div>
+        <div class="arrival-driver-card__action">
+          <button class="button button-primary arrival-driver-copy-button" type="button" data-arrival-copy="<?= htmlspecialchars($arrivalDriverNote, ENT_QUOTES, 'UTF-8') ?>" hidden>Copy arrival note for driver</button>
+          <p class="arrival-driver-card__status" data-arrival-copy-status role="status" aria-live="polite"></p>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -388,6 +409,8 @@ $ctaBand = [
         'class' => 'button button-primary',
         'target' => '_blank',
         'rel' => 'noopener',
+        'tracking_id' => 'booking-arrival-final',
+        'tracking_location' => 'arrival-final-cta',
     ],
     'secondary' => [
         'label' => 'Contact us',
@@ -414,5 +437,6 @@ require __DIR__ . '/include/ui/planning-path.php';
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
 <script src="js/garh-v2.js"></script>
+<script src="js/arrival-guide.js"></script>
 </body>
 </html>

@@ -127,6 +127,9 @@ jobs:
       - name: Verify conversion-led website content and mobile contracts
         run: php tests/php/conversion-copy-contract.php
 
+      - name: Verify premium arrival experience
+        run: php tests/php/arrival-experience-contract.php
+
       - name: Verify success-only lead conversion instrumentation
         run: php tests/php/lead-conversion-contract.php
 

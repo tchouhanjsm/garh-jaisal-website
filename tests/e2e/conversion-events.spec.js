@@ -231,3 +231,28 @@ test('homepage hero, room discovery and closing booking CTAs report attributable
   expect(final).not.toHaveProperty('email');
   expect(final).not.toHaveProperty('topic');
 });
+
+
+test('arrival booking CTA records attributable booking intent without forwarding private query values', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Arrival booking attribution runs once on desktop-1280');
+  await page.route('https://www.googletagmanager.com/**', route => route.abort());
+  await preventTrackedNavigation(page);
+  await page.goto('/direction.php?utm_source=google&utm_medium=cpc&utm_campaign=arrival_guide&email=private%40example.com&topic=private', { waitUntil: 'domcontentloaded' });
+  const bookingLink = page.locator('.arrival-page .final-cta a[data-cta-id="booking-arrival-final"]');
+  await expect(bookingLink).toBeVisible();
+  const bookingUrl = new URL(await bookingLink.getAttribute('href'), 'https://www.hotelgarhjaisal.com');
+  expect(bookingUrl.hostname).toBe('asiatech.in');
+  expect(bookingUrl.searchParams.get('utm_source')).toBe('google');
+  expect(bookingUrl.searchParams.get('utm_medium')).toBe('cpc');
+  expect(bookingUrl.searchParams.get('utm_campaign')).toBe('arrival_guide');
+  expect(bookingUrl.searchParams.has('email')).toBe(false);
+  expect(bookingUrl.searchParams.has('topic')).toBe(false);
+  await bookingLink.click();
+  const events = await readTrackedEvents(page);
+  const booking = expectRoutedOnce(events, 'booking_outbound_click', '/direction.php', 'arrival');
+  expect(booking.cta_id).toBe('booking-arrival-final');
+  expect(booking.cta_location).toBe('arrival-final-cta');
+  expect(booking.utm_campaign).toBe('arrival_guide');
+  expect(booking).not.toHaveProperty('email');
+  expect(booking).not.toHaveProperty('topic');
+});
