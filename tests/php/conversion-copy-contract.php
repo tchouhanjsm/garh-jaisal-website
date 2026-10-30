@@ -54,7 +54,7 @@ if (!is_string($homeSource)) {
         'id="start-planning"',
         'id="arrival-guide"',
         'id="planning-confidence"',
-        'class="conversion-faq"',
+        'class="section conversion-faq"',
     ];
     $previousPosition = -1;
     foreach ($homeSectionOrder as $sectionMarker) {
