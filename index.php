@@ -43,7 +43,7 @@ $page = [
     'twitter_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
     'twitter_description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
     'twitter_image' => '/img/v2/facade.jpg',
-    'css' => ['css/thar-sunset-story.css'],
+    'css' => ['css/thar-sunset-story.css', 'css/home-premium-story.css'],
     'schema' => [
         [
             '@type' => 'WebPage',
@@ -84,8 +84,7 @@ require __DIR__ . '/include/page-head.php';
     <h1>Wake up inside Jaisalmer Fort.</h1>
 
     <p>
-      A heritage haveli with individually styled rooms, rooftop dining,
-      guided city walks and Thar Desert experiences.
+      A heritage haveli with individually styled rooms, rooftop dining above the sandstone city, and experiences that take you from the Fort into the Thar Desert.
     </p>
 
     <div class="actions">
@@ -149,20 +148,21 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
-<section class="section intro" data-story-reveal>
+<section class="section intro home-place-story" data-story-reveal>
   <div class="site-shell intro-grid">
 
     <div class="intro-copy">
 
       <p class="eyebrow">The place</p>
 
-      <h2>Experience Jaisalmer from inside its living Fort.</h2>
+      <h2>Experience the Golden City from inside its living Fort.</h2>
 
       <p>
-        Jaisalmer is more than a stop for photographs. Staying inside the
-        Fort lets you step straight into its sandstone lanes, then return to
-        a room with its own character. Add rooftop dining, a guided heritage
-        walk or a desert outing to shape the visit around your interests.
+        Jaisalmer is more than a landmark to photograph. Staying inside the Fort
+        makes its sandstone lanes part of your everyday rhythm: step out to
+        explore, then return to a room with its own character. Add rooftop
+        dining, a guided city experience or a desert outing to shape the visit
+        around the time and interests you bring.
       </p>
 
       <div class="feature-list">
@@ -215,24 +215,7 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
-<section class="section conversion-journey conversion-journey--editorial" id="start-planning" aria-labelledby="conversion-journey-title">
-  <div class="site-shell">
-    <div class="home-planning-panel">
-      <div class="home-planning-copy">
-        <p class="eyebrow">Plan your stay</p>
-        <h2 id="conversion-journey-title">Begin with the room. Shape the rest around you.</h2>
-        <p>Compare the rooms first, then add a guided Fort walk or a desert experience that fits your time. Routes, rates and availability are confirmed with the hotel for your dates.</p>
-        <p class="home-planning-guide">New to booking directly? <a href="book-rooms-in-jaisalmer.php">Read our guide to staying inside the Fort</a>.</p>
-      </div>
-      <nav class="home-planning-actions" aria-label="Plan the rest of your stay">
-        <a class="button button-primary" href="room.php">Explore the rooms <span aria-hidden="true">↗</span></a>
-        <a class="home-planning-link" href="guided-jaisalmer-tour.php"><span>Guided city walks</span><span aria-hidden="true">↗</span></a>
-        <a class="home-planning-link" href="desert-safari.php"><span>Desert experiences</span><span aria-hidden="true">↗</span></a>
-        <a class="home-planning-contact" href="contact.php?topic=visit-planning" data-cta-id="enquiry-home-planning" data-cta-location="home-planning">Tell us what you are planning</a>
-      </nav>
-    </div>
-  </div>
-</section>
+
   <section class="section home-rooms" id="rooms-preview" data-story-reveal aria-labelledby="rooms-preview-title">
     <?php
     $featuredRooms = array_slice($rooms, 0, 3);
@@ -397,6 +380,56 @@ require __DIR__ . '/include/page-head.php';
 </section>
 
 
+
+<section class="section home-city-discovery" id="city-discovery" data-story-reveal aria-labelledby="city-discovery-title">
+  <div class="site-shell home-city-discovery__grid">
+    <div class="home-city-discovery__copy">
+      <p class="eyebrow">Discover Jaisalmer</p>
+      <h2 id="city-discovery-title">The Golden City has more stories to tell.</h2>
+      <p>
+        The Fort is only the beginning. Discover the streets, architecture and
+        places that give Jaisalmer its character, then choose how far beyond
+        the old city you would like to explore.
+      </p>
+      <p>
+        Ask about a guided Fort walk or a car-based city experience that fits
+        the time you have. Routes, guide availability, timings, prices and
+        inclusions are confirmed for your requested date.
+      </p>
+      <div class="actions home-city-discovery__actions">
+        <a class="button button-primary" href="guided-jaisalmer-tour.php">Explore guided city walks</a>
+        <a class="button button-light" href="car-tours.php">Explore car &amp; city tours</a>
+      </div>
+    </div>
+    <figure class="home-city-discovery__media">
+      <img
+        src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg', '(max-width: 760px) 100vw, 48vw') ?>
+        alt="Jaisalmer city seen from the fort"
+        loading="lazy" decoding="async">
+      <figcaption>Jaisalmer, seen from within the Golden Fort.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section conversion-journey conversion-journey--editorial" id="start-planning" aria-labelledby="conversion-journey-title">
+  <div class="site-shell">
+    <div class="home-planning-panel">
+      <div class="home-planning-copy">
+        <p class="eyebrow">Plan your stay</p>
+        <h2 id="conversion-journey-title">Begin with the room. Shape the rest around you.</h2>
+        <p>Compare the rooms first, then add a guided Fort walk or a desert experience that fits your time. Routes, rates and availability are confirmed with the hotel for your dates.</p>
+        <p class="home-planning-guide">New to booking directly? <a href="book-rooms-in-jaisalmer.php">Read our guide to staying inside the Fort</a>.</p>
+      </div>
+      <nav class="home-planning-actions" aria-label="Plan the rest of your stay">
+        <a class="button button-primary" href="room.php">Explore the rooms <span aria-hidden="true">↗</span></a>
+        <a class="home-planning-link" href="guided-jaisalmer-tour.php"><span>Guided city walks</span><span aria-hidden="true">↗</span></a>
+        <a class="home-planning-link" href="desert-safari.php"><span>Desert experiences</span><span aria-hidden="true">↗</span></a>
+        <a class="home-planning-contact" href="contact.php?topic=visit-planning" data-cta-id="enquiry-home-planning" data-cta-location="home-planning">Tell us what you are planning</a>
+      </nav>
+    </div>
+  </div>
+</section>
+
 <section class="section arrival" id="arrival-guide" data-story-reveal aria-labelledby="arrival-guide-title">
   <div class="site-shell">
 
@@ -509,6 +542,43 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
+
+<section class="section home-planning-confidence" id="planning-confidence" data-story-reveal aria-labelledby="planning-confidence-title">
+  <div class="site-shell">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">A clearer way to plan</p>
+        <h2 id="planning-confidence-title">Know what to expect before you book.</h2>
+      </div>
+      <p>
+        A memorable trip starts with practical details answered clearly.
+        Explore the information you need, then ask the hotel to confirm
+        anything that depends on your dates.
+      </p>
+    </div>
+    <div class="home-planning-confidence__grid">
+      <article class="home-planning-confidence__item">
+        <span class="home-planning-confidence__number" aria-hidden="true">01</span>
+        <h3>Know where you are staying</h3>
+        <p>Garh Jaisal Haveli is inside Jaisalmer Fort. Vehicles cannot enter, so the final approach is on foot through the fort lanes.</p>
+        <a class="text-link" href="direction.php">Understand your arrival <span aria-hidden="true">↗</span></a>
+      </article>
+      <article class="home-planning-confidence__item">
+        <span class="home-planning-confidence__number" aria-hidden="true">02</span>
+        <h3>Choose with the details in view</h3>
+        <p>Room facilities vary. Compare the available room details and check current rates and availability for your dates.</p>
+        <a class="text-link" href="room.php">Compare the rooms <span aria-hidden="true">↗</span></a>
+      </article>
+      <article class="home-planning-confidence__item">
+        <span class="home-planning-confidence__number" aria-hidden="true">03</span>
+        <h3>Ask before arranging experiences</h3>
+        <p>Tour routes, guide availability, timings, prices and inclusions are confirmed for the requested date. An enquiry is not a confirmed booking.</p>
+        <a class="text-link" href="contact.php?topic=visit-planning">Ask the hotel directly <span aria-hidden="true">↗</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
 <section class="section conversion-faq" aria-labelledby="conversion-faq-title">
   <div class="site-shell">
     <div class="section-head"><div><p class="eyebrow">Before you decide</p><h2 id="conversion-faq-title">A few useful things to know.</h2></div><p>We would rather help you arrive prepared than leave you guessing about practical details.</p></div>
@@ -526,8 +596,8 @@ $ctaBand = [
     'section_class' => 'section final-cta',
     'inner_class' => 'site-shell final-cta-inner',
     'eyebrow' => 'Plan your stay',
-    'title' => 'Make Jaisalmer more than a stop on the map.',
-    'text' => 'Check your dates, get the arrival details straight, and ask about the city or desert experiences that fit your trip.',
+    'title' => 'Your Jaisalmer story starts inside the Fort.',
+    'text' => 'Choose your room, understand the final walk into the Fort, and ask about the city or desert experiences that fit your trip.',
     'actions_class' => 'actions',
     'primary' => [
         'label' => 'Book your stay',

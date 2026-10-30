@@ -3,7 +3,7 @@
 $root = dirname(__DIR__, 2);
 $errors = [];
 $required = [
-    'index.php' => ['Wake up inside Jaisalmer Fort.', 'Heritage stay · Inside Jaisalmer Fort', 'individually styled rooms', 'home-hero-facts', 'Explore the rooms', 'conversion-journey', 'home-planning-panel', 'id="arrival-guide"', 'conversion-faq', 'Check rooms &amp; rates', 'guided-jaisalmer-tour.php', 'desert-safari.php'],
+    'index.php' => ['Wake up inside Jaisalmer Fort.', 'Heritage stay · Inside Jaisalmer Fort', 'individually styled rooms', 'home-hero-facts', 'Explore the rooms', 'conversion-journey', 'home-planning-panel', 'id="arrival-guide"', 'conversion-faq', 'Check rooms &amp; rates', 'guided-jaisalmer-tour.php', 'desert-safari.php', 'home-city-discovery', 'The Golden City has more stories to tell.', 'car-tours.php', 'home-planning-confidence', 'Know what to expect before you book.'],
     'about.php' => ['Stay inside the Fort. Feel closer to Jaisalmer.', 'Good hospitality begins before you arrive.', 'conversion-promise'],
     'desert-safari.php' => ['Find the Jaisalmer desert safari that fits your trip.', 'desert-options', 'conversion-checklist', 'Confirm my safari details'],
     'guided-jaisalmer-tour.php' => ['See Jaisalmer with a guide, at your pace.', 'guided-options', 'Plan my guided tour'],
@@ -46,6 +46,27 @@ if (!is_string($homeSource)) {
     }
     if (strpos($homeSource, 'home-planning-panel') === false) {
         $errors[] = 'Homepage must provide the consolidated editorial planning panel';
+    }
+
+    $homeSectionOrder = [
+        'class="hero"',
+        'class="home-city-discovery"',
+        'id="start-planning"',
+        'id="arrival-guide"',
+        'class="home-planning-confidence"',
+        'class="conversion-faq"',
+    ];
+    $previousPosition = -1;
+    foreach ($homeSectionOrder as $sectionMarker) {
+        $position = strpos($homeSource, $sectionMarker);
+        if ($position === false || $position <= $previousPosition) {
+            $errors[] = 'Homepage narrative sections must remain present and in the intended discovery order: ' . $sectionMarker;
+            break;
+        }
+        $previousPosition = $position;
+    }
+    if (strpos($homeSource, 'css/home-premium-story.css') === false) {
+        $errors[] = 'Homepage must load its dedicated art-direction stylesheet';
     }
 }
 

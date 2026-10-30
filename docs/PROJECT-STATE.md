@@ -1,10 +1,10 @@
 # Project state and release gates
 
-Last updated: 28 October 2026.
+Last updated: 30 October 2026.
 
 ## Current objective
 
-Deliver a coherent, premium first impression and a lower-friction direct-booking journey on the existing plain-PHP/cPanel stack. The visual direction remains editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint and local warmth.
+Deliver a coherent, premium first impression and a lower-friction direct-booking journey on the existing plain-PHP/cPanel stack. The active homepage batch combines premium art direction with a complete heritage-to-city storytelling sequence, using first-party photography, transparent arrival/booking information, existing room/experience registries and the shared Trip-to-Contact journey. The visual direction remains editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint and local warmth.
 
 ## Verified baseline after PR #155
 
@@ -225,3 +225,13 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Added a release-verification check for stored and visibly rendered captions. Integration coverage now checks Live tour/guide caption rendering, captionless private-preview reminders, and the new authoring fields.
 - Updated the editorial media browser audit to assert the caption length band across the 12 guides and eight experience pages, and added source-order/publication contracts so schema helper order and the caption gate cannot silently regress.
 - These changes harden local publishing; they do not imply a hosting deployment or new live content. No route URLs, business claims, image assets, booking destinations or publication statuses were changed.
+
+
+## Active implementation — Premium homepage storytelling (Milestones 1–2)
+
+- **Branch:** `feature/home-premium-storytelling-20261030`, based on main `da806a67f7369d33eb15969d28c0386819cef7dc`.
+- **Milestone 1:** refine the homepage hero art direction and responsive visual hierarchy using the existing Fort/facade photography, established brand tokens and the current responsive-image pipeline.
+- **Milestone 2:** complete the guest-facing story with a dedicated Jaisalmer discovery section and transparent planning-confidence content; retain the existing room, rooftop, desert, arrival, gallery, FAQ and final conversion journeys.
+- Move the existing Trip planning panel after accommodation and experience discovery so it acts as a considered next step rather than interrupting the story.
+- Preserve the configured external booking destination, registered room data, public routes, Trip tray, WhatsApp/Contact handoff, verified facts and analytics privacy boundaries.
+- **Release state:** implementation is prepared for PR review. Exact-head CI, browser screenshots, visual review and non-deploying package/Staging QA remain required. No cPanel upload or staging/production deployment is authorized by this batch.

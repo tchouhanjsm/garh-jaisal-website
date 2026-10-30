@@ -2,14 +2,14 @@
 
 > Tracked source and exact-commit CI are authoritative. Owner retains production release approval.
 
-## Latest state — 29 October 2026
+## Latest state — 30 October 2026
 
 | Item | Value |
 |---|---|
-| Verified main SHA | 15afdf46506bdaf3799bde97f47e3296210bb898 — PR #158 merged |
-| Active implementation | Sprint 85 — source-size-accurate carousel delivery and truthful responsive-image auditing |
-| Working branch | feature/image-delivery-budget-guardrails-20261029 |
-| Scope | Correct room/experience carousel source-size hints; report physical selected-source pixels accurately; classify initial viewport visibility in both dimensions; preserve the 250,000-byte variant budgets |
+| Verified main SHA | da806a67f7369d33eb15969d28c0386819cef7dc — PR #159 merged |
+| Active implementation | Premium homepage storytelling — Milestones 1 and 2 on `feature/home-premium-storytelling-20261030` |
+| Working branch | `feature/home-premium-storytelling-20261030` (based on `da806a67f7369d33eb15969d28c0386819cef7dc`) |
+| Scope | Premium hero art direction, improved place-story copy, city-discovery pathway, transparent planning-confidence section, and responsive/browser regression coverage; preserve booking and enquiry journeys |
 | Release boundary | Owner retains merge and release approval; no cPanel upload, staging deployment or production deployment |
 | Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667258) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667379) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667299) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667390) — all passed on 15afdf46506bdaf3799bde97f47e3296210bb898 |
 
@@ -141,3 +141,13 @@ Regression coverage verifies action count and destination parity on the live exp
 - Derive source-pixel coverage from the selected responsive width descriptor, not density-corrected `naturalWidth`; keep the latter as a separate diagnostic.
 - Classify initial-viewport image visibility using both horizontal and vertical intersection in the image audit and performance baseline.
 - Revalidate all image, performance, PHP, package and staging contracts on the new exact head before the next sprint.
+
+
+## Homepage premium storytelling — Milestones 1 and 2
+
+- Existing homepage foundations were retained: the configured booking engine, registered rooms, rooftop dining, desert-experience cards, arrival guide, gallery, FAQs, footer CTA and session-only Trip/Contact journeys.
+- The new homepage city-discovery section links to the existing guided Jaisalmer and car-tour destinations; it does not create new tour products or imply availability.
+- The new planning-confidence layer explains the verified Fort vehicle restriction, room-specific differences and date-dependent tour confirmation. It is not a substitute for verified guest reviews; review proof remains owner-data gated.
+- The existing Trip planning panel is repositioned after the core discovery sequence.
+- Exact-head Site Checks, Browser E2E/screenshots, sitemap parity, package preflight and non-deploying Staging QA must pass before merge. Human screenshot review remains required; local browser timings are not field Core Web Vitals.
+- No cPanel upload, staging deployment or production release is included.
