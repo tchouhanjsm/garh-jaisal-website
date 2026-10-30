@@ -147,7 +147,7 @@ test('room and experience carousel source candidates cover their rendered image 
           const currentPath = new URL(img.currentSrc || img.src, document.baseURI).pathname;
           const sourceSet = img.getAttribute('srcset') || '';
           const selectedCandidate = sourceSet.split(',').map(candidate => {
-            const parts = candidate.trim().split(/\\s+/);
+            const parts = candidate.trim().split(/\s+/);
             try {
               return new URL(parts[0], document.baseURI).pathname === currentPath
                 ? { descriptor: parts[1] || '' }

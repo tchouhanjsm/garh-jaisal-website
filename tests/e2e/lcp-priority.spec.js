@@ -96,7 +96,7 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
           const renderedWidth = img.getBoundingClientRect().width;
           const sourceSet = responsiveOwner.getAttribute('srcset') || img.getAttribute('srcset') || '';
           const selectedCandidate = sourceSet.split(',').map(candidate => {
-            const parts = candidate.trim().split(/\\s+/);
+            const parts = candidate.trim().split(/\s+/);
             try {
               return new URL(parts[0], document.baseURI).pathname === currentPath
                 ? { descriptor: parts[1] || '' }

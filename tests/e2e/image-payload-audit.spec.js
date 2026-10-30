@@ -179,7 +179,7 @@ test('audit every published route for image slots and payloads at mobile and des
           const activeSource = Array.from(img.closest('picture')?.querySelectorAll('source[srcset]') || [])
             .find(source => source.srcset.split(',').some(candidate => {
               try {
-                return new URL(candidate.trim().split(/\\s+/)[0], document.baseURI).pathname === currentPath;
+                return new URL(candidate.trim().split(/\s+/)[0], document.baseURI).pathname === currentPath;
               } catch {
                 return false;
               }
@@ -187,7 +187,7 @@ test('audit every published route for image slots and payloads at mobile and des
           const responsiveOwner = activeSource || img;
           const sourceSet = responsiveOwner.getAttribute('srcset') || img.getAttribute('srcset') || '';
           const selectedCandidate = sourceSet.split(',').map(candidate => {
-            const parts = candidate.trim().split(/\\s+/);
+            const parts = candidate.trim().split(/\s+/);
             try {
               return new URL(parts[0], document.baseURI).pathname === currentPath
                 ? { descriptor: parts[1] || '' }
