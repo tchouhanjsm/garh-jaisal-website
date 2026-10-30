@@ -4,7 +4,7 @@ Last updated: 30 October 2026.
 
 ## Current objective
 
-Deliver a coherent, premium first impression and a lower-friction direct-booking journey on the existing plain-PHP/cPanel stack. The active homepage batch combines premium art direction, a complete heritage-to-city storytelling sequence and direct-booking conversion improvements. It uses first-party photography, transparent arrival/booking information, existing room/experience registries and privacy-safe CTA attribution through the shared analytics router and Trip-to-Contact journey. The visual direction remains editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint and local warmth.
+Deliver a coherent, premium first impression and a lower-friction direct-booking journey on the existing plain-PHP/cPanel stack. The active PR #161 batch combines premium homepage storytelling and direct-booking conversion with a complete Directions/arrival experience. It uses first-party photography, transparent arrival/booking information, existing room/experience registries and privacy-safe CTA attribution through the shared analytics router and Trip-to-Contact journey. The visual direction remains editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint and local warmth.
 
 ## Verified baseline after PR #155
 
@@ -227,7 +227,7 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - These changes harden local publishing; they do not imply a hosting deployment or new live content. No route URLs, business claims, image assets, booking destinations or publication statuses were changed.
 
 
-## Active implementation — Premium homepage storytelling (Milestones 1–2)
+## PR #161 implementation history — Homepage Milestones 1–2
 
 - **PR:** [#161](https://github.com/tchouhanjsm/garh-jaisal-website/pull/161) — open for review. **Branch:** `feature/home-premium-storytelling-20261030`, based on main `da806a67f7369d33eb15969d28c0386819cef7dc`.
 - **Milestone 1:** refine the homepage hero art direction and responsive visual hierarchy using the existing Fort/facade photography, established brand tokens and the current responsive-image pipeline.
@@ -237,7 +237,7 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - **Release state:** implementation is prepared for PR review. Exact-head CI, browser screenshots, visual review and non-deploying package/Staging QA remain required. No cPanel upload or staging/production deployment is authorized by this batch.
 
 
-## Active implementation — Homepage Milestones 1–2 + Phase 3 (PR #161)
+## PR #161 implementation history — Homepage direct-booking Phase 3
 
 - **Milestones 1–2:** premium first-screen art direction and a complete Fort-to-city homepage story.
 - **Phase 3:** provide a clear room-discovery booking action that uses the already configured booking engine; instrument hero, room-section and final booking CTAs with stable IDs and locations.
@@ -246,7 +246,7 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - PR #160's independent staging-release-provenance work is paused on its retained branch while this homepage PR is the sole active PR. Rebase and resume it only after #161 is merged.
 
 
-## Phase 4 — Premium Directions and arrival experience (PR #161)
+## Active implementation — PR #161 Phase 4: Premium Directions and arrival experience
 
 - Extend the same active implementation branch with a complete Directions page experience batch; do not create a second open PR.
 - Apply a route-scoped visual system across the arrival hero, quick guide, travel choices, walking route, mobility information, map, FAQs and booking close.

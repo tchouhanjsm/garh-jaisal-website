@@ -70,6 +70,8 @@
 .arrival-page .arrival-driver-card__address { margin-top: 14px !important; color: var(--arrival-garnet) !important; font-size: .94rem; font-weight: 750; }
 .arrival-page .arrival-driver-card__action { display: grid; justify-items: stretch; gap: 10px; min-width: min(245px,100%); }
 .arrival-page .arrival-driver-copy-button { min-height: 50px; padding-inline: 20px; border: 1px solid var(--arrival-garnet); background: var(--arrival-garnet); color: #fff; cursor: pointer; white-space: normal; }
+/* The shared .button rule sets display:flex; explicitly preserve HTML hidden semantics. */
+.arrival-page .arrival-driver-copy-button[hidden] { display: none; }
 .arrival-page .arrival-driver-copy-button:hover:not(:disabled) { background: #421321; }
 .arrival-page .arrival-driver-copy-button:disabled { cursor: wait; opacity: .72; }
 .arrival-page .arrival-driver-card__status { min-height: 1.45em; margin: 0; color: var(--arrival-muted); font-size: .82rem; line-height: 1.45; }

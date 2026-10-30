@@ -29,7 +29,7 @@ $css = is_file($cssPath) ? file_get_contents($cssPath) : false;
 if (!is_string($css)) {
     $errors[] = 'css/arrival-experience.css is missing or unreadable';
 } else {
-    foreach (['.arrival-driver-card','.arrival-route-steps','.arrival-map','@media (max-width: 760px)','@media (prefers-reduced-motion: reduce)',':focus-visible'] as $needle) {
+    foreach (['.arrival-driver-card','.arrival-driver-copy-button[hidden]','.arrival-route-steps','.arrival-map','@media (max-width: 760px)','@media (prefers-reduced-motion: reduce)',':focus-visible'] as $needle) {
         if (strpos($css, $needle) === false) $errors[] = 'arrival stylesheet missing marker: ' . $needle;
     }
 }

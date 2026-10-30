@@ -162,5 +162,7 @@ test('driver arrival details remain readable when the enhancement script is unav
   const driverCard = page.locator('.arrival-driver-card');
   await expect(driverCard).toContainText('Fort Kotari Para, Inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001');
   await expect(driverCard).toContainText('Vehicles cannot enter Jaisalmer Fort');
-  await expect(driverCard.getByRole('button', { name: 'Copy arrival note for driver' })).toBeHidden();
+  const copyButton = driverCard.locator('button[data-arrival-copy]');
+  await expect(copyButton).toHaveAttribute('hidden', '');
+  await expect(copyButton).toBeHidden();
 });
