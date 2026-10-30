@@ -223,7 +223,16 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell">
       <div class="section-head">
         <div><p class="eyebrow">Stay</p><h2 id="rooms-preview-title">Find your room inside the Fort.</h2></div>
-        <p>See the rooms before you choose. Compare their character and details, then check current rates, availability and room-specific facilities for your dates.</p>
+        <div class="home-room-section-intro">
+          <p>See the rooms before you choose. Compare their character and details, then check current rates, availability and room-specific facilities for your dates.</p>
+          <a
+            class="button button-primary home-room-section-booking"
+            href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
+            target="_blank"
+            rel="noopener"
+            data-cta-id="booking-home-rooms"
+            data-cta-location="home-rooms-section">Check dates &amp; rates</a>
+        </div>
       </div>
       <div class="cards home-room-cards">
         <?php foreach ($featuredRooms as $room): ?>
@@ -605,6 +614,8 @@ $ctaBand = [
         'class' => 'button button-primary',
         'target' => '_blank',
         'rel' => 'noopener',
+        'tracking_id' => 'booking-home-final',
+        'tracking_location' => 'home-final-cta',
     ],
     'secondary' => [
         'label' => 'Contact us',

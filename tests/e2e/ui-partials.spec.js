@@ -6,7 +6,7 @@ const CTA_CASES = [
   {
     route: '/',
     section: '.final-cta',
-    heading: 'Make Jaisalmer more than a stop on the map.',
+    heading: 'Your Jaisalmer story starts inside the Fort.',
     links: [
       { label: 'Book your stay', opensNewTab: true },
       { label: 'Contact us', href: 'contact.php' },

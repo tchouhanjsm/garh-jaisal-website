@@ -9,7 +9,7 @@
 | Verified main SHA | da806a67f7369d33eb15969d28c0386819cef7dc — PR #159 merged |
 | Active implementation | Premium homepage storytelling — Milestones 1 and 2 on `feature/home-premium-storytelling-20261030` |
 | Working branch | `feature/home-premium-storytelling-20261030` (based on `da806a67f7369d33eb15969d28c0386819cef7dc`) |
-| Scope | Premium hero art direction, improved place-story copy, city-discovery pathway, transparent planning-confidence section, and responsive/browser regression coverage; preserve booking and enquiry journeys |
+| Scope | Premium hero art direction, Fort-to-city storytelling, clear room-section booking CTA, privacy-safe booking-intent attribution and responsive/browser regression coverage; preserve existing booking and enquiry journeys |
 | Release boundary | Owner retains merge and release approval; no cPanel upload, staging deployment or production deployment |
 | Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667258) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667379) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667299) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667390) — all passed on 15afdf46506bdaf3799bde97f47e3296210bb898 |
 
@@ -151,3 +151,13 @@ Regression coverage verifies action count and destination parity on the live exp
 - The existing Trip planning panel is repositioned after the core discovery sequence.
 - PR [#161](https://github.com/tchouhanjsm/garh-jaisal-website/pull/161) is open for review. Exact-head Site Checks, Browser E2E/screenshots, sitemap parity, package preflight and non-deploying Staging QA must pass before merge. Human screenshot review remains required; local browser timings are not field Core Web Vitals.
 - No cPanel upload, staging deployment or production release is included.
+
+
+## Homepage Phase 3 — direct-booking conversion (PR #161)
+
+- Added one explicit room-section action that opens the configured booking engine; it does not claim to preselect a specific room or guarantee a rate.
+- The hero, room-section and closing booking CTAs now have stable CTA IDs/locations in the existing outbound-booking event.
+- Regression coverage verifies both approved GA4 destinations, first-touch allowlisted campaign attribution and exclusion of private query values (email/topic).
+- Fixed the 320px compact hero collision with the fixed mobile action dock by restoring the previously tuned compact type scale and spacing.
+- Updated the shared CTA test to reflect the approved closing headline.
+- No new booking integration, offer, review, pricing promise, public route or deployment is introduced.

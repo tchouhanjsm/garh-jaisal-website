@@ -12,6 +12,13 @@ test.describe('Premium homepage storytelling', () => {
     await expect(page.locator('.hero-content a.button-primary')).toHaveText('Check rooms & rates');
     await expect(page.locator('.hero-content a.button-primary')).toHaveAttribute('href', /asiatech\.in\/booking_engine\/index3\?token=/);
 
+    const roomBooking = page.locator('#rooms-preview a.home-room-section-booking');
+    await expect(roomBooking).toBeVisible();
+    await expect(roomBooking).toHaveText('Check dates & rates');
+    await expect(roomBooking).toHaveAttribute('target', '_blank');
+    await expect(roomBooking).toHaveAttribute('rel', /noopener/);
+    await expect(roomBooking).toHaveAttribute('data-cta-id', 'booking-home-rooms');
+
     const city = page.locator('#city-discovery');
     await expect(city).toBeVisible();
     await expect(city.getByRole('heading', { level: 2, name: 'The Golden City has more stories to tell.' })).toBeVisible();

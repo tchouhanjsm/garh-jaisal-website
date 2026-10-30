@@ -177,3 +177,57 @@ test('restaurant fallback call and WhatsApp intents route safely to both approve
   expect(whatsapp).not.toHaveProperty('email');
   expect(whatsapp).not.toHaveProperty('topic');
 });
+
+
+test('homepage hero, room discovery and closing booking CTAs report attributable booking intent without query PII', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Homepage booking attribution runs once on desktop-1280');
+  await page.route('https://www.googletagmanager.com/**', route => route.abort());
+  await preventTrackedNavigation(page);
+
+  await page.goto('/?utm_source=google&utm_medium=cpc&utm_campaign=homepage_direct&email=private%40example.com&topic=private', {
+    waitUntil: 'domcontentloaded'
+  });
+
+  const heroBooking = page.locator('a[data-cta-id="booking-home-hero"]');
+  await expect(heroBooking).toBeVisible();
+  const heroHref = new URL(await heroBooking.getAttribute('href'), 'https://www.hotelgarhjaisal.com');
+  expect(heroHref.hostname).toBe('asiatech.in');
+  expect(heroHref.searchParams.get('utm_source')).toBe('google');
+  expect(heroHref.searchParams.get('utm_medium')).toBe('cpc');
+  expect(heroHref.searchParams.get('utm_campaign')).toBe('homepage_direct');
+  expect(heroHref.searchParams.has('email')).toBe(false);
+  expect(heroHref.searchParams.has('topic')).toBe(false);
+
+  await heroBooking.click();
+  let events = await readTrackedEvents(page);
+  const hero = expectRoutedOnce(events, 'booking_outbound_click', '/', 'home');
+  expect(hero.cta_id).toBe('booking-home-hero');
+  expect(hero.cta_location).toBe('home-hero');
+  expect(hero.utm_campaign).toBe('homepage_direct');
+  expect(hero).not.toHaveProperty('email');
+  expect(hero).not.toHaveProperty('topic');
+
+  await page.evaluate(() => { if (Array.isArray(window.dataLayer)) window.dataLayer.length = 0; });
+  const roomsBooking = page.locator('#rooms-preview a.home-room-section-booking');
+  await expect(roomsBooking).toBeVisible();
+  await roomsBooking.click();
+  events = await readTrackedEvents(page);
+  const rooms = expectRoutedOnce(events, 'booking_outbound_click', '/', 'home');
+  expect(rooms.cta_id).toBe('booking-home-rooms');
+  expect(rooms.cta_location).toBe('home-rooms-section');
+  expect(rooms.utm_campaign).toBe('homepage_direct');
+  expect(rooms).not.toHaveProperty('email');
+  expect(rooms).not.toHaveProperty('topic');
+
+  await page.evaluate(() => { if (Array.isArray(window.dataLayer)) window.dataLayer.length = 0; });
+  const finalBooking = page.locator('.final-cta a[data-cta-id="booking-home-final"]');
+  await expect(finalBooking).toBeVisible();
+  await finalBooking.click();
+  events = await readTrackedEvents(page);
+  const final = expectRoutedOnce(events, 'booking_outbound_click', '/', 'home');
+  expect(final.cta_id).toBe('booking-home-final');
+  expect(final.cta_location).toBe('home-final-cta');
+  expect(final.utm_campaign).toBe('homepage_direct');
+  expect(final).not.toHaveProperty('email');
+  expect(final).not.toHaveProperty('topic');
+});

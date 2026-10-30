@@ -4,7 +4,7 @@ Last updated: 30 October 2026.
 
 ## Current objective
 
-Deliver a coherent, premium first impression and a lower-friction direct-booking journey on the existing plain-PHP/cPanel stack. The active homepage batch combines premium art direction with a complete heritage-to-city storytelling sequence, using first-party photography, transparent arrival/booking information, existing room/experience registries and the shared Trip-to-Contact journey. The visual direction remains editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint and local warmth.
+Deliver a coherent, premium first impression and a lower-friction direct-booking journey on the existing plain-PHP/cPanel stack. The active homepage batch combines premium art direction, a complete heritage-to-city storytelling sequence and direct-booking conversion improvements. It uses first-party photography, transparent arrival/booking information, existing room/experience registries and privacy-safe CTA attribution through the shared analytics router and Trip-to-Contact journey. The visual direction remains editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint and local warmth.
 
 ## Verified baseline after PR #155
 
@@ -235,3 +235,12 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Move the existing Trip planning panel after accommodation and experience discovery so it acts as a considered next step rather than interrupting the story.
 - Preserve the configured external booking destination, registered room data, public routes, Trip tray, WhatsApp/Contact handoff, verified facts and analytics privacy boundaries.
 - **Release state:** implementation is prepared for PR review. Exact-head CI, browser screenshots, visual review and non-deploying package/Staging QA remain required. No cPanel upload or staging/production deployment is authorized by this batch.
+
+
+## Active implementation — Homepage Milestones 1–2 + Phase 3 (PR #161)
+
+- **Milestones 1–2:** premium first-screen art direction and a complete Fort-to-city homepage story.
+- **Phase 3:** provide a clear room-discovery booking action that uses the already configured booking engine; instrument hero, room-section and final booking CTAs with stable IDs and locations.
+- Keep attribution limited to the existing allowlisted UTM fields. Never forward email, topic, name, message or arbitrary query parameters to analytics.
+- Preserve first-screen proof-point clearance at 320px, with the existing fixed mobile booking dock remaining unobstructed.
+- PR #160's independent staging-release-provenance work is paused on its retained branch while this homepage PR is the sole active PR. Rebase and resume it only after #161 is merged.

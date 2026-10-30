@@ -250,3 +250,75 @@ main.thar-sunset-story--home :is(.home-city-discovery, .home-planning-confidence
     transition: none;
   }
 }
+
+
+/* Phase 3 — direct-booking CTA hierarchy in the homepage room discovery. */
+main.thar-sunset-story--home .home-room-section-intro {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  gap: 12px;
+}
+
+main.thar-sunset-story--home .home-room-section-intro > p {
+  margin: 0;
+}
+
+main.thar-sunset-story--home .home-room-section-booking {
+  min-height: 46px;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  main.thar-sunset-story--home .home-room-section-booking {
+    width: 100%;
+    justify-content: center;
+    white-space: normal;
+  }
+}
+
+/* The original compact-phone hero was tuned to keep all proof points above
+   the fixed action dock. Restore that compact hierarchy after the desktop
+   art-direction rule so the 320px first screen remains complete. */
+@media (max-width: 360px) {
+  main.thar-sunset-story--home > .hero {
+    min-height: max(500px, calc(100svh - 180px));
+  }
+
+  main.thar-sunset-story--home .hero-content {
+    padding-top: 72px;
+    padding-bottom: 14px;
+  }
+
+  main.thar-sunset-story--home .hero-content > .eyebrow {
+    margin-bottom: 7px;
+    font-size: 0.8125rem;
+  }
+
+  main.thar-sunset-story--home .hero-content h1 {
+    max-width: 15ch;
+    margin-bottom: 10px;
+    font-size: clamp(1.9rem, 8.6vw, 2.15rem);
+    line-height: 1.08;
+  }
+
+  main.thar-sunset-story--home .hero-content > p:not(.eyebrow) {
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    line-height: 1.38;
+  }
+
+  main.thar-sunset-story--home .hero-content .actions {
+    gap: 7px;
+  }
+
+  main.thar-sunset-story--home .hero-content .actions .button {
+    min-height: 44px;
+    padding-inline: 12px;
+  }
+
+  main.thar-sunset-story--home .home-hero-facts {
+    margin-top: 10px;
+    padding: 4px;
+  }
+}
