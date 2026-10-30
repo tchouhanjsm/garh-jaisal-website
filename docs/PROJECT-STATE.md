@@ -1,12 +1,19 @@
 # Project state and release gates
 
-Last updated: 28 October 2026.
+Last updated: 30 October 2026.
 
 ## Current objective
 
 Deliver a coherent, premium first impression and a lower-friction direct-booking journey on the existing plain-PHP/cPanel stack. The visual direction remains editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint and local warmth.
 
-## Verified baseline after PR #155
+## Current verified baseline — 30 October 2026
+
+- `main` is at `da806a67f7369d33eb15969d28c0386819cef7dc`, the merge commit for PR #159.
+- PR #159 final head `99dd36679da829372f87681cc4caad76a1411ce5` passed Site Checks (PHP 7.4/8.2), Browser E2E/screenshots, cPanel package preflight and non-deploying Staging QA. The owner-reviewed package build was skipped for the PR event.
+- PR #159 completed responsive hero preload parity, experience hero source corrections, five manifest image budgets, offscreen Journal priority correction, carousel slot-size alignment and route-wide image auditing.
+- Those are repository/Chromium results, not a cPanel deployment, field Core Web Vitals or real-host cache evidence. Owner approval remains required for staging upload and production release.
+
+## Historical baseline after PR #155 (superseded by PR #159)
 
 - main is at merge commit a6089e80cf1a1895f7280504d9ba377924c991f1, merging PR #155 on 28 October 2026.
 - PR #154 delivered room-comparison decision support; PR #155 delivered the editorial publication contract, five-topic taxonomy, registry-driven related-guide ranking and browser regression coverage.
@@ -225,3 +232,12 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Added a release-verification check for stored and visibly rendered captions. Integration coverage now checks Live tour/guide caption rendering, captionless private-preview reminders, and the new authoring fields.
 - Updated the editorial media browser audit to assert the caption length band across the 12 guides and eight experience pages, and added source-order/publication contracts so schema helper order and the caption gate cannot silently regress.
 - These changes harden local publishing; they do not imply a hosting deployment or new live content. No route URLs, business claims, image assets, booking destinations or publication statuses were changed.
+
+
+## Sprint 86 — staged package provenance and real-host image delivery (active)
+
+- Generate a non-secret `release-info.txt` inside each reviewed cPanel archive, binding the archive to its exact 40-character Git SHA.
+- Verify the host-served marker matches the exact main-branch workflow checkout before accepting external staging evidence; send no-cache and noindex headers and disallow the marker in robots.txt.
+- Extend the existing staging route audit to record actual `src`, `srcset`, `sizes`, `currentSrc`, intrinsic dimensions, rendered slot width, selected source-pixel coverage and preload parity.
+- Probe unique first-viewport same-origin image URLs using read-only HTTP HEAD requests; record response status, Content-Type, Content-Length, Cache-Control, Expires and effective cache lifetime. Require at least seven days in line with the existing month-long image expiry policy.
+- PR checks remain local/non-deploying. Real-host evidence requires an owner-dispatched HTTPS staging origin and the exact reviewed package SHA. No cPanel upload, merge or production deployment is performed by automation.

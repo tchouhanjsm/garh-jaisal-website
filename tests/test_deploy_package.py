@@ -5,7 +5,9 @@ from pathlib import Path
 
 from scripts.build_deploy_package import (
     EXAMPLE_CONFIG_PATH,
+    RELEASE_MARKER_PATH,
     PackageError,
+    build_release_marker,
     PRIVATE_CONFIG_PATH,
     get_generated_responsive_paths,
     select_runtime_paths,
@@ -65,6 +67,19 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
     def test_private_local_config_is_never_packageable(self):
         with self.assertRaisesRegex(PackageError, "must never be tracked"):
             select_runtime_paths([PRIVATE_CONFIG_PATH])
+
+    def test_release_marker_is_generated_from_a_full_commit_sha(self):
+        commit_sha = "A" * 40
+        expected = "GARH_JAISAL_RELEASE_SHA=" + ("a" * 40) + chr(10)
+        self.assertEqual(build_release_marker(commit_sha).decode("ascii"), expected)
+        for invalid in ("abc123", "g" * 40, "", None):
+            with self.subTest(invalid=invalid):
+                with self.assertRaisesRegex(PackageError, "full 40-character Git commit SHA"):
+                    build_release_marker(invalid)
+
+    def test_release_marker_path_cannot_be_supplied_as_a_tracked_file(self):
+        with self.assertRaisesRegex(PackageError, "generated during package creation"):
+            select_runtime_paths([RELEASE_MARKER_PATH])
 
     def test_every_sitemap_route_must_be_included(self):
         selected = [

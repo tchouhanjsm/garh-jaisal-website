@@ -7,7 +7,7 @@ This site is plain PHP and has no frontend build step. This document is a releas
 The **cPanel deployment package** workflow validates file selection on pull requests. It builds a ZIP artifact only from a successful push to `main` (or a manual workflow dispatch on `main`); it never uploads files to a server.
 
 1. Open the successful [cPanel deployment package workflow](https://github.com/tchouhanjsm/garh-jaisal-website/actions/workflows/deployment-package.yml) for the exact merged `main` SHA.
-2. Download the `cpanel-deployment-package-<commit SHA>` artifact. It contains the deployment ZIP, a JSON manifest and a `.sha256` checksum file.
+2. Download the `cpanel-deployment-package-<commit SHA>` artifact. It contains the deployment ZIP, a JSON manifest and a `.sha256` checksum file. The ZIP includes a generated `release-info.txt` containing only `GARH_JAISAL_RELEASE_SHA=<full commit SHA>`; it is generated at package time and is not a tracked file or secret.
 3. Confirm the manifest's commit matches the merged SHA approved for staging, then verify the archive checksum with `sha256sum -c <package-name>.sha256`.
 4. Inspect the manifest's file list and published-route count. The ZIP contains tracked runtime PHP pages, `.htaccess`, sitemap, robots rules, CSS, JavaScript, images and runtime includes. It excludes repository metadata, docs, tests, scripts, workflow files, package/test configuration, `include/site-config.example.php` and the server-only `include/site-config.local.php`.
 5. Preserve the existing server-only `include/site-config.local.php` and uploaded/server-managed files. Extract the reviewed archive into a **staging** document root only after making a restorable backup. Do not overwrite local server configuration with any package or example file.
@@ -84,3 +84,10 @@ The deployment package excludes `img/tent1.jpg`, root `restaurant.css`/`restaura
 The responsive variants in `img/responsive/` are generated during CI/package preparation and are intentionally absent from Git. Before uploading a locally assembled site, generate them with Python 3.12 and `Pillow==11.3.0`, then check the generated report and visual-review sheet. The cPanel package workflow performs this build and packages only manifest-approved outputs. The PHP runtime must be able to serve the WebP candidates from the generated directory; when a candidate is absent or fails the runtime type/dimension/aspect-ratio/byte checks, the helper falls back to the existing approved image. Do not delete the original source or optimized fallback assets during promotion.
 
 CI dry runs do not verify that generated files are served correctly from an actual cPanel staging host. Verify the deployed ZIP manifest and image requests (HTTP status, content type, selected responsive candidate, and preload alignment) on staging before production. Keep owner review of the generated image sheet and screenshots as a release gate.
+
+
+## Sprint 86 — staged package provenance and image delivery evidence
+
+After extracting the reviewed archive into the owner-approved staging document root, run the owner-dispatched Staging QA workflow with the exact staging origin and the SHA in the package manifest. The workflow reads `/release-info.txt` from the host and rejects the run unless the served commit matches the exact `main` checkout SHA. The marker is sent with `Cache-Control: no-store` and `X-Robots-Tag: noindex, nofollow`, and is excluded from robots crawling.
+
+External QA also records the selected image candidate, its rendered slot and source-pixel coverage, responsive preload parity, and read-only HTTP HEAD observations for first-viewport same-origin image URLs. It checks status, image content type and at least seven days of effective cache lifetime. These checks do not upload files, submit enquiries or authorize production deployment.

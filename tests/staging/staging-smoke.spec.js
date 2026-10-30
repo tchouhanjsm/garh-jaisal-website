@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
+const { cacheMaxAgeSeconds, normalizedSrcset, parseReleaseMarker, selectedSrcsetWidth } = require('../../scripts/staging-delivery-diagnostics');
 
 const ROOT = path.resolve(__dirname, '../..');
 const REMOTE_TARGET = (process.env.STAGING_BASE_URL || '').trim();
@@ -12,6 +13,7 @@ const STAGING_ORIGIN = new URL(BASE_URL).origin;
 const EXPECTED_SHA = (process.env.STAGING_EXPECTED_COMMIT_SHA || '').toLowerCase();
 const CHECKED_OUT_SHA = (process.env.CHECKED_OUT_COMMIT_SHA || '').toLowerCase();
 const CORE_ROUTES = ['/', '/room.php', '/contact.php', '/direction.php'];
+const MIN_IMAGE_CACHE_AGE_SECONDS = 7 * 24 * 60 * 60;
 
 function routePathsFromSitemap(content) {
   return [...new Set(
@@ -39,6 +41,9 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
   const failures = [];
   const routeResults = [];
   const screenshots = [];
+  const selectedImageUrls = new Set();
+  const imageCacheAudit = [];
+  let releaseProvenance = { status: 'not-run', packageCommit: null };
   const screenshotsDir = path.join(process.cwd(), 'artifacts', 'staging-qa', 'screenshots');
   fs.mkdirSync(screenshotsDir, { recursive: true });
   let activePageErrors = [];
@@ -51,6 +56,31 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
   if (EXTERNAL_STAGING) {
     record(/^[0-9a-f]{40}$/i.test(EXPECTED_SHA), 'External run is missing a full staged-package SHA.');
     record(EXPECTED_SHA === CHECKED_OUT_SHA, 'Staged package SHA differs from the workflow checkout SHA.');
+
+    try {
+      const markerResponse = await request.get(new URL('/release-info.txt', BASE_URL).href, { maxRedirects: 0, timeout: 15_000 });
+      const markerText = await markerResponse.text();
+      const observedCommit = parseReleaseMarker(markerText);
+      const markerHeaders = markerResponse.headers();
+      releaseProvenance = {
+        status: markerResponse.status(),
+        packageCommit: observedCommit,
+        expectedCommit: EXPECTED_SHA,
+        contentType: markerHeaders['content-type'] || null,
+        cacheControl: markerHeaders['cache-control'] || null,
+        robotsHeader: markerHeaders['x-robots-tag'] || null,
+      };
+      record(markerResponse.status() === 200, 'Staging release marker must return HTTP 200.', { status: markerResponse.status() });
+      record(Boolean(observedCommit), 'Staging release marker is missing or malformed.');
+      record(observedCommit === EXPECTED_SHA, 'Staging is not serving the exact reviewed package commit.', { expectedCommit: EXPECTED_SHA, observedCommit });
+      record((markerHeaders['content-type'] || '').toLowerCase().startsWith('text/plain'), 'Staging release marker must be text/plain.', { contentType: markerHeaders['content-type'] || null });
+      record(/noindex/i.test(markerHeaders['x-robots-tag'] || ''), 'Staging release marker must be noindex.');
+      record(/no-store/i.test(markerHeaders['cache-control'] || ''), 'Staging release marker must not be cached.', { cacheControl: markerHeaders['cache-control'] || null });
+      record(markerText.length <= 128, 'Staging release marker exceeds its 128-character safety limit.', { characters: markerText.length });
+    } catch (error) {
+      releaseProvenance = { status: 'request-failed', packageCommit: null, detail: error.message };
+      failures.push({ message: 'Unable to verify staged package release provenance.', detail: error.message });
+    }
     try {
       const sitemapResponse = await request.get(new URL('/sitemap.xml', BASE_URL).href, { maxRedirects: 0, timeout: 20_000 });
       record(sitemapResponse.status() < 400, 'Staging sitemap did not return a successful response.', { status: sitemapResponse.status() });
@@ -132,6 +162,8 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
         imageCount: 0,
         imageFailures: 0,
         horizontalOverflow: null,
+        imageSources: [],
+        preloads: [],
         pageErrors: [],
         screenshot: null,
       };
@@ -202,17 +234,90 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
 
         const images = await page.locator('img').evaluateAll(nodes => nodes.map((img, index) => {
           const style = getComputedStyle(img);
+          const currentSrc = img.currentSrc || img.src || '';
+          const pictureSources = Array.from(img.closest('picture')?.querySelectorAll('source[srcset]') || []);
+          const activeSource = pictureSources.find(source => source.srcset.split(',').some(candidate => {
+            const candidateUrl = candidate.trim().split(/\s+/)[0];
+            try { return new URL(candidateUrl, document.baseURI).href === currentSrc; }
+            catch { return false; }
+          }));
+          const rect = img.getBoundingClientRect();
           return {
             index: index + 1,
-            src: img.currentSrc || img.src || '',
+            src: img.getAttribute('src') || img.src || '',
+            srcset: activeSource?.getAttribute('srcset') || img.getAttribute('srcset') || '',
+            sizes: activeSource?.getAttribute('sizes') || img.getAttribute('sizes') || '',
+            currentSrc,
             altPresent: img.hasAttribute('alt'),
             width: Number(img.getAttribute('width')),
             height: Number(img.getAttribute('height')),
+            naturalWidth: img.naturalWidth,
+            naturalHeight: img.naturalHeight,
+            renderedWidth: Math.round(rect.width * 100) / 100,
+            renderedHeight: Math.round(rect.height * 100) / 100,
+            devicePixelRatio: window.devicePixelRatio || 1,
+            loading: img.loading || 'eager',
+            fetchPriority: img.fetchPriority || 'auto',
+            visibleAtInitialViewport: rect.width > 0 && rect.height > 0
+              && rect.right > 0 && rect.left < window.innerWidth
+              && rect.bottom > 0 && rect.top < window.innerHeight
+              && style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0,
             loaded: img.complete && img.naturalWidth > 0 && img.naturalHeight > 0,
             rendered: style.display !== 'none' && style.visibility !== 'hidden' && img.getClientRects().length > 0,
           };
         }));
         result.imageCount = images.length;
+        result.imageSources = images;
+        result.preloads = await page.locator('link[rel="preload"][as="image"]').evaluateAll(nodes => nodes.map(link => ({
+          href: link.href || '',
+          imagesrcset: link.getAttribute('imagesrcset') || '',
+          imagesizes: link.getAttribute('imagesizes') || '',
+          fetchpriority: link.getAttribute('fetchpriority') || '',
+        })));
+        for (const img of images) {
+          const selectedWidth = selectedSrcsetWidth(img.srcset, img.currentSrc, BASE_URL);
+          const targetPixelWidth = img.renderedWidth * img.devicePixelRatio;
+          const sourcePixelCoverage = selectedWidth && targetPixelWidth > 0 ? selectedWidth / targetPixelWidth : null;
+          img.selectedSrcsetWidth = selectedWidth;
+          img.sourcePixelCoverage = sourcePixelCoverage;
+          if (sourcePixelCoverage !== null) {
+            record(sourcePixelCoverage >= 0.9, 'Responsive image candidate is under-resolved for its rendered slot.', {
+              route, viewport: viewport.width, src: img.currentSrc, selectedWidth, targetPixelWidth,
+              sourcePixelCoverage: Math.round(sourcePixelCoverage * 1000) / 1000,
+            });
+          }
+          if (img.fetchPriority === 'high') {
+            record(img.visibleAtInitialViewport, 'High-priority image is outside the initial viewport.', {
+              route, viewport: viewport.width, src: img.currentSrc,
+            });
+          }
+          if (EXTERNAL_STAGING && img.visibleAtInitialViewport && img.currentSrc) {
+            try {
+              if (new URL(img.currentSrc).origin === STAGING_ORIGIN) selectedImageUrls.add(img.currentSrc);
+            } catch { /* Invalid image URLs are covered by the existing load assertion. */ }
+          }
+        }
+        const preloadKeys = result.preloads.map(preload => [preload.href, preload.imagesrcset, preload.imagesizes].join('|'));
+        record(new Set(preloadKeys).size === preloadKeys.length, 'Duplicate image preloads were emitted.', { route, viewport: viewport.width, preloads: result.preloads });
+        for (const preload of result.preloads) {
+          const preloadSet = normalizedSrcset(preload.imagesrcset, BASE_URL);
+          const matchingImages = images.filter(img => {
+            if (preload.imagesrcset) {
+              return Boolean(img.srcset)
+                && preloadSet !== ''
+                && preloadSet === normalizedSrcset(img.srcset, BASE_URL)
+                && preload.imagesizes === img.sizes;
+            }
+            try {
+              return Boolean(img.src) && new URL(preload.href, BASE_URL).pathname === new URL(img.src, BASE_URL).pathname;
+            } catch {
+              return false;
+            }
+          });
+          record(matchingImages.length > 0, 'Image preload does not match a rendered candidate and sizes hint.', {
+            route, viewport: viewport.width, preload,
+          });
+        }
         for (const img of images) {
           const problems = [];
           if (!img.altPresent) problems.push('missing-alt');
@@ -239,6 +344,40 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
     }
   }
 
+  if (EXTERNAL_STAGING) {
+    const imageUrls = [...selectedImageUrls].sort();
+    for (let offset = 0; offset < imageUrls.length; offset += 6) {
+      const batch = imageUrls.slice(offset, offset + 6);
+      const observations = await Promise.all(batch.map(async url => {
+        try {
+          const response = await request.head(url, { maxRedirects: 0, timeout: 15_000 });
+          const headers = response.headers();
+          const maxAgeSeconds = cacheMaxAgeSeconds(headers);
+          const contentType = (headers['content-type'] || '').split(';')[0].trim().toLowerCase();
+          const contentLength = Number(headers['content-length']);
+          const observation = {
+            url, status: response.status(), contentType: contentType || null,
+            contentLengthBytes: Number.isFinite(contentLength) && contentLength > 0 ? contentLength : null,
+            cacheControl: headers['cache-control'] || null,
+            expires: headers.expires || null,
+            effectiveMaxAgeSeconds: maxAgeSeconds,
+          };
+          record(response.status() === 200, 'Selected staging image did not return HTTP 200 to HEAD.', { url, status: response.status() });
+          record(contentType.startsWith('image/'), 'Selected staging image has a non-image Content-Type.', { url, contentType });
+          record(maxAgeSeconds !== null, 'Selected staging image has no verifiable cache lifetime.', { url, cacheControl: observation.cacheControl, expires: observation.expires });
+          record(maxAgeSeconds !== null && maxAgeSeconds >= MIN_IMAGE_CACHE_AGE_SECONDS,
+            'Selected staging image cache lifetime is below the seven-day minimum.',
+            { url, effectiveMaxAgeSeconds: maxAgeSeconds, minimumSeconds: MIN_IMAGE_CACHE_AGE_SECONDS });
+          return observation;
+        } catch (error) {
+          record(false, 'Unable to inspect selected staging image cache headers.', { url, detail: error.message });
+          return { url, status: null, error: error.message };
+        }
+      }));
+      imageCacheAudit.push(...observations);
+    }
+  }
+
   const report = {
     generatedAt: new Date().toISOString(),
     mode: EXTERNAL_STAGING ? 'external-staging' : 'local-dry-run',
@@ -247,6 +386,13 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
     workflowCheckoutCommit: EXTERNAL_STAGING ? CHECKED_OUT_SHA : null,
     deploymentPerformed: false,
     enquirySubmitted: false,
+    releaseProvenance,
+    imageDelivery: {
+      firstViewportFirstPartyImageCount: selectedImageUrls.size,
+      cacheProbeCount: imageCacheAudit.length,
+      minimumCacheAgeSeconds: MIN_IMAGE_CACHE_AGE_SECONDS,
+      cacheProbes: imageCacheAudit,
+    },
     routeCount: ROUTES_TO_CHECK.length,
     viewportWidths: viewports.map(viewport => viewport.width),
     failures,
