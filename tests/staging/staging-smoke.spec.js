@@ -206,6 +206,8 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
         }
         record(schemaBlocks.length > 0, 'Page must emit structured data.', { route, viewport: viewport.width });
 
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.waitForTimeout(50);
         const initialImageVisibility = await page.locator('img').evaluateAll(nodes => nodes.map(img => {
           const rect = img.getBoundingClientRect();
           const style = getComputedStyle(img);
