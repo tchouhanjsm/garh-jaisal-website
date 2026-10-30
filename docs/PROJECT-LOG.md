@@ -7,9 +7,9 @@
 | Item | Value |
 |---|---|
 | Verified main SHA | 15afdf46506bdaf3799bde97f47e3296210bb898 — PR #158 merged |
-| Active implementation | Sprint 84 — remove offscreen image priority waste and enforce responsive-image review thresholds |
+| Active implementation | Sprint 85 — source-size-accurate carousel delivery and truthful responsive-image auditing |
 | Working branch | feature/image-delivery-budget-guardrails-20261029 |
-| Scope | Keep experience heroes resolution-fit; remove the below-fold Journal preload; enforce 250,000-byte budgets for facade and Directions courtyard 1200px variants while preserving original source assets |
+| Scope | Correct room/experience carousel source-size hints; report physical selected-source pixels accurately; classify initial viewport visibility in both dimensions; preserve the 250,000-byte variant budgets |
 | Release boundary | Owner retains merge and release approval; no cPanel upload, staging deployment or production deployment |
 | Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667258) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667379) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667299) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667390) — all passed on 15afdf46506bdaf3799bde97f47e3296210bb898 |
 
@@ -125,3 +125,19 @@ Regression coverage verifies action count and destination parity on the live exp
 - The same 37-route/two-viewport audit measured `facade-1200.webp` at 278,254 bytes and `courtyard-1200.webp` at 269,602 bytes. Introduce a bounded highest-quality-that-fits encoder and reduce both manifest caps to 250,000 bytes; the route-wide audit must then report zero resources above 250 KiB.
 - Re-run exact-head Site Checks (PHP 7.4/8.2), Browser E2E and screenshots, package preflight and non-deploying Staging QA before considering Sprint 84 validated.
 - Release boundary unchanged: owner retains merge approval; no cPanel upload, staging deployment or production deployment.
+
+ 
+## Sprint 84 — offscreen image priority and responsive payload budgets (completed in PR #159)
+
+- Removed the below-fold Journal lead-card preload/high-priority policy while keeping responsive loading available on scroll.
+- Added a quality-ladder encoder for the five manifest-owned hard byte limits. The final artifact reports all five budgets passing, with 89,304 bytes of combined headroom.
+- The final image audit checked 37 sitemap routes at 390px and 1280px, recording 272 unique image/viewport URLs and 397 measurable image-resource observations. No selected resource exceeded the 256,000-byte review threshold.
+- Exact-head Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA all passed on `42e9922c52aad0ea95043d05d52d0d1536c9e034`. Browser E2E recorded 622 passed tests; measurements remain synthetic local Chromium evidence, not production field Core Web Vitals.
+
+## Sprint 85 — source-size-accurate carousel delivery and truthful image auditing (active in PR #159)
+
+- The Sprint 84 image report showed the room carousel's 33vw hint underestimating a 563px desktop slot, causing a 480px derivative to be selected where the available 800px source should be used.
+- Correct shared variant-specific `sizes` values for room, experience/editorial and rooftop carousels.
+- Derive source-pixel coverage from the selected responsive width descriptor, not density-corrected `naturalWidth`; keep the latter as a separate diagnostic.
+- Classify initial-viewport image visibility using both horizontal and vertical intersection in the image audit and performance baseline.
+- Revalidate all image, performance, PHP, package and staging contracts on the new exact head before the next sprint.

@@ -94,11 +94,27 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
             }));
           const responsiveOwner = activeSource || img;
           const renderedWidth = img.getBoundingClientRect().width;
+          const sourceSet = responsiveOwner.getAttribute('srcset') || img.getAttribute('srcset') || '';
+          const selectedCandidate = sourceSet.split(',').map(candidate => {
+            const parts = candidate.trim().split(/\\s+/);
+            try {
+              return new URL(parts[0], document.baseURI).pathname === currentPath
+                ? { descriptor: parts[1] || '' }
+                : null;
+            } catch {
+              return null;
+            }
+          }).find(Boolean);
+          const widthDescriptor = (selectedCandidate?.descriptor || '').match(/^([1-9][0-9]*)w$/);
+          const selectedSourceWidth = widthDescriptor ? Number(widthDescriptor[1]) : img.naturalWidth;
           return {
             currentPath,
             preloads,
             renderedWidth: Math.round(renderedWidth * 100) / 100,
-            pixelCoverageRatio: renderedWidth > 0 ? img.naturalWidth / renderedWidth : 0,
+            selectedSourceWidth,
+            selectedSourceDescriptor: selectedCandidate?.descriptor || '',
+            pixelCoverageRatio: renderedWidth > 0 ? selectedSourceWidth / renderedWidth : 0,
+            densityCorrectedNaturalWidth: img.naturalWidth,
             width: img.naturalWidth,
             height: img.naturalHeight,
             fetchPriority: img.getAttribute('fetchpriority'),
@@ -130,7 +146,7 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
         expect(state.height, hero.route + ' LCP image must decode').toBeGreaterThan(0);
         expect(
           state.pixelCoverageRatio,
-          hero.route + ' LCP image must supply at least 90% of the rendered slot width at 1x density'
+          hero.route + ' selected source pixels must cover at least 90% of the rendered slot width at 1x density'
         ).toBeGreaterThanOrEqual(0.9);
         expect(state.declaredWidth, hero.route + ' must reserve intrinsic image width').toBeGreaterThan(0);
         expect(state.declaredHeight, hero.route + ' must reserve intrinsic image height').toBeGreaterThan(0);

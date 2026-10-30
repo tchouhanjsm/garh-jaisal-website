@@ -173,6 +173,35 @@ test('audit every published route for image slots and payloads at mobile and des
         });
         const usage = await page.locator('img').evaluateAll((images, viewportName) => images.map(img => {
           const rect = img.getBoundingClientRect();
+          const style = window.getComputedStyle(img);
+          const currentPath = new URL(img.currentSrc || img.src, document.baseURI).pathname;
+          // <picture> can own the selected candidate; otherwise use the img srcset.
+          const activeSource = Array.from(img.closest('picture')?.querySelectorAll('source[srcset]') || [])
+            .find(source => source.srcset.split(',').some(candidate => {
+              try {
+                return new URL(candidate.trim().split(/\\s+/)[0], document.baseURI).pathname === currentPath;
+              } catch {
+                return false;
+              }
+            }));
+          const responsiveOwner = activeSource || img;
+          const sourceSet = responsiveOwner.getAttribute('srcset') || img.getAttribute('srcset') || '';
+          const selectedCandidate = sourceSet.split(',').map(candidate => {
+            const parts = candidate.trim().split(/\\s+/);
+            try {
+              return new URL(parts[0], document.baseURI).pathname === currentPath
+                ? { descriptor: parts[1] || '' }
+                : null;
+            } catch {
+              return null;
+            }
+          }).find(Boolean);
+          const widthDescriptor = (selectedCandidate?.descriptor || '').match(/^([1-9][0-9]*)w$/);
+          const selectedSourceWidth = widthDescriptor ? Number(widthDescriptor[1]) : img.naturalWidth;
+          const visibleAtInitialViewport = rect.width > 0 && rect.height > 0
+            && rect.right > 0 && rect.left < window.innerWidth
+            && rect.bottom > 0 && rect.top < window.innerHeight
+            && style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0;
           return {
             viewportName,
             route: window.location.pathname,
@@ -181,6 +210,8 @@ test('audit every published route for image slots and payloads at mobile and des
             srcset: img.getAttribute('srcset') || '',
             sizes: img.getAttribute('sizes') || '',
             currentSrc: img.currentSrc || '',
+            selectedSourceWidth,
+            selectedSourceDescriptor: selectedCandidate?.descriptor || '',
             alt: img.getAttribute('alt'),
             widthAttribute: img.getAttribute('width'),
             heightAttribute: img.getAttribute('height'),
@@ -191,7 +222,7 @@ test('audit every published route for image slots and payloads at mobile and des
             renderedHeight: Math.round(rect.height * 100) / 100,
             loading: img.loading || 'eager',
             fetchPriority: img.fetchPriority || 'auto',
-            visibleAtInitialViewport: rect.bottom > 0 && rect.top < window.innerHeight,
+            visibleAtInitialViewport,
           };
         }), viewport.name);
         imageUsages.push(...usage);
@@ -261,7 +292,14 @@ test('audit every published route for image slots and payloads at mobile and des
       durationMs: resource?.durationMs ?? null,
       renderedSlotWidthMin: knownSlots.length ? Math.min(...knownSlots.map(x => x.renderedWidth)) : null,
       renderedSlotWidthMax: knownSlots.length ? Math.max(...knownSlots.map(x => x.renderedWidth)) : null,
-      selectedPixelsPerCssPixel: usages.filter(x => x.naturalWidth && x.renderedWidth > 0).map(x => ({
+      selectedSourcePixelsPerCssPixel: usages.filter(x => x.selectedSourceWidth && x.renderedWidth > 0).map(x => ({
+        route: x.route,
+        viewportWidth: x.viewport.width,
+        selectedSourceWidth: x.selectedSourceWidth,
+        descriptor: x.selectedSourceDescriptor,
+        ratio: Math.round((x.selectedSourceWidth / x.renderedWidth) * 100) / 100,
+      })),
+      densityCorrectedNaturalWidthPerCssPixel: usages.filter(x => x.naturalWidth && x.renderedWidth > 0).map(x => ({
         route: x.route,
         viewportWidth: x.viewport.width,
         ratio: Math.round((x.naturalWidth / x.renderedWidth) * 100) / 100,
@@ -278,6 +316,11 @@ test('audit every published route for image slots and payloads at mobile and des
     uniqueImageViewportUrls: images.length,
     measuredImageResources: imageResources.filter(item => item.transferBytes > 0).length,
     largeImageCandidates: images.filter(image => image.reviewCandidate).length,
+    imagesBelow90PercentSourceCoverage: images.flatMap(image => image.selectedSourcePixelsPerCssPixel
+      .filter(usage => usage.ratio < 0.9)
+      .map(usage => ({ url: image.url, transferBytes: image.transferBytes, ...usage }))),
+    imagesBelow90PercentSourceCoverageCount: images.reduce((count, image) =>
+      count + image.selectedSourcePixelsPerCssPixel.filter(usage => usage.ratio < 0.9).length, 0),
     reviewThresholdBytes: REVIEW_THRESHOLD_BYTES,
     routesWithVisibleLargeImagesNotHighPriority: routeResults.filter(result => result.visibleUnprioritized.length > 0).map(result => ({
       route: result.route,

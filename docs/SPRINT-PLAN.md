@@ -1042,3 +1042,16 @@ PR #140 merged to `main` at `df812a33675a5d31d4ce388629038cf5a7960105`, completi
 - Enforce zero selected responsive image resources above the audit's 250 KiB review threshold across 37 sitemap routes at 390px mobile and 1280px desktop.
 - Validate manifest controls, quality selection, all required hero variants, PHP 7.4/8.2 checks, Playwright image/performance contracts, package preflight and non-deploying Staging QA on the exact head. Measurements are local synthetic evidence, not production field Core Web Vitals.
 - Preserve source photos, alt text/captions, route structure, SEO metadata, experience content and booking/contact destinations. No merge or deployment.
+
+
+## Sprint 85 — source-size-accurate carousel delivery and truthful image auditing (PR #159)
+
+**Performance objective:** remove the audited room-gallery source under-selection and make responsive-image reports describe the actual selected source pixels and true initial-viewport intersection.
+
+- Replace the room carousel's 33vw desktop hint: the final audit measured a 563px room-photo slot at 1280px, while 33vw advertised only about 422px and selected the 480px derivative. Use the layout's 100vw single-column rule through 1080px and a capped 45vw desktop rule that selects the 800px source for the measured two-column card.
+- Give experience/editorial galleries a 95vw desktop source-size hint to reflect the site-shell gallery slot; keep the rooftop carousel tied to its CSS max-width of 980px.
+- Extend browser coverage to load representative room and experience carousel photos at 390px and 1280px, parse the selected `w` descriptor and require at least 90% source-pixel coverage of the rendered slot.
+- Correct image-payload audit coverage to use the selected srcset width descriptor for source-pixel ratios. Report density-corrected `naturalWidth` separately so a `sizes`-derived CSS width is never presented as the file's physical pixel width.
+- Require both horizontal and vertical viewport intersection when classifying visible images; apply the same rule to the rendered performance baseline so off-canvas carousel slides are not misreported as initial-viewport media.
+- Validate updated source selection, route-wide 37-route/two-viewport audit, LCP preload coverage, all existing guest journeys, PHP 7.4/8.2 Site Checks, package preflight and non-deploying Staging QA on the exact PR head.
+- Preserve the original photography, gallery order, captions, alt text, public routes, booking/contact destinations, SEO metadata and all existing byte budgets. No merge, cPanel upload, staging deployment or production deployment.

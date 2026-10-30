@@ -19,6 +19,22 @@ $photoCarouselVariant = (string) ($photoCarousel['variant'] ?? 'editorial');
 if (!in_array($photoCarouselVariant, ['experience', 'room', 'restaurant', 'editorial'], true)) {
     $photoCarouselVariant = 'editorial';
 }
+
+switch ($photoCarouselVariant) {
+    case 'room':
+        // Room directory cards use one column through 1080px, then two columns.
+        // At 1280px the active image slot is ~563px, not the previous 33vw (~422px).
+        $photoCarouselSizes = '(max-width: 1080px) 100vw, min(45vw, 600px)';
+        break;
+    case 'restaurant':
+        // The rooftop/dining gallery is explicitly capped at 980px in restaurant.css.
+        $photoCarouselSizes = '(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 980px';
+        break;
+    default:
+        // Experience and editorial galleries fill the site shell rather than a 1000px slot.
+        $photoCarouselSizes = '(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 95vw';
+        break;
+}
 $photoCarouselRoot = dirname(__DIR__, 2);
 $photoCarouselImages = [];
 $photoCarouselSourceSlides = isset($photoCarousel['slides']) && is_array($photoCarousel['slides'])
@@ -78,7 +94,7 @@ foreach ($photoCarouselSourceSlides as $photoCarouselSlide) {
         <figure class="photo-carousel-slide" data-photo-carousel-slide>
           <img
             src="<?= htmlspecialchars($photoCarouselImage['src'], ENT_QUOTES, 'UTF-8') ?>"
-            <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($photoCarouselImage['src'], $photoCarouselVariant === 'room' ? '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1000px') : '' ?>
+            <?= function_exists('gj_image_dimension_attributes') ? gj_image_dimension_attributes($photoCarouselImage['src'], $photoCarouselSizes) : '' ?>
             alt="<?= htmlspecialchars($photoCarouselImage['alt'], ENT_QUOTES, 'UTF-8') ?>"
             loading="lazy"
             decoding="async">
@@ -107,6 +123,7 @@ foreach ($photoCarouselSourceSlides as $photoCarouselSlide) {
     $photoCarousel,
     $photoCarouselLabel,
     $photoCarouselVariant,
+    $photoCarouselSizes,
     $photoCarouselRoot,
     $photoCarouselImages,
     $photoCarouselSourceSlides,

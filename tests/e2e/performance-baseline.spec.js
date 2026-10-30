@@ -37,7 +37,12 @@ test('write rendered performance and asset baseline for sitemap routes', async (
       await page.locator('img').evaluateAll(async images => {
         const candidates = images.filter(img => {
           const rect = img.getBoundingClientRect();
-          return img.loading !== 'lazy' || (rect.bottom > 0 && rect.top < window.innerHeight);
+          const style = window.getComputedStyle(img);
+          const intersectsInitialViewport = rect.width > 0 && rect.height > 0
+            && rect.right > 0 && rect.left < window.innerWidth
+            && rect.bottom > 0 && rect.top < window.innerHeight
+            && style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0;
+          return img.loading !== 'lazy' || intersectsInitialViewport;
         });
         await Promise.all(candidates.map(img => img.decode ? img.decode().catch(() => undefined) : Promise.resolve()));
       });
@@ -71,7 +76,10 @@ test('write rendered performance and asset baseline for sitemap routes', async (
           renderedHeight: Math.round(rect.height),
           loading: img.loading || 'eager',
           fetchPriority: img.fetchPriority || 'auto',
-          visibleAtInitialViewport: rect.bottom > 0 && rect.top < window.innerHeight,
+          visibleAtInitialViewport: rect.width > 0 && rect.height > 0
+            && rect.right > 0 && rect.left < window.innerWidth
+            && rect.bottom > 0 && rect.top < window.innerHeight
+            && style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0,
           display: style.display,
         };
       }));
