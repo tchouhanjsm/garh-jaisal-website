@@ -309,7 +309,8 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
                 && preload.imagesizes === img.sizes;
             }
             try {
-              return Boolean(img.src) && new URL(preload.href, BASE_URL).pathname === new URL(img.src, BASE_URL).pathname;
+              const preloadPath = new URL(preload.href, BASE_URL).pathname;
+              return [img.currentSrc, img.src].some(source => Boolean(source) && new URL(source, BASE_URL).pathname === preloadPath);
             } catch {
               return false;
             }
