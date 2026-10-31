@@ -3,39 +3,29 @@ $activePage = 'home';
 $siteConfig = require __DIR__ . '/include/site-config.php';
 $bookingUrl = $siteConfig['booking_url'];
 $rooms = require __DIR__ . '/include/rooms-data.php';
+require_once __DIR__ . '/include/image-metadata.php';
 ?>
 <!doctype html>
 <html lang="en">
 <?php
 $schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $schemaPageUrl = $schemaSiteUrl . '/';
-$buildHeroPreload = static function ($stem, $media, $fallback) {
-    $srcset = [];
-    foreach ([480, 800, 1200] as $candidateWidth) {
-        $candidate = '/img/responsive/v2/' . $stem . '-' . $candidateWidth . '.webp';
-        if (is_file(__DIR__ . $candidate) && !is_link(__DIR__ . $candidate)) {
-            $srcset[] = $candidate . ' ' . $candidateWidth . 'w';
-        }
+$buildHeroPreload = static function ($source, $media) {
+    $descriptor = gj_image_responsive_preload_descriptor($source, '100vw');
+    if (!is_array($descriptor)) {
+        return null;
     }
-    $descriptor = [
-        'href' => $srcset ? strtok($srcset[0], ' ') : $fallback,
-        'media' => $media,
-        'fetchpriority' => 'high',
-    ];
-    if ($srcset) {
-        $descriptor['imagesrcset'] = implode(', ', $srcset);
-        $descriptor['imagesizes'] = '100vw';
-    }
+    $descriptor['media'] = $media;
     return $descriptor;
 };
 $page = [
     'title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
     'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
     'path' => '/',
-    'preload' => [
-        $buildHeroPreload('facade', '(max-width: 767px)', '/img/optimized/v2/facade.webp'),
-        $buildHeroPreload('fort-from-roof', '(min-width: 768px)', '/img/optimized/v2/fort-from-roof.webp'),
-    ],
+    'preload' => array_values(array_filter([
+        $buildHeroPreload('img/optimized/v2/facade.webp', '(max-width: 767px)'),
+        $buildHeroPreload('img/optimized/v2/fort-from-roof.webp', '(min-width: 768px)'),
+    ])),
     'og_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
     'og_description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
     'og_image' => '/img/v2/facade.jpg',

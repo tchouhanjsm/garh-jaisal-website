@@ -57,6 +57,63 @@ $assert(
     gj_image_dimension_attributes('../include/site-config.php') === '',
     'Canonical image helper must fail closed for traversal and non-image paths.'
 );
+
+foreach (['img/rest3.jpg', 'img/jcity.jpg'] as $nativeHeroSource) {
+    $nativeMetadata = gj_local_image_metadata($nativeHeroSource);
+    $nativeCandidates = gj_image_responsive_candidates($nativeHeroSource);
+    $generatedCandidates = [];
+    foreach ($nativeCandidates as $candidate) {
+        if (($candidate['path'] ?? null) !== $nativeHeroSource) {
+            $generatedCandidates[] = $candidate;
+        }
+    }
+
+    // Site Checks do not generate CI-only image derivatives. When candidates are
+    // available, verify the resolver's native-width decision against its 90%
+    // source-coverage rule; Browser E2E exercises the generated-artifact path.
+    if (is_array($nativeMetadata) && $generatedCandidates) {
+        $largestGenerated = $generatedCandidates[count($generatedCandidates) - 1];
+        $needsNativeFallback = ($largestGenerated['width'] / $nativeMetadata['width']) < 0.9;
+        $expectedPath = $needsNativeFallback ? $nativeHeroSource : $largestGenerated['path'];
+        $expectedWidth = $needsNativeFallback ? $nativeMetadata['width'] : $largestGenerated['width'];
+        $largestCandidate = $nativeCandidates[count($nativeCandidates) - 1];
+
+        $assert(
+            ($largestCandidate['path'] ?? null) === $expectedPath
+            && ($largestCandidate['width'] ?? null) === $expectedWidth,
+            'Responsive helper must select the native fallback only when its largest generated derivative covers under 90%: ' . $nativeHeroSource
+        );
+        $nativePreload = gj_image_responsive_preload_descriptor($nativeHeroSource, '100vw');
+        $assert(
+            is_array($nativePreload)
+            && strpos($nativePreload['imagesrcset'], $expectedPath . ' ' . $expectedWidth . 'w') !== false,
+            'Hero preload must use the same final responsive candidate as the rendered srcset: ' . $nativeHeroSource
+        );
+    }
+}
+$roofHero = 'img/roofslide.webp';
+$roofHeroPreload = gj_image_responsive_preload_descriptor($roofHero, '100vw');
+$roofHeroAttributes = gj_image_dimension_attributes($roofHero, '100vw');
+if (is_array($roofHeroPreload)) {
+    $roofSrcset = [];
+    $hasRoofSrcset = preg_match('/\\bsrcset="([^"]+)"/', $roofHeroAttributes, $roofSrcset) === 1;
+    $assert($hasRoofSrcset, 'The 1600px rooftop panorama must expose responsive candidates.');
+    if ($hasRoofSrcset) {
+        $normalize = static function ($value) {
+            $parts = [];
+            foreach (preg_split('/\\s*,\\s*/', trim($value)) as $candidate) {
+                $items = preg_split('/\\s+/', trim($candidate));
+                $parts[] = ltrim($items[0], '/') . ' ' . ($items[1] ?? '');
+            }
+            return implode(', ', $parts);
+        };
+        $assert(
+            $normalize($roofSrcset[1]) === $roofHeroPreload['imagesrcset'],
+            'Rooftop preload and rendered srcset must share the exact verified candidate list.'
+        );
+    }
+}
+
 $assert(is_array($metadata), 'A known local JPEG must return metadata.');
 if (is_array($metadata)) {
     $assert(($metadata['path'] ?? null) === $source, 'Metadata should retain the normalized local path.');
@@ -123,6 +180,8 @@ if (is_string($helperSource)) {
     $assert(strpos($helperSource, 'function gj_image_responsive_candidates') !== false, 'The shared verified candidate resolver must serve responsive markup and preload descriptors.');
     $assert(strpos($helperSource, 'function gj_image_responsive_preload_descriptor') !== false, 'Responsive image preload descriptors must live beside the canonical image metadata helper.');
     $assert(strpos($helperSource, 'gj_local_image_metadata($candidateSource)') !== false, 'Responsive candidates must use path-safe metadata inspection.');
+    $assert(strpos($helperSource, '$sourcePixelCoverage < 0.9') !== false, 'Native source fallback must be added only when the largest derivative leaves less than 90% source-pixel coverage.');
+    $assert(strpos($helperSource, '\'path\' => $sourceMetadata[\'path\']') !== false, 'Native source fallback must retain the verified original path.');
 }
 $headerSource = file_get_contents($root . '/include/header-v2.php');
 $assert(

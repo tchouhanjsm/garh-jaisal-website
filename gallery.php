@@ -9,29 +9,17 @@ $bookingUrl = $siteConfig['booking_url'];
 $schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $schemaPageUrl = $schemaSiteUrl . '/gallery.php';
 
-// The hero media is full-bleed. Keep preload candidates and the rendered image's
-// sizes hint aligned so a 1280px slot does not download the smaller 45vw candidate.
-$galleryHeroSrcsetCandidates = [];
-foreach ([480, 800, 1200] as $galleryHeroWidth) {
-    $galleryHeroCandidate = '/img/responsive/v2/rooftop-dusk-' . $galleryHeroWidth . '.webp';
-    $galleryHeroCandidatePath = __DIR__ . $galleryHeroCandidate;
-    if (is_file($galleryHeroCandidatePath) && !is_link($galleryHeroCandidatePath)) {
-        $galleryHeroSrcsetCandidates[] = $galleryHeroCandidate . ' ' . $galleryHeroWidth . 'w';
-    }
-}
-$galleryHeroPreload = [
-    'href' => '/img/v2/rooftop-dusk.jpg',
-    'fetchpriority' => 'high',
-];
-if ($galleryHeroSrcsetCandidates) {
-    $galleryHeroPreload['imagesrcset'] = implode(', ', $galleryHeroSrcsetCandidates);
-    $galleryHeroPreload['imagesizes'] = '100vw';
-}
+// Use the same verified responsive candidates as the rendered full-bleed hero.
+require_once __DIR__ . '/include/image-metadata.php';
+$galleryHeroPreload = gj_image_responsive_preload_descriptor(
+    'img/v2/rooftop-dusk.jpg',
+    '100vw'
+);
 $page = [
     'title' => 'Gallery | Garh Jaisal Haveli, Jaisalmer Fort',
     'description' => 'Explore photos of heritage rooms, the haveli, rooftop dining and desert experiences at Garh Jaisal Haveli inside Jaisalmer Fort, Jaisalmer.',
     'path' => '/gallery.php',
-    'preload' => [$galleryHeroPreload],
+    'preload' => is_array($galleryHeroPreload) ? [$galleryHeroPreload] : [],
     'og_title' => 'Gallery | Garh Jaisal Haveli, Jaisalmer Fort',
     'og_description' => 'See the rooms, haveli, desert experiences and dining at Garh Jaisal Haveli.',
     'og_image' => '/img/s1.jpg',

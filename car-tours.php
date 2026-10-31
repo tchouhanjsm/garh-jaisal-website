@@ -9,6 +9,9 @@ $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] 
 <html lang="en">
 <?php
 require_once __DIR__ . '/include/schema.php';
+require_once __DIR__ . '/include/image-metadata.php';
+$cityTourHeroSizes = '(max-width: 1000px) 100vw, 1000px';
+$cityTourHeroPreload = gj_image_responsive_preload_descriptor('img/jcity.jpg', $cityTourHeroSizes);
 $faqItems = [
     ['question' => "Which tour ideas can I ask about?", 'answer' => "The six researched themes are examples, not a complete menu. Use the custom itinerary builder to ask about other places or combine interests. All proposed routes remain enquiries until the hotel confirms feasibility and current details."],
     ['question' => "Can the hotel arrange a car for arrival?", 'answer' => "The hotel can arrange a car for arrival or a desert day. Confirm the route, pickup arrangement and current price directly with the hotel."],
@@ -24,6 +27,7 @@ $page = [
     'title' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
     'description' => 'Explore guided Jaisalmer city tours or enquire about car arrangements. Share your route and dates so the hotel can confirm options.',
     'path' => '/car-tours.php',
+    'preload' => is_array($cityTourHeroPreload) ? [$cityTourHeroPreload] : [],
     'og_title' => 'Car & City Tours from Jaisalmer | Garh Jaisal Haveli',
     'og_description' => 'Explore guided Jaisalmer city tours or enquire about car arrangements. Share your route and dates so the hotel can confirm options.',
     'og_image' => '/img/jcity.jpg',
@@ -52,10 +56,10 @@ require __DIR__ . '/include/page-head.php';
 ?>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
-<main id="main-content" tabindex="-1">
+<main id="main-content" class="car-tours-page" tabindex="-1">
   <section class="package-hero">
     <div class="package-hero-media">
-      <img src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg', '100vw') ?> alt="View over Jaisalmer’s historic city from the fort edge" fetchpriority="high" decoding="async">
+      <img src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg', $cityTourHeroSizes) ?> alt="View over Jaisalmer’s historic city from the fort edge" fetchpriority="high" decoding="async">
       <div class="package-hero-overlay"></div>
     </div>
     <div class="site-shell package-hero-content">

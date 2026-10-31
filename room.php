@@ -68,31 +68,17 @@ $faqItems = [
     ['question' => "Do all rooms have the same facilities?", 'answer' => "No. Facilities vary by room; compare each room’s listed features before choosing."],
     ['question' => "Where can I find arrival instructions?", 'answer' => "The Directions page explains how to reach the fort and the final walk to the haveli."],
 ];
-$buildRoomHeroPreload = static function () {
-    $srcset = [];
-    foreach ([480, 800, 1200] as $candidateWidth) {
-        $candidate = '/img/responsive/v2/sitting-room-' . $candidateWidth . '.webp';
-        if (is_file(__DIR__ . $candidate) && !is_link(__DIR__ . $candidate)) {
-            $srcset[] = $candidate . ' ' . $candidateWidth . 'w';
-        }
-    }
-
-    $descriptor = [
-        'href' => $srcset ? strtok($srcset[0], ' ') : '/img/optimized/v2/sitting-room.webp',
-        'fetchpriority' => 'high',
-    ];
-    if ($srcset) {
-        $descriptor['imagesrcset'] = implode(', ', $srcset);
-        $descriptor['imagesizes'] = '100vw';
-    }
-    return $descriptor;
-};
+require_once __DIR__ . '/include/image-metadata.php';
+$roomHeroPreload = gj_image_responsive_preload_descriptor(
+    'img/optimized/v2/sitting-room.webp',
+    '100vw'
+);
 
 $page = [
     'title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'description' => 'Compare heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort. Review each room\'s features and check availability for your dates.',
     'path' => '/room.php',
-    'preload' => [$buildRoomHeroPreload()],
+    'preload' => is_array($roomHeroPreload) ? [$roomHeroPreload] : [],
     'og_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'og_description' => 'Compare heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort. Review each room\'s features and check availability for your dates.',
     'og_image' => '/img/v2/sitting-room.jpg',

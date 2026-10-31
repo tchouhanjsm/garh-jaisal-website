@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 const BASE_URL = 'http://127.0.0.1:8080';
-const RESPONSIVE_WIDTHS = [480, 800, 1200];
+const RESPONSIVE_WIDTHS = [480, 800, 1200, 1280, 1366, 1440, 1800];
 const HEROES = [
   {
     route: '/',
@@ -37,7 +37,7 @@ const HEROES = [
 ];
 
 function responsiveCandidateForPath(pathname) {
-  const match = pathname.match(/\/img\/responsive\/(?:[^/]+\/)*([^/]+)-(480|800|1200)\.webp$/);
+  const match = pathname.match(/\/img\/responsive\/(?:[^/]+\/)*([^/]+)-(480|800|1200|1280|1366|1440|1800)\.webp$/);
   return match ? { stem: match[1], width: Number(match[2]) } : null;
 }
 
@@ -162,6 +162,16 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
             matchingPreloads[0].imagesizes,
             hero.route + ' preload sizes must match the rendered image source sizes'
           ).toBe(state.sizes);
+        }
+        if (state.srcset && matchingPreloads[0].imagesrcset) {
+          const normalizeCandidates = value => value.split(',').map(item => {
+            const candidate = item.trim();
+            return candidate.startsWith('/') ? candidate.slice(1) : candidate;
+          }).join(', ');
+          expect(
+            normalizeCandidates(matchingPreloads[0].imagesrcset),
+            hero.route + ' preload candidates must exactly match the rendered responsive source'
+          ).toBe(normalizeCandidates(state.srcset));
         }
 
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);

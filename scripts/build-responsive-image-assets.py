@@ -30,6 +30,19 @@ def output_path(source_relative: str, target_width: int) -> Path:
     return OUTPUT_ROOT / relative.parent / (relative.stem + f"-{target_width}.webp")
 
 
+def target_widths_for_source(
+    manifest: dict[str, Any],
+    source_relative: str,
+    default_widths: list[int] | None = None,
+) -> list[int]:
+    """Merge configured (or explicitly supplied) global widths with source-specific widths."""
+    configured_widths = manifest.get("target_widths")
+    if configured_widths is None:
+        configured_widths = default_widths if default_widths is not None else []
+    additional = manifest.get("source_target_widths", {}).get(source_relative, [])
+    return sorted(set(configured_widths) | set(additional))
+
+
 DEFAULT_REQUIRED_HERO_SOURCES = (
     "img/v2/facade.jpg",
     "img/v2/fort-from-roof.jpg",
@@ -38,15 +51,22 @@ DEFAULT_REQUIRED_HERO_SOURCES = (
 
 
 def required_hero_variant_paths(manifest: dict[str, Any], widths: list[int]) -> set[str]:
-    """Return generated paths that must exist for each manifest-declared high-intent hero."""
+    """Require only derivatives that can be generated without upscaling the source."""
     required_sources = manifest.get("required_hero_sources")
     if required_sources is None:
         required_sources = [source for source in DEFAULT_REQUIRED_HERO_SOURCES if source in manifest.get("sources", [])]
-    return {
-        output_path(source, width).relative_to(ROOT).as_posix()
-        for source in required_sources
-        for width in widths
-    }
+
+    required: set[str] = set()
+    for source in required_sources:
+        with Image.open(ROOT / source) as opened:
+            source_width = opened.width
+        for width in target_widths_for_source(manifest, source, widths):
+            # An original at or below the target width is its own best candidate.
+            # The PHP resolver exposes that verified source at its native descriptor.
+            if width >= source_width:
+                continue
+            required.add(output_path(source, width).relative_to(ROOT).as_posix())
+    return required
 
 
 def load_manifest() -> dict[str, Any]:
@@ -64,7 +84,22 @@ def load_manifest() -> dict[str, Any]:
     if len(sources) != len(set(sources)):
         raise ValueError("sources must not contain duplicates")
 
+    source_target_widths = manifest.get("source_target_widths", {})
+    if not isinstance(source_target_widths, dict):
+        raise ValueError("source_target_widths must be a source-to-width-list object")
+    for source, additional_widths in source_target_widths.items():
+        if source not in sources:
+            raise ValueError(f"source_target_widths source is not listed in sources: {source!r}")
+        if (
+            not isinstance(additional_widths, list)
+            or not additional_widths
+            or any(isinstance(width, bool) or not isinstance(width, int) or width < 1 for width in additional_widths)
+            or additional_widths != sorted(set(additional_widths))
+        ):
+            raise ValueError(f"Invalid source_target_widths entry for {source!r}: widths must be positive, unique and sorted")
+
     output_paths: set[str] = set()
+    source_width_by_output: dict[str, int] = {}
     for source in sources:
         if not isinstance(source, str):
             raise ValueError(f"Unsafe or unsupported source path: {source!r}")
@@ -81,11 +116,16 @@ def load_manifest() -> dict[str, Any]:
         candidate = ROOT / source_path
         if not candidate.is_file() or candidate.is_symlink():
             raise FileNotFoundError(f"Manifest source is missing or is a symlink: {source}")
-        for width in widths:
+        with Image.open(candidate) as opened:
+            source_width = opened.width
+        if source_width < 1:
+            raise ValueError(f"Manifest source has an invalid width: {source}")
+        for width in target_widths_for_source(manifest, source):
             generated = output_path(source, width).relative_to(ROOT).as_posix()
             if generated in output_paths:
                 raise ValueError(f"Manifest sources collide on generated output path: {generated}")
             output_paths.add(generated)
+            source_width_by_output[generated] = source_width
 
     if "required_hero_sources" in manifest:
         required_hero_sources = manifest["required_hero_sources"]
@@ -128,6 +168,11 @@ def load_manifest() -> dict[str, Any]:
             raise ValueError(f"variant_max_bytes path is not a generated manifest candidate: {variant_path!r}")
         if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or max_bytes < 1:
             raise ValueError(f"Invalid byte budget for {variant_path!r}: {max_bytes!r}")
+        output_width = int(Path(variant_path).stem.rsplit("-", 1)[-1])
+        if output_width >= source_width_by_output[variant_path]:
+            raise ValueError(
+                f"Byte budget cannot target a non-generatable no-upscale candidate: {variant_path!r}"
+            )
 
     budget_quality_floor = manifest.get("budget_quality_floor", 58)
     budget_quality_step = manifest.get("budget_quality_step", 2)
@@ -137,7 +182,10 @@ def load_manifest() -> dict[str, Any]:
         raise ValueError("Invalid budget_quality_step setting")
     budgeted_sources = {
         source for source in sources
-        if any(output_path(source, width).relative_to(ROOT).as_posix() in variant_max_bytes for width in widths)
+        if any(
+            output_path(source, width).relative_to(ROOT).as_posix() in variant_max_bytes
+            for width in target_widths_for_source(manifest, source)
+        )
     }
     for source in budgeted_sources:
         starting_quality = quality_overrides.get(source, quality)
@@ -156,7 +204,6 @@ def quality_for_source(manifest: dict[str, Any], source_relative: str) -> int:
 
 def summarize_variant_coverage(rows: list[dict[str, Any]], widths: list[int]) -> dict[str, Any]:
     """Report generated-candidate coverage and verify skipped widths retain source fallbacks."""
-    width_count = len(widths)
     variants = [variant for row in rows for variant in row.get("variants", [])]
     generated = [variant for variant in variants if variant.get("status") == "generated"]
     skipped = [variant for variant in variants if variant.get("status") != "generated"]
@@ -177,6 +224,7 @@ def summarize_variant_coverage(rows: list[dict[str, Any]], widths: list[int]) ->
             and all(isinstance(value, int) and value > 0 for value in dimensions)
         )
         row_variants = row.get("variants", [])
+        row_width_count = len(row.get("target_widths", widths))
         generated_widths = sorted(
             int(item["target_width"]) for item in row_variants
             if item.get("status") == "generated" and isinstance(item.get("target_width"), int)
@@ -188,10 +236,10 @@ def summarize_variant_coverage(rows: list[dict[str, Any]], widths: list[int]) ->
         row["generated_widths"] = generated_widths
         row["fallback_widths"] = fallback_widths
         row["responsive_variant_coverage_percent"] = round(
-            len(generated_widths) / width_count * 100, 3
-        ) if width_count else 100.0
+            len(generated_widths) / row_width_count * 100, 3
+        ) if row_width_count else 100.0
         row["source_fallback_verified"] = verified
-        if len(generated_widths) == width_count:
+        if len(generated_widths) == row_width_count:
             complete_sources += 1
         elif generated_widths:
             partial_sources += 1
@@ -200,7 +248,7 @@ def summarize_variant_coverage(rows: list[dict[str, Any]], widths: list[int]) ->
         if verified:
             verified_fallback_opportunities += len(fallback_widths)
 
-    opportunities = len(rows) * width_count
+    opportunities = sum(len(row.get("target_widths", widths)) for row in rows)
     fallback_opportunities = len(skipped)
     return {
         "variant_opportunities": opportunities,
@@ -428,8 +476,9 @@ def build() -> dict[str, Any]:
             source_bytes = source.stat().st_size
             source_format = opened.format or source.suffix.lstrip(".").upper()
 
+        source_widths = target_widths_for_source(manifest, source_relative)
         variants = []
-        for width in widths:
+        for width in source_widths:
             path = output_path(source_relative, width)
             relative_output_path = path.relative_to(ROOT).as_posix()
             source_quality = quality_for_source(manifest, source_relative)
@@ -488,6 +537,7 @@ def build() -> dict[str, Any]:
             "source_dimensions": source_dimensions,
             "source_bytes": source_bytes,
             "quality": source_quality,
+            "target_widths": source_widths,
             "variants": variants,
         }
         rows.append(row)
@@ -503,7 +553,8 @@ def build() -> dict[str, Any]:
             + ", ".join(missing_hero_variants)
         )
 
-    review_sheet = build_review_sheet(rows, widths)
+    review_widths = sorted({width for row in rows for width in row.get("target_widths", widths)})
+    review_sheet = build_review_sheet(rows, review_widths)
     coverage_metrics = summarize_variant_coverage(rows, widths)
     enforced_variant_budgets = [
         {
@@ -555,6 +606,7 @@ def build() -> dict[str, Any]:
             "quality": quality,
             "quality_overrides": dict(manifest.get("quality_overrides", {})),
             "variant_max_bytes": dict(sorted(manifest.get("variant_max_bytes", {}).items())),
+            "source_target_widths": dict(sorted(manifest.get("source_target_widths", {}).items())),
             "method": method,
             "minimum_savings_percent": minimum_savings,
             "upscaling": False,
@@ -603,6 +655,7 @@ def main() -> int:
                 "source_count": len(manifest["sources"]),
                 "source_bytes": total_source_bytes,
                 "target_widths": manifest["target_widths"],
+                "source_target_widths": manifest.get("source_target_widths", {}),
                 "minimum_savings_percent": manifest["minimum_savings_percent"],
                 "manifest": MANIFEST_PATH.relative_to(ROOT).as_posix(),
                 "assets_generated": False,

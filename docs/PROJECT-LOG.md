@@ -2,15 +2,15 @@
 
 > Tracked source and exact-commit CI are authoritative. Owner retains production release approval.
 
-## Latest state — 30 October 2026
+## Latest state — 31 October 2026
 
 | Item | Value |
 |---|---|
-| Verified main SHA | da806a67f7369d33eb15969d28c0386819cef7dc — PR #159 merged |
-| Active implementation | Premium homepage and arrival experience — Milestones 1–2 + Phases 3–4 on `feature/home-premium-storytelling-20261030` |
-| Working branch | `feature/home-premium-storytelling-20261030` (based on `da806a67f7369d33eb15969d28c0386819cef7dc`) |
-| Scope | Premium homepage storytelling, direct-booking CTA measurement, and route-complete Directions/arrival experience with driver-ready copy, responsive art direction and booking-intent coverage |
-| Release boundary | Owner retains merge and release approval; no cPanel upload, staging deployment or production deployment |
+| Verified main SHA | e858fa794a71bd68d1940bb49f6b382e2aec3dfd — PR #161 merged 31 October 2026 |
+| Active implementation | Release provenance and cPanel staging delivery assurance (PR #162, successor to retained PR #160 after PR #161 merged) |
+| Working branch | `feature/staging-release-provenance-delivery-20261030` (PR #162; base main `e858fa794a71bd68d1940bb49f6b382e2aec3dfd`) |
+| Scope | Exact-SHA package marker, reproducible ZIP/manifest/checksum, 11-route guest-journey staging smoke, and read-only real-host responsive-image/cache diagnostics |
+| Release boundary | Owner retains staging upload, merge and production approval; PR checks do not upload or submit enquiries |
 | Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667258) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667379) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667299) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667390) — all passed on 15afdf46506bdaf3799bde97f47e3296210bb898 |
 
 ## Recent guest-journey milestones
@@ -174,3 +174,100 @@ Regression coverage verifies action count and destination parity on the live exp
 - Add a PHP source contract, expanded multi-viewport E2E, progressive-enhancement coverage and the Directions sitemap freshness update.
 - Preserve the public route, canonical/schema, map pin/embed, phone/WhatsApp/enquiry destinations, business facts and original photographs. No cPanel upload, staging deployment or production release is included.
 - Exact-head CI must pass after the batch commit; owner visual review remains a release gate.
+
+
+## PR #161 — completed homepage and arrival milestones
+
+- PR #161 merged on 31 October 2026 at e858fa794a71bd68d1940bb49f6b382e2aec3dfd.
+- Delivered premium homepage storytelling, the three measured homepage booking CTAs, privacy-safe campaign attribution and the complete Directions visual/arrival experience with a driver-ready copy action.
+- The merge is repository integration only. It is not evidence of a cPanel upload, live staging verification or production deployment.
+
+## PR #162 — release provenance and cPanel staging delivery assurance (successor to PR #160)
+
+- PR #160 was closed without merging after PR #161 merged. PR #162 carries the retained Sprint 86 release-provenance work as the only open implementation PR on the existing branch.
+- Preserve the generated exact-SHA release marker, package manifest/checksum, no-store/noindex marker rules and external staging read-only image/cache diagnostics.
+- Sprint 87: widen the local staging smoke matrix to 11 guest-facing routes and assert the merged homepage booking paths plus the Directions driver note, exact map pin and arrival booking CTA at mobile/desktop widths.
+- Sprint 88: exercise the actual package builder in a temporary clean Git checkout; extract the archive marker, verify marker/manifest/archive/sidecar hashes, assert exclusion of the server-only config, and check byte-identical ZIP output for repeat builds of one commit.
+- Sprint 89: exact-head validation of PHP/site contracts, deployment-package unit/preflight, local staging route smoke, and Browser E2E/screenshots. Real-host image HEAD/cache verification remains owner-dispatched and read-only.
+- No cPanel upload, external staging deployment, enquiry submission or production release is part of this PR.
+
+
+### Staging QA RCA — PR #162 initial visibility audit
+
+The first expanded non-deploying staging run exposed an existing Playwright callback-boundary bug: the image metadata callback executed in the browser context but referenced the Node-side `initialImageVisibility` array as an undeclared closure variable. Pass the captured array explicitly as the second `locator.evaluateAll` argument and read its zero-based index inside the page context. This preserves the measured first-viewport state for high-priority image and real-host cache-probe decisions; it does not change page rendering or guest-facing behavior.
+
+
+### Responsive image RCA — Rooftop and Car & City Tours desktop slots
+
+The expanded staging route matrix exposed three large desktop image slots whose srcsets stopped at 800w. Rooftop's banner source is 1180px wide, so a 1200px derivative would be an invalid upscale; the shared PHP image resolver adds the verified original source as the native-width fallback when the best generated derivative covers less than 90% of the source width. The Rooftop hero rest5.jpg and Car & City Tours jcity.jpg sources are no wider than 1200px, so requiring 1200w derivatives for either was incorrect; their originals are the truthful native-width candidates. Smaller 480/800w derivatives remain generated where they can be made without upscaling. The browser contract verifies the actually selected candidates and at least 90% slot coverage at 1280px; the staging smoke retains the sitewide threshold. Original image files, aspect ratios, crop intent, text and public URLs are unchanged.
+
+
+## Sprint 90 — source-aware responsive requirements and native-width delivery (PR #162)
+
+The deployment, browser and staging workflows were blocked by two false manifest requirements: img/responsive/jcity-1200.webp and img/responsive/rest5-1200.webp had hard byte budgets even though neither original is wider than 1200px. The encoder correctly returned skipped-no-upscale; the manifest then treated those safe skips as fatal budget failures.
+
+- Changed required-hero coverage to require only targets strictly below each decoded original width.
+- Added manifest validation that rejects hard byte budgets on any width target that cannot be generated without upscaling.
+- Removed both impossible jcity-1200 and rest5-1200 budgets while retaining their generated smaller derivatives and the PHP resolver's native original-source fallbacks.
+- Updated desktop Browser E2E to assert the original rest5.jpg and jcity.jpg URLs and their true intrinsic width descriptors, with the same 90% minimum source-pixel coverage.
+- Added PHP parity coverage proving the Rooftop and Car & City Tours responsive srcsets and preloads both include the same native-source candidates.
+- The original photograph, crop, page copy, routes and booking destinations are unchanged. This is delivery-pipeline correctness, not a request to upscale or replace the photo.
+
+
+## Phase 3 — High-resolution responsive delivery and exact preload parity (PR #162)
+
+**Finding:** the 37-route/two-viewport image audit showed that multiple hero sources stopped at 1200w. Chromium therefore selected 1366–2000px originals for wide desktop slots, with several selected resources above the 250 KiB review threshold. Homepage and Gallery had independently assembled preload lists, creating a risk of preload/rendered-srcset divergence.
+
+- Add source-specific 1280w candidates for 1366px photos and 1280/1440/1800w candidates for selected 1600–2000px hero masters. Do not increase the global derivative count for all image sources.
+- Enforce a 250,000-byte maximum on each additional high-resolution WebP with the existing adaptive quality ladder. Preserve original assets, aspect ratios, color profiles and the no-upscale rule.
+- Extend the shared PHP candidate resolver to approved responsive widths and use its candidate list for Homepage, Gallery and Rooftop preload descriptors as well as rendered image srcset.
+- Use the reviewed 1600×575 roofslide.webp panorama for the full-bleed Rooftop hero; keep rest3.jpg and jcity.jpg in maximum-1000px layouts so the 900px originals are not stretched.
+- Add source-specific generator validation, per-source coverage reporting, browser candidate/preload parity and PHP contracts.
+- Local Chromium measurements are engineering evidence only, not field Core Web Vitals. No cPanel upload, external staging deployment, enquiry submission or production release is included.
+
+
+### Phase 3 RCA — source-width-aware facade target
+
+The first image-generator run correctly rejected 1440w for `img/v2/facade.jpg`. Its decoded dimensions are 1333×2000, so 1280w is the largest valid added candidate. Removed 1440w/1800w target entries and budgets for this one source; all 2000px masters retain 1280/1440/1800 and other 1366px masters retain only 1280. The generator's validation is unchanged: no upscale candidate or byte budget is accepted.
+
+
+### Phase 3 payload-budget calibration
+
+The first generated 1280w facade candidate missed the 250,000-byte limit by 7,328 bytes at the pre-existing quality floor of 58. Lower the adaptive floor to 56 and cap this single candidate at 256,000 bytes (250 KiB); all other additional high-resolution candidates remain at 250,000 bytes. The source-pixel target and source photo are unchanged.
+
+
+## Phase 4 — Source-aware image delivery and preload parity (PR #162)
+
+**RCA:** the PR #162 browser artifact measured three oversized Swiss Tent gallery downloads: `Tent.jpeg` (327,101 B), `CampingInJsm.jpeg` (307,943 B) and `tent_deluxe.jpeg` (287,688 B). Each source is 1600px wide. The page advertises a 95vw desktop slot; at 1280px that is approximately 1216px, slightly wider than the existing 1200w derivative. Chromium therefore chose the 1600w JPEG originals. The remediation adds budgeted 1280w and 1440w derivatives for those three sources and retains the 250,000-byte per-candidate cap. It does not weaken the route-wide 256,000-byte (250 KiB) audit threshold.
+
+- Corrected `target_widths_for_source()` and `required_hero_variant_paths()` so the explicit width list is honoured when a caller supplies a minimal manifest fragment without `target_widths`.
+- Added source-specific 1280w/1440w candidates and hard budgets for the three Swiss Tent gallery photos. Existing JPEG originals and editorial ordering/alt text/captions remain untouched.
+- Removed duplicated Room and Gallery preload assembly. Both pages now use the same validated PHP candidate resolver as their actual hero `img` markup. The Room preload uses the optimized source actually rendered by the page; Gallery uses its rooftop-dusk source. This guarantees identical candidate lists and sizes hints instead of independently maintained three-width lists.
+- Strengthened LCP preload parity and the Gallery 1280w source-selection assertion.
+- Updated editorial media readiness to permit only an exact same-origin native source as the final fallback, and only when its width descriptor matches the verified intrinsic source width. All other srcset paths remain restricted to validated responsive derivatives.
+- Expanded the Swiss Tent mobile/desktop carousel source matrix. The general image payload audit remains strict and must report zero selected resources above 250 KiB and zero image slots below 90% source-pixel coverage.
+- Validation required on the exact final PR head: PHP 7.4/8.2, responsive image generator/budget tests, Browser E2E/screenshots, package preflight/reproducibility and 11-route non-deploying Staging QA. No live-host deployment or production release is part of this phase.
+
+
+### Phase 4 sitemap freshness RCA
+
+- The exact-head PHP 7.4/8.2 sitemap contract correctly identified that `room.php` had changed on 31 October while its committed `lastmod` remained 29 October. Updated only the Room entry to 31 October 2026; no bulk sitemap date refresh or unrelated URL date change was applied.
+
+
+### Package inventory RCA — source-specific image candidates
+
+- The first package preflight after adding Swiss Tent 1280w/1440w derivatives correctly rejected them because `get_generated_responsive_paths()` still built its allowed-path set from global target widths only. It now validates `source_target_widths` against the source allowlist and unions those widths for that source only. Unit coverage verifies the 1280w/1440w budgeted assets are selected without permitting arbitrary output files.
+- Browser E2E's first run also caught a malformed escape in the added LCP preload-candidate normalizer. Replaced the slash regex with explicit leading-slash normalization; exact candidate-list equality remains enforced.
+
+
+## Phase 5 — Interaction-aware carousel image delivery and accessibility (PR #162)
+
+**Root cause from Browser E2E run 857:** the source-selection test located one of the later Swiss Tent carousel images after the carousel's DOMContentLoaded enhancement had intentionally hidden inactive slides. It then called `scrollIntoViewIfNeeded()` on a hidden slide and timed out. The image resolver, responsive candidate list and 90% coverage threshold were not the cause. The test did not reproduce the guest interaction required to reveal the target photo.
+
+- Rework the mobile/desktop source-selection matrix to locate the target slide index and advance through the same Next control guests use. Only after the target is visible does the test measure currentSrc, width descriptor, sizes and actual rendered width.
+- Enhance the shared carousel so an explicitly selected slide is decoded after a click or arrow-key action. Keep initial loading lazy, do not preload hidden/adjacent images on page load, and do not auto-advance.
+- Extend browser coverage for active/inactive hidden and aria-hidden state, exactly one visible slide, loaded selected images, keyboard navigation, wraparound and the live Photo N of M status.
+- Add a PHP source contract for the shared renderer's meaningful alt text, path validation, intrinsic dimension helper, lazy loading, asynchronous decoding and hidden-until-enhanced controls; run it in PHP 7.4 and 8.2 CI.
+- Preserve the no-JavaScript behavior: all curated slides remain visible and controls remain hidden when the script does not execute.
+- Preserve source photographs, order, captions, routes, responsive candidate budgets, preload parity, booking destinations and site content. This phase changes carousel interaction/loading behavior only after explicit guest input.
+- Fresh exact-head Site Checks, Browser E2E/screenshots, package integrity/reproducibility and non-deploying Staging QA are required. No cPanel upload or production deployment is authorized.
