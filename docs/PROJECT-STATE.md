@@ -318,3 +318,8 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 - Update the Gallery full-bleed hero contract to its actual selected 1280w candidate; extend carousel coverage for the three Swiss Tent images at mobile and desktop widths.
 - Keep the route-wide 250 KiB selected-resource audit and 90% source-pixel coverage gate. Do not relax payload thresholds to conceal large originals.
 - No route, crop, image original, alt text, captions, booking destination, business fact, map or public metadata is changed. Exact-head PHP 7.4/8.2, Browser E2E/screenshots, package reproducibility and non-deploying Staging QA remain release gates. No cPanel upload, external staging deployment or production release is included.
+
+
+### Phase 4 sitemap freshness
+
+- Updated only `/room.php` to the 31 October 2026 Git source date because the shared Room hero preload now uses the responsive image resolver. All other sitemap dates remain unchanged.

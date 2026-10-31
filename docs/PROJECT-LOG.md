@@ -247,3 +247,8 @@ The first generated 1280w facade candidate missed the 250,000-byte limit by 7,32
 - Updated editorial media readiness to permit only an exact same-origin native source as the final fallback, and only when its width descriptor matches the verified intrinsic source width. All other srcset paths remain restricted to validated responsive derivatives.
 - Expanded the Swiss Tent mobile/desktop carousel source matrix. The general image payload audit remains strict and must report zero selected resources above 250 KiB and zero image slots below 90% source-pixel coverage.
 - Validation required on the exact final PR head: PHP 7.4/8.2, responsive image generator/budget tests, Browser E2E/screenshots, package preflight/reproducibility and 11-route non-deploying Staging QA. No live-host deployment or production release is part of this phase.
+
+
+### Phase 4 sitemap freshness RCA
+
+- The exact-head PHP 7.4/8.2 sitemap contract correctly identified that `room.php` had changed on 31 October while its committed `lastmod` remained 29 October. Updated only the Room entry to 31 October 2026; no bulk sitemap date refresh or unrelated URL date change was applied.
