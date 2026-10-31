@@ -158,7 +158,7 @@ if (is_string($helperSource)) {
     $assert(strpos($helperSource, 'function gj_image_responsive_preload_descriptor') !== false, 'Responsive image preload descriptors must live beside the canonical image metadata helper.');
     $assert(strpos($helperSource, 'gj_local_image_metadata($candidateSource)') !== false, 'Responsive candidates must use path-safe metadata inspection.');
     $assert(strpos($helperSource, '$sourcePixelCoverage < 0.9') !== false, 'Native source fallback must be added only when the largest derivative leaves less than 90% source-pixel coverage.');
-    $assert(strpos($helperSource, "'path' => $sourceMetadata['path']") !== false, 'Native source fallback must retain the verified original path.');
+    $assert(strpos($helperSource, '\'path\' => $sourceMetadata[\'path\']') !== false, 'Native source fallback must retain the verified original path.');
 }
 $headerSource = file_get_contents($root . '/include/header-v2.php');
 $assert(
