@@ -4,7 +4,7 @@ Last updated: 31 October 2026.
 
 ## Current objective
 
-Deliver a premium, transparent guest journey and a verifiable cPanel staging release on the existing plain-PHP stack. PR #161 has merged the homepage storytelling, direct-booking measurement and complete Directions/arrival experience. The active release-engineering batch binds each deployment archive to its exact Git SHA and verifies rendered guest journeys, responsive asset selection, real-host image content types and cache lifetime before production approval.
+Deliver a premium, transparent guest journey and a verifiable cPanel staging release on the existing plain-PHP stack. PR #161 has merged the homepage storytelling, direct-booking measurement and complete Directions/arrival experience. The active release-engineering batch binds each deployment archive to its exact Git SHA, verifies rendered guest journeys, enforces source-appropriate large-slot image candidates, and checks real-host image content types/cache lifetime before production approval.
 
 ## Verified baseline after PR #155
 
@@ -266,3 +266,11 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 - Sprint 88 — package integrity and reproducibility: extract the generated marker from the ZIP, match it to the package manifest and sidecar checksum, and prove the same clean commit produces the same ZIP hash. Reject a build when GITHUB_SHA differs from HEAD.
 - Real-host delivery gate: only an owner-dispatched Staging QA run with the HTTPS staging origin and package SHA may assert host-served provenance and image cache headers. The diagnostic uses bounded, read-only HTTP HEAD requests, checks image content type/status and at least seven days of effective cache lifetime, and records responsive candidate/preload parity and source-pixel coverage.
 - All PR checks remain non-deploying. No cPanel upload, enquiry submission, staging deployment or production release is included.
+
+
+## Active implementation — PR #162 Phase 2: Full-width guest-image delivery
+
+- Require budgeted 1200w WebP candidates for the 1280px Rooftop and Car & City Tours hero originals; keep per-asset byte ceilings and the existing quality floor.
+- For source images whose original width is below the 1200px target, never upscale. The shared PHP resolver adds the native original as a final width-descriptor candidate when the largest generated derivative would cover less than 90% of the source width.
+- Assert selected source width, exact candidate URL and >=90% slot coverage for the three audited Rooftop/Car & City slots at 1280px. The 11-route staging smoke independently enforces the same 90% coverage rule.
+- Original photography, public routes, existing crop/aspect behavior, booking links and editorial copy remain unchanged. PR checks are local/non-deploying.

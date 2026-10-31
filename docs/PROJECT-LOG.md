@@ -195,3 +195,8 @@ Regression coverage verifies action count and destination parity on the live exp
 ### Staging QA RCA — PR #162 initial visibility audit
 
 The first expanded non-deploying staging run exposed an existing Playwright callback-boundary bug: the image metadata callback executed in the browser context but referenced the Node-side `initialImageVisibility` array as an undeclared closure variable. Pass the captured array explicitly as the second `locator.evaluateAll` argument and read its zero-based index inside the page context. This preserves the measured first-viewport state for high-priority image and real-host cache-probe decisions; it does not change page rendering or guest-facing behavior.
+
+
+### Responsive image RCA — Rooftop and Car & City Tours desktop slots
+
+The expanded staging route matrix exposed three 1280px desktop image slots whose srcsets stopped at 800w. Rooftop's banner original is 1180px wide, so a 1200px derivative would be an invalid upscale; the shared PHP image resolver now adds the verified original source as the final width-descriptor fallback when the best generated derivative covers less than 90% of the source width. Rooftop hero and Car & City Tours hero originals are 1280px wide, so their 1200w WebP variants are now required manifest assets with explicit byte ceilings and quality-budget fallback. The browser contract verifies the actually selected candidates and at least 90% slot coverage at 1280px; the staging smoke retains the sitewide threshold. Original image files, aspect ratios, crop intent, text and public URLs are unchanged.

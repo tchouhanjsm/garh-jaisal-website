@@ -177,3 +177,68 @@ test('room and experience carousel source candidates cover their rendered image 
     }
   }
 });
+
+
+test('wide rooftop and city-tour hero slots select source-appropriate desktop candidates', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Run large source-selection checks once at a controlled desktop viewport.');
+  test.setTimeout(60_000);
+
+  const cases = [
+    {
+      route: '/roof.php',
+      selector: '.page-hero-media img[src="img/rest5.jpg"]',
+      expectedPath: '/img/responsive/rest5-1200.webp',
+      expectedWidth: 1200,
+    },
+    {
+      route: '/roof.php',
+      selector: '.roof-banner img[src="img/rest3.jpg"]',
+      expectedPath: '/img/rest3.jpg',
+      expectedWidth: 1180,
+    },
+    {
+      route: '/car-tours.php',
+      selector: '.package-hero-media img[src="img/jcity.jpg"]',
+      expectedPath: '/img/responsive/jcity-1200.webp',
+      expectedWidth: 1200,
+    },
+  ];
+
+  for (const item of cases) {
+    const response = await page.goto(BASE_URL + item.route, { waitUntil: 'domcontentloaded' });
+    expect(response, item.route + ' should return the desktop image markup').not.toBeNull();
+    expect(response.status()).toBe(200);
+
+    const image = page.locator(item.selector);
+    await expect(image).toHaveCount(1);
+    await expect(image).toHaveAttribute('srcset', /1200w|1180w/);
+    await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 15_000 }).toBe(true);
+
+    const selected = await image.evaluate(img => {
+      const currentPath = new URL(img.currentSrc || img.src, document.baseURI).pathname;
+      const descriptor = (img.getAttribute('srcset') || '').split(',').map(candidate => {
+        const parts = candidate.trim().split(/\s+/);
+        try {
+          return new URL(parts[0], document.baseURI).pathname === currentPath
+            ? { path: currentPath, width: Number((parts[1] || '').replace(/w$/, '')) }
+            : null;
+        } catch {
+          return null;
+        }
+      }).find(Boolean);
+      return {
+        path: currentPath,
+        selectedWidth: descriptor?.width || 0,
+        renderedWidth: img.getBoundingClientRect().width,
+        naturalWidth: img.naturalWidth,
+      };
+    });
+
+    expect(selected.path, item.route + ' should select the reviewed source candidate').toBe(item.expectedPath);
+    expect(selected.selectedWidth, item.route + ' should expose the truthful width descriptor').toBe(item.expectedWidth);
+    expect(
+      selected.selectedWidth / selected.renderedWidth,
+      item.route + ' should deliver at least 90% of the rendered slot in source pixels'
+    ).toBeGreaterThanOrEqual(0.9);
+  }
+});

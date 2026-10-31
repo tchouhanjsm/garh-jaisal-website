@@ -39,6 +39,8 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             "img/v2/courtyard.jpg",
             "img/j5.jpg",
             "img/sleeping_under_stars/tour_9.jpeg",
+            "img/rest5.jpg",
+            "img/jcity.jpg",
         ])
         self.assertEqual(manifest["variant_max_bytes"], {
             "img/responsive/v2/courtyard-480.webp": 76800,
@@ -46,6 +48,8 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             "img/responsive/v2/courtyard-1200.webp": 250000,
             "img/responsive/j5-1200.webp": 160000,
             "img/responsive/sleeping_under_stars/tour_9-1200.webp": 80000,
+            "img/responsive/rest5-1200.webp": 87800,
+            "img/responsive/jcity-1200.webp": 145000,
         })
 
     def test_required_hero_sources_generate_all_responsive_width_contracts(self):
@@ -61,6 +65,12 @@ class ResponsiveImageAssetTests(unittest.TestCase):
         self.assertIn("img/responsive/sleeping_under_stars/tour_9-480.webp", required_paths)
         self.assertIn("img/responsive/sleeping_under_stars/tour_9-800.webp", required_paths)
         self.assertIn("img/responsive/sleeping_under_stars/tour_9-1200.webp", required_paths)
+        self.assertIn("img/responsive/rest5-480.webp", required_paths)
+        self.assertIn("img/responsive/rest5-800.webp", required_paths)
+        self.assertIn("img/responsive/rest5-1200.webp", required_paths)
+        self.assertIn("img/responsive/jcity-480.webp", required_paths)
+        self.assertIn("img/responsive/jcity-800.webp", required_paths)
+        self.assertIn("img/responsive/jcity-1200.webp", required_paths)
 
     def test_manifest_rejects_required_hero_sources_outside_the_source_allowlist(self):
         manifest = assets.load_manifest()

@@ -11,7 +11,9 @@
     "img/responsive/v2/facade-1200.webp": 250000,
     "img/responsive/v2/courtyard-1200.webp": 250000,
     "img/responsive/j5-1200.webp": 160000,
-    "img/responsive/sleeping_under_stars/tour_9-1200.webp": 80000
+    "img/responsive/sleeping_under_stars/tour_9-1200.webp": 80000,
+    "img/responsive/rest5-1200.webp": 87800,
+    "img/responsive/jcity-1200.webp": 145000
   },
   "method": 6,
   "minimum_savings_percent": 5,
@@ -112,7 +114,9 @@
     "img/v2/fort-from-roof.jpg",
     "img/v2/courtyard.jpg",
     "img/j5.jpg",
-    "img/sleeping_under_stars/tour_9.jpeg"
+    "img/sleeping_under_stars/tour_9.jpeg",
+    "img/rest5.jpg",
+    "img/jcity.jpg"
   ],
   "budget_quality_floor": 58,
   "budget_quality_step": 2
