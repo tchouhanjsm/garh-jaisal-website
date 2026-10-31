@@ -229,3 +229,8 @@ The deployment, browser and staging workflows were blocked by two false manifest
 ### Phase 3 RCA — source-width-aware facade target
 
 The first image-generator run correctly rejected 1440w for `img/v2/facade.jpg`. Its decoded dimensions are 1333×2000, so 1280w is the largest valid added candidate. Removed 1440w/1800w target entries and budgets for this one source; all 2000px masters retain 1280/1440/1800 and other 1366px masters retain only 1280. The generator's validation is unchanged: no upscale candidate or byte budget is accepted.
+
+
+### Phase 3 payload-budget calibration
+
+The first generated 1280w facade candidate missed the 250,000-byte limit by 7,328 bytes at the pre-existing quality floor of 58. Lower the adaptive floor to 56 and cap this single candidate at 256,000 bytes (250 KiB); all other additional high-resolution candidates remain at 250,000 bytes. The source-pixel target and source photo are unchanged.

@@ -28,7 +28,7 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             "img/v2/facade.jpg": 70,
             "img/v2/courtyard.jpg": 70,
         })
-        self.assertEqual(manifest["budget_quality_floor"], 58)
+        self.assertEqual(manifest["budget_quality_floor"], 56)
         self.assertEqual(manifest["budget_quality_step"], 2)
         self.assertEqual(assets.quality_for_source(manifest, "img/v2/facade.jpg"), 70)
         self.assertEqual(assets.quality_for_source(manifest, "img/v2/courtyard.jpg"), 70)

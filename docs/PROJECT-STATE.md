@@ -301,3 +301,9 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 - The generator's decoded source inspection confirmed `img/v2/facade.jpg` is 1333px wide. Keep its 1280w derivative, but do not declare 1440w/1800w candidates or budgets that would require upscaling.
 - The generated sitemap dates now reflect the directly edited public templates: Home, Gallery, Rooftop Dining and Car & City Tours (31 October 2026).
 - The no-upscale guard remains enforced both when loading manifest byte budgets and when deriving mandatory hero coverage.
+
+
+### Phase 3 payload-budget calibration
+
+- The 1333px facade's 1280w WebP measured 257,328 bytes at quality 58. Keep the global quality ladder, but allow it to step down to 56 and enforce a 256,000-byte cap for this single candidate (250 KiB). All other new candidate caps remain 250,000 bytes.
+- This remains below the Browser/Staging image audit's 250 KiB threshold; no original photo or page slot is changed to meet the budget.

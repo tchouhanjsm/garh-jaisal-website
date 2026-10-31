@@ -12,7 +12,7 @@
     "img/responsive/v2/courtyard-1200.webp": 250000,
     "img/responsive/j5-1200.webp": 160000,
     "img/responsive/sleeping_under_stars/tour_9-1200.webp": 80000,
-    "img/responsive/v2/facade-1280.webp": 250000,
+    "img/responsive/v2/facade-1280.webp": 256000,
     "img/responsive/v2/fort-from-roof-1280.webp": 250000,
     "img/responsive/v2/fort-from-roof-1440.webp": 250000,
     "img/responsive/v2/fort-from-roof-1800.webp": 250000,
@@ -133,7 +133,7 @@
     "img/roofslide.webp",
     "img/jcity.jpg"
   ],
-  "budget_quality_floor": 58,
+  "budget_quality_floor": 56,
   "budget_quality_step": 2,
   "source_target_widths": {
     "img/v2/facade.jpg": [
