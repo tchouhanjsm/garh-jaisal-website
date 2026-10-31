@@ -231,11 +231,11 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
             for width in [480, 800, 1200, 1280, 1440]:
                 (output / f"Tent-{width}.webp").write_bytes(b"approved-webp-candidate")
             self.assertEqual(get_generated_responsive_paths(root), [
+                "img/responsive/Desert_Camp/Tent-1200.webp",
                 "img/responsive/Desert_Camp/Tent-1280.webp",
                 "img/responsive/Desert_Camp/Tent-1440.webp",
                 "img/responsive/Desert_Camp/Tent-480.webp",
                 "img/responsive/Desert_Camp/Tent-800.webp",
-                "img/responsive/Desert_Camp/Tent-1200.webp",
             ])
 
     def test_generated_responsive_paths_enforce_manifest_byte_budgets(self):
