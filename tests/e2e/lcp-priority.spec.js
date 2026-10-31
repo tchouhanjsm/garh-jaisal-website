@@ -163,6 +163,13 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
             hero.route + ' preload sizes must match the rendered image source sizes'
           ).toBe(state.sizes);
         }
+        if (state.srcset && matchingPreloads[0].imagesrcset) {
+          const normalizeCandidates = value => value.split(',').map(item => item.trim().replace(/^\\//, '')).join(', ');
+          expect(
+            normalizeCandidates(matchingPreloads[0].imagesrcset),
+            hero.route + ' preload candidates must exactly match the rendered responsive source'
+          ).toBe(normalizeCandidates(state.srcset));
+        }
 
         const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
         expect(overflow, hero.route + ' must not create horizontal overflow at ' + width + 'px').toBe(false);

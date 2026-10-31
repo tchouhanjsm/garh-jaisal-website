@@ -46,6 +46,16 @@ class ResponsiveImageAssetTests(unittest.TestCase):
         self.assertEqual(assets.target_widths_for_source(manifest, "img/v2/fort-from-roof.jpg"), [480, 800, 1200, 1280, 1440, 1800])
         self.assertEqual(assets.target_widths_for_source(manifest, "img/j10.jpg"), [480, 800, 1200, 1280])
         self.assertEqual(assets.target_widths_for_source(manifest, "img/jcity.jpg"), [480, 800, 1200])
+        for source in (
+            "img/Desert_Camp/Tent.jpeg",
+            "img/Desert_Camp/CampingInJsm.jpeg",
+            "img/Desert_Camp/tent_deluxe.jpeg",
+        ):
+            self.assertEqual(assets.target_widths_for_source(manifest, source), [480, 800, 1200, 1280, 1440])
+        self.assertEqual(
+            assets.target_widths_for_source({"source_target_widths": {"img/wide.jpg": [1280, 1440]}}, "img/wide.jpg", [480, 800, 1200]),
+            [480, 800, 1200, 1280, 1440],
+        )
         self.assertEqual(manifest["variant_max_bytes"]["img/responsive/v2/courtyard-480.webp"], 76800)
         self.assertEqual(manifest["variant_max_bytes"]["img/responsive/v2/facade-1200.webp"], 250000)
         self.assertEqual(manifest["variant_max_bytes"]["img/responsive/v2/courtyard-1200.webp"], 250000)
@@ -53,7 +63,15 @@ class ResponsiveImageAssetTests(unittest.TestCase):
         self.assertEqual(manifest["variant_max_bytes"]["img/responsive/sleeping_under_stars/tour_9-1200.webp"], 80000)
         self.assertEqual(manifest["variant_max_bytes"]["img/responsive/v2/fort-from-roof-1800.webp"], 250000)
         self.assertEqual(manifest["variant_max_bytes"]["img/responsive/roofslide-1440.webp"], 250000)
-        self.assertEqual(len(manifest["variant_max_bytes"]), 22)
+        for source in (
+            "img/Desert_Camp/Tent.jpeg",
+            "img/Desert_Camp/CampingInJsm.jpeg",
+            "img/Desert_Camp/tent_deluxe.jpeg",
+        ):
+            stem = source.rsplit("/", 1)[1].rsplit(".", 1)[0]
+            self.assertEqual(manifest["variant_max_bytes"][f"img/responsive/Desert_Camp/{stem}-1280.webp"], 250000)
+            self.assertEqual(manifest["variant_max_bytes"][f"img/responsive/Desert_Camp/{stem}-1440.webp"], 250000)
+        self.assertEqual(len(manifest["variant_max_bytes"]), 28)
         self.assertNotIn("img/responsive/v2/facade-1440.webp", manifest["variant_max_bytes"])
         self.assertNotIn("img/responsive/v2/facade-1800.webp", manifest["variant_max_bytes"])
         self.assertNotIn("img/responsive/jcity-1200.webp", manifest["variant_max_bytes"])

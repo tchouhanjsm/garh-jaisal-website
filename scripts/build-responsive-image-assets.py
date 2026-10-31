@@ -30,10 +30,17 @@ def output_path(source_relative: str, target_width: int) -> Path:
     return OUTPUT_ROOT / relative.parent / (relative.stem + f"-{target_width}.webp")
 
 
-def target_widths_for_source(manifest: dict[str, Any], source_relative: str) -> list[int]:
-    """Merge global candidate widths with narrowly scoped source-specific hero widths."""
+def target_widths_for_source(
+    manifest: dict[str, Any],
+    source_relative: str,
+    default_widths: list[int] | None = None,
+) -> list[int]:
+    """Merge configured (or explicitly supplied) global widths with source-specific widths."""
+    configured_widths = manifest.get("target_widths")
+    if configured_widths is None:
+        configured_widths = default_widths if default_widths is not None else []
     additional = manifest.get("source_target_widths", {}).get(source_relative, [])
-    return sorted(set(manifest["target_widths"]) | set(additional))
+    return sorted(set(configured_widths) | set(additional))
 
 
 DEFAULT_REQUIRED_HERO_SOURCES = (
@@ -53,7 +60,7 @@ def required_hero_variant_paths(manifest: dict[str, Any], widths: list[int]) -> 
     for source in required_sources:
         with Image.open(ROOT / source) as opened:
             source_width = opened.width
-        for width in target_widths_for_source(manifest, source):
+        for width in target_widths_for_source(manifest, source, widths):
             # An original at or below the target width is its own best candidate.
             # The PHP resolver exposes that verified source at its native descriptor.
             if width >= source_width:

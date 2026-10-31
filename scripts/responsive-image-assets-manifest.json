@@ -28,7 +28,13 @@
     "img/responsive/desert7-1280.webp": 250000,
     "img/responsive/j10-1280.webp": 250000,
     "img/responsive/j2-1280.webp": 250000,
-    "img/responsive/j5-1280.webp": 250000
+    "img/responsive/j5-1280.webp": 250000,
+    "img/responsive/Desert_Camp/Tent-1280.webp": 250000,
+    "img/responsive/Desert_Camp/Tent-1440.webp": 250000,
+    "img/responsive/Desert_Camp/CampingInJsm-1280.webp": 250000,
+    "img/responsive/Desert_Camp/CampingInJsm-1440.webp": 250000,
+    "img/responsive/Desert_Camp/tent_deluxe-1280.webp": 250000,
+    "img/responsive/Desert_Camp/tent_deluxe-1440.webp": 250000
   },
   "method": 6,
   "minimum_savings_percent": 5,
@@ -174,6 +180,18 @@
     ],
     "img/j5.jpg": [
       1280
+    ],
+    "img/Desert_Camp/Tent.jpeg": [
+      1280,
+      1440
+    ],
+    "img/Desert_Camp/CampingInJsm.jpeg": [
+      1280,
+      1440
+    ],
+    "img/Desert_Camp/tent_deluxe.jpeg": [
+      1280,
+      1440
     ]
   }
 }

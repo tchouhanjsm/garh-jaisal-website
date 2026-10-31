@@ -120,6 +120,9 @@ test('room and experience carousel source candidates cover their rendered image 
   const cases = [
     { route: '/room.php', selector: '.room-card .photo-carousel-slide img[src="img/maharaniroom.jpg"]', sizes: ROOM_CAROUSEL_SIZES },
     { route: '/full-day-jaisalmer-tour.php', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/j10.jpg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
+    { route: '/swiss-tent-safari.php', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/Desert_Camp/Tent.jpeg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
+    { route: '/swiss-tent-safari.php', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/Desert_Camp/CampingInJsm.jpeg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
+    { route: '/swiss-tent-safari.php', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/Desert_Camp/tent_deluxe.jpeg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
   ];
 
   for (const width of [390, 1280]) {

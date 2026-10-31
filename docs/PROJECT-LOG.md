@@ -234,3 +234,16 @@ The first image-generator run correctly rejected 1440w for `img/v2/facade.jpg`. 
 ### Phase 3 payload-budget calibration
 
 The first generated 1280w facade candidate missed the 250,000-byte limit by 7,328 bytes at the pre-existing quality floor of 58. Lower the adaptive floor to 56 and cap this single candidate at 256,000 bytes (250 KiB); all other additional high-resolution candidates remain at 250,000 bytes. The source-pixel target and source photo are unchanged.
+
+
+## Phase 4 — Source-aware image delivery and preload parity (PR #162)
+
+**RCA:** the PR #162 browser artifact measured three oversized Swiss Tent gallery downloads: `Tent.jpeg` (327,101 B), `CampingInJsm.jpeg` (307,943 B) and `tent_deluxe.jpeg` (287,688 B). Each source is 1600px wide. The page advertises a 95vw desktop slot; at 1280px that is approximately 1216px, slightly wider than the existing 1200w derivative. Chromium therefore chose the 1600w JPEG originals. The remediation adds budgeted 1280w and 1440w derivatives for those three sources and retains the 250,000-byte per-candidate cap. It does not weaken the route-wide 256,000-byte (250 KiB) audit threshold.
+
+- Corrected `target_widths_for_source()` and `required_hero_variant_paths()` so the explicit width list is honoured when a caller supplies a minimal manifest fragment without `target_widths`.
+- Added source-specific 1280w/1440w candidates and hard budgets for the three Swiss Tent gallery photos. Existing JPEG originals and editorial ordering/alt text/captions remain untouched.
+- Removed duplicated Room and Gallery preload assembly. Both pages now use the same validated PHP candidate resolver as their actual hero `img` markup. The Room preload uses the optimized source actually rendered by the page; Gallery uses its rooftop-dusk source. This guarantees identical candidate lists and sizes hints instead of independently maintained three-width lists.
+- Strengthened LCP preload parity and the Gallery 1280w source-selection assertion.
+- Updated editorial media readiness to permit only an exact same-origin native source as the final fallback, and only when its width descriptor matches the verified intrinsic source width. All other srcset paths remain restricted to validated responsive derivatives.
+- Expanded the Swiss Tent mobile/desktop carousel source matrix. The general image payload audit remains strict and must report zero selected resources above 250 KiB and zero image slots below 90% source-pixel coverage.
+- Validation required on the exact final PR head: PHP 7.4/8.2, responsive image generator/budget tests, Browser E2E/screenshots, package preflight/reproducibility and 11-route non-deploying Staging QA. No live-host deployment or production release is part of this phase.

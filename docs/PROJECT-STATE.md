@@ -307,3 +307,14 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 
 - The 1333px facade's 1280w WebP measured 257,328 bytes at quality 58. Keep the global quality ladder, but allow it to step down to 56 and enforce a 256,000-byte cap for this single candidate (250 KiB). All other new candidate caps remain 250,000 bytes.
 - This remains below the Browser/Staging image audit's 250 KiB threshold; no original photo or page slot is changed to meet the budget.
+
+
+## Active implementation — PR #162 Phase 4: source-aware image delivery and preload parity
+
+- Correct the image generator's required-candidate helper so an explicit global-width argument remains usable for minimal manifest fixtures/consumers; merge it with source-specific widths without permitting upscaling.
+- Extend only three Swiss Tent gallery originals with 1280w and 1440w WebP candidates: Tent.jpeg, CampingInJsm.jpeg and tent_deluxe.jpeg. Every new derivative has an independently enforced 250,000-byte budget; original photos remain unchanged.
+- Replace Room and Gallery's independent hand-built preload lists with `gj_image_responsive_preload_descriptor()`, using the exact source path and sizes expression passed to the rendered hero image. LCP tests require exact normalized preload/srcset parity.
+- Update editorial media readiness so it accepts only a same-origin native original as the final srcset fallback, with a descriptor equal to the verified intrinsic source width. All other candidates must remain under the approved responsive path.
+- Update the Gallery full-bleed hero contract to its actual selected 1280w candidate; extend carousel coverage for the three Swiss Tent images at mobile and desktop widths.
+- Keep the route-wide 250 KiB selected-resource audit and 90% source-pixel coverage gate. Do not relax payload thresholds to conceal large originals.
+- No route, crop, image original, alt text, captions, booking destination, business fact, map or public metadata is changed. Exact-head PHP 7.4/8.2, Browser E2E/screenshots, package reproducibility and non-deploying Staging QA remain release gates. No cPanel upload, external staging deployment or production release is included.
