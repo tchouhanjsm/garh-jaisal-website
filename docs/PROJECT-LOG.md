@@ -190,3 +190,8 @@ Regression coverage verifies action count and destination parity on the live exp
 - Sprint 88: exercise the actual package builder in a temporary clean Git checkout; extract the archive marker, verify marker/manifest/archive/sidecar hashes, assert exclusion of the server-only config, and check byte-identical ZIP output for repeat builds of one commit.
 - Sprint 89: exact-head validation of PHP/site contracts, deployment-package unit/preflight, local staging route smoke, and Browser E2E/screenshots. Real-host image HEAD/cache verification remains owner-dispatched and read-only.
 - No cPanel upload, external staging deployment, enquiry submission or production release is part of this PR.
+
+
+### Staging QA RCA — PR #162 initial visibility audit
+
+The first expanded non-deploying staging run exposed an existing Playwright callback-boundary bug: the image metadata callback executed in the browser context but referenced the Node-side `initialImageVisibility` array as an undeclared closure variable. Pass the captured array explicitly as the second `locator.evaluateAll` argument and read its zero-based index inside the page context. This preserves the measured first-viewport state for high-priority image and real-host cache-probe decisions; it does not change page rendering or guest-facing behavior.

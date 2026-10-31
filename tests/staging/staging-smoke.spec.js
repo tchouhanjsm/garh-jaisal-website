@@ -298,7 +298,7 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
         result.horizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
         record(result.horizontalOverflow === false, 'Horizontal overflow at responsive viewport.', { route, viewport: viewport.width });
 
-        const images = await page.locator('img').evaluateAll(nodes => nodes.map((img, index) => {
+        const images = await page.locator('img').evaluateAll((nodes, initialVisibility) => nodes.map((img, index) => {
           const style = getComputedStyle(img);
           const currentSrc = img.currentSrc || img.src || '';
           const pictureSources = Array.from(img.closest('picture')?.querySelectorAll('source[srcset]') || []);
@@ -324,11 +324,12 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
             devicePixelRatio: window.devicePixelRatio || 1,
             loading: img.loading || 'eager',
             fetchPriority: img.fetchPriority || 'auto',
-            visibleAtInitialViewport: initialImageVisibility[index - 1] === true,
+            visibleAtInitialViewport: initialVisibility[index] === true,
             loaded: img.complete && img.naturalWidth > 0 && img.naturalHeight > 0,
             rendered: style.display !== 'none' && style.visibility !== 'hidden' && img.getClientRects().length > 0,
           };
-        }));
+        }), initialImageVisibility);
+
         result.imageCount = images.length;
         result.imageSources = images;
         result.preloads = await page.locator('link[rel="preload"][as="image"]').evaluateAll(nodes => nodes.map(link => ({
