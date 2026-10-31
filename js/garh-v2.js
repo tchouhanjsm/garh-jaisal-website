@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (slides.length < 2 || !controls || !status || !previous || !next) return;
 
     let activeIndex = 0;
-    const showSlide = (nextIndex) => {
+    const showSlide = (nextIndex, decodeActiveImage = false) => {
       activeIndex = (nextIndex + slides.length) % slides.length;
       slides.forEach((slide, index) => {
         const isActive = index === activeIndex;
@@ -27,18 +27,27 @@ document.addEventListener('DOMContentLoaded', () => {
         slide.setAttribute('aria-hidden', String(!isActive));
       });
       status.textContent = 'Photo ' + (activeIndex + 1) + ' of ' + slides.length;
+
+      // Keep initial loading lazy. After explicit guest navigation, decode only
+      // the newly active image so the selected photo is ready to render.
+      if (decodeActiveImage) {
+        const image = slides[activeIndex].querySelector('img');
+        if (image && !(image.complete && image.naturalWidth > 0) && typeof image.decode === 'function') {
+          image.decode().catch(() => {});
+        }
+      }
     };
 
-    previous.addEventListener('click', () => showSlide(activeIndex - 1));
-    next.addEventListener('click', () => showSlide(activeIndex + 1));
+    previous.addEventListener('click', () => showSlide(activeIndex - 1, true));
+    next.addEventListener('click', () => showSlide(activeIndex + 1, true));
     carousel.addEventListener('keydown', (event) => {
       if (event.altKey || event.ctrlKey || event.metaKey) return;
       if (event.key === 'ArrowLeft') {
         event.preventDefault();
-        showSlide(activeIndex - 1);
+        showSlide(activeIndex - 1, true);
       } else if (event.key === 'ArrowRight') {
         event.preventDefault();
-        showSlide(activeIndex + 1);
+        showSlide(activeIndex + 1, true);
       }
     });
 

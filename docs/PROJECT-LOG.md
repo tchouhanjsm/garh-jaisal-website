@@ -258,3 +258,16 @@ The first generated 1280w facade candidate missed the 250,000-byte limit by 7,32
 
 - The first package preflight after adding Swiss Tent 1280w/1440w derivatives correctly rejected them because `get_generated_responsive_paths()` still built its allowed-path set from global target widths only. It now validates `source_target_widths` against the source allowlist and unions those widths for that source only. Unit coverage verifies the 1280w/1440w budgeted assets are selected without permitting arbitrary output files.
 - Browser E2E's first run also caught a malformed escape in the added LCP preload-candidate normalizer. Replaced the slash regex with explicit leading-slash normalization; exact candidate-list equality remains enforced.
+
+
+## Phase 5 — Interaction-aware carousel image delivery and accessibility (PR #162)
+
+**Root cause from Browser E2E run 857:** the source-selection test located one of the later Swiss Tent carousel images after the carousel's DOMContentLoaded enhancement had intentionally hidden inactive slides. It then called `scrollIntoViewIfNeeded()` on a hidden slide and timed out. The image resolver, responsive candidate list and 90% coverage threshold were not the cause. The test did not reproduce the guest interaction required to reveal the target photo.
+
+- Rework the mobile/desktop source-selection matrix to locate the target slide index and advance through the same Next control guests use. Only after the target is visible does the test measure currentSrc, width descriptor, sizes and actual rendered width.
+- Enhance the shared carousel so an explicitly selected slide is decoded after a click or arrow-key action. Keep initial loading lazy, do not preload hidden/adjacent images on page load, and do not auto-advance.
+- Extend browser coverage for active/inactive hidden and aria-hidden state, exactly one visible slide, loaded selected images, keyboard navigation, wraparound and the live Photo N of M status.
+- Add a PHP source contract for the shared renderer's meaningful alt text, path validation, intrinsic dimension helper, lazy loading, asynchronous decoding and hidden-until-enhanced controls; run it in PHP 7.4 and 8.2 CI.
+- Preserve the no-JavaScript behavior: all curated slides remain visible and controls remain hidden when the script does not execute.
+- Preserve source photographs, order, captions, routes, responsive candidate budgets, preload parity, booking destinations and site content. This phase changes carousel interaction/loading behavior only after explicit guest input.
+- Fresh exact-head Site Checks, Browser E2E/screenshots, package integrity/reproducibility and non-deploying Staging QA are required. No cPanel upload or production deployment is authorized.

@@ -229,12 +229,12 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 
 ## PR #161 implementation history — Homepage Milestones 1–2
 
-- **PR:** [#161](https://github.com/tchouhanjsm/garh-jaisal-website/pull/161) — open for review. **Branch:** `feature/home-premium-storytelling-20261030`, based on main `da806a67f7369d33eb15969d28c0386819cef7dc`.
+- **PR:** [#161](https://github.com/tchouhanjsm/garh-jaisal-website/pull/161) — merged on 31 October 2026 at `e858fa794a71bd68d1940bb49f6b382e2aec3dfd`. **Branch:** `feature/home-premium-storytelling-20261030`.
 - **Milestone 1:** refine the homepage hero art direction and responsive visual hierarchy using the existing Fort/facade photography, established brand tokens and the current responsive-image pipeline.
 - **Milestone 2:** complete the guest-facing story with a dedicated Jaisalmer discovery section and transparent planning-confidence content; retain the existing room, rooftop, desert, arrival, gallery, FAQ and final conversion journeys.
 - Move the existing Trip planning panel after accommodation and experience discovery so it acts as a considered next step rather than interrupting the story.
 - Preserve the configured external booking destination, registered room data, public routes, Trip tray, WhatsApp/Contact handoff, verified facts and analytics privacy boundaries.
-- **Release state:** implementation is prepared for PR review. Exact-head CI, browser screenshots, visual review and non-deploying package/Staging QA remain required. No cPanel upload or staging/production deployment is authorized by this batch.
+- **Release state:** integrated by the PR #161 merge. The merge did not perform a cPanel upload or staging/production deployment.
 
 
 ## PR #161 implementation history — Homepage direct-booking Phase 3
@@ -309,7 +309,7 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 - This remains below the Browser/Staging image audit's 250 KiB threshold; no original photo or page slot is changed to meet the budget.
 
 
-## Active implementation — PR #162 Phase 4: source-aware image delivery and preload parity
+## PR #162 Phase 4 — source-aware image delivery and preload parity
 
 - Correct the image generator's required-candidate helper so an explicit global-width argument remains usable for minimal manifest fixtures/consumers; merge it with source-specific widths without permitting upscaling.
 - Extend only three Swiss Tent gallery originals with 1280w and 1440w WebP candidates: Tent.jpeg, CampingInJsm.jpeg and tent_deluxe.jpeg. Every new derivative has an independently enforced 250,000-byte budget; original photos remain unchanged.
@@ -328,3 +328,15 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 ### Phase 4 package inventory parity
 
 - The deployment package selector now validates and includes source-specific widths from the same manifest contract as the responsive-image generator. Unit coverage proves the Swiss Tent 1280w/1440w budgeted variants are selected into the runtime package.
+
+
+## Active implementation — PR #162 Phase 5: carousel image delivery and accessible interaction
+
+**Purpose:** complete the guest-facing behavior of the source-aware image work, rather than testing hidden carousel images as though they were visible page slots.
+
+- **Sprint 91 — visible-slide source measurement:** update the two-viewport source-selection matrix to activate the target photo through the carousel's actual Next control before reading currentSrc, dimensions and rendered slot width. Keep the 90% source-pixel coverage threshold unchanged.
+- **Sprint 92 — interaction-scoped image decode:** when the guest moves to another photo with a button or arrow key, request/decode only the newly active image. Do not eagerly decode every slide, preload adjacent photos on page load, or introduce autoplay.
+- **Sprint 93 — keyboard and screen-reader state:** verify ArrowLeft/ArrowRight navigation, wraparound, the single visible slide, matching hidden/aria-hidden state and the polite Photo N of M announcement.
+- **Sprint 94 — no-JavaScript and lazy-media contract:** preserve all curated slides when JavaScript is unavailable, keep gallery images lazy/async, and add a PHP source contract to both PHP 7.4 and 8.2 Site Checks.
+- **Release gates:** rerun source-aware image generation, both PHP Site Checks, Browser E2E/screenshots, package reproducibility/preflight and non-deploying 11-route Staging QA on the exact PR #162 head. Real-host HTTPS/cache tests remain owner-dispatched and read-only.
+- **Preservation:** original photography, slide order, alt text, captions, aspect ratios, route URLs, canonical/schema, room/tour content, booking destinations and image budgets remain unchanged. No cPanel upload, external staging deployment, enquiry submission or production release is included.

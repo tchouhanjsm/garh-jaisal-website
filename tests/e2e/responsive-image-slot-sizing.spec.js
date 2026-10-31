@@ -118,11 +118,11 @@ test('room and experience carousel source candidates cover their rendered image 
   test.setTimeout(60_000);
 
   const cases = [
-    { route: '/room.php', selector: '.room-card .photo-carousel-slide img[src="img/maharaniroom.jpg"]', sizes: ROOM_CAROUSEL_SIZES },
-    { route: '/full-day-jaisalmer-tour.php', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/j10.jpg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
-    { route: '/swiss-tent-safari.php', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/Desert_Camp/Tent.jpeg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
-    { route: '/swiss-tent-safari.php', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/Desert_Camp/CampingInJsm.jpeg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
-    { route: '/swiss-tent-safari.php', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/Desert_Camp/tent_deluxe.jpeg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
+    { route: '/room.php', source: 'img/maharaniroom.jpg', selector: '.room-card .photo-carousel-slide img[src="img/maharaniroom.jpg"]', sizes: ROOM_CAROUSEL_SIZES },
+    { route: '/full-day-jaisalmer-tour.php', source: 'img/j10.jpg', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/j10.jpg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
+    { route: '/swiss-tent-safari.php', source: 'img/Desert_Camp/Tent.jpeg', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/Desert_Camp/Tent.jpeg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
+    { route: '/swiss-tent-safari.php', source: 'img/Desert_Camp/CampingInJsm.jpeg', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/Desert_Camp/CampingInJsm.jpeg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
+    { route: '/swiss-tent-safari.php', source: 'img/Desert_Camp/tent_deluxe.jpeg', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/Desert_Camp/tent_deluxe.jpeg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
   ];
 
   for (const width of [390, 1280]) {
@@ -141,6 +141,26 @@ test('room and experience carousel source candidates cover their rendered image 
         expect(response.status(), item.route + ' must return a successful response').toBeLessThan(400);
         const image = page.locator(item.selector);
         await expect(image, item.route + ' must render its representative carousel image').toHaveCount(1);
+        const carousel = page.locator('[data-photo-carousel]').filter({ has: image });
+        await expect(carousel, item.route + ' image must belong to one initialized carousel').toHaveCount(1);
+        await expect(carousel.locator('[data-photo-carousel-controls]')).toBeVisible();
+
+        const targetIndex = await carousel.locator('[data-photo-carousel-slide]').evaluateAll(
+          (slides, source) => slides.findIndex(slide => slide.querySelector('img')?.getAttribute('src') === source),
+          item.source
+        );
+        expect(targetIndex, item.route + ' must retain the requested carousel photo').toBeGreaterThanOrEqual(0);
+
+        // Inactive slides are hidden after enhancement. Activate the actual
+        // target through the same control a guest uses before measuring its slot.
+        const next = carousel.locator('[data-photo-carousel-next]');
+        for (let step = 0; step < targetIndex; step += 1) await next.click();
+
+        const targetSlide = image.locator('xpath=ancestor::*[@data-photo-carousel-slide]');
+        await expect(targetSlide, item.route + ' requested slide must become visible').toBeVisible();
+        await expect(targetSlide).toHaveAttribute('aria-hidden', 'false');
+        await expect(carousel.locator('[data-photo-carousel-slide]:visible')).toHaveCount(1);
+
         await image.scrollIntoViewIfNeeded();
         await expect.poll(
           () => image.evaluate(img => img.complete && img.naturalWidth > 0),
