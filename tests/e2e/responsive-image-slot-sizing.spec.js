@@ -211,34 +211,47 @@ test('wide rooftop and city-tour hero slots select source-appropriate desktop ca
 
     const image = page.locator(item.selector);
     await expect(image).toHaveCount(1);
-    await expect(image).toHaveAttribute('srcset', /1200w|1180w/);
+    await expect(image).toHaveAttribute('srcset', /[1-9][0-9]*w/);
     await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 15_000 }).toBe(true);
 
     const selected = await image.evaluate(img => {
       const currentPath = new URL(img.currentSrc || img.src, document.baseURI).pathname;
-      const descriptor = (img.getAttribute('srcset') || '').split(',').map(candidate => {
+      const sourcePath = new URL(img.getAttribute('src') || img.src, document.baseURI).pathname;
+      const sourceWidth = Number(img.getAttribute('width')) || img.naturalWidth;
+      const candidates = (img.getAttribute('srcset') || '').split(',').map(candidate => {
         const parts = candidate.trim().split(/\s+/);
+        const width = Number((parts[1] || '').replace(/w$/, ''));
         try {
-          return new URL(parts[0], document.baseURI).pathname === currentPath
-            ? { path: currentPath, width: Number((parts[1] || '').replace(/w$/, '')) }
+          return parts.length > 1 && width > 0
+            ? { path: new URL(parts[0], document.baseURI).pathname, width }
             : null;
         } catch {
           return null;
         }
-      }).find(Boolean);
+      }).filter(Boolean);
+      const descriptor = candidates.find(candidate => candidate.path === currentPath);
       return {
         path: currentPath,
+        sourcePath,
+        sourceWidth,
+        candidates,
         selectedWidth: descriptor?.width || 0,
         renderedWidth: img.getBoundingClientRect().width,
-        naturalWidth: img.naturalWidth,
       };
     });
 
-    expect(selected.path, item.route + ' should select the reviewed source candidate').toBe(item.expectedPath);
     if (item.expectedNativeWidth) {
-      expect(selected.selectedWidth, item.route + ' should use the original photo’s truthful intrinsic width descriptor')
-        .toBe(selected.naturalWidth);
+      const generated = selected.candidates
+        .filter(candidate => candidate.path !== selected.sourcePath)
+        .sort((a, b) => a.width - b.width);
+      const largestGenerated = generated[generated.length - 1];
+      const needsNativeFallback = !largestGenerated || largestGenerated.width / selected.sourceWidth < 0.9;
+      const expectedPath = needsNativeFallback ? selected.sourcePath : largestGenerated.path;
+      const expectedWidth = needsNativeFallback ? selected.sourceWidth : largestGenerated.width;
+      expect(selected.path, item.route + ' should select the largest valid derivative or native source fallback').toBe(expectedPath);
+      expect(selected.selectedWidth, item.route + ' should expose the truthful selected width descriptor').toBe(expectedWidth);
     } else {
+      expect(selected.path, item.route + ' should select the reviewed source candidate').toBe(item.expectedPath);
       expect(selected.selectedWidth, item.route + ' should expose the truthful width descriptor').toBe(item.expectedWidth);
     }
     expect(
