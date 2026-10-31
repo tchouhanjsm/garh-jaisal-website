@@ -187,8 +187,8 @@ test('wide rooftop and city-tour hero slots select source-appropriate desktop ca
     {
       route: '/roof.php',
       selector: '.page-hero-media img[src="img/rest5.jpg"]',
-      expectedPath: '/img/responsive/rest5-1200.webp',
-      expectedWidth: 1200,
+      expectedPath: '/img/rest5.jpg',
+      expectedNativeWidth: true,
     },
     {
       route: '/roof.php',

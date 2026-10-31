@@ -270,7 +270,7 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 
 ## Active implementation — PR #162 Phase 2: Full-width guest-image delivery
 
-- Require budgeted 1200w WebP candidates for the 1280px Rooftop and Car & City Tours hero originals; keep per-asset byte ceilings and the existing quality floor.
+- Require budgeted 1200w WebP candidates only for originals wider than 1200px. Rooftop rest5.jpg and Car & City Tours jcity.jpg are no wider than the target and must use the original as their native-width candidate; no 1200w derivative or byte budget is allowed for them.
 - For source images whose original width is below the 1200px target, never upscale. The shared PHP resolver adds the native original as a final width-descriptor candidate when the largest generated derivative would cover less than 90% of the source width.
 - Assert selected source width, exact candidate URL and >=90% slot coverage for the three audited Rooftop/Car & City slots at 1280px. The 11-route staging smoke independently enforces the same 90% coverage rule.
 - Original photography, public routes, existing crop/aspect behavior, booking links and editorial copy remain unchanged. PR checks are local/non-deploying.
@@ -279,8 +279,8 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 ## Sprint 90 — source-aware responsive requirements and native-width delivery (PR #162)
 
 - Required hero variants are derived from decoded source dimensions. A target at or above the original width is a deliberate no-upscale fallback, not a missing generated asset.
-- Manifest validation rejects byte budgets attached to candidates that cannot be generated without upscaling. The Car & City Tours source no longer has an impossible jcity-1200 budget.
-- Keep jcity 480/800 WebP derivatives where generated and expose the original photo as the final truthful native-width candidate. Rendered srcset and high-priority preload continue to share the same path-safe candidate resolver.
-- Update PHP and desktop Browser E2E contracts to assert native candidate URL/descriptor and at least 90% source-pixel coverage for the large Car & City Tours hero slot.
+- Manifest validation rejects byte budgets attached to candidates that cannot be generated without upscaling. Neither Rooftop rest5-1200 nor Car & City Tours jcity-1200 is a valid budget target.
+- Keep rest5/jcity 480/800 WebP derivatives where generated and expose each original photo as its final truthful native-width candidate. Rendered srcset and high-priority preload continue to share the same path-safe candidate resolver.
+- Update PHP and desktop Browser E2E contracts to assert Rooftop and Car & City Tours native candidate URLs/descriptors and at least 90% source-pixel coverage for both large hero slots.
 - Preserve original photography, dimensions, crop, public routes, content, map and booking destinations.
 - Exact-head validation still requires Site Checks, image generation, Browser E2E/screenshots, package reproducibility and non-deploying 11-route Staging QA. Real-host checks remain owner-dispatched and read-only.

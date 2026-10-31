@@ -48,7 +48,6 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             "img/responsive/v2/courtyard-1200.webp": 250000,
             "img/responsive/j5-1200.webp": 160000,
             "img/responsive/sleeping_under_stars/tour_9-1200.webp": 80000,
-            "img/responsive/rest5-1200.webp": 87800,
         })
         self.assertNotIn("img/responsive/jcity-1200.webp", manifest["variant_max_bytes"])
 
@@ -69,14 +68,14 @@ class ResponsiveImageAssetTests(unittest.TestCase):
         self.assertIn("img/responsive/j5-800.webp", required_paths)
         self.assertIn("img/responsive/j5-1200.webp", required_paths)
         self.assertIn("img/responsive/sleeping_under_stars/tour_9-1200.webp", required_paths)
-        self.assertIn("img/responsive/rest5-1200.webp", required_paths)
-
-        with Image.open(assets.ROOT / "img/jcity.jpg") as opened:
-            city_source_width = opened.width
-        if city_source_width <= 1200:
-            self.assertNotIn("img/responsive/jcity-1200.webp", required_paths)
-        else:
-            self.assertIn("img/responsive/jcity-1200.webp", required_paths)
+        for source in ("img/rest5.jpg", "img/jcity.jpg"):
+            with Image.open(assets.ROOT / source) as opened:
+                source_width = opened.width
+            path = "img/responsive/" + source[4:-4] + "-1200.webp"
+            if source_width <= 1200:
+                self.assertNotIn(path, required_paths)
+            else:
+                self.assertIn(path, required_paths)
 
     def test_required_hero_candidate_policy_uses_native_sources_without_upscaling(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -199,16 +199,16 @@ The first expanded non-deploying staging run exposed an existing Playwright call
 
 ### Responsive image RCA — Rooftop and Car & City Tours desktop slots
 
-The expanded staging route matrix exposed three large desktop image slots whose srcsets stopped at 800w. Rooftop's banner source is 1180px wide, so a 1200px derivative would be an invalid upscale; the shared PHP image resolver adds the verified original source as the native-width fallback when the best generated derivative covers less than 90% of the source width. The Rooftop hero has a generated 1200w WebP candidate with an explicit byte ceiling. The Car & City Tours jcity.jpg source is no wider than 1200px, so requiring a jcity-1200.webp derivative was incorrect; its original is the truthful native-width candidate. The browser contract verifies the actually selected candidates and at least 90% slot coverage at 1280px; the staging smoke retains the sitewide threshold. Original image files, aspect ratios, crop intent, text and public URLs are unchanged.
+The expanded staging route matrix exposed three large desktop image slots whose srcsets stopped at 800w. Rooftop's banner source is 1180px wide, so a 1200px derivative would be an invalid upscale; the shared PHP image resolver adds the verified original source as the native-width fallback when the best generated derivative covers less than 90% of the source width. The Rooftop hero rest5.jpg and Car & City Tours jcity.jpg sources are no wider than 1200px, so requiring 1200w derivatives for either was incorrect; their originals are the truthful native-width candidates. Smaller 480/800w derivatives remain generated where they can be made without upscaling. The browser contract verifies the actually selected candidates and at least 90% slot coverage at 1280px; the staging smoke retains the sitewide threshold. Original image files, aspect ratios, crop intent, text and public URLs are unchanged.
 
 
 ## Sprint 90 — source-aware responsive requirements and native-width delivery (PR #162)
 
-The deployment, browser and staging workflows were blocked by one false manifest requirement: img/responsive/jcity-1200.webp had a hard byte budget even though the source image width is no greater than 1200px. The encoder correctly returned skipped-no-upscale; the manifest then treated that safe skip as a fatal budget failure.
+The deployment, browser and staging workflows were blocked by two false manifest requirements: img/responsive/jcity-1200.webp and img/responsive/rest5-1200.webp had hard byte budgets even though neither original is wider than 1200px. The encoder correctly returned skipped-no-upscale; the manifest then treated those safe skips as fatal budget failures.
 
 - Changed required-hero coverage to require only targets strictly below each decoded original width.
 - Added manifest validation that rejects hard byte budgets on any width target that cannot be generated without upscaling.
-- Removed the impossible jcity-1200 budget while retaining jcity's generated smaller derivatives and the PHP resolver's native original-source fallback.
-- Updated desktop Browser E2E to assert the original jcity.jpg URL and its true intrinsic width descriptor, with the same 90% minimum source-pixel coverage.
-- Added PHP parity coverage proving the Car & City Tours responsive srcset and preload both include the same native-source candidate.
+- Removed both impossible jcity-1200 and rest5-1200 budgets while retaining their generated smaller derivatives and the PHP resolver's native original-source fallbacks.
+- Updated desktop Browser E2E to assert the original rest5.jpg and jcity.jpg URLs and their true intrinsic width descriptors, with the same 90% minimum source-pixel coverage.
+- Added PHP parity coverage proving the Rooftop and Car & City Tours responsive srcsets and preloads both include the same native-source candidates.
 - The original photograph, crop, page copy, routes and booking destinations are unchanged. This is delivery-pipeline correctness, not a request to upscale or replace the photo.

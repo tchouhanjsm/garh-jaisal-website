@@ -58,22 +58,29 @@ $assert(
     'Canonical image helper must fail closed for traversal and non-image paths.'
 );
 
-$cityMetadata = gj_local_image_metadata('img/jcity.jpg');
-$cityCandidates = gj_image_responsive_candidates('img/jcity.jpg');
-if (is_array($cityMetadata) && $cityMetadata['width'] > 800 && $cityMetadata['width'] <= 1200) {
-    $largestCityCandidate = $cityCandidates ? $cityCandidates[count($cityCandidates) - 1] : null;
-    $assert(
-        is_array($largestCityCandidate)
-        && ($largestCityCandidate['path'] ?? null) === 'img/jcity.jpg'
-        && ($largestCityCandidate['width'] ?? null) === $cityMetadata['width'],
-        'A city image with no larger generated derivative must retain the verified original as its native-width responsive candidate.'
-    );
-    $cityPreload = gj_image_responsive_preload_descriptor('img/jcity.jpg', '100vw');
-    $assert(
-        is_array($cityPreload)
-        && strpos($cityPreload['imagesrcset'], 'img/jcity.jpg ' . $cityMetadata['width'] . 'w') !== false,
-        'City hero preload must use the same native-width original candidate as its rendered srcset.'
-    );
+foreach (['img/rest5.jpg', 'img/jcity.jpg'] as $nativeHeroSource) {
+    $nativeMetadata = gj_local_image_metadata($nativeHeroSource);
+    if (
+        is_array($nativeMetadata)
+        && $nativeMetadata['width'] > 800
+        && $nativeMetadata['width'] <= 1200
+        && (800 / $nativeMetadata['width']) < 0.9
+    ) {
+        $nativeCandidates = gj_image_responsive_candidates($nativeHeroSource);
+        $largestCandidate = $nativeCandidates ? $nativeCandidates[count($nativeCandidates) - 1] : null;
+        $assert(
+            is_array($largestCandidate)
+            && ($largestCandidate['path'] ?? null) === $nativeHeroSource
+            && ($largestCandidate['width'] ?? null) === $nativeMetadata['width'],
+            'A 1200px-or-smaller hero must retain its verified native source when the largest derivative leaves under 90% coverage: ' . $nativeHeroSource
+        );
+        $nativePreload = gj_image_responsive_preload_descriptor($nativeHeroSource, '100vw');
+        $assert(
+            is_array($nativePreload)
+            && strpos($nativePreload['imagesrcset'], $nativeHeroSource . ' ' . $nativeMetadata['width'] . 'w') !== false,
+            'Hero preload must use the same native-width candidate as the rendered srcset: ' . $nativeHeroSource
+        );
+    }
 }
 $assert(is_array($metadata), 'A known local JPEG must return metadata.');
 if (is_array($metadata)) {
