@@ -11,6 +11,8 @@ $canonical = $siteUrl . '/roof.php';
 <html lang="en">
 <?php
 require_once __DIR__ . '/include/schema.php';
+require_once __DIR__ . '/include/image-metadata.php';
+$roofHeroPreload = gj_image_responsive_preload_descriptor('img/roofslide.webp', '100vw');
 $faqItems = [
     ['question' => "Where is rooftop dining?", 'answer' => "Garh Jaisal’s Kitchen is the rooftop restaurant at Garh Jaisal Haveli, inside Jaisalmer Fort."],
     ['question' => "Can I check the menu before visiting?", 'answer' => "Yes. Open the restaurant menu page to review the menu; dishes and listed prices may change, so confirm current details with the hotel."],
@@ -21,14 +23,15 @@ $page = [
     'title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
     'description' => "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
     'path' => '/roof.php',
+    'preload' => is_array($roofHeroPreload) ? [$roofHeroPreload] : [],
     'og_type' => 'website',
     'og_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
     'og_description' => "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
-    'og_image' => '/img/rest5.jpg',
-    'og_image_alt' => 'Dining at Garh Jaisal Haveli',
+    'og_image' => '/img/roofslide.webp',
+    'og_image_alt' => 'Candlelit rooftop terrace and Jaisalmer city view at dusk',
     'twitter_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
     'twitter_description' => "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
-    'twitter_image' => '/img/rest5.jpg',
+    'twitter_image' => '/img/roofslide.webp',
     'css' => ['css/roof.css', 'css/thar-sunset-story.css'],
     'schema' => [
         [
@@ -59,7 +62,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="roof-page thar-sunset-story thar-sunset-story--dining" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/rest5.jpg" <?= gj_image_dimension_attributes('img/rest5.jpg', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/roofslide.webp" <?= gj_image_dimension_attributes('img/roofslide.webp', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Rooftop dining</p>
@@ -106,7 +109,7 @@ require __DIR__ . '/include/page-head.php';
         <img
           src="img/rest3.jpg"
           alt="Rooftop dining area with views across Jaisalmer"
-          <?= gj_image_dimension_attributes('img/rest3.jpg', '(max-width: 760px) 100vw, 1180px') ?>
+          <?= gj_image_dimension_attributes('img/rest3.jpg', '(max-width: 1000px) 100vw, 1000px') ?>
         >
       </div>
 

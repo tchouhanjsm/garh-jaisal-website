@@ -137,7 +137,15 @@ test('editorial and experience hero media is publish-ready', async ({ page }, te
       if (new Set(widths).size !== widths.length || widths.some((width, index) => index > 0 && width <= widths[index - 1])) {
         issues.push('responsive-srcset-widths-are-not-unique-and-ascending');
       }
-      if (candidates.some(candidate => candidate.url.origin !== heroUrl.origin || !candidate.url.pathname.startsWith('/img/responsive/'))) {
+      const hasUnsafeCandidate = candidates.some((candidate, index) => {
+        if (candidate.url.origin !== heroUrl.origin) return true;
+        if (candidate.url.pathname.startsWith('/img/responsive/')) return false;
+        const isFinalNativeSourceFallback = index === candidates.length - 1
+          && candidate.url.pathname === heroUrl.pathname
+          && candidate.width === intrinsic.width;
+        return !isFinalNativeSourceFallback;
+      });
+      if (hasUnsafeCandidate) {
         issues.push('responsive-srcset-contains-unsafe-or-unexpected-asset-path');
       }
       if (!rendered.responsiveSizes.trim()) issues.push('responsive-srcset-is-missing-sizes');

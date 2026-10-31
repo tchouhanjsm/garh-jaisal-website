@@ -39,6 +39,9 @@ EXPLICIT_DEPLOY_EXCLUDES = {
     "css/owl.video.play.html",    # Stray artifact, not a stylesheet.
 }
 CANONICAL_HOST = "www.hotelgarhjaisal.com"
+RELEASE_MARKER_PATH = "release-info.txt"
+RELEASE_MARKER_PREFIX = "GARH_JAISAL_RELEASE_SHA="
+FULL_COMMIT_SHA = re.compile(r"^[0-9a-f]{40}$", re.IGNORECASE)
 ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
 
 
@@ -90,6 +93,8 @@ def is_runtime_path(path: str) -> bool:
         raise PackageError(
             PRIVATE_CONFIG_PATH + " must never be tracked; keep it server-only."
         )
+    if path == RELEASE_MARKER_PATH:
+        raise PackageError(RELEASE_MARKER_PATH + " is generated during package creation and must not be tracked.")
     if path == EXAMPLE_CONFIG_PATH or path in NON_RUNTIME_ROOT_FILES or path in EXPLICIT_DEPLOY_EXCLUDES:
         return False
     if path in ROOT_RUNTIME_FILES:
@@ -123,6 +128,20 @@ def get_generated_responsive_paths(root: Path = ROOT) -> list[str]:
     if not isinstance(widths, list) or not widths or not isinstance(sources, list) or not sources:
         raise PackageError("Responsive image manifest must define sources and target widths.")
 
+    source_target_widths = manifest.get("source_target_widths", {})
+    if not isinstance(source_target_widths, dict):
+        raise PackageError("Responsive image source-specific widths must be a source-to-width-list object.")
+    for source, additional_widths in source_target_widths.items():
+        if source not in sources:
+            raise PackageError("Responsive image source-specific widths target an unlisted source: " + str(source))
+        if (
+            not isinstance(additional_widths, list)
+            or not additional_widths
+            or any(isinstance(width, bool) or not isinstance(width, int) or width < 1 for width in additional_widths)
+            or additional_widths != sorted(set(additional_widths))
+        ):
+            raise PackageError("Responsive image source-specific widths must be positive, unique and sorted: " + str(source))
+
     allowed: set[str] = set()
     for source in sources:
         if not isinstance(source, str):
@@ -134,7 +153,8 @@ def get_generated_responsive_paths(root: Path = ROOT) -> list[str]:
         ):
             raise PackageError("Unsafe responsive image source path: " + source)
         relative = pure.relative_to("img")
-        for width in widths:
+        candidate_widths = sorted(set(widths) | set(source_target_widths.get(source, [])))
+        for width in candidate_widths:
             if not isinstance(width, int) or isinstance(width, bool) or width < 1:
                 raise PackageError("Responsive image widths must be positive integers.")
             generated = PurePosixPath(
@@ -324,6 +344,13 @@ def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
+def build_release_marker(commit_sha: str) -> bytes:
+    """Build public, non-secret provenance for the exact packaged Git commit."""
+    if not isinstance(commit_sha, str) or not FULL_COMMIT_SHA.fullmatch(commit_sha):
+        raise PackageError("Release marker requires a full 40-character Git commit SHA.")
+    return (RELEASE_MARKER_PREFIX + commit_sha.lower() + "\n").encode("ascii")
+
+
 def build_deployment_package(root: Path, output_dir: Path) -> dict:
     ensure_tracked_worktree_clean(root)
     generated_responsive_paths = get_generated_responsive_paths(root)
@@ -348,13 +375,20 @@ def build_deployment_package(root: Path, output_dir: Path) -> dict:
     if workflow_sha and workflow_sha != commit_sha:
         raise PackageError("Checked-out commit does not match GITHUB_SHA.")
 
+    release_marker_data = build_release_marker(commit_sha)
+    selected = sorted(set(selected + [RELEASE_MARKER_PATH]))
+    routes = validate_package_paths(selected, sitemap_path.read_text(encoding="utf-8"))
+
     entries = []
     total_bytes = 0
     for relative in selected:
-        source = root / relative
-        if source.is_symlink() or not source.is_file():
-            raise PackageError("Runtime file is missing or is a symlink: " + relative)
-        data = source.read_bytes()
+        if relative == RELEASE_MARKER_PATH:
+            data = release_marker_data
+        else:
+            source = root / relative
+            if source.is_symlink() or not source.is_file():
+                raise PackageError("Runtime file is missing or is a symlink: " + relative)
+            data = source.read_bytes()
         total_bytes += len(data)
         entries.append({"path": relative, "size_bytes": len(data), "sha256": sha256_bytes(data)})
 
@@ -365,7 +399,7 @@ def build_deployment_package(root: Path, output_dir: Path) -> dict:
         archive_path, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
     ) as archive:
         for entry in entries:
-            data = (root / entry["path"]).read_bytes()
+            data = release_marker_data if entry["path"] == RELEASE_MARKER_PATH else (root / entry["path"]).read_bytes()
             info = zipfile.ZipInfo(entry["path"], date_time=ZIP_TIMESTAMP)
             info.compress_type = zipfile.ZIP_DEFLATED
             info.create_system = 3
@@ -390,6 +424,11 @@ def build_deployment_package(root: Path, output_dir: Path) -> dict:
         "responsive_fallback_source_count": len(responsive_fallback_sources),
         "responsive_variant_budget_count": len(responsive_variant_budgets),
         "responsive_variant_budgets": responsive_variant_budgets,
+        "release_marker": {
+            "path": RELEASE_MARKER_PATH,
+            "format": RELEASE_MARKER_PREFIX + "<40-character-commit-sha>",
+            "sha256": sha256_bytes(release_marker_data),
+        },
         "total_uncompressed_bytes": total_bytes,
         "excluded_server_only_or_development_files": [
             PRIVATE_CONFIG_PATH, EXAMPLE_CONFIG_PATH, ".git/", ".github/",

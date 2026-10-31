@@ -729,3 +729,15 @@ main.thar-sunset-story--experiences .experience-duration-label{
 .tour-ideas-custom-builder p:last-child{margin:0;color:var(--muted);line-height:1.65}
 .tour-ideas-custom-builder .button{flex:0 0 auto}
 @media(max-width:680px){.tour-ideas-custom-builder{align-items:stretch;flex-direction:column}.tour-ideas-custom-builder .button{width:100%;text-align:center}}
+
+
+/* Keep the 900px city panorama within its true source resolution. */
+.car-tours-page .package-hero-media img {
+  position:absolute;
+  top:0;
+  left:50%;
+  width:min(100%,1000px);
+  max-width:1000px;
+  height:100%;
+  transform:translateX(-50%);
+}

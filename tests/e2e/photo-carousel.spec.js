@@ -28,15 +28,43 @@ test('published experience and tour hubs provide an accessible next/previous pho
     const slideCount = await slides.count();
     expect(slideCount, route + ': must have multiple photos').toBeGreaterThan(2);
     await expect(gallery.locator('[data-photo-carousel-status]')).toHaveText('Photo 1 of ' + slideCount);
+    await expect(gallery.locator('[data-photo-carousel-status]')).toHaveAttribute('aria-live', 'polite');
     await expect(gallery.locator('[data-photo-carousel-slide]:visible')).toHaveCount(1);
+    await expect(slides.first()).toHaveAttribute('aria-hidden', 'false');
+    await expect(slides.nth(1)).toHaveAttribute('aria-hidden', 'true');
+
+    const mediaPolicy = await slides.locator('img').evaluateAll(images => images.map(image => ({
+      loading: image.getAttribute('loading'),
+      decoding: image.getAttribute('decoding'),
+      hasAlt: Boolean((image.getAttribute('alt') || '').trim()),
+    })));
+    expect(mediaPolicy.every(image => image.loading === 'lazy' && image.decoding === 'async' && image.hasAlt)).toBe(true);
 
     await gallery.locator('[data-photo-carousel-next]').click();
     await expect(gallery.locator('[data-photo-carousel-status]')).toHaveText('Photo 2 of ' + slideCount);
     await expect(gallery.locator('[data-photo-carousel-slide]:visible')).toHaveCount(1);
+    await expect(slides.nth(0)).toHaveAttribute('aria-hidden', 'true');
+    await expect(slides.nth(1)).toHaveAttribute('aria-hidden', 'false');
+    await expect.poll(
+      () => slides.nth(1).locator('img').evaluate(image => image.complete && image.naturalWidth > 0),
+      { timeout: 15_000 }
+    ).toBe(true);
 
+    const nextButton = gallery.locator('[data-photo-carousel-next]');
+    await nextButton.focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(gallery.locator('[data-photo-carousel-status]')).toHaveText('Photo 3 of ' + slideCount);
+    await expect(gallery.locator('[data-photo-carousel-slide]:visible')).toHaveCount(1);
+    await page.keyboard.press('ArrowLeft');
+    await expect(gallery.locator('[data-photo-carousel-status]')).toHaveText('Photo 2 of ' + slideCount);
     await gallery.locator('[data-photo-carousel-prev]').click();
     await expect(gallery.locator('[data-photo-carousel-status]')).toHaveText('Photo 1 of ' + slideCount);
+    await gallery.locator('[data-photo-carousel-prev]').click();
+    await expect(gallery.locator('[data-photo-carousel-status]')).toHaveText('Photo ' + slideCount + ' of ' + slideCount);
     await expect(gallery.locator('[data-photo-carousel-slide]:visible')).toHaveCount(1);
+    await expect(slides.nth(slideCount - 1)).toHaveAttribute('aria-hidden', 'false');
+    await gallery.locator('[data-photo-carousel-next]').click();
+    await expect(gallery.locator('[data-photo-carousel-status]')).toHaveText('Photo 1 of ' + slideCount);
 
     const blankAltCount = await slides.locator('img').evaluateAll(images =>
       images.filter(image => !image.getAttribute('alt') || !image.getAttribute('alt').trim()).length
@@ -70,6 +98,9 @@ test('room cards show two-photo room stories without changing booking and enquir
     await gallery.locator('[data-photo-carousel-next]').click();
     await expect(gallery.locator('[data-photo-carousel-status]')).toHaveText('Photo 2 of 2');
     await expect(gallery.locator('[data-photo-carousel-slide]:visible')).toHaveCount(1);
+    const secondImage = gallery.locator('[data-photo-carousel-slide]').nth(1).locator('img');
+    await expect(secondImage).toBeVisible();
+    await expect.poll(() => secondImage.evaluate(image => image.complete && image.naturalWidth > 0), { timeout: 15_000 }).toBe(true);
   }
 });
 

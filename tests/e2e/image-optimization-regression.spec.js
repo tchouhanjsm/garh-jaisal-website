@@ -4,6 +4,7 @@ const { test, expect } = require('@playwright/test');
 
 const root = path.resolve(__dirname, '../..');
 const manifest = require('../../scripts/image-optimization-manifest.json');
+const responsiveManifest = require('../../scripts/responsive-image-assets-manifest.json');
 const sourceSet = new Set(manifest.sources);
 const sources = manifest.sources.map(source => {
   const relative = path.posix.relative('img', source);
@@ -126,9 +127,12 @@ test('approved WebP derivatives preserve dimensions, map to the same source phot
         const responsiveSource = path.posix.relative('img', candidate.source);
         const responsiveParsed = path.posix.parse(responsiveSource);
         const responsivePrefix = path.posix.join('img', 'responsive', responsiveParsed.dir, responsiveParsed.name);
-        const responsiveCandidates = [480, 800, 1200].map(width => responsivePrefix + '-' + width + '.webp');
+        const sourceWidths = responsiveManifest.source_target_widths?.[candidate.source] || [];
+        const responsiveWidths = [...new Set([...(responsiveManifest.target_widths || []), ...sourceWidths])].sort((a, b) => a - b);
+        const responsiveCandidates = responsiveWidths.map(width => responsivePrefix + '-' + width + '.webp');
         const srcsetPaths = image.srcset.split(',').map(item => localPath(item.trim().split(/\s+/)[0], 'http://127.0.0.1:8080'));
-        const responsiveSelected = responsiveCandidates.includes(image.current) && srcsetPaths.includes(image.current);
+        const nativeSourceSelected = image.current === candidate.source && srcsetPaths.includes(image.current);
+        const responsiveSelected = (responsiveCandidates.includes(image.current) || nativeSourceSelected) && srcsetPaths.includes(image.current);
         const legacySelected = image.current === candidate.derivative && srcsetPaths.includes(candidate.derivative);
         if (!legacySelected && !responsiveSelected) {
           report.findings.push({ route, source: candidate.source, issue: 'approved-srcset-candidate-not-selected', current: image.current, expectedLegacy: candidate.derivative, expectedResponsive: responsiveCandidates, srcset: image.srcset });
@@ -145,7 +149,7 @@ test('approved WebP derivatives preserve dimensions, map to the same source phot
             report.findings.push({ route, source: candidate.source, issue: 'declared-aspect-ratio-mismatch', width: image.width, height: image.height, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight });
           }
         }
-        if (responsiveSelected) {
+        if (responsiveSelected && !nativeSourceSelected) {
           const selectedFile = path.join(root, image.current);
           const selectedBytes = fs.existsSync(selectedFile) ? fs.statSync(selectedFile).size : 0;
           if (!(selectedBytes > 0 && selectedBytes < candidate.sourceBytes)) {

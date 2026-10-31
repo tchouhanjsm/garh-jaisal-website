@@ -28,7 +28,7 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             "img/v2/facade.jpg": 70,
             "img/v2/courtyard.jpg": 70,
         })
-        self.assertEqual(manifest["budget_quality_floor"], 58)
+        self.assertEqual(manifest["budget_quality_floor"], 56)
         self.assertEqual(manifest["budget_quality_step"], 2)
         self.assertEqual(assets.quality_for_source(manifest, "img/v2/facade.jpg"), 70)
         self.assertEqual(assets.quality_for_source(manifest, "img/v2/courtyard.jpg"), 70)
@@ -39,28 +39,113 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             "img/v2/courtyard.jpg",
             "img/j5.jpg",
             "img/sleeping_under_stars/tour_9.jpeg",
+            "img/roofslide.webp",
+            "img/jcity.jpg",
         ])
-        self.assertEqual(manifest["variant_max_bytes"], {
-            "img/responsive/v2/courtyard-480.webp": 76800,
-            "img/responsive/v2/facade-1200.webp": 250000,
-            "img/responsive/v2/courtyard-1200.webp": 250000,
-            "img/responsive/j5-1200.webp": 160000,
-            "img/responsive/sleeping_under_stars/tour_9-1200.webp": 80000,
-        })
+        self.assertEqual(assets.target_widths_for_source(manifest, "img/v2/facade.jpg"), [480, 800, 1200, 1280])
+        self.assertEqual(assets.target_widths_for_source(manifest, "img/v2/fort-from-roof.jpg"), [480, 800, 1200, 1280, 1440, 1800])
+        self.assertEqual(assets.target_widths_for_source(manifest, "img/j10.jpg"), [480, 800, 1200, 1280])
+        self.assertEqual(assets.target_widths_for_source(manifest, "img/jcity.jpg"), [480, 800, 1200])
+        for source in (
+            "img/Desert_Camp/Tent.jpeg",
+            "img/Desert_Camp/CampingInJsm.jpeg",
+            "img/Desert_Camp/tent_deluxe.jpeg",
+        ):
+            self.assertEqual(assets.target_widths_for_source(manifest, source), [480, 800, 1200, 1280, 1440])
+        self.assertEqual(
+            assets.target_widths_for_source({"source_target_widths": {"img/wide.jpg": [1280, 1440]}}, "img/wide.jpg", [480, 800, 1200]),
+            [480, 800, 1200, 1280, 1440],
+        )
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/v2/courtyard-480.webp"], 76800)
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/v2/facade-1200.webp"], 250000)
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/v2/courtyard-1200.webp"], 250000)
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/j5-1200.webp"], 160000)
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/sleeping_under_stars/tour_9-1200.webp"], 80000)
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/v2/fort-from-roof-1800.webp"], 250000)
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/roofslide-1440.webp"], 250000)
+        for source in (
+            "img/Desert_Camp/Tent.jpeg",
+            "img/Desert_Camp/CampingInJsm.jpeg",
+            "img/Desert_Camp/tent_deluxe.jpeg",
+        ):
+            stem = source.rsplit("/", 1)[1].rsplit(".", 1)[0]
+            self.assertEqual(manifest["variant_max_bytes"][f"img/responsive/Desert_Camp/{stem}-1280.webp"], 250000)
+            self.assertEqual(manifest["variant_max_bytes"][f"img/responsive/Desert_Camp/{stem}-1440.webp"], 250000)
+        self.assertEqual(len(manifest["variant_max_bytes"]), 28)
+        self.assertNotIn("img/responsive/v2/facade-1440.webp", manifest["variant_max_bytes"])
+        self.assertNotIn("img/responsive/v2/facade-1800.webp", manifest["variant_max_bytes"])
+        self.assertNotIn("img/responsive/jcity-1200.webp", manifest["variant_max_bytes"])
+        self.assertNotIn("img/responsive/rest5-1200.webp", manifest["variant_max_bytes"])
 
-    def test_required_hero_sources_generate_all_responsive_width_contracts(self):
+    def test_required_hero_sources_require_only_non_upscaled_candidates(self):
         manifest = assets.load_manifest()
         required_paths = assets.required_hero_variant_paths(manifest, manifest["target_widths"])
-        self.assertEqual(
-            len(required_paths),
-            len(manifest["required_hero_sources"]) * len(manifest["target_widths"]),
-        )
+        expected_paths = set()
+        for source in manifest["required_hero_sources"]:
+            with Image.open(assets.ROOT / source) as opened:
+                source_width = opened.width
+            expected_paths.update(
+                assets.output_path(source, width).relative_to(assets.ROOT).as_posix()
+                for width in assets.target_widths_for_source(manifest, source)
+                if width < source_width
+            )
+        self.assertEqual(required_paths, expected_paths)
         self.assertIn("img/responsive/j5-480.webp", required_paths)
         self.assertIn("img/responsive/j5-800.webp", required_paths)
         self.assertIn("img/responsive/j5-1200.webp", required_paths)
-        self.assertIn("img/responsive/sleeping_under_stars/tour_9-480.webp", required_paths)
-        self.assertIn("img/responsive/sleeping_under_stars/tour_9-800.webp", required_paths)
         self.assertIn("img/responsive/sleeping_under_stars/tour_9-1200.webp", required_paths)
+        self.assertIn("img/responsive/v2/fort-from-roof-1280.webp", required_paths)
+        self.assertIn("img/responsive/v2/fort-from-roof-1800.webp", required_paths)
+        self.assertIn("img/responsive/roofslide-1440.webp", required_paths)
+        for source in ("img/rest3.jpg", "img/jcity.jpg"):
+            with Image.open(assets.ROOT / source) as opened:
+                source_width = opened.width
+            path = "img/responsive/" + source[4:-4] + "-1200.webp"
+            if source_width <= 1200:
+                self.assertNotIn(path, required_paths)
+            else:
+                self.assertIn(path, required_paths)
+
+    def test_required_hero_candidate_policy_uses_native_sources_without_upscaling(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            image_root = root / "img"
+            image_root.mkdir()
+            Image.new("RGB", (1000, 600), (110, 90, 70)).save(image_root / "native.jpg", format="JPEG")
+            Image.new("RGB", (1600, 900), (80, 100, 120)).save(image_root / "wide.jpg", format="JPEG")
+            with patch.object(assets, "ROOT", root), patch.object(assets, "OUTPUT_ROOT", image_root / "responsive"):
+                required = assets.required_hero_variant_paths({
+                    "required_hero_sources": ["img/native.jpg", "img/wide.jpg"],
+                    "sources": ["img/native.jpg", "img/wide.jpg"],
+                }, [480, 800, 1200])
+            self.assertEqual(required, {
+                "img/responsive/native-480.webp",
+                "img/responsive/native-800.webp",
+                "img/responsive/wide-480.webp",
+                "img/responsive/wide-800.webp",
+                "img/responsive/wide-1200.webp",
+            })
+
+    def test_manifest_rejects_byte_budgets_for_native_width_candidates(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            image_root = root / "img"
+            image_root.mkdir()
+            Image.new("RGB", (1000, 600), (110, 90, 70)).save(image_root / "native.jpg", format="JPEG")
+            manifest_path = root / "manifest.json"
+            manifest_path.write_text(json.dumps({
+                "version": 1,
+                "format": "WEBP",
+                "quality": 82,
+                "method": 6,
+                "minimum_savings_percent": 5,
+                "target_widths": [480, 800, 1200],
+                "sources": ["img/native.jpg"],
+                "variant_max_bytes": {"img/responsive/native-1200.webp": 1000},
+            }), encoding="utf-8")
+            with patch.object(assets, "ROOT", root), patch.object(assets, "OUTPUT_ROOT", image_root / "responsive"), patch.object(assets, "MANIFEST_PATH", manifest_path):
+                with self.assertRaisesRegex(ValueError, "Byte budget cannot target a non-generatable no-upscale candidate"):
+                    assets.load_manifest()
 
     def test_manifest_rejects_required_hero_sources_outside_the_source_allowlist(self):
         manifest = assets.load_manifest()
@@ -279,6 +364,23 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             with patch.object(assets, "ROOT", root), patch.object(assets, "OUTPUT_ROOT", root / "img" / "responsive"), patch.object(assets, "MANIFEST_PATH", manifest_path):
                 with self.assertRaisesRegex(ValueError, "collide"):
                     assets.load_manifest()
+
+
+    def test_source_target_widths_reject_unknown_sources_and_unsorted_targets(self):
+        manifest = assets.load_manifest()
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "manifest.json"
+            invalid_maps = [
+                ({"img/not-listed.jpg": [1280]}, "not listed in sources"),
+                ({"img/jcity.jpg": [1440, 1280]}, "positive, unique and sorted"),
+                ({"img/jcity.jpg": [1280, True]}, "positive, unique and sorted"),
+            ]
+            for source_widths, expected_error in invalid_maps:
+                path.write_text(json.dumps(dict(manifest, source_target_widths=source_widths)), encoding="utf-8")
+                with self.subTest(source_widths=source_widths):
+                    with patch.object(assets, "MANIFEST_PATH", path):
+                        with self.assertRaisesRegex(ValueError, expected_error):
+                            assets.load_manifest()
 
 
 if __name__ == "__main__":

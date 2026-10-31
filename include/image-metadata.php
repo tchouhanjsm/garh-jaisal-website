@@ -116,9 +116,9 @@ if (!function_exists('gj_local_image_metadata')) {
  * safety are checked by one implementation.
  */
 /**
- * Return only generated responsive candidates that pass the same source,
- * MIME, intrinsic-width, aspect-ratio and byte-saving checks as HTML delivery.
- * The structured result is shared by the img srcset and its preload descriptor.
+ * Return verified generated responsive candidates plus a native-width source
+ * fallback when the best derivative would cover less than 90% of source pixels.
+ * The structured result is shared by rendered img srcset and its preload descriptor.
  */
 if (!function_exists('gj_image_responsive_candidates')) {
     function gj_image_responsive_candidates($source)
@@ -146,7 +146,7 @@ if (!function_exists('gj_image_responsive_candidates')) {
             : $responsiveInfo['dirname'] . '/';
         $candidates = [];
 
-        foreach ([480, 800, 1200] as $candidateWidth) {
+        foreach ([480, 800, 1200, 1280, 1366, 1440, 1800] as $candidateWidth) {
             if ($candidateWidth >= $sourceWidth) {
                 continue;
             }
@@ -174,6 +174,23 @@ if (!function_exists('gj_image_responsive_candidates')) {
                 'width' => $candidateWidth,
                 'bytes' => $candidateMetadata['bytes'],
             ];
+        }
+
+        if ($candidates) {
+            $largestCandidate = $candidates[count($candidates) - 1];
+            $sourcePixelCoverage = $largestCandidate['width'] / $sourceWidth;
+
+            // Never strand a wide slot on a low-resolution derivative when the
+            // original source has meaningful extra pixels. The source is already
+            // path/MIME/dimension/byte validated above; expose it as the final
+            // width-descriptor fallback rather than fabricating an upscale.
+            if ($sourcePixelCoverage < 0.9) {
+                $candidates[] = [
+                    'path' => $sourceMetadata['path'],
+                    'width' => $sourceWidth,
+                    'bytes' => $sourceMetadata['bytes'],
+                ];
+            }
         }
 
         return $candidates;

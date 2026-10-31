@@ -15,7 +15,7 @@ const responsiveSlots = [
   { route: '/blog.php', selector: '.blog-card img[src="img/s4.jpg"]', sizes: CARD_SIZES },
   { route: '/blog.php', selector: '.blog-card img[src="img/big6.jpg"]', sizes: CARD_SIZES },
   { route: '/blog.php', selector: '.blog-card img[src="img/jcity.jpg"]', sizes: CARD_SIZES },
-  { route: '/car-tours.php', selector: '.package-hero-media img[src="img/jcity.jpg"]', sizes: '100vw' },
+  { route: '/car-tours.php', selector: '.package-hero-media img[src="img/jcity.jpg"]', sizes: '(max-width: 1000px) 100vw, 1000px' },
   { route: '/car-tours.php', selector: '.experience-card-grid img[src="img/j10.jpg"]', sizes: CARD_SIZES },
   { route: '/', selector: '.home-experiences img[src="img/tent.jpg"]', sizes: NARROW_CARD_SIZES },
   { route: '/', selector: '.gallery-strip figure:first-child img[src="img/jcity.jpg"]', sizes: '(max-width: 760px) 100vw, 50vw' },
@@ -38,8 +38,8 @@ const responsiveSlots = [
   { route: '/guided-jaisalmer-tour.php', selector: '.experience-hero-media img[src="img/j5.jpg"]', sizes: '100vw' },
   { route: '/guided-jaisalmer-tour.php', selector: '.experience-card-grid--two img[src="img/j2.jpg"]', sizes: '(max-width: 760px) 100vw, 50vw' },
   { route: '/restaurant.php', selector: '.restaurant-hero-media img[src="img/rest2.jpg"]', sizes: '(max-width: 760px) 100vw, 45vw' },
-  { route: '/roof.php', selector: '.page-hero-media img[src="img/rest5.jpg"]', sizes: '100vw' },
-  { route: '/roof.php', selector: '.roof-banner img[src="img/rest3.jpg"]', sizes: '(max-width: 760px) 100vw, 1180px' },
+  { route: '/roof.php', selector: '.page-hero-media img[src="img/roofslide.webp"]', sizes: '100vw' },
+  { route: '/roof.php', selector: '.roof-banner img[src="img/rest3.jpg"]', sizes: '(max-width: 1000px) 100vw, 1000px' },
   { route: '/', selector: '.home-experiences img[src="img/v2/swiss-tent.webp"]', sizes: NARROW_CARD_SIZES },
 ];
 
@@ -118,8 +118,11 @@ test('room and experience carousel source candidates cover their rendered image 
   test.setTimeout(60_000);
 
   const cases = [
-    { route: '/room.php', selector: '.room-card .photo-carousel-slide img[src="img/maharaniroom.jpg"]', sizes: ROOM_CAROUSEL_SIZES },
-    { route: '/full-day-jaisalmer-tour.php', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/j10.jpg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
+    { route: '/room.php', source: 'img/maharaniroom.jpg', selector: '.room-card .photo-carousel-slide img[src="img/maharaniroom.jpg"]', sizes: ROOM_CAROUSEL_SIZES },
+    { route: '/full-day-jaisalmer-tour.php', source: 'img/j10.jpg', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/j10.jpg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
+    { route: '/swiss-tent-safari.php', source: 'img/Desert_Camp/Tent.jpeg', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/Desert_Camp/Tent.jpeg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
+    { route: '/swiss-tent-safari.php', source: 'img/Desert_Camp/CampingInJsm.jpeg', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/Desert_Camp/CampingInJsm.jpeg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
+    { route: '/swiss-tent-safari.php', source: 'img/Desert_Camp/tent_deluxe.jpeg', selector: '.experience-photo-gallery .photo-carousel-slide img[src="img/Desert_Camp/tent_deluxe.jpeg"]', sizes: EXPERIENCE_CAROUSEL_SIZES },
   ];
 
   for (const width of [390, 1280]) {
@@ -138,6 +141,26 @@ test('room and experience carousel source candidates cover their rendered image 
         expect(response.status(), item.route + ' must return a successful response').toBeLessThan(400);
         const image = page.locator(item.selector);
         await expect(image, item.route + ' must render its representative carousel image').toHaveCount(1);
+        const carousel = image.locator('xpath=ancestor::*[@data-photo-carousel]');
+        await expect(carousel, item.route + ' image must belong to one initialized carousel').toHaveCount(1);
+        await expect(carousel.locator('[data-photo-carousel-controls]')).toBeVisible();
+
+        const targetIndex = await carousel.locator('[data-photo-carousel-slide]').evaluateAll(
+          (slides, source) => slides.findIndex(slide => slide.querySelector('img')?.getAttribute('src') === source),
+          item.source
+        );
+        expect(targetIndex, item.route + ' must retain the requested carousel photo').toBeGreaterThanOrEqual(0);
+
+        // Inactive slides are hidden after enhancement. Activate the actual
+        // target through the same control a guest uses before measuring its slot.
+        const next = carousel.locator('[data-photo-carousel-next]');
+        for (let step = 0; step < targetIndex; step += 1) await next.click();
+
+        const targetSlide = image.locator('xpath=ancestor::*[@data-photo-carousel-slide]');
+        await expect(targetSlide, item.route + ' requested slide must become visible').toBeVisible();
+        await expect(targetSlide).toHaveAttribute('aria-hidden', 'false');
+        await expect(carousel.locator('[data-photo-carousel-slide]:visible')).toHaveCount(1);
+
         await image.scrollIntoViewIfNeeded();
         await expect.poll(
           () => image.evaluate(img => img.complete && img.naturalWidth > 0),
@@ -175,5 +198,88 @@ test('room and experience carousel source candidates cover their rendered image 
     } finally {
       await context.close();
     }
+  }
+});
+
+
+test('wide rooftop and city-tour hero slots select source-appropriate desktop candidates', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Run large source-selection checks once at a controlled desktop viewport.');
+  test.setTimeout(60_000);
+
+  const cases = [
+    {
+      route: '/roof.php',
+      selector: '.page-hero-media img[src="img/roofslide.webp"]',
+      expectedPath: '/img/responsive/roofslide-1280.webp',
+      expectedWidth: 1280,
+    },
+    {
+      route: '/roof.php',
+      selector: '.roof-banner img[src="img/rest3.jpg"]',
+      expectedPath: '/img/rest3.jpg',
+      expectedWidth: 900,
+    },
+    {
+      route: '/car-tours.php',
+      selector: '.package-hero-media img[src="img/jcity.jpg"]',
+      expectedPath: '/img/jcity.jpg',
+      expectedNativeWidth: true,
+    },
+  ];
+
+  for (const item of cases) {
+    const response = await page.goto(BASE_URL + item.route, { waitUntil: 'domcontentloaded' });
+    expect(response, item.route + ' should return the desktop image markup').not.toBeNull();
+    expect(response.status()).toBe(200);
+
+    const image = page.locator(item.selector);
+    await expect(image).toHaveCount(1);
+    await expect(image).toHaveAttribute('srcset', /[1-9][0-9]*w/);
+    await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 15_000 }).toBe(true);
+
+    const selected = await image.evaluate(img => {
+      const currentPath = new URL(img.currentSrc || img.src, document.baseURI).pathname;
+      const sourcePath = new URL(img.getAttribute('src') || img.src, document.baseURI).pathname;
+      const sourceWidth = Number(img.getAttribute('width')) || img.naturalWidth;
+      const candidates = (img.getAttribute('srcset') || '').split(',').map(candidate => {
+        const parts = candidate.trim().split(/\s+/);
+        const width = Number((parts[1] || '').replace(/w$/, ''));
+        try {
+          return parts.length > 1 && width > 0
+            ? { path: new URL(parts[0], document.baseURI).pathname, width }
+            : null;
+        } catch {
+          return null;
+        }
+      }).filter(Boolean);
+      const descriptor = candidates.find(candidate => candidate.path === currentPath);
+      return {
+        path: currentPath,
+        sourcePath,
+        sourceWidth,
+        candidates,
+        selectedWidth: descriptor?.width || 0,
+        renderedWidth: img.getBoundingClientRect().width,
+      };
+    });
+
+    if (item.expectedNativeWidth) {
+      const generated = selected.candidates
+        .filter(candidate => candidate.path !== selected.sourcePath)
+        .sort((a, b) => a.width - b.width);
+      const largestGenerated = generated[generated.length - 1];
+      const needsNativeFallback = !largestGenerated || largestGenerated.width / selected.sourceWidth < 0.9;
+      const expectedPath = needsNativeFallback ? selected.sourcePath : largestGenerated.path;
+      const expectedWidth = needsNativeFallback ? selected.sourceWidth : largestGenerated.width;
+      expect(selected.path, item.route + ' should select the largest valid derivative or native source fallback').toBe(expectedPath);
+      expect(selected.selectedWidth, item.route + ' should expose the truthful selected width descriptor').toBe(expectedWidth);
+    } else {
+      expect(selected.path, item.route + ' should select the reviewed source candidate').toBe(item.expectedPath);
+      expect(selected.selectedWidth, item.route + ' should expose the truthful width descriptor').toBe(item.expectedWidth);
+    }
+    expect(
+      selected.selectedWidth / selected.renderedWidth,
+      item.route + ' should deliver at least 90% of the rendered slot in source pixels'
+    ).toBeGreaterThanOrEqual(0.9);
   }
 });

@@ -1,10 +1,10 @@
 # Project state and release gates
 
-Last updated: 30 October 2026.
+Last updated: 31 October 2026.
 
 ## Current objective
 
-Deliver a coherent, premium first impression and a lower-friction direct-booking journey on the existing plain-PHP/cPanel stack. The active PR #161 batch combines premium homepage storytelling and direct-booking conversion with a complete Directions/arrival experience. It uses first-party photography, transparent arrival/booking information, existing room/experience registries and privacy-safe CTA attribution through the shared analytics router and Trip-to-Contact journey. The visual direction remains editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint and local warmth.
+Deliver a premium, transparent guest journey and a verifiable cPanel staging release on the existing plain-PHP stack. PR #161 has merged the homepage storytelling, direct-booking measurement and complete Directions/arrival experience. The active release-engineering batch binds each deployment archive to its exact Git SHA, verifies rendered guest journeys, enforces source-appropriate large-slot image candidates, and checks real-host image content types/cache lifetime before production approval.
 
 ## Verified baseline after PR #155
 
@@ -229,12 +229,12 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 
 ## PR #161 implementation history — Homepage Milestones 1–2
 
-- **PR:** [#161](https://github.com/tchouhanjsm/garh-jaisal-website/pull/161) — open for review. **Branch:** `feature/home-premium-storytelling-20261030`, based on main `da806a67f7369d33eb15969d28c0386819cef7dc`.
+- **PR:** [#161](https://github.com/tchouhanjsm/garh-jaisal-website/pull/161) — merged on 31 October 2026 at `e858fa794a71bd68d1940bb49f6b382e2aec3dfd`. **Branch:** `feature/home-premium-storytelling-20261030`.
 - **Milestone 1:** refine the homepage hero art direction and responsive visual hierarchy using the existing Fort/facade photography, established brand tokens and the current responsive-image pipeline.
 - **Milestone 2:** complete the guest-facing story with a dedicated Jaisalmer discovery section and transparent planning-confidence content; retain the existing room, rooftop, desert, arrival, gallery, FAQ and final conversion journeys.
 - Move the existing Trip planning panel after accommodation and experience discovery so it acts as a considered next step rather than interrupting the story.
 - Preserve the configured external booking destination, registered room data, public routes, Trip tray, WhatsApp/Contact handoff, verified facts and analytics privacy boundaries.
-- **Release state:** implementation is prepared for PR review. Exact-head CI, browser screenshots, visual review and non-deploying package/Staging QA remain required. No cPanel upload or staging/production deployment is authorized by this batch.
+- **Release state:** integrated by the PR #161 merge. The merge did not perform a cPanel upload or staging/production deployment.
 
 
 ## PR #161 implementation history — Homepage direct-booking Phase 3
@@ -243,10 +243,10 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - **Phase 3:** provide a clear room-discovery booking action that uses the already configured booking engine; instrument hero, room-section and final booking CTAs with stable IDs and locations.
 - Keep attribution limited to the existing allowlisted UTM fields. Never forward email, topic, name, message or arbitrary query parameters to analytics.
 - Preserve first-screen proof-point clearance at 320px, with the existing fixed mobile booking dock remaining unobstructed.
-- PR #160's independent staging-release-provenance work is paused on its retained branch while this homepage PR is the sole active PR. Rebase and resume it only after #161 is merged.
+- PR #160 was closed without merging. Its retained release-provenance branch continues as the sole active successor PR #162, based on the merged PR #161 main SHA.
 
 
-## Active implementation — PR #161 Phase 4: Premium Directions and arrival experience
+## Completed phase — PR #161 Phase 4: Premium Directions and arrival experience
 
 - Extend the same active implementation branch with a complete Directions page experience batch; do not create a second open PR.
 - Apply a route-scoped visual system across the arrival hero, quick guide, travel choices, walking route, mobility information, map, FAQs and booking close.
@@ -254,4 +254,89 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Add stable tracking metadata to the Directions booking CTA. Browser coverage confirms outbound booking intent, both approved analytics destinations, allowlisted UTM attribution and exclusion of private query values; it does not claim a completed reservation.
 - Preserve the Directions public URL, canonical/schema, exact pin, map embed, phone/WhatsApp/contact destinations, transfer and mobility caveats, rickshaw-hours wording, existing FAQ answers and original imagery.
 - Add PHP source contract, multi-viewport browser assertions, copy/progressive-enhancement tests and the sitemap lastmod update.
-- Re-run PHP 7.4/8.2 Site Checks, sitemap validation, responsive Browser E2E/screenshots, package preflight and non-deploying Staging QA on the exact final PR head. Human visual review remains required; no deployment is part of this phase.
+- PR #161 merged on 31 October 2026 at e858fa794a71bd68d1940bb49f6b382e2aec3dfd. This confirms repository integration; it does not mean cPanel staging or production was deployed.
+
+
+## Active implementation — PR #162: release provenance and staged delivery assurance
+
+Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for PR #161. PR #162 is the sole open successor to the retained PR #160 work. Do not open another implementation PR while #162 is active.
+
+- Sprint 86 — package provenance: generate a non-secret release-info.txt in the ZIP from the exact 40-character checkout SHA; include its hash in the manifest and protect it with no-store/noindex headers and a robots disallow.
+- Sprint 87 — guest-journey staging smoke: audit Home, Rooms, Contact, Directions, Restaurant, Rooftop, Desert Safari, Guided Tours, Car Tours, Gallery and Journal at 390px and 1280px. Assert the three homepage booking CTA identities/destinations, Directions driver note and exact map pin, arrival booking CTA, route metadata, schema, images and overflow.
+- Sprint 88 — package integrity and reproducibility: extract the generated marker from the ZIP, match it to the package manifest and sidecar checksum, and prove the same clean commit produces the same ZIP hash. Reject a build when GITHUB_SHA differs from HEAD.
+- Real-host delivery gate: only an owner-dispatched Staging QA run with the HTTPS staging origin and package SHA may assert host-served provenance and image cache headers. The diagnostic uses bounded, read-only HTTP HEAD requests, checks image content type/status and at least seven days of effective cache lifetime, and records responsive candidate/preload parity and source-pixel coverage.
+- All PR checks remain non-deploying. No cPanel upload, enquiry submission, staging deployment or production release is included.
+
+
+## Active implementation — PR #162 Phase 2: Full-width guest-image delivery
+
+- Require budgeted 1200w WebP candidates only for originals wider than 1200px. Rooftop rest5.jpg and Car & City Tours jcity.jpg are no wider than the target and must use the original as their native-width candidate; no 1200w derivative or byte budget is allowed for them.
+- For source images whose original width is below the 1200px target, never upscale. The shared PHP resolver adds the native original as a final width-descriptor candidate when the largest generated derivative would cover less than 90% of the source width.
+- Assert selected source width, exact candidate URL and >=90% slot coverage for the three audited Rooftop/Car & City slots at 1280px. The 11-route staging smoke independently enforces the same 90% coverage rule.
+- Original photography, public routes, existing crop/aspect behavior, booking links and editorial copy remain unchanged. PR checks are local/non-deploying.
+
+
+## Sprint 90 — source-aware responsive requirements and native-width delivery (PR #162)
+
+- Required hero variants are derived from decoded source dimensions. A target at or above the original width is a deliberate no-upscale fallback, not a missing generated asset.
+- Manifest validation rejects byte budgets attached to candidates that cannot be generated without upscaling. Neither Rooftop rest5-1200 nor Car & City Tours jcity-1200 is a valid budget target.
+- Keep rest5/jcity 480/800 WebP derivatives where generated and expose each original photo as its final truthful native-width candidate. Rendered srcset and high-priority preload continue to share the same path-safe candidate resolver.
+- Update PHP and desktop Browser E2E contracts to assert Rooftop and Car & City Tours native candidate URLs/descriptors and at least 90% source-pixel coverage for both large hero slots.
+- Preserve original photography, dimensions, crop, public routes, content, map and booking destinations.
+- Exact-head validation still requires Site Checks, image generation, Browser E2E/screenshots, package reproducibility and non-deploying 11-route Staging QA. Real-host checks remain owner-dispatched and read-only.
+
+
+## Active implementation — PR #162 Phase 3: High-resolution responsive delivery
+
+- Add source-scoped 1280/1440/1800 WebP candidates only for full-width hero sources whose current 1200w ceiling forces a large native original to be selected. Keep the global 480/800/1200 set unchanged for other photography.
+- Enforce a hard 250,000-byte cap for every newly added candidate through the existing adaptive quality ladder. Preserve source images, metadata-safety, aspect ratios and the no-upscale rule.
+- Extend the PHP resolver allowlist and derive page preloads from the same verified candidate list as rendered srcset output.
+- Replace the full-bleed Rooftop hero with the approved 1600px panoramic rooftop photo. Constrain the 900px rooftop feature and Car & City Tours city photo to a 1000px maximum slot rather than upscaling their originals.
+- Extend Python generator/manifest tests, PHP preload parity, desktop/mobile Playwright candidate selection and source-pixel coverage checks.
+- Exact-head gates: PHP 7.4/8.2 Site Checks, source-image generation, responsive image audit, Browser E2E/screenshots, package reproducibility and non-deploying 11-route Staging QA. No cPanel upload, external staging deployment or production release.
+
+
+### Phase 3 source-width validation correction
+
+- The generator's decoded source inspection confirmed `img/v2/facade.jpg` is 1333px wide. Keep its 1280w derivative, but do not declare 1440w/1800w candidates or budgets that would require upscaling.
+- The generated sitemap dates now reflect the directly edited public templates: Home, Gallery, Rooftop Dining and Car & City Tours (31 October 2026).
+- The no-upscale guard remains enforced both when loading manifest byte budgets and when deriving mandatory hero coverage.
+
+
+### Phase 3 payload-budget calibration
+
+- The 1333px facade's 1280w WebP measured 257,328 bytes at quality 58. Keep the global quality ladder, but allow it to step down to 56 and enforce a 256,000-byte cap for this single candidate (250 KiB). All other new candidate caps remain 250,000 bytes.
+- This remains below the Browser/Staging image audit's 250 KiB threshold; no original photo or page slot is changed to meet the budget.
+
+
+## PR #162 Phase 4 — source-aware image delivery and preload parity
+
+- Correct the image generator's required-candidate helper so an explicit global-width argument remains usable for minimal manifest fixtures/consumers; merge it with source-specific widths without permitting upscaling.
+- Extend only three Swiss Tent gallery originals with 1280w and 1440w WebP candidates: Tent.jpeg, CampingInJsm.jpeg and tent_deluxe.jpeg. Every new derivative has an independently enforced 250,000-byte budget; original photos remain unchanged.
+- Replace Room and Gallery's independent hand-built preload lists with `gj_image_responsive_preload_descriptor()`, using the exact source path and sizes expression passed to the rendered hero image. LCP tests require exact normalized preload/srcset parity.
+- Update editorial media readiness so it accepts only a same-origin native original as the final srcset fallback, with a descriptor equal to the verified intrinsic source width. All other candidates must remain under the approved responsive path.
+- Update the Gallery full-bleed hero contract to its actual selected 1280w candidate; extend carousel coverage for the three Swiss Tent images at mobile and desktop widths.
+- Keep the route-wide 250 KiB selected-resource audit and 90% source-pixel coverage gate. Do not relax payload thresholds to conceal large originals.
+- No route, crop, image original, alt text, captions, booking destination, business fact, map or public metadata is changed. Exact-head PHP 7.4/8.2, Browser E2E/screenshots, package reproducibility and non-deploying Staging QA remain release gates. No cPanel upload, external staging deployment or production release is included.
+
+
+### Phase 4 sitemap freshness
+
+- Updated only `/room.php` to the 31 October 2026 Git source date because the shared Room hero preload now uses the responsive image resolver. All other sitemap dates remain unchanged.
+
+
+### Phase 4 package inventory parity
+
+- The deployment package selector now validates and includes source-specific widths from the same manifest contract as the responsive-image generator. Unit coverage proves the Swiss Tent 1280w/1440w budgeted variants are selected into the runtime package.
+
+
+## Active implementation — PR #162 Phase 5: carousel image delivery and accessible interaction
+
+**Purpose:** complete the guest-facing behavior of the source-aware image work, rather than testing hidden carousel images as though they were visible page slots.
+
+- **Sprint 91 — visible-slide source measurement:** update the two-viewport source-selection matrix to activate the target photo through the carousel's actual Next control before reading currentSrc, dimensions and rendered slot width. Keep the 90% source-pixel coverage threshold unchanged.
+- **Sprint 92 — interaction-scoped image decode:** when the guest moves to another photo with a button or arrow key, request/decode only the newly active image. Do not eagerly decode every slide, preload adjacent photos on page load, or introduce autoplay.
+- **Sprint 93 — keyboard and screen-reader state:** verify ArrowLeft/ArrowRight navigation, wraparound, the single visible slide, matching hidden/aria-hidden state and the polite Photo N of M announcement.
+- **Sprint 94 — no-JavaScript and lazy-media contract:** preserve all curated slides when JavaScript is unavailable, keep gallery images lazy/async, and add a PHP source contract to both PHP 7.4 and 8.2 Site Checks.
+- **Release gates:** rerun source-aware image generation, both PHP Site Checks, Browser E2E/screenshots, package reproducibility/preflight and non-deploying 11-route Staging QA on the exact PR #162 head. Real-host HTTPS/cache tests remain owner-dispatched and read-only.
+- **Preservation:** original photography, slide order, alt text, captions, aspect ratios, route URLs, canonical/schema, room/tour content, booking destinations and image budgets remain unchanged. No cPanel upload, external staging deployment, enquiry submission or production release is included.

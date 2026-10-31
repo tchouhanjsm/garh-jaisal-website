@@ -139,13 +139,13 @@ test.describe('Visual asset and typography evidence', () => {
     });
 
     expect(state.sizes, 'A full-bleed Gallery hero must advertise the full viewport slot').toBe('100vw');
-    expect(state.srcset).toContain('rooftop-dusk-1200.webp 1200w');
-    expect(state.currentSrc).toMatch(/rooftop-dusk-1200\.webp(?:[?#].*)?$/);
+    expect(state.srcset).toContain('rooftop-dusk-1280.webp 1280w');
+    expect(state.currentSrc).toMatch(/rooftop-dusk-1280\.webp(?:[?#].*)?$/);
     expect(state.naturalWidth).toBeGreaterThanOrEqual(1000);
     expect(state.renderedWidth).toBeGreaterThan(1000);
     expect(state.fetchPriority).toBe('high');
     expect(state.preloadSizes).toBe('100vw');
-    expect(state.preloadSrcset).toContain('rooftop-dusk-1200.webp 1200w');
+    expect(state.preloadSrcset).toContain('rooftop-dusk-1280.webp 1280w');
     const normalizeCandidateList = (srcset) => srcset.split(',').map(candidate => candidate.trim().replace(/^\//, '')).join(', ');
     expect(normalizeCandidateList(state.preloadSrcset)).toBe(normalizeCandidateList(state.srcset));
   });
