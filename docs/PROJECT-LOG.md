@@ -252,3 +252,9 @@ The first generated 1280w facade candidate missed the 250,000-byte limit by 7,32
 ### Phase 4 sitemap freshness RCA
 
 - The exact-head PHP 7.4/8.2 sitemap contract correctly identified that `room.php` had changed on 31 October while its committed `lastmod` remained 29 October. Updated only the Room entry to 31 October 2026; no bulk sitemap date refresh or unrelated URL date change was applied.
+
+
+### Package inventory RCA — source-specific image candidates
+
+- The first package preflight after adding Swiss Tent 1280w/1440w derivatives correctly rejected them because `get_generated_responsive_paths()` still built its allowed-path set from global target widths only. It now validates `source_target_widths` against the source allowlist and unions those widths for that source only. Unit coverage verifies the 1280w/1440w budgeted assets are selected without permitting arbitrary output files.
+- Browser E2E's first run also caught a malformed escape in the added LCP preload-candidate normalizer. Replaced the slash regex with explicit leading-slash normalization; exact candidate-list equality remains enforced.

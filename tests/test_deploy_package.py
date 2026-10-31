@@ -209,6 +209,35 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
                 "img/responsive/v2/facade-800.webp",
             ])
 
+    def test_generated_responsive_paths_include_source_specific_widths(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "scripts").mkdir()
+            output = root / "img" / "responsive" / "Desert_Camp"
+            output.mkdir(parents=True)
+            source = "img/Desert_Camp/Tent.jpeg"
+            manifest = {
+                "target_widths": [480, 800, 1200],
+                "sources": [source],
+                "source_target_widths": {source: [1280, 1440]},
+                "variant_max_bytes": {
+                    "img/responsive/Desert_Camp/Tent-1280.webp": 250000,
+                    "img/responsive/Desert_Camp/Tent-1440.webp": 250000,
+                },
+            }
+            (root / "scripts" / "responsive-image-assets-manifest.json").write_text(
+                json.dumps(manifest), encoding="utf-8"
+            )
+            for width in [480, 800, 1200, 1280, 1440]:
+                (output / f"Tent-{width}.webp").write_bytes(b"approved-webp-candidate")
+            self.assertEqual(get_generated_responsive_paths(root), [
+                "img/responsive/Desert_Camp/Tent-1280.webp",
+                "img/responsive/Desert_Camp/Tent-1440.webp",
+                "img/responsive/Desert_Camp/Tent-480.webp",
+                "img/responsive/Desert_Camp/Tent-800.webp",
+                "img/responsive/Desert_Camp/Tent-1200.webp",
+            ])
+
     def test_generated_responsive_paths_enforce_manifest_byte_budgets(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

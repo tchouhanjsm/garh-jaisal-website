@@ -164,7 +164,10 @@ test('high-intent LCP images are preloaded before render at mobile and desktop w
           ).toBe(state.sizes);
         }
         if (state.srcset && matchingPreloads[0].imagesrcset) {
-          const normalizeCandidates = value => value.split(',').map(item => item.trim().replace(/^\\//, '')).join(', ');
+          const normalizeCandidates = value => value.split(',').map(item => {
+            const candidate = item.trim();
+            return candidate.startsWith('/') ? candidate.slice(1) : candidate;
+          }).join(', ');
           expect(
             normalizeCandidates(matchingPreloads[0].imagesrcset),
             hero.route + ' preload candidates must exactly match the rendered responsive source'

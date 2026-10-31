@@ -323,3 +323,8 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 ### Phase 4 sitemap freshness
 
 - Updated only `/room.php` to the 31 October 2026 Git source date because the shared Room hero preload now uses the responsive image resolver. All other sitemap dates remain unchanged.
+
+
+### Phase 4 package inventory parity
+
+- The deployment package selector now validates and includes source-specific widths from the same manifest contract as the responsive-image generator. Unit coverage proves the Swiss Tent 1280w/1440w budgeted variants are selected into the runtime package.

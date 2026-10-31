@@ -128,6 +128,20 @@ def get_generated_responsive_paths(root: Path = ROOT) -> list[str]:
     if not isinstance(widths, list) or not widths or not isinstance(sources, list) or not sources:
         raise PackageError("Responsive image manifest must define sources and target widths.")
 
+    source_target_widths = manifest.get("source_target_widths", {})
+    if not isinstance(source_target_widths, dict):
+        raise PackageError("Responsive image source-specific widths must be a source-to-width-list object.")
+    for source, additional_widths in source_target_widths.items():
+        if source not in sources:
+            raise PackageError("Responsive image source-specific widths target an unlisted source: " + str(source))
+        if (
+            not isinstance(additional_widths, list)
+            or not additional_widths
+            or any(isinstance(width, bool) or not isinstance(width, int) or width < 1 for width in additional_widths)
+            or additional_widths != sorted(set(additional_widths))
+        ):
+            raise PackageError("Responsive image source-specific widths must be positive, unique and sorted: " + str(source))
+
     allowed: set[str] = set()
     for source in sources:
         if not isinstance(source, str):
@@ -139,7 +153,8 @@ def get_generated_responsive_paths(root: Path = ROOT) -> list[str]:
         ):
             raise PackageError("Unsafe responsive image source path: " + source)
         relative = pure.relative_to("img")
-        for width in widths:
+        candidate_widths = sorted(set(widths) | set(source_target_widths.get(source, [])))
+        for width in candidate_widths:
             if not isinstance(width, int) or isinstance(width, bool) or width < 1:
                 raise PackageError("Responsive image widths must be positive integers.")
             generated = PurePosixPath(
