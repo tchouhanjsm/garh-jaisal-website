@@ -1,10 +1,10 @@
 # Project state and release gates
 
-Last updated: 30 October 2026.
+Last updated: 31 October 2026.
 
 ## Current objective
 
-Deliver a coherent, premium first impression and a lower-friction direct-booking journey on the existing plain-PHP/cPanel stack. The active PR #161 batch combines premium homepage storytelling and direct-booking conversion with a complete Directions/arrival experience. It uses first-party photography, transparent arrival/booking information, existing room/experience registries and privacy-safe CTA attribution through the shared analytics router and Trip-to-Contact journey. The visual direction remains editorial heritage hospitality: real property photography, sandstone and night-sky contrast, warm light, readable typography, restraint and local warmth.
+Deliver a premium, transparent guest journey and a verifiable cPanel staging release on the existing plain-PHP stack. PR #161 has merged the homepage storytelling, direct-booking measurement and complete Directions/arrival experience. The active release-engineering batch binds each deployment archive to its exact Git SHA and verifies rendered guest journeys, responsive asset selection, real-host image content types and cache lifetime before production approval.
 
 ## Verified baseline after PR #155
 
@@ -243,10 +243,10 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - **Phase 3:** provide a clear room-discovery booking action that uses the already configured booking engine; instrument hero, room-section and final booking CTAs with stable IDs and locations.
 - Keep attribution limited to the existing allowlisted UTM fields. Never forward email, topic, name, message or arbitrary query parameters to analytics.
 - Preserve first-screen proof-point clearance at 320px, with the existing fixed mobile booking dock remaining unobstructed.
-- PR #160's independent staging-release-provenance work is paused on its retained branch while this homepage PR is the sole active PR. Rebase and resume it only after #161 is merged.
+- PR #160's staging-release-provenance work has been rebased onto the merged PR #161 main SHA and resumed as the sole active implementation PR.
 
 
-## Active implementation — PR #161 Phase 4: Premium Directions and arrival experience
+## Completed phase — PR #161 Phase 4: Premium Directions and arrival experience
 
 - Extend the same active implementation branch with a complete Directions page experience batch; do not create a second open PR.
 - Apply a route-scoped visual system across the arrival hero, quick guide, travel choices, walking route, mobility information, map, FAQs and booking close.
@@ -254,4 +254,15 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - Add stable tracking metadata to the Directions booking CTA. Browser coverage confirms outbound booking intent, both approved analytics destinations, allowlisted UTM attribution and exclusion of private query values; it does not claim a completed reservation.
 - Preserve the Directions public URL, canonical/schema, exact pin, map embed, phone/WhatsApp/contact destinations, transfer and mobility caveats, rickshaw-hours wording, existing FAQ answers and original imagery.
 - Add PHP source contract, multi-viewport browser assertions, copy/progressive-enhancement tests and the sitemap lastmod update.
-- Re-run PHP 7.4/8.2 Site Checks, sitemap validation, responsive Browser E2E/screenshots, package preflight and non-deploying Staging QA on the exact final PR head. Human visual review remains required; no deployment is part of this phase.
+- PR #161 merged on 31 October 2026 at e858fa794a71bd68d1940bb49f6b382e2aec3dfd. This confirms repository integration; it does not mean cPanel staging or production was deployed.
+
+
+## Active implementation — PR #160: release provenance and staged delivery assurance
+
+Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for PR #161. The retained PR #160 branch has been rebased onto this main revision. Do not open another implementation PR while #160 is active.
+
+- Sprint 86 — package provenance: generate a non-secret release-info.txt in the ZIP from the exact 40-character checkout SHA; include its hash in the manifest and protect it with no-store/noindex headers and a robots disallow.
+- Sprint 87 — guest-journey staging smoke: audit Home, Rooms, Contact, Directions, Restaurant, Rooftop, Desert Safari, Guided Tours, Car Tours, Gallery and Journal at 390px and 1280px. Assert the three homepage booking CTA identities/destinations, Directions driver note and exact map pin, arrival booking CTA, route metadata, schema, images and overflow.
+- Sprint 88 — package integrity and reproducibility: extract the generated marker from the ZIP, match it to the package manifest and sidecar checksum, and prove the same clean commit produces the same ZIP hash. Reject a build when GITHUB_SHA differs from HEAD.
+- Real-host delivery gate: only an owner-dispatched Staging QA run with the HTTPS staging origin and package SHA may assert host-served provenance and image cache headers. The diagnostic uses bounded, read-only HTTP HEAD requests, checks image content type/status and at least seven days of effective cache lifetime, and records responsive candidate/preload parity and source-pixel coverage.
+- All PR checks remain non-deploying. No cPanel upload, enquiry submission, staging deployment or production release is included.

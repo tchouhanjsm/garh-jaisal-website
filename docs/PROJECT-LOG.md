@@ -2,15 +2,15 @@
 
 > Tracked source and exact-commit CI are authoritative. Owner retains production release approval.
 
-## Latest state — 30 October 2026
+## Latest state — 31 October 2026
 
 | Item | Value |
 |---|---|
-| Verified main SHA | da806a67f7369d33eb15969d28c0386819cef7dc — PR #159 merged |
-| Active implementation | Premium homepage and arrival experience — Milestones 1–2 + Phases 3–4 on `feature/home-premium-storytelling-20261030` |
-| Working branch | `feature/home-premium-storytelling-20261030` (based on `da806a67f7369d33eb15969d28c0386819cef7dc`) |
-| Scope | Premium homepage storytelling, direct-booking CTA measurement, and route-complete Directions/arrival experience with driver-ready copy, responsive art direction and booking-intent coverage |
-| Release boundary | Owner retains merge and release approval; no cPanel upload, staging deployment or production deployment |
+| Verified main SHA | e858fa794a71bd68d1940bb49f6b382e2aec3dfd — PR #161 merged 31 October 2026 |
+| Active implementation | Release provenance and cPanel staging delivery assurance (PR #160, rebased after PR #161) |
+| Working branch | `feature/staging-release-provenance-delivery-20261030` (based on `e858fa794a71bd68d1940bb49f6b382e2aec3dfd`) |
+| Scope | Exact-SHA package marker, reproducible ZIP/manifest/checksum, 11-route guest-journey staging smoke, and read-only real-host responsive-image/cache diagnostics |
+| Release boundary | Owner retains staging upload, merge and production approval; PR checks do not upload or submit enquiries |
 | Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667258) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667379) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667299) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667390) — all passed on 15afdf46506bdaf3799bde97f47e3296210bb898 |
 
 ## Recent guest-journey milestones
@@ -174,3 +174,19 @@ Regression coverage verifies action count and destination parity on the live exp
 - Add a PHP source contract, expanded multi-viewport E2E, progressive-enhancement coverage and the Directions sitemap freshness update.
 - Preserve the public route, canonical/schema, map pin/embed, phone/WhatsApp/enquiry destinations, business facts and original photographs. No cPanel upload, staging deployment or production release is included.
 - Exact-head CI must pass after the batch commit; owner visual review remains a release gate.
+
+
+## PR #161 — completed homepage and arrival milestones
+
+- PR #161 merged on 31 October 2026 at e858fa794a71bd68d1940bb49f6b382e2aec3dfd.
+- Delivered premium homepage storytelling, the three measured homepage booking CTAs, privacy-safe campaign attribution and the complete Directions visual/arrival experience with a driver-ready copy action.
+- The merge is repository integration only. It is not evidence of a cPanel upload, live staging verification or production deployment.
+
+## PR #160 — release provenance and cPanel staging delivery assurance
+
+- Rebase the retained Sprint 86 branch on the PR #161 merge SHA and keep it as the single active implementation PR.
+- Preserve the generated exact-SHA release marker, package manifest/checksum, no-store/noindex marker rules and external staging read-only image/cache diagnostics.
+- Sprint 87: widen the local staging smoke matrix to 11 guest-facing routes and assert the merged homepage booking paths plus the Directions driver note, exact map pin and arrival booking CTA at mobile/desktop widths.
+- Sprint 88: exercise the actual package builder in a temporary clean Git checkout; extract the archive marker, verify marker/manifest/archive/sidecar hashes, assert exclusion of the server-only config, and check byte-identical ZIP output for repeat builds of one commit.
+- Sprint 89: exact-head validation of PHP/site contracts, deployment-package unit/preflight, local staging route smoke, and Browser E2E/screenshots. Real-host image HEAD/cache verification remains owner-dispatched and read-only.
+- No cPanel upload, external staging deployment, enquiry submission or production release is part of this PR.

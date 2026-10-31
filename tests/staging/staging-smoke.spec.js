@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
+const { cacheMaxAgeSeconds, normalizedSrcset, parseReleaseMarker, selectedSrcsetWidth } = require('../../scripts/staging-delivery-diagnostics');
 
 const ROOT = path.resolve(__dirname, '../..');
 const REMOTE_TARGET = (process.env.STAGING_BASE_URL || '').trim();
@@ -11,7 +12,8 @@ const BASE_URL = EXTERNAL_STAGING
 const STAGING_ORIGIN = new URL(BASE_URL).origin;
 const EXPECTED_SHA = (process.env.STAGING_EXPECTED_COMMIT_SHA || '').toLowerCase();
 const CHECKED_OUT_SHA = (process.env.CHECKED_OUT_COMMIT_SHA || '').toLowerCase();
-const CORE_ROUTES = ['/', '/room.php', '/contact.php', '/direction.php'];
+const CORE_ROUTES = ['/', '/room.php', '/contact.php', '/direction.php', '/restaurant.php', '/roof.php', '/desert-safari.php', '/guided-jaisalmer-tour.php', '/car-tours.php', '/gallery.php', '/blog.php'];
+const MIN_IMAGE_CACHE_AGE_SECONDS = 7 * 24 * 60 * 60;
 
 function routePathsFromSitemap(content) {
   return [...new Set(
@@ -39,6 +41,9 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
   const failures = [];
   const routeResults = [];
   const screenshots = [];
+  const selectedImageUrls = new Set();
+  const imageCacheAudit = [];
+  let releaseProvenance = { status: 'not-run', packageCommit: null };
   const screenshotsDir = path.join(process.cwd(), 'artifacts', 'staging-qa', 'screenshots');
   fs.mkdirSync(screenshotsDir, { recursive: true });
   let activePageErrors = [];
@@ -51,6 +56,31 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
   if (EXTERNAL_STAGING) {
     record(/^[0-9a-f]{40}$/i.test(EXPECTED_SHA), 'External run is missing a full staged-package SHA.');
     record(EXPECTED_SHA === CHECKED_OUT_SHA, 'Staged package SHA differs from the workflow checkout SHA.');
+
+    try {
+      const markerResponse = await request.get(new URL('/release-info.txt', BASE_URL).href, { maxRedirects: 0, timeout: 15_000 });
+      const markerText = await markerResponse.text();
+      const observedCommit = parseReleaseMarker(markerText);
+      const markerHeaders = markerResponse.headers();
+      releaseProvenance = {
+        status: markerResponse.status(),
+        packageCommit: observedCommit,
+        expectedCommit: EXPECTED_SHA,
+        contentType: markerHeaders['content-type'] || null,
+        cacheControl: markerHeaders['cache-control'] || null,
+        robotsHeader: markerHeaders['x-robots-tag'] || null,
+      };
+      record(markerResponse.status() === 200, 'Staging release marker must return HTTP 200.', { status: markerResponse.status() });
+      record(Boolean(observedCommit), 'Staging release marker is missing or malformed.');
+      record(observedCommit === EXPECTED_SHA, 'Staging is not serving the exact reviewed package commit.', { expectedCommit: EXPECTED_SHA, observedCommit });
+      record((markerHeaders['content-type'] || '').toLowerCase().startsWith('text/plain'), 'Staging release marker must be text/plain.', { contentType: markerHeaders['content-type'] || null });
+      record(/noindex/i.test(markerHeaders['x-robots-tag'] || ''), 'Staging release marker must be noindex.');
+      record(/no-store/i.test(markerHeaders['cache-control'] || ''), 'Staging release marker must not be cached.', { cacheControl: markerHeaders['cache-control'] || null });
+      record(markerText.length <= 128, 'Staging release marker exceeds its 128-character safety limit.', { characters: markerText.length });
+    } catch (error) {
+      releaseProvenance = { status: 'request-failed', packageCommit: null, detail: error.message };
+      failures.push({ message: 'Unable to verify staged package release provenance.', detail: error.message });
+    }
     try {
       const sitemapResponse = await request.get(new URL('/sitemap.xml', BASE_URL).href, { maxRedirects: 0, timeout: 20_000 });
       record(sitemapResponse.status() < 400, 'Staging sitemap did not return a successful response.', { status: sitemapResponse.status() });
@@ -132,6 +162,8 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
         imageCount: 0,
         imageFailures: 0,
         horizontalOverflow: null,
+        imageSources: [],
+        preloads: [],
         pageErrors: [],
         screenshot: null,
       };
@@ -174,6 +206,72 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
         }
         record(schemaBlocks.length > 0, 'Page must emit structured data.', { route, viewport: viewport.width });
 
+        // Validate the guest journeys introduced by the merged PR #161.
+        if (route === '/') {
+          const homeBookingCases = [
+            ['a[data-cta-id="booking-home-hero"]', 'booking-home-hero', 'home-hero'],
+            ['#rooms-preview a[data-cta-id="booking-home-rooms"]', 'booking-home-rooms', 'home-rooms-section'],
+            ['.final-cta a[data-cta-id="booking-home-final"]', 'booking-home-final', 'home-final-cta'],
+          ];
+          for (const [selector, ctaId, location] of homeBookingCases) {
+            const link = page.locator(selector);
+            const count = await link.count();
+            record(count === 1, 'Homepage booking journey is missing or duplicated: ' + ctaId, { route, viewport: viewport.width, count });
+            if (count === 1) {
+              const href = await link.getAttribute('href') || '';
+              let host = '';
+              try { host = new URL(href, BASE_URL).hostname; } catch { /* recorded below */ }
+              record(host === 'asiatech.in', 'Homepage booking CTA must retain the configured booking engine.', { route, viewport: viewport.width, ctaId, host });
+              record(await link.getAttribute('data-cta-location') === location, 'Homepage booking CTA location metadata changed.', { route, viewport: viewport.width, ctaId });
+              record(await link.getAttribute('target') === '_blank', 'Homepage booking CTA must open the configured engine in a new tab.', { route, viewport: viewport.width, ctaId });
+              record((await link.getAttribute('rel') || '').includes('noopener'), 'Homepage booking CTA must retain noopener.', { route, viewport: viewport.width, ctaId });
+            }
+          }
+        }
+
+        if (route === '/direction.php') {
+          const driverCard = page.locator('.arrival-driver-card');
+          const driverCount = await driverCard.count();
+          record(driverCount === 1, 'Directions page must render one driver-ready arrival card.', { route, viewport: viewport.width, count: driverCount });
+          if (driverCount === 1) {
+            const driverCopy = await driverCard.innerText();
+            for (const fact of [
+              'Fort Kotari Para, Inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001',
+              'Vehicles cannot enter Jaisalmer Fort',
+              'Fort Parking',
+            ]) {
+              record(driverCopy.includes(fact), 'Directions driver card is missing an approved arrival fact.', { route, viewport: viewport.width, fact });
+            }
+            const copyButton = driverCard.locator('button[data-arrival-copy]');
+            record(await copyButton.isVisible().catch(() => false), 'Directions driver-copy action should be available when JavaScript is enabled.', { route, viewport: viewport.width });
+            const copyPayload = await copyButton.getAttribute('data-arrival-copy').catch(() => '') || '';
+            record(copyPayload.includes('300 metres (5–6 minutes)'), 'Driver-copy payload is missing the verified final-walk guidance.', { route, viewport: viewport.width });
+            record(copyPayload.includes('https://maps.app.goo.gl/nAbRiZhv78FSbju48'), 'Driver-copy payload is missing the exact approved hotel pin.', { route, viewport: viewport.width });
+          }
+
+          const arrivalBooking = page.locator('.arrival-page .final-cta a[data-cta-id="booking-arrival-final"]');
+          const arrivalBookingCount = await arrivalBooking.count();
+          record(arrivalBookingCount === 1, 'Directions page must retain one measured direct-booking CTA.', { route, viewport: viewport.width, count: arrivalBookingCount });
+          if (arrivalBookingCount === 1) {
+            const href = await arrivalBooking.getAttribute('href') || '';
+            let host = '';
+            try { host = new URL(href, BASE_URL).hostname; } catch { /* recorded below */ }
+            record(host === 'asiatech.in', 'Directions booking CTA must retain the configured booking engine.', { route, viewport: viewport.width, host });
+            record(await arrivalBooking.getAttribute('data-cta-location') === 'arrival-final-cta', 'Directions booking CTA location metadata changed.', { route, viewport: viewport.width });
+          }
+        }
+
+
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.waitForTimeout(50);
+        const initialImageVisibility = await page.locator('img').evaluateAll(nodes => nodes.map(img => {
+          const rect = img.getBoundingClientRect();
+          const style = getComputedStyle(img);
+          return rect.width > 0 && rect.height > 0
+            && rect.right > 0 && rect.left < window.innerWidth
+            && rect.bottom > 0 && rect.top < window.innerHeight
+            && style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0;
+        }));
         const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
         for (let top = 0; top < pageHeight; top += 700) {
           await page.evaluate(value => window.scrollTo(0, value), top);
@@ -202,17 +300,91 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
 
         const images = await page.locator('img').evaluateAll(nodes => nodes.map((img, index) => {
           const style = getComputedStyle(img);
+          const currentSrc = img.currentSrc || img.src || '';
+          const pictureSources = Array.from(img.closest('picture')?.querySelectorAll('source[srcset]') || []);
+          const activeSource = pictureSources.find(source => source.srcset.split(',').some(candidate => {
+            const candidateUrl = candidate.trim().split(/\s+/)[0];
+            try { return new URL(candidateUrl, document.baseURI).href === currentSrc; }
+            catch { return false; }
+          }));
+          const rect = img.getBoundingClientRect();
           return {
             index: index + 1,
-            src: img.currentSrc || img.src || '',
+            src: img.getAttribute('src') || img.src || '',
+            srcset: activeSource?.getAttribute('srcset') || img.getAttribute('srcset') || '',
+            sizes: activeSource?.getAttribute('sizes') || img.getAttribute('sizes') || '',
+            currentSrc,
             altPresent: img.hasAttribute('alt'),
             width: Number(img.getAttribute('width')),
             height: Number(img.getAttribute('height')),
+            naturalWidth: img.naturalWidth,
+            naturalHeight: img.naturalHeight,
+            renderedWidth: Math.round(rect.width * 100) / 100,
+            renderedHeight: Math.round(rect.height * 100) / 100,
+            devicePixelRatio: window.devicePixelRatio || 1,
+            loading: img.loading || 'eager',
+            fetchPriority: img.fetchPriority || 'auto',
+            visibleAtInitialViewport: initialImageVisibility[index - 1] === true,
             loaded: img.complete && img.naturalWidth > 0 && img.naturalHeight > 0,
             rendered: style.display !== 'none' && style.visibility !== 'hidden' && img.getClientRects().length > 0,
           };
         }));
         result.imageCount = images.length;
+        result.imageSources = images;
+        result.preloads = await page.locator('link[rel="preload"][as="image"]').evaluateAll(nodes => nodes.map(link => ({
+          href: link.href || '',
+          imagesrcset: link.getAttribute('imagesrcset') || '',
+          imagesizes: link.getAttribute('imagesizes') || '',
+          media: link.getAttribute('media') || '',
+          active: !link.media || window.matchMedia(link.media).matches,
+          fetchpriority: link.getAttribute('fetchpriority') || '',
+        })));
+        for (const img of images) {
+          const selectedWidth = selectedSrcsetWidth(img.srcset, img.currentSrc, BASE_URL);
+          const targetPixelWidth = img.renderedWidth * img.devicePixelRatio;
+          const sourcePixelCoverage = selectedWidth && targetPixelWidth > 0 ? selectedWidth / targetPixelWidth : null;
+          img.selectedSrcsetWidth = selectedWidth;
+          img.sourcePixelCoverage = sourcePixelCoverage;
+          if (sourcePixelCoverage !== null) {
+            record(sourcePixelCoverage >= 0.9, 'Responsive image candidate is under-resolved for its rendered slot.', {
+              route, viewport: viewport.width, src: img.currentSrc, selectedWidth, targetPixelWidth,
+              sourcePixelCoverage: Math.round(sourcePixelCoverage * 1000) / 1000,
+            });
+          }
+          if (img.fetchPriority === 'high') {
+            record(img.visibleAtInitialViewport, 'High-priority image is outside the initial viewport.', {
+              route, viewport: viewport.width, src: img.currentSrc,
+            });
+          }
+          if (EXTERNAL_STAGING && img.visibleAtInitialViewport && img.currentSrc) {
+            try {
+              if (new URL(img.currentSrc).origin === STAGING_ORIGIN) selectedImageUrls.add(img.currentSrc);
+            } catch { /* Invalid image URLs are covered by the existing load assertion. */ }
+          }
+        }
+        const activePreloads = result.preloads.filter(preload => preload.active);
+        const preloadKeys = activePreloads.map(preload => [preload.href, preload.imagesrcset, preload.imagesizes].join('|'));
+        record(new Set(preloadKeys).size === preloadKeys.length, 'Duplicate active image preloads were emitted.', { route, viewport: viewport.width, preloads: activePreloads });
+        for (const preload of activePreloads) {
+          const preloadSet = normalizedSrcset(preload.imagesrcset, BASE_URL);
+          const matchingImages = images.filter(img => {
+            if (preload.imagesrcset) {
+              return Boolean(img.srcset)
+                && preloadSet !== ''
+                && preloadSet === normalizedSrcset(img.srcset, BASE_URL)
+                && preload.imagesizes === img.sizes;
+            }
+            try {
+              const preloadPath = new URL(preload.href, BASE_URL).pathname;
+              return [img.currentSrc, img.src].some(source => Boolean(source) && new URL(source, BASE_URL).pathname === preloadPath);
+            } catch {
+              return false;
+            }
+          });
+          record(matchingImages.length > 0, 'Image preload does not match a rendered candidate and sizes hint.', {
+            route, viewport: viewport.width, preload,
+          });
+        }
         for (const img of images) {
           const problems = [];
           if (!img.altPresent) problems.push('missing-alt');
@@ -239,6 +411,40 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
     }
   }
 
+  if (EXTERNAL_STAGING) {
+    const imageUrls = [...selectedImageUrls].sort();
+    for (let offset = 0; offset < imageUrls.length; offset += 6) {
+      const batch = imageUrls.slice(offset, offset + 6);
+      const observations = await Promise.all(batch.map(async url => {
+        try {
+          const response = await request.head(url, { maxRedirects: 0, timeout: 15_000 });
+          const headers = response.headers();
+          const maxAgeSeconds = cacheMaxAgeSeconds(headers);
+          const contentType = (headers['content-type'] || '').split(';')[0].trim().toLowerCase();
+          const contentLength = Number(headers['content-length']);
+          const observation = {
+            url, status: response.status(), contentType: contentType || null,
+            contentLengthBytes: Number.isFinite(contentLength) && contentLength > 0 ? contentLength : null,
+            cacheControl: headers['cache-control'] || null,
+            expires: headers.expires || null,
+            effectiveMaxAgeSeconds: maxAgeSeconds,
+          };
+          record(response.status() === 200, 'Selected staging image did not return HTTP 200 to HEAD.', { url, status: response.status() });
+          record(contentType.startsWith('image/'), 'Selected staging image has a non-image Content-Type.', { url, contentType });
+          record(maxAgeSeconds !== null, 'Selected staging image has no verifiable cache lifetime.', { url, cacheControl: observation.cacheControl, expires: observation.expires });
+          record(maxAgeSeconds !== null && maxAgeSeconds >= MIN_IMAGE_CACHE_AGE_SECONDS,
+            'Selected staging image cache lifetime is below the seven-day minimum.',
+            { url, effectiveMaxAgeSeconds: maxAgeSeconds, minimumSeconds: MIN_IMAGE_CACHE_AGE_SECONDS });
+          return observation;
+        } catch (error) {
+          record(false, 'Unable to inspect selected staging image cache headers.', { url, detail: error.message });
+          return { url, status: null, error: error.message };
+        }
+      }));
+      imageCacheAudit.push(...observations);
+    }
+  }
+
   const report = {
     generatedAt: new Date().toISOString(),
     mode: EXTERNAL_STAGING ? 'external-staging' : 'local-dry-run',
@@ -247,6 +453,13 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
     workflowCheckoutCommit: EXTERNAL_STAGING ? CHECKED_OUT_SHA : null,
     deploymentPerformed: false,
     enquirySubmitted: false,
+    releaseProvenance,
+    imageDelivery: {
+      firstViewportFirstPartyImageCount: selectedImageUrls.size,
+      cacheProbeCount: imageCacheAudit.length,
+      minimumCacheAgeSeconds: MIN_IMAGE_CACHE_AGE_SECONDS,
+      cacheProbes: imageCacheAudit,
+    },
     routeCount: ROUTES_TO_CHECK.length,
     viewportWidths: viewports.map(viewport => viewport.width),
     failures,

@@ -43,6 +43,20 @@ jobs:
           php-version: '8.2'
           coverage: none
 
+      - name: Set up Python for local responsive image fixtures
+        if: github.event_name != 'workflow_dispatch'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned responsive image tooling
+        if: github.event_name != 'workflow_dispatch'
+        run: python -m pip install --disable-pip-version-check Pillow==11.3.0
+
+      - name: Generate responsive image candidates for local staging QA
+        if: github.event_name != 'workflow_dispatch'
+        run: python scripts/build-responsive-image-assets.py
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -54,8 +68,8 @@ jobs:
       - name: Install Chromium and system dependencies
         run: npx playwright install --with-deps chromium
 
-      - name: Test staging-target validator
-        run: node --test tests/test-staging-target.js
+      - name: Test staging target and delivery diagnostics
+        run: node --test tests/test-staging-target.js tests/test-staging-delivery-diagnostics.js
 
       - name: Test shared page-head staging noindex guard
         run: php tests/php/staging-noindex.php

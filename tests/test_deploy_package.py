@@ -1,11 +1,19 @@
+import hashlib
 import json
+import os
+import subprocess
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts.build_deploy_package import (
     EXAMPLE_CONFIG_PATH,
+    RELEASE_MARKER_PATH,
     PackageError,
+    build_release_marker,
+    build_deployment_package,
     PRIVATE_CONFIG_PATH,
     get_generated_responsive_paths,
     select_runtime_paths,
@@ -22,6 +30,53 @@ SITEMAP = """<?xml version="1.0" encoding="UTF-8"?>
   <url><loc>https://www.hotelgarhjaisal.com/contact.php</loc></url>
 </urlset>
 """
+
+
+def create_package_git_fixture(root: Path) -> str:
+    """Create a minimal clean main checkout with generated, manifest-approved WebP."""
+    runtime_files = {
+        ".htaccess": "Options -Indexes\n",
+        "404.php": "<?php http_response_code(404);\n",
+        "contact.php": "<?php\n",
+        "index.php": "<?php\n",
+        "mail.php": "<?php\n",
+        "robots.txt": "User-agent: *\n",
+        "sitemap.xml": SITEMAP,
+        "include/page-head.php": "<?php\n",
+        "include/site-config.php": "<?php\n",
+        "room.php": "<?php\n",
+        "img/facade.jpg": "original-image-fallback",
+        "scripts/responsive-image-assets-manifest.json": json.dumps({
+            "target_widths": [480],
+            "sources": ["img/facade.jpg"],
+            "variant_max_bytes": {"img/responsive/facade-480.webp": 256},
+        }),
+        ".gitignore": "img/responsive/\n",
+    }
+    for relative, content in runtime_files.items():
+        target = root / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(content, encoding="utf-8")
+
+    generated = root / "img" / "responsive" / "facade-480.webp"
+    generated.parent.mkdir(parents=True, exist_ok=True)
+    generated.write_bytes(b"approved-webp-candidate")
+
+    subprocess.run(
+        ["git", "init", "--initial-branch=main", str(root)],
+        check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+    )
+    subprocess.run(["git", "config", "user.name", "Package Fixture"], cwd=root, check=True)
+    subprocess.run(["git", "config", "user.email", "package-fixture@example.invalid"], cwd=root, check=True)
+    subprocess.run(["git", "add", "--all"], cwd=root, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", "fixture: clean deployment source"],
+        cwd=root, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+    )
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=root, check=True,
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
+    ).stdout.strip()
 
 
 class DeploymentPackageSelectionTests(unittest.TestCase):
@@ -65,6 +120,19 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
     def test_private_local_config_is_never_packageable(self):
         with self.assertRaisesRegex(PackageError, "must never be tracked"):
             select_runtime_paths([PRIVATE_CONFIG_PATH])
+
+    def test_release_marker_is_generated_from_a_full_commit_sha(self):
+        commit_sha = "A" * 40
+        expected = "GARH_JAISAL_RELEASE_SHA=" + ("a" * 40) + chr(10)
+        self.assertEqual(build_release_marker(commit_sha).decode("ascii"), expected)
+        for invalid in ("abc123", "g" * 40, "", None):
+            with self.subTest(invalid=invalid):
+                with self.assertRaisesRegex(PackageError, "full 40-character Git commit SHA"):
+                    build_release_marker(invalid)
+
+    def test_release_marker_path_cannot_be_supplied_as_a_tracked_file(self):
+        with self.assertRaisesRegex(PackageError, "generated during package creation"):
+            select_runtime_paths([RELEASE_MARKER_PATH])
 
     def test_every_sitemap_route_must_be_included(self):
         selected = [
@@ -193,6 +261,60 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
             sitemap_route_targets(
                 "<urlset><url><loc>https://www.hotelgarhjaisal.com/nested/room.php</loc></url></urlset>"
             )
+
+
+    def test_archive_release_marker_manifest_checksum_and_reproducibility(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "repo"
+            root.mkdir()
+            commit_sha = create_package_git_fixture(root)
+            first_output = Path(directory) / "package-one"
+            second_output = Path(directory) / "package-two"
+            workflow_env = {
+                "GITHUB_ACTIONS": "true",
+                "GITHUB_REF": "refs/heads/main",
+                "GITHUB_SHA": commit_sha,
+            }
+
+            with patch.dict(os.environ, workflow_env):
+                first = build_deployment_package(root, first_output)
+                second = build_deployment_package(root, second_output)
+
+            self.assertEqual(first["commit"], commit_sha)
+            self.assertEqual(first["package_sha256"], second["package_sha256"])
+
+            archive_path = Path(first["package"])
+            manifest = json.loads(Path(first["manifest"]).read_text(encoding="utf-8"))
+            checksum = Path(first["checksum"]).read_text(encoding="utf-8")
+            archive_bytes = archive_path.read_bytes()
+            expected_marker = build_release_marker(commit_sha)
+
+            self.assertEqual(hashlib.sha256(archive_bytes).hexdigest(), manifest["package_sha256"])
+            self.assertEqual(checksum, manifest["package_sha256"] + "  " + archive_path.name + "\n")
+            self.assertEqual(manifest["release_marker"]["path"], RELEASE_MARKER_PATH)
+            self.assertEqual(hashlib.sha256(expected_marker).hexdigest(), manifest["release_marker"]["sha256"])
+
+            marker_entries = [item for item in manifest["files"] if item["path"] == RELEASE_MARKER_PATH]
+            self.assertEqual(len(marker_entries), 1)
+            self.assertEqual(marker_entries[0]["sha256"], manifest["release_marker"]["sha256"])
+            with zipfile.ZipFile(archive_path) as archive:
+                self.assertIn(RELEASE_MARKER_PATH, archive.namelist())
+                self.assertEqual(archive.read(RELEASE_MARKER_PATH), expected_marker)
+                self.assertNotIn("include/site-config.local.php", archive.namelist())
+                self.assertNotIn("scripts/responsive-image-assets-manifest.json", archive.namelist())
+
+    def test_archive_build_rejects_a_workflow_sha_that_does_not_match_the_checkout(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "repo"
+            root.mkdir()
+            create_package_git_fixture(root)
+            with patch.dict(os.environ, {
+                "GITHUB_ACTIONS": "true",
+                "GITHUB_REF": "refs/heads/main",
+                "GITHUB_SHA": "f" * 40,
+            }):
+                with self.assertRaisesRegex(PackageError, "does not match GITHUB_SHA"):
+                    build_deployment_package(root, Path(directory) / "package")
 
 
 if __name__ == "__main__":
