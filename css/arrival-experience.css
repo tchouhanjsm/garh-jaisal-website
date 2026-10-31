@@ -1,0 +1,133 @@
+/*
+ * Premium arrival experience — route-scoped visual system.
+ * Preserves shared chrome, current page structure and existing guest destinations.
+ */
+.arrival-page {
+  --arrival-night: #14122b;
+  --arrival-garnet: #5b1a2b;
+  --arrival-parchment: #f7efe0;
+  --arrival-paper: #fffdfa;
+  --arrival-ink: #231a14;
+  --arrival-muted: #62564d;
+  --arrival-line: rgba(91, 26, 43, .16);
+  --arrival-gold: #b98b4c;
+  color: var(--arrival-ink);
+  overflow-wrap: break-word;
+}
+.arrival-page .arrival-hero { position: relative; isolation: isolate; min-height: 0; background: var(--arrival-night); }
+.arrival-page .arrival-hero::before {
+  position: absolute; z-index: 1; inset: 0;
+  background: linear-gradient(90deg,rgba(20,18,43,.88),rgba(20,18,43,.62) 47%,rgba(20,18,43,.18)),
+    linear-gradient(180deg,rgba(20,18,43,.08),rgba(20,18,43,.32));
+  content: ""; pointer-events: none;
+}
+.arrival-page .arrival-hero .page-hero-media { z-index: 0; }
+.arrival-page .arrival-hero-inner { position: relative; z-index: 2; padding-block: clamp(3rem,6vw,5.8rem); }
+.arrival-page .arrival-hero-layout { grid-template-columns: minmax(0,1.2fr) minmax(320px,.74fr); gap: clamp(28px,5vw,72px); }
+.arrival-page .arrival-hero-copy h1 { max-width: 12ch; margin-bottom: 22px; font-size: clamp(2.75rem,5.5vw,5rem); font-weight: 400; letter-spacing: -.045em; line-height: .99; }
+.arrival-page .arrival-hero-copy > p:not(.eyebrow) { max-width: 56ch; font-size: clamp(1.02rem,1.3vw,1.16rem); line-height: 1.72; }
+.arrival-page .arrival-hero-copy .actions .button,
+.arrival-page .arrival-quick-map { min-height: 50px; }
+.arrival-page .arrival-quick-card { border: 1px solid rgba(255,255,255,.82); border-radius: 8px; background: var(--arrival-paper); box-shadow: 0 26px 70px rgba(0,0,0,.28); }
+.arrival-page .arrival-quick-card h2 { font-weight: 400; letter-spacing: -.025em; }
+.arrival-page .arrival-quick-list li { padding-block: 17px; }
+.arrival-page .arrival-quick-number { border-color: rgba(185,139,76,.55); background: rgba(185,139,76,.09); }
+.arrival-page .arrival-section-nav { border-bottom-color: var(--arrival-line); box-shadow: 0 5px 18px rgba(20,18,43,.035); }
+.arrival-page .arrival-section-nav .site-shell { scrollbar-color: var(--arrival-gold) transparent; }
+.arrival-page .arrival-section-nav a { min-height: 58px; font-size: .9rem; }
+.arrival-page .arrival-overview { background: linear-gradient(145deg,var(--arrival-parchment),#fbf7ef 68%,#f1e7d9); }
+.arrival-page .section-head h2,
+.arrival-page .arrival-split h2 { text-wrap: balance; letter-spacing: -.035em; }
+.arrival-page .arrival-facts,
+.arrival-page .travel-grid { gap: 16px; }
+.arrival-page .arrival-fact,
+.arrival-page .travel-card {
+  position: relative; overflow: hidden; padding: clamp(22px,2.6vw,32px);
+  border: 1px solid var(--arrival-line); border-radius: 7px;
+  background: rgba(255,253,250,.9); box-shadow: 0 10px 30px rgba(20,18,43,.045);
+}
+.arrival-page .arrival-fact::before,
+.arrival-page .travel-card::before {
+  position: absolute; inset: 0 0 auto; height: 3px; background: var(--arrival-gold); content: "";
+}
+.arrival-page .arrival-fact > span { color: var(--arrival-muted); font-size: .82rem; font-weight: 750; letter-spacing: .07em; text-transform: uppercase; }
+.arrival-page .arrival-fact strong { margin-block: 12px; color: var(--arrival-garnet); font-size: clamp(1.55rem,2.3vw,2rem); }
+.arrival-page .arrival-fact p,
+.arrival-page .travel-card p { line-height: 1.68; }
+.arrival-page .arrival-driver-card {
+  display: grid; grid-template-columns: minmax(0,1fr) auto; gap: clamp(22px,4vw,48px); align-items: center;
+  margin-top: clamp(22px,3vw,34px); padding: clamp(24px,3.4vw,42px);
+  border: 1px solid rgba(91,26,43,.2); border-inline-start: 5px solid var(--arrival-gold); border-radius: 7px;
+  background: radial-gradient(circle at 100% 0,rgba(185,139,76,.14),transparent 34%),linear-gradient(120deg,#fffdfa,#f6edde);
+  box-shadow: 0 14px 38px rgba(20,18,43,.065);
+}
+.arrival-page .arrival-driver-card__copy { min-width: 0; }
+.arrival-page .arrival-driver-card h3 {
+  margin: 0 0 12px; color: var(--arrival-ink); font-family: Georgia,"Times New Roman",serif;
+  font-size: clamp(1.65rem,2.7vw,2.2rem); font-weight: 400; letter-spacing: -.025em; line-height: 1.12;
+}
+.arrival-page .arrival-driver-card__copy > p:not(.eyebrow):not(.arrival-driver-card__address) { max-width: 66ch; margin: 0; color: var(--arrival-muted); line-height: 1.7; }
+.arrival-page .arrival-driver-card__address { margin-top: 14px !important; color: var(--arrival-garnet) !important; font-size: .94rem; font-weight: 750; }
+.arrival-page .arrival-driver-card__action { display: grid; justify-items: stretch; gap: 10px; min-width: min(245px,100%); }
+.arrival-page .arrival-driver-copy-button { min-height: 50px; padding-inline: 20px; border: 1px solid var(--arrival-garnet); background: var(--arrival-garnet); color: #fff; cursor: pointer; white-space: normal; }
+/* The shared .button rule sets display:flex; explicitly preserve HTML hidden semantics. */
+.arrival-page .arrival-driver-copy-button[hidden] { display: none; }
+.arrival-page .arrival-driver-copy-button:hover:not(:disabled) { background: #421321; }
+.arrival-page .arrival-driver-copy-button:disabled { cursor: wait; opacity: .72; }
+.arrival-page .arrival-driver-card__status { min-height: 1.45em; margin: 0; color: var(--arrival-muted); font-size: .82rem; line-height: 1.45; }
+.arrival-page .arrival-route-steps { gap: 16px; }
+.arrival-page .arrival-route-steps .step { position: relative; padding: clamp(20px,2.2vw,28px); border: 1px solid var(--arrival-line); border-radius: 7px; background: var(--arrival-paper); }
+.arrival-page .arrival-route-steps .arrival-route-number { width: 42px; height: 42px; border: 1px solid rgba(185,139,76,.42); background: var(--arrival-parchment); }
+.arrival-page .arrival-route-steps .step strong { line-height: 1.35; }
+.arrival-page .arrival-route-steps .step p { line-height: 1.65; }
+.arrival-page .travel-card { transition: transform .2s ease,border-color .2s ease,box-shadow .2s ease; }
+.arrival-page .travel-card:hover { transform: translateY(-3px); border-color: rgba(91,26,43,.32); box-shadow: 0 16px 34px rgba(20,18,43,.09); }
+.arrival-page .arrival-notice { border: 1px solid rgba(91,26,43,.16); border-inline-start: 5px solid var(--arrival-gold); border-radius: 7px; background: linear-gradient(110deg,#f5ead8,#fbf7ef); }
+.arrival-page .arrival-notice h3 { color: var(--arrival-garnet); font-weight: 500; letter-spacing: -.02em; }
+.arrival-page .arrival-access { background: #f5f0e8; }
+.arrival-page .arrival-access .access-list { padding: 4px clamp(18px,3vw,30px); border: 1px solid var(--arrival-line); border-radius: 7px; background: var(--arrival-paper); }
+.arrival-page .arrival-map { background: var(--arrival-paper); }
+.arrival-page .arrival-map-frame { min-height: 390px; border: 1px solid var(--arrival-line); border-radius: 7px; box-shadow: 0 12px 32px rgba(20,18,43,.07); }
+.arrival-page .arrival-map-frame iframe { min-height: 390px; }
+.arrival-page .arrival-map-copy { border: 1px solid var(--arrival-line); border-radius: 7px; }
+.arrival-page .arrival-map-copy .button { min-height: 48px; }
+.arrival-page .arrival-contact { background: radial-gradient(circle at 90% 0,rgba(185,139,76,.18),transparent 38%),linear-gradient(125deg,#201c35,#302018); }
+.arrival-page .arrival-address { border-radius: 7px; background: rgba(255,255,255,.035); }
+.arrival-page .arrival-address a { text-underline-offset: .22em; }
+.arrival-page .arrival-faq { background: linear-gradient(145deg,var(--arrival-parchment),#fffdfa); }
+.arrival-page .arrival-faq .faq-list details { border-color: var(--arrival-line); }
+.arrival-page .arrival-faq .faq-list summary { min-height: 58px; padding-block: 18px; font-size: clamp(1.05rem,1.5vw,1.18rem); line-height: 1.4; }
+.arrival-page .final-cta { background: radial-gradient(circle at 85% 15%,rgba(185,139,76,.18),transparent 34%),var(--arrival-night); }
+.arrival-page a:focus-visible,
+.arrival-page button:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 3px; }
+@media (max-width: 1000px) {
+  .arrival-page .arrival-hero-layout { grid-template-columns: minmax(0,1fr); max-width: 760px; }
+  .arrival-page .arrival-quick-card { max-width: 620px; }
+  .arrival-page .arrival-route-steps { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .arrival-page .arrival-driver-card { grid-template-columns: minmax(0,1fr); }
+  .arrival-page .arrival-driver-card__action { max-width: 330px; }
+}
+@media (max-width: 760px) {
+  .arrival-page .arrival-hero::before { background: linear-gradient(180deg,rgba(20,18,43,.24),rgba(20,18,43,.94)); }
+  .arrival-page .arrival-hero-layout { gap: 24px; }
+  .arrival-page .arrival-hero-copy h1 { max-width: 11ch; font-size: clamp(2.45rem,10vw,3.45rem); }
+  .arrival-page .arrival-facts,
+  .arrival-page .travel-grid,
+  .arrival-page .arrival-route-steps { grid-template-columns: minmax(0,1fr); }
+  .arrival-page .arrival-driver-card { padding: 22px; }
+  .arrival-page .arrival-driver-card__action,
+  .arrival-page .arrival-driver-copy-button { width: 100%; max-width: none; }
+  .arrival-page .arrival-map-frame,
+  .arrival-page .arrival-map-frame iframe { min-height: 290px; }
+  .arrival-page .arrival-notice { padding: 22px; }
+}
+@media (max-width: 420px) {
+  .arrival-page .arrival-hero-inner { padding-block: 2.6rem; }
+  .arrival-page .arrival-hero-copy h1 { font-size: clamp(2.2rem,9.6vw,2.7rem); }
+  .arrival-page .arrival-driver-card { padding: 18px; }
+  .arrival-page .section-head h2 { font-size: clamp(1.8rem,8vw,2.2rem); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .arrival-page .travel-card { transition: none; }
+  .arrival-page .travel-card:hover { transform: none; }
+}

@@ -1,0 +1,324 @@
+/*
+ * Homepage art direction — premium heritage storytelling.
+ * Uses first-party photography, existing design tokens and no new runtime dependency.
+ * Kept route-scoped so the shared visual system and other page families are untouched.
+ */
+
+main.thar-sunset-story--home > .hero {
+  min-height: clamp(560px, calc(100svh - 76px), 760px);
+  isolation: isolate;
+}
+
+main.thar-sunset-story--home .hero-overlay {
+  background:
+    linear-gradient(90deg, rgba(20, 18, 43, .78) 0%, rgba(20, 18, 43, .52) 43%, rgba(20, 18, 43, .10) 86%),
+    linear-gradient(180deg, rgba(20, 18, 43, .06) 0%, rgba(20, 18, 43, .10) 44%, rgba(20, 18, 43, .88) 100%);
+}
+
+main.thar-sunset-story--home .hero-content {
+  max-width: 940px;
+  padding-top: clamp(112px, 14vh, 154px);
+  padding-bottom: clamp(34px, 5vh, 58px);
+}
+
+main.thar-sunset-story--home .hero-content h1 {
+  max-width: 13ch;
+  font-size: clamp(2.9rem, 5.6vw, 4.8rem);
+  line-height: .98;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+
+main.thar-sunset-story--home .hero-content > p:not(.eyebrow) {
+  max-width: 57ch;
+  font-size: clamp(1.02rem, 1.25vw, 1.16rem);
+  line-height: 1.62;
+}
+
+main.thar-sunset-story--home .hero-content .actions .button {
+  min-height: 52px;
+  padding-inline: clamp(18px, 2vw, 25px);
+}
+
+main.thar-sunset-story--home .hero-content .button-primary {
+  box-shadow: 0 10px 28px rgba(20, 18, 43, .28);
+}
+
+main.thar-sunset-story--home .home-place-story .image-panel {
+  overflow: hidden;
+  border: 1px solid var(--story-keyline, rgba(217, 164, 65, .5));
+  border-radius: 48% 48% 6px 6px / 20% 20% 6px 6px;
+  background: var(--parchment, #f7efe0);
+}
+
+main.thar-sunset-story--home .home-place-story .image-panel img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  object-fit: cover;
+}
+
+main.thar-sunset-story--home .home-city-discovery {
+  overflow: hidden;
+  background: linear-gradient(135deg, #f7efe0 0%, #fbf7ef 58%, #efe2d3 100%);
+  border-block: 1px solid rgba(91, 26, 43, .13);
+}
+
+main.thar-sunset-story--home .home-city-discovery__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, .92fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 76px);
+}
+
+main.thar-sunset-story--home .home-city-discovery__copy h2 {
+  max-width: 15ch;
+  margin: 0 0 18px;
+  color: var(--ink, #231a14);
+  font-family: var(--font-display, Georgia, serif);
+  font-size: clamp(2rem, 3.8vw, 3.4rem);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+
+main.thar-sunset-story--home .home-city-discovery__copy > p:not(.eyebrow) {
+  max-width: 58ch;
+  color: #51453d;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+main.thar-sunset-story--home .home-city-discovery__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+main.thar-sunset-story--home .home-city-discovery__actions .button {
+  min-height: 48px;
+}
+
+main.thar-sunset-story--home .home-city-discovery__media {
+  min-width: 0;
+  margin: 0;
+  padding: 8px;
+  overflow: hidden;
+  border: 1px solid var(--story-keyline, rgba(217, 164, 65, .5));
+  border-radius: 48% 48% 6px 6px / 20% 20% 6px 6px;
+  background: linear-gradient(135deg, var(--garnet, #5b1a2b), var(--night, #14122b));
+  box-shadow: 0 18px 42px rgba(20, 18, 43, .12);
+}
+
+main.thar-sunset-story--home .home-city-discovery__media img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: inherit;
+  object-fit: cover;
+}
+
+main.thar-sunset-story--home .home-city-discovery__media figcaption {
+  padding: 12px 12px 7px;
+  color: #f7efe0;
+  font-size: .82rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+main.thar-sunset-story--home .home-planning-confidence {
+  background: #fbf7ef;
+  border-block: 1px solid rgba(91, 26, 43, .12);
+}
+
+main.thar-sunset-story--home .home-planning-confidence__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 22px);
+}
+
+main.thar-sunset-story--home .home-planning-confidence__item {
+  min-width: 0;
+  padding: clamp(20px, 2.5vw, 30px);
+  border: 1px solid rgba(91, 26, 43, .15);
+  border-top: 3px solid var(--saffron, #b94a0e);
+  border-radius: var(--radius-card, 6px);
+  background: #fffdfa;
+  box-shadow: 0 8px 22px rgba(20, 18, 43, .045);
+}
+
+main.thar-sunset-story--home .home-planning-confidence__number {
+  display: inline-flex;
+  margin-bottom: 16px;
+  color: #946b2d;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+}
+
+main.thar-sunset-story--home .home-planning-confidence__item h3 {
+  margin: 0 0 10px;
+  color: var(--ink, #231a14);
+  font-family: var(--font-display, Georgia, serif);
+  font-size: clamp(1.35rem, 1.8vw, 1.7rem);
+  font-weight: 400;
+  line-height: 1.14;
+  text-wrap: balance;
+}
+
+main.thar-sunset-story--home .home-planning-confidence__item p {
+  color: #51453d;
+  font-size: .94rem;
+  line-height: 1.65;
+}
+
+main.thar-sunset-story--home .home-planning-confidence__item .text-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  color: var(--garnet, #5b1a2b);
+  font-weight: 750;
+  text-underline-offset: .24em;
+}
+
+main.thar-sunset-story--home :is(.home-city-discovery, .home-planning-confidence) a:focus-visible {
+  outline: 3px solid var(--focus, #1d4ed8);
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  main.thar-sunset-story--home .home-city-discovery__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, .8fr);
+    gap: 24px;
+  }
+
+  main.thar-sunset-story--home .home-planning-confidence__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  main.thar-sunset-story--home .home-planning-confidence__item:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  main.thar-sunset-story--home .hero-overlay {
+    background:
+      linear-gradient(180deg, rgba(20, 18, 43, .10) 0%, rgba(20, 18, 43, .30) 34%, rgba(20, 18, 43, .92) 100%);
+  }
+
+  main.thar-sunset-story--home .home-place-story .image-panel img {
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+  }
+
+  main.thar-sunset-story--home .home-city-discovery__grid,
+  main.thar-sunset-story--home .home-planning-confidence__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  main.thar-sunset-story--home .home-city-discovery__media {
+    max-width: 560px;
+    margin-inline: auto;
+  }
+
+  main.thar-sunset-story--home .home-city-discovery__media img {
+    aspect-ratio: 5 / 4;
+  }
+
+  main.thar-sunset-story--home .home-planning-confidence__item:last-child {
+    grid-column: auto;
+  }
+
+  main.thar-sunset-story--home .home-city-discovery__actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  main.thar-sunset-story--home .home-city-discovery__actions .button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main.thar-sunset-story--home .home-city-discovery__media img {
+    transition: none;
+  }
+}
+
+
+/* Phase 3 — direct-booking CTA hierarchy in the homepage room discovery. */
+main.thar-sunset-story--home .home-room-section-intro {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  gap: 12px;
+}
+
+main.thar-sunset-story--home .home-room-section-intro > p {
+  margin: 0;
+}
+
+main.thar-sunset-story--home .home-room-section-booking {
+  min-height: 46px;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  main.thar-sunset-story--home .home-room-section-booking {
+    width: 100%;
+    justify-content: center;
+    white-space: normal;
+  }
+}
+
+/* The original compact-phone hero was tuned to keep all proof points above
+   the fixed action dock. Restore that compact hierarchy after the desktop
+   art-direction rule so the 320px first screen remains complete. */
+@media (max-width: 360px) {
+  main.thar-sunset-story--home > .hero {
+    min-height: max(500px, calc(100svh - 180px));
+  }
+
+  main.thar-sunset-story--home .hero-content {
+    padding-top: 72px;
+    padding-bottom: 14px;
+  }
+
+  main.thar-sunset-story--home .hero-content > .eyebrow {
+    margin-bottom: 7px;
+    font-size: 0.8125rem;
+  }
+
+  main.thar-sunset-story--home .hero-content h1 {
+    max-width: 15ch;
+    margin-bottom: 10px;
+    font-size: clamp(1.9rem, 8.6vw, 2.15rem);
+    line-height: 1.08;
+  }
+
+  main.thar-sunset-story--home .hero-content > p:not(.eyebrow) {
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+    line-height: 1.38;
+  }
+
+  main.thar-sunset-story--home .hero-content .actions {
+    gap: 7px;
+  }
+
+  main.thar-sunset-story--home .hero-content .actions .button {
+    min-height: 44px;
+    padding-inline: 12px;
+  }
+
+  main.thar-sunset-story--home .home-hero-facts {
+    margin-top: 10px;
+    padding: 4px;
+  }
+}

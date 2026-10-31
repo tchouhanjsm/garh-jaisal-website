@@ -121,7 +121,48 @@ test('Directions hero, route cards and section navigation remain usable at key v
     }
 
     await expect(page.locator('.arrival-quick-card')).toBeVisible();
+    await expect(page.locator('.arrival-driver-card')).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Directions page sections' })).toBeVisible();
     await expect(page.locator('.arrival-route-steps > li')).toHaveCount(4);
   }
+});
+
+
+test('driver arrival note copies the approved drop-off, walking and exact map-pin details', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Driver-note interaction runs once on desktop-1280');
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText: async (value) => { window.__arrivalCopiedText = value; } }
+    });
+  });
+  await page.goto('/direction.php', { waitUntil: 'domcontentloaded' });
+  const driverCard = page.locator('.arrival-driver-card');
+  await expect(driverCard.getByRole('heading', { level: 3, name: 'Share the right drop-off point.' })).toBeVisible();
+  await expect(driverCard).toContainText('Fort Kotari Para, Inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001');
+  const copyButton = driverCard.getByRole('button', { name: 'Copy arrival note for driver' });
+  await expect(copyButton).toBeVisible();
+  await copyButton.click();
+  await expect(driverCard.locator('[data-arrival-copy-status]')).toHaveText(
+    'Arrival note copied. Share it with your driver before you set out.'
+  );
+  const copied = await page.evaluate(() => window.__arrivalCopiedText);
+  expect(copied).toContain('Garh Jaisal Haveli');
+  expect(copied).toContain('Vehicles cannot enter Jaisalmer Fort');
+  expect(copied).toContain('Fort Parking');
+  expect(copied).toContain('300 metres (5–6 minutes)');
+  expect(copied).toContain('https://maps.app.goo.gl/nAbRiZhv78FSbju48');
+  expect(copied).not.toMatch(/email|phone|topic|private/i);
+});
+
+test('driver arrival details remain readable when the enhancement script is unavailable', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Progressive-enhancement check runs once on desktop-1280');
+  await page.route('**/js/arrival-guide.js', route => route.abort());
+  await page.goto('/direction.php', { waitUntil: 'domcontentloaded' });
+  const driverCard = page.locator('.arrival-driver-card');
+  await expect(driverCard).toContainText('Fort Kotari Para, Inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001');
+  await expect(driverCard).toContainText('Vehicles cannot enter Jaisalmer Fort');
+  const copyButton = driverCard.locator('button[data-arrival-copy]');
+  await expect(copyButton).toHaveAttribute('hidden', '');
+  await expect(copyButton).toBeHidden();
 });
