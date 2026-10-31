@@ -58,7 +58,7 @@ $assert(
     'Canonical image helper must fail closed for traversal and non-image paths.'
 );
 
-foreach (['img/rest5.jpg', 'img/jcity.jpg'] as $nativeHeroSource) {
+foreach (['img/rest3.jpg', 'img/jcity.jpg'] as $nativeHeroSource) {
     $nativeMetadata = gj_local_image_metadata($nativeHeroSource);
     $nativeCandidates = gj_image_responsive_candidates($nativeHeroSource);
     $generatedCandidates = [];
@@ -91,6 +91,29 @@ foreach (['img/rest5.jpg', 'img/jcity.jpg'] as $nativeHeroSource) {
         );
     }
 }
+$roofHero = 'img/roofslide.webp';
+$roofHeroPreload = gj_image_responsive_preload_descriptor($roofHero, '100vw');
+$roofHeroAttributes = gj_image_dimension_attributes($roofHero, '100vw');
+if (is_array($roofHeroPreload)) {
+    $roofSrcset = [];
+    $hasRoofSrcset = preg_match('/\\bsrcset="([^"]+)"/', $roofHeroAttributes, $roofSrcset) === 1;
+    $assert($hasRoofSrcset, 'The 1600px rooftop panorama must expose responsive candidates.');
+    if ($hasRoofSrcset) {
+        $normalize = static function ($value) {
+            $parts = [];
+            foreach (preg_split('/\\s*,\\s*/', trim($value)) as $candidate) {
+                $items = preg_split('/\\s+/', trim($candidate));
+                $parts[] = ltrim($items[0], '/') . ' ' . ($items[1] ?? '');
+            }
+            return implode(', ', $parts);
+        };
+        $assert(
+            $normalize($roofSrcset[1]) === $roofHeroPreload['imagesrcset'],
+            'Rooftop preload and rendered srcset must share the exact verified candidate list.'
+        );
+    }
+}
+
 $assert(is_array($metadata), 'A known local JPEG must return metadata.');
 if (is_array($metadata)) {
     $assert(($metadata['path'] ?? null) === $source, 'Metadata should retain the normalized local path.');

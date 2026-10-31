@@ -39,16 +39,20 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             "img/v2/courtyard.jpg",
             "img/j5.jpg",
             "img/sleeping_under_stars/tour_9.jpeg",
-            "img/rest5.jpg",
+            "img/roofslide.webp",
             "img/jcity.jpg",
         ])
-        self.assertEqual(manifest["variant_max_bytes"], {
-            "img/responsive/v2/courtyard-480.webp": 76800,
-            "img/responsive/v2/facade-1200.webp": 250000,
-            "img/responsive/v2/courtyard-1200.webp": 250000,
-            "img/responsive/j5-1200.webp": 160000,
-            "img/responsive/sleeping_under_stars/tour_9-1200.webp": 80000,
-        })
+        self.assertEqual(assets.target_widths_for_source(manifest, "img/v2/fort-from-roof.jpg"), [480, 800, 1200, 1280, 1440, 1800])
+        self.assertEqual(assets.target_widths_for_source(manifest, "img/j10.jpg"), [480, 800, 1200, 1280])
+        self.assertEqual(assets.target_widths_for_source(manifest, "img/jcity.jpg"), [480, 800, 1200])
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/v2/courtyard-480.webp"], 76800)
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/v2/facade-1200.webp"], 250000)
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/v2/courtyard-1200.webp"], 250000)
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/j5-1200.webp"], 160000)
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/sleeping_under_stars/tour_9-1200.webp"], 80000)
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/v2/fort-from-roof-1800.webp"], 250000)
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/roofslide-1440.webp"], 250000)
+        self.assertEqual(len(manifest["variant_max_bytes"]), 24)
         self.assertNotIn("img/responsive/jcity-1200.webp", manifest["variant_max_bytes"])
         self.assertNotIn("img/responsive/rest5-1200.webp", manifest["variant_max_bytes"])
 
@@ -61,7 +65,7 @@ class ResponsiveImageAssetTests(unittest.TestCase):
                 source_width = opened.width
             expected_paths.update(
                 assets.output_path(source, width).relative_to(assets.ROOT).as_posix()
-                for width in manifest["target_widths"]
+                for width in assets.target_widths_for_source(manifest, source)
                 if width < source_width
             )
         self.assertEqual(required_paths, expected_paths)
@@ -69,7 +73,10 @@ class ResponsiveImageAssetTests(unittest.TestCase):
         self.assertIn("img/responsive/j5-800.webp", required_paths)
         self.assertIn("img/responsive/j5-1200.webp", required_paths)
         self.assertIn("img/responsive/sleeping_under_stars/tour_9-1200.webp", required_paths)
-        for source in ("img/rest5.jpg", "img/jcity.jpg"):
+        self.assertIn("img/responsive/v2/fort-from-roof-1280.webp", required_paths)
+        self.assertIn("img/responsive/v2/fort-from-roof-1800.webp", required_paths)
+        self.assertIn("img/responsive/roofslide-1440.webp", required_paths)
+        for source in ("img/rest3.jpg", "img/jcity.jpg"):
             with Image.open(assets.ROOT / source) as opened:
                 source_width = opened.width
             path = "img/responsive/" + source[4:-4] + "-1200.webp"
@@ -336,6 +343,23 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             with patch.object(assets, "ROOT", root), patch.object(assets, "OUTPUT_ROOT", root / "img" / "responsive"), patch.object(assets, "MANIFEST_PATH", manifest_path):
                 with self.assertRaisesRegex(ValueError, "collide"):
                     assets.load_manifest()
+
+
+    def test_source_target_widths_reject_unknown_sources_and_unsorted_targets(self):
+        manifest = assets.load_manifest()
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "manifest.json"
+            invalid_maps = [
+                ({"img/not-listed.jpg": [1280]}, "not listed in sources"),
+                ({"img/jcity.jpg": [1440, 1280]}, "positive, unique and sorted"),
+                ({"img/jcity.jpg": [1280, True]}, "positive, unique and sorted"),
+            ]
+            for source_widths, expected_error in invalid_maps:
+                path.write_text(json.dumps(dict(manifest, source_target_widths=source_widths)), encoding="utf-8")
+                with self.subTest(source_widths=source_widths):
+                    with patch.object(assets, "MANIFEST_PATH", path):
+                        with self.assertRaisesRegex(ValueError, expected_error):
+                            assets.load_manifest()
 
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ const responsiveSlots = [
   { route: '/blog.php', selector: '.blog-card img[src="img/s4.jpg"]', sizes: CARD_SIZES },
   { route: '/blog.php', selector: '.blog-card img[src="img/big6.jpg"]', sizes: CARD_SIZES },
   { route: '/blog.php', selector: '.blog-card img[src="img/jcity.jpg"]', sizes: CARD_SIZES },
-  { route: '/car-tours.php', selector: '.package-hero-media img[src="img/jcity.jpg"]', sizes: '100vw' },
+  { route: '/car-tours.php', selector: '.package-hero-media img[src="img/jcity.jpg"]', sizes: '(max-width: 1000px) 100vw, 1000px' },
   { route: '/car-tours.php', selector: '.experience-card-grid img[src="img/j10.jpg"]', sizes: CARD_SIZES },
   { route: '/', selector: '.home-experiences img[src="img/tent.jpg"]', sizes: NARROW_CARD_SIZES },
   { route: '/', selector: '.gallery-strip figure:first-child img[src="img/jcity.jpg"]', sizes: '(max-width: 760px) 100vw, 50vw' },
@@ -38,8 +38,8 @@ const responsiveSlots = [
   { route: '/guided-jaisalmer-tour.php', selector: '.experience-hero-media img[src="img/j5.jpg"]', sizes: '100vw' },
   { route: '/guided-jaisalmer-tour.php', selector: '.experience-card-grid--two img[src="img/j2.jpg"]', sizes: '(max-width: 760px) 100vw, 50vw' },
   { route: '/restaurant.php', selector: '.restaurant-hero-media img[src="img/rest2.jpg"]', sizes: '(max-width: 760px) 100vw, 45vw' },
-  { route: '/roof.php', selector: '.page-hero-media img[src="img/rest5.jpg"]', sizes: '100vw' },
-  { route: '/roof.php', selector: '.roof-banner img[src="img/rest3.jpg"]', sizes: '(max-width: 760px) 100vw, 1180px' },
+  { route: '/roof.php', selector: '.page-hero-media img[src="img/roofslide.webp"]', sizes: '100vw' },
+  { route: '/roof.php', selector: '.roof-banner img[src="img/rest3.jpg"]', sizes: '(max-width: 1000px) 100vw, 1000px' },
   { route: '/', selector: '.home-experiences img[src="img/v2/swiss-tent.webp"]', sizes: NARROW_CARD_SIZES },
 ];
 
@@ -186,15 +186,15 @@ test('wide rooftop and city-tour hero slots select source-appropriate desktop ca
   const cases = [
     {
       route: '/roof.php',
-      selector: '.page-hero-media img[src="img/rest5.jpg"]',
-      expectedPath: '/img/rest5.jpg',
-      expectedNativeWidth: true,
+      selector: '.page-hero-media img[src="img/roofslide.webp"]',
+      expectedPath: '/img/responsive/roofslide-1280.webp',
+      expectedWidth: 1280,
     },
     {
       route: '/roof.php',
       selector: '.roof-banner img[src="img/rest3.jpg"]',
       expectedPath: '/img/rest3.jpg',
-      expectedWidth: 1180,
+      expectedWidth: 900,
     },
     {
       route: '/car-tours.php',

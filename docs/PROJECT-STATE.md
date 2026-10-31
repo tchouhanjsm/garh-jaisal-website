@@ -284,3 +284,13 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 - Update PHP and desktop Browser E2E contracts to assert Rooftop and Car & City Tours native candidate URLs/descriptors and at least 90% source-pixel coverage for both large hero slots.
 - Preserve original photography, dimensions, crop, public routes, content, map and booking destinations.
 - Exact-head validation still requires Site Checks, image generation, Browser E2E/screenshots, package reproducibility and non-deploying 11-route Staging QA. Real-host checks remain owner-dispatched and read-only.
+
+
+## Active implementation — PR #162 Phase 3: High-resolution responsive delivery
+
+- Add source-scoped 1280/1440/1800 WebP candidates only for full-width hero sources whose current 1200w ceiling forces a large native original to be selected. Keep the global 480/800/1200 set unchanged for other photography.
+- Enforce a hard 250,000-byte cap for every newly added candidate through the existing adaptive quality ladder. Preserve source images, metadata-safety, aspect ratios and the no-upscale rule.
+- Extend the PHP resolver allowlist and derive page preloads from the same verified candidate list as rendered srcset output.
+- Replace the full-bleed Rooftop hero with the approved 1600px panoramic rooftop photo. Constrain the 900px rooftop feature and Car & City Tours city photo to a 1000px maximum slot rather than upscaling their originals.
+- Extend Python generator/manifest tests, PHP preload parity, desktop/mobile Playwright candidate selection and source-pixel coverage checks.
+- Exact-head gates: PHP 7.4/8.2 Site Checks, source-image generation, responsive image audit, Browser E2E/screenshots, package reproducibility and non-deploying 11-route Staging QA. No cPanel upload, external staging deployment or production release.

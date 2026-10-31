@@ -146,7 +146,7 @@ if (!function_exists('gj_image_responsive_candidates')) {
             : $responsiveInfo['dirname'] . '/';
         $candidates = [];
 
-        foreach ([480, 800, 1200] as $candidateWidth) {
+        foreach ([480, 800, 1200, 1280, 1366, 1440, 1800] as $candidateWidth) {
             if ($candidateWidth >= $sourceWidth) {
                 continue;
             }

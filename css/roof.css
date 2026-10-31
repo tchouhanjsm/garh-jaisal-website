@@ -12,10 +12,12 @@
 }
 
 .roof-banner {
-  aspect-ratio: 1600 / 575;
-  overflow: hidden;
-  margin-bottom: 28px;
-  background: #e6ddd1;
+  width:100%;
+  max-width:1000px;
+  aspect-ratio:1600 / 575;
+  overflow:hidden;
+  margin:0 auto 28px;
+  background:#e6ddd1;
 }
 
 .roof-banner img {

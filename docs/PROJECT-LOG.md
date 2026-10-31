@@ -212,3 +212,15 @@ The deployment, browser and staging workflows were blocked by two false manifest
 - Updated desktop Browser E2E to assert the original rest5.jpg and jcity.jpg URLs and their true intrinsic width descriptors, with the same 90% minimum source-pixel coverage.
 - Added PHP parity coverage proving the Rooftop and Car & City Tours responsive srcsets and preloads both include the same native-source candidates.
 - The original photograph, crop, page copy, routes and booking destinations are unchanged. This is delivery-pipeline correctness, not a request to upscale or replace the photo.
+
+
+## Phase 3 — High-resolution responsive delivery and exact preload parity (PR #162)
+
+**Finding:** the 37-route/two-viewport image audit showed that multiple hero sources stopped at 1200w. Chromium therefore selected 1366–2000px originals for wide desktop slots, with several selected resources above the 250 KiB review threshold. Homepage and Gallery had independently assembled preload lists, creating a risk of preload/rendered-srcset divergence.
+
+- Add source-specific 1280w candidates for 1366px photos and 1280/1440/1800w candidates for selected 1600–2000px hero masters. Do not increase the global derivative count for all image sources.
+- Enforce a 250,000-byte maximum on each additional high-resolution WebP with the existing adaptive quality ladder. Preserve original assets, aspect ratios, color profiles and the no-upscale rule.
+- Extend the shared PHP candidate resolver to approved responsive widths and use its candidate list for Homepage, Gallery and Rooftop preload descriptors as well as rendered image srcset.
+- Use the reviewed 1600×575 roofslide.webp panorama for the full-bleed Rooftop hero; keep rest3.jpg and jcity.jpg in maximum-1000px layouts so the 900px originals are not stretched.
+- Add source-specific generator validation, per-source coverage reporting, browser candidate/preload parity and PHP contracts.
+- Local Chromium measurements are engineering evidence only, not field Core Web Vitals. No cPanel upload, external staging deployment, enquiry submission or production release is included.

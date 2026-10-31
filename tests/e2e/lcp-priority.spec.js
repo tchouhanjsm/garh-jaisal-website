@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 const BASE_URL = 'http://127.0.0.1:8080';
-const RESPONSIVE_WIDTHS = [480, 800, 1200];
+const RESPONSIVE_WIDTHS = [480, 800, 1200, 1280, 1366, 1440, 1800];
 const HEROES = [
   {
     route: '/',
@@ -37,7 +37,7 @@ const HEROES = [
 ];
 
 function responsiveCandidateForPath(pathname) {
-  const match = pathname.match(/\/img\/responsive\/(?:[^/]+\/)*([^/]+)-(480|800|1200)\.webp$/);
+  const match = pathname.match(/\/img\/responsive\/(?:[^/]+\/)*([^/]+)-(480|800|1200|1280|1366|1440|1800)\.webp$/);
   return match ? { stem: match[1], width: Number(match[2]) } : null;
 }
 
