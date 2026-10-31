@@ -38,15 +38,22 @@ DEFAULT_REQUIRED_HERO_SOURCES = (
 
 
 def required_hero_variant_paths(manifest: dict[str, Any], widths: list[int]) -> set[str]:
-    """Return generated paths that must exist for each manifest-declared high-intent hero."""
+    """Require only derivatives that can be generated without upscaling the source."""
     required_sources = manifest.get("required_hero_sources")
     if required_sources is None:
         required_sources = [source for source in DEFAULT_REQUIRED_HERO_SOURCES if source in manifest.get("sources", [])]
-    return {
-        output_path(source, width).relative_to(ROOT).as_posix()
-        for source in required_sources
-        for width in widths
-    }
+
+    required: set[str] = set()
+    for source in required_sources:
+        with Image.open(ROOT / source) as opened:
+            source_width = opened.width
+        for width in widths:
+            # An original at or below the target width is its own best candidate.
+            # The PHP resolver exposes that verified source at its native descriptor.
+            if width >= source_width:
+                continue
+            required.add(output_path(source, width).relative_to(ROOT).as_posix())
+    return required
 
 
 def load_manifest() -> dict[str, Any]:
@@ -65,6 +72,7 @@ def load_manifest() -> dict[str, Any]:
         raise ValueError("sources must not contain duplicates")
 
     output_paths: set[str] = set()
+    source_width_by_output: dict[str, int] = {}
     for source in sources:
         if not isinstance(source, str):
             raise ValueError(f"Unsafe or unsupported source path: {source!r}")
@@ -81,11 +89,16 @@ def load_manifest() -> dict[str, Any]:
         candidate = ROOT / source_path
         if not candidate.is_file() or candidate.is_symlink():
             raise FileNotFoundError(f"Manifest source is missing or is a symlink: {source}")
+        with Image.open(candidate) as opened:
+            source_width = opened.width
+        if source_width < 1:
+            raise ValueError(f"Manifest source has an invalid width: {source}")
         for width in widths:
             generated = output_path(source, width).relative_to(ROOT).as_posix()
             if generated in output_paths:
                 raise ValueError(f"Manifest sources collide on generated output path: {generated}")
             output_paths.add(generated)
+            source_width_by_output[generated] = source_width
 
     if "required_hero_sources" in manifest:
         required_hero_sources = manifest["required_hero_sources"]
@@ -128,6 +141,11 @@ def load_manifest() -> dict[str, Any]:
             raise ValueError(f"variant_max_bytes path is not a generated manifest candidate: {variant_path!r}")
         if isinstance(max_bytes, bool) or not isinstance(max_bytes, int) or max_bytes < 1:
             raise ValueError(f"Invalid byte budget for {variant_path!r}: {max_bytes!r}")
+        output_width = int(Path(variant_path).stem.rsplit("-", 1)[-1])
+        if output_width >= source_width_by_output[variant_path]:
+            raise ValueError(
+                f"Byte budget cannot target a non-generatable no-upscale candidate: {variant_path!r}"
+            )
 
     budget_quality_floor = manifest.get("budget_quality_floor", 58)
     budget_quality_step = manifest.get("budget_quality_step", 2)

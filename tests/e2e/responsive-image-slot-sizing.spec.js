@@ -199,8 +199,8 @@ test('wide rooftop and city-tour hero slots select source-appropriate desktop ca
     {
       route: '/car-tours.php',
       selector: '.package-hero-media img[src="img/jcity.jpg"]',
-      expectedPath: '/img/responsive/jcity-1200.webp',
-      expectedWidth: 1200,
+      expectedPath: '/img/jcity.jpg',
+      expectedNativeWidth: true,
     },
   ];
 
@@ -235,7 +235,12 @@ test('wide rooftop and city-tour hero slots select source-appropriate desktop ca
     });
 
     expect(selected.path, item.route + ' should select the reviewed source candidate').toBe(item.expectedPath);
-    expect(selected.selectedWidth, item.route + ' should expose the truthful width descriptor').toBe(item.expectedWidth);
+    if (item.expectedNativeWidth) {
+      expect(selected.selectedWidth, item.route + ' should use the original photo’s truthful intrinsic width descriptor')
+        .toBe(selected.naturalWidth);
+    } else {
+      expect(selected.selectedWidth, item.route + ' should expose the truthful width descriptor').toBe(item.expectedWidth);
+    }
     expect(
       selected.selectedWidth / selected.renderedWidth,
       item.route + ' should deliver at least 90% of the rendered slot in source pixels'

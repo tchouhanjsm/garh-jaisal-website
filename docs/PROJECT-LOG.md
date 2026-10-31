@@ -7,8 +7,8 @@
 | Item | Value |
 |---|---|
 | Verified main SHA | e858fa794a71bd68d1940bb49f6b382e2aec3dfd — PR #161 merged 31 October 2026 |
-| Active implementation | Release provenance and cPanel staging delivery assurance (PR #160, rebased after PR #161) |
-| Working branch | `feature/staging-release-provenance-delivery-20261030` (based on `e858fa794a71bd68d1940bb49f6b382e2aec3dfd`) |
+| Active implementation | Release provenance and cPanel staging delivery assurance (PR #162, successor to retained PR #160 after PR #161 merged) |
+| Working branch | `feature/staging-release-provenance-delivery-20261030` (PR #162; base main `e858fa794a71bd68d1940bb49f6b382e2aec3dfd`) |
 | Scope | Exact-SHA package marker, reproducible ZIP/manifest/checksum, 11-route guest-journey staging smoke, and read-only real-host responsive-image/cache diagnostics |
 | Release boundary | Owner retains staging upload, merge and production approval; PR checks do not upload or submit enquiries |
 | Exact-main CI | [Site Checks](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667258) · [Browser E2E](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667379) · [Package](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667299) · [Staging QA](https://github.com/tchouhanjsm/garh-jaisal-website/actions/runs/40853667390) — all passed on 15afdf46506bdaf3799bde97f47e3296210bb898 |
@@ -182,9 +182,9 @@ Regression coverage verifies action count and destination parity on the live exp
 - Delivered premium homepage storytelling, the three measured homepage booking CTAs, privacy-safe campaign attribution and the complete Directions visual/arrival experience with a driver-ready copy action.
 - The merge is repository integration only. It is not evidence of a cPanel upload, live staging verification or production deployment.
 
-## PR #160 — release provenance and cPanel staging delivery assurance
+## PR #162 — release provenance and cPanel staging delivery assurance (successor to PR #160)
 
-- Rebase the retained Sprint 86 branch on the PR #161 merge SHA and keep it as the single active implementation PR.
+- PR #160 was closed without merging after PR #161 merged. PR #162 carries the retained Sprint 86 release-provenance work as the only open implementation PR on the existing branch.
 - Preserve the generated exact-SHA release marker, package manifest/checksum, no-store/noindex marker rules and external staging read-only image/cache diagnostics.
 - Sprint 87: widen the local staging smoke matrix to 11 guest-facing routes and assert the merged homepage booking paths plus the Directions driver note, exact map pin and arrival booking CTA at mobile/desktop widths.
 - Sprint 88: exercise the actual package builder in a temporary clean Git checkout; extract the archive marker, verify marker/manifest/archive/sidecar hashes, assert exclusion of the server-only config, and check byte-identical ZIP output for repeat builds of one commit.
@@ -199,4 +199,16 @@ The first expanded non-deploying staging run exposed an existing Playwright call
 
 ### Responsive image RCA — Rooftop and Car & City Tours desktop slots
 
-The expanded staging route matrix exposed three 1280px desktop image slots whose srcsets stopped at 800w. Rooftop's banner original is 1180px wide, so a 1200px derivative would be an invalid upscale; the shared PHP image resolver now adds the verified original source as the final width-descriptor fallback when the best generated derivative covers less than 90% of the source width. Rooftop hero and Car & City Tours hero originals are 1280px wide, so their 1200w WebP variants are now required manifest assets with explicit byte ceilings and quality-budget fallback. The browser contract verifies the actually selected candidates and at least 90% slot coverage at 1280px; the staging smoke retains the sitewide threshold. Original image files, aspect ratios, crop intent, text and public URLs are unchanged.
+The expanded staging route matrix exposed three large desktop image slots whose srcsets stopped at 800w. Rooftop's banner source is 1180px wide, so a 1200px derivative would be an invalid upscale; the shared PHP image resolver adds the verified original source as the native-width fallback when the best generated derivative covers less than 90% of the source width. The Rooftop hero has a generated 1200w WebP candidate with an explicit byte ceiling. The Car & City Tours jcity.jpg source is no wider than 1200px, so requiring a jcity-1200.webp derivative was incorrect; its original is the truthful native-width candidate. The browser contract verifies the actually selected candidates and at least 90% slot coverage at 1280px; the staging smoke retains the sitewide threshold. Original image files, aspect ratios, crop intent, text and public URLs are unchanged.
+
+
+## Sprint 90 — source-aware responsive requirements and native-width delivery (PR #162)
+
+The deployment, browser and staging workflows were blocked by one false manifest requirement: img/responsive/jcity-1200.webp had a hard byte budget even though the source image width is no greater than 1200px. The encoder correctly returned skipped-no-upscale; the manifest then treated that safe skip as a fatal budget failure.
+
+- Changed required-hero coverage to require only targets strictly below each decoded original width.
+- Added manifest validation that rejects hard byte budgets on any width target that cannot be generated without upscaling.
+- Removed the impossible jcity-1200 budget while retaining jcity's generated smaller derivatives and the PHP resolver's native original-source fallback.
+- Updated desktop Browser E2E to assert the original jcity.jpg URL and its true intrinsic width descriptor, with the same 90% minimum source-pixel coverage.
+- Added PHP parity coverage proving the Car & City Tours responsive srcset and preload both include the same native-source candidate.
+- The original photograph, crop, page copy, routes and booking destinations are unchanged. This is delivery-pipeline correctness, not a request to upscale or replace the photo.

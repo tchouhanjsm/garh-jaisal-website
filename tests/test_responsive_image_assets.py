@@ -49,28 +49,75 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             "img/responsive/j5-1200.webp": 160000,
             "img/responsive/sleeping_under_stars/tour_9-1200.webp": 80000,
             "img/responsive/rest5-1200.webp": 87800,
-            "img/responsive/jcity-1200.webp": 145000,
         })
+        self.assertNotIn("img/responsive/jcity-1200.webp", manifest["variant_max_bytes"])
 
-    def test_required_hero_sources_generate_all_responsive_width_contracts(self):
+    def test_required_hero_sources_require_only_non_upscaled_candidates(self):
         manifest = assets.load_manifest()
         required_paths = assets.required_hero_variant_paths(manifest, manifest["target_widths"])
-        self.assertEqual(
-            len(required_paths),
-            len(manifest["required_hero_sources"]) * len(manifest["target_widths"]),
-        )
+        expected_paths = set()
+        for source in manifest["required_hero_sources"]:
+            with Image.open(assets.ROOT / source) as opened:
+                source_width = opened.width
+            expected_paths.update(
+                assets.output_path(source, width).relative_to(assets.ROOT).as_posix()
+                for width in manifest["target_widths"]
+                if width < source_width
+            )
+        self.assertEqual(required_paths, expected_paths)
         self.assertIn("img/responsive/j5-480.webp", required_paths)
         self.assertIn("img/responsive/j5-800.webp", required_paths)
         self.assertIn("img/responsive/j5-1200.webp", required_paths)
-        self.assertIn("img/responsive/sleeping_under_stars/tour_9-480.webp", required_paths)
-        self.assertIn("img/responsive/sleeping_under_stars/tour_9-800.webp", required_paths)
         self.assertIn("img/responsive/sleeping_under_stars/tour_9-1200.webp", required_paths)
-        self.assertIn("img/responsive/rest5-480.webp", required_paths)
-        self.assertIn("img/responsive/rest5-800.webp", required_paths)
         self.assertIn("img/responsive/rest5-1200.webp", required_paths)
-        self.assertIn("img/responsive/jcity-480.webp", required_paths)
-        self.assertIn("img/responsive/jcity-800.webp", required_paths)
-        self.assertIn("img/responsive/jcity-1200.webp", required_paths)
+
+        with Image.open(assets.ROOT / "img/jcity.jpg") as opened:
+            city_source_width = opened.width
+        if city_source_width <= 1200:
+            self.assertNotIn("img/responsive/jcity-1200.webp", required_paths)
+        else:
+            self.assertIn("img/responsive/jcity-1200.webp", required_paths)
+
+    def test_required_hero_candidate_policy_uses_native_sources_without_upscaling(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            image_root = root / "img"
+            image_root.mkdir()
+            Image.new("RGB", (1000, 600), (110, 90, 70)).save(image_root / "native.jpg", format="JPEG")
+            Image.new("RGB", (1600, 900), (80, 100, 120)).save(image_root / "wide.jpg", format="JPEG")
+            with patch.object(assets, "ROOT", root), patch.object(assets, "OUTPUT_ROOT", image_root / "responsive"):
+                required = assets.required_hero_variant_paths({
+                    "required_hero_sources": ["img/native.jpg", "img/wide.jpg"],
+                    "sources": ["img/native.jpg", "img/wide.jpg"],
+                }, [480, 800, 1200])
+            self.assertEqual(required, {
+                "img/responsive/native-480.webp",
+                "img/responsive/native-800.webp",
+                "img/responsive/wide-480.webp",
+                "img/responsive/wide-800.webp",
+                "img/responsive/wide-1200.webp",
+            })
+
+    def test_manifest_rejects_byte_budgets_for_native_width_candidates(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            image_root = root / "img"
+            image_root.mkdir()
+            Image.new("RGB", (1000, 600), (110, 90, 70)).save(image_root / "native.jpg", format="JPEG")
+            manifest_path = root / "manifest.json"
+            manifest_path.write_text(json.dumps({
+                "version": 1,
+                "format": "WEBP",
+                "quality": 82,
+                "method": 6,
+                "minimum_savings_percent": 5,
+                "target_widths": [480, 800, 1200],
+                "sources": ["img/native.jpg"],
+                "variant_max_bytes": {"img/responsive/native-1200.webp": 1000},
+            }), encoding="utf-8")
+            with patch.object(assets, "ROOT", root), patch.object(assets, "OUTPUT_ROOT", image_root / "responsive"), patch.object(assets, "MANIFEST_PATH", manifest_path):
+                with self.assertRaisesRegex(ValueError, "Byte budget cannot target a non-generatable no-upscale candidate"):
+                    assets.load_manifest()
 
     def test_manifest_rejects_required_hero_sources_outside_the_source_allowlist(self):
         manifest = assets.load_manifest()
