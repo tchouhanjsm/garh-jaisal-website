@@ -42,6 +42,7 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             "img/roofslide.webp",
             "img/jcity.jpg",
         ])
+        self.assertEqual(assets.target_widths_for_source(manifest, "img/v2/facade.jpg"), [480, 800, 1200, 1280])
         self.assertEqual(assets.target_widths_for_source(manifest, "img/v2/fort-from-roof.jpg"), [480, 800, 1200, 1280, 1440, 1800])
         self.assertEqual(assets.target_widths_for_source(manifest, "img/j10.jpg"), [480, 800, 1200, 1280])
         self.assertEqual(assets.target_widths_for_source(manifest, "img/jcity.jpg"), [480, 800, 1200])
@@ -52,7 +53,9 @@ class ResponsiveImageAssetTests(unittest.TestCase):
         self.assertEqual(manifest["variant_max_bytes"]["img/responsive/sleeping_under_stars/tour_9-1200.webp"], 80000)
         self.assertEqual(manifest["variant_max_bytes"]["img/responsive/v2/fort-from-roof-1800.webp"], 250000)
         self.assertEqual(manifest["variant_max_bytes"]["img/responsive/roofslide-1440.webp"], 250000)
-        self.assertEqual(len(manifest["variant_max_bytes"]), 24)
+        self.assertEqual(len(manifest["variant_max_bytes"]), 22)
+        self.assertNotIn("img/responsive/v2/facade-1440.webp", manifest["variant_max_bytes"])
+        self.assertNotIn("img/responsive/v2/facade-1800.webp", manifest["variant_max_bytes"])
         self.assertNotIn("img/responsive/jcity-1200.webp", manifest["variant_max_bytes"])
         self.assertNotIn("img/responsive/rest5-1200.webp", manifest["variant_max_bytes"])
 

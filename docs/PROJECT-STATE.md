@@ -294,3 +294,10 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 - Replace the full-bleed Rooftop hero with the approved 1600px panoramic rooftop photo. Constrain the 900px rooftop feature and Car & City Tours city photo to a 1000px maximum slot rather than upscaling their originals.
 - Extend Python generator/manifest tests, PHP preload parity, desktop/mobile Playwright candidate selection and source-pixel coverage checks.
 - Exact-head gates: PHP 7.4/8.2 Site Checks, source-image generation, responsive image audit, Browser E2E/screenshots, package reproducibility and non-deploying 11-route Staging QA. No cPanel upload, external staging deployment or production release.
+
+
+### Phase 3 source-width validation correction
+
+- The generator's decoded source inspection confirmed `img/v2/facade.jpg` is 1333px wide. Keep its 1280w derivative, but do not declare 1440w/1800w candidates or budgets that would require upscaling.
+- The generated sitemap dates now reflect the directly edited public templates: Home, Gallery, Rooftop Dining and Car & City Tours (31 October 2026).
+- The no-upscale guard remains enforced both when loading manifest byte budgets and when deriving mandatory hero coverage.

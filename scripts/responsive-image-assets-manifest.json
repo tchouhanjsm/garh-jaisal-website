@@ -13,8 +13,6 @@
     "img/responsive/j5-1200.webp": 160000,
     "img/responsive/sleeping_under_stars/tour_9-1200.webp": 80000,
     "img/responsive/v2/facade-1280.webp": 250000,
-    "img/responsive/v2/facade-1440.webp": 250000,
-    "img/responsive/v2/facade-1800.webp": 250000,
     "img/responsive/v2/fort-from-roof-1280.webp": 250000,
     "img/responsive/v2/fort-from-roof-1440.webp": 250000,
     "img/responsive/v2/fort-from-roof-1800.webp": 250000,
@@ -139,9 +137,7 @@
   "budget_quality_step": 2,
   "source_target_widths": {
     "img/v2/facade.jpg": [
-      1280,
-      1440,
-      1800
+      1280
     ],
     "img/v2/fort-from-roof.jpg": [
       1280,

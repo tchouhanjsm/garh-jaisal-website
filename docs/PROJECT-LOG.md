@@ -224,3 +224,8 @@ The deployment, browser and staging workflows were blocked by two false manifest
 - Use the reviewed 1600×575 roofslide.webp panorama for the full-bleed Rooftop hero; keep rest3.jpg and jcity.jpg in maximum-1000px layouts so the 900px originals are not stretched.
 - Add source-specific generator validation, per-source coverage reporting, browser candidate/preload parity and PHP contracts.
 - Local Chromium measurements are engineering evidence only, not field Core Web Vitals. No cPanel upload, external staging deployment, enquiry submission or production release is included.
+
+
+### Phase 3 RCA — source-width-aware facade target
+
+The first image-generator run correctly rejected 1440w for `img/v2/facade.jpg`. Its decoded dimensions are 1333×2000, so 1280w is the largest valid added candidate. Removed 1440w/1800w target entries and budgets for this one source; all 2000px masters retain 1280/1440/1800 and other 1366px masters retain only 1280. The generator's validation is unchanged: no upscale candidate or byte budget is accepted.
