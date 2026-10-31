@@ -50,6 +50,7 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             "img/responsive/sleeping_under_stars/tour_9-1200.webp": 80000,
         })
         self.assertNotIn("img/responsive/jcity-1200.webp", manifest["variant_max_bytes"])
+        self.assertNotIn("img/responsive/rest5-1200.webp", manifest["variant_max_bytes"])
 
     def test_required_hero_sources_require_only_non_upscaled_candidates(self):
         manifest = assets.load_manifest()
