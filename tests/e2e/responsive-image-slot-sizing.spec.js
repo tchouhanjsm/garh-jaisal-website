@@ -141,7 +141,7 @@ test('room and experience carousel source candidates cover their rendered image 
         expect(response.status(), item.route + ' must return a successful response').toBeLessThan(400);
         const image = page.locator(item.selector);
         await expect(image, item.route + ' must render its representative carousel image').toHaveCount(1);
-        const carousel = page.locator('[data-photo-carousel]').filter({ has: image });
+        const carousel = image.locator('xpath=ancestor::*[@data-photo-carousel]');
         await expect(carousel, item.route + ' image must belong to one initialized carousel').toHaveCount(1);
         await expect(carousel.locator('[data-photo-carousel-controls]')).toBeVisible();
 
