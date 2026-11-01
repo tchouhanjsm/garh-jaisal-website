@@ -1,6 +1,63 @@
 /*
  * Garh Jaisal Haveli — shared visual system.
  * Palette decisions remain owner-approved. This file is loaded last so page
+ * templates share one type/spacing/layout scale while intentional art
+ * direction and component-specific photography remain available.
+ */
+:root {
+  --night: #14122B;
+  --night-2: #241B3F;
+  --gold: #D9A441;
+  --gold-ink: #8A6212;
+  --saffron: #B94A0E;
+  --garnet: #5B1A2B;
+  --parchment: #F7EFE0;
+  --sand: #EADBC0;
+  --ink: #231A14;
+  --peacock: #1D7472;
+  --alert: #A62B1F;
+
+  --max: 1200px;
+  --content-max: 1240px;
+  --page-gutter: clamp(1rem, 3vw, 2rem);
+  --section-space: clamp(3.5rem, 5.25vw, 4.75rem);
+  --card-gap: clamp(1rem, 2.25vw, 1.75rem);
+  --reading-measure: 68ch;
+
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --fs-hero: clamp(2.125rem, 4.4vw, 3.75rem);
+  --fs-h1: var(--fs-hero);
+  --fs-h2: clamp(1.65rem, 3vw, 2.5rem);
+  --fs-h3: clamp(1.25rem, 1.8vw, 1.55rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-caption: 0.75rem;
+
+  --sp-1: 0.375rem;
+  --sp-2: 0.75rem;
+  --sp-3: 1.125rem;
+  --sp-4: 1.75rem;
+  --sp-5: clamp(2.5rem, 5vw, 4rem);
+  --sp-6: clamp(3rem, 6vw, 5rem);
+
+  --radius: 6px;
+  --radius-sm: 6px;
+  --radius-control: 6px;
+  --radius-card: 6px;
+  --shadow-card: 0 5px 18px rgba(20, 18, 43, 0.07);
+  --shadow-sm: var(--shadow-card);
+  --shadow: 0 14px 34px rgba(20, 18, 43, 0.1);
+  --accent: var(--saffron);
+  --accent-hover: #963A08;
+  --focus: #1d4ed8;
+  --text-on-dark: #FFFFFF;
+  --text-on-light: var(--ink);
+}
+
+/*
+ * Garh Jaisal Haveli — shared visual system.
+ * Palette decisions remain owner-approved. This file is loaded last so page
  * templates share one type/spacing/layout scale while their intentional
  * art direction and component-specific photography remain available.
  */
@@ -17,51 +74,23 @@
   --peacock: #1D7472;
   --alert: #A62B1F;
 
-  /* Semantic surface and line roles — use these instead of page-local guesses. */
-  --surface: var(--parchment);
-  --surface-raised: #FFFCF6;
-  --surface-muted: #F0E5D2;
-  --surface-dark: var(--night);
-  --surface-dark-raised: var(--night-2);
-  --line: #D9CBB5;
-  --line-strong: #BFAE94;
-  --text-muted: #65574F;
-  --text-on-dark-muted: #E8DCCB;
-
-  /* Conversion roles: gold remains decorative; saffron owns primary actions. */
-  --action-primary: var(--saffron);
-  --action-primary-hover: #963A08;
-  --action-secondary: var(--garnet);
-  --focus-ring: #1D4ED8;
-
-  /* Shared interaction and composition timing. */
-  --motion-fast: 150ms;
-  --motion-standard: 220ms;
-  --motion-emphasis: 360ms;
-  --ease-standard: cubic-bezier(.2,.7,.25,1);
-
   /* Shared layout geometry */
   --max: 1200px;
   --content-max: 1240px;
-  --content-wide: 1400px;
   --page-gutter: clamp(1rem, 3vw, 2rem);
   --section-space: clamp(4rem, 7vw, 7rem);
   --section-space-compact: clamp(2.75rem, 5vw, 4.75rem);
   --card-gap: clamp(1rem, 2.25vw, 1.75rem);
   --reading-measure: 68ch;
-  --measure-wide: 78ch;
-  --hero-measure: 16ch;
 
   /* Typographic scale: expressive display titles, predictable body copy */
   --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
   --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --fs-display: clamp(3rem, 6vw, 5.75rem);
   --fs-hero: clamp(2.65rem, 5.2vw, 4.5rem);
   --fs-h1: var(--fs-hero);
   --fs-h2: clamp(1.9rem, 3.35vw, 3rem);
   --fs-h3: clamp(1.25rem, 1.8vw, 1.55rem);
   --fs-body: 1rem;
-  --fs-body-large: clamp(1.0625rem, 1.2vw, 1.1875rem);
   --fs-small: 0.875rem;
   --fs-caption: 0.75rem;
 
@@ -78,14 +107,12 @@
   --radius-sm: 6px;
   --radius-control: 6px;
   --radius-card: 6px;
-  --radius-media: 4px;
-  --shadow-card: 0 8px 28px rgba(20, 18, 43, 0.075);
-  --shadow-sm: 0 3px 12px rgba(20, 18, 43, 0.06);
-  --shadow: 0 18px 48px rgba(20, 18, 43, 0.12);
-  --shadow-dark: 0 24px 64px rgba(8, 7, 19, 0.28);
-  --accent: var(--action-primary);
-  --accent-hover: var(--action-primary-hover);
-  --focus: var(--focus-ring);
+  --shadow-card: 0 5px 18px rgba(20, 18, 43, 0.07);
+  --shadow-sm: var(--shadow-card);
+  --shadow: 0 14px 34px rgba(20, 18, 43, 0.1);
+  --accent: var(--saffron);
+  --accent-hover: #963A08;
+  --focus: #1d4ed8;
   --text-on-dark: #FFFFFF;
   --text-on-light: var(--ink);
 }
@@ -923,7 +950,6 @@ body .footer-bottom {
     overflow-wrap: anywhere;
   }
 }
-
 
 /*
  * Premium component contracts.
