@@ -26,16 +26,20 @@ $roofNextSection = $roofHeroStart === false ? false : strpos($roof, '<section cl
 $roofHero = $roofHeroStart !== false && $roofNextSection !== false
     ? substr($roof, $roofHeroStart, $roofNextSection - $roofHeroStart)
     : '';
+$restaurantTripPanel = strpos($restaurant, '<section class="section restaurant-trip-planner"');
+$restaurantTripPartial = $restaurantTripPanel === false ? false : strpos($restaurant, "require __DIR__ . '/include/ui/trip-add-button.php';", $restaurantTripPanel);
+$roofTripPanel = strpos($roof, '<div class="roof-trip-action"');
+$roofTripPartial = $roofTripPanel === false ? false : strpos($roof, "require __DIR__ . '/include/ui/trip-add-button.php';", $roofTripPanel);
 
 $checks = [
     ['restaurant hero has stable table-enquiry attribution', strpos($restaurantHero, 'data-cta-id="enquiry-restaurant-table"') !== false && strpos($restaurantHero, 'data-cta-location="restaurant-hero"') !== false],
-    ['restaurant hero does not contain the Trip action', strpos($restaurantHero, 'data-trip-add') === false],
-    ['restaurant Trip action sits in a separate planning panel', strpos($restaurant, '<section class="section restaurant-trip-planner"') !== false && strpos($restaurant, 'restaurant-trip-planner-actions') !== false],
+    ['restaurant hero does not contain the Trip partial', strpos($restaurantHero, 'trip-add-button.php') === false],
+    ['restaurant Trip partial is rendered after the planning panel', $restaurantTripPanel !== false && $restaurantTripPartial !== false && $restaurantTripPartial > $restaurantTripPanel && strpos($restaurant, 'restaurant-trip-planner-actions') !== false],
     ['restaurant and rooftop share the stable Trip item ID', strpos($restaurant, "'id' => 'rooftop-dining'") !== false && strpos($roof, "'id' => 'rooftop-dining'") !== false],
     ['reservation form destination uses truthful request wording', strpos($restaurant, '<p class="eyebrow eyebrow-light">Table enquiry</p>') !== false && strpos($restaurant, '<h2>Request a table.</h2>') !== false],
     ['roof hero retains enquiry and menu discovery', strpos($roofHero, 'data-cta-id="enquiry-rooftop-table"') !== false && strpos($roofHero, 'href="restaurant.php#menu"') !== false],
-    ['roof hero does not contain the Trip action', strpos($roofHero, 'data-trip-add') === false],
-    ['roof Trip action is placed in the lower planning story', strpos($roof, '<div class="roof-trip-action"') !== false && strpos($roof, 'data-trip-add') > strpos($roof, '<div class="roof-trip-action"')],
+    ['roof hero does not contain the Trip partial', strpos($roofHero, 'trip-add-button.php') === false],
+    ['roof Trip partial is rendered inside the lower planning panel', $roofTripPanel !== false && $roofTripPartial !== false && $roofTripPartial > $roofTripPanel],
     ['restaurant Trip panel has responsive styles and focus treatment', strpos($restaurantCss, '.restaurant-trip-planner-inner') !== false && strpos($restaurantCss, '@media (max-width: 760px)') !== false && strpos($restaurantCss, ':focus-visible') !== false],
     ['roof Trip panel has responsive styles and focus treatment', strpos($roofCss, '.roof-trip-action') !== false && strpos($roofCss, '@media (max-width: 760px)') !== false && strpos($roofCss, ':focus-visible') !== false],
 ];
