@@ -52,6 +52,25 @@ function gj_brand_contrast_ratio($foreground, $background)
 
 $sources = [$tokenCss, $baseCss];
 $tokenNames = ['night', 'parchment', 'gold', 'saffron', 'garnet', 'ink', 'gold-ink', 'peacock', 'alert', 'white'];
+$semanticAliases = [
+    'surface' => 'parchment',
+    'surface-dark' => 'night',
+    'action-primary' => 'saffron',
+    'action-primary-hover' => 'accent-hover',
+    'focus-ring' => 'focus',
+];
+foreach ($semanticAliases as $semantic => $target) {
+    if (!preg_match('/--' . preg_quote($semantic, '/') . '\\s*:\\s*var\\(--' . preg_quote($target, '/') . '\\)\\s*;/', $tokenCss)) {
+        fwrite(STDERR, "Missing semantic alias contract: --" . $semantic . " must point to --" . $target . ".\\n");
+        exit(1);
+    }
+}
+foreach (['surface-raised', 'surface-muted', 'surface-dark-raised', 'line', 'line-strong', 'text-muted', 'text-on-dark-muted', 'motion-standard', 'ease-standard', 'content-wide', 'fs-display', 'fs-body-large'] as $name) {
+    if (!preg_match('/--' . preg_quote($name, '/') . '\\s*:\\s*(?!;)\\S+/', $tokenCss)) {
+        fwrite(STDERR, "Missing semantic design token: --" . $name . ".\\n");
+        exit(1);
+    }
+}
 $tokens = [];
 foreach ($tokenNames as $name) {
     $tokens[$name] = gj_brand_token($name, $sources);
