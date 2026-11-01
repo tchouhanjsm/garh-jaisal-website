@@ -54,14 +54,18 @@ test('restaurant hero eyebrow maintains readable contrast on its dark background
   expect(contrast.ratio).toBeGreaterThanOrEqual(4.5);
 });
 
-test('rooftop and restaurant entry points reach the contextual dining enquiry', async ({ page }, testInfo) => {
+test('rooftop table request and restaurant contextual enquiry remain distinct, safe paths', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Dining journey runs once on desktop-1280');
 
   const roofResponse = await page.goto('/roof.php', { waitUntil: 'domcontentloaded' });
   expect(roofResponse).not.toBeNull();
   expect(roofResponse.status()).toBeLessThan(400);
-  await page.locator('.page-hero-inner').getByRole('link', { name: 'Contact the hotel', exact: true }).click();
-  await expectDiningEnquiry(page);
+  const rooftopEnquiry = page.locator('.page-hero-inner').getByRole('link', { name: 'Enquire about a table', exact: true });
+  await expect(rooftopEnquiry).toHaveAttribute('href', 'restaurant.php#reserve');
+  await rooftopEnquiry.click();
+  await expect(page).toHaveURL(/\/restaurant\.php#reserve$/);
+  await expect(page.locator('#reserve form.restaurant-form')).toBeVisible();
+  await expect(page.locator('#reserve .restaurant-policy')).toContainText('not a confirmed booking');
 
   const restaurantResponse = await page.goto('/restaurant.php#reserve', { waitUntil: 'domcontentloaded' });
   expect(restaurantResponse).not.toBeNull();

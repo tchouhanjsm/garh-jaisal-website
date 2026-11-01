@@ -43,3 +43,43 @@ test('thank-you page without a successful enquiry does not emit generate_lead', 
   }));
   expect(leadEvents, 'A bare page visit must not be counted as a lead').toBe(false);
 });
+
+
+test('rooftop table CTA emits a privacy-safe table enquiry intent with stable attribution', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Rooftop CTA analytics assertion runs once on desktop-1280.');
+
+  const capturedEvents = [];
+  await page.exposeFunction('__captureGtagEvent', (...args) => {
+    capturedEvents.push(args);
+  });
+
+  const response = await page.goto('/roof.php', { waitUntil: 'domcontentloaded' });
+  expect(response, 'Rooftop dining page should return a response').not.toBeNull();
+  expect(response.status(), 'Rooftop dining page should load').toBeLessThan(400);
+
+  const cta = page.locator('.page-hero-inner').getByRole('link', { name: 'Enquire about a table', exact: true });
+  await expect(cta).toHaveAttribute('href', 'restaurant.php#reserve');
+  await expect(cta).toHaveAttribute('data-cta-id', 'enquiry-rooftop-table');
+  await expect(cta).toHaveAttribute('data-cta-location', 'rooftop-dining-hero');
+
+  await page.evaluate(() => {
+    window.gtag = (...args) => window.__captureGtagEvent(...args);
+  });
+  await cta.click();
+  await expect(page).toHaveURL(/\/restaurant\.php#reserve$/);
+  await expect.poll(() => capturedEvents.some(call => call[0] === 'event' && call[1] === 'table_enquiry_click')).toBe(true);
+
+  const eventCall = capturedEvents.find(call => call[0] === 'event' && call[1] === 'table_enquiry_click');
+  expect(eventCall[2]).toMatchObject({
+    page_path: '/roof.php',
+    page_context: 'dining',
+    cta_id: 'enquiry-rooftop-table',
+    cta_location: 'rooftop-dining-hero',
+    cta_label: 'Enquire about a table',
+  });
+  expect(eventCall[2]).not.toHaveProperty('name');
+  expect(eventCall[2]).not.toHaveProperty('email');
+  expect(eventCall[2]).not.toHaveProperty('phone');
+  expect(eventCall[2]).not.toHaveProperty('message');
+  // This measures a click to the table request form, not a confirmed reservation.
+});
