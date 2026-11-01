@@ -56,8 +56,6 @@ $semanticAliases = [
     'surface' => 'parchment',
     'surface-dark' => 'night',
     'action-primary' => 'saffron',
-    'action-primary-hover' => 'accent-hover',
-    'focus-ring' => 'focus',
 ];
 foreach ($semanticAliases as $semantic => $target) {
     if (!preg_match('/--' . preg_quote($semantic, '/') . '\\s*:\\s*var\\(--' . preg_quote($target, '/') . '\\)\\s*;/', $tokenCss)) {
