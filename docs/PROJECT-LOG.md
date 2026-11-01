@@ -282,3 +282,13 @@ The first generated 1280w facade candidate missed the 250,000-byte limit by 7,32
 - This is not a selector-deletion cleanup. Existing route CSS and historical responsive fixes have been preserved because safe consolidation requires selector usage analysis, computed-style comparison and exact viewport screenshot parity first.
 - Required exact-head verification: brand/token PHP contract, full PHP Site Checks (7.4/8.2), sitemap/publication checks, Browser E2E/page sheets and responsive screenshots at 320/390/768/1280/1440px, responsive-image generator/review, package preflight/reproducibility and non-deploying local Staging QA.
 - No real-host QA, package upload, staging deployment, form submission, merge or production deployment is included. Owner visual review and release approval remain required.
+
+
+## Canonical visual foundation consolidation — continuation (1 November 2026)
+
+- Root cause: the initial premium-token implementation was repeatedly appended during repair attempts. css/tokens.css contained three top-level :root declarations and three copies of the shared component contracts; repeated declarations created avoidable cascade ambiguity and made further edits unsafe.
+- Consolidated the original palette and semantic roles into one top-level token block. Existing token names remain compatible; legacy responsive :root overrides under media queries remain in place.
+- Retained one final shared component-contract layer after legacy responsive overrides so its intended precedence is preserved. Removed only repeated copies, retaining the image fallback color and compact-section spacing contract once.
+- Extended the brand/token check to reject duplicate semantic-token declarations, duplicate top-level root blocks and repeated shared selectors. The one base button rule plus one mobile touch-target override are explicitly permitted.
+- Preserved route CSS, page templates, photography, booking/contact destinations, SEO metadata, analytics behavior and release/package configuration.
+- Exact-head PHP/Site Checks and Browser E2E/screenshots at 320/390/768/1280/1440px remain required CI and human-review gates. No live-host inspection, package upload, staging QA dispatch, merge or deployment is authorized.

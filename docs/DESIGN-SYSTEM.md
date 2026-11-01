@@ -88,6 +88,7 @@ The canonical token source remains `css/tokens.css`. The first implementation ba
 - `css/thar-sunset-story.css` owns the story motif and scoped narrative treatments.
 - Route CSS owns only genuinely route-specific composition.
 - Do not duplicate a shared rule in multiple layers to win the cascade. Before consolidating historical overrides, search selector usage and compare computed styles and responsive screenshots.
+- Keep canonical semantic tokens in one top-level `:root` block, with one declaration per token. Keep shared component contracts in one final block after retained compatibility rules; enforce uniqueness in `scripts/check-brand-contrast.php`.
 - No selector or route CSS is removed in this batch. This is intentional: a safe consolidation needs rendered baseline evidence on the exact commit.
 
 ### Vendor review boundary

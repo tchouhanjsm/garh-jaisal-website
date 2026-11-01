@@ -233,7 +233,9 @@ test('premium semantic tokens are available and resolve to the approved identity
   for (const [name, value] of Object.entries(tokens)) {
     expect(value, name + ' must resolve to a non-empty shared token').not.toBe('');
   }
+  expect(tokens.surface.toLowerCase()).toBe('#f7efe0');
   expect(tokens.actionPrimary.toLowerCase()).toBe('#b94a0e');
   expect(tokens.actionHover.toLowerCase()).toBe('#963a08');
   expect(tokens.surfaceDark.toLowerCase()).toBe('#14122b');
+  expect(tokens.focusRing.toLowerCase()).toBe('#1d4ed8');
 });
