@@ -101,7 +101,7 @@ test('restaurant hero table enquiry emits a privacy-safe intent with stable attr
     window.gtag = (...args) => window.__captureRestaurantGtag(...args);
   });
   await cta.click();
-  await expect(page).toHaveURL(/\\/restaurant\\.php#reserve$/);
+  await expect(page).toHaveURL(new RegExp('/restaurant[.]php#reserve$'));
   await expect.poll(() => capturedEvents.some(call => call[0] === 'event' && call[1] === 'table_enquiry_click')).toBe(true);
 
   const eventCall = capturedEvents.find(call => call[0] === 'event' && call[1] === 'table_enquiry_click');
