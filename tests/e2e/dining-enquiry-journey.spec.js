@@ -129,7 +129,7 @@ test('restaurant and rooftop entry points share one dining Trip option through C
   expect(restaurantResponse).not.toBeNull();
   expect(restaurantResponse.status()).toBeLessThan(400);
 
-  const restaurantAdd = page.locator('.restaurant-hero [data-trip-add][data-trip-id="rooftop-dining"]');
+  const restaurantAdd = page.locator('.restaurant-trip-planner [data-trip-add][data-trip-id="rooftop-dining"]');
   await expect(restaurantAdd).toBeVisible();
   await expect(restaurantAdd).toHaveAttribute('data-trip-title', 'Rooftop dining');
   await expect(restaurantAdd).toHaveAttribute('data-trip-url', 'roof.php');
@@ -146,7 +146,7 @@ test('restaurant and rooftop entry points share one dining Trip option through C
   const roofResponse = await page.goto('/roof.php', { waitUntil: 'domcontentloaded' });
   expect(roofResponse).not.toBeNull();
   expect(roofResponse.status()).toBeLessThan(400);
-  const roofAdd = page.locator('.page-hero-inner [data-trip-add][data-trip-id="rooftop-dining"]');
+  const roofAdd = page.locator('.roof-trip-action [data-trip-add][data-trip-id="rooftop-dining"]');
   await expect(roofAdd).toBeVisible();
   await expect(roofAdd).toHaveAttribute('data-trip-title', 'Rooftop dining');
   await expect(roofAdd).toHaveAttribute('data-trip-group', 'dining');
@@ -181,9 +181,9 @@ test('dining Trip actions and Contact context fit 320–1440px without horizonta
       expect(response, route + ' response at ' + width).not.toBeNull();
       expect(response.status(), route + ' is available at ' + width).toBeLessThan(400);
       if (route === '/restaurant.php') {
-        await expect(page.locator('.restaurant-hero [data-trip-add][data-trip-id="rooftop-dining"]')).toBeVisible();
+        await expect(page.locator('.restaurant-trip-planner [data-trip-add][data-trip-id="rooftop-dining"]')).toBeVisible();
       } else if (route === '/roof.php') {
-        await expect(page.locator('.page-hero-inner [data-trip-add][data-trip-id="rooftop-dining"]')).toBeVisible();
+        await expect(page.locator('.roof-trip-action [data-trip-add][data-trip-id="rooftop-dining"]')).toBeVisible();
       } else {
         await expect(page.locator('.contact-trip-context')).toContainText('Rooftop dining');
       }

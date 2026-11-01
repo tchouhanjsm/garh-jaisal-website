@@ -101,3 +101,11 @@ This design-system work is repository-first. It is not based on a crawl or scree
 - Run the repository's PHP/site checks, token/contrast checks, Playwright E2E and screenshot/page-sheet matrix on the exact PR head.
 - Inspect generated screenshots at 320/390/768/1280/1440px; a green CI run is not a substitute for human visual approval.
 - Do not upload a package, dispatch real-host QA, submit an enquiry, merge or deploy as part of the PR.
+
+## Dining hero action hierarchy
+
+- The Restaurant and Rooftop heroes prioritize one table-enquiry action and one secondary menu or direct-contact route.
+- Save-to-Trip is a planning action, not a reservation action; place it in a distinct lower-page planning panel rather than beside the hero's primary CTA.
+- Keep the existing `rooftop-dining` Trip ID consistent across Restaurant and Rooftop so a guest's selection survives navigation.
+- Use explicit enquiry/request language until the hotel confirms table availability. A click to the request form is intent, not a submitted enquiry or reservation.
+- Preserve visible focus, 44px minimum interaction targets, mobile stacking and reduced-motion behavior for the lower planning panel.

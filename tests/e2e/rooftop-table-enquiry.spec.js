@@ -17,13 +17,17 @@ test('Rooftop hero prioritises the existing table enquiry journey', async ({ pag
     await expect(hero.getByRole('link', { name: 'View the menu', exact: true }))
       .toHaveAttribute('href', 'restaurant.php#menu');
     await expect(hero.locator('[data-cta-id="booking-rooftop-dining"]')).toHaveCount(0);
+    await expect(hero.locator('[data-trip-add][data-trip-id="rooftop-dining"]')).toHaveCount(0);
+    const tripAction = page.locator('.roof-trip-action [data-trip-add][data-trip-id="rooftop-dining"]');
+    await expect(tripAction).toBeVisible();
+    await expect(tripAction).toHaveAttribute('data-trip-title', 'Rooftop dining');
   }
 
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto('/roof.php', { waitUntil: 'domcontentloaded' });
   await page.getByRole('link', { name: 'Enquire about a table', exact: true }).click();
   await expect(page).toHaveURL(/\/restaurant\.php#reserve$/);
-  await expect(page.locator('#reserve h2')).toHaveText('Plan your table.');
+  await expect(page.locator('#reserve h2')).toHaveText('Request a table.');
   await expect(page.locator('#reserve .restaurant-policy'))
     .toContainText('not a confirmed booking');
   await expect(page.locator('#reserve button[type="submit"]')).toHaveText('Request a table');

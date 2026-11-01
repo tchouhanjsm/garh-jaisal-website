@@ -18,6 +18,7 @@ test.describe('restaurant reservation enquiry readiness', () => {
     await expect(form.locator('#note')).toHaveAttribute('maxlength', '500');
     await expect(form.locator('#consent')).toHaveAttribute('required', '');
     await expect(reservation).toContainText('not a confirmed booking');
+    await expect(reservation.getByRole('heading', { name: 'Request a table.' })).toBeVisible();
 
     await expect(page.locator('.restaurant-hours')).toContainText('Confirm current hours with the hotel');
     await expect(page.locator('.restaurant-hours')).not.toContainText(/7:30 am|10:30 am|12:30 pm|3:30 pm|7:00 pm|11:00 pm/i);
