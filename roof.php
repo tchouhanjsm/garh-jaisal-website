@@ -62,7 +62,7 @@ require __DIR__ . '/include/page-head.php';
 <main class="roof-page thar-sunset-story thar-sunset-story--dining" id="main-content" tabindex="-1">
   <section class="page-hero page-hero--photo">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/roofslide.webp" <?= gj_image_dimension_attributes('img/roofslide.webp', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="img/roofslide.webp" <?= gj_image_dimension_attributes('img/roofslide.webp', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" loading="eager" decoding="async">
     </div>
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Rooftop dining</p>
@@ -105,13 +105,16 @@ require __DIR__ . '/include/page-head.php';
         </p>
       </div>
 
-      <div class="roof-banner">
+      <figure class="roof-banner">
         <img
           src="img/rest3.jpg"
           alt="Rooftop dining area with views across Jaisalmer"
           <?= gj_image_dimension_attributes('img/rest3.jpg', '(max-width: 1000px) 100vw, 1000px') ?>
+          loading="lazy"
+          decoding="async"
         >
-      </div>
+        <figcaption>Views across Jaisalmer from the rooftop terrace</figcaption>
+      </figure>
 
       <div class="roof-copy">
         <p>

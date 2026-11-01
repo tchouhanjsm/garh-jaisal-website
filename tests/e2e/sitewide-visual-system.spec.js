@@ -18,14 +18,15 @@ const PAGE_ARCHETYPES = [
   { route: '/catalogue.php', hero: 'main .catalogue-hero', media: 'main .product-card-media' },
   { route: '/desert-safari.php', hero: 'main .experience-hero', media: 'main .experience-card-media' },
   { route: '/restaurant.php', hero: 'main .restaurant-hero' },
+  { route: '/roof.php', hero: 'main .page-hero' },
   { route: '/gallery.php', hero: 'main .gallery-hero' },
   { route: '/blog.php', hero: 'main .article-hero', media: 'main .blog-card-image' },
   { route: '/direction.php', hero: 'main .page-hero' },
   { route: '/contact.php', hero: 'main .contact-hero' },
   { route: '/jaisalmer-fort-guide.php', hero: 'main .article-hero' },
 ];
-const PHOTO_HERO_ROUTES = new Set(['/', '/room.php', '/pack.php', '/catalogue.php', '/desert-safari.php']);
-const VISUAL_REVIEW_ROUTES = new Set(['/', '/room.php', '/pack.php', '/catalogue.php', '/restaurant.php', '/gallery.php']);
+const PHOTO_HERO_ROUTES = new Set(['/', '/room.php', '/pack.php', '/catalogue.php', '/desert-safari.php', '/roof.php']);
+const VISUAL_REVIEW_ROUTES = new Set(['/', '/room.php', '/pack.php', '/catalogue.php', '/restaurant.php', '/roof.php', '/gallery.php']);
 const VISUAL_REVIEW_WIDTHS = new Set([320, 768, 1440]);
 const VISUAL_REVIEW_DIR = path.join('artifacts', 'screenshots', 'responsive-spotchecks');
 
@@ -33,7 +34,7 @@ function normalizePath(value) {
   try { return new URL(value, BASE_URL).pathname; } catch { return ''; }
 }
 
-test('shared visual system stays consistent across five viewports and eleven page archetypes', async ({ browser }, testInfo) => {
+test('shared visual system stays consistent across five viewports and twelve page archetypes', async ({ browser }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'This contract creates its own five viewport contexts');
   test.setTimeout(180_000);
 
@@ -238,4 +239,31 @@ test('premium semantic tokens are available and resolve to the approved identity
   expect(tokens.actionHover.toLowerCase()).toBe('#963a08');
   expect(tokens.surfaceDark.toLowerCase()).toBe('#14122b');
   expect(tokens.focusRing.toLowerCase()).toBe('#1d4ed8');
+});
+
+
+test('rooftop dining prioritises its hero and defers editorial rooftop photography', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Rooftop image priority contract runs once at desktop width.');
+
+  const response = await page.goto('/roof.php', { waitUntil: 'domcontentloaded' });
+  expect(response, 'Rooftop dining page must return an HTTP response').not.toBeNull();
+  expect(response.status(), 'Rooftop dining page must be available').toBeLessThan(400);
+
+  const heroImage = page.locator('main .page-hero-media img');
+  await expect(heroImage).toHaveAttribute('fetchpriority', 'high');
+  await expect(heroImage).toHaveAttribute('loading', 'eager');
+
+  const rooftopFigure = page.locator('main figure.roof-banner');
+  await expect(rooftopFigure).toHaveCount(1);
+  await expect(rooftopFigure.locator('figcaption')).toHaveText('Views across Jaisalmer from the rooftop terrace');
+
+  const rooftopImage = rooftopFigure.locator('img');
+  await expect(rooftopImage).toHaveAttribute('loading', 'lazy');
+  await expect(rooftopImage).toHaveAttribute('decoding', 'async');
+
+  const galleryImages = page.locator('main .cards .card-image img');
+  await expect(galleryImages).toHaveCount(3);
+  for (const image of await galleryImages.all()) {
+    await expect(image).toHaveAttribute('loading', 'lazy');
+  }
 });
