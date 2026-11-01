@@ -25,6 +25,25 @@ function cacheMaxAgeSeconds(headers, nowMs = Date.now()) {
   const baseline = Number.isFinite(serverDate) ? serverDate : nowMs;
   return Math.max(0, Math.floor((expires - baseline) / 1000));
 }
+function normalizeImagePolicySnapshot(snapshot) {
+  const source = snapshot && typeof snapshot === 'object' ? snapshot : {};
+  const normalize = (property, attribute, allowed, fallback) => {
+    const raw = typeof source[property] === 'string' ? source[property]
+      : typeof source[attribute] === 'string' ? source[attribute] : fallback;
+    const value = raw.toLowerCase();
+    return allowed.includes(value) ? value : fallback;
+  };
+  return {
+    loading: normalize('loadingProperty', 'loadingAttribute', ['eager', 'lazy'], 'eager'),
+    loadingAttribute: typeof source.loadingAttribute === 'string' ? source.loadingAttribute : null,
+    fetchPriority: normalize('fetchPriorityProperty', 'fetchPriorityAttribute', ['high', 'low', 'auto'], 'auto'),
+    fetchPriorityAttribute: typeof source.fetchPriorityAttribute === 'string' ? source.fetchPriorityAttribute : null,
+    decoding: normalize('decodingProperty', 'decodingAttribute', ['sync', 'async', 'auto'], 'auto'),
+    decodingAttribute: typeof source.decodingAttribute === 'string' ? source.decodingAttribute : null,
+    visibleAtInitialViewport: source.visibleAtInitialViewport === true,
+    policyCapturedBeforeAuditMutation: source.captured === true,
+  };
+}
 function parseSrcsetCandidates(srcset, baseUrl) {
   if (typeof srcset !== 'string' || !srcset.trim()) return [];
   return srcset.split(',').map(candidate => {
@@ -44,4 +63,4 @@ function selectedSrcsetWidth(srcset, currentSrc, baseUrl) {
 function normalizedSrcset(srcset, baseUrl) {
   return parseSrcsetCandidates(srcset, baseUrl).map(item => item.url + ' ' + item.descriptor).sort().join(', ');
 }
-module.exports = { cacheMaxAgeSeconds, normalizedSrcset, parseReleaseMarker, selectedSrcsetWidth };
+module.exports = { cacheMaxAgeSeconds, normalizeImagePolicySnapshot, normalizedSrcset, parseReleaseMarker, selectedSrcsetWidth };

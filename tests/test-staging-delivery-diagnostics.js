@@ -1,7 +1,7 @@
 'use strict';
 const assert = require('node:assert/strict');
 const test = require('node:test');
-const { cacheMaxAgeSeconds, normalizedSrcset, parseReleaseMarker, selectedSrcsetWidth } = require('../scripts/staging-delivery-diagnostics');
+const { cacheMaxAgeSeconds, normalizeImagePolicySnapshot, normalizedSrcset, parseReleaseMarker, selectedSrcsetWidth } = require('../scripts/staging-delivery-diagnostics');
 const sha = 'a'.repeat(40);
 test('parses only a bounded full-SHA release marker', () => {
   assert.equal(parseReleaseMarker('GARH_JAISAL_RELEASE_SHA=' + sha + '\n'), sha);
@@ -32,4 +32,55 @@ test('normalizes candidate URLs before comparing preload parity', () => {
   const left = 'img/responsive/hero-480.webp 480w, /img/responsive/hero-800.webp 800w';
   const right = '/img/responsive/hero-800.webp 800w, /img/responsive/hero-480.webp 480w';
   assert.equal(normalizedSrcset(left, 'https://stage.example.net/'), normalizedSrcset(right, 'https://stage.example.net/'));
+});
+
+test('preserves the original lazy-loading, priority and decoding policy for staging evidence', () => {
+  assert.deepEqual(normalizeImagePolicySnapshot({
+    captured: true,
+    visibleAtInitialViewport: false,
+    loadingAttribute: 'lazy',
+    loadingProperty: 'lazy',
+    fetchPriorityAttribute: 'high',
+    fetchPriorityProperty: 'high',
+    decodingAttribute: 'async',
+    decodingProperty: 'async',
+  }), {
+    loading: 'lazy',
+    loadingAttribute: 'lazy',
+    fetchPriority: 'high',
+    fetchPriorityAttribute: 'high',
+    decoding: 'async',
+    decodingAttribute: 'async',
+    visibleAtInitialViewport: false,
+    policyCapturedBeforeAuditMutation: true,
+  });
+});
+test('reports browser defaults when image policy attributes are omitted', () => {
+  assert.deepEqual(normalizeImagePolicySnapshot({ captured: true }), {
+    loading: 'eager',
+    loadingAttribute: null,
+    fetchPriority: 'auto',
+    fetchPriorityAttribute: null,
+    decoding: 'auto',
+    decodingAttribute: null,
+    visibleAtInitialViewport: false,
+    policyCapturedBeforeAuditMutation: true,
+  });
+});
+test('fails closed on unknown request-policy values without losing the original attributes', () => {
+  const policy = normalizeImagePolicySnapshot({
+    captured: true,
+    loadingAttribute: 'immediate',
+    loadingProperty: 'eager',
+    fetchPriorityAttribute: 'urgent',
+    fetchPriorityProperty: 'auto',
+    decodingAttribute: 'background',
+    decodingProperty: 'auto',
+  });
+  assert.equal(policy.loading, 'eager');
+  assert.equal(policy.loadingAttribute, 'immediate');
+  assert.equal(policy.fetchPriority, 'auto');
+  assert.equal(policy.fetchPriorityAttribute, 'urgent');
+  assert.equal(policy.decoding, 'auto');
+  assert.equal(policy.decodingAttribute, 'background');
 });
