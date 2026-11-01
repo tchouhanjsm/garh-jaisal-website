@@ -271,3 +271,14 @@ The first generated 1280w facade candidate missed the 250,000-byte limit by 7,32
 - Preserve the no-JavaScript behavior: all curated slides remain visible and controls remain hidden when the script does not execute.
 - Preserve source photographs, order, captions, routes, responsive candidate budgets, preload parity, booking destinations and site content. This phase changes carousel interaction/loading behavior only after explicit guest input.
 - Fresh exact-head Site Checks, Browser E2E/screenshots, package integrity/reproducibility and non-deploying Staging QA are required. No cPanel upload or production deployment is authorized.
+
+## Premium visual foundation — repository-first vendor batch (1 November 2026)
+
+- Captured the exact source baseline at `d15af654b411266a4380a3b839c698959e8412bd`, after PR #162. At capture time there were no open PRs.
+- Scope is strictly `tchouhanjsm/garh-jaisal-website`. The separately hosted `hotelgarhjaisal.com` domain is explicitly outside this vendor engagement; no live domain browsing, crawling, probing or screenshots were performed.
+- Added a repository baseline record and extended the canonical visual tokens with semantic surface, text, border, action, spacing, type and motion roles while preserving pre-existing token names.
+- Refined shared story composition, editorial section rhythm, cards and shared navigation/footer chrome. Existing PHP route templates, verified business content, booking destinations, public metadata and media manifests remain unchanged.
+- Added a browser contract for the new semantic token roles and extended the brand contrast contract to verify semantic aliases and presence of shared roles.
+- This is not a selector-deletion cleanup. Existing route CSS and historical responsive fixes have been preserved because safe consolidation requires selector usage analysis, computed-style comparison and exact viewport screenshot parity first.
+- Required exact-head verification: brand/token PHP contract, full PHP Site Checks (7.4/8.2), sitemap/publication checks, Browser E2E/page sheets and responsive screenshots at 320/390/768/1280/1440px, responsive-image generator/review, package preflight/reproducibility and non-deploying local Staging QA.
+- No real-host QA, package upload, staging deployment, form submission, merge or production deployment is included. Owner visual review and release approval remain required.
