@@ -72,21 +72,18 @@ require __DIR__ . '/include/page-head.php';
         the royal palace and lake as the light changes over the fort.
       </p>
       <div class="actions">
-        <a class="button button-primary" href="restaurant.php#menu">View the menu</a>
-        <a class="button button-light" href="contact.php?topic=dining">Contact the hotel</a>
+        <a
+          class="button button-primary"
+          href="restaurant.php#reserve"
+          data-cta-id="enquiry-rooftop-table"
+          data-cta-location="rooftop-dining-hero"
+        >Enquire about a table</a>
+        <a class="button button-light" href="restaurant.php#menu">View the menu</a>
         <?php
           $tripItem = ['id' => 'rooftop-dining', 'title' => 'Rooftop dining', 'url' => 'roof.php', 'group' => 'dining'];
           $tripButtonClass = 'button button-light';
           require __DIR__ . '/include/ui/trip-add-button.php';
         ?>
-        <a
-          class="button button-light"
-          href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
-          target="_blank"
-          rel="noopener"
-          data-cta-id="booking-rooftop-dining"
-          data-cta-location="rooftop-dining-hero"
-        >Book a stay</a>
       </div>
     </div>
   </section>

@@ -325,7 +325,7 @@ $page = [
     'twitter_title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
     'twitter_description' => "Enjoy rooftop dining at " . $restaurant['name'] . " inside Jaisalmer Fort. Enquire about a table and confirm current hours, menu and prices.",
     'twitter_image' => '/img/rest2.jpg',
-    'css' => ['css/restaurant.css'],
+    'css' => ['css/restaurant.css', 'css/map-preview.css'],
     'schema' => array_values(array_filter(
         $schema['@graph'],
         static function ($node) {
@@ -528,18 +528,16 @@ require __DIR__ . '/include/page-head.php';
         <p>Open the verified Google Maps destination or scan the QR code to get directions to the restaurant.</p>
       </div>
       <div class="restaurant-find-grid">
-        <div class="restaurant-map-frame">
-          <iframe
-            src="<?= e($googleMapsEmbedUrl) ?>"
-            title="Google Maps location of Garh Jaisal's Kitchen"
-            width="600"
-            height="450"
-            style="border:0;"
-            allowfullscreen
-            loading="lazy"
-            referrerpolicy="strict-origin-when-cross-origin"
-          ></iframe>
-        </div>
+        <?php
+        $mapPreview = [
+            'class' => 'restaurant-map-frame',
+            'title' => 'Explore Garh Jaisal’s Kitchen on the map.',
+            'description' => 'Load the interactive map only when you need it. The verified location link and QR code remain available beside the preview.',
+            'embed_url' => $googleMapsEmbedUrl,
+            'frame_title' => 'Google Maps location of Garh Jaisal’s Kitchen inside Jaisalmer Fort',
+        ];
+        require __DIR__ . '/include/ui/map-preview.php';
+        ?>
         <aside class="restaurant-map-qr-card">
           <img
             src="img/restaurant-maps-qr.svg"
@@ -681,5 +679,6 @@ require __DIR__ . '/include/ui/planning-path.php';
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
 <script src="js/restaurant.js" defer></script>
 <script src="js/garh-v2.js"></script>
+<script src="js/map-preview.js" defer></script>
 </body>
 </html>
