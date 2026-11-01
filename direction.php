@@ -50,7 +50,7 @@ $page = [
             'imagesizes' => '100vw',
         ],
     ],
-    'css' => ['css/arrival.css', 'css/arrival-experience.css'],
+    'css' => ['css/arrival.css', 'css/arrival-experience.css', 'css/map-preview.css'],
     'schema' => [
         [
             '@type' => 'WebPage',
@@ -295,18 +295,16 @@ require __DIR__ . '/include/page-head.php';
         <p>Use the map for the surrounding area, then open the hotel's exact Google Maps pin before travelling. Cars cannot enter the narrow Fort lanes.</p>
       </div>
       <div class="arrival-map-grid">
-        <div class="arrival-map-frame">
-          <iframe
-            src="<?= htmlspecialchars($hotelMapsEmbedUrl, ENT_QUOTES, 'UTF-8') ?>"
-            title="Map of Garh Jaisal Haveli near Fort Kotari Para inside Jaisalmer Fort"
-            width="600"
-            height="450"
-            style="border:0;"
-            allowfullscreen
-            loading="lazy"
-            referrerpolicy="strict-origin-when-cross-origin"
-          ></iframe>
-        </div>
+        <?php
+        $mapPreview = [
+            'class' => 'arrival-map-frame',
+            'title' => 'Explore the area around Jaisalmer Fort.',
+            'description' => 'Load the interactive map when you need it. The exact hotel pin and the final walk from Fort Parking are available alongside.',
+            'embed_url' => $hotelMapsEmbedUrl,
+            'frame_title' => 'Map of Garh Jaisal Haveli near Fort Kotari Para inside Jaisalmer Fort',
+        ];
+        require __DIR__ . '/include/ui/map-preview.php';
+        ?>
         <div class="arrival-map-copy">
           <p class="eyebrow">Last part on foot</p>
           <h3>Stop at Fort Parking.</h3>
@@ -438,5 +436,6 @@ require __DIR__ . '/include/ui/planning-path.php';
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
 <script src="js/garh-v2.js"></script>
 <script src="js/arrival-guide.js"></script>
+<script src="js/map-preview.js" defer></script>
 </body>
 </html>

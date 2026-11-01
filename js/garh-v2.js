@@ -350,6 +350,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    if (
+      destination.origin === window.location.origin &&
+      /\/restaurant\.php$/i.test(destination.pathname) &&
+      destination.hash === '#reserve'
+    ) {
+      trackIntentEvent('table_enquiry_click', Object.assign({}, eventContext, ctaMetadataForLink(anchor), {
+        cta_label: labelForTrackedLink(anchor, 'enquiry')
+      }));
+      return;
+    }
+
     if (destination.origin === window.location.origin && /\/contact\.php$/i.test(destination.pathname)) {
       trackIntentEvent('contact_enquiry_click', Object.assign({}, eventContext, ctaMetadataForLink(anchor), {
         cta_label: labelForTrackedLink(anchor, 'enquiry')

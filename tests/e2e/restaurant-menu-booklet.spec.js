@@ -90,7 +90,7 @@ test('restaurant directions QR, map and Instagram link use the verified destinat
   expect(qrSvg).toContain('shape-rendering="crispEdges"');
   expect(qrSvg).toContain('<path');
 
-  await expect(directions.locator('iframe')).toHaveAttribute('title', "Google Maps location of Garh Jaisal's Kitchen");
+  await expect(directions.locator('iframe')).toHaveAttribute('title', 'Google Maps location of Garh Jaisal’s Kitchen inside Jaisalmer Fort');
   await expect(directions.getByRole('link', { name: 'Open directions in Google Maps ↗' }))
     .toHaveAttribute('href', 'https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8');
 

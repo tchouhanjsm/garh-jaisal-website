@@ -24,6 +24,8 @@ $expectations = [
     ['campaign values persist only in per-tab session storage', strpos($analytics, 'gj_conversion_attribution_v1') !== false && strpos($analytics, 'window.sessionStorage.setItem') !== false],
     ['campaign attribution is limited to approved UTM fields', strpos($analytics, "const attributionKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content']") !== false],
     ['stable CTA IDs are validated before entering analytics', strpos($analytics, 'ctaMetadataForLink') !== false && strpos($analytics, 'metadata.cta_id = id') !== false],
+    ['same-site table request handoff emits a dedicated intent event', strpos($analytics, "trackIntentEvent('table_enquiry_click'") !== false],
+    ['table request click is scoped to the restaurant reserve anchor', strpos($analytics, "destination.hash === '#reserve'") !== false],
 ];
 foreach ($expectations as [$description, $passed]) { if (!$passed) $errors[] = $description; }
 $eventPosition = strpos($thankYou, "window.gtag('event', 'generate_lead'");
