@@ -1,6 +1,15 @@
 # Project state and release gates
 
-Last updated: 31 October 2026.
+Last updated: 1 November 2026.
+
+## Current repository status — 1 November 2026
+
+- `main` is at merge commit `74c625dff0916d4e6c32caf0920a0d9be3665bc7`, which merged PR #164 (on-demand maps and rooftop dining enquiry journey).
+- PR #164 is merged; there were no open pull requests when the next implementation batch began.
+- PR #161 homepage storytelling and Directions arrival work, PR #162 release-provenance/image-delivery work, and PR #164 map/dining-enquiry work are repository history, not active pull requests.
+- The repository is the sole implementation source of truth for this work. Do not inspect, change, upload to or deploy the separately hosted live website as part of a repository-only task.
+- CI, screenshot artifacts and package preflight are repository-local evidence. They do not authorize a cPanel upload, staging/production release, booking submission or real guest enquiry.
+- Remaining business-content blockers still require owner confirmation in `docs/OWNER-FACTS.md`: booking/cancellation terms, check-in/check-out, reception/late-arrival process, restaurant menu/prices/hours, approved reviews, transfer quotes and tour-specific operational details.
 
 ## Current objective
 
@@ -257,7 +266,7 @@ Every PR must deliver a coherent visible slice with exact-head Site Checks, Brow
 - PR #161 merged on 31 October 2026 at e858fa794a71bd68d1940bb49f6b382e2aec3dfd. This confirms repository integration; it does not mean cPanel staging or production was deployed.
 
 
-## Active implementation — PR #162: release provenance and staged delivery assurance
+## Historical implementation — PR #162: release provenance and staged delivery assurance
 
 Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for PR #161. PR #162 is the sole open successor to the retained PR #160 work. Do not open another implementation PR while #162 is active.
 
@@ -268,7 +277,7 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 - All PR checks remain non-deploying. No cPanel upload, enquiry submission, staging deployment or production release is included.
 
 
-## Active implementation — PR #162 Phase 2: Full-width guest-image delivery
+## Historical implementation — PR #162 Phase 2: Full-width guest-image delivery
 
 - Require budgeted 1200w WebP candidates only for originals wider than 1200px. Rooftop rest5.jpg and Car & City Tours jcity.jpg are no wider than the target and must use the original as their native-width candidate; no 1200w derivative or byte budget is allowed for them.
 - For source images whose original width is below the 1200px target, never upscale. The shared PHP resolver adds the native original as a final width-descriptor candidate when the largest generated derivative would cover less than 90% of the source width.
@@ -286,7 +295,7 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 - Exact-head validation still requires Site Checks, image generation, Browser E2E/screenshots, package reproducibility and non-deploying 11-route Staging QA. Real-host checks remain owner-dispatched and read-only.
 
 
-## Active implementation — PR #162 Phase 3: High-resolution responsive delivery
+## Historical implementation — PR #162 Phase 3: High-resolution responsive delivery
 
 - Add source-scoped 1280/1440/1800 WebP candidates only for full-width hero sources whose current 1200w ceiling forces a large native original to be selected. Keep the global 480/800/1200 set unchanged for other photography.
 - Enforce a hard 250,000-byte cap for every newly added candidate through the existing adaptive quality ladder. Preserve source images, metadata-safety, aspect ratios and the no-upscale rule.
@@ -330,7 +339,7 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 - The deployment package selector now validates and includes source-specific widths from the same manifest contract as the responsive-image generator. Unit coverage proves the Swiss Tent 1280w/1440w budgeted variants are selected into the runtime package.
 
 
-## Active implementation — PR #162 Phase 5: carousel image delivery and accessible interaction
+## Historical implementation — PR #162 Phase 5: carousel image delivery and accessible interaction
 
 **Purpose:** complete the guest-facing behavior of the source-aware image work, rather than testing hidden carousel images as though they were visible page slots.
 
@@ -340,3 +349,11 @@ Baseline: main is e858fa794a71bd68d1940bb49f6b382e2aec3dfd, the merge commit for
 - **Sprint 94 — no-JavaScript and lazy-media contract:** preserve all curated slides when JavaScript is unavailable, keep gallery images lazy/async, and add a PHP source contract to both PHP 7.4 and 8.2 Site Checks.
 - **Release gates:** rerun source-aware image generation, both PHP Site Checks, Browser E2E/screenshots, package reproducibility/preflight and non-deploying 11-route Staging QA on the exact PR #162 head. Real-host HTTPS/cache tests remain owner-dispatched and read-only.
 - **Preservation:** original photography, slide order, alt text, captions, aspect ratios, route URLs, canonical/schema, room/tour content, booking destinations and image budgets remain unchanged. No cPanel upload, external staging deployment, enquiry submission or production release is included.
+
+## Dining conversion hierarchy — implementation branch
+
+- Branch: `feature/dining-conversion-hierarchy-20261101`, based on main `74c625dff0916d4e6c32caf0920a0d9be3665bc7`.
+- The Restaurant and Rooftop hero actions are being simplified to foreground table enquiry and menu/direct-contact routes; save-to-Trip remains available in a lower, contextual planning panel.
+- The Restaurant table-enquiry hero action receives stable attribution for the existing intent-only `table_enquiry_click` event. Guest form fields must never be sent to analytics.
+- The reservation destination remains `restaurant.php#reserve`; wording identifies a request, not a confirmed table.
+- Acceptance requires PHP 7.4/8.2 Site Checks, Browser E2E/screenshots, package preflight and non-deploying Staging QA on the exact PR head. No live-site inspection, cPanel upload, external staging deployment, booking submission or real enquiry is included.

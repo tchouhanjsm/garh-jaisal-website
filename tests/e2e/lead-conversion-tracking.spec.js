@@ -83,3 +83,38 @@ test('rooftop table CTA emits a privacy-safe table enquiry intent with stable at
   expect(eventCall[2]).not.toHaveProperty('message');
   // This measures a click to the table request form, not a confirmed reservation.
 });
+
+test('restaurant hero table enquiry emits a privacy-safe intent with stable attribution', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Restaurant hero attribution assertion runs once on desktop-1280.');
+  const capturedEvents = [];
+  await page.exposeFunction('__captureRestaurantGtag', (...args) => capturedEvents.push(args));
+
+  const response = await page.goto('/restaurant.php', { waitUntil: 'domcontentloaded' });
+  expect(response, 'Restaurant page should return a response').not.toBeNull();
+  expect(response.status(), 'Restaurant page should load').toBeLessThan(400);
+  const cta = page.locator('.restaurant-hero').getByRole('link', { name: 'Enquire about a table', exact: true });
+  await expect(cta).toHaveAttribute('href', '#reserve');
+  await expect(cta).toHaveAttribute('data-cta-id', 'enquiry-restaurant-table');
+  await expect(cta).toHaveAttribute('data-cta-location', 'restaurant-hero');
+
+  await page.evaluate(() => {
+    window.gtag = (...args) => window.__captureRestaurantGtag(...args);
+  });
+  await cta.click();
+  await expect(page).toHaveURL(/\\/restaurant\\.php#reserve$/);
+  await expect.poll(() => capturedEvents.some(call => call[0] === 'event' && call[1] === 'table_enquiry_click')).toBe(true);
+
+  const eventCall = capturedEvents.find(call => call[0] === 'event' && call[1] === 'table_enquiry_click');
+  expect(eventCall[2]).toMatchObject({
+    page_path: '/restaurant.php',
+    page_context: 'dining',
+    cta_id: 'enquiry-restaurant-table',
+    cta_location: 'restaurant-hero',
+    cta_label: 'Enquire about a table',
+  });
+  expect(eventCall[2]).not.toHaveProperty('name');
+  expect(eventCall[2]).not.toHaveProperty('email');
+  expect(eventCall[2]).not.toHaveProperty('phone');
+  expect(eventCall[2]).not.toHaveProperty('message');
+  // The event records a click to the request form, never a confirmed reservation.
+});

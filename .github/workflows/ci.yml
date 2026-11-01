@@ -139,6 +139,9 @@ jobs:
       - name: Verify success-only lead conversion instrumentation
         run: php tests/php/lead-conversion-contract.php
 
+      - name: Verify restaurant conversion hierarchy and enquiry truthfulness
+        run: php tests/php/restaurant-conversion-contract.php
+
       - name: Verify structured enquiry context and safe recovery
         run: php tests/php/enquiry-context-contract.php
 

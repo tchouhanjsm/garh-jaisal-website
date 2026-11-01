@@ -717,3 +717,44 @@
   max-width: 100%;
   resize: vertical;
 }
+
+/* Dining conversion hierarchy: table intent and direct contact lead the hero.
+   Trip planning is a separate contextual decision below the primary story. */
+.restaurant-trip-planner {
+  border-block: 1px solid var(--line, #ded3c5);
+  background: linear-gradient(135deg, var(--sand-light, #f5ead8), var(--cream, #fbf7ef));
+}
+.restaurant-trip-planner-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(220px, .6fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 56px);
+}
+.restaurant-trip-planner-copy { max-width: 64ch; }
+.restaurant-trip-planner-copy .eyebrow { margin: 0 0 10px; color: var(--gold-ink, #8a6212); }
+.restaurant-trip-planner-copy h2 {
+  max-width: 24ch;
+  margin: 0 0 12px;
+  color: var(--ink, #231a14);
+  font-family: var(--font-display, Georgia, serif);
+  font-size: clamp(1.8rem, 3.4vw, 2.65rem);
+  font-weight: 400;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+.restaurant-trip-planner-copy p:last-child { margin: 0; color: var(--text-muted, #65574f); line-height: 1.7; }
+.restaurant-trip-planner-actions { display: grid; justify-items: start; gap: 10px; }
+.restaurant-trip-planner-actions .button { min-height: 48px; }
+.restaurant-trip-planner-actions .text-link {
+  display: inline-flex; min-height: 44px; align-items: center;
+  color: var(--garnet, #5b1a2b); font-weight: 700; text-underline-offset: .22em;
+}
+.restaurant-trip-planner :is(a, button):focus-visible { outline: 3px solid var(--focus, #1d4ed8); outline-offset: 3px; }
+@media (max-width: 760px) {
+  .restaurant-trip-planner-inner { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .restaurant-trip-planner-actions, .restaurant-trip-planner-actions .button { width: 100%; }
+  .restaurant-trip-planner-actions .button { justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .restaurant-trip-planner * { scroll-behavior: auto; transition: none !important; animation: none !important; }
+}

@@ -347,13 +347,8 @@ require __DIR__ . '/include/page-head.php';
         <h1>Rooftop dining in the heart of Jaisalmer Fort.</h1>
         <p>Settle in above the sandstone rooftops at Garh Jaisal's Kitchen. Explore the menu, then ask us to confirm current dishes, dietary options, service hours and a table for your date.</p>
         <div class="actions">
-          <a class="button button-primary" href="#reserve">Enquire about a table</a>
-          <a class="button button-light" href="<?= e($waLink) ?>" target="_blank" rel="noopener">WhatsApp</a>
-          <?php
-          $tripItem = ['id' => 'rooftop-dining', 'title' => 'Rooftop dining', 'url' => 'roof.php', 'group' => 'dining'];
-          $tripButtonClass = 'button button-light';
-          require __DIR__ . '/include/ui/trip-add-button.php';
-          ?>
+          <a class="button button-primary" href="#reserve" data-cta-id="enquiry-restaurant-table" data-cta-location="restaurant-hero">Enquire about a table</a>
+          <a class="button button-light" href="<?= e($waLink) ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-restaurant-hero" data-cta-location="restaurant-hero">WhatsApp</a>
         </div>
         <p class="restaurant-rooftop-link">Planning a meal or candlelight dinner? <a href="roof.php">Explore the rooftop dining space</a>.</p>
       </div>
@@ -404,6 +399,24 @@ require __DIR__ . '/include/page-head.php';
         <a class="button button-primary" href="<?= e($instagramUrl) ?>" target="_blank" rel="noopener">Follow @garhjaisal <span aria-hidden="true">↗</span></a>
         <p class="restaurant-instagram-note">A lightweight profile link keeps this page quick to load. Individual posts and reels can be featured when their direct URLs are approved.</p>
       </aside>
+    </div>
+  </section>
+
+  <section class="section restaurant-trip-planner" aria-labelledby="restaurant-trip-planner-title">
+    <div class="site-shell restaurant-trip-planner-inner">
+      <div class="restaurant-trip-planner-copy">
+        <p class="eyebrow">Plan your visit</p>
+        <h2 id="restaurant-trip-planner-title">Keep rooftop dining on your trip shortlist.</h2>
+        <p>Add the rooftop experience to your Trip while you compare rooms and explore Jaisalmer. A saved Trip item is a planning note, not a table request.</p>
+      </div>
+      <div class="restaurant-trip-planner-actions">
+        <?php
+        $tripItem = ['id' => 'rooftop-dining', 'title' => 'Rooftop dining', 'url' => 'roof.php', 'group' => 'dining'];
+        $tripButtonClass = 'button button-primary';
+        require __DIR__ . '/include/ui/trip-add-button.php';
+        ?>
+        <a class="text-link" href="catalogue.php">Explore more ways to plan your stay →</a>
+      </div>
     </div>
   </section>
 
@@ -558,8 +571,8 @@ require __DIR__ . '/include/page-head.php';
   <section id="reserve" class="section restaurant-reserve">
     <div class="site-shell restaurant-reserve-grid">
       <div>
-        <p class="eyebrow eyebrow-light">Reserve</p>
-        <h2>Plan your table.</h2>
+        <p class="eyebrow eyebrow-light">Table enquiry</p>
+        <h2>Request a table.</h2>
         <p>For same-day enquiries, call <a href="tel:<?= e($hotelPhone) ?>"><?= e($hotelPhoneDisplay) ?></a> or message us on WhatsApp.</p>
         <a class="button button-light" href="<?= e($waLink) ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-restaurant-reserve" data-cta-location="restaurant-reservation">Message on WhatsApp</a>
       </div>

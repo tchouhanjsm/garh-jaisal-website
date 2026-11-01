@@ -79,11 +79,6 @@ require __DIR__ . '/include/page-head.php';
           data-cta-location="rooftop-dining-hero"
         >Enquire about a table</a>
         <a class="button button-light" href="restaurant.php#menu">View the menu</a>
-        <?php
-          $tripItem = ['id' => 'rooftop-dining', 'title' => 'Rooftop dining', 'url' => 'roof.php', 'group' => 'dining'];
-          $tripButtonClass = 'button button-light';
-          require __DIR__ . '/include/ui/trip-add-button.php';
-        ?>
       </div>
     </div>
   </section>
@@ -132,8 +127,20 @@ require __DIR__ . '/include/page-head.php';
         </p>
       </div>
 
-      <div class="roof-trip-action">
-        <a class="text-link" href="catalogue.php">Combine dining with a stay or desert option →</a>
+      <div class="roof-trip-action" aria-labelledby="roof-trip-title">
+        <div class="roof-trip-copy">
+          <p class="eyebrow">Plan with your stay</p>
+          <h3 id="roof-trip-title">Add rooftop dining to your Jaisalmer plans.</h3>
+          <p>Keep this experience in your Trip while you compare rooms and explore the city. Adding it does not request or confirm a table.</p>
+        </div>
+        <div class="roof-trip-actions">
+          <?php
+            $tripItem = ['id' => 'rooftop-dining', 'title' => 'Rooftop dining', 'url' => 'roof.php', 'group' => 'dining'];
+            $tripButtonClass = 'button button-primary';
+            require __DIR__ . '/include/ui/trip-add-button.php';
+          ?>
+          <a class="text-link" href="catalogue.php">Combine dining with a stay or desert option →</a>
+        </div>
       </div>
 
       <div class="cards">

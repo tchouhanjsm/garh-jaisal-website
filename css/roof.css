@@ -93,3 +93,39 @@
 /* Keep the dining hub and menu page visually connected. */
 .roof-page .section-head a,.roof-page .roof-copy a{text-underline-offset:3px;text-decoration-thickness:1px}
 .roof-page .section-head p{min-width:0}
+
+/* The Rooftop hero stays focused on enquiry and menu discovery.
+   Save-to-Trip is positioned in the lower planning context. */
+.roof-trip-action {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, .48fr);
+  align-items: center;
+  gap: clamp(20px, 4vw, 42px);
+  margin: clamp(28px, 4vw, 48px) 0 34px;
+  padding: clamp(22px, 3.5vw, 38px);
+  border: 1px solid var(--line, #ded3c5);
+  background: linear-gradient(135deg, var(--sand-light, #f5ead8), var(--cream, #fbf7ef));
+}
+.roof-trip-copy .eyebrow { margin: 0 0 8px; color: var(--gold-ink, #8a6212); }
+.roof-trip-copy h3 {
+  margin: 0 0 10px; color: var(--ink, #231a14);
+  font-family: var(--font-display, Georgia, serif);
+  font-size: clamp(1.5rem, 2.8vw, 2.1rem); font-weight: 400;
+  line-height: 1.12; text-wrap: balance;
+}
+.roof-trip-copy p:last-child { max-width: 62ch; margin: 0; color: var(--text-muted, #65574f); line-height: 1.65; }
+.roof-trip-actions { display: grid; justify-items: start; gap: 10px; }
+.roof-trip-actions .button { min-height: 48px; }
+.roof-trip-actions .text-link {
+  display: inline-flex; min-height: 44px; align-items: center;
+  color: var(--garnet, #5b1a2b); font-weight: 700; text-underline-offset: .22em;
+}
+.roof-trip-action :is(a, button):focus-visible { outline: 3px solid var(--focus, #1d4ed8); outline-offset: 3px; }
+@media (max-width: 760px) {
+  .roof-trip-action { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .roof-trip-actions, .roof-trip-actions .button { width: 100%; }
+  .roof-trip-actions .button { justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .roof-trip-action * { scroll-behavior: auto; transition: none !important; animation: none !important; }
+}
