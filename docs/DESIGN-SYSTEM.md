@@ -55,3 +55,49 @@ Update the existing canonical stylesheet/component owner before creating another
 ## Automated contrast check coverage
 
 The repository checker enforces minimum contrast for documented representative pairs only; it checks representative pairs, not every possible rendered CSS combination across every page. Actual page contrast, overlays and text placement still require screenshot and accessibility review.
+
+## Premium visual system — implementation contract (1 November 2026)
+
+The canonical token source remains `css/tokens.css`. The first implementation batch adds semantic surface, text, line, action and motion roles while retaining every existing token name for backwards compatibility.
+
+### Semantic usage
+
+- `--surface`, `--surface-raised`, and `--surface-muted` define warm editorial surfaces. Do not put dense policy, price, form or FAQ content over busy photography.
+- `--surface-dark` and `--surface-dark-raised` define immersive Fort Night storytelling layers. Keep body copy on dark surfaces at the documented muted-light role.
+- `--line` and `--line-strong` provide consistent separators and boundaries.
+- `--text-muted` is for secondary text on light surfaces; `--text-on-dark-muted` is for supporting text on dark surfaces.
+- `--action-primary` and `--action-primary-hover` are reserved for direct booking and the single primary action in a viewport. Gold remains a graphic accent and must not become small text on parchment.
+- `--focus-ring` remains a visible focus indicator. Do not remove it to achieve a visual treatment.
+- Motion roles must honour the existing `css/accessibility.css` reduced-motion preference layer.
+
+### Composition standards
+
+1. **Editorial rhythm:** use generous section spacing, varied full-bleed, split and restrained card compositions. A page should not become a repeated grid of identical boxes.
+2. **Photography:** use only the repository's approved property/experience photography and existing responsive-image helpers. Never add external image references as though they depict the property.
+3. **Typography:** Source Serif 4 remains the display face; Inter/system remains the body face. Prefer short, balanced headings and readable body measures.
+4. **Actions:** 48px primary actions on public guest journeys; secondary actions must remain visually subordinate. Existing IDs, destinations and booking instrumentation are invariants.
+5. **Cards:** use the shared surface/line/shadow roles. Reserve card treatments for comparable items or decision units; let editorial storytelling sections breathe without enclosing every paragraph.
+6. **Responsive:** test 320, 390, 768, 1280 and 1440px. Review hero content, section-head stacking, text measure, image crop, fixed mobile dock clearance, cards, forms and footer.
+7. **Accessibility:** keyboard-visible focus, contrast review at rendered component level, reduced-motion support, meaningful link text, correct heading hierarchy and touch targets of at least 44px (48px for primary actions).
+
+### CSS ownership rules
+
+- `css/tokens.css` owns tokens and shared component-level normalization only.
+- `css/garh-v2.css` remains the base and legacy compatibility stylesheet.
+- `css/conversion-system.css` owns shared conversion, FAQ and planning components.
+- `css/thar-sunset-story.css` owns the story motif and scoped narrative treatments.
+- Route CSS owns only genuinely route-specific composition.
+- Do not duplicate a shared rule in multiple layers to win the cascade. Before consolidating historical overrides, search selector usage and compare computed styles and responsive screenshots.
+- Keep canonical semantic tokens in one top-level `:root` block, with one declaration per token. Keep shared component contracts in one final block after retained compatibility rules; enforce uniqueness in `scripts/check-brand-contrast.php`.
+- No selector or route CSS is removed in this batch. This is intentional: a safe consolidation needs rendered baseline evidence on the exact commit.
+
+### Vendor review boundary
+
+This design-system work is repository-first. It is not based on a crawl or screenshot of `hotelgarhjaisal.com`. That domain is outside the repository vendor engagement. The Git repository, its exact commit, its committed asset library and its tests are the only implementation sources of truth.
+
+### Acceptance
+
+- Existing semantic contracts, routes, booking/contact destinations, content facts, schemas, analytics boundaries and asset manifests remain unchanged.
+- Run the repository's PHP/site checks, token/contrast checks, Playwright E2E and screenshot/page-sheet matrix on the exact PR head.
+- Inspect generated screenshots at 320/390/768/1280/1440px; a green CI run is not a substitute for human visual approval.
+- Do not upload a package, dispatch real-host QA, submit an enquiry, merge or deploy as part of the PR.

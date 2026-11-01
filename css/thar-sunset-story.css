@@ -1096,3 +1096,194 @@ dialog.room-comparison-dialog::backdrop{
     transform: none !important;
   }
 }
+
+/* Premium refinement — consistent editorial rhythm and architectural restraint.
+   The base rules are deliberately scoped to existing story templates. */
+main.thar-sunset-story .section-head {
+  gap: clamp(1.5rem, 4.5vw, 4.5rem);
+  margin-bottom: clamp(1.75rem, 3.5vw, 3rem);
+}
+main.thar-sunset-story .section-head h2 {
+  max-width: 18ch;
+  font-size: clamp(2rem, 3.8vw, 3.35rem);
+  line-height: 1.04;
+  letter-spacing: -.035em;
+}
+main.thar-sunset-story .section-head > p {
+  max-width: 54ch;
+  font-size: var(--fs-body-large, 1.0625rem);
+  line-height: 1.7;
+}
+main.thar-sunset-story .section > .site-shell > .section-head,
+main.thar-sunset-story .section .site-shell > .section-head {
+  align-items: end;
+}
+main.thar-sunset-story .hero-content .eyebrow,
+main.thar-sunset-story .page-hero-inner > .eyebrow,
+main.thar-sunset-story .package-hero-content > .eyebrow,
+main.thar-sunset-story .experience-hero-content > .eyebrow,
+main.thar-sunset-story .article-hero .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  color: #F4D6A1;
+  letter-spacing: .15em;
+}
+main.thar-sunset-story .hero-content h1,
+main.thar-sunset-story .page-hero-inner h1,
+main.thar-sunset-story .package-hero-content h1,
+main.thar-sunset-story .experience-hero-content h1,
+main.thar-sunset-story .article-hero h1 {
+  text-wrap: balance;
+  max-width: var(--hero-measure, 16ch);
+}
+main.thar-sunset-story :is(.home-place-story, .home-city-discovery, .home-rooftop) figure,
+main.thar-sunset-story :is(.home-place-story, .home-city-discovery, .home-rooftop) .media,
+main.thar-sunset-story :is(.home-place-story, .home-city-discovery, .home-rooftop) .image-panel {
+  isolation: isolate;
+}
+main.thar-sunset-story :is(.home-place-story, .home-city-discovery, .home-rooftop) img {
+  display: block;
+}
+main.thar-sunset-story :is(.home-place-story, .home-city-discovery) figure img,
+main.thar-sunset-story .home-place-story .image-panel img {
+  box-shadow: var(--shadow);
+}
+main.thar-sunset-story .home-discovery-link {
+  min-height: 104px;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border-inline-start: 1px solid var(--line-strong);
+  transition: background-color var(--motion-standard) var(--ease-standard),
+    border-color var(--motion-standard) var(--ease-standard);
+}
+main.thar-sunset-story .home-discovery-link:hover {
+  background: rgba(255, 252, 246, .74);
+  border-inline-start-color: var(--gold-ink);
+}
+main.thar-sunset-story .home-discovery-link:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 4px;
+}
+main.thar-sunset-story .home-arrival-note {
+  border-block: 1px solid var(--line);
+}
+main.thar-sunset-story .home-arrival-note h2 {
+  max-width: 18ch;
+  font-size: clamp(1.8rem, 3vw, 2.55rem);
+  line-height: 1.08;
+  letter-spacing: -.03em;
+}
+main.thar-sunset-story .home-arrival-note p:not(.eyebrow) {
+  max-width: 68ch;
+  color: var(--text-muted);
+}
+main.thar-sunset-story .home-planning-panel {
+  border: 1px solid var(--line-strong);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow);
+}
+main.thar-sunset-story .home-planning-copy h2 {
+  max-width: 16ch;
+}
+main.thar-sunset-story .home-planning-link {
+  transition: color var(--motion-standard) var(--ease-standard),
+    border-color var(--motion-standard) var(--ease-standard);
+}
+main.thar-sunset-story .home-planning-link:hover {
+  color: var(--garnet);
+  border-color: var(--gold-ink);
+}
+main.thar-sunset-story .home-planning-link span:last-child {
+  transition: transform var(--motion-fast) var(--ease-standard);
+}
+main.thar-sunset-story .home-city-discovery__copy {
+  max-width: 58ch;
+}
+main.thar-sunset-story .home-city-discovery__copy h2 {
+  max-width: 15ch;
+  font-size: clamp(2rem, 3.8vw, 3.25rem);
+  line-height: 1.04;
+}
+main.thar-sunset-story .home-city-discovery__media {
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-muted);
+  box-shadow: var(--shadow);
+}
+main.thar-sunset-story .home-city-discovery__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+main.thar-sunset-story .home-city-discovery__media figcaption {
+  padding: .75rem 1rem;
+  color: var(--text-muted);
+  font-size: var(--fs-small);
+}
+main.thar-sunset-story .home-room-card {
+  overflow: hidden;
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--motion-standard) var(--ease-standard),
+    box-shadow var(--motion-standard) var(--ease-standard),
+    border-color var(--motion-standard) var(--ease-standard);
+}
+main.thar-sunset-story .home-room-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold-ink);
+  box-shadow: var(--shadow);
+}
+main.thar-sunset-story .home-room-card .card-body {
+  padding: clamp(1rem, 1.8vw, 1.5rem);
+}
+main.thar-sunset-story .home-room-card .card-kicker {
+  color: var(--gold-ink);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-size: var(--fs-caption);
+  font-weight: 750;
+}
+main.thar-sunset-story .home-room-card h3 {
+  margin-block: .45rem .65rem;
+  font-size: clamp(1.35rem, 2vw, 1.65rem);
+  line-height: 1.12;
+}
+main.thar-sunset-story .home-room-card p {
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+main.thar-sunset-story .home-room-detail-link {
+  font-weight: 700;
+  text-underline-offset: .25em;
+}
+@media (max-width: 760px) {
+  main.thar-sunset-story .section-head h2 {
+    max-width: 18ch;
+    font-size: clamp(1.9rem, 8vw, 2.55rem);
+  }
+  main.thar-sunset-story .section-head > p {
+    font-size: 1rem;
+  }
+  main.thar-sunset-story .home-discovery-link {
+    min-height: 82px;
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--line);
+  }
+  main.thar-sunset-story .home-discovery-link:last-child {
+    border-block-end: 1px solid var(--line);
+  }
+  main.thar-sunset-story .home-room-card .card-body {
+    padding: 1rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  main.thar-sunset-story .home-discovery-link,
+  main.thar-sunset-story .home-planning-link,
+  main.thar-sunset-story .home-room-card {
+    transition: none;
+  }
+  main.thar-sunset-story .home-room-card:hover {
+    transform: none;
+  }
+}

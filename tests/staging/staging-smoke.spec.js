@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
-const { cacheMaxAgeSeconds, normalizedSrcset, parseReleaseMarker, selectedSrcsetWidth } = require('../../scripts/staging-delivery-diagnostics');
+const { cacheMaxAgeSeconds, normalizeImagePolicySnapshot, normalizedSrcset, parseReleaseMarker, selectedSrcsetWidth } = require('../../scripts/staging-delivery-diagnostics');
 
 const ROOT = path.resolve(__dirname, '../..');
 const REMOTE_TARGET = (process.env.STAGING_BASE_URL || '').trim();
@@ -14,6 +14,7 @@ const EXPECTED_SHA = (process.env.STAGING_EXPECTED_COMMIT_SHA || '').toLowerCase
 const CHECKED_OUT_SHA = (process.env.CHECKED_OUT_COMMIT_SHA || '').toLowerCase();
 const CORE_ROUTES = ['/', '/room.php', '/contact.php', '/direction.php', '/restaurant.php', '/roof.php', '/desert-safari.php', '/guided-jaisalmer-tour.php', '/car-tours.php', '/gallery.php', '/blog.php'];
 const MIN_IMAGE_CACHE_AGE_SECONDS = 7 * 24 * 60 * 60;
+const IMAGE_POLICY_SNAPSHOT_KEY = '__garhJaisalStagingImagePolicySnapshots';
 
 function routePathsFromSitemap(content) {
   return [...new Set(
@@ -161,6 +162,7 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
         h1Count: 0,
         imageCount: 0,
         imageFailures: 0,
+        imagePolicySummary: null,
         horizontalOverflow: null,
         imageSources: [],
         preloads: [],
@@ -264,14 +266,29 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
 
         await page.evaluate(() => window.scrollTo(0, 0));
         await page.waitForTimeout(50);
-        const initialImageVisibility = await page.locator('img').evaluateAll(nodes => nodes.map(img => {
-          const rect = img.getBoundingClientRect();
-          const style = getComputedStyle(img);
-          return rect.width > 0 && rect.height > 0
-            && rect.right > 0 && rect.left < window.innerWidth
-            && rect.bottom > 0 && rect.top < window.innerHeight
-            && style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0;
-        }));
+        // Snapshot each image's original request policy before scroll/decode diagnostics mutate it.
+        await page.evaluate(snapshotKey => {
+          const snapshots = new WeakMap();
+          for (const img of document.images) {
+            const rect = img.getBoundingClientRect();
+            const style = getComputedStyle(img);
+            const visibleAtInitialViewport = rect.width > 0 && rect.height > 0
+              && rect.right > 0 && rect.left < window.innerWidth
+              && rect.bottom > 0 && rect.top < window.innerHeight
+              && style.display !== 'none' && style.visibility !== 'hidden' && Number(style.opacity) > 0;
+            snapshots.set(img, {
+              captured: true,
+              visibleAtInitialViewport,
+              loadingAttribute: img.getAttribute('loading'),
+              loadingProperty: img.loading || 'eager',
+              fetchPriorityAttribute: img.getAttribute('fetchpriority'),
+              fetchPriorityProperty: img.fetchPriority || 'auto',
+              decodingAttribute: img.getAttribute('decoding'),
+              decodingProperty: img.decoding || 'auto',
+            });
+          }
+          window[snapshotKey] = snapshots;
+        }, IMAGE_POLICY_SNAPSHOT_KEY);
         const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
         for (let top = 0; top < pageHeight; top += 700) {
           await page.evaluate(value => window.scrollTo(0, value), top);
@@ -279,6 +296,25 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
         }
         await page.evaluate(() => window.scrollTo(0, 0));
         await page.waitForTimeout(100);
+
+        // Include images added by scroll-triggered content before the audit promotes request priority.
+        await page.evaluate(snapshotKey => {
+          const snapshots = window[snapshotKey] instanceof WeakMap ? window[snapshotKey] : new WeakMap();
+          for (const img of document.images) {
+            if (snapshots.has(img)) continue;
+            snapshots.set(img, {
+              captured: true,
+              visibleAtInitialViewport: false,
+              loadingAttribute: img.getAttribute('loading'),
+              loadingProperty: img.loading || 'eager',
+              fetchPriorityAttribute: img.getAttribute('fetchpriority'),
+              fetchPriorityProperty: img.fetchPriority || 'auto',
+              decodingAttribute: img.getAttribute('decoding'),
+              decodingProperty: img.decoding || 'auto',
+            });
+          }
+          window[snapshotKey] = snapshots;
+        }, IMAGE_POLICY_SNAPSHOT_KEY);
 
         // Promote lazy images to eager and wait for decoding before inspecting natural dimensions.
         await page.locator('img').evaluateAll(async nodes => {
@@ -298,7 +334,7 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
         result.horizontalOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
         record(result.horizontalOverflow === false, 'Horizontal overflow at responsive viewport.', { route, viewport: viewport.width });
 
-        const images = await page.locator('img').evaluateAll((nodes, initialVisibility) => nodes.map((img, index) => {
+        const images = await page.locator('img').evaluateAll((nodes, snapshotKey) => nodes.map((img, index) => {
           const style = getComputedStyle(img);
           const currentSrc = img.currentSrc || img.src || '';
           const pictureSources = Array.from(img.closest('picture')?.querySelectorAll('source[srcset]') || []);
@@ -308,8 +344,12 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
             catch { return false; }
           }));
           const rect = img.getBoundingClientRect();
+          const policySnapshot = window[snapshotKey]?.get(img) || null;
           return {
             index: index + 1,
+            policySnapshot,
+            isRooftopHero: Boolean(img.closest('.page-hero-media')),
+            isRooftopEditorial: Boolean(img.closest('figure.roof-banner')),
             src: img.getAttribute('src') || img.src || '',
             srcset: activeSource?.getAttribute('srcset') || img.getAttribute('srcset') || '',
             sizes: activeSource?.getAttribute('sizes') || img.getAttribute('sizes') || '',
@@ -322,13 +362,44 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
             renderedWidth: Math.round(rect.width * 100) / 100,
             renderedHeight: Math.round(rect.height * 100) / 100,
             devicePixelRatio: window.devicePixelRatio || 1,
-            loading: img.loading || 'eager',
-            fetchPriority: img.fetchPriority || 'auto',
-            visibleAtInitialViewport: initialVisibility[index] === true,
+            // Loading/fetch/decode policy is normalized from the pre-mutation snapshot below.
+            visibleAtInitialViewport: false,
             loaded: img.complete && img.naturalWidth > 0 && img.naturalHeight > 0,
             rendered: style.display !== 'none' && style.visibility !== 'hidden' && img.getClientRects().length > 0,
           };
-        }), initialImageVisibility);
+        }), IMAGE_POLICY_SNAPSHOT_KEY);
+
+        for (const img of images) {
+          const policy = normalizeImagePolicySnapshot(img.policySnapshot);
+          Object.assign(img, policy);
+          img.placement = img.isRooftopHero ? 'rooftop-hero' : img.isRooftopEditorial ? 'rooftop-editorial' : null;
+          delete img.policySnapshot;
+          delete img.isRooftopHero;
+          delete img.isRooftopEditorial;
+          record(img.policyCapturedBeforeAuditMutation, 'Image request policy was not captured before staging-audit mutations.', {
+            route, viewport: viewport.width, src: img.src,
+          });
+        }
+
+        result.imagePolicySummary = {
+          captureTiming: 'pre-audit-mutation',
+          capturedImageCount: images.filter(img => img.policyCapturedBeforeAuditMutation).length,
+          lazyImageCount: images.filter(img => img.loading === 'lazy').length,
+          eagerImageCount: images.filter(img => img.loading === 'eager').length,
+          highPriorityImageCount: images.filter(img => img.fetchPriority === 'high').length,
+        };
+
+        if (route === '/roof.php') {
+          const rooftopHero = images.find(img => img.placement === 'rooftop-hero');
+          const rooftopEditorial = images.find(img => img.placement === 'rooftop-editorial');
+          record(Boolean(rooftopHero), 'Rooftop hero is missing from the staging image-policy audit.', { route, viewport: viewport.width });
+          record(Boolean(rooftopHero && rooftopHero.loading === 'eager' && rooftopHero.fetchPriority === 'high'),
+            'Rooftop hero must retain eager loading and high fetch priority.',
+            { route, viewport: viewport.width, observed: rooftopHero || null });
+          record(Boolean(rooftopEditorial && rooftopEditorial.loading === 'lazy' && rooftopEditorial.decoding === 'async'),
+            'Rooftop editorial photography must retain lazy loading and async decoding.',
+            { route, viewport: viewport.width, observed: rooftopEditorial || null });
+        }
 
         result.imageCount = images.length;
         result.imageSources = images;

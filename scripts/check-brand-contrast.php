@@ -18,6 +18,47 @@ if (!is_string($tokenCss) || !is_string($baseCss) || !is_string($storyCss) || !i
     exit(1);
 }
 
+// Keep the canonical visual foundation structurally unambiguous.
+$topLevelRootCount = preg_match_all('/^:root\\s*\\{/m', $tokenCss);
+if ($topLevelRootCount !== 1) {
+    fwrite(STDERR, "css/tokens.css must contain exactly one top-level :root token block.\\n");
+    exit(1);
+}
+$canonicalTokens = [
+    'surface', 'surface-raised', 'surface-muted', 'surface-dark', 'surface-dark-raised',
+    'line', 'line-strong', 'text-muted', 'text-on-dark-muted',
+    'action-primary', 'action-primary-hover', 'action-secondary', 'focus-ring',
+    'motion-fast', 'motion-standard', 'motion-emphasis', 'ease-standard',
+    'content-wide', 'measure-wide', 'hero-measure', 'fs-display', 'fs-body-large',
+    'radius-media', 'shadow-dark', 'accent', 'accent-hover', 'focus',
+];
+foreach ($canonicalTokens as $name) {
+    $count = preg_match_all('/--' . preg_quote($name, '/') . '\\s*:/', $tokenCss);
+    if ($count !== 1) {
+        fwrite(STDERR, "Canonical token --" . $name . " must be declared exactly once; found " . $count . ".\\n");
+        exit(1);
+    }
+}
+$sharedSelectors = [
+    ':where(main) .eyebrow {' => 1,
+    ':where(main) .section-head {' => 1,
+    ':where(main) .section-head h2 {' => 1,
+    ':where(main) .section-head > p {' => 1,
+    ':where(main) .button {' => 2, // one base rule plus one intentional mobile target-size override
+    ':where(main) .button-primary {' => 1,
+    ':where(main) .button-primary:hover {' => 1,
+    ':where(main) :is(input, select, textarea) {' => 1,
+    ':where(main) :is(input, select, textarea)::placeholder {' => 1,
+    ':where(main) img {' => 1,
+];
+foreach ($sharedSelectors as $selector => $expectedCount) {
+    $count = substr_count($tokenCss, $selector);
+    if ($count !== $expectedCount) {
+        fwrite(STDERR, "Shared component selector has an unexpected declaration count (expected " . $expectedCount . "): " . $selector . PHP_EOL);
+        exit(1);
+    }
+}
+
 function gj_brand_token($name, $sources)
 {
     foreach ($sources as $source) {
@@ -52,6 +93,23 @@ function gj_brand_contrast_ratio($foreground, $background)
 
 $sources = [$tokenCss, $baseCss];
 $tokenNames = ['night', 'parchment', 'gold', 'saffron', 'garnet', 'ink', 'gold-ink', 'peacock', 'alert', 'white'];
+$semanticAliases = [
+    'surface' => 'parchment',
+    'surface-dark' => 'night',
+    'action-primary' => 'saffron',
+];
+foreach ($semanticAliases as $semantic => $target) {
+    if (!preg_match('/--' . preg_quote($semantic, '/') . '\\s*:\\s*var\\(--' . preg_quote($target, '/') . '\\)\\s*;/', $tokenCss)) {
+        fwrite(STDERR, "Missing semantic alias contract: --" . $semantic . " must point to --" . $target . "." . PHP_EOL);
+        exit(1);
+    }
+}
+foreach (['surface-raised', 'surface-muted', 'surface-dark-raised', 'line', 'line-strong', 'text-muted', 'text-on-dark-muted', 'motion-standard', 'ease-standard', 'content-wide', 'fs-display', 'fs-body-large'] as $name) {
+    if (!preg_match('/--' . preg_quote($name, '/') . '\\s*:\\s*(?!;)\\S+/', $tokenCss)) {
+        fwrite(STDERR, "Missing semantic design token: --" . $name . "." . PHP_EOL);
+        exit(1);
+    }
+}
 $tokens = [];
 foreach ($tokenNames as $name) {
     $tokens[$name] = gj_brand_token($name, $sources);

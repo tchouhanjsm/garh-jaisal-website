@@ -3246,3 +3246,113 @@ main.thar-sunset-story--rooms [hidden] {
   outline-offset:3px;
 }
 .trip-tray-contact[hidden]{display:none!important}
+
+/* Shared chrome refinement — keep the guest's route and booking actions clear. */
+.nav-wrap {
+  background: rgba(247, 239, 224, .96);
+  border-bottom-color: var(--line);
+  box-shadow: 0 5px 22px rgba(20, 18, 43, .055);
+}
+.nav-inner {
+  min-height: 76px;
+  gap: clamp(12px, 1.8vw, 24px);
+}
+.brand img {
+  width: 46px;
+  height: 46px;
+  flex-basis: 46px;
+}
+.brand strong {
+  font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+}
+.main-nav {
+  gap: clamp(10px, 1.35vw, 19px);
+}
+.main-nav a {
+  font-size: .875rem;
+}
+.main-nav .nav-book {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border-radius: var(--radius-control, 6px);
+  background: var(--action-primary, var(--saffron));
+  box-shadow: 0 6px 16px rgba(91, 26, 43, .12);
+}
+.main-nav .nav-book:hover {
+  background: var(--action-primary-hover, #963A08);
+}
+.main-nav a:focus-visible,
+.main-nav button:focus-visible,
+.nav-toggle:focus-visible,
+.contact-dock a:focus-visible,
+.mobile-cta a:focus-visible {
+  outline: 3px solid var(--focus-ring, var(--focus));
+  outline-offset: 4px;
+}
+.contact-dock {
+  gap: 10px;
+}
+.contact-dock a {
+  min-height: 50px;
+  border: 1px solid rgba(247, 239, 224, .72);
+  border-radius: var(--radius-control, 6px);
+  box-shadow: 0 12px 30px rgba(20, 18, 43, .2);
+}
+.contact-dock a:not(.whatsapp) {
+  background: rgba(20, 18, 43, .96);
+}
+.contact-dock .whatsapp {
+  background: #236b45;
+}
+.mobile-cta {
+  box-shadow: 0 -8px 30px rgba(20, 18, 43, .12);
+}
+.mobile-cta a {
+  min-height: 52px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.mobile-cta .mobile-cta-book {
+  background: var(--action-primary, var(--saffron));
+}
+.site-footer {
+  background: var(--night);
+  color: var(--text-on-dark, #fff);
+}
+.site-footer :is(h2, h3, .footer-title, .eyebrow) {
+  color: var(--parchment);
+}
+.site-footer p,
+.site-footer li,
+.site-footer .footer-copy,
+.site-footer .footer-bottom {
+  color: var(--text-on-dark-muted, #e8dccb);
+}
+.site-footer a {
+  text-underline-offset: .24em;
+}
+.site-footer a:hover {
+  color: var(--gold);
+}
+.site-footer a:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 4px;
+}
+@media (max-width: 991px) {
+  .nav-inner {
+    min-height: 68px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .main-nav .nav-book,
+  .contact-dock a {
+    transition: none;
+  }
+  .main-nav .nav-book:hover,
+  .contact-dock a:hover {
+    transform: none;
+  }
+}
