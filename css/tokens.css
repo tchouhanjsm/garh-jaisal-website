@@ -77,34 +77,6 @@
   --shadow-dark: 0 24px 64px rgba(8, 7, 19, .28);
 }
 
-/* Semantic surface, hierarchy, action and motion roles for the premium system. */
-:root {
-  --surface: var(--parchment);
-  --surface-raised: #FFFCF6;
-  --surface-muted: #F0E5D2;
-  --surface-dark: var(--night);
-  --surface-dark-raised: var(--night-2);
-  --line: #D9CBB5;
-  --line-strong: #BFAE94;
-  --text-muted: #65574F;
-  --text-on-dark-muted: #E8DCCB;
-  --action-primary: var(--saffron);
-  --action-primary-hover: #963A08;
-  --action-secondary: var(--garnet);
-  --focus-ring: #1D4ED8;
-  --motion-fast: 150ms;
-  --motion-standard: 220ms;
-  --motion-emphasis: 360ms;
-  --ease-standard: cubic-bezier(.2,.7,.25,1);
-  --content-wide: 1400px;
-  --measure-wide: 78ch;
-  --hero-measure: 16ch;
-  --fs-display: clamp(3rem, 6vw, 5.75rem);
-  --fs-body-large: clamp(1.0625rem, 1.2vw, 1.1875rem);
-  --radius-media: 4px;
-  --shadow-dark: 0 24px 64px rgba(8, 7, 19, .28);
-}
-
 /* Base canvas and one shared responsive content rail. */
 html {
   scroll-padding-top: 5.5rem;
