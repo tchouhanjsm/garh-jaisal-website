@@ -207,3 +207,33 @@ test('shared visual system stays consistent across five viewports and eleven pag
     }
   }
 });
+
+test('premium semantic tokens are available and resolve to the approved identity palette', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Token contract is evaluated in one browser context.');
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  const tokens = await page.evaluate(() => {
+    const root = getComputedStyle(document.documentElement);
+    const read = name => root.getPropertyValue(name).trim();
+    return {
+      surface: read('--surface'),
+      surfaceRaised: read('--surface-raised'),
+      surfaceMuted: read('--surface-muted'),
+      surfaceDark: read('--surface-dark'),
+      line: read('--line'),
+      textMuted: read('--text-muted'),
+      actionPrimary: read('--action-primary'),
+      actionHover: read('--action-primary-hover'),
+      focusRing: read('--focus-ring'),
+      motionStandard: read('--motion-standard'),
+      contentWide: read('--content-wide'),
+      displayScale: read('--fs-display'),
+      heroScale: read('--fs-hero'),
+    };
+  });
+  for (const [name, value] of Object.entries(tokens)) {
+    expect(value, name + ' must resolve to a non-empty shared token').not.toBe('');
+  }
+  expect(tokens.actionPrimary.toLowerCase()).toBe('#b94a0e');
+  expect(tokens.actionHover.toLowerCase()).toBe('#963a08');
+  expect(tokens.surfaceDark.toLowerCase()).toBe('#14122b');
+});
