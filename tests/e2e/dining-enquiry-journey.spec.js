@@ -67,9 +67,10 @@ test('rooftop table request and restaurant contextual enquiry remain distinct, s
   await expect(page.locator('#reserve form.restaurant-form')).toBeVisible();
   await expect(page.locator('#reserve .restaurant-policy')).toContainText('not a confirmed booking');
 
-  const restaurantResponse = await page.goto('/restaurant.php#reserve', { waitUntil: 'domcontentloaded' });
-  expect(restaurantResponse).not.toBeNull();
-  expect(restaurantResponse.status()).toBeLessThan(400);
+  // The Rooftop CTA has already navigated to this exact restaurant reserve URL.
+  // Reuse that loaded document: page.goto() to the same URL can be a same-document
+  // navigation and legitimately return null instead of an HTTPResponse.
+  await expect(page).toHaveURL(/\/restaurant\.php#reserve$/);
   await expect(page.locator('#reserve form.restaurant-form')).toBeVisible();
   await page.getByRole('link', { name: 'Send a dining enquiry →', exact: true }).click();
   await expectDiningEnquiry(page);
