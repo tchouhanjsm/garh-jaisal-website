@@ -177,7 +177,6 @@ if (!is_string($component)) {
         "require_once dirname(__DIR__) . '/guest-decision-links.php'",
         'gj_guest_decision_safe_internal_href',
         'gj_guest_decision_safe_external_href',
-        'htmlspecialchars(is_scalar($value) ? (string) $value, ENT_QUOTES,',
         'data-guest-decision-context=',
         'Published on this site',
         'Confirm with the hotel',
