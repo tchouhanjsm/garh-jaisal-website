@@ -1,10 +1,8 @@
 <?php
-require_once dirname(__DIR__) . '/include/media-library-audit.php';
+require_once dirname(__DIR__) . '/include/admin-auth.php';
+gj_require_media_admin_access(dirname(__DIR__));
 
-header('X-Robots-Tag: noindex, nofollow');
-header('X-Content-Type-Options: nosniff');
-header('Referrer-Policy: strict-origin-when-cross-origin');
-header('Cache-Control: private, no-store, max-age=0, must-revalidate');
+require_once dirname(__DIR__) . '/include/media-library-audit.php';
 
 $isJson = isset($_GET['format']) && $_GET['format'] === 'json';
 
