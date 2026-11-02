@@ -15,6 +15,8 @@ test('read-only media library reports usage, Gallery records and duplicate evide
   const report = await reportResponse.json();
   expect(report.summary.total_assets).toBeGreaterThan(0);
   expect(report.summary.source_files_scanned).toBeGreaterThan(0);
+  expect(typeof report.summary.source_scan_complete).toBe('boolean');
+  await expect(page.locator('#scan-coverage')).toContainText(report.summary.source_scan_complete ? 'Source scan complete' : 'Source scan partial');
   expect(Array.isArray(report.assets)).toBe(true);
   expect(report.assets.some((asset) => asset.gallery_entries && asset.gallery_entries.length > 0)).toBe(true);
 

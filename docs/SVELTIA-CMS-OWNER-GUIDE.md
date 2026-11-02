@@ -117,3 +117,8 @@ The report scans bounded source files and explicitly skips include/site-config.l
 ## Sign-in method
 
 The hosted configuration now explicitly allows Sveltia's **token** sign-in method only. Use a fine-grained personal access token restricted to this repository with **Contents: Read and write**. Pull request permission is not required for the current manual compare-and-create workflow. Sveltia stores the token in the browser's local storage; use an owner-controlled browser profile, sign out on shared devices, and revoke the token immediately if the browser or token is exposed. The CMS's cms-media branch selection is not a substitute for protecting main.
+
+
+### Understanding scan coverage
+
+The Media Library report shows whether its source scan was complete. If it says **Source scan partial**, at least one eligible source file exceeded the per-file safety limit, could not be read, or the overall file/byte budget was reached. Treat all usage counts as incomplete until the skipped source files are reviewed. Responsive derivatives inherit the Gallery category of their original image for filtering, while their direct source-file usage remains attributed to the original so the report does not claim that a page directly references a generated derivative.

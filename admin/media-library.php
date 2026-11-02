@@ -28,6 +28,8 @@ try {
             'duplicate_groups' => 0,
             'total_bytes' => 0,
             'source_files_scanned' => 0,
+            'source_files_skipped' => 0,
+            'source_scan_complete' => false,
             'missing_gallery_references' => 0,
         ],
         'error' => 'Media inventory unavailable.',
@@ -186,6 +188,7 @@ header('Content-Type: text/html; charset=utf-8');
 
   <div class="results-line">
     <span id="result-count" role="status" aria-live="polite">Preparing inventory…</span>
+    <span id="scan-coverage" role="status" aria-live="polite"></span>
     <span id="generated-at"></span>
   </div>
 
@@ -227,6 +230,11 @@ header('Content-Type: text/html; charset=utf-8');
   document.getElementById('stat-unreferenced').textContent = number(summary.no_literal_reference);
   document.getElementById('stat-responsive').textContent = number(summary.responsive_derivatives);
   document.getElementById('stat-duplicates').textContent = number(summary.duplicate_assets);
+  const scanCoverage = document.getElementById('scan-coverage');
+  scanCoverage.textContent = summary.source_scan_complete
+    ? 'Source scan complete · ' + number(summary.source_files_scanned) + ' files inspected'
+    : 'Source scan partial · ' + number(summary.source_files_skipped) + ' skipped; usage counts may be incomplete';
+  scanCoverage.setAttribute('data-scan-complete', summary.source_scan_complete ? 'true' : 'false');
   document.getElementById('generated-at').textContent = report.generated_at ? 'Generated ' + new Date(report.generated_at).toLocaleString() : '';
 
   const warningList = document.getElementById('media-warnings');

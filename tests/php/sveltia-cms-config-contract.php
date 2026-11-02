@@ -120,7 +120,9 @@ if (strpos($mediaLibrary, 'Media library intelligence') === false
 }
 if (strpos($mediaAudit, 'include/site-config.local.php') === false
     || strpos($mediaAudit, 'no-literal-reference') === false
-    || strpos($mediaAudit, 'sha256') === false) {
+    || strpos($mediaAudit, 'sha256') === false
+    || strpos($mediaAudit, 'source_scan_complete') === false
+    || strpos($mediaAudit, "\$assets[\$index]['gallery_entries'] = \$assets[\$sourceIndex]['gallery_entries'];") === false) {
     $errors[] = 'Media audit must exclude private local configuration and provide conservative usage/duplicate evidence.';
 }
 if (preg_match('/branch:\s*main\b/i', $config)) {

@@ -123,6 +123,7 @@ if (!function_exists('gj_media_library_audit')) {
         $maxSourceBytes = 2 * 1024 * 1024;
         $maxTotalSourceBytes = 24 * 1024 * 1024;
         $sourceFilesScanned = 0;
+        $sourceFilesSkipped = 0;
         $sourceBytesScanned = 0;
         $sourceTruncated = false;
         $referencePattern = "~((?:(?:\\.\\./)+)?/?img/[A-Za-z0-9._/-]+\\.(?:avif|gif|jpe?g|png|webp|svg))(?=$|[\\s\\\"'?#),;<>.])~i";
@@ -176,6 +177,7 @@ if (!function_exists('gj_media_library_audit')) {
 
             $fileSize = @filesize($fileInfo->getPathname());
             if (!is_int($fileSize) || $fileSize < 0 || $fileSize > $maxSourceBytes) {
+                $sourceFilesSkipped++;
                 continue;
             }
             if ($sourceBytesScanned + $fileSize > $maxTotalSourceBytes) {
@@ -185,6 +187,7 @@ if (!function_exists('gj_media_library_audit')) {
 
             $source = @file_get_contents($fileInfo->getPathname());
             if (!is_string($source)) {
+                $sourceFilesSkipped++;
                 continue;
             }
 
@@ -210,8 +213,12 @@ if (!function_exists('gj_media_library_audit')) {
         }
 
         if ($sourceTruncated) {
-            $warnings[] = 'Source scan reached its safety limit; usage counts may be incomplete.';
+            $warnings[] = 'Source scan reached its total file or byte safety limit; usage counts may be incomplete.';
         }
+        if ($sourceFilesSkipped > 0) {
+            $warnings[] = 'One or more source files exceeded the per-file scan limit or could not be read; usage counts may be incomplete.';
+        }
+        $sourceScanComplete = !$sourceTruncated && $sourceFilesSkipped === 0;
 
         // Attach Gallery entry metadata. A missing Gallery source is surfaced
         // as an integrity warning, never as a deletion recommendation.
@@ -282,7 +289,13 @@ if (!function_exists('gj_media_library_audit')) {
                 foreach (['jpg', 'jpeg', 'png', 'webp', 'avif'] as $sourceExtension) {
                     $possibleSource = 'img/' . $parts[1] . '.' . $sourceExtension;
                     if (isset($assetIndex[$possibleSource])) {
+                        $sourceIndex = $assetIndex[$possibleSource];
                         $assets[$index]['derived_from'] = $possibleSource;
+                        // A derivative belongs to the same Gallery categories as
+                        // its original. Do not copy direct usage paths: the page
+                        // references the original and the image resolver selects
+                        // the derivative at runtime.
+                        $assets[$index]['gallery_entries'] = $assets[$sourceIndex]['gallery_entries'];
                         break;
                     }
                 }
@@ -363,6 +376,8 @@ if (!function_exists('gj_media_library_audit')) {
                 'duplicate_groups' => count($duplicates),
                 'total_bytes' => $totalBytes,
                 'source_files_scanned' => $sourceFilesScanned,
+                'source_files_skipped' => $sourceFilesSkipped,
+                'source_scan_complete' => $sourceScanComplete,
                 'missing_gallery_references' => count($missingGalleryReferences),
             ],
         ];

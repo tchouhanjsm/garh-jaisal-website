@@ -65,6 +65,15 @@ try {
     $write('docs/old-guide.md', 'img/not-used.png');
     $write('tests/fixture.php', 'img/not-used.png');
 
+    // A source larger than the per-file scan budget must make coverage partial.
+    $largeSource = fopen($root . '/large-source.php', 'wb');
+    if (!is_resource($largeSource)) {
+        throw new RuntimeException('Unable to create oversized source fixture.');
+    }
+    fwrite($largeSource, '<?php // oversized source fixture');
+    ftruncate($largeSource, (2 * 1024 * 1024) + 1);
+    fclose($largeSource);
+
     $report = gj_media_library_audit($root);
     $byPath = [];
     foreach ($report['assets'] as $asset) {
@@ -85,6 +94,18 @@ try {
     }
     if (($byPath['img/responsive/gallery/room-480.webp']['usage_state'] ?? '') !== 'responsive-derivative') {
         $errors[] = 'Responsive derivatives must be identified separately from deletion candidates.';
+    }
+    if (($byPath['img/responsive/gallery/room-480.webp']['gallery_entries'][0]['category'] ?? '') !== 'rooms') {
+        $errors[] = 'Responsive derivatives must inherit their original Gallery category for accurate filtering.';
+    }
+    if (($report['summary']['source_scan_complete'] ?? true) !== false
+        || ($report['summary']['source_files_skipped'] ?? 0) !== 1) {
+        $errors[] = 'A source file skipped for exceeding the per-file budget must mark usage coverage partial.';
+    }
+    if (!count(array_filter($report['warnings'], static function ($warning) {
+        return strpos($warning, 'per-file scan limit') !== false;
+    }))) {
+        $errors[] = 'Partial source coverage must be visible in the warning list.';
     }
     if (($byPath['img/gallery/room.webp']['is_duplicate'] ?? false) !== true) {
         $errors[] = 'Exact duplicate file content should be detected.';
