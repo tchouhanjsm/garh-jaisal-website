@@ -36,7 +36,9 @@ $guestDecisionItems = static function ($items) {
 
 $guestDecisionShown = $guestDecisionItems($guestDecisionPanel['shown'] ?? []);
 $guestDecisionConfirm = $guestDecisionItems($guestDecisionPanel['confirm'] ?? []);
-$guestDecisionTitle = is_string($guestDecisionPanel['title'] ?? null) ? trim($guestDecisionPanel['title']) : '';
+$guestDecisionTitle = is_string($guestDecisionTitleOverride ?? null) && trim($guestDecisionTitleOverride) !== ''
+    ? trim($guestDecisionTitleOverride)
+    : (is_string($guestDecisionPanel['title'] ?? null) ? trim($guestDecisionPanel['title']) : '');
 $guestDecisionIntro = is_string($guestDecisionPanel['intro'] ?? null) ? trim($guestDecisionPanel['intro']) : '';
 if ($guestDecisionTitle === '' || $guestDecisionIntro === '' || !$guestDecisionShown || !$guestDecisionConfirm) {
     return;
