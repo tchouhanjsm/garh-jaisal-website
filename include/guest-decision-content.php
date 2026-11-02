@@ -26,7 +26,7 @@ return [
     'home' => [
         'cta_id' => 'enquiry-home-guest-decision',
         'cta_location' => 'home-guest-decision',
-        'title' => 'Know what is clear before you decide.',
+        'title' => 'Know what to expect before you book.',
         'intro' => 'Review the practical information already published, then ask us to confirm anything that depends on your travel dates, room choice or current operations.',
         'shown' => [
             ['label' => 'A stay inside Jaisalmer Fort', 'detail' => 'The haveli is inside the Fort. Vehicles cannot enter the fort lanes, so the final approach is on foot.'],
