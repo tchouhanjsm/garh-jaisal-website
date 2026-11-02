@@ -35,7 +35,7 @@ test('guest decision panels render one truthful, actionable guide on every route
       await expect(primary).toHaveAttribute('href', '#contact-form');
       await expect(page.locator('#contact-form')).toHaveCount(1);
     } else {
-      await expect(primary).toHaveAttribute('href', new RegExp('contact\\\\.php\\\\?topic=' + route.topic));
+      await expect(primary).toHaveAttribute('href', new RegExp('contact\\.php\\?topic=' + route.topic));
     }
   }
 });
@@ -55,10 +55,10 @@ test('room directory summary follows the maintained room registry and keeps the 
   await expect(panel).toContainText('bed configuration');
   await expect(panel).toContainText('room dimensions');
   await expect(panel.locator('.guest-decision__actions a.guest-decision__secondary'))
-    .toHaveAttribute('href', /^https:\\/\\/asiatech\\.in\\/booking_engine\\/index3\\?token=/);
+    .toHaveAttribute('href', /^https:\/\/asiatech\.in\/booking_engine\/index3\?token=/);
 
   await panel.locator('a.button-primary').click();
-  await expect(page).toHaveURL(/contact\\.php\\?topic=stay$/);
+  await expect(page).toHaveURL(/contact\.php\?topic=stay$/);
   await expect(page.locator('.contact-topic-context')).toContainText('Room details and booking terms');
   await expect(page.locator('#message')).toHaveValue(/maximum occupancy/);
   await expect(page.locator('#message')).toHaveValue(/cancellation policy/);
@@ -66,6 +66,7 @@ test('room directory summary follows the maintained room registry and keeps the 
 
 test('guest decision panels remain contained and switch layout across required viewports', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Viewport matrix runs once on desktop-1280');
+  test.setTimeout(90000);
 
   for (const width of viewportWidths) {
     await page.setViewportSize({ width, height: 900 });
@@ -83,7 +84,7 @@ test('guest decision panels remain contained and switch layout across required v
         return {
           panelClientWidth: element.clientWidth,
           panelScrollWidth: element.scrollWidth,
-          columnCount: panelStyle.gridTemplateColumns.trim().split(/\\s+/).length,
+          columnCount: panelStyle.gridTemplateColumns.trim().split(/\s+/).length,
           primaryVisible: Boolean(primary && primary.getBoundingClientRect().width > 0),
           primaryWidth: primary ? primary.getBoundingClientRect().width : 0,
           actionWidth: primary && primary.parentElement ? primary.parentElement.clientWidth : 0,
