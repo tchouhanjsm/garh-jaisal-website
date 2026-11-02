@@ -21,12 +21,20 @@ if (!in_array($area, ['home', 'rooms', 'dining', 'experiences'], true) || $slotI
 $config = require $root . '/include/site-config.php';
 $key = is_array($config) ? ($config['media_approval_hmac_key'] ?? '') : '';
 $approvers = is_array($config) ? ($config['media_approvers'] ?? []) : [];
-if (!is_string($key) || preg_match('/^[a-f0-9]{64,128}$/iD', $key) !== 1) {
+if (!is_string($key) || preg_match('/^(?:[a-f0-9]{2}){32,64}$/iD', $key) !== 1) {
     fwrite(STDERR, "ERROR Configure GJ_MEDIA_APPROVAL_HMAC_KEY or media_approval_hmac_key in site-config.local.php.\n");
     exit(1);
 }
-if (!is_array($approvers) || !in_array($approver, $approvers, true)) {
-    fwrite(STDERR, "ERROR Approver is not present in the server-side media_approvers allowlist.\n");
+$allowedApprovers = [];
+if (is_array($approvers)) {
+    foreach ($approvers as $allowedApprover) {
+        if (is_string($allowedApprover) && trim($allowedApprover) !== '') {
+            $allowedApprovers[] = trim($allowedApprover);
+        }
+    }
+}
+if (!in_array($approver, $allowedApprovers, true)) {
+    fwrite(STDERR, "ERROR Approver is not present in the server-side media_approvers allowlist.\\n");
     exit(1);
 }
 
@@ -88,8 +96,30 @@ if ($approval['signature'] === ''
 }
 $records[$slotId]['approval'] = $approval;
 $encoded = json_encode($records, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-if (!is_string($encoded) || file_put_contents($file, $encoded . PHP_EOL, LOCK_EX) === false) {
-    fwrite(STDERR, "ERROR Unable to write signed page media JSON.\n");
+if (!is_string($encoded)) {
+    fwrite(STDERR, "ERROR Unable to encode signed page media JSON.\\n");
+    exit(1);
+}
+
+// Refuse to overwrite a concurrent edit, then atomically replace the JSON file.
+$currentRaw = @file_get_contents($file);
+if (!is_string($currentRaw) || !hash_equals(hash('sha256', $raw), hash('sha256', $currentRaw))) {
+    fwrite(STDERR, "ERROR Page media JSON changed during signing; reload and retry.\\n");
+    exit(1);
+}
+$tempFile = @tempnam(dirname($file), '.page-media-approval-');
+if (!is_string($tempFile)) {
+    fwrite(STDERR, "ERROR Unable to create a temporary approval file.\\n");
+    exit(1);
+}
+$payload = $encoded . PHP_EOL;
+$written = @file_put_contents($tempFile, $payload, LOCK_EX);
+$permissions = @fileperms($file);
+if (!is_int($written) || $written !== strlen($payload)
+    || (is_int($permissions) && !@chmod($tempFile, $permissions & 0777))
+    || !@rename($tempFile, $file)) {
+    @unlink($tempFile);
+    fwrite(STDERR, "ERROR Unable to atomically write signed page media JSON.\\n");
     exit(1);
 }
 echo "Signed approval for " . $slotId . " in " . $relativeFile . ". Review the JSON diff and submit it through a pull request.\n";
