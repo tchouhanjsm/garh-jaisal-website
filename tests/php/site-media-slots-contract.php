@@ -26,8 +26,12 @@ foreach ($expected as $area => $ids) {
 }
 $fallback = ['src' => 'img/reviewed-fallback.webp', 'alt' => 'Reviewed fallback description for a page image'];
 if (gj_site_media_slot($slots, 'missing-slot', $fallback) !== $fallback) $errors[] = 'Missing slot must preserve fallback.';
-foreach (['home-hero-mobile', 'home-hero-desktop', 'rooms-hero', 'dining-hero', 'experience-desert-safari-hero'] as $id) {
-    if (gj_site_media_slot($slots, $id, $fallback) !== $fallback) $errors[] = 'Unapproved slot must preserve fallback: ' . $id;
+foreach ($expected as $area => $ids) {
+    foreach ($ids as $id) {
+        if (gj_site_media_slot($slots, $id, $fallback) !== $fallback) {
+            $errors[] = 'Every unapproved slot must preserve the reviewed fallback: ' . $id;
+        }
+    }
 }
 
 $makeFixture = static function () {
