@@ -259,6 +259,10 @@ if (!function_exists('gj_media_library_audit')) {
                 }
 
                 $index = $assetIndex[$source];
+                $galleryRecordPath = 'content/gallery/' . basename($galleryFile);
+                if (!in_array($galleryRecordPath, $assets[$index]['usage_files'], true)) {
+                    $assets[$index]['usage_files'][] = $galleryRecordPath;
+                }
                 $assets[$index]['gallery_entries'][] = [
                     'id' => is_string($record['id'] ?? null) ? $record['id'] : basename($galleryFile, '.json'),
                     'category' => is_string($record['category'] ?? null) ? $record['category'] : 'unknown',
@@ -315,19 +319,20 @@ if (!function_exists('gj_media_library_audit')) {
         }
 
         foreach ($assets as $index => $asset) {
-            $assets[$index]['usage_count'] = count($asset['usage_files']);
+            $usageCount = count($asset['usage_files']);
+            $assets[$index]['usage_count'] = $usageCount;
             $assets[$index]['gallery_entry_count'] = count($asset['gallery_entries']);
             $assets[$index]['is_responsive_derivative'] = is_string($asset['derived_from']);
             $assets[$index]['is_duplicate'] = isset($duplicatePathSet[$asset['path']]);
             $assets[$index]['usage_state'] = $assets[$index]['is_responsive_derivative']
                 ? 'responsive-derivative'
-                : ($assets[$index]['usage_count'] > 0 ? 'referenced' : 'no-literal-reference');
+                : ($usageCount > 0 ? 'referenced' : 'no-literal-reference');
 
             $totalBytes += $asset['bytes'];
-            if ($asset['usage_count'] > 0) {
+            if ($usageCount > 0) {
                 $referencedAssets++;
             }
-            if ($asset['usage_count'] === 0 && !$assets[$index]['is_responsive_derivative']) {
+            if ($usageCount === 0 && !$assets[$index]['is_responsive_derivative']) {
                 $unreferencedCandidates++;
             }
             if ($assets[$index]['is_responsive_derivative']) {
