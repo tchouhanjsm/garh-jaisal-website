@@ -23,7 +23,8 @@ if (!function_exists('gj_media_admin_request_is_https')) {
         // An explicit HTTPS=off must win over a conflicting port value.
         if (array_key_exists('HTTPS', $server)) {
             $https = strtolower(trim((string) $server['HTTPS']));
-            return !in_array($https, ['', 'off', '0', 'false'], true);
+            if (in_array($https, ['off', '0', 'false'], true)) return false;
+            if ($https !== '') return true;
         }
         if (isset($server['SERVER_PORT']) && (string) $server['SERVER_PORT'] === '443') return true;
 
