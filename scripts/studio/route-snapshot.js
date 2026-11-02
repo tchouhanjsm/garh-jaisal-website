@@ -20,7 +20,14 @@ function get(port, route) {
     }).on('error', () => resolve({ status: 0, body: '' }));
   });
 }
-const normalise = html => html.replace(/name="csrf[^"]*" value="[^"]*"/g, '').replace(/\b[a-f0-9]{32,64}\b/g, 'HASH').replace(/\?v=\d+/g, '');
+// Responsive candidate lists are an image-delivery optimisation, not a page-content
+// change. Ignore only srcset/sizes (and preload equivalents); keep src, alt,
+// dimensions, links, captions and all other markup in the route fingerprint.
+const normalise = html => html
+  .replace(/\s+(?:srcset|sizes|imagesrcset|imagesizes)\s*=\s*("[^"]*"|'[^']*')/gi, '')
+  .replace(/name="csrf[^"]*" value="[^"]*"/g, '')
+  .replace(/\b[a-f0-9]{32,64}\b/g, 'HASH')
+  .replace(/\?v=\d+/g, '');
 
 function routes(root = ROOT) {
   const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
@@ -43,7 +50,7 @@ async function snapshot(root = ROOT) {
   } finally { php.kill(); }
 }
 
-module.exports = { snapshot, routes };
+module.exports = { snapshot, routes, normalise };
 
 if (require.main === module) {
   (async () => {

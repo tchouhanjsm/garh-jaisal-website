@@ -53,6 +53,9 @@ jobs:
       - name: Exercise Content Studio live/draft publishing workflow
         run: node tests/node/content-studio.integration.js
 
+      - name: Verify route snapshot ignores responsive delivery hints only
+        run: node tests/node/route-snapshot.contract.js
+
       - name: Check Content Studio pack modules syntax
         run: |
           for f in scripts/studio/*.js scripts/check-content-pack.js tools/content-studio/start.js; do node --check "$f"; done
