@@ -370,6 +370,17 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
+  <?php
+  $guestDecisionContext = 'dining';
+  $guestDecisionPrimaryHref = 'contact.php?topic=dining';
+  $guestDecisionPrimaryLabel = 'Ask about menu, hours or a table';
+  $guestDecisionSecondaryHref = $waLink;
+  $guestDecisionSecondaryLabel = 'WhatsApp the hotel';
+  $guestDecisionSecondaryExternal = true;
+  require __DIR__ . '/include/ui/guest-decision-panel.php';
+  unset($guestDecisionContext, $guestDecisionPrimaryHref, $guestDecisionPrimaryLabel, $guestDecisionSecondaryHref, $guestDecisionSecondaryLabel, $guestDecisionSecondaryExternal);
+  ?>
+
   <section class="section restaurant-intro">
     <div class="site-shell restaurant-intro-grid">
       <div>

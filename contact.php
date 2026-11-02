@@ -302,6 +302,12 @@ require __DIR__ . '/include/page-head.php';
         <a class="button button-secondary contact-whatsapp-button" href="<?= htmlspecialchars($siteConfig['whatsapp_url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-contact-top" data-cta-location="contact-booking-actions">Message on WhatsApp</a>
       </div>
 
+      <?php
+      $guestDecisionContext = 'contact';
+      require __DIR__ . '/include/ui/guest-decision-panel.php';
+      unset($guestDecisionContext);
+      ?>
+
       <div class="contact-layout">
         <div class="contact-facts">
           <h2>Phone</h2>
@@ -319,7 +325,7 @@ require __DIR__ . '/include/page-head.php';
           <p>Hotel Garh Jaisal Haveli, Fort Kotari Para, Jaisalmer, Rajasthan 345001</p>
         </div>
 
-        <form class="contact-form" action="mail.php" method="post">
+        <form class="contact-form" id="contact-form" action="mail.php" method="post">
           <h2>Send an enquiry</h2>
           <?php if ($contactExperience !== null): ?>
             <p class="contact-experience-context" data-experience-slug="<?= htmlspecialchars((string) $contactExperience['slug'], ENT_QUOTES, 'UTF-8') ?>">Experience enquiry: <strong><?= htmlspecialchars($contactExperience['h1'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your travel date or any specific questions.</p>
@@ -334,6 +340,8 @@ require __DIR__ . '/include/page-head.php';
               <p class="contact-topic-context">Enquiry topic: <strong><?= htmlspecialchars($contactTopic['label'], ENT_QUOTES, 'UTF-8') ?></strong>. Add your check-in date and expected arrival time to the draft message so the hotel can advise what may be arranged. Do not rely on meet-and-assist or luggage assistance until the hotel confirms it.</p>
             <?php elseif ($contactTopicKey === 'dining'): ?>
               <p class="contact-topic-context">Enquiry topic: <strong><?= htmlspecialchars($contactTopic['label'], ENT_QUOTES, 'UTF-8') ?></strong>. Add your preferred date, time and number of guests. This enquiry does not confirm a table; wait for the hotel to confirm service hours and availability.</p>
+            <?php elseif ($contactTopicKey === 'stay'): ?>
+              <p class="contact-topic-context">Enquiry topic: <strong><?= htmlspecialchars($contactTopic['label'], ENT_QUOTES, 'UTF-8') ?></strong>. Add your travel dates and the room you are considering. Ask the hotel to confirm the selected room's occupancy, bed setup, dimensions, access requirements, current check-in/check-out times and cancellation terms.</p>
             <?php else: ?>
               <p class="contact-topic-context">Enquiry topic: <strong><?= htmlspecialchars($contactTopic['label'], ENT_QUOTES, 'UTF-8') ?></strong>. Review the draft message below and add your date or any specific questions.</p>
             <?php endif; ?>
