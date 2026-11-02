@@ -314,6 +314,7 @@ header('Content-Type: text/html; charset=utf-8');
     }
 
     filtered.forEach((asset) => {
+      const optimizationFlags = Array.isArray(asset.optimization_flags) ? asset.optimization_flags : [];
       const card = make('article', 'asset-card');
       card.dataset.mediaCard = 'true';
       const preview = make('div', 'preview');
