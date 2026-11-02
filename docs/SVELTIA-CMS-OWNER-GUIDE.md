@@ -130,3 +130,48 @@ The hosted configuration now explicitly allows Sveltia's **token** sign-in metho
 ### Understanding scan coverage
 
 The Media Library report shows whether its source scan was complete. If it says **Source scan partial**, at least one eligible source file exceeded the per-file safety limit, could not be read, or the overall file/byte budget was reached. Treat all usage counts as incomplete until the skipped source files are reviewed. Responsive derivatives inherit the Gallery category of their original image for filtering, while their direct source-file usage remains attributed to the original so the report does not claim that a page directly references a generated derivative.
+
+
+## Page image approval and fallback protection
+
+All 33 page image slots start as **Pending review**. Editing an image, alt text or caption in Sveltia does not change the public page by itself. The website keeps its reviewed PHP fallback until a trusted reviewer signs the exact slot and image revision.
+
+For each image being considered for publication:
+
+1. In **Page image slots**, choose the image and write accurate alt text.
+2. Complete the approval evidence: creator/source attribution, the rights or licence basis, what was checked for visual match, and what was checked for alt-text accuracy.
+3. Set **Approval status** to **Approved** only after the human review is complete.
+4. On a trusted local checkout, configure the signing key and approver allowlist in the untracked include/site-config.local.php (or provide GJ_MEDIA_APPROVAL_HMAC_KEY to the CLI process). Never add the key to GitHub, Sveltia, a screenshot or a CMS record.
+5. Run: php scripts/sign-page-media-approval.php <area> <slot-id> "<approved reviewer>". Example: php scripts/sign-page-media-approval.php home home-hero-desktop "Hotel Owner".
+6. Review the JSON diff. The tool records the approving reviewer, timestamp, image SHA-256 and HMAC signature. Commit and submit the signed record through the normal pull request review.
+7. The runtime accepts the image only when the signature, allowlisted reviewer, approval evidence and image checksum all match.
+
+Any later change to the image bytes, path, alt text, caption, approval status or evidence invalidates the signature. Set the status to **Revoked** to return to the reviewed PHP fallback. Re-sign only after another review. Existing images are deliberately left pending; no historical rights or visual review evidence has been invented.
+
+The HMAC key must be a random 32-byte (or longer) hexadecimal secret. Generate one with openssl rand -hex 32. Configure media_approvers with the exact reviewer names allowed to sign. Configure media_approval_hmac_key in the server-only local configuration or the GJ_MEDIA_APPROVAL_HMAC_KEY environment variable. The key must be available to the trusted local signing process and production PHP runtime, but never committed.
+
+## Media Library owner authentication
+
+The Media Library HTML route and its JSON endpoint require HTTPS Basic authentication before the inventory scan runs. Configure the following in the untracked server-side include/site-config.local.php:
+
+```php
+return [
+    // Keep any existing local settings in this same returned array.
+    'media_admin_auth' => [
+        'username' => 'your-owner-login',
+        'password_hash' => 'PASTE_A_PASSWORD_HASH_HERE',
+    ],
+    'media_approvers' => ['Hotel Owner'],
+    'media_approval_hmac_key' => 'PASTE_A_RANDOM_HEX_SECRET_HERE',
+];
+```
+
+Generate the password hash locally with:
+
+```sh
+php -r 'echo password_hash("USE-A-LONG-UNIQUE-PASSWORD", PASSWORD_DEFAULT), PHP_EOL;'
+```
+
+Use a strong unique password and HTTPS. Never put the plaintext password or hash in tracked files. If owner authentication is not configured, the dashboard returns a generic **503** and does not build the inventory; missing or incorrect credentials receive **401**. The JSON endpoint uses the same gate.
+
+The Sveltia /admin/ sign-in screen remains reachable and still requires a repository-scoped GitHub token to make changes. The Media Library PHP report has separate owner authentication because its output contains repository inventory and usage metadata. Noindex/no-store headers are additional safeguards, not authentication.
