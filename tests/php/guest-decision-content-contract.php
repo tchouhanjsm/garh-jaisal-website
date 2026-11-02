@@ -211,7 +211,7 @@ foreach ($routeContracts as $relative => $needles) {
 }
 
 $homepage = file_get_contents($root . '/index.php');
-if (strpos($homepage, 'class="section home-planning-confidence"') === false
+if (strpos($homepage, 'class="home-planning-confidence"') === false
     || strpos($homepage, 'id="planning-confidence"') === false) {
     $fail('Homepage must retain the planning-confidence section identity for the shared decision guide.');
 }
