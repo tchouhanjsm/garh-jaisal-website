@@ -107,6 +107,67 @@ foreach ($arrivalShown as $item) {
     }
 }
 
+$renderGuestDecision = static function ($context, $primaryHref, $primaryLabel, $secondaryHref, $secondaryLabel, $secondaryExternal, $config) use ($root) {
+    $guestDecisionContext = $context;
+    $guestDecisionPrimaryHref = $primaryHref;
+    $guestDecisionPrimaryLabel = $primaryLabel;
+    $guestDecisionSecondaryHref = $secondaryHref;
+    $guestDecisionSecondaryLabel = $secondaryLabel;
+    $guestDecisionSecondaryExternal = $secondaryExternal;
+    $siteConfig = $config;
+    ob_start();
+    require $root . '/include/ui/guest-decision-panel.php';
+    return (string) ob_get_clean();
+};
+
+$renderConfig = [
+    'booking_url' => 'https://book.example/booking/index?token=approved',
+    'whatsapp_url' => 'https://wa.me/910000000000',
+];
+$unsafeRender = $renderGuestDecision(
+    'stay',
+    'javascript:alert(1)',
+    'Unsafe primary',
+    'https://evil.example/collect',
+    'Unsafe secondary',
+    true,
+    $renderConfig
+);
+if (strpos($unsafeRender, 'href="javascript:') !== false
+    || strpos($unsafeRender, 'href="https://evil.example') !== false
+    || strpos($unsafeRender, 'Unsafe primary') !== false
+    || strpos($unsafeRender, 'Unsafe secondary') !== false) {
+    $fail('The renderer must omit unsafe primary and external destination overrides.');
+}
+
+$safeRender = $renderGuestDecision(
+    'stay',
+    'contact.php?topic=stay',
+    'Ask about room details',
+    'https://book.example/booking/index?token=approved',
+    'Check live rates',
+    true,
+    $renderConfig
+);
+if (strpos($safeRender, 'href="contact.php?topic=stay"') === false
+    || strpos($safeRender, 'href="https://book.example/booking/index?token=approved"') === false
+    || strpos($safeRender, 'rel="noopener noreferrer"') === false) {
+    $fail('The renderer must preserve approved local and configured booking destinations.');
+}
+
+$invalidContextRender = $renderGuestDecision(
+    'stay"><script>',
+    'contact.php?topic=stay',
+    'Ask about room details',
+    '',
+    '',
+    false,
+    $renderConfig
+);
+if (trim($invalidContextRender) !== '') {
+    $fail('The renderer must not output a panel for an invalid context identifier.');
+}
+
 $componentPath = $root . '/include/ui/guest-decision-panel.php';
 $component = is_file($componentPath) ? file_get_contents($componentPath) : false;
 if (!is_string($component)) {
