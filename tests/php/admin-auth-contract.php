@@ -31,6 +31,8 @@ $conflictingTls['SERVER_PORT'] = '443';
 if (gj_media_admin_request_is_https($conflictingTls)) $errors[] = 'Explicit HTTPS=off must override a conflicting port 443 value.';
 $portOnlyTls = ['SERVER_PORT' => '443'];
 if (!gj_media_admin_request_is_https($portOnlyTls)) $errors[] = 'Port 443 may identify TLS when the server omits the HTTPS flag.';
+$emptyHttpsTls = ['HTTPS' => '', 'SERVER_PORT' => '443'];
+if (!gj_media_admin_request_is_https($emptyHttpsTls)) $errors[] = 'An empty HTTPS flag must defer to port 443 when the server omits its TLS value.';
 
 if ($errors) {
     foreach ($errors as $error) fwrite(STDERR, 'ERROR ' . $error . PHP_EOL);
