@@ -1,34 +1,130 @@
 {
   "rooms-hero": {
     "src": "img/optimized/v2/sitting-room.webp",
-    "alt": "Sitting room with carved wood at Garh Jaisal Haveli"
+    "alt": "Sitting room with carved wood at Garh Jaisal Haveli",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "room-sweet-purple-room-primary": {
     "src": "img/v2/purple-room.jpg",
-    "alt": "Sweet Purple Room at Garh Jaisal Haveli, with a carved bed and magenta curtains"
+    "alt": "Sweet Purple Room at Garh Jaisal Haveli, with a carved bed and magenta curtains",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "room-rising-sun-room-primary": {
     "src": "img/sun2.jpg",
-    "alt": "Rising Sun Room at Garh Jaisal Haveli"
+    "alt": "Rising Sun Room at Garh Jaisal Haveli",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "room-scarlet-room-primary": {
     "src": "img/scarlet.jpg",
-    "alt": "Scarlet Room at Garh Jaisal Haveli"
+    "alt": "Scarlet Room at Garh Jaisal Haveli",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "room-opium-room-primary": {
     "src": "img/opium-room.jpg",
-    "alt": "Opium Room at Garh Jaisal Haveli"
+    "alt": "Opium Room at Garh Jaisal Haveli",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "room-red-maharani-room-primary": {
     "src": "img/maharaniroom.jpg",
-    "alt": "Red Maharani Room at Garh Jaisal Haveli"
+    "alt": "Red Maharani Room at Garh Jaisal Haveli",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "room-green-room-primary": {
     "src": "img/v2/green-room.jpg",
-    "alt": "Green Room at Garh Jaisal Haveli, with a window seat and green bedding"
+    "alt": "Green Room at Garh Jaisal Haveli, with a window seat and green bedding",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "room-bluesky-room-primary": {
     "src": "img/rr3.jpg",
-    "alt": "BlueSky Room at Garh Jaisal Haveli"
+    "alt": "BlueSky Room at Garh Jaisal Haveli",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   }
 }
