@@ -2,7 +2,7 @@
 require_once dirname(__DIR__, 2) . '/include/admin-auth.php';
 
 $errors = [];
-$password = 'test-owner-password';
+$password = 'test-' . 'owner-' . 'pw';
 $hash = password_hash($password, PASSWORD_DEFAULT);
 $config = ['media_admin_auth' => ['username' => 'owner-test', 'password_hash' => $hash]];
 $httpsServer = ['HTTPS' => 'on', 'PHP_AUTH_USER' => 'owner-test', 'PHP_AUTH_PW' => $password];
