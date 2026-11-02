@@ -1,0 +1,104 @@
+# Owner-managed visual gallery CMS.
+# The branch is intentionally writable; main remains the reviewed release branch.
+backend:
+  name: github
+  repo: tchouhanjsm/garh-jaisal-website
+  branch: cms-media
+
+# Sveltia writes repository media here and stores this relative public path in JSON.
+media_folder: /img/gallery
+public_folder: img/gallery
+
+# Keep originals out of Git where practical: uploads are transformed in the browser.
+# max_file_size limits the input upload; transformations resize and encode raster photos.
+media_libraries:
+  all:
+    max_file_size: 15728640
+    slugify_filename: true
+    filename_template: '{{year}}{{month}}{{day}}-{{uuid_short}}'
+    transformations:
+      raster_image:
+        format: webp
+        quality: 84
+        width: 1600
+        height: 1600
+
+collections:
+  - name: gallery
+    label: Gallery photos
+    label_singular: Gallery photo
+    folder: /content/gallery
+    format: json
+    create: true
+    delete: false
+    identifier_field: id
+    slug:
+      template: '{{id}}'
+      editable:
+        - create
+    fields:
+      - name: id
+        label: Photo ID
+        widget: string
+        required: true
+        hint: Use lowercase letters, numbers and hyphens. This ID becomes the JSON filename.
+        pattern:
+          - '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+          - Use lowercase letters, numbers and hyphens only.
+      - name: category
+        label: Gallery category
+        widget: select
+        required: true
+        default: hotel
+        options:
+          - label: Hotel & fort
+            value: hotel
+          - label: Rooms
+            value: rooms
+          - label: Desert experiences
+            value: desert
+          - label: Restaurant & rooftop
+            value: restaurant
+      - name: status
+        label: Publication status
+        widget: select
+        required: true
+        default: draft
+        options:
+          - label: Draft — not shown publicly
+            value: draft
+          - label: Live — shown after the PR is merged
+            value: live
+          - label: Hidden — retained but not shown publicly
+            value: hidden
+      - name: image
+        label: Photo
+        widget: object
+        fields:
+          - name: src
+            label: Image file
+            widget: image
+            required: true
+          - name: alt
+            label: Accessible description (alt text)
+            widget: string
+            required: true
+            hint: Describe what is visible in the photograph; do not use keyword lists.
+          - name: caption
+            label: Caption
+            widget: text
+            required: false
+          - name: crop
+            label: Display shape
+            widget: select
+            required: true
+            default: standard
+            options:
+              - label: Standard
+                value: standard
+              - label: Architectural arch
+                value: arch
+              - label: Landscape
+                value: landscape
+              - label: Portrait
+                value: portrait

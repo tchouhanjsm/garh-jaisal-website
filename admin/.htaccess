@@ -1,0 +1,7 @@
+# Sveltia CMS is an authenticated GitHub client, not a PHP admin endpoint.
+# Configuration contains repository paths only; never put tokens or secrets here.
+Options -Indexes
+<IfModule mod_headers.c>
+  Header always set X-Robots-Tag "noindex, nofollow"
+  Header always set Cache-Control "no-store, max-age=0, must-revalidate"
+</IfModule>
