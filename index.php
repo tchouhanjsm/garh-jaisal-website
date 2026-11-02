@@ -545,8 +545,9 @@ require __DIR__ . '/include/page-head.php';
 <section class="section home-planning-confidence" id="planning-confidence" aria-labelledby="guest-decision-home-title">
   <?php
   $guestDecisionContext = 'home';
+  $guestDecisionTitleOverride = 'Know what to expect before you book.';
   require __DIR__ . '/include/ui/guest-decision-panel.php';
-  unset($guestDecisionContext);
+  unset($guestDecisionContext, $guestDecisionTitleOverride);
   ?>
 </section>
 
