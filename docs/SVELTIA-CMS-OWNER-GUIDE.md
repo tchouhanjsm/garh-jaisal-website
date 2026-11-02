@@ -175,3 +175,8 @@ php -r 'echo password_hash("USE-A-LONG-UNIQUE-PASSWORD", PASSWORD_DEFAULT), PHP_
 Use a strong unique password and HTTPS. Never put the plaintext password or hash in tracked files. If owner authentication is not configured, the dashboard returns a generic **503** and does not build the inventory; missing or incorrect credentials receive **401**. The JSON endpoint uses the same gate.
 
 The Sveltia /admin/ sign-in screen remains reachable and still requires a repository-scoped GitHub token to make changes. The Media Library PHP report has separate owner authentication because its output contains repository inventory and usage metadata. Noindex/no-store headers are additional safeguards, not authentication.
+
+
+### What the approval signature proves
+
+The HMAC is a server-held shared-secret integrity check. It proves that the exact slot, image bytes, descriptive text and evidence were signed by someone with access to the configured key, and it prevents a CMS-only editor from creating or silently changing a valid approval. The `approved_by` value is an audit attribution selected by the key holder; HMAC does **not** provide individual cryptographic non-repudiation. Keep the key with one trusted owner, or treat every person with the key as a fully privileged approver. Do not distribute it to ordinary CMS editors.
