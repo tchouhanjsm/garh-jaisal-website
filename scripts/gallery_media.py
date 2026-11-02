@@ -11,7 +11,7 @@ ALLOWED_CATEGORIES = {"hotel", "rooms", "desert", "restaurant"}
 ALLOWED_STATUSES = {"live", "draft", "hidden"}
 ALLOWED_CROPS = {"arch", "landscape", "portrait", "standard"}
 ID_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-SOURCE_PATTERN = re.compile(r"^img/[A-Za-z0-9._/-]+\.(?:jpe?g|png|webp)$", re.IGNORECASE)
+SOURCE_PATTERN = re.compile(r"^img/[A-Za-z0-9._/-]+\.(?:avif|jpe?g|png|webp)$", re.IGNORECASE)
 
 
 def gallery_record_image_sources(root: Path) -> list[str]:
@@ -19,6 +19,7 @@ def gallery_record_image_sources(root: Path) -> list[str]:
 
     Draft and Hidden assets are also returned: deployments retain them, and
     responsive derivatives are ready if the owner later publishes the entry.
+    Legacy Content Studio records without an explicit order remain valid.
     """
     root = Path(root)
     content_root = root / "content" / "gallery"
@@ -53,9 +54,14 @@ def gallery_record_image_sources(root: Path) -> list[str]:
             or record_id in seen_ids
             or record.get("category") not in ALLOWED_CATEGORIES
             or record.get("status") not in ALLOWED_STATUSES
-            or isinstance(record.get("order"), bool)
-            or not isinstance(record.get("order"), int)
-            or record["order"] < 1
+            or (
+                "order" in record
+                and (
+                    isinstance(record.get("order"), bool)
+                    or not isinstance(record.get("order"), int)
+                    or record["order"] < 1
+                )
+            )
         ):
             raise ValueError("CMS gallery identity, category, status or order is invalid: " + record_path.name)
 

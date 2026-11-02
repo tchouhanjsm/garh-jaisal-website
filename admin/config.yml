@@ -80,6 +80,9 @@ collections:
         default: 100
         min: 1
         hint: Lower numbers appear first within a category. Choose a unique number in that category.
+      - name: review_status
+        widget: hidden
+        default: draft
       - name: image
         label: Photo
         widget: object
@@ -94,6 +97,11 @@ collections:
             widget: string
             required: true
             hint: Describe what is visible. Do not use keyword lists.
+          - name: caption
+            label: Caption (optional)
+            widget: string
+            required: false
+            default: ''
           - name: crop
             label: Display shape
             widget: select

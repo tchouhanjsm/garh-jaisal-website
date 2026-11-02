@@ -104,6 +104,23 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
                     "crop": "standard",
                 },
             }), encoding="utf-8")
+            # Local Content Studio records predate numeric order and can reference AVIF.
+            legacy_image = image_root / "content-studio" / "legacy-gallery.avif"
+            legacy_image.parent.mkdir(parents=True)
+            legacy_image.write_bytes(b"legacy-avif-fixture")
+            (records / "hotel-studio-legacy.json").write_text(json.dumps({
+                "id": "hotel-studio-legacy",
+                "category": "hotel",
+                "status": "live",
+                "review_status": "approved_for_release",
+                "image": {
+                    "src": "img/content-studio/legacy-gallery.avif",
+                    "alt": "Legacy Content Studio gallery photo",
+                    "caption": "Preserved legacy caption",
+                    "crop": "landscape",
+                },
+            }), encoding="utf-8")
+
             scripts = root / "scripts"
             scripts.mkdir()
             (scripts / "responsive-image-assets-manifest.json").write_text(json.dumps({
@@ -111,9 +128,10 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
                 "target_widths": [480],
             }), encoding="utf-8")
 
-            selected = ["img/facade.jpg", "img/gallery/hotel/owner-upload.webp"]
+            selected = ["img/facade.jpg", "img/gallery/hotel/owner-upload.webp", "img/content-studio/legacy-gallery.avif"]
             verified = validate_responsive_fallback_sources(selected, root)
             self.assertIn("img/gallery/hotel/owner-upload.webp", verified)
+            self.assertIn("img/content-studio/legacy-gallery.avif", verified)
             with self.assertRaisesRegex(PackageError, "missing from the runtime package"):
                 validate_responsive_fallback_sources(["img/facade.jpg"], root)
 

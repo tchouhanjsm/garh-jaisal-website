@@ -48,6 +48,7 @@ $allowedCrops = ['arch', 'landscape', 'portrait', 'standard'];
 $galleryRecords = [];
 $usedGalleryIds = [];
 $usedGallerySources = [];
+$legacyOrderByCategory = array_fill_keys($allowedCategories, 0);
 
 if (is_link($galleryContentRoot)) {
     throw new RuntimeException('Unsafe Sveltia gallery content directory.');
@@ -83,7 +84,8 @@ foreach ($galleryFiles as $galleryFile) {
 
     $category = $record['category'] ?? null;
     $status = $record['status'] ?? null;
-    $order = $record['order'] ?? null;
+    $hasExplicitOrder = array_key_exists('order', $record);
+    $order = $hasExplicitOrder ? $record['order'] : null;
     $photo = $record['image'] ?? null;
     $src = is_array($photo) && is_string($photo['src'] ?? null) ? trim($photo['src']) : '';
     $alt = is_array($photo) && is_string($photo['alt'] ?? null) ? trim($photo['alt']) : '';
@@ -92,16 +94,24 @@ foreach ($galleryFiles as $galleryFile) {
     if (
         !is_string($category) || !in_array($category, $allowedCategories, true)
         || !is_string($status) || !in_array($status, $allowedStatuses, true)
-        || !is_int($order) || $order < 1
         || !is_array($photo)
         || $src === ''
-        || !preg_match('~^img/[A-Za-z0-9._/-]+\.(?:jpe?g|png|webp)$~iD', $src)
+        || !preg_match('~^img/[A-Za-z0-9._/-]+\.(?:avif|jpe?g|png|webp)$~iD', $src)
         || strpos($src, '..') !== false
         || strpos($src, chr(92)) !== false
         || $alt === ''
         || !in_array($crop, $allowedCrops, true)
     ) {
-        throw new RuntimeException('Invalid Sveltia gallery record fields: ' . $id);
+        throw new RuntimeException('Invalid Sveltia/Content Studio gallery record fields: ' . $id);
+    }
+
+    // Older local Content Studio records have no numeric order; keep them after explicitly ordered records.
+    if (!$hasExplicitOrder) {
+        $order = PHP_INT_MAX - 100000 + $legacyOrderByCategory[$category];
+        $legacyOrderByCategory[$category]++;
+    }
+    if (!is_int($order) || $order < 1) {
+        throw new RuntimeException('Invalid Gallery display order: ' . $id);
     }
 
     $relativeParts = explode('/', substr($src, 4));
@@ -136,6 +146,7 @@ foreach ($galleryFiles as $galleryFile) {
             'src' => $src,
             'alt' => $alt,
             'crop' => $crop,
+            'caption' => is_string($photo['caption'] ?? null) ? trim($photo['caption']) : '',
         ],
     ];
 }

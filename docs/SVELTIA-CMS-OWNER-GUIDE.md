@@ -6,7 +6,7 @@ Open `/admin/` on the deployed website. Sveltia CMS is the owner-facing dashboar
 
 The four collections are **Hotel & fort**, **Rooms**, **Desert experiences** and **Restaurant & rooftop**. The original 36 curated gallery photographs are now individual JSON entries in `content/gallery/`.
 
-**The migration preserves existing image URLs.** The 36 entries still reference their existing `img/...` files, so the initial migration does not change the Gallery page's image paths or overwrite photos that may be reused on other pages. When you replace one of those photos, the new upload is stored under `img/gallery/`; the old original file remains in the repository.
+**The migration preserves existing image URLs.** The 36 entries still reference their existing `img/...` files, so the initial migration does not change the Gallery page's image paths or overwrite photos that may be reused on other pages. Existing local Content Studio Gallery records in the same folder remain supported; records created before the Sveltia order field are placed after explicitly ordered photos. When you replace one of those photos, the new upload is stored under `img/gallery/`; the old original file remains in the repository.
 
 ## Sign-in and access
 

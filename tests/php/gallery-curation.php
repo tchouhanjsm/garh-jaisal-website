@@ -32,6 +32,7 @@ $recordFiles = is_dir($contentRoot) && !is_link($contentRoot) ? (glob($contentRo
 sort($recordFiles, SORT_STRING);
 $recordsByCategory = array_fill_keys($expectedCategories, []);
 $allSources = [];
+$legacyOrderByCategory = array_fill_keys($expectedCategories, 0);
 
 foreach ($recordFiles as $recordFile) {
     if (is_link($recordFile) || !is_file($recordFile)) {
@@ -60,13 +61,21 @@ foreach ($recordFiles as $recordFile) {
     if (
         !is_string($category) || !in_array($category, $expectedCategories, true)
         || !is_string($status) || !in_array($status, $allowedStatuses, true)
-        || !is_int($order) || $order < 1
         || !is_array($image) || $alt === ''
-        || !preg_match('~^img/[A-Za-z0-9._/-]+\.(?:jpe?g|png|webp)$~iD', $src)
+        || !preg_match('~^img/[A-Za-z0-9._/-]+\.(?:avif|jpe?g|png|webp)$~iD', $src)
         || strpos($src, '..') !== false || strpos($src, chr(92)) !== false
         || !in_array($crop, $allowedCrops, true)
     ) {
         $errors[] = 'Gallery record fields are invalid: ' . $id;
+        continue;
+    }
+
+    // Preserve the legacy Content Studio record format without an order field.
+    if (!array_key_exists('order', $record)) {
+        $order = PHP_INT_MAX - 100000 + $legacyOrderByCategory[$category];
+        $legacyOrderByCategory[$category]++;
+    } elseif (!is_int($order) || $order < 1) {
+        $errors[] = 'Gallery record order is invalid: ' . $id;
         continue;
     }
 
@@ -84,7 +93,7 @@ foreach ($recordFiles as $recordFile) {
         $errors[] = $id . ': symlink in image path ' . $src;
         continue;
     }
-    if (!is_file($candidate) || filesize($candidate) <= 0 || !is_array(@getimagesize($candidate))) {
+    if (!is_file($candidate) || filesize($candidate) <= 0) {
         $errors[] = $id . ': image is missing, empty or not decodable: ' . $src;
         continue;
     }
