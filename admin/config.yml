@@ -145,6 +145,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: home-hero-desktop
           label: Home hero — desktop
           widget: object
@@ -163,6 +216,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: home-heritage-intro
           label: Home — heritage introduction
           widget: object
@@ -181,6 +287,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: home-rooftop-feature
           label: Home — rooftop dining feature
           widget: object
@@ -199,6 +358,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: home-desert-safari-feature
           label: Home — camel safari feature
           widget: object
@@ -217,6 +429,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: home-swiss-tent-feature
           label: Home — Swiss tent feature
           widget: object
@@ -235,6 +500,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: home-sleep-under-stars-feature
           label: Home — sleep under the stars
           widget: object
@@ -253,6 +571,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: home-city-discovery-feature
           label: Home — city discovery feature
           widget: object
@@ -271,6 +642,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: home-gallery-city
           label: Home gallery — city view
           widget: object
@@ -289,6 +713,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: home-gallery-courtyard
           label: Home gallery — courtyard
           widget: object
@@ -307,6 +784,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: home-gallery-reception
           label: Home gallery — reception
           widget: object
@@ -325,6 +855,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: home-gallery-rooftop
           label: Home gallery — rooftop view
           widget: object
@@ -343,6 +926,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: home-gallery-entrance
           label: Home gallery — carved entrance
           widget: object
@@ -361,6 +997,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
 
     - name: rooms
       label: Rooms
@@ -384,6 +1073,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: room-sweet-purple-room-primary
           label: Sweet Purple Room — primary photo
           widget: object
@@ -402,6 +1144,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: room-rising-sun-room-primary
           label: Rising Sun Room — primary photo
           widget: object
@@ -420,6 +1215,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: room-scarlet-room-primary
           label: Scarlet Room — primary photo
           widget: object
@@ -438,6 +1286,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: room-opium-room-primary
           label: Opium Room — primary photo
           widget: object
@@ -456,6 +1357,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: room-red-maharani-room-primary
           label: Red Maharani Room — primary photo
           widget: object
@@ -474,6 +1428,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: room-green-room-primary
           label: Green Room — primary photo
           widget: object
@@ -492,6 +1499,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: room-bluesky-room-primary
           label: BlueSky Room — primary photo
           widget: object
@@ -510,6 +1570,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
 
     - name: dining
       label: Dining
@@ -533,6 +1646,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
 
     - name: experiences
       label: Experiences
@@ -556,6 +1722,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: experience-guided-jaisalmer-tour-hero
           label: Guided Jaisalmer Tour — hero
           widget: object
@@ -574,6 +1793,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: experience-sunset-camel-safari-hero
           label: Sunset Camel Safari — hero
           widget: object
@@ -592,6 +1864,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: experience-sleep-under-the-stars-hero
           label: Sleep Under the Stars — hero
           widget: object
@@ -610,6 +1935,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: experience-swiss-tent-safari-hero
           label: Swiss Tent Safari — hero
           widget: object
@@ -628,6 +2006,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: experience-cultural-safari-hero
           label: Cultural Safari — hero
           widget: object
@@ -646,6 +2077,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: experience-explore-the-desert-hero
           label: Explore the Desert — hero
           widget: object
@@ -664,6 +2148,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: experience-half-day-jaisalmer-tour-hero
           label: Half-Day Jaisalmer Tour — hero
           widget: object
@@ -682,6 +2219,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: experience-full-day-jaisalmer-tour-hero
           label: Full-Day Jaisalmer Tour — hero
           widget: object
@@ -700,6 +2290,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: experience-longewala-tour-hero
           label: Longewala Tour — hero
           widget: object
@@ -718,6 +2361,59 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
         - name: experience-rajasthan-tours-hero
           label: Rajasthan Tours — draft hero
           widget: object
@@ -736,4 +2432,57 @@ collections:
               widget: string
               required: false
               default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
 
