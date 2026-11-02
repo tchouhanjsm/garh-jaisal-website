@@ -5,13 +5,15 @@ const ownerPassword = process.env.GJ_MEDIA_ADMIN_E2E_PASSWORD;
 
 test('unauthenticated Media Library HTML and JSON requests are denied without inventory leakage', async ({ request }) => {
   const htmlResponse = await request.get('/admin/media-library.php');
-  expect([401, 403, 503]).toContain(htmlResponse.status());
+  expect([401, 503]).toContain(htmlResponse.status());
+  if (htmlResponse.status() === 401) expect(htmlResponse.headers()['www-authenticate']).toContain('Basic');
   const html = await htmlResponse.text();
   expect(html).not.toContain('Media library intelligence');
   expect(html).not.toContain('total image files');
 
   const jsonResponse = await request.get('/admin/media-library.php?format=json');
-  expect([401, 403, 503]).toContain(jsonResponse.status());
+  expect([401, 503]).toContain(jsonResponse.status());
+  if (jsonResponse.status() === 401) expect(jsonResponse.headers()['www-authenticate']).toContain('Basic');
   const jsonText = await jsonResponse.text();
   expect(jsonText).not.toContain('"assets"');
   expect(jsonText).not.toContain('"total_assets"');
