@@ -135,6 +135,38 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
             with self.assertRaisesRegex(PackageError, "missing from the runtime package"):
                 validate_responsive_fallback_sources(["img/facade.jpg"], root)
 
+    def test_page_image_slot_sources_are_required_package_fallbacks(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            image = root / "img" / "gallery" / "home-hero.webp"
+            image.parent.mkdir(parents=True)
+            image.write_bytes(b"valid-page-slot-image")
+            slots = root / "content" / "page-media"
+            slots.mkdir(parents=True)
+            (slots / "home.json").write_text(json.dumps({
+                "home-hero-mobile": {
+                    "src": "img/gallery/home-hero.webp",
+                    "alt": "Carved sandstone facade inside Jaisalmer Fort",
+                },
+            }), encoding="utf-8")
+            (slots / "rooms.json").write_text(json.dumps({}), encoding="utf-8")
+            (slots / "dining.json").write_text(json.dumps({}), encoding="utf-8")
+            (slots / "experiences.json").write_text(json.dumps({}), encoding="utf-8")
+            from scripts import gallery_media
+            with patch.object(gallery_media, "PAGE_MEDIA_SLOT_IDS", {
+                "home": ["home-hero-mobile"], "rooms": [], "dining": [], "experiences": []
+            }):
+                (root / "scripts").mkdir()
+                (root / "scripts" / "responsive-image-assets-manifest.json").write_text(json.dumps({
+                    "target_widths": [480], "sources": ["img/facade.jpg"]
+                }), encoding="utf-8")
+                (root / "img" / "facade.jpg").write_bytes(b"original-image-fallback")
+                selected = ["img/facade.jpg", "img/gallery/home-hero.webp"]
+                verified = validate_responsive_fallback_sources(selected, root)
+                self.assertIn("img/gallery/home-hero.webp", verified)
+                with self.assertRaisesRegex(PackageError, "missing from the runtime package"):
+                    validate_responsive_fallback_sources(["img/facade.jpg"], root)
+
     def test_selects_runtime_files_and_excludes_development_files(self):
         tracked = [
             ".htaccess", "index.php", "room.php", "robots.txt", "sitemap.xml",

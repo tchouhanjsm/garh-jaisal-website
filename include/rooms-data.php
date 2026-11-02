@@ -1,6 +1,6 @@
 <?php
 
-return [
+$rooms = [
     [
         'name' => 'Sweet Purple Room',
         'kicker' => 'Ground floor',
@@ -104,3 +104,16 @@ return [
         ],
     ],
 ];
+
+$siteMediaSlots = require __DIR__ . '/site-media-slots.php';
+foreach ($rooms as &$room) {
+    $roomSlug = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '-', $room['name']), '-'));
+    $slotImage = gj_site_media_slot($siteMediaSlots, 'room-' . $roomSlug . '-primary', [
+        'src' => $room['image'],
+        'alt' => $room['alt'],
+    ]);
+    $room['image'] = $slotImage['src'];
+    $room['alt'] = $slotImage['alt'];
+}
+unset($room);
+return $rooms;

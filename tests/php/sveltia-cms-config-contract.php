@@ -15,6 +15,12 @@ $requiredFiles = [
     'docs/SVELTIA-CMS-OWNER-GUIDE.md',
     'include/gallery-data.php',
     'include/media-library-audit.php',
+    'include/site-media-slots.php',
+    'content/page-media/home.json',
+    'content/page-media/rooms.json',
+    'content/page-media/dining.json',
+    'content/page-media/experiences.json',
+    'tests/php/site-media-slots-contract.php',
     'tests/php/media-library-audit.php',
     'scripts/build_deploy_package.py',
 ];
@@ -39,6 +45,7 @@ $read = static function ($relative) use ($root, &$errors) {
 $html = $read('admin/index.html');
 $mediaLibrary = $read('admin/media-library.php');
 $mediaAudit = $read('include/media-library-audit.php');
+$siteMediaLoader = $read('include/site-media-slots.php');
 $config = $read('admin/config.yml');
 $headers = $read('admin/.htaccess');
 $galleryLoader = $read('include/gallery-data.php');
@@ -117,6 +124,22 @@ if (preg_match('/(?:ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|client_sec
 if (strpos($mediaLibrary, 'Media library intelligence') === false
     || stripos($mediaLibrary, 'never delete from this report alone') === false) {
     $errors[] = 'Read-only media library dashboard must explain usage limitations and must not expose mutation actions.';
+}
+if (strpos($siteMediaLoader, 'getimagesize') === false
+    || strpos($siteMediaLoader, 'realpath') === false
+    || strpos($siteMediaLoader, 'is_link') === false
+    || strpos($siteMediaLoader, 'gj_site_media_slot') === false) {
+    $errors[] = 'Page media slot loader must validate decodable images beneath img/ and retain safe fallbacks.';
+}
+if (strpos($config, 'name: page_media_slots') === false
+    || strpos($config, 'file: content/page-media/home.json') === false
+    || strpos($config, 'file: content/page-media/rooms.json') === false
+    || strpos($config, 'file: content/page-media/dining.json') === false
+    || strpos($config, 'file: content/page-media/experiences.json') === false) {
+    $errors[] = 'Sveltia must expose the four fixed Page image slot files.';
+}
+if (strpos($read('content/.htaccess'), 'Require all denied') === false) {
+    $errors[] = 'CMS content JSON must remain blocked from direct public access.';
 }
 if (strpos($mediaAudit, 'include/site-config.local.php') === false
     || strpos($mediaAudit, 'large_file_assets') === false

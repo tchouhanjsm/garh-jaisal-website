@@ -116,6 +116,9 @@ jobs:
 
       - name: Verify read-only media library usage and duplicate audit
         run: php tests/php/media-library-audit.php
+
+      - name: Verify owner-managed Home, Rooms, Dining and Experience image slots
+        run: php tests/php/site-media-slots-contract.php
       - name: Verify shared quick-facts component contract
         run: php tests/php/at-a-glance-contract.php
 

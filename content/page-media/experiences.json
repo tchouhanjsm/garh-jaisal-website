@@ -1,0 +1,46 @@
+{
+  "experience-desert-safari-hero": {
+    "src": "img/desert3.jpg",
+    "alt": "Sand dunes in the Thar Desert near Jaisalmer"
+  },
+  "experience-guided-jaisalmer-tour-hero": {
+    "src": "img/j10.jpg",
+    "alt": "Ornately carved sandstone architecture in Jaisalmer's historic centre"
+  },
+  "experience-sunset-camel-safari-hero": {
+    "src": "img/desert7.jpg",
+    "alt": "Camel riders travelling across the dunes near Jaisalmer"
+  },
+  "experience-sleep-under-the-stars-hero": {
+    "src": "img/sleeping_under_stars/tour_9.jpeg",
+    "alt": "Desert campfire, shelter and jeep at dusk"
+  },
+  "experience-swiss-tent-safari-hero": {
+    "src": "img/v2/swiss-tent.webp",
+    "alt": "White Swiss-style tents at a desert accommodation near Jaisalmer"
+  },
+  "experience-cultural-safari-hero": {
+    "src": "img/Desert_Camp/Prog.jpeg",
+    "alt": "An evening cultural programme at a desert camp near Jaisalmer"
+  },
+  "experience-explore-the-desert-hero": {
+    "src": "img/desert12.jpg",
+    "alt": "Camel riders on a desert route near Jaisalmer"
+  },
+  "experience-half-day-jaisalmer-tour-hero": {
+    "src": "img/j5.jpg",
+    "alt": "Carved sandstone balconies on a historic Jaisalmer haveli"
+  },
+  "experience-full-day-jaisalmer-tour-hero": {
+    "src": "img/j2.jpg",
+    "alt": "Carved sandstone architecture in historic Jaisalmer"
+  },
+  "experience-longewala-tour-hero": {
+    "src": "img/desert10.jpg",
+    "alt": "A jeep crossing open sand on a desert route near Jaisalmer"
+  },
+  "experience-rajasthan-tours-hero": {
+    "src": "img/1.webp",
+    "alt": "Panoramic view across Jaisalmer's golden sandstone city"
+  }
+}

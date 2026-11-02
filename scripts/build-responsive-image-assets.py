@@ -17,9 +17,9 @@ from typing import Any
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 try:
-    from scripts.gallery_media import gallery_record_image_sources
+    from scripts.gallery_media import cms_managed_image_sources
 except ImportError:
-    from gallery_media import gallery_record_image_sources
+    from gallery_media import cms_managed_image_sources
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "scripts" / "responsive-image-assets-manifest.json"
@@ -89,11 +89,11 @@ def load_manifest() -> dict[str, Any]:
     if len(sources) != len(set(sources)):
         raise ValueError("sources must not contain duplicates")
 
-    # Gallery JSON is the source of truth for CMS-managed media added after
-    # the static image manifest was curated. Include all publication states.
-    for gallery_source in gallery_record_image_sources(ROOT):
-        if gallery_source not in sources:
-            sources.append(gallery_source)
+    # Gallery records and fixed page image slots can reference owner uploads.
+    # Include each accepted source before responsive candidates are generated.
+    for cms_source in cms_managed_image_sources(ROOT):
+        if cms_source not in sources:
+            sources.append(cms_source)
     manifest["sources"] = sources
 
     source_target_widths = manifest.get("source_target_widths", {})

@@ -4,7 +4,7 @@
 
 Open `/admin/` on the deployed website. Sveltia CMS is the owner-facing dashboard for the Gallery page. It edits repository content and media; it does not use a separate database and it does not publish to the live server by itself.
 
-The four collections are **Hotel & fort**, **Rooms**, **Desert experiences** and **Restaurant & rooftop**. The original 36 curated gallery photographs are now individual JSON entries in `content/gallery/`.
+The CMS provides **Gallery photos** plus **Page image slots** for Home, Rooms, Dining and Experiences. The original 36 curated gallery photographs are individual JSON entries in `content/gallery/`; fixed page image slots are grouped in `content/page-media/`.
 
 **The migration preserves existing image URLs.** The 36 entries still reference their existing `img/...` files, so the initial migration does not change the Gallery page's image paths or overwrite photos that may be reused on other pages. Existing local Content Studio Gallery records in the same folder remain supported; records created before the Sveltia order field are placed after explicitly ordered photos. When you replace one of those photos, the new upload is stored under `img/gallery/`; the old original file remains in the repository.
 
@@ -70,7 +70,7 @@ Sveltia's current configuration provides browser-side raster processing:
 
 Use JPG/JPEG, PNG or WebP photographs. Avoid animated images and SVGs for this Gallery workflow. Inspect the result at full size before submitting, especially fine sandstone details and low-light room photographs.
 
-The repository's responsive-image pipeline automatically discovers image paths from all Gallery JSON records. Responsive derivatives and original fallbacks are validated by the existing image and deployment-package checks.
+The repository's responsive-image pipeline discovers image paths from both Gallery JSON records and the four fixed Page image slot files. New slot uploads are included in responsive WebP candidate generation and cPanel package fallback validation.
 
 ## Review and publish — no direct production edits
 
@@ -87,6 +87,14 @@ Sveltia writes to the dedicated `cms-media` branch, not `main`.
 
 A CMS save, GitHub merge or branch-sync run does **not** upload files to cPanel. Production deployment remains a manual owner-controlled release.
 
+## Manage Home, Rooms, Dining and Experience images
+
+Open **Page image slots** in Sveltia. The collection contains four fixed files—Home, Rooms, Dining and Experiences. Each file contains the named image slots used by the page templates; owners can replace images and update accessible descriptions, but cannot create or delete page slots. Home includes the responsive mobile/desktop hero, feature images and lower Gallery strip. Rooms includes the Rooms hero and the primary photo for each room. Dining includes the restaurant hero. Experiences includes the hero image for each registered experience, including draft entries.
+
+Choose or upload the replacement in **Image file**. New uploads are stored under `img/gallery/` and do not overwrite the original page image. Keep alt text descriptive and accurate. Experience hero captions may also be updated in the Caption field. Save in the `cms-media` branch, compare it with `main`, and submit the change through the normal reviewed PR and deployment process. Missing or invalid slot data falls back to the existing page image. The responsive-image builder discovers all page-slot sources, and cPanel packaging requires those source images as fallbacks.
+
+The PHP renderer validates each source as a decodable regular file beneath `img/`; malformed paths, missing images and symlinks are ignored in favour of the existing fallback.
+
 ## Rollback and recovery
 
 For a bad published image, open **View Git history** on its Media Library card to inspect the file's commits on `main` and identify a known-good version. Restore the previous image from that revision or revert the publishing pull request, then submit the restoration through a new reviewed pull request. Do not edit production files directly in cPanel as the normal rollback path. The dashboard provides a history link only; it does not perform a restore or change repository files.
@@ -95,8 +103,8 @@ If branch synchronisation fails, do not continue editing on a stale branch. Open
 
 ## Current boundaries
 
-- This collection manages the public Gallery page. It does not yet manage Home hero, individual room-page, dining-page or experience-page image slots.
-- The 36 migrated entries preserve their original source paths until each owner replaces the image.
+- Gallery photos and fixed Page image slots are managed separately; changing a page slot does not alter a Gallery entry that may reference the same original image.
+- The 36 migrated Gallery entries preserve their original source paths until each owner replaces the image; page-slot images likewise retain their original sources as fallbacks.
 - Staff OAuth onboarding and automatic pull-request creation are not included. The owner creates the review PR using the compare link.
 - Crop changes the Gallery display treatment; it does not edit image pixels.
 - No CMS workflow deploys to production.

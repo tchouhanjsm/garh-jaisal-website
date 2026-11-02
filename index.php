@@ -4,6 +4,21 @@ $siteConfig = require __DIR__ . '/include/site-config.php';
 $bookingUrl = $siteConfig['booking_url'];
 $rooms = require __DIR__ . '/include/rooms-data.php';
 require_once __DIR__ . '/include/image-metadata.php';
+$siteMediaSlots = require __DIR__ . '/include/site-media-slots.php';
+$homeHeroMobile = gj_site_media_slot($siteMediaSlots, 'home-hero-mobile', ['src' => 'img/optimized/v2/facade.webp', 'alt' => 'Carved sandstone facade of Garh Jaisal Haveli inside Jaisalmer Fort']);
+$homeHeroDesktop = gj_site_media_slot($siteMediaSlots, 'home-hero-desktop', ['src' => 'img/optimized/v2/fort-from-roof.webp', 'alt' => 'Jaisalmer Fort seen from the rooftop at Garh Jaisal Haveli']);
+$homeHeritageIntro = gj_site_media_slot($siteMediaSlots, 'home-heritage-intro', ['src' => 'img/5.webp', 'alt' => 'Carved sandstone architecture inside Garh Jaisal Haveli']);
+$homeRooftopFeature = gj_site_media_slot($siteMediaSlots, 'home-rooftop-feature', ['src' => 'img/roofslide.webp', 'alt' => 'Rooftop table at dusk overlooking the lights of Jaisalmer']);
+$homeDesertFeature = gj_site_media_slot($siteMediaSlots, 'home-desert-safari-feature', ['src' => 'img/desert7.jpg', 'alt' => 'Camel safari at sunset in the Thar Desert near Jaisalmer']);
+$homeTentFeature = gj_site_media_slot($siteMediaSlots, 'home-swiss-tent-feature', ['src' => 'img/v2/swiss-tent.webp', 'alt' => 'Swiss tent accommodation at a desert camp near Jaisalmer']);
+$homeStarsFeature = gj_site_media_slot($siteMediaSlots, 'home-sleep-under-stars-feature', ['src' => 'img/tent.jpg', 'alt' => 'Open-air sleeping arrangement beneath the night sky in the Jaisalmer desert']);
+$homeCityFeature = gj_site_media_slot($siteMediaSlots, 'home-city-discovery-feature', ['src' => 'img/jcity.jpg', 'alt' => 'Jaisalmer city seen from within the Golden Fort']);
+$homeGalleryCity = gj_site_media_slot($siteMediaSlots, 'home-gallery-city', ['src' => 'img/jcity.jpg', 'alt' => 'Jaisalmer city seen from the fort']);
+$homeGalleryCourtyard = gj_site_media_slot($siteMediaSlots, 'home-gallery-courtyard', ['src' => 'img/courtyard.jpg', 'alt' => 'Carved sandstone hallway inside a heritage haveli']);
+$homeGalleryReception = gj_site_media_slot($siteMediaSlots, 'home-gallery-reception', ['src' => 'img/recep1.jpg', 'alt' => 'Reception area with traditional furnishings at Garh Jaisal Haveli']);
+$homeGalleryRooftop = gj_site_media_slot($siteMediaSlots, 'home-gallery-rooftop', ['src' => 'img/s4.jpg', 'alt' => 'View across Jaisalmer from the rooftop']);
+$homeGalleryEntrance = gj_site_media_slot($siteMediaSlots, 'home-gallery-entrance', ['src' => 'img/big9.jpg', 'alt' => 'A carved entrance in a historic sandstone building']);
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -23,16 +38,16 @@ $page = [
     'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
     'path' => '/',
     'preload' => array_values(array_filter([
-        $buildHeroPreload('img/optimized/v2/facade.webp', '(max-width: 767px)'),
-        $buildHeroPreload('img/optimized/v2/fort-from-roof.webp', '(min-width: 768px)'),
+        $buildHeroPreload($homeHeroMobile['src'], '(max-width: 767px)'),
+        $buildHeroPreload($homeHeroDesktop['src'], '(min-width: 768px)'),
     ])),
     'og_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
     'og_description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
-    'og_image' => '/img/v2/facade.jpg',
-    'og_image_alt' => 'Carved facade of Garh Jaisal Haveli inside Jaisalmer Fort',
+    'og_image' => '/' . ltrim($homeHeroMobile['src'], '/'),
+    'og_image_alt' => $homeHeroMobile['alt'],
     'twitter_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
     'twitter_description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
-    'twitter_image' => '/img/v2/facade.jpg',
+    'twitter_image' => '/' . ltrim($homeHeroMobile['src'], '/'),
     'css' => ['css/thar-sunset-story.css', 'css/home-premium-story.css'],
     'schema' => [
         [
@@ -56,10 +71,10 @@ require __DIR__ . '/include/page-head.php';
     <picture class="hero-picture">
       <source
         media="(min-width: 768px)"
-        <?= gj_image_dimension_attributes('img/optimized/v2/fort-from-roof.webp', '100vw') ?>>
+        <?= gj_image_dimension_attributes($homeHeroDesktop['src'], '100vw') ?>>
       <img
-        src="img/optimized/v2/facade.webp"
-        <?= gj_image_dimension_attributes('img/optimized/v2/facade.webp', '100vw') ?>
+        src="<?= htmlspecialchars($homeHeroMobile['src'], ENT_QUOTES, 'UTF-8') ?>"
+        <?= gj_image_dimension_attributes($homeHeroMobile['src'], '100vw') ?>
         alt=""
         aria-hidden="true"
         fetchpriority="high"
@@ -197,8 +212,8 @@ require __DIR__ . '/include/page-head.php';
 
     <div class="image-panel">
       <img
-        src="img/5.webp" <?= gj_image_dimension_attributes('img/5.webp', '(max-width: 800px) 100vw, 50vw') ?>
-        alt="Carved sandstone architecture inside Garh Jaisal Haveli"
+        src="<?= htmlspecialchars($homeHeritageIntro['src'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($homeHeritageIntro['src'], '(max-width: 800px) 100vw, 50vw') ?>
+        alt="<?= htmlspecialchars($homeHeritageIntro['alt'], ENT_QUOTES, 'UTF-8') ?>"
         loading="lazy" decoding="async">
     </div>
 
@@ -273,8 +288,8 @@ require __DIR__ . '/include/page-head.php';
 
     <div class="media">
       <img
-        src="img/roofslide.webp" <?= gj_image_dimension_attributes('img/roofslide.webp', '(max-width: 760px) 100vw, 50vw') ?>
-        alt="Rooftop table at dusk overlooking the lights of Jaisalmer"
+        src="<?= htmlspecialchars($homeRooftopFeature['src'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($homeRooftopFeature['src'], '(max-width: 760px) 100vw, 50vw') ?>
+        alt="<?= htmlspecialchars($homeRooftopFeature['alt'], ENT_QUOTES, 'UTF-8') ?>"
         loading="lazy"
         decoding="async">
     </div>
@@ -303,8 +318,8 @@ require __DIR__ . '/include/page-head.php';
       <article class="card">
         <div class="card-image">
           <img
-            src="img/desert7.jpg" <?= gj_image_dimension_attributes('img/desert7.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
-            alt="Camel safari at sunset in the Thar Desert near Jaisalmer"
+            src="<?= htmlspecialchars($homeDesertFeature['src'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($homeDesertFeature['src'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
+            alt="<?= htmlspecialchars($homeDesertFeature['alt'], ENT_QUOTES, 'UTF-8') ?>"
             loading="lazy" decoding="async">
         </div>
 
@@ -328,8 +343,8 @@ require __DIR__ . '/include/page-head.php';
       <article class="card">
         <div class="card-image">
           <img
-            src="img/v2/swiss-tent.webp" <?= gj_image_dimension_attributes('img/v2/swiss-tent.webp', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
-            alt="Swiss tent accommodation in the Jaisalmer desert"
+            src="<?= htmlspecialchars($homeTentFeature['src'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($homeTentFeature['src'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
+            alt="<?= htmlspecialchars($homeTentFeature['alt'], ENT_QUOTES, 'UTF-8') ?>"
             loading="lazy" decoding="async">
         </div>
 
@@ -353,8 +368,8 @@ require __DIR__ . '/include/page-head.php';
       <article class="card">
         <div class="card-image">
           <img
-            src="img/tent.jpg" <?= gj_image_dimension_attributes('img/tent.jpg', '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
-            alt="People sleeping under a starry desert sky in the Jaisalmer desert"
+            src="<?= htmlspecialchars($homeStarsFeature['src'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($homeStarsFeature['src'], '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw') ?>
+            alt="<?= htmlspecialchars($homeStarsFeature['alt'], ENT_QUOTES, 'UTF-8') ?>"
             loading="lazy" decoding="async">
         </div>
 
@@ -402,8 +417,8 @@ require __DIR__ . '/include/page-head.php';
     </div>
     <figure class="home-city-discovery__media">
       <img
-        src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg', '(max-width: 760px) 100vw, 48vw') ?>
-        alt="Jaisalmer city seen from the fort"
+        src="<?= htmlspecialchars($homeCityFeature['src'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($homeCityFeature['src'], '(max-width: 760px) 100vw, 48vw') ?>
+        alt="<?= htmlspecialchars($homeCityFeature['alt'], ENT_QUOTES, 'UTF-8') ?>"
         loading="lazy" decoding="async">
       <figcaption>Jaisalmer, seen from within the Golden Fort.</figcaption>
     </figure>
@@ -503,36 +518,36 @@ require __DIR__ . '/include/page-head.php';
 
       <figure>
         <img
-          src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg', '(max-width: 760px) 100vw, 50vw') ?>
-          alt="Jaisalmer city seen from the fort"
+          src="<?= htmlspecialchars($homeGalleryCity['src'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($homeGalleryCity['src'], '(max-width: 760px) 100vw, 50vw') ?>
+          alt="<?= htmlspecialchars($homeGalleryCity['alt'], ENT_QUOTES, 'UTF-8') ?>"
           loading="lazy" decoding="async">
       </figure>
 
       <figure>
         <img
-          src="img/courtyard.jpg" <?= gj_image_dimension_attributes('img/courtyard.jpg', '(max-width: 760px) 50vw, 28vw') ?>
-          alt="Carved sandstone hallway inside a heritage haveli"
+          src="<?= htmlspecialchars($homeGalleryCourtyard['src'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($homeGalleryCourtyard['src'], '(max-width: 760px) 50vw, 28vw') ?>
+          alt="<?= htmlspecialchars($homeGalleryCourtyard['alt'], ENT_QUOTES, 'UTF-8') ?>"
           loading="lazy" decoding="async">
       </figure>
 
       <figure>
         <img
-          src="img/recep1.jpg" <?= gj_image_dimension_attributes('img/recep1.jpg', '(max-width: 760px) 50vw, 28vw') ?>
-          alt="Reception area with traditional furnishings at Garh Jaisal Haveli"
+          src="<?= htmlspecialchars($homeGalleryReception['src'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($homeGalleryReception['src'], '(max-width: 760px) 50vw, 28vw') ?>
+          alt="<?= htmlspecialchars($homeGalleryReception['alt'], ENT_QUOTES, 'UTF-8') ?>"
           loading="lazy" decoding="async">
       </figure>
 
       <figure>
         <img
-          src="img/s4.jpg" <?= gj_image_dimension_attributes('img/s4.jpg', '(max-width: 760px) 50vw, 28vw') ?>
-          alt="View across Jaisalmer from the rooftop"
+          src="<?= htmlspecialchars($homeGalleryRooftop['src'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($homeGalleryRooftop['src'], '(max-width: 760px) 50vw, 28vw') ?>
+          alt="<?= htmlspecialchars($homeGalleryRooftop['alt'], ENT_QUOTES, 'UTF-8') ?>"
           loading="lazy" decoding="async">
       </figure>
 
       <figure>
         <img
-          src="img/big9.jpg" <?= gj_image_dimension_attributes('img/big9.jpg', '(max-width: 760px) 50vw, 28vw') ?>
-          alt="A carved entrance in a historic sandstone building"
+          src="<?= htmlspecialchars($homeGalleryEntrance['src'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($homeGalleryEntrance['src'], '(max-width: 760px) 50vw, 28vw') ?>
+          alt="<?= htmlspecialchars($homeGalleryEntrance['alt'], ENT_QUOTES, 'UTF-8') ?>"
           loading="lazy" decoding="async">
       </figure>
 
