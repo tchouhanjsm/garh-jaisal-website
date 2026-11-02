@@ -32,7 +32,7 @@ if (!function_exists('gj_page_media_approval_payload')) {
 if (!function_exists('gj_page_media_approval_sign')) {
     function gj_page_media_approval_sign($slotId, $source, $alt, $caption, $approval, $key)
     {
-        if (!is_string($key) || preg_match('/^[a-f0-9]{64,128}$/iD', $key) !== 1) return '';
+        if (!is_string($key) || preg_match('/^(?:[a-f0-9]{2}){32,64}$/iD', $key) !== 1) return '';
         $payload = gj_page_media_approval_payload($slotId, $source, $alt, $caption, $approval);
         if (!is_string($payload)) return '';
         return hash_hmac('sha256', $payload, $key);
@@ -43,7 +43,7 @@ if (!function_exists('gj_page_media_approval_is_valid')) {
     function gj_page_media_approval_is_valid($slotId, $source, $alt, $caption, $approval, $imagePath, $key, $approvers)
     {
         if (!is_array($approval) || !is_string($key)
-            || preg_match('/^[a-f0-9]{64,128}$/iD', $key) !== 1
+            || preg_match('/^(?:[a-f0-9]{2}){32,64}$/iD', $key) !== 1
             || !is_array($approvers) || !$approvers) return false;
 
         $requiredText = [
