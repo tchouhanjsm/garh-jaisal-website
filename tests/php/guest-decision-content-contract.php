@@ -150,8 +150,15 @@ foreach ($routeContracts as $relative => $needles) {
 }
 
 $homepage = file_get_contents($root . '/index.php');
-if (strpos($homepage, 'home-planning-confidence') !== false) {
-    $fail('Homepage still contains the duplicate planning-confidence card section.');
+if (strpos($homepage, 'class="section home-planning-confidence"') === false
+    || strpos($homepage, 'id="planning-confidence"') === false) {
+    $fail('Homepage must retain the planning-confidence section identity for the shared decision guide.');
+}
+if (strpos($homepage, 'home-planning-confidence__grid') !== false) {
+    $fail('Homepage should not reintroduce the duplicated three-card planning-confidence grid.');
+}
+if (substr_count($homepage, 'guest-decision-panel.php') !== 1) {
+    $fail('Homepage must render exactly one shared guest decision panel.');
 }
 $roomPage = file_get_contents($root . '/room.php');
 if (strpos($roomPage, 'rooms-cta-inner') !== false) {
