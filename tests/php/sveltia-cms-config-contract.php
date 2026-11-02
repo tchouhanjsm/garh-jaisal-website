@@ -107,6 +107,41 @@ $expectedMediaConfig = "media_libraries:\n  default:\n    config:\n      max_fil
 if (strpos($config, $expectedMediaConfig) === false) {
     $errors[] = 'Sveltia internal media settings must be nested under media_libraries.default.config.';
 }
+$galleryStart = strpos($config, "  - name: gallery");
+$nextCollection = $galleryStart === false ? false : strpos($config, "\n  - name: page_media_slots", $galleryStart + 1);
+$galleryConfig = $galleryStart === false ? '' : substr($config, $galleryStart, $nextCollection === false ? null : $nextCollection - $galleryStart);
+$galleryField = static function ($name) use ($galleryConfig) {
+    $marker = "      - name: " . $name . "\n";
+    $start = strpos($galleryConfig, $marker);
+    if ($start === false) return '';
+    $next = strpos($galleryConfig, "\n      - name:", $start + strlen($marker));
+    return substr($galleryConfig, $start, $next === false ? null : $next - $start);
+};
+$reviewStatusField = $galleryField('review_status');
+$sourceEvidenceField = $galleryField('sourceEvidence');
+$visualReviewField = $galleryField('visualReview');
+$technicalValidationField = $galleryField('technicalValidation');
+if ($reviewStatusField === '' || strpos($reviewStatusField, 'widget: select') === false || strpos($reviewStatusField, 'default: draft') === false || strpos($reviewStatusField, 'value: approved') === false || strpos($reviewStatusField, 'widget: hidden') !== false) {
+    $errors[] = 'Gallery editorial review status must be visible, selectable and default to Draft.';
+}
+foreach (['name: creator', 'name: sourceUrl', 'name: licenseName', 'name: evidenceReference', 'name: verifiedBy', 'name: verifiedAt'] as $marker) {
+    if ($sourceEvidenceField === '' || strpos($sourceEvidenceField, $marker) === false) $errors[] = 'Gallery source/rights evidence is missing field: ' . $marker;
+}
+if (strpos($sourceEvidenceField, 'default: unverified') === false || strpos($sourceEvidenceField, 'value: owner-confirmed') === false || strpos($sourceEvidenceField, 'value: licensed') === false) {
+    $errors[] = 'Gallery rights evidence must default to Unverified and distinguish owner-confirmed from licensed evidence.';
+}
+foreach (['name: evidence', 'name: reviewer', 'name: reviewedAt'] as $marker) {
+    if ($visualReviewField === '' || strpos($visualReviewField, $marker) === false) $errors[] = 'Gallery visual review is missing field: ' . $marker;
+}
+if (strpos($visualReviewField, 'default: not_assessed') === false || strpos($visualReviewField, 'value: matched') === false || strpos($visualReviewField, 'value: mismatch') === false) {
+    $errors[] = 'Gallery visual review must default to Not assessed and distinguish match from mismatch.';
+}
+if ($technicalValidationField === '' || strpos($technicalValidationField, 'default: pending') === false || strpos($technicalValidationField, 'value: verified') === false || strpos($technicalValidationField, 'name: evidenceReference') === false) {
+    $errors[] = 'Gallery technical validation must default to Pending and link evidence for verified checks.';
+}
+if (strpos($guide, 'Rights evidence status: Unverified') === false || strpos($guide, 'do not backfill the 36 existing Gallery records') === false || strpos($guide, 'not cryptographic signatures') === false) {
+    $errors[] = 'Owner guide must explain fail-closed defaults, existing-record boundaries and reviewer identity limits.';
+}
 if (preg_match('/media_libraries:\s*\n\s+all:/', $config)) {
     $errors[] = 'Unsupported media_libraries.all configuration must not be used.';
 }
