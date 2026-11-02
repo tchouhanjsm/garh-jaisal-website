@@ -542,7 +542,7 @@ require __DIR__ . '/include/page-head.php';
 </section>
 
 
-<section class="section home-planning-confidence" id="planning-confidence" aria-labelledby="guest-decision-home-title">
+<section class="home-planning-confidence" id="planning-confidence" aria-labelledby="guest-decision-home-title">
   <?php
   $guestDecisionContext = 'home';
   $guestDecisionTitleOverride = 'Know what to expect before you book.';
