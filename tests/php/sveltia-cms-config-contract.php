@@ -199,6 +199,8 @@ if (
     strpos($packageBuilder, '"admin"') === false
     || strpos($packageBuilder, '"admin/config.yml"') === false
     || strpos($packageBuilder, '"admin/index.html"') === false
+    || strpos($packageBuilder, '"include/admin-auth.php"') === false
+    || strpos($packageBuilder, '"include/page-media-approval.php"') === false
 ) {
     $errors[] = 'The cPanel package builder must include the CMS runtime directory and entry points.';
 }
