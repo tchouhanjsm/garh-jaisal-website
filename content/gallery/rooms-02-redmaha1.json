@@ -1,0 +1,11 @@
+{
+  "id": "rooms-02-redmaha1",
+  "category": "rooms",
+  "status": "live",
+  "order": 2,
+  "image": {
+    "src": "img/redmaha1.jpg",
+    "alt": "Red Maharani Room interior",
+    "crop": "portrait"
+  }
+}

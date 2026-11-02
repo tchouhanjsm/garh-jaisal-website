@@ -1,0 +1,11 @@
+{
+  "id": "rooms-06-sunt1",
+  "category": "rooms",
+  "status": "live",
+  "order": 6,
+  "image": {
+    "src": "img/sunt1.jpg",
+    "alt": "Rising Sun Room detail",
+    "crop": "portrait"
+  }
+}

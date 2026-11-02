@@ -83,6 +83,58 @@ def create_package_git_fixture(root: Path) -> str:
 
 
 class DeploymentPackageSelectionTests(unittest.TestCase):
+    def test_cms_gallery_record_images_are_required_package_fallbacks(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            image_root = root / "img"
+            gallery_image = image_root / "gallery" / "hotel" / "owner-upload.webp"
+            gallery_image.parent.mkdir(parents=True)
+            gallery_image.write_bytes(b"valid-image-fixture")
+            (image_root / "facade.jpg").write_bytes(b"legacy-image-fixture")
+            records = root / "content" / "gallery"
+            records.mkdir(parents=True)
+            (records / "hotel-owner-upload.json").write_text(json.dumps({
+                "id": "hotel-owner-upload",
+                "category": "hotel",
+                "status": "draft",
+                "order": 100,
+                "image": {
+                    "src": "img/gallery/hotel/owner-upload.webp",
+                    "alt": "Owner uploaded hotel photograph",
+                    "crop": "standard",
+                },
+            }), encoding="utf-8")
+            # Local Content Studio records predate numeric order and can reference AVIF.
+            legacy_image = image_root / "content-studio" / "legacy-gallery.avif"
+            legacy_image.parent.mkdir(parents=True)
+            legacy_image.write_bytes(b"legacy-avif-fixture")
+            (records / "hotel-studio-legacy.json").write_text(json.dumps({
+                "id": "hotel-studio-legacy",
+                "category": "hotel",
+                "status": "live",
+                "review_status": "approved_for_release",
+                "image": {
+                    "src": "img/content-studio/legacy-gallery.avif",
+                    "alt": "Legacy Content Studio gallery photo",
+                    "caption": "Preserved legacy caption",
+                    "crop": "landscape",
+                },
+            }), encoding="utf-8")
+
+            scripts = root / "scripts"
+            scripts.mkdir()
+            (scripts / "responsive-image-assets-manifest.json").write_text(json.dumps({
+                "sources": ["img/facade.jpg"],
+                "target_widths": [480],
+            }), encoding="utf-8")
+
+            selected = ["img/facade.jpg", "img/gallery/hotel/owner-upload.webp", "img/content-studio/legacy-gallery.avif"]
+            verified = validate_responsive_fallback_sources(selected, root)
+            self.assertIn("img/gallery/hotel/owner-upload.webp", verified)
+            self.assertIn("img/content-studio/legacy-gallery.avif", verified)
+            with self.assertRaisesRegex(PackageError, "missing from the runtime package"):
+                validate_responsive_fallback_sources(["img/facade.jpg"], root)
+
     def test_selects_runtime_files_and_excludes_development_files(self):
         tracked = [
             ".htaccess", "index.php", "room.php", "robots.txt", "sitemap.xml",

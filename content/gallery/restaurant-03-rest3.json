@@ -1,0 +1,11 @@
+{
+  "id": "restaurant-03-rest3",
+  "category": "restaurant",
+  "status": "live",
+  "order": 3,
+  "image": {
+    "src": "img/rest3.jpg",
+    "alt": "Rooftop dining at Garh Jaisal Haveli",
+    "crop": "landscape"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "desert-10-tour-6",
+  "category": "desert",
+  "status": "live",
+  "order": 10,
+  "image": {
+    "src": "img/sleeping_under_stars/tour_6.jpeg",
+    "alt": "Ripples across the sand dunes in the Jaisalmer desert",
+    "crop": "landscape"
+  }
+}

@@ -1,90 +1,102 @@
 # Sveltia CMS — Owner guide
 
-## What this provides
+## What the media manager does
 
-The hosted media manager is available at `/admin/` after this pull request is merged and the reviewed cPanel package is deployed. It uses Sveltia CMS with the existing GitHub repository as its content and media store. There is no separate database or paid CMS subscription.
+Open `/admin/` on the deployed website. Sveltia CMS is the owner-facing dashboard for the Gallery page. It edits repository content and media; it does not use a separate database and it does not publish to the live server by itself.
 
-The first release supports **new owner-managed gallery items** in four categories: Hotel & fort, Rooms, Desert experiences, and Restaurant & rooftop. The existing PHP gallery renderer already reads valid `content/gallery/*.json` records and only displays records whose status is `live`.
+The four collections are **Hotel & fort**, **Rooms**, **Desert experiences** and **Restaurant & rooftop**. The original 36 curated gallery photographs are now individual JSON entries in `content/gallery/`.
 
-**Important current limitation:** the original 36 curated photographs are still embedded in `include/gallery-data.php` and remain at their existing image paths. They are not yet individual Sveltia entries and are not yet inside the CMS Asset Library folder. This first slice does not yet let the owner replace those 36 legacy photographs. A separate migration milestone must copy/register those assets and move the curated metadata into the same managed model without breaking image references used elsewhere on the site.
+**The migration preserves existing image URLs.** The 36 entries still reference their existing `img/...` files, so the initial migration does not change the Gallery page's image paths or overwrite photos that may be reused on other pages. Existing local Content Studio Gallery records in the same folder remain supported; records created before the Sveltia order field are placed after explicitly ordered photos. When you replace one of those photos, the new upload is stored under `img/gallery/`; the old original file remains in the repository.
 
 ## Sign-in and access
 
 Sveltia's GitHub backend requires a GitHub account with Write, Maintain or Admin access to this repository.
 
-Before first sign-in, verify in GitHub repository settings that `main` has a branch protection rule or ruleset requiring pull requests (and the repository's required checks) before changes can land. The `branch: cms-media` setting in this CMS configuration is a routing choice, not an access-control boundary: a repository-scoped Contents-write token can write to any branch that GitHub permits. Keep `cms-media` writable for Sveltia and keep `main` protected. This PR does not change or verify GitHub branch-protection settings.
+Before first sign-in, verify in GitHub repository settings that `main` requires pull requests and the required checks. The `cms-media` branch setting routes CMS writes but is not an access-control boundary: a repository-scoped Contents-write token can write to any branch GitHub permits. Keep `main` protected and `cms-media` writable.
 
-For the owner-only initial setup:
+The initial setup is owner-only:
 
-1. Open `/admin/` on the deployed site.
-2. Choose **Sign in with Token** in the Sveltia sign-in screen.
-3. Use a GitHub fine-grained personal access token restricted to this repository only.
-4. Grant **Contents: Read and write**. Metadata read is added automatically by GitHub. Pull-request permission is not needed for this direct-branch setup because the owner creates the review PR in GitHub.
-5. Paste the token only into Sveltia's sign-in prompt in the owner's browser.
+1. Wait until this integration is merged and the **Sveltia CMS branch sync** workflow has completed successfully.
+2. Open `/admin/` on the deployed site.
+3. Choose **Sign in with Token**.
+4. Use a GitHub fine-grained personal access token restricted to this repository.
+5. Grant **Contents: Read and write**. Metadata read is added automatically.
+6. Paste the token only into Sveltia's sign-in prompt in the owner's browser.
 
-Sveltia stores the token in that browser's local storage. Use only a trusted, owner-controlled browser profile. Do not put the token in this repository, a screenshot, a shared document, a support chat or a website configuration file. Sign out and revoke the token in GitHub if the browser/device is lost or the token is exposed.
+Sveltia stores the token in that browser's local storage. Use a trusted, owner-controlled browser profile. Never put the token in this repository, screenshots, shared documents or support chats. Sign out and revoke the token if the browser/device is lost or the token is exposed.
 
-The CMS sign-in screen is publicly reachable, but repository writes require an authorised GitHub token. The admin route is marked noindex; this is not a substitute for GitHub authentication.
+The sign-in screen is publicly reachable; repository writes still require an authorised GitHub token. The admin route is marked noindex, but noindex is not authentication.
 
-## Add a gallery photo
+## Update an existing photo
 
-1. Open **Gallery photos** in Sveltia.
-2. Create a new entry.
-3. Give it a unique ID such as `hotel-rooftop-evening-01`. Use lowercase letters, numbers and hyphens only. The ID becomes the JSON filename and should not be changed after creation.
-4. Choose one of the four gallery categories.
-5. Keep **Publication status** as **Draft** while preparing the entry.
-6. Upload the photograph in the **Image file** field or use the Asset Library. New uploads are stored beneath `img/gallery/`.
-7. Add meaningful alt text. Describe the visible subject rather than repeating the hotel's name or adding SEO keywords.
-8. Add a caption if it helps a guest understand the photograph.
-9. Choose the display shape: Standard, Architectural arch, Landscape or Portrait. This is a layout treatment for the website; it is not an interactive crop editor.
-10. Save the entry.
+1. Open **Gallery photos** and choose the entry you want to change.
+2. The Image file field shows the current photo. The migrated entries initially reference the same existing `img/...` path as the live site.
+3. To replace it, upload or choose a new image in the Image file field. New/replacement uploads are stored under `img/gallery/`, not over the old shared file.
+4. Review the accessible description (alt text) and Display shape.
+5. Keep the status as **Draft** while preparing the change.
+6. Save.
 
-The entry is stored as `content/gallery/<photo-id>.json`. New records default to Draft and therefore do not appear in the public gallery.
+The previous source file is intentionally retained. Do not delete it from the repository: another page may still use it.
 
-## Image optimisation
+## Add a photo
 
-The CMS is configured to process supported raster uploads in the browser before committing them to Git:
+1. In **Gallery photos**, create a new entry.
+2. Give it a unique ID using lowercase letters, numbers and hyphens, for example `hotel-rooftop-evening-01`. Do not change an ID after creation.
+3. Choose the category.
+4. Set **Display order** to the next unused positive number in that category. Lower numbers appear first. The migrated values currently run from 1–9 for Hotel, 1–12 for Rooms, 1–10 for Desert and 1–5 for Restaurant. The default value 100 places a new item after the original set.
+5. Upload/select the photograph in Image file. New uploads are saved under `img/gallery/`.
+6. Enter meaningful alt text and choose the display shape.
+7. Leave the status as **Draft**, then save.
 
-- Convert raster photos to WebP where the browser supports encoding.
-- Limit the maximum dimension to 1600 × 1600 pixels without upscaling.
-- Use quality 84 as the starting point.
-- Strip raster EXIF metadata, including GPS data.
-- Reject source files larger than 15 MiB before processing.
+New entries are not visible on the public Gallery until their status is changed to **Live**, the change is reviewed and merged, and the reviewed site package is deployed. The Sveltia collection disables entry deletion; use **Hidden** to remove a photo from public display while retaining its record.
 
-Large panoramas and exceptionally detailed architectural photographs should still be visually reviewed after conversion. WebP conversion is not a substitute for checking the image at full size. Animated images are not a supported gallery workflow. Sveltia's Asset Library does not provide a freehand crop editor in this configuration.
+## Reorder and organise
 
-## Review and publish
+Change **Display order** to a unique positive number within the selected category. Smaller numbers appear first. This collection uses a numeric order field rather than drag-to-reorder.
 
-The CMS is configured to write to the dedicated `cms-media` branch, **not** to `main`.
+The Asset Library manages media under `img/gallery/`. The 36 migrated original files remain at their old paths outside this managed folder; their image previews are available from their Gallery entries. New and replacement uploads appear in the Asset Library.
 
-1. Save content and media changes in Sveltia. They are committed to `cms-media`.
-2. Open GitHub and create a pull request from `cms-media` into `main`.
-3. Review every JSON change and every new or replaced image. Check the category, alt text, caption, status, image path and file size.
-4. Keep new entries as Draft until the owner has reviewed them. Set a record to Live only when it is ready to appear on the public site after merge.
-5. Wait for the existing repository checks to pass. Resolve any failed checks before merging.
-6. Merge the PR only after owner approval. Prefer a merge commit so the CMS branch remains an ancestor of main; do not merge this CMS branch directly to production without review.
-7. Use the existing cPanel deployment-package and staging procedure for a production release. A GitHub merge or CMS save does not itself upload files to cPanel.
+**Do not rename or delete an asset that is referenced by a gallery entry.** Replace it through the Image file field instead. Keep an entry Hidden rather than deleting its media.
 
-The CMS does not automatically deploy the website and does not send changes directly to the live server.
+## Image handling
 
-## Replace and remove media safely
+Sveltia's current configuration provides browser-side raster processing:
 
-The Asset Library can manage files stored under `img/gallery/`. Use it to upload new assets or replace an asset that is already stored in that managed folder.
+- Maximum source upload: 15 MiB.
+- New/replacement raster images are converted to WebP where browser encoding is available.
+- Maximum dimensions: 1600 × 1600 pixels, without upscaling.
+- Quality target: 84.
+- Raster EXIF metadata, including GPS metadata, is removed.
 
-Before replacing an asset, inspect all references and the public result. A file may be used by more than one page or content record. Do not delete a file merely because one gallery entry is hidden or removed. Prefer setting an entry to **Hidden**, which preserves the record and its asset while removing it from the public gallery after the reviewed change is merged.
+Use JPG/JPEG, PNG or WebP photographs. Avoid animated images and SVGs for this Gallery workflow. Inspect the result at full size before submitting, especially fine sandstone details and low-light room photographs.
 
-The Asset Library can rename or delete assets; those operations can affect references. Treat rename/delete as a code change and review the complete Git diff before merging.
+The repository's responsive-image pipeline automatically discovers image paths from all Gallery JSON records. Responsive derivatives and original fallbacks are validated by the existing image and deployment-package checks.
 
-## Rollback
+## Review and publish — no direct production edits
 
-For a bad gallery update, revert the relevant merged pull request or restore the previous JSON/image file from Git history in a new pull request. Do not edit production files directly in cPanel as the normal rollback path. Preserve the current server backup and follow the existing cPanel deployment guide.
+Sveltia writes to the dedicated `cms-media` branch, not `main`.
 
-## What is not included yet
+1. Save your changes in Sveltia. The CMS commits them to `cms-media`.
+2. Open the [CMS changes comparison](https://github.com/tchouhanjsm/garh-jaisal-website/compare/main...cms-media?expand=1).
+3. Create a pull request from `cms-media` into `main`.
+4. Review every changed JSON record and uploaded image. Check category, order, status, image path, alt text, file size and the complete file diff.
+5. Wait for all repository checks to pass: PHP Site Checks, gallery contracts, responsive-image validation, Browser E2E, staging QA and cPanel package preflight. Fix failures before merging.
+6. Merge only after owner approval. Do not merge directly from the CMS branch without pull-request checks.
+7. After the merge, the **Sveltia CMS branch sync** workflow merges the new `main` baseline into `cms-media`. Wait for that workflow to pass before the next CMS editing session. It never force-pushes; a conflict fails safely and must be resolved before further editing.
+8. Use the existing cPanel deployment-package and staging procedure for a production release.
 
-- Migration of the 36 hard-coded curated photographs into Sveltia.
-- Owner-managed editing of Home hero images, individual room-page images, dining-page images or experience-page assets.
-- Automatic pull-request creation from the CMS branch.
-- OAuth sign-in for non-technical staff. The first setup is owner-only token authentication.
-- A visual crop editor or automatic multiple responsive derivatives generated by Sveltia.
+A CMS save, GitHub merge or branch-sync run does **not** upload files to cPanel. Production deployment remains a manual owner-controlled release.
 
-These are separate milestones. Keep the public PHP renderer, URL structure, booking journeys and business facts unchanged while this gallery workflow is proven.
+## Rollback and recovery
+
+For a bad published change, revert the relevant pull request or restore the previous JSON/image from Git history in a new pull request. Do not edit production files directly in cPanel as the normal rollback path.
+
+If branch synchronisation fails, do not continue editing on a stale branch. Open the workflow run, resolve any merge conflict on `cms-media` with the repository's latest `main` baseline, and rerun the sync. Never force-push the CMS branch over owner changes.
+
+## Current boundaries
+
+- This collection manages the public Gallery page. It does not yet manage Home hero, individual room-page, dining-page or experience-page image slots.
+- The 36 migrated entries preserve their original source paths until each owner replaces the image.
+- Staff OAuth onboarding and automatic pull-request creation are not included. The owner creates the review PR using the compare link.
+- Crop changes the Gallery display treatment; it does not edit image pixels.
+- No CMS workflow deploys to production.

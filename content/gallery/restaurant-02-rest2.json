@@ -1,0 +1,11 @@
+{
+  "id": "restaurant-02-rest2",
+  "category": "restaurant",
+  "status": "live",
+  "order": 2,
+  "image": {
+    "src": "img/rest2.jpg",
+    "alt": "Dining space at Garh Jaisal Haveli",
+    "crop": "landscape"
+  }
+}

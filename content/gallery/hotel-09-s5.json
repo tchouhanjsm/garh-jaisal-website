@@ -1,0 +1,11 @@
+{
+  "id": "hotel-09-s5",
+  "category": "hotel",
+  "status": "live",
+  "order": 9,
+  "image": {
+    "src": "img/s5.jpg",
+    "alt": "Heritage interior at Garh Jaisal Haveli",
+    "crop": "standard"
+  }
+}

@@ -56,6 +56,14 @@ foreach ([
         'quality: 84',
         'width: 1600',
         'height: 1600',
+        'name: order',
+        'widget: number',
+        'value_type: int',
+        'default: 100',
+        'min: 1',
+        'widget: hidden',
+        'name: review_status',
+        'name: caption',
         'folder: /content/gallery',
         'format: json',
         'identifier_field: id',
@@ -82,6 +90,21 @@ foreach ([
     }
 }
 
+$expectedMediaConfig = "media_libraries:\n  default:\n    config:\n      max_file_size: 15728640";
+if (strpos($config, $expectedMediaConfig) === false) {
+    $errors[] = 'Sveltia internal media settings must be nested under media_libraries.default.config.';
+}
+if (preg_match('/media_libraries:\s*\n\s+all:/', $config)) {
+    $errors[] = 'Unsupported media_libraries.all configuration must not be used.';
+}
+if (strpos($config, 'filename_template:') !== false) {
+    $errors[] = 'Do not rely on an undocumented filename_template option.';
+}
+if (strpos($config, 'slugify_filename: true') === false
+    || strpos($config, "transformations:\n        raster_image:") === false) {
+    $errors[] = 'Sveltia media upload configuration must include filename slugification and raster transformation.';
+}
+
 if (preg_match('/(?:ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|client_secret\s*:)/i', $config)) {
     $errors[] = 'CMS configuration appears to contain a credential or client secret.';
 }
@@ -91,7 +114,7 @@ if (preg_match('/branch:\s*main\b/i', $config)) {
 if (strpos($config, 'delete: false') === false) {
     $errors[] = 'Gallery entry deletion must remain disabled in the CMS collection.';
 }
-if (strpos($galleryLoader, "'/content/gallery") === false) {
+if (strpos($galleryLoader, "'/content/gallery") === false || strpos($galleryLoader, "'order'") === false) {
     // The PHP loader resolves the JSON overlay relative to the repository root.
     $errors[] = 'PHP gallery loader no longer references the managed content/gallery overlay.';
 }

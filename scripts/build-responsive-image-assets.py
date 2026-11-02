@@ -16,6 +16,11 @@ from typing import Any
 
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
+try:
+    from scripts.gallery_media import gallery_record_image_sources
+except ImportError:
+    from gallery_media import gallery_record_image_sources
+
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "scripts" / "responsive-image-assets-manifest.json"
 OUTPUT_ROOT = ROOT / "img" / "responsive"
@@ -83,6 +88,13 @@ def load_manifest() -> dict[str, Any]:
         raise ValueError("sources must be a non-empty list")
     if len(sources) != len(set(sources)):
         raise ValueError("sources must not contain duplicates")
+
+    # Gallery JSON is the source of truth for CMS-managed media added after
+    # the static image manifest was curated. Include all publication states.
+    for gallery_source in gallery_record_image_sources(ROOT):
+        if gallery_source not in sources:
+            sources.append(gallery_source)
+    manifest["sources"] = sources
 
     source_target_widths = manifest.get("source_target_widths", {})
     if not isinstance(source_target_widths, dict):

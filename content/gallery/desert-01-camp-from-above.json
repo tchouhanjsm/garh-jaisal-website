@@ -1,0 +1,11 @@
+{
+  "id": "desert-01-camp-from-above",
+  "category": "desert",
+  "status": "live",
+  "order": 1,
+  "image": {
+    "src": "img/Desert_Camp/camp_from_above.jpeg",
+    "alt": "Desert camp viewed from above near Jaisalmer",
+    "crop": "landscape"
+  }
+}

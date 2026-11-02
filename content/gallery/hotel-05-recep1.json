@@ -1,0 +1,11 @@
+{
+  "id": "hotel-05-recep1",
+  "category": "hotel",
+  "status": "live",
+  "order": 5,
+  "image": {
+    "src": "img/recep1.jpg",
+    "alt": "Reception area at Garh Jaisal Haveli",
+    "crop": "standard"
+  }
+}

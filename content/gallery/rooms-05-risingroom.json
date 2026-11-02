@@ -1,0 +1,11 @@
+{
+  "id": "rooms-05-risingroom",
+  "category": "rooms",
+  "status": "live",
+  "order": 5,
+  "image": {
+    "src": "img/risingroom.jpg",
+    "alt": "Rising Sun Room at Garh Jaisal Haveli",
+    "crop": "arch"
+  }
+}
