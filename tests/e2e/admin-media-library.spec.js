@@ -34,9 +34,12 @@ test('authenticated owner can inspect the read-only Media Library on desktop and
     await expect(page.getByRole('link', { name: 'Open Sveltia CMS' })).toHaveAttribute('href', '/admin/');
     await expect(page.locator('[data-media-card]')).not.toHaveCount(0);
 
-    const jsonResponse = await page.request.get('/admin/media-library.php?format=json');
-    expect(jsonResponse.status()).toBe(200);
-    const report = await jsonResponse.json();
+    const jsonResponse = await page.evaluate(async () => {
+      const response = await fetch('/admin/media-library.php?format=json', { credentials: 'same-origin' });
+      return { status: response.status, report: await response.json() };
+    });
+    expect(jsonResponse.status).toBe(200);
+    const report = jsonResponse.report;
     expect(report.summary.total_assets).toBeGreaterThan(0);
     expect(report.summary.source_files_scanned).toBeGreaterThan(0);
     expect(typeof report.summary.source_scan_complete).toBe('boolean');
@@ -81,11 +84,13 @@ test('incorrect owner credentials cannot access Media Library HTML or JSON', asy
     expect(htmlResponse.headers()['www-authenticate']).toContain('Basic');
     expect(await page.locator('body').innerText()).not.toContain('Media library intelligence');
 
-    const jsonResponse = await page.request.get('/admin/media-library.php?format=json');
-    expect(jsonResponse.status()).toBe(401);
-    const body = await jsonResponse.text();
-    expect(body).not.toContain('"assets"');
-    expect(body).not.toContain('"total_assets"');
+    const jsonResponse = await page.evaluate(async () => {
+      const response = await fetch('/admin/media-library.php?format=json', { credentials: 'same-origin' });
+      return { status: response.status, body: await response.text() };
+    });
+    expect(jsonResponse.status).toBe(401);
+    expect(jsonResponse.body).not.toContain('"assets"');
+    expect(jsonResponse.body).not.toContain('"total_assets"');
   } finally {
     await context.close();
   }
