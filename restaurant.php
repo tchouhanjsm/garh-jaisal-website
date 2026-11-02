@@ -1,6 +1,8 @@
 <?php
 $activePage = 'dining';
 $siteConfig = require __DIR__ . '/include/site-config.php';
+$siteMediaSlots = require __DIR__ . '/include/site-media-slots.php';
+$diningHero = gj_site_media_slot($siteMediaSlots, 'dining-hero', ['src' => 'img/rest2.jpg', 'alt' => "Rooftop dining area at Garh Jaisal's Kitchen in Jaisalmer"]);
 require_once __DIR__ . '/include/schema.php';
 $siteUrl = rtrim((string) ($siteConfig['site_url'] ?? ''), '/');
 $hotelPhoneSchema = gj_schema_hotel($siteUrl, $siteConfig)['telephone'];
@@ -223,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $pageUrl = $siteUrl . '/restaurant.php';
-$heroImage = $siteUrl . '/img/rest2.jpg';
+$heroImage = $siteUrl . '/' . ltrim($diningHero['src'], '/');
 
 $schema = [
     '@context' => 'https://schema.org',
@@ -320,11 +322,11 @@ $page = [
     'og_type' => 'website',
     'og_title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
     'og_description' => "Enjoy rooftop dining at " . $restaurant['name'] . " inside Jaisalmer Fort. Enquire about a table and confirm current hours, menu and prices.",
-    'og_image' => '/img/rest2.jpg',
-    'og_image_alt' => 'Dining space at Garh Jaisal Haveli',
+    'og_image' => '/' . ltrim($diningHero['src'], '/'),
+    'og_image_alt' => $diningHero['alt'],
     'twitter_title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
     'twitter_description' => "Enjoy rooftop dining at " . $restaurant['name'] . " inside Jaisalmer Fort. Enquire about a table and confirm current hours, menu and prices.",
-    'twitter_image' => '/img/rest2.jpg',
+    'twitter_image' => '/' . ltrim($diningHero['src'], '/'),
     'css' => ['css/restaurant.css', 'css/map-preview.css'],
     'schema' => array_values(array_filter(
         $schema['@graph'],
@@ -355,9 +357,9 @@ require __DIR__ . '/include/page-head.php';
 
       <div class="restaurant-hero-media">
         <img
-          src="img/rest2.jpg"
-          <?= gj_image_dimension_attributes('img/rest2.jpg', '(max-width: 760px) 100vw, 45vw') ?>
-          alt="Rooftop dining area at Garh Jaisal's Kitchen in Jaisalmer"
+          src="<?= e($diningHero['src']) ?>"
+          <?= gj_image_dimension_attributes($diningHero['src'], '(max-width: 760px) 100vw, 45vw') ?>
+          alt="<?= e($diningHero['alt']) ?>"
           fetchpriority="high"
         >
       </div>

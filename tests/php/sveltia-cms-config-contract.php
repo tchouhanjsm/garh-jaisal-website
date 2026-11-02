@@ -9,10 +9,19 @@ $errors = [];
 
 $requiredFiles = [
     'admin/index.html',
+    'admin/media-library.php',
     'admin/config.yml',
     'admin/.htaccess',
     'docs/SVELTIA-CMS-OWNER-GUIDE.md',
     'include/gallery-data.php',
+    'include/media-library-audit.php',
+    'include/site-media-slots.php',
+    'content/page-media/home.json',
+    'content/page-media/rooms.json',
+    'content/page-media/dining.json',
+    'content/page-media/experiences.json',
+    'tests/php/site-media-slots-contract.php',
+    'tests/php/media-library-audit.php',
     'scripts/build_deploy_package.py',
 ];
 foreach ($requiredFiles as $relative) {
@@ -34,6 +43,9 @@ $read = static function ($relative) use ($root, &$errors) {
 };
 
 $html = $read('admin/index.html');
+$mediaLibrary = $read('admin/media-library.php');
+$mediaAudit = $read('include/media-library-audit.php');
+$siteMediaLoader = $read('include/site-media-slots.php');
 $config = $read('admin/config.yml');
 $headers = $read('admin/.htaccess');
 $galleryLoader = $read('include/gallery-data.php');
@@ -49,6 +61,7 @@ foreach ([
         'name: github',
         'repo: tchouhanjsm/garh-jaisal-website',
         'branch: cms-media',
+        'auth_methods: [token]',
         'media_folder: /img/gallery',
         'public_folder: img/gallery',
         'max_file_size: 15728640',
@@ -107,6 +120,41 @@ if (strpos($config, 'slugify_filename: true') === false
 
 if (preg_match('/(?:ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|client_secret\s*:)/i', $config)) {
     $errors[] = 'CMS configuration appears to contain a credential or client secret.';
+}
+if (strpos($mediaLibrary, 'Media library intelligence') === false
+    || stripos($mediaLibrary, 'never delete from this report alone') === false) {
+    $errors[] = 'Read-only media library dashboard must explain usage limitations and must not expose mutation actions.';
+}
+if (strpos($siteMediaLoader, 'getimagesize') === false
+    || strpos($siteMediaLoader, 'realpath') === false
+    || strpos($siteMediaLoader, 'is_link') === false
+    || strpos($siteMediaLoader, 'gj_site_media_slot') === false) {
+    $errors[] = 'Page media slot loader must validate decodable images beneath img/ and retain safe fallbacks.';
+}
+if (strpos($config, 'name: page_media_slots') === false
+    || strpos($config, 'file: content/page-media/home.json') === false
+    || strpos($config, 'file: content/page-media/rooms.json') === false
+    || strpos($config, 'file: content/page-media/dining.json') === false
+    || strpos($config, 'file: content/page-media/experiences.json') === false) {
+    $errors[] = 'Sveltia must expose the four fixed Page image slot files.';
+}
+if (strpos($read('content/.htaccess'), 'Require all denied') === false) {
+    $errors[] = 'CMS content JSON must remain blocked from direct public access.';
+}
+if (strpos($mediaAudit, 'include/site-config.local.php') === false
+    || strpos($mediaAudit, 'large_file_assets') === false
+    || strpos($mediaAudit, 'oversized_dimension_assets') === false
+    || strpos($mediaAudit, 'large_dimension_threshold_px') === false
+    || strpos($mediaLibrary, 'stat-storage') === false
+    || strpos($mediaLibrary, 'optimization-review') === false
+    || strpos($mediaLibrary, 'commits/main/') === false
+    || strpos($mediaLibrary, 'View Git history') === false
+    || strpos($html, 'Owner tools') === false
+    || strpos($mediaAudit, 'no-literal-reference') === false
+    || strpos($mediaAudit, 'sha256') === false
+    || strpos($mediaAudit, 'source_scan_complete') === false
+    || strpos($mediaAudit, "\$assets[\$index]['gallery_entries'] = \$assets[\$sourceIndex]['gallery_entries'];") === false) {
+    $errors[] = 'Media audit must exclude private local configuration and provide conservative usage/duplicate evidence.';
 }
 if (preg_match('/branch:\s*main\b/i', $config)) {
     $errors[] = 'Sveltia must not write directly to main.';

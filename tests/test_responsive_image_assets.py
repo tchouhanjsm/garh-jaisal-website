@@ -9,7 +9,7 @@ import sys
 
 from PIL import Image
 
-from scripts.gallery_media import gallery_record_image_sources
+from scripts.gallery_media import gallery_record_image_sources, site_media_slot_image_sources
 
 SCRIPT_PATH = Path(__file__).resolve().parents[1] / "scripts" / "build-responsive-image-assets.py"
 SPEC = importlib.util.spec_from_file_location("build_responsive_image_assets", SCRIPT_PATH)
@@ -26,6 +26,23 @@ class ResponsiveImageAssetTests(unittest.TestCase):
         gallery_sources = gallery_record_image_sources(assets.ROOT)
         self.assertGreaterEqual(len(gallery_sources), 36)
         self.assertTrue(set(gallery_sources).issubset(set(manifest["sources"])))
+        page_media_sources = site_media_slot_image_sources(assets.ROOT)
+        self.assertEqual(len(page_media_sources), 30)
+        self.assertTrue(set(page_media_sources).issubset(set(manifest["sources"])))
+
+    def test_missing_page_media_directory_is_allowed_for_isolated_unit_fixtures(self):
+        with tempfile.TemporaryDirectory() as directory:
+            self.assertEqual(site_media_slot_image_sources(Path(directory)), [])
+
+    def test_page_media_slot_sources_are_included_in_responsive_manifest(self):
+        manifest = assets.load_manifest()
+        page_media_sources = site_media_slot_image_sources(assets.ROOT)
+        self.assertEqual(len(page_media_sources), 30)
+        self.assertTrue(set(page_media_sources).issubset(set(manifest['sources'])))
+        self.assertIn('img/optimized/v2/facade.webp', page_media_sources)
+        self.assertIn('img/optimized/v2/sitting-room.webp', page_media_sources)
+        self.assertIn('img/rest2.jpg', page_media_sources)
+        self.assertIn('img/desert3.jpg', page_media_sources)
 
     def test_repository_manifest_is_valid_and_has_unique_outputs(self):
         manifest = assets.load_manifest()

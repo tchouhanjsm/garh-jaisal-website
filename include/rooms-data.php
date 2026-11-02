@@ -1,6 +1,6 @@
 <?php
 
-return [
+$rooms = [
     [
         'name' => 'Sweet Purple Room',
         'kicker' => 'Ground floor',
@@ -104,3 +104,21 @@ return [
         ],
     ],
 ];
+
+$rooms = (static function ($roomRecords) {
+    // The rooms include can run inside pages that already use $room/$roomSlug.
+    $pageMediaSlots = require __DIR__ . '/site-media-slots.php';
+    foreach ($roomRecords as &$pageMediaRoom) {
+        $pageMediaRoomSlug = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '-', $pageMediaRoom['name']), '-'));
+        $pageMediaImage = gj_site_media_slot($pageMediaSlots, 'room-' . $pageMediaRoomSlug . '-primary', [
+            'src' => $pageMediaRoom['image'],
+            'alt' => $pageMediaRoom['alt'],
+        ]);
+        $pageMediaRoom['image'] = $pageMediaImage['src'];
+        $pageMediaRoom['alt'] = $pageMediaImage['alt'];
+    }
+    unset($pageMediaRoom, $pageMediaRoomSlug, $pageMediaImage, $pageMediaSlots);
+    return $roomRecords;
+})($rooms);
+
+return $rooms;

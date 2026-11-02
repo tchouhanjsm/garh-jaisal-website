@@ -6,8 +6,22 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Garh Jaisal Haveli · Media Manager</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .owner-tools-nav { min-height: 42px; display: flex; align-items: center; justify-content: flex-end; gap: 18px; padding: 8px clamp(14px, 3vw, 32px); background: #24211d; color: #fff; font: 12px/1.4 system-ui, sans-serif; }
+    .owner-tools-nav strong { margin-right: auto; letter-spacing: .08em; text-transform: uppercase; font-size: 10px; }
+    .owner-tools-nav a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+    .owner-tools-nav a:focus-visible { outline: 2px solid #e9c58a; outline-offset: 3px; }
+    @media (max-width: 480px) { .owner-tools-nav { gap: 12px; flex-wrap: wrap; justify-content: flex-start; } }
+  </style>
 </head>
 <body>
+  <nav class="owner-tools-nav" aria-label="Owner tools">
+    <strong>Garh Jaisal owner tools</strong>
+    <a href="/admin/media-library.php">Media library intelligence</a>
+    <a href="/gallery.php">Public gallery</a>
+  </nav>
   <noscript>This media manager requires JavaScript to run.</noscript>
   <script src="https://unpkg.com/@sveltia/cms@0.256.1/dist/sveltia-cms.js"></script>
 </body>

@@ -1,0 +1,34 @@
+{
+  "rooms-hero": {
+    "src": "img/optimized/v2/sitting-room.webp",
+    "alt": "Sitting room with carved wood at Garh Jaisal Haveli"
+  },
+  "room-sweet-purple-room-primary": {
+    "src": "img/v2/purple-room.jpg",
+    "alt": "Sweet Purple Room at Garh Jaisal Haveli, with a carved bed and magenta curtains"
+  },
+  "room-rising-sun-room-primary": {
+    "src": "img/sun2.jpg",
+    "alt": "Rising Sun Room at Garh Jaisal Haveli"
+  },
+  "room-scarlet-room-primary": {
+    "src": "img/scarlet.jpg",
+    "alt": "Scarlet Room at Garh Jaisal Haveli"
+  },
+  "room-opium-room-primary": {
+    "src": "img/opium-room.jpg",
+    "alt": "Opium Room at Garh Jaisal Haveli"
+  },
+  "room-red-maharani-room-primary": {
+    "src": "img/maharaniroom.jpg",
+    "alt": "Red Maharani Room at Garh Jaisal Haveli"
+  },
+  "room-green-room-primary": {
+    "src": "img/v2/green-room.jpg",
+    "alt": "Green Room at Garh Jaisal Haveli, with a window seat and green bedding"
+  },
+  "room-bluesky-room-primary": {
+    "src": "img/rr3.jpg",
+    "alt": "BlueSky Room at Garh Jaisal Haveli"
+  }
+}
