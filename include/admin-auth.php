@@ -20,8 +20,14 @@ if (!function_exists('gj_media_admin_request_is_https')) {
     function gj_media_admin_request_is_https($server = null)
     {
         $server = is_array($server) ? $server : $_SERVER;
-        if ((isset($server['HTTPS']) && strtolower((string) $server['HTTPS']) !== 'off' && (string) $server['HTTPS'] !== '')
-            || (isset($server['SERVER_PORT']) && (string) $server['SERVER_PORT'] === '443')) return true;
+        // An explicit HTTPS=off must win over a conflicting port value.
+        if (array_key_exists('HTTPS', $server)) {
+            $https = strtolower(trim((string) $server['HTTPS']));
+            return !in_array($https, ['', 'off', '0', 'false'], true);
+        }
+        if (isset($server['SERVER_PORT']) && (string) $server['SERVER_PORT'] === '443') return true;
+
+        // Permit loopback-only development requests. This cannot match a remote client.
         $remote = $server['REMOTE_ADDR'] ?? '';
         $host = strtolower((string) ($server['HTTP_HOST'] ?? $server['SERVER_NAME'] ?? ''));
         $host = preg_replace('/:\\d+$/', '', $host);
