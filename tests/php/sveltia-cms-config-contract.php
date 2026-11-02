@@ -91,11 +91,9 @@ if (preg_match('/branch:\s*main\b/i', $config)) {
 if (strpos($config, 'delete: false') === false) {
     $errors[] = 'Gallery entry deletion must remain disabled in the CMS collection.';
 }
-if (strpos($galleryLoader, "'/content/gallery'") === false && strpos($galleryLoader, "'/content/gallery'") === false) {
-    // The PHP loader currently resolves its JSON overlay relative to the repository root.
-    if (strpos($galleryLoader, "'/content/gallery'") === false) {
-        $errors[] = 'PHP gallery loader no longer references the managed content/gallery overlay.';
-    }
+if (strpos($galleryLoader, "'/content/gallery") === false) {
+    // The PHP loader resolves the JSON overlay relative to the repository root.
+    $errors[] = 'PHP gallery loader no longer references the managed content/gallery overlay.';
 }
 if (
     strpos($packageBuilder, '"admin"') === false
