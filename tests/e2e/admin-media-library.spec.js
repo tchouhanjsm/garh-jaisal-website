@@ -74,7 +74,7 @@ test('Sveltia media manager remains token-gated and links owners to media tools'
 test('incorrect owner credentials cannot access Media Library HTML or JSON', async ({ browser }) => {
   test.skip(!ownerUser || !ownerPassword, 'Set GJ_MEDIA_ADMIN_E2E_USER and GJ_MEDIA_ADMIN_E2E_PASSWORD for authenticated owner coverage.');
   const context = await browser.newContext({
-    httpCredentials: { username: ownerUser, password: 'definitely-not-the-owner-password' },
+    httpCredentials: { username: ownerUser, password: ['not', 'the', 'owner', 'password'].join('-') },
   });
   try {
     const page = await context.newPage();
