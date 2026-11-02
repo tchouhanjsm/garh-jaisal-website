@@ -57,6 +57,7 @@ foreach ($recordFiles as $recordFile) {
     $image = $record['image'] ?? null;
     $src = is_array($image) && is_string($image['src'] ?? null) ? trim($image['src']) : '';
     $alt = is_array($image) && is_string($image['alt'] ?? null) ? trim($image['alt']) : '';
+    $caption = is_array($image) && is_string($image['caption'] ?? null) ? trim($image['caption']) : '';
     $crop = is_array($image) && is_string($image['crop'] ?? null) ? trim($image['crop']) : '';
     if (
         !is_string($category) || !in_array($category, $expectedCategories, true)
@@ -107,6 +108,8 @@ foreach ($recordFiles as $recordFile) {
         'status' => $status,
         'order' => $order,
         'src' => $src,
+        'alt' => $alt,
+        'expected_caption' => $caption !== '' ? $caption : $alt,
     ];
 }
 
@@ -131,13 +134,25 @@ foreach ($expectedCategories as $category) {
         }
     }
     $actualLiveSources = [];
+    $actualLivePhotos = [];
     foreach (($sections[$category]['images'] ?? []) as $photo) {
         if (is_array($photo) && is_string($photo['src'] ?? null)) {
             $actualLiveSources[] = $photo['src'];
+            $actualLivePhotos[$photo['src']] = $photo;
         }
     }
     if ($actualLiveSources !== $expectedLiveSources) {
         $errors[] = $category . ': PHP renderer must publish only live records in numeric order';
+    }
+    foreach ($recordsByCategory[$category] as $record) {
+        if ($record['status'] !== 'live') {
+            continue;
+        }
+        $publishedPhoto = $actualLivePhotos[$record['src']] ?? [];
+        $publishedCaption = is_string($publishedPhoto['caption'] ?? null) ? trim($publishedPhoto['caption']) : '';
+        if ($publishedCaption !== $record['expected_caption']) {
+            $errors[] = $category . ': published caption must use the CMS caption or fall back to alt text for ' . $record['id'];
+        }
     }
     if (count($actualLiveSources) < 1) {
         $errors[] = $category . ': keep at least one live photo in each public gallery category';

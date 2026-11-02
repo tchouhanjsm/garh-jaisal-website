@@ -146,7 +146,10 @@ foreach ($galleryFiles as $galleryFile) {
             'src' => $src,
             'alt' => $alt,
             'crop' => $crop,
-            'caption' => is_string($photo['caption'] ?? null) ? trim($photo['caption']) : '',
+            // A blank CMS caption must retain the legacy alt-text fallback used by carousels.
+            'caption' => is_string($photo['caption'] ?? null) && trim($photo['caption']) !== ''
+                ? trim($photo['caption'])
+                : $alt,
         ],
     ];
 }
