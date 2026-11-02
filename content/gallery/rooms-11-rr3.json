@@ -1,0 +1,11 @@
+{
+  "id": "rooms-11-rr3",
+  "category": "rooms",
+  "status": "live",
+  "order": 11,
+  "image": {
+    "src": "img/rr3.jpg",
+    "alt": "BlueSky Room at Garh Jaisal Haveli",
+    "crop": "arch"
+  }
+}

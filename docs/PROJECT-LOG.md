@@ -321,3 +321,12 @@ A shared guest decision panel is being introduced across Home, Rooms, Dining, Di
 
 - Browser regression follow-up: retained the Rooms editorial stay-guide CTA after removing the duplicate booking CTA band. The section now links to the existing Fort-stay guide, while room cards and the guest decision panel continue to own booking and enquiry actions.
 - Updated homepage storytelling and shared CTA Playwright contracts to assert the consolidated two-column guest decision guide and the editorial Rooms guide link, rather than the superseded three-card/generic-booking markup.
+
+
+## 2 November 2026 — Sveltia Gallery management and release guardrails
+
+- Migrated the 36-photo public Gallery baseline into owner-managed JSON records while retaining each original `img/...` source path and its current public URL.
+- Added explicit per-category numeric display order, Live/Draft/Hidden publication states and managed replacement uploads beneath `img/gallery/`.
+- New replacement uploads use a separate media folder so the owner does not overwrite images reused on Rooms or experience pages.
+- Responsive-image generation and cPanel package fallback validation now discover image sources from all CMS Gallery records, including Draft and Hidden entries.
+- Added lightweight validation for commits to `cms-media` and a no-force branch synchronisation workflow after main updates. CMS changes still require a reviewed PR; production remains a manual cPanel release.

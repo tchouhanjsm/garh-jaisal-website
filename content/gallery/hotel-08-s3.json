@@ -1,0 +1,11 @@
+{
+  "id": "hotel-08-s3",
+  "category": "hotel",
+  "status": "live",
+  "order": 8,
+  "image": {
+    "src": "img/s3.jpg",
+    "alt": "Sandstone details at Garh Jaisal Haveli",
+    "crop": "portrait"
+  }
+}

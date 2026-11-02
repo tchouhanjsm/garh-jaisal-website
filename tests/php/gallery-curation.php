@@ -1,6 +1,6 @@
 <?php
 /**
- * Guard the public Gallery's curated image inventory and progressive-enhancement hooks.
+ * Verify the owner-managed Gallery registry, image ordering and progressive enhancement.
  *
  * Run with: php tests/php/gallery-curation.php
  */
@@ -9,10 +9,11 @@ $registryPath = $root . '/include/gallery-data.php';
 $galleryPath = $root . '/gallery.php';
 $scriptPath = $root . '/js/garh-v2.js';
 $stylePath = $root . '/css/gallery.css';
+$contentRoot = $root . '/content/gallery';
 $errors = [];
 
-if (!is_file($registryPath)) {
-    fwrite(STDERR, "ERROR missing include/gallery-data.php\n");
+if (!is_file($registryPath) || is_link($registryPath)) {
+    fwrite(STDERR, "ERROR missing or unsafe include/gallery-data.php\n");
     exit(1);
 }
 $sections = require $registryPath;
@@ -21,100 +22,122 @@ if (!is_array($sections)) {
     exit(1);
 }
 
-$expectedCounts = [
-    'hotel' => 9,
-    'rooms' => 12,
-    'desert' => 10,
-    'restaurant' => 5,
-];
-if (array_keys($sections) !== array_keys($expectedCounts)) {
+$expectedCategories = ['hotel', 'rooms', 'desert', 'restaurant'];
+if (array_keys($sections) !== $expectedCategories) {
     $errors[] = 'Gallery categories must remain in the approved hotel, rooms, desert, restaurant order';
 }
-
+$allowedStatuses = ['live', 'draft', 'hidden'];
 $allowedCrops = ['arch', 'landscape', 'portrait', 'standard'];
+$recordFiles = is_dir($contentRoot) && !is_link($contentRoot) ? (glob($contentRoot . '/*.json') ?: []) : [];
+sort($recordFiles, SORT_STRING);
+$recordsByCategory = array_fill_keys($expectedCategories, []);
 $allSources = [];
-$total = 0;
-foreach ($expectedCounts as $category => $expectedCount) {
-    if (!isset($sections[$category]) || !is_array($sections[$category])) {
-        $errors[] = 'Gallery category is missing or invalid: ' . $category;
+
+foreach ($recordFiles as $recordFile) {
+    if (is_link($recordFile) || !is_file($recordFile)) {
+        $errors[] = 'Gallery JSON record is missing or unsafe: ' . basename($recordFile);
         continue;
     }
-    $section = $sections[$category];
-    foreach (['eyebrow', 'title', 'description', 'images'] as $requiredKey) {
-        if (!isset($section[$requiredKey])) {
-            $errors[] = $category . ': missing required registry field ' . $requiredKey;
-        }
-    }
-    if (!isset($section['images']) || !is_array($section['images'])) {
-        $errors[] = $category . ': images must be an array';
+    $recordJson = file_get_contents($recordFile);
+    $record = is_string($recordJson) ? json_decode($recordJson, true) : null;
+    $id = basename($recordFile, '.json');
+    if (
+        !is_array($record) || json_last_error() !== JSON_ERROR_NONE
+        || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $id)
+        || ($record['id'] ?? null) !== $id
+    ) {
+        $errors[] = 'Gallery record identity or JSON is invalid: ' . basename($recordFile);
         continue;
     }
-    if (count($section['images']) < $expectedCount) {
-        $errors[] = $category . ': expected at least ' . $expectedCount . ' curated photos, found ' . count($section['images']);
+
+    $category = $record['category'] ?? null;
+    $status = $record['status'] ?? null;
+    $order = $record['order'] ?? null;
+    $image = $record['image'] ?? null;
+    $src = is_array($image) && is_string($image['src'] ?? null) ? trim($image['src']) : '';
+    $alt = is_array($image) && is_string($image['alt'] ?? null) ? trim($image['alt']) : '';
+    $crop = is_array($image) && is_string($image['crop'] ?? null) ? trim($image['crop']) : '';
+    if (
+        !is_string($category) || !in_array($category, $expectedCategories, true)
+        || !is_string($status) || !in_array($status, $allowedStatuses, true)
+        || !is_int($order) || $order < 1
+        || !is_array($image) || $alt === ''
+        || !preg_match('~^img/[A-Za-z0-9._/-]+\.(?:jpe?g|png|webp)$~iD', $src)
+        || strpos($src, '..') !== false || strpos($src, chr(92)) !== false
+        || !in_array($crop, $allowedCrops, true)
+    ) {
+        $errors[] = 'Gallery record fields are invalid: ' . $id;
+        continue;
     }
 
-    foreach ($section['images'] as $index => $photo) {
-        $label = $category . ' photo ' . ($index + 1);
-        if (!is_array($photo)) {
-            $errors[] = $label . ': photo must be an array';
-            continue;
+    $candidate = $root . '/' . $src;
+    $cursor = $root;
+    $unsafePath = false;
+    foreach (explode('/', $src) as $part) {
+        $cursor .= DIRECTORY_SEPARATOR . $part;
+        if (is_link($cursor)) {
+            $unsafePath = true;
+            break;
         }
-        $src = isset($photo['src']) && is_string($photo['src']) ? trim($photo['src']) : '';
-        $alt = isset($photo['alt']) && is_string($photo['alt']) ? trim($photo['alt']) : '';
-        $crop = isset($photo['crop']) && is_string($photo['crop']) ? trim($photo['crop']) : '';
-
-        if (
-            $src === ''
-            || strpos($src, '..') !== false
-            || strpos($src, chr(92)) !== false
-            || !preg_match('~^img/[A-Za-z0-9._/-]+\.(?:avif|jpe?g|png|webp)$~iD', $src)
-        ) {
-            $errors[] = $label . ': invalid local image path';
-            continue;
-        }
-        if (!is_file($root . '/' . $src)) {
-            $errors[] = $label . ': image file is missing: ' . $src;
-        }
-        if ($alt === '') {
-            $errors[] = $label . ': descriptive alt text is required';
-        }
-        if (!in_array($crop, $allowedCrops, true)) {
-            $errors[] = $label . ': unsupported crop treatment ' . $crop;
-        }
-        if (isset($allSources[$src])) {
-            $errors[] = $label . ': duplicate source path ' . $src;
-        }
-        $allSources[$src] = true;
-        $total++;
     }
+    if ($unsafePath) {
+        $errors[] = $id . ': symlink in image path ' . $src;
+        continue;
+    }
+    if (!is_file($candidate) || filesize($candidate) <= 0 || !is_array(@getimagesize($candidate))) {
+        $errors[] = $id . ': image is missing, empty or not decodable: ' . $src;
+        continue;
+    }
+    if (isset($allSources[$src])) {
+        $errors[] = $id . ': duplicate image reference ' . $src;
+        continue;
+    }
+    $allSources[$src] = true;
+    $recordsByCategory[$category][] = [
+        'id' => $id,
+        'status' => $status,
+        'order' => $order,
+        'src' => $src,
+    ];
 }
 
-if ($total < 36) {
-    $errors[] = 'Gallery must retain at least 36 curated photos; found ' . $total;
+if (count($recordFiles) < 36) {
+    $errors[] = 'Gallery should retain the 36 migrated owner-managed records; found ' . count($recordFiles);
 }
 
-$expectedDesertSources = [
-    'img/Desert_Camp/camp_from_above.jpeg',
-    'img/Desert_Camp/camp_evening.jpeg',
-    'img/Desert_Camp/tent_deluxe.jpeg',
-    'img/Desert_Camp/Bathroom.jpeg',
-    'img/Desert_Camp/Prog.jpeg',
-    'img/Desert_Camp/Tent.jpeg',
-    'img/Desert_Camp/Tentout.jpeg',
-    'img/sleeping_under_stars/Tour_1.jpeg',
-    'img/sleeping_under_stars/tour_4.jpeg',
-    'img/sleeping_under_stars/tour_6.jpeg',
-];
-$desertSources = [];
-foreach (($sections['desert']['images'] ?? []) as $photo) {
-    if (is_array($photo) && isset($photo['src']) && is_string($photo['src'])) {
-        $desertSources[] = $photo['src'];
+$totalLive = 0;
+foreach ($expectedCategories as $category) {
+    if (empty($recordsByCategory[$category])) {
+        $errors[] = 'Gallery category has no owner-managed records: ' . $category;
     }
+    usort($recordsByCategory[$category], static function ($left, $right) {
+        $orderCompare = $left['order'] <=> $right['order'];
+        return $orderCompare !== 0 ? $orderCompare : strcmp($left['id'], $right['id']);
+    });
+
+    $expectedLiveSources = [];
+    foreach ($recordsByCategory[$category] as $record) {
+        if ($record['status'] === 'live') {
+            $expectedLiveSources[] = $record['src'];
+        }
+    }
+    $actualLiveSources = [];
+    foreach (($sections[$category]['images'] ?? []) as $photo) {
+        if (is_array($photo) && is_string($photo['src'] ?? null)) {
+            $actualLiveSources[] = $photo['src'];
+        }
+    }
+    if ($actualLiveSources !== $expectedLiveSources) {
+        $errors[] = $category . ': PHP renderer must publish only live records in numeric order';
+    }
+    if (count($actualLiveSources) < 1) {
+        $errors[] = $category . ': keep at least one live photo in each public gallery category';
+    }
+    $totalLive += count($actualLiveSources);
 }
-foreach ($expectedDesertSources as $source) {
-    if (!in_array($source, $desertSources, true)) {
-        $errors[] = 'approved desert selection is missing: ' . $source;
-    }
+
+if ($totalLive < 4) {
+    $errors[] = 'Gallery must publish at least one image in each of its four categories.';
 }
 
 foreach ([
@@ -167,8 +190,8 @@ foreach ($errors as $error) {
     fwrite(STDERR, 'ERROR ' . $error . PHP_EOL);
 }
 if ($errors) {
-    printf("%d Gallery curation error(s) across %d registry photos\n", count($errors), $total);
+    printf("%d Gallery curation error(s) across %d managed records\n", count($errors), count($recordFiles));
     exit(1);
 }
 
-printf("PASS: validated %d Gallery photos across %d ordered categories (36-photo baseline retained)\n", $total, count($expectedCounts));
+printf("PASS: validated %d owner-managed Gallery records; %d live photos across %d ordered categories\n", count($recordFiles), $totalLive, count($expectedCategories));

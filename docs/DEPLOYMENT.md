@@ -35,3 +35,8 @@ Production target: `https://www.hotelgarhjaisal.com`, hosted on cPanel. Reposito
 Keep the pre-release backup and identify the previous package SHA. If a release fails, restore that backup/package and verify routing, assets, contact channels and booking link. A Git revert may be appropriate for code regression; it does not restore server-side configuration by itself.
 
 The owner reviews staging evidence and explicitly authorizes production deployment. A merged PR or green workflow is not deployment approval.
+
+
+## Sveltia Gallery publishing
+
+The Sveltia dashboard at `/admin/` writes Gallery JSON and newly uploaded/replacement media to `cms-media`. The 36 original Gallery image URLs remain unchanged after migration. Responsive-image candidates are discovered from `content/gallery/*.json`, including Draft and Hidden records so their assets are packageable if later published. After a CMS review PR is merged to `main`, the Sveltia branch-sync workflow merges the new main baseline into `cms-media`. Neither workflow uploads to the server; continue using the owner-reviewed cPanel package and manual staging/release process.

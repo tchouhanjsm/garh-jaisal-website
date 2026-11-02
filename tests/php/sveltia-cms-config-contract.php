@@ -56,6 +56,11 @@ foreach ([
         'quality: 84',
         'width: 1600',
         'height: 1600',
+        'name: order',
+        'widget: number',
+        'value_type: int',
+        'default: 100',
+        'min: 1',
         'folder: /content/gallery',
         'format: json',
         'identifier_field: id',
@@ -91,7 +96,7 @@ if (preg_match('/branch:\s*main\b/i', $config)) {
 if (strpos($config, 'delete: false') === false) {
     $errors[] = 'Gallery entry deletion must remain disabled in the CMS collection.';
 }
-if (strpos($galleryLoader, "'/content/gallery") === false) {
+if (strpos($galleryLoader, "'/content/gallery") === false || strpos($galleryLoader, "'order'") === false) {
     // The PHP loader resolves the JSON overlay relative to the repository root.
     $errors[] = 'PHP gallery loader no longer references the managed content/gallery overlay.';
 }

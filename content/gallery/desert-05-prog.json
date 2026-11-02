@@ -1,0 +1,11 @@
+{
+  "id": "desert-05-prog",
+  "category": "desert",
+  "status": "live",
+  "order": 5,
+  "image": {
+    "src": "img/Desert_Camp/Prog.jpeg",
+    "alt": "Musicians performing at an evening programme in the desert camp",
+    "crop": "portrait"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "rooms-04-purple-room",
+  "category": "rooms",
+  "status": "live",
+  "order": 4,
+  "image": {
+    "src": "img/purple-room.jpg",
+    "alt": "Sweet Purple Room at Garh Jaisal Haveli",
+    "crop": "arch"
+  }
+}

@@ -1,16 +1,17 @@
 # Owner-managed visual gallery CMS.
-# The branch is intentionally writable; main remains the reviewed release branch.
+# This branch is writable for Sveltia's Simple Workflow and Asset Library commits.
+# Main remains the reviewed release branch; never point the CMS backend at main.
 backend:
   name: github
   repo: tchouhanjsm/garh-jaisal-website
   branch: cms-media
 
-# Sveltia writes repository media here and stores this relative public path in JSON.
+# New and replacement Gallery uploads are isolated from images reused elsewhere.
 media_folder: /img/gallery
 public_folder: img/gallery
 
-# Keep originals out of Git where practical: uploads are transformed in the browser.
-# max_file_size limits the input upload; transformations resize and encode raster photos.
+# Shared options supported by Sveltia's internal Git media storage.
+# Browser-side raster optimisation runs before uploads are committed.
 media_libraries:
   all:
     max_file_size: 15728640
@@ -41,7 +42,7 @@ collections:
         label: Photo ID
         widget: string
         required: true
-        hint: Use lowercase letters, numbers and hyphens. This ID becomes the JSON filename.
+        hint: Use lowercase letters, numbers and hyphens only. Keep the ID stable after creation.
         pattern:
           - '^[a-z0-9]+(?:-[a-z0-9]+)*$'
           - Use lowercase letters, numbers and hyphens only.
@@ -67,10 +68,18 @@ collections:
         options:
           - label: Draft — not shown publicly
             value: draft
-          - label: Live — shown after the PR is merged
+          - label: Live — shown after review and deployment
             value: live
           - label: Hidden — retained but not shown publicly
             value: hidden
+      - name: order
+        label: Display order
+        widget: number
+        value_type: int
+        required: true
+        default: 100
+        min: 1
+        hint: Lower numbers appear first within a category. Choose a unique number in that category.
       - name: image
         label: Photo
         widget: object
@@ -79,15 +88,12 @@ collections:
             label: Image file
             widget: image
             required: true
+            hint: Existing photos retain their current site path. New uploads and replacements are stored under img/gallery/.
           - name: alt
             label: Accessible description (alt text)
             widget: string
             required: true
-            hint: Describe what is visible in the photograph; do not use keyword lists.
-          - name: caption
-            label: Caption
-            widget: text
-            required: false
+            hint: Describe what is visible. Do not use keyword lists.
           - name: crop
             label: Display shape
             widget: select

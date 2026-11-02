@@ -1,0 +1,11 @@
+{
+  "id": "desert-08-tour-1",
+  "category": "desert",
+  "status": "live",
+  "order": 8,
+  "image": {
+    "src": "img/sleeping_under_stars/Tour_1.jpeg",
+    "alt": "Mattress and bedding set out in the desert beside a small tent",
+    "crop": "landscape"
+  }
+}

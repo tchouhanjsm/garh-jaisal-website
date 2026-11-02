@@ -1,0 +1,11 @@
+{
+  "id": "rooms-09-green-room",
+  "category": "rooms",
+  "status": "live",
+  "order": 9,
+  "image": {
+    "src": "img/green-room.jpg",
+    "alt": "Green Room at Garh Jaisal Haveli",
+    "crop": "arch"
+  }
+}

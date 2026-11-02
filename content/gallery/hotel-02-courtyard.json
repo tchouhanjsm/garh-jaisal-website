@@ -1,0 +1,11 @@
+{
+  "id": "hotel-02-courtyard",
+  "category": "hotel",
+  "status": "live",
+  "order": 2,
+  "image": {
+    "src": "img/v2/courtyard.jpg",
+    "alt": "Courtyard balconies inside Garh Jaisal Haveli",
+    "crop": "arch"
+  }
+}

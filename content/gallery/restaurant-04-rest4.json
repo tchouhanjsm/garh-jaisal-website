@@ -1,0 +1,11 @@
+{
+  "id": "restaurant-04-rest4",
+  "category": "restaurant",
+  "status": "live",
+  "order": 4,
+  "image": {
+    "src": "img/rest4.jpg",
+    "alt": "Restaurant view at Garh Jaisal Haveli",
+    "crop": "landscape"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "hotel-06-s1",
+  "category": "hotel",
+  "status": "live",
+  "order": 6,
+  "image": {
+    "src": "img/s1.jpg",
+    "alt": "Interior of Garh Jaisal Haveli",
+    "crop": "standard"
+  }
+}

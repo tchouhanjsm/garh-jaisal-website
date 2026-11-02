@@ -1,0 +1,11 @@
+{
+  "id": "rooms-12-rr2",
+  "category": "rooms",
+  "status": "live",
+  "order": 12,
+  "image": {
+    "src": "img/rr2.jpg",
+    "alt": "BlueSky Room interior",
+    "crop": "portrait"
+  }
+}
