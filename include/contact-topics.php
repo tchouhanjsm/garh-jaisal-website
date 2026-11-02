@@ -1,6 +1,10 @@
 <?php
 /** Shared, allowlisted topic records for public enquiry context resolution. */
 return [
+    'stay' => [
+        'label' => 'Room details and booking terms',
+        'message' => 'Hello, I am considering a stay at Garh Jaisal Haveli. My travel dates are: [add dates]. Room I am considering: [add room name]. Please confirm the maximum occupancy, bed configuration, room dimensions, bathroom and access details for this room. Please also confirm the current check-in/check-out times, cancellation policy, early-arrival access or luggage-storage options, and the current rate and availability for my dates.',
+    ],
     'arrival' => [
         'label' => 'Arrival arrangements',
         'message' => 'Hello, I would like to confirm arrival arrangements for my stay. My check-in date is: [add date]. My expected arrival time is: [add time]. Please confirm current reception hours, the route from Fort Parking, and whether meet-and-assist or luggage help can be arranged for that date and time. Please confirm the official check-in/check-out times and any instructions for arrivals outside reception hours.',

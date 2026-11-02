@@ -176,6 +176,17 @@ require __DIR__ . '/include/page-head.php';
         </article>
       </div>
 
+      <?php
+      $guestDecisionContext = 'arrival';
+      $guestDecisionPrimaryHref = 'contact.php?topic=arrival';
+      $guestDecisionPrimaryLabel = 'Confirm arrival arrangements';
+      $guestDecisionSecondaryHref = $whatsappUrl;
+      $guestDecisionSecondaryLabel = 'WhatsApp the hotel';
+      $guestDecisionSecondaryExternal = true;
+      require __DIR__ . '/include/ui/guest-decision-panel.php';
+      unset($guestDecisionContext, $guestDecisionPrimaryHref, $guestDecisionPrimaryLabel, $guestDecisionSecondaryHref, $guestDecisionSecondaryLabel, $guestDecisionSecondaryExternal);
+      ?>
+
       <aside class="arrival-driver-card" aria-labelledby="arrival-driver-title">
         <div class="arrival-driver-card__copy">
           <p class="eyebrow">For your driver</p>

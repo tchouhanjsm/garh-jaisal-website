@@ -70,3 +70,16 @@ These are candidates for review, not a promise that Garh Jaisal Haveli currently
 - Table requests produce a reference and remain unconfirmed until the hotel replies. Supply real restaurant hours, closed days, last seating, same-day cut-off and online party-size policy before configuring those constraints.
 - Confirm the public menu before enabling `include/menu-data.php` price display.
 - Approve the privacy/controller wording, the lead log operator, backup/retention requirements, and a staging mail test before production use.
+
+
+## Guest-facing decision content — 2 November 2026
+
+The shared public wording is maintained in `include/guest-decision-content.php` and rendered through `include/ui/guest-decision-panel.php`.
+
+- **Published on this site** means the information is already represented in the current public route or a maintained data registry. It is not a substitute for checking that the underlying fact remains current.
+- **Confirm with the hotel** means the site intentionally does not publish a fixed value or service promise. Do not change this status or add a public value until the owner confirms the exact wording and operating details.
+- Room dimensions, maximum occupancy, bed configuration where not stated, room-specific access details, check-in/check-out, cancellation terms, current dining hours/menu/prices, dietary arrangements, transfer quotes, reception hours and luggage assistance must remain in the confirmation group until approved.
+- The `stay` Contact topic creates a structured question for room suitability and booking terms. It does not change rates, reserve a room or imply policy approval.
+- Keep `include/menu-data.php` owner confirmation disabled until the current dishes, descriptions, dietary classifications and prices have been reviewed together.
+
+When approving a fact, update the answer here first, then update the matching guest decision record and the source page/data registry in the same change. Record the date of approval. Do not infer that a blank answer is a negative or a service that is not offered.

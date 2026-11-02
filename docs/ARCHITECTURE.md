@@ -36,3 +36,13 @@ Plain PHP on cPanel/shared hosting. There is no frontend build step. JavaScript 
 ## Safety and release authority
 
 Never include server-local secrets, passwords, guest PII, workstation paths or cPanel credentials in Git. Tests must not submit a real enquiry or trigger production mail. GitHub workflows validate and produce artifacts; they do not upload to cPanel. The owner approves merge, real staging actions and production releases.
+
+
+## Guest decision content
+
+- `include/guest-decision-content.php` is the shared guest-facing registry for information already shown on the site and details that must be confirmed for a guest's dates.
+- `include/ui/guest-decision-panel.php` renders that registry on Home, Rooms, Dining, Directions and Contact. It escapes every rendered value and uses page-provided allowlisted destinations.
+- The registry's `shown` group is a pointer to existing page/data content, not a new source of truth for room inventory or operating facts. The room, menu, experience and site configuration registries remain authoritative for their respective data.
+- Keep date-dependent or owner-unconfirmed facts in `confirm`. Do not add speculative prices, schedules, occupancy, policies, review quotes, transfer fares or assistance promises to the public-facing `shown` group.
+- Contact uses the allowlisted `stay` topic for room suitability, check-in/check-out and cancellation questions. It remains an enquiry only; it does not reserve a room or approve a policy.
+- The shared panel styles belong to `css/conversion-system.css`; do not create a second global visual layer for the component.

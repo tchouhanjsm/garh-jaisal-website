@@ -578,6 +578,12 @@ require __DIR__ . '/include/page-head.php';
   </div>
 </section>
 
+<?php
+$guestDecisionContext = 'home';
+require __DIR__ . '/include/ui/guest-decision-panel.php';
+unset($guestDecisionContext);
+?>
+
 <section class="section conversion-faq" aria-labelledby="conversion-faq-title">
   <div class="site-shell">
     <div class="section-head"><div><p class="eyebrow">Before you decide</p><h2 id="conversion-faq-title">A few useful things to know.</h2></div><p>We would rather help you arrive prepared than leave you guessing about practical details.</p></div>

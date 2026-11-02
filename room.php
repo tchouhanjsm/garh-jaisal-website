@@ -455,6 +455,17 @@ require __DIR__ . '/include/page-head.php';
 
 
 
+  <?php
+  $guestDecisionContext = 'stay';
+  $guestDecisionPrimaryHref = 'contact.php?topic=stay';
+  $guestDecisionPrimaryLabel = 'Ask about room details';
+  $guestDecisionSecondaryHref = $bookingUrl;
+  $guestDecisionSecondaryLabel = 'Check live rates';
+  $guestDecisionSecondaryExternal = true;
+  require __DIR__ . '/include/ui/guest-decision-panel.php';
+  unset($guestDecisionContext, $guestDecisionPrimaryHref, $guestDecisionPrimaryLabel, $guestDecisionSecondaryHref, $guestDecisionSecondaryLabel, $guestDecisionSecondaryExternal);
+  ?>
+
   <section class="section site-faq room-faq" data-story-reveal aria-labelledby="room-faq-title">
     <div class="site-shell">
       <div class="section-head">

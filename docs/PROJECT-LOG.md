@@ -292,3 +292,14 @@ The first generated 1280w facade candidate missed the 250,000-byte limit by 7,32
 - Extended the brand/token check to reject duplicate semantic-token declarations, duplicate top-level root blocks and repeated shared selectors. The one base button rule plus one mobile touch-target override are explicitly permitted.
 - Preserved route CSS, page templates, photography, booking/contact destinations, SEO metadata, analytics behavior and release/package configuration.
 - Exact-head PHP/Site Checks and Browser E2E/screenshots at 320/390/768/1280/1440px remain required CI and human-review gates. No live-host inspection, package upload, staging QA dispatch, merge or deployment is authorized.
+
+## 2 November 2026 — Guest decision content and business-truth presentation
+
+A shared guest decision panel is being introduced across Home, Rooms, Dining, Directions and Contact. It separates information already represented in the public site from date-dependent or owner-unconfirmed details that guests should confirm before booking or travelling.
+
+- Add a shared data registry and escaped UI partial; use the shared conversion stylesheet rather than another global CSS layer.
+- Add an allowlisted `stay` Contact topic with a prefilled request for room occupancy, bed setup, dimensions, access requirements, check-in/check-out and cancellation terms.
+- Improve the room journey with a direct question path for missing room decision facts while retaining the existing live booking-engine link and room-specific enquiry path.
+- Keep menu/prices, service hours, last seating, policies, reviews, transfers, reception and luggage promises unapproved until the owner supplies current answers.
+- Add PHP registry/rendering contracts and Playwright coverage for all five routes. Exact-head Site Checks and Browser E2E remain release gates.
+- This is repository source work only. No live domain inspection, cPanel upload, staging deployment, guest enquiry, booking, merge or production release is performed by this change.
