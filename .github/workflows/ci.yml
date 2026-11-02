@@ -157,6 +157,9 @@ jobs:
       - name: Verify shared contact-channel configuration
         run: php tests/php/contact-channel-contract.php
 
+      - name: Verify guest decision content registry and rendering contract
+        run: php tests/php/guest-decision-content-contract.php
+
       - name: Verify custom itinerary builder remains enquiry-only
         run: php tests/php/custom-itinerary-contract.php
 
