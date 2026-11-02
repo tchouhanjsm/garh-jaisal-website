@@ -315,3 +315,5 @@ A shared guest decision panel is being introduced across Home, Rooms, Dining, Di
 - Reframed arrival-panel published content to point to the route and driver guidance already shown on the Directions page instead of restating vehicle access and walking-distance facts.
 - Expanded the PHP contract to exercise valid/invalid URL cases, room-registry synchronization, route ownership and duplicate-section guardrails. Expanded Playwright coverage to all five routes and the 320/375/390/430/768/1366/1440/1920px viewport matrix.
 - No booking, guest enquiry, production mail, cPanel upload, staging dispatch, merge or production deployment is performed by this change. Exact-head CI and human screenshot review remain required.
+
+- Removed the obsolete Home planning-confidence card CSS and delegated section spacing, border and background to the shared decision component.
