@@ -47,6 +47,9 @@ jobs:
       - name: Check one-click Content Studio launcher syntax
         run: bash -n "tools/content-studio/Start Content Studio.command"
 
+      - name: Parse the Sveltia CMS YAML configuration
+        run: ruby -e 'require "yaml"; YAML.parse_file("admin/config.yml")'
+
       - name: Install Pillow for Content Studio photo placement checks
         run: python3 -c "import PIL" 2>/dev/null || python3 -m pip install --break-system-packages pillow
 
