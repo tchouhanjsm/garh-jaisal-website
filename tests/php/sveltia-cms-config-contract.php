@@ -155,7 +155,7 @@ if (strpos($config, 'name: approval') === false
     $errors[] = 'Sveltia Page image slots must expose the review evidence fields.';
 }
 
-$approvalSchemaCount = preg_match_all('/^\\s{12}- name: approval$/m', $config);
+$approvalSchemaCount = preg_match_all('/^ {12}- name: approval$/m', $config);
 if ($approvalSchemaCount !== 33) {
     $errors[] = 'Every one of the 33 fixed page image slots must expose exactly one approval object; found ' . (int) $approvalSchemaCount . '.';
 }
