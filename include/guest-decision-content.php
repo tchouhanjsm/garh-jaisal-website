@@ -9,6 +9,8 @@
  */
 return [
     'home' => [
+        'cta_id' => 'enquiry-home-guest-decision',
+        'cta_location' => 'home-guest-decision',
         'title' => 'Know what is clear before you decide.',
         'intro' => 'Review the practical information already published, then ask us to confirm anything that depends on your travel dates, room choice or current operations.',
         'shown' => [
@@ -25,6 +27,8 @@ return [
         'cta_label' => 'Ask about your dates',
     ],
     'stay' => [
+        'cta_id' => 'enquiry-room-details',
+        'cta_location' => 'rooms-guest-decision',
         'title' => 'Choose with the details that matter.',
         'intro' => 'The room directory shows the photographs, floor and features currently recorded for each room. Ask the team to confirm anything that is not listed before you book.',
         'shown' => [
@@ -41,6 +45,8 @@ return [
         'cta_label' => 'Ask about room details',
     ],
     'dining' => [
+        'cta_id' => 'enquiry-dining-details',
+        'cta_location' => 'dining-guest-decision',
         'title' => 'Plan the meal, then confirm the details.',
         'intro' => 'The site introduces the rooftop setting and the table-enquiry route. Current service information is confirmed by the hotel for the date you have in mind.',
         'shown' => [
@@ -56,6 +62,8 @@ return [
         'cta_label' => 'Ask about dining',
     ],
     'arrival' => [
+        'cta_id' => 'enquiry-arrival-details',
+        'cta_location' => 'directions-guest-decision',
         'title' => 'Arrive knowing what to expect.',
         'intro' => 'The final walk into the living Fort is part of the stay. Review the route, then confirm any assistance or time-sensitive arrangements directly.',
         'shown' => [
@@ -71,6 +79,8 @@ return [
         'cta_label' => 'Confirm arrival arrangements',
     ],
     'contact' => [
+        'cta_id' => 'enquiry-contact-form',
+        'cta_location' => 'contact-guest-decision',
         'title' => 'Know what happens after you enquire.',
         'intro' => 'Use the form for a question or planning request. The hotel must confirm rates, availability and arrangements before anything is treated as booked.',
         'shown' => [

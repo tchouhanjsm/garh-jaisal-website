@@ -25,6 +25,10 @@ $guestDecisionSecondaryHref = is_string($guestDecisionSecondaryHref ?? null) ? $
 $guestDecisionSecondaryLabel = is_string($guestDecisionSecondaryLabel ?? null) ? $guestDecisionSecondaryLabel : '';
 $guestDecisionSecondaryExternal = !empty($guestDecisionSecondaryExternal);
 $guestDecisionId = 'guest-decision-' . $guestDecisionEscape($guestDecisionContext);
+$guestDecisionCtaId = (string) ($guestDecisionPanel['cta_id'] ?? '');
+$guestDecisionCtaLocation = (string) ($guestDecisionPanel['cta_location'] ?? '');
+$guestDecisionCtaId = preg_match('/^[a-z0-9]+(?:-[a-z0-9]+){0,7}$/D', $guestDecisionCtaId) ? $guestDecisionCtaId : '';
+$guestDecisionCtaLocation = preg_match('/^[a-z0-9]+(?:-[a-z0-9]+){0,7}$/D', $guestDecisionCtaLocation) ? $guestDecisionCtaLocation : '';
 ?>
 <aside class="guest-decision" data-guest-decision-context="<?= $guestDecisionEscape($guestDecisionContext) ?>" aria-labelledby="<?= $guestDecisionId ?>-title">
   <div class="guest-decision__inner">
@@ -58,7 +62,7 @@ $guestDecisionId = 'guest-decision-' . $guestDecisionEscape($guestDecisionContex
 
     <div class="guest-decision__actions">
       <?php if ($guestDecisionPrimaryHref !== '' && $guestDecisionPrimaryLabel !== ''): ?>
-        <a class="button button-primary" href="<?= $guestDecisionEscape($guestDecisionPrimaryHref) ?>"><?= $guestDecisionEscape($guestDecisionPrimaryLabel) ?></a>
+        <a class="button button-primary" href="<?= $guestDecisionEscape($guestDecisionPrimaryHref) ?>"<?= $guestDecisionCtaId !== '' ? ' data-cta-id="' . $guestDecisionEscape($guestDecisionCtaId) . '"' : '' ?><?= $guestDecisionCtaLocation !== '' ? ' data-cta-location="' . $guestDecisionEscape($guestDecisionCtaLocation) . '"' : '' ?>><?= $guestDecisionEscape($guestDecisionPrimaryLabel) ?></a>
       <?php endif; ?>
       <?php if ($guestDecisionSecondaryHref !== '' && $guestDecisionSecondaryLabel !== ''): ?>
         <a class="guest-decision__secondary" href="<?= $guestDecisionEscape($guestDecisionSecondaryHref) ?>"<?= $guestDecisionSecondaryExternal ? ' target="_blank" rel="noopener"' : '' ?>><?= $guestDecisionEscape($guestDecisionSecondaryLabel) ?> <span aria-hidden="true">→</span></a>
