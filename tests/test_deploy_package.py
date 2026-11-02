@@ -47,8 +47,8 @@ def create_package_git_fixture(root: Path) -> str:
         "sitemap.xml": SITEMAP,
         "include/page-head.php": "<?php\n",
         "include/site-config.php": "<?php\n",
-        "include/admin-auth.php": "<?php\\n",
-        "include/page-media-approval.php": "<?php\\n",
+        "include/admin-auth.php": "<?php\n",
+        "include/page-media-approval.php": "<?php\n",
         "room.php": "<?php\n",
         "img/facade.jpg": "original-image-fallback",
         "scripts/responsive-image-assets-manifest.json": json.dumps({
