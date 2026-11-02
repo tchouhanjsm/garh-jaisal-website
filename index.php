@@ -12,7 +12,7 @@ $homeRooftopFeature = gj_site_media_slot($siteMediaSlots, 'home-rooftop-feature'
 $homeDesertFeature = gj_site_media_slot($siteMediaSlots, 'home-desert-safari-feature', ['src' => 'img/desert7.jpg', 'alt' => 'Camel safari at sunset in the Thar Desert near Jaisalmer']);
 $homeTentFeature = gj_site_media_slot($siteMediaSlots, 'home-swiss-tent-feature', ['src' => 'img/v2/swiss-tent.webp', 'alt' => 'Swiss tent accommodation at a desert camp near Jaisalmer']);
 $homeStarsFeature = gj_site_media_slot($siteMediaSlots, 'home-sleep-under-stars-feature', ['src' => 'img/tent.jpg', 'alt' => 'Open-air sleeping arrangement beneath the night sky in the Jaisalmer desert']);
-$homeCityFeature = gj_site_media_slot($siteMediaSlots, 'home-city-discovery-feature', ['src' => 'img/jcity.jpg', 'alt' => 'Jaisalmer city seen from within the Golden Fort']);
+$homeCityFeature = gj_site_media_slot($siteMediaSlots, 'home-city-discovery-feature', ['src' => 'img/jcity.jpg', 'alt' => 'Jaisalmer city seen from the fort']);
 $homeGalleryCity = gj_site_media_slot($siteMediaSlots, 'home-gallery-city', ['src' => 'img/jcity.jpg', 'alt' => 'Jaisalmer city seen from the fort']);
 $homeGalleryCourtyard = gj_site_media_slot($siteMediaSlots, 'home-gallery-courtyard', ['src' => 'img/courtyard.jpg', 'alt' => 'Carved sandstone hallway inside a heritage haveli']);
 $homeGalleryReception = gj_site_media_slot($siteMediaSlots, 'home-gallery-reception', ['src' => 'img/recep1.jpg', 'alt' => 'Reception area with traditional furnishings at Garh Jaisal Haveli']);

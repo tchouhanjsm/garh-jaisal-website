@@ -30,6 +30,10 @@ class ResponsiveImageAssetTests(unittest.TestCase):
         self.assertEqual(len(page_media_sources), 30)
         self.assertTrue(set(page_media_sources).issubset(set(manifest["sources"])))
 
+    def test_missing_page_media_directory_is_allowed_for_isolated_unit_fixtures(self):
+        with tempfile.TemporaryDirectory() as directory:
+            self.assertEqual(site_media_slot_image_sources(Path(directory)), [])
+
     def test_page_media_slot_sources_are_included_in_responsive_manifest(self):
         manifest = assets.load_manifest()
         page_media_sources = site_media_slot_image_sources(assets.ROOT)

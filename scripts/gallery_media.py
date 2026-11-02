@@ -117,8 +117,14 @@ def site_media_slot_image_sources(root: Path) -> list[str]:
     """Return safe image paths referenced by the four fixed page-media JSON files."""
     root = Path(root)
     slots_root = root / "content" / "page-media"
-    if slots_root.is_symlink() or not slots_root.is_dir():
-        raise ValueError("CMS page image slot directory is missing or unsafe.")
+    if slots_root.is_symlink():
+        raise ValueError("CMS page image slot directory must not be a symlink.")
+    # Isolated unit fixtures may omit CMS page-media files entirely.
+    # Dedicated repository contracts require all four fixed files to exist.
+    if not slots_root.exists():
+        return []
+    if not slots_root.is_dir():
+        raise ValueError("CMS page image slot directory is unsafe.")
     image_root = root / "img"
     if image_root.is_symlink() or not image_root.is_dir():
         raise ValueError("CMS page image slot image root is missing or unsafe.")
