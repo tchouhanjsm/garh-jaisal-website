@@ -63,7 +63,7 @@ $routeContracts = [
     'room.php' => ['guestDecisionContext = \'stay\'', 'contact.php?topic=stay', 'Check live rates'],
     'restaurant.php' => ['guestDecisionContext = \'dining\'', 'guest-decision-panel.php'],
     'direction.php' => ['guestDecisionContext = \'arrival\'', 'guest-decision-panel.php'],
-    'contact.php' => ['guestDecisionContext = \'contact\'', 'id="contact-form"', 'contact.php?topic=stay'],
+    'contact.php' => ['guestDecisionContext = \'contact\'', 'id="contact-form"', 'contactTopicKey === \'stay\''],
 ];
 foreach ($routeContracts as $relative => $needles) {
     $path = $root . '/' . $relative;

@@ -56,8 +56,8 @@ test('room decision path asks for missing room facts and preserves the live book
   await panel.locator('a.button-primary').click();
   await expect(page).toHaveURL(/contact\.php\?topic=stay$/);
   await expect(page.locator('.contact-topic-context')).toContainText('Room details and booking terms');
-  await expect(page.locator('#message')).toContainText('maximum occupancy');
-  await expect(page.locator('#message')).toContainText('cancellation policy');
+  await expect(page.locator('#message')).toHaveValue(/maximum occupancy/);
+  await expect(page.locator('#message')).toHaveValue(/cancellation policy/);
 });
 
 test('guest decision panel stacks cleanly on narrow screens', async ({ page }) => {
