@@ -221,8 +221,10 @@ if (substr_count($homepage, 'guest-decision-panel.php') !== 1) {
     $fail('Homepage must render exactly one shared guest decision panel.');
 }
 $roomPage = file_get_contents($root . '/room.php');
-if (strpos($roomPage, 'rooms-cta-inner') !== false) {
-    $fail('Rooms page still contains the duplicate generic booking CTA band.');
+if (strpos($roomPage, 'rooms-cta-guide-link') === false
+    || strpos($roomPage, 'Read our guide to staying inside Jaisalmer Fort') === false
+    || strpos($roomPage, "'label' => 'Book your stay'") !== false) {
+    $fail('Rooms page must retain the editorial stay-guide CTA without reintroducing a duplicate generic booking CTA.');
 }
 
 $topicsPath = $root . '/include/contact-topics.php';
