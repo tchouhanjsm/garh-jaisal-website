@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (
       destination.origin === window.location.origin &&
       /\/contact\.php$/i.test(destination.pathname) &&
-      destination.searchParams.get('topic') === 'stay'
+      (destination.searchParams.get('topic') === 'stay' || destination.searchParams.has('room'))
     ) {
       trackIntentEvent('room_details_enquiry_click', Object.assign({}, eventContext, ctaMetadataForLink(anchor), {
         cta_label: labelForTrackedLink(anchor, 'enquiry')

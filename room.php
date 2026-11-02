@@ -466,6 +466,24 @@ require __DIR__ . '/include/page-head.php';
   unset($guestDecisionContext, $guestDecisionPrimaryHref, $guestDecisionPrimaryLabel, $guestDecisionSecondaryHref, $guestDecisionSecondaryLabel, $guestDecisionSecondaryExternal);
   ?>
 
+  <?php
+  $ctaBand = [
+      'section_class' => 'section rooms-cta',
+      'inner_class' => 'site-shell rooms-cta-inner',
+      'eyebrow' => 'Keep planning',
+      'title' => 'Understand the stay before you choose.',
+      'text' => 'Read the practical guide to staying inside Jaisalmer Fort, including the final approach and the details to plan before arrival.',
+      'actions_class' => 'actions',
+      'primary' => [
+          'label' => 'Read our guide to staying inside Jaisalmer Fort',
+          'href' => 'book-rooms-in-jaisalmer.php',
+          'class' => 'button button-primary rooms-cta-guide-link',
+      ],
+  ];
+  require __DIR__ . '/include/ui/cta-band.php';
+  unset($ctaBand);
+  ?>
+
   <section class="section site-faq room-faq" data-story-reveal aria-labelledby="room-faq-title">
     <div class="site-shell">
       <div class="section-head">
@@ -482,35 +500,6 @@ require __DIR__ . '/include/page-head.php';
       ?>
     </div>
   </section>
-  <!-- =====================================================
-       BOOKING CTA
-       ===================================================== -->
-
-  <?php
-$ctaBand = [
-    'section_class' => 'section rooms-cta',
-    'inner_class' => 'site-shell rooms-cta-inner',
-    'eyebrow' => 'Plan your stay',
-    'title' => 'Choose your room.',
-    'text' => 'Check current availability and rates through our booking system.',
-    'actions_class' => 'actions',
-    'primary' => [
-        'label' => 'Book your stay',
-        'href' => $bookingUrl,
-        'class' => 'button button-primary',
-        'target' => '_blank',
-        'rel' => 'noopener',
-    ],
-    'secondary' => [
-        'label' => 'Read our guide to staying inside Jaisalmer Fort →',
-        'href' => 'book-rooms-in-jaisalmer.php',
-        'class' => 'text-link rooms-cta-guide-link',
-    ],
-];
-require __DIR__ . '/include/ui/cta-band.php';
-?>
-
-
 <?php
 $planningPath = [
     'title' => 'Build the rest of your stay',

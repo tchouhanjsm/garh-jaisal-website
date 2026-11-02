@@ -383,3 +383,14 @@ main .section-head > *, main .conversion-journey__card, main .conversion-promise
 @media (prefers-reduced-motion: reduce) {
   .guest-decision * { scroll-behavior: auto; animation: none !important; transition: none !important; }
 }
+
+
+/* Guest decision resilience: long labels and action text must stay within the
+   component rail at narrow and intermediate viewport widths. */
+.guest-decision__column,
+.guest-decision__column li,
+.guest-decision__actions { min-width: 0; }
+.guest-decision__column li strong,
+.guest-decision__column li p,
+.guest-decision__actions a { overflow-wrap: anywhere; }
+.guest-decision__actions > * { max-width: 100%; }
