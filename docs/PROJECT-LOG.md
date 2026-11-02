@@ -317,3 +317,7 @@ A shared guest decision panel is being introduced across Home, Rooms, Dining, Di
 - No booking, guest enquiry, production mail, cPanel upload, staging dispatch, merge or production deployment is performed by this change. Exact-head CI and human screenshot review remain required.
 
 - Removed the obsolete Home planning-confidence card CSS and delegated section spacing, border and background to the shared decision component.
+
+
+- Browser regression follow-up: retained the Rooms editorial stay-guide CTA after removing the duplicate booking CTA band. The section now links to the existing Fort-stay guide, while room cards and the guest decision panel continue to own booking and enquiry actions.
+- Updated homepage storytelling and shared CTA Playwright contracts to assert the consolidated two-column guest decision guide and the editorial Rooms guide link, rather than the superseded three-card/generic-booking markup.
