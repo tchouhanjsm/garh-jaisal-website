@@ -303,3 +303,30 @@ A shared guest decision panel is being introduced across Home, Rooms, Dining, Di
 - Keep menu/prices, service hours, last seating, policies, reviews, transfers, reception and luggage promises unapproved until the owner supplies current answers.
 - Add PHP registry/rendering contracts and Playwright coverage for all five routes. Exact-head Site Checks and Browser E2E remain release gates.
 - This is repository source work only. No live domain inspection, cPanel upload, staging deployment, guest enquiry, booking, merge or production release is performed by this change.
+
+
+## 2 November 2026 — Guest decision UX integrity and responsive hardening
+
+- Consolidated the Home planning-confidence card repeat into the shared guest decision guide; retained the editorial planning entry point and FAQ.
+- Removed the redundant generic Rooms booking CTA band. Room cards retain their room-specific booking and enquiry actions; the shared stay guide retains the details enquiry and configured live-rates handoff.
+- The stay guide derives its room count and floor list from `include/rooms-data.php`, so inventory edits are reflected without copying those facts into the content registry.
+- Added a shared safe-link policy. Primary actions accept only local PHP routes/fragments. Secondary external actions must match the configured booking or WhatsApp host and path; the configured booking token query must match exactly.
+- Aligned room-card enquiry analytics with the existing `room_details_enquiry_click` intent. The event continues to contain CTA/page metadata only; it does not include guest fields or the selected room slug.
+- Reframed arrival-panel published content to point to the route and driver guidance already shown on the Directions page instead of restating vehicle access and walking-distance facts.
+- Expanded the PHP contract to exercise valid/invalid URL cases, room-registry synchronization, route ownership and duplicate-section guardrails. Expanded Playwright coverage to all five routes and the 320/375/390/430/768/1366/1440/1920px viewport matrix.
+- No booking, guest enquiry, production mail, cPanel upload, staging dispatch, merge or production deployment is performed by this change. Exact-head CI and human screenshot review remain required.
+
+- Removed the obsolete Home planning-confidence card CSS and delegated section spacing, border and background to the shared decision component.
+
+
+- Browser regression follow-up: retained the Rooms editorial stay-guide CTA after removing the duplicate booking CTA band. The section now links to the existing Fort-stay guide, while room cards and the guest decision panel continue to own booking and enquiry actions.
+- Updated homepage storytelling and shared CTA Playwright contracts to assert the consolidated two-column guest decision guide and the editorial Rooms guide link, rather than the superseded three-card/generic-booking markup.
+
+
+## 2 November 2026 — Sveltia Gallery management and release guardrails
+
+- Migrated the 36-photo public Gallery baseline into owner-managed JSON records while retaining each original `img/...` source path and its current public URL.
+- Added explicit per-category numeric display order, Live/Draft/Hidden publication states and managed replacement uploads beneath `img/gallery/`.
+- New replacement uploads use a separate media folder so the owner does not overwrite images reused on Rooms or experience pages.
+- Responsive-image generation and cPanel package fallback validation now discover image sources from all CMS Gallery records, including Draft and Hidden entries.
+- Added lightweight validation for commits to `cms-media` and a no-force branch synchronisation workflow after main updates. CMS changes still require a reviewed PR; production remains a manual cPanel release.

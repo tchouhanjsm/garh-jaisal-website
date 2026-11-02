@@ -1,0 +1,11 @@
+{
+  "id": "desert-04-bathroom",
+  "category": "desert",
+  "status": "live",
+  "order": 4,
+  "image": {
+    "src": "img/Desert_Camp/Bathroom.jpeg",
+    "alt": "Bathroom inside a Swiss tent with a shower, basin and toilet",
+    "crop": "portrait"
+  }
+}

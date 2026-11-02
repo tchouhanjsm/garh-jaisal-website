@@ -36,6 +36,9 @@ def create_package_git_fixture(root: Path) -> str:
     """Create a minimal clean main checkout with generated, manifest-approved WebP."""
     runtime_files = {
         ".htaccess": "Options -Indexes\n",
+        "admin/index.html": "<!doctype html>\\n",
+        "admin/config.yml": "backend:\\n  name: github\\n  branch: cms-media\\n",
+        "admin/.htaccess": "Options -Indexes\\n",
         "404.php": "<?php http_response_code(404);\n",
         "contact.php": "<?php\n",
         "index.php": "<?php\n",
@@ -80,9 +83,62 @@ def create_package_git_fixture(root: Path) -> str:
 
 
 class DeploymentPackageSelectionTests(unittest.TestCase):
+    def test_cms_gallery_record_images_are_required_package_fallbacks(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            image_root = root / "img"
+            gallery_image = image_root / "gallery" / "hotel" / "owner-upload.webp"
+            gallery_image.parent.mkdir(parents=True)
+            gallery_image.write_bytes(b"valid-image-fixture")
+            (image_root / "facade.jpg").write_bytes(b"legacy-image-fixture")
+            records = root / "content" / "gallery"
+            records.mkdir(parents=True)
+            (records / "hotel-owner-upload.json").write_text(json.dumps({
+                "id": "hotel-owner-upload",
+                "category": "hotel",
+                "status": "draft",
+                "order": 100,
+                "image": {
+                    "src": "img/gallery/hotel/owner-upload.webp",
+                    "alt": "Owner uploaded hotel photograph",
+                    "crop": "standard",
+                },
+            }), encoding="utf-8")
+            # Local Content Studio records predate numeric order and can reference AVIF.
+            legacy_image = image_root / "content-studio" / "legacy-gallery.avif"
+            legacy_image.parent.mkdir(parents=True)
+            legacy_image.write_bytes(b"legacy-avif-fixture")
+            (records / "hotel-studio-legacy.json").write_text(json.dumps({
+                "id": "hotel-studio-legacy",
+                "category": "hotel",
+                "status": "live",
+                "review_status": "approved_for_release",
+                "image": {
+                    "src": "img/content-studio/legacy-gallery.avif",
+                    "alt": "Legacy Content Studio gallery photo",
+                    "caption": "Preserved legacy caption",
+                    "crop": "landscape",
+                },
+            }), encoding="utf-8")
+
+            scripts = root / "scripts"
+            scripts.mkdir()
+            (scripts / "responsive-image-assets-manifest.json").write_text(json.dumps({
+                "sources": ["img/facade.jpg"],
+                "target_widths": [480],
+            }), encoding="utf-8")
+
+            selected = ["img/facade.jpg", "img/gallery/hotel/owner-upload.webp", "img/content-studio/legacy-gallery.avif"]
+            verified = validate_responsive_fallback_sources(selected, root)
+            self.assertIn("img/gallery/hotel/owner-upload.webp", verified)
+            self.assertIn("img/content-studio/legacy-gallery.avif", verified)
+            with self.assertRaisesRegex(PackageError, "missing from the runtime package"):
+                validate_responsive_fallback_sources(["img/facade.jpg"], root)
+
     def test_selects_runtime_files_and_excludes_development_files(self):
         tracked = [
             ".htaccess", "index.php", "room.php", "robots.txt", "sitemap.xml",
+            "admin/index.html", "admin/config.yml", "admin/.htaccess",
             "contact.php", "404.php", "mail.php", "include/page-head.php",
             "include/site-config.php", EXAMPLE_CONFIG_PATH, "css/garh-v2.css",
             "img/facade.webp", "js/garh-v2.js", "docs/DEPLOY-CPANEL.md",
@@ -91,6 +147,9 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
         ]
         selected = select_runtime_paths(tracked)
         self.assertIn(".htaccess", selected)
+        self.assertIn("admin/index.html", selected)
+        self.assertIn("admin/config.yml", selected)
+        self.assertIn("admin/.htaccess", selected)
         self.assertIn("include/site-config.php", selected)
         self.assertIn("css/garh-v2.css", selected)
         self.assertIn("img/facade.webp", selected)
@@ -139,6 +198,7 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
             ".htaccess", "404.php", "contact.php", "index.php", "mail.php",
             "robots.txt", "sitemap.xml", "include/page-head.php",
             "include/site-config.php", "room.php",
+            "admin/index.html", "admin/config.yml", "admin/.htaccess",
         ]
         routes = validate_package_paths(selected, SITEMAP)
         self.assertEqual([route for route, _ in routes], ["/", "/contact.php", "/room.php"])

@@ -1,0 +1,46 @@
+name: Sveltia CMS media validation
+
+on:
+  push:
+    branches:
+      - cms-media
+    paths:
+      - 'content/gallery/**'
+      - 'img/gallery/**'
+      - 'admin/config.yml'
+      - 'include/gallery-data.php'
+      - 'scripts/gallery_media.py'
+      - 'tests/php/gallery-curation.php'
+      - 'tests/php/sveltia-cms-config-contract.php'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sveltia-media-validation
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: validate CMS gallery content (PHP 8.2)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out CMS branch
+        uses: actions/checkout@v4
+        with:
+          ref: cms-media
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: Lint gallery runtime
+        run: php -l include/gallery-data.php
+
+      - name: Validate managed gallery entries and image references
+        run: php tests/php/gallery-curation.php
+
+      - name: Validate Sveltia config and publication contract
+        run: php tests/php/sveltia-cms-config-contract.php

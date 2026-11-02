@@ -1,0 +1,11 @@
+{
+  "id": "hotel-04-fort-from-roof",
+  "category": "hotel",
+  "status": "live",
+  "order": 4,
+  "image": {
+    "src": "img/v2/fort-from-roof.jpg",
+    "alt": "Jaisalmer Fort seen from the rooftop at dusk",
+    "crop": "landscape"
+  }
+}

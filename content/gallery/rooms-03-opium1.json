@@ -1,0 +1,11 @@
+{
+  "id": "rooms-03-opium1",
+  "category": "rooms",
+  "status": "live",
+  "order": 3,
+  "image": {
+    "src": "img/opium1.jpg",
+    "alt": "Opium Room at Garh Jaisal Haveli",
+    "crop": "arch"
+  }
+}

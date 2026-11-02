@@ -1,0 +1,11 @@
+{
+  "id": "desert-09-tour-4",
+  "category": "desert",
+  "status": "live",
+  "order": 9,
+  "image": {
+    "src": "img/sleeping_under_stars/tour_4.jpeg",
+    "alt": "Traveller riding a camel across the desert dunes",
+    "crop": "portrait"
+  }
+}

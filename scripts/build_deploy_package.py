@@ -17,8 +17,13 @@ import sys
 from urllib.parse import unquote, urlsplit
 import zipfile
 
+try:
+    from scripts.gallery_media import gallery_record_image_sources
+except ImportError:
+    from gallery_media import gallery_record_image_sources
+
 ROOT = Path(__file__).resolve().parents[1]
-RUNTIME_DIRECTORIES = {"content", "css", "img", "include", "js"}
+RUNTIME_DIRECTORIES = {"admin", "content", "css", "img", "include", "js"}
 ROOT_RUNTIME_FILES = {".htaccess", "robots.txt", "sitemap.xml"}
 ROOT_RUNTIME_SUFFIXES = {
     ".php", ".css", ".js", ".png", ".jpg", ".jpeg", ".webp", ".gif",
@@ -27,6 +32,7 @@ ROOT_RUNTIME_SUFFIXES = {
 REQUIRED_RUNTIME_FILES = {
     ".htaccess", "404.php", "contact.php", "index.php", "mail.php",
     "robots.txt", "sitemap.xml", "include/page-head.php", "include/site-config.php",
+    "admin/index.html", "admin/config.yml", "admin/.htaccess",
 }
 PRIVATE_CONFIG_PATH = "include/site-config.local.php"
 EXAMPLE_CONFIG_PATH = "include/site-config.example.php"
@@ -127,6 +133,12 @@ def get_generated_responsive_paths(root: Path = ROOT) -> list[str]:
         raise PackageError("Responsive image manifest is invalid: " + str(error)) from error
     if not isinstance(widths, list) or not widths or not isinstance(sources, list) or not sources:
         raise PackageError("Responsive image manifest must define sources and target widths.")
+    try:
+        for gallery_source in gallery_record_image_sources(root):
+            if gallery_source not in sources:
+                sources.append(gallery_source)
+    except (OSError, ValueError) as error:
+        raise PackageError("CMS gallery image registry is invalid: " + str(error)) from error
 
     source_target_widths = manifest.get("source_target_widths", {})
     if not isinstance(source_target_widths, dict):
@@ -253,6 +265,12 @@ def validate_responsive_fallback_sources(
         raise PackageError("Responsive image manifest is invalid: " + str(error)) from error
     if not isinstance(sources, list) or not sources or any(not isinstance(item, str) for item in sources):
         raise PackageError("Responsive image manifest must define fallback source paths.")
+    try:
+        for gallery_source in gallery_record_image_sources(root):
+            if gallery_source not in sources:
+                sources.append(gallery_source)
+    except (OSError, ValueError) as error:
+        raise PackageError("CMS gallery fallback registry is invalid: " + str(error)) from error
     if len(sources) != len(set(sources)):
         raise PackageError("Responsive image fallback source paths must be unique.")
 

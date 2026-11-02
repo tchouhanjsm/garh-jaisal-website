@@ -1,0 +1,11 @@
+{
+  "id": "hotel-03-sitting-room",
+  "category": "hotel",
+  "status": "live",
+  "order": 3,
+  "image": {
+    "src": "img/v2/sitting-room.jpg",
+    "alt": "Sitting room with carved wood at Garh Jaisal Haveli",
+    "crop": "standard"
+  }
+}

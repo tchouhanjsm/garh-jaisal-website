@@ -9,6 +9,8 @@ import sys
 
 from PIL import Image
 
+from scripts.gallery_media import gallery_record_image_sources
+
 SCRIPT_PATH = Path(__file__).resolve().parents[1] / "scripts" / "build-responsive-image-assets.py"
 SPEC = importlib.util.spec_from_file_location("build_responsive_image_assets", SCRIPT_PATH)
 if SPEC is None or SPEC.loader is None:
@@ -19,6 +21,12 @@ SPEC.loader.exec_module(assets)
 
 
 class ResponsiveImageAssetTests(unittest.TestCase):
+    def test_cms_gallery_record_sources_are_included_in_responsive_manifest(self):
+        manifest = assets.load_manifest()
+        gallery_sources = gallery_record_image_sources(assets.ROOT)
+        self.assertGreaterEqual(len(gallery_sources), 36)
+        self.assertTrue(set(gallery_sources).issubset(set(manifest["sources"])))
+
     def test_repository_manifest_is_valid_and_has_unique_outputs(self):
         manifest = assets.load_manifest()
         self.assertEqual(manifest["target_widths"], sorted(set(manifest["target_widths"])))

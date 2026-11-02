@@ -1,0 +1,11 @@
+{
+  "id": "desert-03-tent-deluxe",
+  "category": "desert",
+  "status": "live",
+  "order": 3,
+  "image": {
+    "src": "img/Desert_Camp/tent_deluxe.jpeg",
+    "alt": "Deluxe tent accommodation at the desert camp near Jaisalmer",
+    "crop": "arch"
+  }
+}

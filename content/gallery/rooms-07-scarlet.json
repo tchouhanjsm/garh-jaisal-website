@@ -1,0 +1,11 @@
+{
+  "id": "rooms-07-scarlet",
+  "category": "rooms",
+  "status": "live",
+  "order": 7,
+  "image": {
+    "src": "img/scarlet.jpg",
+    "alt": "Scarlet Room at Garh Jaisal Haveli",
+    "crop": "arch"
+  }
+}

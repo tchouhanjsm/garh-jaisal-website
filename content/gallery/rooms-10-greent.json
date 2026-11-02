@@ -1,0 +1,11 @@
+{
+  "id": "rooms-10-greent",
+  "category": "rooms",
+  "status": "live",
+  "order": 10,
+  "image": {
+    "src": "img/greent.jpg",
+    "alt": "Green Room detail",
+    "crop": "portrait"
+  }
+}

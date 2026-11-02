@@ -1,0 +1,11 @@
+{
+  "id": "desert-07-tentout",
+  "category": "desert",
+  "status": "live",
+  "order": 7,
+  "image": {
+    "src": "img/Desert_Camp/Tentout.jpeg",
+    "alt": "White tents with planted greenery outside the accommodation",
+    "crop": "landscape"
+  }
+}

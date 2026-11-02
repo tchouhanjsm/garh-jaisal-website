@@ -88,3 +88,10 @@ Quick add is now Title, Photos, Check and approve. Photos can be dragged in. Pag
 ## Staff view
 
 Staff use `docs/STAFF-GUIDE.md` and the double-click launchers (`Start-Studio.bat`, `Start-Studio.command`). Screen wording avoids git terms: "Send for review" runs branch, push and pull request internally. This runbook and "Owner tools (Advanced forms)" are for the owner.
+
+
+## Hosted gallery media manager (Sveltia CMS)
+
+The local Content Studio remains the development/pack workflow for tours, blogs and local drafts. The owner-facing hosted gallery dashboard is now Sveltia CMS at `/admin/`. Read `docs/SVELTIA-CMS-OWNER-GUIDE.md` before first use.
+
+Sveltia manages all four public Gallery categories through `content/gallery/*.json`. The 36 migrated entries retain their existing `img/...` image paths; new and replacement uploads are stored separately under `img/gallery/` so files reused by other pages are not overwritten. Responsive-image tooling discovers image paths from all Gallery records automatically. The writable `cms-media` branch is synchronised from `main` by a no-force merge workflow; owner changes are submitted to `main` through a reviewed pull request. No CMS save or branch sync deploys to the server.

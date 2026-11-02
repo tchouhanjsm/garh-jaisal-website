@@ -20,7 +20,14 @@ function get(port, route) {
     }).on('error', () => resolve({ status: 0, body: '' }));
   });
 }
-const normalise = html => html.replace(/name="csrf[^"]*" value="[^"]*"/g, '').replace(/\b[a-f0-9]{32,64}\b/g, 'HASH').replace(/\?v=\d+/g, '');
+// Responsive candidate lists are an image-delivery optimisation, not a page-content
+// change. Ignore only srcset/sizes (and preload equivalents); keep src, alt,
+// dimensions, links, captions and all other markup in the route fingerprint.
+const normalise = html => html
+  .replace(/\s+(?:srcset|sizes|imagesrcset|imagesizes)\s*=\s*("[^"]*"|'[^']*')/gi, '')
+  .replace(/name="csrf[^"]*" value="[^"]*"/g, '')
+  .replace(/\b[a-f0-9]{32,64}\b/g, 'HASH')
+  .replace(/\?v=\d+/g, '');
 
 function routes(root = ROOT) {
   const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
@@ -29,7 +36,7 @@ function routes(root = ROOT) {
   return [...set].sort();
 }
 
-async function snapshot(root = ROOT) {
+async function snapshot(root = ROOT, includeBodies = false) {
   const port = 45000 + (process.pid % 10000);
   const php = spawn('php', ['-S', '127.0.0.1:' + port, '-t', root], { stdio: 'ignore' });
   try {
@@ -37,18 +44,20 @@ async function snapshot(root = ROOT) {
     const out = {};
     for (const route of routes(root)) {
       const r = await get(port, route);
-      out[route] = { status: r.status, sha256: crypto.createHash('sha256').update(normalise(r.body)).digest('hex') };
+      const html = normalise(r.body);
+      out[route] = { status: r.status, sha256: crypto.createHash('sha256').update(html).digest('hex'), ...(includeBodies ? { html } : {}) };
     }
     return out;
   } finally { php.kill(); }
 }
 
-module.exports = { snapshot, routes };
+module.exports = { snapshot, routes, normalise };
 
 if (require.main === module) {
   (async () => {
     const args = process.argv.slice(2);
-    const current = await snapshot();
+    const debugDiff = args.includes('--debug-diff');
+    const current = await snapshot(ROOT, debugDiff);
     const allow = new Set((args[args.indexOf('--allow') + 1] || '').split(',').filter(Boolean));
     if (args.includes('--against')) {
       // Compare this checkout with a git ref (for example origin/main): no stored fixture to go stale.
@@ -58,9 +67,23 @@ if (require.main === module) {
       const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'gj-base-'));
       try {
         execSync('git archive ' + JSON.stringify(ref) + ' | tar -x -C ' + JSON.stringify(dir), { cwd: ROOT, stdio: 'pipe', shell: '/bin/bash' });
-        const base = await snapshot(dir);
+        const base = await snapshot(dir, debugDiff);
         const problems = Object.keys(base).filter(r => (!current[r] || current[r].status !== base[r].status || current[r].sha256 !== base[r].sha256) && !allow.has(r));
-        if (problems.length) { console.error('Existing routes changed versus ' + ref + ':\n  ' + problems.join('\n  ')); process.exit(1); }
+        if (problems.length) {
+          console.error('Existing routes changed versus ' + ref + ':\n  ' + problems.join('\n  '));
+          if (debugDiff) {
+            for (const route of problems) {
+              const before = base[route] ? base[route].html : '';
+              const after = current[route] ? current[route].html : '';
+              let offset = 0;
+              while (offset < before.length && offset < after.length && before[offset] === after[offset]) offset++;
+              console.error('--- ' + route + ' first difference at byte ' + offset);
+              console.error('BASE: ' + before.slice(Math.max(0, offset - 180), offset + 420));
+              console.error('HEAD: ' + after.slice(Math.max(0, offset - 180), offset + 420));
+            }
+          }
+          process.exit(1);
+        }
         const added = Object.keys(current).filter(r => !base[r]);
         console.log('Existing ' + Object.keys(base).length + ' routes unchanged versus ' + ref + (added.length ? '; new routes: ' + added.join(', ') : '') + '.');
       } finally { fs.rmSync(dir, { recursive: true, force: true }); }

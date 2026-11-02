@@ -1,0 +1,11 @@
+{
+  "id": "desert-02-camp-evening",
+  "category": "desert",
+  "status": "live",
+  "order": 2,
+  "image": {
+    "src": "img/Desert_Camp/camp_evening.jpeg",
+    "alt": "Evening at the desert camp near Jaisalmer",
+    "crop": "landscape"
+  }
+}

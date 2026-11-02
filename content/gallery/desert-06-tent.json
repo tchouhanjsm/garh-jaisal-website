@@ -1,0 +1,11 @@
+{
+  "id": "desert-06-tent",
+  "category": "desert",
+  "status": "live",
+  "order": 6,
+  "image": {
+    "src": "img/Desert_Camp/Tent.jpeg",
+    "alt": "Double bed and patterned wall panels inside a Swiss tent",
+    "crop": "arch"
+  }
+}

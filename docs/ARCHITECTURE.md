@@ -41,8 +41,10 @@ Never include server-local secrets, passwords, guest PII, workstation paths or c
 ## Guest decision content
 
 - `include/guest-decision-content.php` is the shared guest-facing registry for information already shown on the site and details that must be confirmed for a guest's dates.
-- `include/ui/guest-decision-panel.php` renders that registry on Home, Rooms, Dining, Directions and Contact. It escapes every rendered value and uses page-provided allowlisted destinations.
-- The registry's `shown` group is a pointer to existing page/data content, not a new source of truth for room inventory or operating facts. The room, menu, experience and site configuration registries remain authoritative for their respective data.
+- `include/ui/guest-decision-panel.php` renders that registry on Home, Rooms, Dining, Directions and Contact. It escapes scalar output, rejects malformed content, and validates page-level CTA overrides before rendering.
+- `include/guest-decision-links.php` owns guest-decision URL policy: primary links must be local routes/fragments; secondary external links must match the configured booking or WhatsApp host and path. Do not duplicate this policy inside route templates.
+- The registry's `shown` group is a pointer to existing page/data content, not a new source of truth for room inventory or operating facts. The stay summary derives its room count and floor list from `include/rooms-data.php`; the room, menu, experience and site configuration registries remain authoritative for their respective data.
+- Keep one planning explanation per route. On Home, the shared decision guide replaces the former three-card planning-confidence repeat. On Rooms, the room cards and decision guide own the booking/enquiry actions. A separate editorial CTA may link to the stay guide, but must not repeat a generic booking action.
 - Keep date-dependent or owner-unconfirmed facts in `confirm`. Do not add speculative prices, schedules, occupancy, policies, review quotes, transfer fares or assistance promises to the public-facing `shown` group.
 - Contact uses the allowlisted `stay` topic for room suitability, check-in/check-out and cancellation questions. It remains an enquiry only; it does not reserve a room or approve a policy.
 - The shared panel styles belong to `css/conversion-system.css`; do not create a second global visual layer for the component.

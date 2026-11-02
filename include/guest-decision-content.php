@@ -7,11 +7,26 @@
  * a maintained registry. It does not remove the owner's duty to keep facts
  * current. Never publish a new value until the owner approves it.
  */
+$guestDecisionRooms = require __DIR__ . '/rooms-data.php';
+$guestDecisionRooms = is_array($guestDecisionRooms) ? $guestDecisionRooms : [];
+$guestDecisionRoomFloors = [];
+foreach ($guestDecisionRooms as $guestDecisionRoom) {
+    if (is_array($guestDecisionRoom) && is_string($guestDecisionRoom['kicker'] ?? null)) {
+        $floor = trim($guestDecisionRoom['kicker']);
+        if ($floor !== '') {
+            $guestDecisionRoomFloors[] = $floor;
+        }
+    }
+}
+$guestDecisionRoomFloors = array_values(array_unique($guestDecisionRoomFloors));
+$guestDecisionRoomFloorLabel = $guestDecisionRoomFloors ? implode(' and ', $guestDecisionRoomFloors) : 'the published room directory';
+$guestDecisionRoomCount = count($guestDecisionRooms);
+
 return [
     'home' => [
         'cta_id' => 'enquiry-home-guest-decision',
         'cta_location' => 'home-guest-decision',
-        'title' => 'Know what is clear before you decide.',
+        'title' => 'Know what to expect before you book.',
         'intro' => 'Review the practical information already published, then ask us to confirm anything that depends on your travel dates, room choice or current operations.',
         'shown' => [
             ['label' => 'A stay inside Jaisalmer Fort', 'detail' => 'The haveli is inside the Fort. Vehicles cannot enter the fort lanes, so the final approach is on foot.'],
@@ -32,8 +47,8 @@ return [
         'title' => 'Choose with the details that matter.',
         'intro' => 'The room directory shows the photographs, floor and features currently recorded for each room. Ask the team to confirm anything that is not listed before you book.',
         'shown' => [
-            ['label' => 'Room identity and floor', 'detail' => 'Each room has its own name, published photographs and a ground-floor or first-floor location.'],
-            ['label' => 'Listed room features', 'detail' => 'Compare the features shown on each room card. A feature not listed for a room should be treated as unconfirmed, not automatically absent.'],
+            ['label' => 'Current room directory', 'detail' => sprintf('The room directory currently lists %d named rooms across %s. Each room card is maintained with its own photographs and floor.', $guestDecisionRoomCount, $guestDecisionRoomFloorLabel)],
+            ['label' => 'Room-specific features', 'detail' => 'Compare the features shown on each room card. A feature not listed for a room should be treated as unconfirmed, not automatically absent.'],
             ['label' => 'Live rates and availability', 'detail' => 'Use the booking engine to check the current rate and availability for your exact dates.'],
         ],
         'confirm' => [
@@ -67,8 +82,8 @@ return [
         'title' => 'Arrive knowing what to expect.',
         'intro' => 'The final walk into the living Fort is part of the stay. Review the route, then confirm any assistance or time-sensitive arrangements directly.',
         'shown' => [
-            ['label' => 'Vehicle access', 'detail' => 'Vehicles cannot enter Jaisalmer Fort. Fort Parking is the drop-off point.'],
-            ['label' => 'The final walk', 'detail' => 'The route from Fort Parking is approximately 300 metres and usually takes 5–6 minutes through narrow lanes with uneven cobbles and short stair sections.'],
+            ['label' => 'Route and walking information', 'detail' => 'This page explains the approach from Fort Parking and the Fort entrance, including the walking route and practical access considerations.'],
+            ['label' => 'Driver handoff details', 'detail' => 'Use the driver-information card on this page for the drop-off address and a shareable arrival note.'],
         ],
         'confirm' => [
             ['label' => 'Reception and late arrival', 'detail' => 'Confirm current reception hours and whether an arrival outside those hours can be accommodated for your expected time.'],
