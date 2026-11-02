@@ -621,5 +621,26 @@ foreach ($studioFiles as $studioFile) {
     if (array_key_exists($slug, $experiences)) throw new RuntimeException('Duplicate experience slug in Content Studio registry: ' . $slug);
     $experiences[$slug] = $record;
 }
+
+$experiences = (static function ($experienceRecords) {
+    // Keep all temporary names in closure scope: this file is required inside
+    // the public route wrapper, where $experienceSlug identifies the request.
+    $pageMediaSlots = require __DIR__ . '/site-media-slots.php';
+    foreach ($experienceRecords as $pageMediaSlug => &$pageMediaRecord) {
+        $pageMediaImage = gj_site_media_slot($pageMediaSlots, 'experience-' . $pageMediaSlug . '-hero', [
+            'src' => $pageMediaRecord['hero_image'],
+            'alt' => $pageMediaRecord['hero_alt'],
+            'caption' => $pageMediaRecord['hero_caption'] ?? '',
+        ]);
+        $pageMediaRecord['hero_image'] = $pageMediaImage['src'];
+        $pageMediaRecord['hero_alt'] = $pageMediaImage['alt'];
+        if (trim((string) ($pageMediaImage['caption'] ?? '')) !== '') {
+            $pageMediaRecord['hero_caption'] = $pageMediaImage['caption'];
+        }
+    }
+    unset($pageMediaRecord, $pageMediaSlug, $pageMediaImage, $pageMediaSlots);
+    return $experienceRecords;
+})($experiences);
+
 return $experiences;
 

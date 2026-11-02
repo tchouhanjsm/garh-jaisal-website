@@ -5,6 +5,9 @@ backend:
   name: github
   repo: tchouhanjsm/garh-jaisal-website
   branch: cms-media
+  # Keep the owner workflow on the documented fine-grained token sign-in path.
+  # The token is entered in Sveltia at runtime and is never stored in this file.
+  auth_methods: [token]
 
 # New and replacement Gallery uploads are isolated from images reused elsewhere.
 media_folder: /img/gallery
@@ -116,3 +119,621 @@ collections:
                 value: landscape
               - label: Portrait
                 value: portrait
+
+  - name: page_media_slots
+    label: Page image slots
+    files:
+    - name: home
+      label: Home
+      file: content/page-media/home.json
+      fields:
+        - name: home-hero-mobile
+          label: Home hero — mobile
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: home-hero-desktop
+          label: Home hero — desktop
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: home-heritage-intro
+          label: Home — heritage introduction
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: home-rooftop-feature
+          label: Home — rooftop dining feature
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: home-desert-safari-feature
+          label: Home — camel safari feature
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: home-swiss-tent-feature
+          label: Home — Swiss tent feature
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: home-sleep-under-stars-feature
+          label: Home — sleep under the stars
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: home-city-discovery-feature
+          label: Home — city discovery feature
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: home-gallery-city
+          label: Home gallery — city view
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: home-gallery-courtyard
+          label: Home gallery — courtyard
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: home-gallery-reception
+          label: Home gallery — reception
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: home-gallery-rooftop
+          label: Home gallery — rooftop view
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: home-gallery-entrance
+          label: Home gallery — carved entrance
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+
+    - name: rooms
+      label: Rooms
+      file: content/page-media/rooms.json
+      fields:
+        - name: rooms-hero
+          label: Rooms page — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: room-sweet-purple-room-primary
+          label: Sweet Purple Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: room-rising-sun-room-primary
+          label: Rising Sun Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: room-scarlet-room-primary
+          label: Scarlet Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: room-opium-room-primary
+          label: Opium Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: room-red-maharani-room-primary
+          label: Red Maharani Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: room-green-room-primary
+          label: Green Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: room-bluesky-room-primary
+          label: BlueSky Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+
+    - name: dining
+      label: Dining
+      file: content/page-media/dining.json
+      fields:
+        - name: dining-hero
+          label: Dining page — rooftop restaurant hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+
+    - name: experiences
+      label: Experiences
+      file: content/page-media/experiences.json
+      fields:
+        - name: experience-desert-safari-hero
+          label: Desert Safari — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: experience-guided-jaisalmer-tour-hero
+          label: Guided Jaisalmer Tour — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: experience-sunset-camel-safari-hero
+          label: Sunset Camel Safari — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: experience-sleep-under-the-stars-hero
+          label: Sleep Under the Stars — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: experience-swiss-tent-safari-hero
+          label: Swiss Tent Safari — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: experience-cultural-safari-hero
+          label: Cultural Safari — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: experience-explore-the-desert-hero
+          label: Explore the Desert — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: experience-half-day-jaisalmer-tour-hero
+          label: Half-Day Jaisalmer Tour — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: experience-full-day-jaisalmer-tour-hero
+          label: Full-Day Jaisalmer Tour — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: experience-longewala-tour-hero
+          label: Longewala Tour — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+        - name: experience-rajasthan-tours-hero
+          label: Rajasthan Tours — draft hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+

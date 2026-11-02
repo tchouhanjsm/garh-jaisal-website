@@ -69,10 +69,9 @@ $faqItems = [
     ['question' => "Where can I find arrival instructions?", 'answer' => "The Directions page explains how to reach the fort and the final walk to the haveli."],
 ];
 require_once __DIR__ . '/include/image-metadata.php';
-$roomHeroPreload = gj_image_responsive_preload_descriptor(
-    'img/optimized/v2/sitting-room.webp',
-    '100vw'
-);
+$siteMediaSlots = require __DIR__ . '/include/site-media-slots.php';
+$roomHeroImage = gj_site_media_slot($siteMediaSlots, 'rooms-hero', ['src' => 'img/optimized/v2/sitting-room.webp', 'alt' => 'Sitting room with carved wood at Garh Jaisal Haveli']);
+$roomHeroPreload = gj_image_responsive_preload_descriptor($roomHeroImage['src'], '100vw');
 
 $page = [
     'title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
@@ -81,11 +80,11 @@ $page = [
     'preload' => is_array($roomHeroPreload) ? [$roomHeroPreload] : [],
     'og_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'og_description' => 'Compare heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort. Review each room\'s features and check availability for your dates.',
-    'og_image' => '/img/v2/sitting-room.jpg',
-    'og_image_alt' => 'Sitting room with carved wood at Garh Jaisal Haveli',
+    'og_image' => '/' . ltrim($roomHeroImage['src'], '/'),
+    'og_image_alt' => $roomHeroImage['alt'],
     'twitter_title' => 'Rooms at Garh Jaisal Haveli | Jaisalmer Fort',
     'twitter_description' => 'Compare heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort. Review each room\'s features and check availability for your dates.',
-    'twitter_image' => '/img/v2/sitting-room.jpg',
+    'twitter_image' => '/' . ltrim($roomHeroImage['src'], '/'),
     'css' => ['css/thar-sunset-story.css'],
     'schema' => [
         [
@@ -118,7 +117,7 @@ require __DIR__ . '/include/page-head.php';
 
   <section class="page-hero page-hero--photo rooms-hero" aria-labelledby="rooms-page-title">
     <div class="page-hero-media" aria-hidden="true">
-      <img src="img/optimized/v2/sitting-room.webp" <?= gj_image_dimension_attributes('img/optimized/v2/sitting-room.webp', '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
+      <img src="<?= htmlspecialchars($roomHeroImage['src'], ENT_QUOTES, 'UTF-8') ?>" <?= gj_image_dimension_attributes($roomHeroImage['src'], '100vw') ?> alt="" aria-hidden="true" fetchpriority="high" decoding="async">
     </div>
     <div class="site-shell rooms-hero-grid">
       <div class="rooms-hero-copy">

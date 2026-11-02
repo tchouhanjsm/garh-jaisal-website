@@ -1,0 +1,54 @@
+{
+  "home-hero-mobile": {
+    "src": "img/optimized/v2/facade.webp",
+    "alt": "Carved sandstone facade of Garh Jaisal Haveli inside Jaisalmer Fort"
+  },
+  "home-hero-desktop": {
+    "src": "img/optimized/v2/fort-from-roof.webp",
+    "alt": "Jaisalmer Fort seen from the rooftop at Garh Jaisal Haveli"
+  },
+  "home-heritage-intro": {
+    "src": "img/5.webp",
+    "alt": "Carved sandstone architecture inside Garh Jaisal Haveli"
+  },
+  "home-rooftop-feature": {
+    "src": "img/roofslide.webp",
+    "alt": "Rooftop table at dusk overlooking the lights of Jaisalmer"
+  },
+  "home-desert-safari-feature": {
+    "src": "img/desert7.jpg",
+    "alt": "Camel safari at sunset in the Thar Desert near Jaisalmer"
+  },
+  "home-swiss-tent-feature": {
+    "src": "img/v2/swiss-tent.webp",
+    "alt": "Swiss tent accommodation at a desert camp near Jaisalmer"
+  },
+  "home-sleep-under-stars-feature": {
+    "src": "img/tent.jpg",
+    "alt": "Open-air sleeping arrangement beneath the night sky in the Jaisalmer desert"
+  },
+  "home-city-discovery-feature": {
+    "src": "img/jcity.jpg",
+    "alt": "Jaisalmer city seen from the fort"
+  },
+  "home-gallery-city": {
+    "src": "img/jcity.jpg",
+    "alt": "Jaisalmer city seen from the fort"
+  },
+  "home-gallery-courtyard": {
+    "src": "img/courtyard.jpg",
+    "alt": "Carved sandstone hallway inside a heritage haveli"
+  },
+  "home-gallery-reception": {
+    "src": "img/recep1.jpg",
+    "alt": "Reception area with traditional furnishings at Garh Jaisal Haveli"
+  },
+  "home-gallery-rooftop": {
+    "src": "img/s4.jpg",
+    "alt": "View across Jaisalmer from the rooftop"
+  },
+  "home-gallery-entrance": {
+    "src": "img/big9.jpg",
+    "alt": "A carved entrance in a historic sandstone building"
+  }
+}
