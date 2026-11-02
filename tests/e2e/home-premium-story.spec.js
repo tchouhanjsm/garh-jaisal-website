@@ -28,10 +28,13 @@ test.describe('Premium homepage storytelling', () => {
 
     const confidence = page.locator('#planning-confidence');
     await expect(confidence.getByRole('heading', { level: 2, name: 'Know what to expect before you book.' })).toBeVisible();
-    await expect(confidence.locator('.home-planning-confidence__item')).toHaveCount(3);
+    await expect(confidence.locator('.guest-decision__columns')).toHaveCount(1);
+    await expect(confidence.getByText('Published on this site', { exact: true })).toBeVisible();
+    await expect(confidence.getByText('Confirm with the hotel', { exact: true })).toBeVisible();
     await expect(confidence).toContainText('Vehicles cannot enter');
-    await expect(confidence).toContainText('Room facilities vary');
-    await expect(confidence).toContainText('An enquiry is not a confirmed booking');
+    await expect(confidence).toContainText('Facilities vary by room');
+    await expect(confidence).toContainText('Confirm check-in and check-out times');
+    await expect(confidence).toContainText('current menu items, prices');
 
     const sectionOrder = await page.locator('main > section').evaluateAll(sections =>
       sections.map(section => section.id || section.classList[0])
@@ -52,13 +55,14 @@ test.describe('Premium homepage storytelling', () => {
     expect(response.status()).toBe(200);
 
     await expect(page.locator('#city-discovery')).toBeVisible();
-    await expect(page.locator('#planning-confidence .home-planning-confidence__item')).toHaveCount(3);
+    const confidence = page.locator('#planning-confidence');
+    await expect(confidence.locator('.guest-decision__columns')).toHaveCount(1);
 
     const layout = await page.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       document: document.documentElement.scrollWidth,
       cityColumns: getComputedStyle(document.querySelector('.home-city-discovery__grid')).gridTemplateColumns,
-      confidenceColumns: getComputedStyle(document.querySelector('.home-planning-confidence__grid')).gridTemplateColumns,
+      confidenceColumns: getComputedStyle(document.querySelector('#planning-confidence .guest-decision__columns')).gridTemplateColumns,
     }));
     expect(layout.document, 'Homepage must not overflow the mobile viewport').toBeLessThanOrEqual(layout.viewport + 1);
     expect(layout.cityColumns.trim().split(/\s+/)).toHaveLength(1);
