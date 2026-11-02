@@ -48,7 +48,7 @@ $approvers = ['Owner Reviewer'];
 $source = 'img/hero.png';
 $alt = 'Carved sandstone facade approved for the homepage hero';
 $caption = 'A reviewed homepage image';
-$png = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/n3sAAAAASUVORK5CYII=', true);
+$png = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=', true);
 if (!is_string($png)) $errors[] = 'Unable to decode PNG fixture.';
 $validRoot = $makeFixture();
 $imagePath = $validRoot . '/img/hero.png';
