@@ -57,15 +57,15 @@ jobs:
                 "password_hash" => getenv("GJ_MEDIA_ADMIN_E2E_PASSWORD_HASH"),
               ],
             ];
-            $contents = "<?php\\nreturn " . var_export($config, true) . ";\\n";
+            $contents = "<?php\nreturn " . var_export($config, true) . ";\n";
             if (file_put_contents("include/site-config.local.php", $contents) === false) {
-              fwrite(STDERR, "Unable to create ephemeral Media Library test config.\\n");
+              fwrite(STDERR, "Unable to create ephemeral Media Library test config.\n");
               exit(1);
             }
           '
           {
-            printf 'GJ_MEDIA_ADMIN_E2E_USER=%s\\n' "$GJ_MEDIA_ADMIN_E2E_USER"
-            printf 'GJ_MEDIA_ADMIN_E2E_PASSWORD=%s\\n' "$GJ_MEDIA_ADMIN_E2E_PASSWORD"
+            printf 'GJ_MEDIA_ADMIN_E2E_USER=%s\n' "$GJ_MEDIA_ADMIN_E2E_USER"
+            printf 'GJ_MEDIA_ADMIN_E2E_PASSWORD=%s\n' "$GJ_MEDIA_ADMIN_E2E_PASSWORD"
           } >> "$GITHUB_ENV"
 
       - name: Set up Node.js
