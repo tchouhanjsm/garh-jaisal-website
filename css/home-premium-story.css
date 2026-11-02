@@ -129,64 +129,21 @@ main.thar-sunset-story--home .home-city-discovery__media figcaption {
   text-align: center;
 }
 
-main.thar-sunset-story--home .home-planning-confidence {
-  background: #fbf7ef;
-  border-block: 1px solid rgba(91, 26, 43, .12);
-}
 
-main.thar-sunset-story--home .home-planning-confidence__grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(12px, 2vw, 22px);
-}
 
-main.thar-sunset-story--home .home-planning-confidence__item {
-  min-width: 0;
-  padding: clamp(20px, 2.5vw, 30px);
-  border: 1px solid rgba(91, 26, 43, .15);
-  border-top: 3px solid var(--saffron, #b94a0e);
-  border-radius: var(--radius-card, 6px);
-  background: #fffdfa;
-  box-shadow: 0 8px 22px rgba(20, 18, 43, .045);
-}
 
-main.thar-sunset-story--home .home-planning-confidence__number {
-  display: inline-flex;
-  margin-bottom: 16px;
-  color: #946b2d;
-  font-size: .78rem;
-  font-weight: 800;
-  letter-spacing: .14em;
-}
 
-main.thar-sunset-story--home .home-planning-confidence__item h3 {
-  margin: 0 0 10px;
-  color: var(--ink, #231a14);
-  font-family: var(--font-display, Georgia, serif);
-  font-size: clamp(1.35rem, 1.8vw, 1.7rem);
-  font-weight: 400;
-  line-height: 1.14;
-  text-wrap: balance;
-}
 
-main.thar-sunset-story--home .home-planning-confidence__item p {
-  color: #51453d;
-  font-size: .94rem;
-  line-height: 1.65;
-}
 
-main.thar-sunset-story--home .home-planning-confidence__item .text-link {
-  display: inline-flex;
-  min-height: 44px;
-  align-items: center;
-  gap: 6px;
-  margin-top: 6px;
-  color: var(--garnet, #5b1a2b);
-  font-weight: 750;
-  text-underline-offset: .24em;
-}
 
-main.thar-sunset-story--home :is(.home-city-discovery, .home-planning-confidence) a:focus-visible {
+
+
+
+
+
+
+
+main.thar-sunset-story--home .home-city-discovery a:focus-visible {
   outline: 3px solid var(--focus, #1d4ed8);
   outline-offset: 3px;
 }
@@ -197,13 +154,9 @@ main.thar-sunset-story--home :is(.home-city-discovery, .home-planning-confidence
     gap: 24px;
   }
 
-  main.thar-sunset-story--home .home-planning-confidence__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 
-  main.thar-sunset-story--home .home-planning-confidence__item:last-child {
-    grid-column: 1 / -1;
-  }
+
+
 }
 
 @media (max-width: 760px) {
@@ -217,8 +170,7 @@ main.thar-sunset-story--home :is(.home-city-discovery, .home-planning-confidence
     aspect-ratio: 4 / 5;
   }
 
-  main.thar-sunset-story--home .home-city-discovery__grid,
-  main.thar-sunset-story--home .home-planning-confidence__grid {
+  main.thar-sunset-story--home .home-city-discovery__grid {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -231,9 +183,7 @@ main.thar-sunset-story--home :is(.home-city-discovery, .home-planning-confidence
     aspect-ratio: 5 / 4;
   }
 
-  main.thar-sunset-story--home .home-planning-confidence__item:last-child {
-    grid-column: auto;
-  }
+
 
   main.thar-sunset-story--home .home-city-discovery__actions {
     display: grid;
