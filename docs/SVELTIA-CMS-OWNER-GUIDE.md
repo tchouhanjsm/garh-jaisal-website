@@ -100,3 +100,20 @@ If branch synchronisation fails, do not continue editing on a stale branch. Open
 - Staff OAuth onboarding and automatic pull-request creation are not included. The owner creates the review PR using the compare link.
 - Crop changes the Gallery display treatment; it does not edit image pixels.
 - No CMS workflow deploys to production.
+
+
+## Media Library Intelligence — usage and duplicate review
+
+Open /admin/media-library.php for the read-only Media Library Intelligence report. It inventories image files under img/, reports file size and dimensions where available, lists literal references found in public PHP/HTML/CSS/JavaScript/JSON/XML/configuration source files, links Gallery records to their image assets, and groups byte-identical files using SHA-256.
+
+Use the filters to narrow the inventory by Gallery category, filename/source path, usage state or exact duplicate content. Open the usage details on an image card to see which scanned source files contain its path. Use Open Sveltia CMS to edit a Gallery record or upload a replacement.
+
+**This report is evidence, not a deletion tool.** “No literal reference found” means the scanner did not find a complete image path in the source files it inspected. It does not prove that a file is unused: PHP or JavaScript can assemble paths dynamically, and shared responsive-image code may select derivatives without embedding each generated path in a page template. Responsive derivatives are labelled separately and are never listed as unused candidates. Exact duplicate means the file bytes have the same SHA-256 digest; it does not mean the images are visually identical.
+
+The report is strictly read-only. It does not upload, replace, hide, rename or delete files, and it does not change Gallery records. Before removing any asset, inspect all source usage, responsive-image manifests, CMS records, route screenshots and the current release package. Retain a restorable copy and submit removal through a reviewed pull request only after proving that no page or fallback depends on it.
+
+The report scans bounded source files and explicitly skips include/site-config.local.php, private local configuration, documentation, tests, tooling and dependency directories. It is marked noindex and served with no-store headers, but it is not an authentication boundary. It contains read-only media paths and usage metadata only; do not put secrets or private configuration into the repository or CMS content.
+
+## Sign-in method
+
+The hosted configuration now explicitly allows Sveltia's **token** sign-in method only. Use a fine-grained personal access token restricted to this repository with **Contents: Read and write**. Pull request permission is not required for the current manual compare-and-create workflow. Sveltia stores the token in the browser's local storage; use an owner-controlled browser profile, sign out on shared devices, and revoke the token immediately if the browser or token is exposed. The CMS's cms-media branch selection is not a substitute for protecting main.

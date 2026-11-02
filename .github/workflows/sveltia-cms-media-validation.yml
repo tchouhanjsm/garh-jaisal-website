@@ -9,6 +9,9 @@ on:
       - 'img/gallery/**'
       - 'admin/config.yml'
       - 'include/gallery-data.php'
+      - 'include/media-library-audit.php'
+      - 'admin/media-library.php'
+      - 'tests/php/media-library-audit.php'
       - 'scripts/gallery_media.py'
       - 'tests/php/gallery-curation.php'
       - 'tests/php/sveltia-cms-config-contract.php'
@@ -44,3 +47,6 @@ jobs:
 
       - name: Validate Sveltia config and publication contract
         run: php tests/php/sveltia-cms-config-contract.php
+
+      - name: Validate read-only media usage inventory
+        run: php tests/php/media-library-audit.php

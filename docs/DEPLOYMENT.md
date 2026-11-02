@@ -40,3 +40,6 @@ The owner reviews staging evidence and explicitly authorizes production deployme
 ## Sveltia Gallery publishing
 
 The Sveltia dashboard at `/admin/` writes Gallery JSON and newly uploaded/replacement media to `cms-media`. The 36 original Gallery image URLs remain unchanged after migration. Responsive-image candidates are discovered from `content/gallery/*.json`, including Draft and Hidden records so their assets are packageable if later published. After a CMS review PR is merged to `main`, the Sveltia branch-sync workflow merges the new main baseline into `cms-media`. Neither workflow uploads to the server; continue using the owner-reviewed cPanel package and manual staging/release process.
+
+
+The owner media report at /admin/media-library.php is a read-only runtime route included with the reviewed admin/ and include/ directories. It does not modify media or content. It is marked noindex/no-store, but it is not an authentication gate. No new deployment action is triggered by opening the report.

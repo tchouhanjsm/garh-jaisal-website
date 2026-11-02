@@ -5,6 +5,9 @@ backend:
   name: github
   repo: tchouhanjsm/garh-jaisal-website
   branch: cms-media
+  # Keep the owner workflow on the documented fine-grained token sign-in path.
+  # The token is entered in Sveltia at runtime and is never stored in this file.
+  auth_methods: [token]
 
 # New and replacement Gallery uploads are isolated from images reused elsewhere.
 media_folder: /img/gallery
