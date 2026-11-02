@@ -25,6 +25,12 @@ if (gj_media_admin_auth_configured($malformed)) $errors[] = 'Malformed password 
 $headerServer = ['HTTPS' => 'on', 'HTTP_AUTHORIZATION' => 'Basic ' . base64_encode('owner-test:' . $password)];
 if (!gj_media_admin_is_authorized($config, $headerServer)) $errors[] = 'Authorization header Basic credentials must be supported.';
 if (gj_media_admin_is_authorized($config, [])) $errors[] = 'Missing credentials must be rejected.';
+$conflictingTls = $httpsServer;
+$conflictingTls['HTTPS'] = 'off';
+$conflictingTls['SERVER_PORT'] = '443';
+if (gj_media_admin_request_is_https($conflictingTls)) $errors[] = 'Explicit HTTPS=off must override a conflicting port 443 value.';
+$portOnlyTls = ['SERVER_PORT' => '443'];
+if (!gj_media_admin_request_is_https($portOnlyTls)) $errors[] = 'Port 443 may identify TLS when the server omits the HTTPS flag.';
 
 if ($errors) {
     foreach ($errors as $error) fwrite(STDERR, 'ERROR ' . $error . PHP_EOL);
