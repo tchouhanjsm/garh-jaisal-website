@@ -5,14 +5,16 @@ const ownerPassword = process.env.GJ_MEDIA_ADMIN_E2E_PASSWORD;
 
 test('unauthenticated Media Library HTML and JSON requests are denied without inventory leakage', async ({ request }) => {
   const htmlResponse = await request.get('/admin/media-library.php');
-  expect([401, 503]).toContain(htmlResponse.status());
+  if (ownerUser && ownerPassword) expect(htmlResponse.status()).toBe(401);
+  else expect([401, 503]).toContain(htmlResponse.status());
   if (htmlResponse.status() === 401) expect(htmlResponse.headers()['www-authenticate']).toContain('Basic');
   const html = await htmlResponse.text();
   expect(html).not.toContain('Media library intelligence');
   expect(html).not.toContain('total image files');
 
   const jsonResponse = await request.get('/admin/media-library.php?format=json');
-  expect([401, 503]).toContain(jsonResponse.status());
+  if (ownerUser && ownerPassword) expect(jsonResponse.status()).toBe(401);
+  else expect([401, 503]).toContain(jsonResponse.status());
   if (jsonResponse.status() === 401) expect(jsonResponse.headers()['www-authenticate']).toContain('Basic');
   const jsonText = await jsonResponse.text();
   expect(jsonText).not.toContain('"assets"');
@@ -63,4 +65,28 @@ test('Sveltia media manager remains token-gated and links owners to media tools'
   await expect(navigation).toBeVisible();
   await expect(navigation.getByRole('link', { name: 'Media library intelligence' })).toHaveAttribute('href', '/admin/media-library.php');
   await expect(navigation.getByRole('link', { name: 'Public gallery' })).toHaveAttribute('href', '/gallery.php');
+});
+
+
+test('incorrect owner credentials cannot access Media Library HTML or JSON', async ({ browser }) => {
+  test.skip(!ownerUser || !ownerPassword, 'Set GJ_MEDIA_ADMIN_E2E_USER and GJ_MEDIA_ADMIN_E2E_PASSWORD for authenticated owner coverage.');
+  const context = await browser.newContext({
+    httpCredentials: { username: ownerUser, password: 'definitely-not-the-owner-password' },
+  });
+  try {
+    const page = await context.newPage();
+    const htmlResponse = await page.goto('/admin/media-library.php', { waitUntil: 'domcontentloaded' });
+    expect(htmlResponse).not.toBeNull();
+    expect(htmlResponse.status()).toBe(401);
+    expect(htmlResponse.headers()['www-authenticate']).toContain('Basic');
+    expect(await page.locator('body').innerText()).not.toContain('Media library intelligence');
+
+    const jsonResponse = await page.request.get('/admin/media-library.php?format=json');
+    expect(jsonResponse.status()).toBe(401);
+    const body = await jsonResponse.text();
+    expect(body).not.toContain('"assets"');
+    expect(body).not.toContain('"total_assets"');
+  } finally {
+    await context.close();
+  }
 });
