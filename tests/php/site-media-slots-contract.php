@@ -65,11 +65,13 @@ $approval = [
     'approved_at' => gmdate('Y-m-d\TH:i:sP'),
 ];
 $approval['signature'] = gj_page_media_approval_sign('home-hero-mobile', $source, $alt, $caption, $approval, $key);
+$unlistedApproval = array_replace($approval, ['approved_by' => 'Unlisted Editor']);
+$unlistedApproval['signature'] = gj_page_media_approval_sign('home-rooftop-feature', $source, $alt, $caption, $unlistedApproval, $key);
 $records = [
     'home-hero-mobile' => ['src' => $source, 'alt' => $alt, 'caption' => $caption, 'approval' => $approval],
     'home-hero-desktop' => ['src' => $source, 'alt' => $alt, 'caption' => $caption, 'approval' => array_replace($approval, ['signature' => ''])],
     'home-heritage-intro' => ['src' => $source, 'alt' => $alt, 'caption' => $caption, 'approval' => array_replace($approval, ['status' => 'revoked'])],
-    'home-rooftop-feature' => ['src' => $source, 'alt' => $alt, 'caption' => $caption, 'approval' => array_replace($approval, ['approved_by' => 'Unlisted Editor'])],
+    'home-rooftop-feature' => ['src' => $source, 'alt' => $alt, 'caption' => $caption, 'approval' => $unlistedApproval],
 ];
 file_put_contents($validRoot . '/content/page-media/home.json', json_encode($records));
 $fixtureSlots = gj_load_site_media_slots($validRoot, $key, $approvers);
