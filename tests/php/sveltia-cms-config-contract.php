@@ -101,7 +101,7 @@ if (strpos($config, 'filename_template:') !== false) {
     $errors[] = 'Do not rely on an undocumented filename_template option.';
 }
 if (strpos($config, 'slugify_filename: true') === false
-    || strpos($config, 'transformations:\n        raster_image:') === false) {
+    || strpos($config, "transformations:\n        raster_image:") === false) {
     $errors[] = 'Sveltia media upload configuration must include filename slugification and raster transformation.';
 }
 
