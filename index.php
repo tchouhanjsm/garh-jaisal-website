@@ -542,42 +542,6 @@ require __DIR__ . '/include/page-head.php';
 </section>
 
 
-<section class="section home-planning-confidence" id="planning-confidence" data-story-reveal aria-labelledby="planning-confidence-title">
-  <div class="site-shell">
-    <div class="section-head">
-      <div>
-        <p class="eyebrow">A clearer way to plan</p>
-        <h2 id="planning-confidence-title">Know what to expect before you book.</h2>
-      </div>
-      <p>
-        A memorable trip starts with practical details answered clearly.
-        Explore the information you need, then ask the hotel to confirm
-        anything that depends on your dates.
-      </p>
-    </div>
-    <div class="home-planning-confidence__grid">
-      <article class="home-planning-confidence__item">
-        <span class="home-planning-confidence__number" aria-hidden="true">01</span>
-        <h3>Know where you are staying</h3>
-        <p>Garh Jaisal Haveli is inside Jaisalmer Fort. Vehicles cannot enter, so the final approach is on foot through the fort lanes.</p>
-        <a class="text-link" href="direction.php">Understand your arrival <span aria-hidden="true">↗</span></a>
-      </article>
-      <article class="home-planning-confidence__item">
-        <span class="home-planning-confidence__number" aria-hidden="true">02</span>
-        <h3>Choose with the details in view</h3>
-        <p>Room facilities vary. Compare the available room details and check current rates and availability for your dates.</p>
-        <a class="text-link" href="room.php">Compare the rooms <span aria-hidden="true">↗</span></a>
-      </article>
-      <article class="home-planning-confidence__item">
-        <span class="home-planning-confidence__number" aria-hidden="true">03</span>
-        <h3>Ask before arranging experiences</h3>
-        <p>Tour routes, guide availability, timings, prices and inclusions are confirmed for the requested date. An enquiry is not a confirmed booking.</p>
-        <a class="text-link" href="contact.php?topic=visit-planning">Ask the hotel directly <span aria-hidden="true">↗</span></a>
-      </article>
-    </div>
-  </div>
-</section>
-
 <?php
 $guestDecisionContext = 'home';
 require __DIR__ . '/include/ui/guest-decision-panel.php';
