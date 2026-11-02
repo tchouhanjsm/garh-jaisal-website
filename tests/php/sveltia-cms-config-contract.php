@@ -119,6 +119,12 @@ if (strpos($mediaLibrary, 'Media library intelligence') === false
     $errors[] = 'Read-only media library dashboard must explain usage limitations and must not expose mutation actions.';
 }
 if (strpos($mediaAudit, 'include/site-config.local.php') === false
+    || strpos($mediaAudit, 'large_file_assets') === false
+    || strpos($mediaAudit, 'oversized_dimension_assets') === false
+    || strpos($mediaAudit, 'large_dimension_threshold_px') === false
+    || strpos($mediaLibrary, 'stat-storage') === false
+    || strpos($mediaLibrary, 'optimization-review') === false
+    || strpos($html, 'Owner tools') === false
     || strpos($mediaAudit, 'no-literal-reference') === false
     || strpos($mediaAudit, 'sha256') === false
     || strpos($mediaAudit, 'source_scan_complete') === false

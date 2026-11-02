@@ -44,7 +44,14 @@ try {
     $write('img/gallery/room.webp', 'same-image-bytes');
     $write('img/gallery/room-copy.webp', 'same-image-bytes');
     $write('img/shared.jpg', 'shared-image-bytes');
-    $write('img/not-used.png', 'unreferenced-image-bytes');
+    $write('img/not-used.png', str_repeat('N', (512 * 1024) + 1));
+    $largeDimensionGif = base64_decode('R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=');
+    if (!is_string($largeDimensionGif) || strlen($largeDimensionGif) < 10) {
+        throw new RuntimeException('Unable to prepare the large-dimension GIF fixture.');
+    }
+    $largeDimensionGif = substr_replace($largeDimensionGif, pack('v', 3000), 6, 2);
+    $largeDimensionGif = substr_replace($largeDimensionGif, pack('v', 1000), 8, 2);
+    $write('img/gallery/panorama.gif', $largeDimensionGif);
     $write('img/responsive/gallery/room-480.webp', 'responsive-derivative-bytes');
 
     $write('room.php', '<?php $hero = "/img/gallery/room.webp";');
@@ -80,8 +87,23 @@ try {
         $byPath[$asset['path']] = $asset;
     }
 
-    if (($report['summary']['total_assets'] ?? 0) !== 5) {
-        $errors[] = 'Expected five image assets in inventory.';
+    if (($report['summary']['total_assets'] ?? 0) !== 6) {
+        $errors[] = 'Expected six image assets in inventory.';
+    }
+    $expectedTotalBytes = array_sum(array_column($report['assets'], 'bytes'));
+    if (($report['summary']['total_bytes'] ?? -1) !== $expectedTotalBytes) {
+        $errors[] = 'Total storage footprint must equal the sum of inventoried file sizes.';
+    }
+    if (($report['summary']['large_file_assets'] ?? 0) !== 1
+        || !in_array('large-file', $byPath['img/not-used.png']['optimization_flags'] ?? [], true)) {
+        $errors[] = 'Files larger than the review threshold must receive a large-file signal.';
+    }
+    if (($report['summary']['oversized_dimension_assets'] ?? 0) !== 1
+        || !in_array('large-dimensions', $byPath['img/gallery/panorama.gif']['optimization_flags'] ?? [], true)) {
+        $errors[] = 'Images beyond the dimension review threshold must receive a large-dimensions signal.';
+    }
+    if (($report['summary']['optimization_review_assets'] ?? 0) !== 2) {
+        $errors[] = 'Optimisation review count must count each flagged image once.';
     }
     if (($byPath['img/gallery/room.webp']['usage_count'] ?? 0) !== 2) {
         $errors[] = 'Expected the Room image to be found in PHP and its Gallery record.';

@@ -27,6 +27,11 @@ try {
             'duplicate_assets' => 0,
             'duplicate_groups' => 0,
             'total_bytes' => 0,
+            'large_file_assets' => 0,
+            'oversized_dimension_assets' => 0,
+            'optimization_review_assets' => 0,
+            'large_file_threshold_bytes' => 524288,
+            'large_dimension_threshold_px' => 2560,
             'source_files_scanned' => 0,
             'source_files_skipped' => 0,
             'source_scan_complete' => false,
@@ -91,12 +96,17 @@ header('Content-Type: text/html; charset=utf-8');
     h1 { max-width: 720px; margin: 12px 0; font: 500 clamp(32px, 5vw, 54px)/1.05 Georgia, serif; letter-spacing: -.035em; }
     .lede { max-width: 720px; margin: 0; color: var(--muted); line-height: 1.7; }
     .status-note { margin: 26px 0 30px; padding: 16px 18px; border: 1px solid #e6d8c5; border-radius: 12px; background: #f4eee5; color: #51483d; line-height: 1.55; font-size: 13px; }
-    .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin: 28px 0; }
+    .stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; margin: 28px 0; }
     .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; min-width: 0; }
     .stat span { display: block; color: var(--muted); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
     .stat strong { display: block; margin-top: 8px; font: 500 27px/1 Georgia, serif; }
     .toolbar { display: grid; grid-template-columns: minmax(180px, 1fr) 190px 210px; gap: 12px; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
     .toolbar label { display: flex; flex-direction: column; gap: 7px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    .optimization-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 12px 0 24px; }
+    .optimization-metric { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 16px; border: 1px solid var(--line); border-radius: 12px; background: #f4eee5; }
+    .optimization-metric span { color: var(--muted); font-size: 12px; }
+    .optimization-metric strong { font: 500 22px/1 Georgia, serif; }
+    .optimization-summary-note { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
     .toolbar input, .toolbar select { width: 100%; min-height: 44px; border: 1px solid #d8d0c5; border-radius: 8px; padding: 0 12px; color: var(--ink); background: white; font: inherit; font-size: 14px; }
     .results-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 18px 2px; color: var(--muted); font-size: 13px; }
     .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
@@ -111,6 +121,7 @@ header('Content-Type: text/html; charset=utf-8');
     .tag.live { background: #e8f1eb; color: var(--green); }
     .tag.draft { background: #f7efe0; color: #8a632a; }
     .tag.hidden { background: #f1e9e8; color: var(--red); }
+    .tag.warning { background: #f7efe0; color: #8a632a; }
     .asset-path { margin: 8px 0 12px; color: var(--muted); font: 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
     .meta { display: flex; flex-wrap: wrap; gap: 7px 12px; color: var(--muted); font-size: 11px; }
     .uses { margin-top: 13px; padding-top: 12px; border-top: 1px solid var(--line); }
@@ -127,6 +138,8 @@ header('Content-Type: text/html; charset=utf-8');
       .masthead-inner { align-items: flex-start; flex-direction: column; justify-content: center; padding: 15px 0; }
       main { padding-top: 36px; }
       .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .optimization-summary { grid-template-columns: 1fr; }
+      .optimization-summary-note { grid-column: auto; }
       .toolbar { grid-template-columns: 1fr; }
       .grid { grid-template-columns: 1fr; }
       .preview { height: 220px; }
@@ -155,6 +168,7 @@ header('Content-Type: text/html; charset=utf-8');
 
   <section class="stats" aria-label="Media inventory summary">
     <div class="stat"><span>Total image files</span><strong id="stat-total">—</strong></div>
+    <div class="stat"><span>Total image storage</span><strong id="stat-storage">—</strong></div>
     <div class="stat"><span>Literal references found</span><strong id="stat-referenced">—</strong></div>
     <div class="stat"><span>No literal reference</span><strong id="stat-unreferenced">—</strong></div>
     <div class="stat"><span>Responsive derivatives</span><strong id="stat-responsive">—</strong></div>
@@ -175,15 +189,24 @@ header('Content-Type: text/html; charset=utf-8');
         <option value="other">Not in Gallery</option>
       </select>
     </label>
-    <label>Usage status
+    <label>Usage &amp; optimisation
       <select id="media-usage">
         <option value="all">All usage states</option>
         <option value="referenced">Literal reference found</option>
         <option value="no-literal-reference">No literal reference found</option>
         <option value="responsive-derivative">Responsive derivative</option>
         <option value="duplicate">Exact duplicate content</option>
+        <option value="large-file">Large files</option>
+        <option value="large-dimensions">Large dimensions</option>
+        <option value="optimization-review">All optimisation flags</option>
       </select>
     </label>
+  </section>
+
+  <section class="optimization-summary" aria-label="Image optimisation review">
+    <div class="optimization-metric"><span id="large-file-label">Files over 512 KB</span><strong id="stat-large-files">—</strong></div>
+    <div class="optimization-metric"><span id="large-dimension-label">Images over 2,560 px</span><strong id="stat-large-dimensions">—</strong></div>
+    <p class="optimization-summary-note">These thresholds identify files for manual review only. They do not mean an image is defective: original quality, intended display size, responsive derivatives and visual detail all matter.</p>
   </section>
 
   <div class="results-line">
@@ -226,6 +249,11 @@ header('Content-Type: text/html; charset=utf-8');
   };
   const summary = report.summary || {};
   document.getElementById('stat-total').textContent = number(summary.total_assets);
+  document.getElementById('stat-storage').textContent = bytes(summary.total_bytes);
+  document.getElementById('stat-large-files').textContent = number(summary.large_file_assets);
+  document.getElementById('stat-large-dimensions').textContent = number(summary.oversized_dimension_assets);
+  document.getElementById('large-file-label').textContent = 'Files over ' + bytes(summary.large_file_threshold_bytes);
+  document.getElementById('large-dimension-label').textContent = 'Images over ' + number(summary.large_dimension_threshold_px) + ' px';
   document.getElementById('stat-referenced').textContent = number(summary.referenced_assets);
   document.getElementById('stat-unreferenced').textContent = number(summary.no_literal_reference);
   document.getElementById('stat-responsive').textContent = number(summary.responsive_derivatives);
@@ -260,8 +288,13 @@ header('Content-Type: text/html; charset=utf-8');
         || (selectedCategory === 'other' ? galleryEntries.length === 0 : galleryEntries.some((entry) => entry.category === selectedCategory));
       if (!inCategory) return false;
       const isDuplicate = duplicatePathSet.has(asset.path);
+      const optimizationFlags = Array.isArray(asset.optimization_flags) ? asset.optimization_flags : [];
       const stateMatches = selectedUsage === 'all'
-        || (selectedUsage === 'duplicate' ? isDuplicate : asset.usage_state === selectedUsage);
+        || (selectedUsage === 'duplicate' && isDuplicate)
+        || (selectedUsage === 'large-file' && optimizationFlags.includes('large-file'))
+        || (selectedUsage === 'large-dimensions' && optimizationFlags.includes('large-dimensions'))
+        || (selectedUsage === 'optimization-review' && optimizationFlags.length > 0)
+        || (['referenced', 'no-literal-reference', 'responsive-derivative'].includes(selectedUsage) && asset.usage_state === selectedUsage);
       if (!stateMatches) return false;
       const haystack = [
         asset.path,
@@ -320,6 +353,8 @@ header('Content-Type: text/html; charset=utf-8');
       meta.append(make('span', '', bytes(asset.bytes)));
       meta.append(make('span', '', asset.width && asset.height ? asset.width + ' × ' + asset.height : asset.extension.toUpperCase()));
       meta.append(make('span', '', number(asset.usage_count) + ' source file(s)'));
+      if (optimizationFlags.includes('large-file')) meta.append(make('span', 'tag warning', 'Large file'));
+      if (optimizationFlags.includes('large-dimensions')) meta.append(make('span', 'tag warning', 'Large dimensions'));
       if (asset.is_duplicate) meta.append(make('span', '', 'Exact duplicate'));
       body.append(meta);
 

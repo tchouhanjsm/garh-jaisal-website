@@ -36,6 +36,9 @@ if (!function_exists('gj_media_library_audit')) {
         $maxAssets = 3000;
         $assetCount = 0;
         $imageExtensions = ['avif', 'gif', 'jpg', 'jpeg', 'png', 'webp', 'svg'];
+        // Review thresholds are triage signals, not automatic quality failures.
+        $largeFileThresholdBytes = 512 * 1024;
+        $largeDimensionThresholdPx = 2560;
 
         $imageIterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($imageRootReal, FilesystemIterator::SKIP_DOTS),
@@ -324,6 +327,9 @@ if (!function_exists('gj_media_library_audit')) {
         $unreferencedCandidates = 0;
         $responsiveDerivatives = 0;
         $duplicateAssetCount = 0;
+        $largeFileAssets = 0;
+        $oversizedDimensionAssets = 0;
+        $optimizationReviewAssets = 0;
         $duplicatePathSet = [];
         foreach ($duplicates as $group) {
             foreach ($group as $path) {
@@ -337,6 +343,23 @@ if (!function_exists('gj_media_library_audit')) {
             $assets[$index]['gallery_entry_count'] = count($asset['gallery_entries']);
             $assets[$index]['is_responsive_derivative'] = is_string($asset['derived_from']);
             $assets[$index]['is_duplicate'] = isset($duplicatePathSet[$asset['path']]);
+            $optimizationFlags = [];
+            if ($asset['bytes'] > $largeFileThresholdBytes) {
+                $optimizationFlags[] = 'large-file';
+                $largeFileAssets++;
+            }
+            if (
+                is_int($asset['width'])
+                && is_int($asset['height'])
+                && max($asset['width'], $asset['height']) > $largeDimensionThresholdPx
+            ) {
+                $optimizationFlags[] = 'large-dimensions';
+                $oversizedDimensionAssets++;
+            }
+            $assets[$index]['optimization_flags'] = $optimizationFlags;
+            if ($optimizationFlags) {
+                $optimizationReviewAssets++;
+            }
             $assets[$index]['usage_state'] = $assets[$index]['is_responsive_derivative']
                 ? 'responsive-derivative'
                 : ($usageCount > 0 ? 'referenced' : 'no-literal-reference');
@@ -375,6 +398,11 @@ if (!function_exists('gj_media_library_audit')) {
                 'duplicate_assets' => $duplicateAssetCount,
                 'duplicate_groups' => count($duplicates),
                 'total_bytes' => $totalBytes,
+                'large_file_assets' => $largeFileAssets,
+                'oversized_dimension_assets' => $oversizedDimensionAssets,
+                'optimization_review_assets' => $optimizationReviewAssets,
+                'large_file_threshold_bytes' => $largeFileThresholdBytes,
+                'large_dimension_threshold_px' => $largeDimensionThresholdPx,
                 'source_files_scanned' => $sourceFilesScanned,
                 'source_files_skipped' => $sourceFilesSkipped,
                 'source_scan_complete' => $sourceScanComplete,
