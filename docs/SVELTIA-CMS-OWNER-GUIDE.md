@@ -12,6 +12,8 @@ The first release supports **new owner-managed gallery items** in four categorie
 
 Sveltia's GitHub backend requires a GitHub account with Write, Maintain or Admin access to this repository.
 
+Before first sign-in, verify in GitHub repository settings that `main` has a branch protection rule or ruleset requiring pull requests (and the repository's required checks) before changes can land. The `branch: cms-media` setting in this CMS configuration is a routing choice, not an access-control boundary: a repository-scoped Contents-write token can write to any branch that GitHub permits. Keep `cms-media` writable for Sveltia and keep `main` protected. This PR does not change or verify GitHub branch-protection settings.
+
 For the owner-only initial setup:
 
 1. Open `/admin/` on the deployed site.
