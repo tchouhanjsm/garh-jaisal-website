@@ -119,6 +119,9 @@ jobs:
 
       - name: Verify owner-managed Home, Rooms, Dining and Experience image slots
         run: php tests/php/site-media-slots-contract.php
+
+      - name: Verify owner Media Library authentication
+        run: php tests/php/admin-auth-contract.php
       - name: Verify shared quick-facts component contract
         run: php tests/php/at-a-glance-contract.php
 
