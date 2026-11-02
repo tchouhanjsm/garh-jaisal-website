@@ -24,6 +24,7 @@ if (!function_exists('gj_media_admin_request_is_https')) {
             || (isset($server['SERVER_PORT']) && (string) $server['SERVER_PORT'] === '443')) return true;
         $remote = $server['REMOTE_ADDR'] ?? '';
         $host = strtolower((string) ($server['HTTP_HOST'] ?? $server['SERVER_NAME'] ?? ''));
+        $host = preg_replace('/:\\d+$/', '', $host);
         return in_array($remote, ['127.0.0.1', '::1'], true)
             && in_array($host, ['localhost', '127.0.0.1', '[::1]'], true);
     }
