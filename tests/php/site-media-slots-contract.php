@@ -45,6 +45,9 @@ $removeTree = static function ($path) use (&$removeTree) {
 };
 $key = str_repeat('a1', 32);
 $approvers = ['Owner Reviewer'];
+if (gj_page_media_approval_sign('home-hero-mobile', 'img/hero.png', 'A sufficiently long descriptive alt text', '', [], str_repeat('a', 65)) !== '') {
+    $errors[] = 'Odd-length hexadecimal HMAC keys must be rejected.';
+}
 $source = 'img/hero.png';
 $alt = 'Carved sandstone facade approved for the homepage hero';
 $caption = 'A reviewed homepage image';
@@ -108,7 +111,26 @@ file_put_contents($changedAssetRoot . '/content/page-media/home.json', json_enco
 $changedAssetSlots = gj_load_site_media_slots($changedAssetRoot, $key, $approvers);
 if (($changedAssetSlots['home-hero-mobile']['approved'] ?? true) !== false) $errors[] = 'Changing image bytes must invalidate signature.';
 
-foreach ([$validRoot, $wrongKeyRoot, $wrongApproverRoot, $tamperedRoot, $changedAssetRoot] as $fixtureRoot) $removeTree($fixtureRoot);
+$evidenceTamperRoot = $makeFixture();
+copy($imagePath, $evidenceTamperRoot . '/img/hero.png');
+$evidenceTampered = $records['home-hero-mobile'];
+$evidenceTampered['approval']['rights_basis'] = 'A changed rights review statement after approval';
+file_put_contents($evidenceTamperRoot . '/content/page-media/home.json', json_encode(['home-hero-mobile' => $evidenceTampered]));
+$evidenceTamperSlots = gj_load_site_media_slots($evidenceTamperRoot, $key, $approvers);
+if (($evidenceTamperSlots['home-hero-mobile']['approved'] ?? true) !== false) $errors[] = 'Changing rights evidence must invalidate signature.';
+
+$futureApprovalRoot = $makeFixture();
+copy($imagePath, $futureApprovalRoot . '/img/hero.png');
+$futureApproval = $records['home-hero-mobile']['approval'];
+$futureApproval['approved_at'] = gmdate('Y-m-d\\TH:i:sP', time() + 600);
+$futureApproval['signature'] = gj_page_media_approval_sign('home-hero-mobile', $source, $alt, $caption, $futureApproval, $key);
+file_put_contents($futureApprovalRoot . '/content/page-media/home.json', json_encode([
+    'home-hero-mobile' => ['src' => $source, 'alt' => $alt, 'caption' => $caption, 'approval' => $futureApproval],
+]));
+$futureApprovalSlots = gj_load_site_media_slots($futureApprovalRoot, $key, $approvers);
+if (($futureApprovalSlots['home-hero-mobile']['approved'] ?? true) !== false) $errors[] = 'Future-dated approvals must be rejected.';
+
+foreach ([$validRoot, $wrongKeyRoot, $wrongApproverRoot, $tamperedRoot, $changedAssetRoot, $evidenceTamperRoot, $futureApprovalRoot] as $fixtureRoot) $removeTree($fixtureRoot);
 if ($errors) {
     foreach ($errors as $error) fwrite(STDERR, 'ERROR ' . $error . PHP_EOL);
     exit(1);
