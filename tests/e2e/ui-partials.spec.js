@@ -15,8 +15,8 @@ const CTA_CASES = [
   {
     route: '/room.php',
     section: '.rooms-cta',
-    heading: 'Choose your room.',
-    links: [{ label: 'Book your stay', opensNewTab: true }],
+    heading: 'Understand the stay before you choose.',
+    links: [{ label: 'Read our guide to staying inside Jaisalmer Fort', href: 'book-rooms-in-jaisalmer.php' }],
   },
   {
     route: '/direction.php',
