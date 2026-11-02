@@ -154,6 +154,40 @@ if (strpos($config, 'name: approval') === false
     || strpos($config, 'name: alt_text_review') === false) {
     $errors[] = 'Sveltia Page image slots must expose the review evidence fields.';
 }
+
+$approvalSchemaCount = preg_match_all('/^\\s{12}- name: approval$/m', $config);
+if ($approvalSchemaCount !== 33) {
+    $errors[] = 'Every one of the 33 fixed page image slots must expose exactly one approval object; found ' . (int) $approvalSchemaCount . '.';
+}
+
+$pageMediaAreas = ['home' => 13, 'rooms' => 8, 'dining' => 1, 'experiences' => 11];
+$pageMediaCount = 0;
+foreach ($pageMediaAreas as $area => $expectedCount) {
+    $records = json_decode($read('content/page-media/' . $area . '.json'), true);
+    if (!is_array($records) || count($records) !== $expectedCount) {
+        $errors[] = 'Expected ' . $expectedCount . ' fixed page-media records in ' . $area . '.';
+        continue;
+    }
+    foreach ($records as $slotId => $record) {
+        $pageMediaCount++;
+        $approval = is_array($record['approval'] ?? null) ? $record['approval'] : [];
+        if (($approval['status'] ?? null) !== 'pending'
+            || ($approval['source_credit'] ?? null) !== ''
+            || ($approval['rights_basis'] ?? null) !== ''
+            || ($approval['visual_match_review'] ?? null) !== ''
+            || ($approval['alt_text_review'] ?? null) !== ''
+            || ($approval['technical_validation'] ?? null) !== ''
+            || ($approval['asset_sha256'] ?? null) !== ''
+            || ($approval['approved_by'] ?? null) !== ''
+            || ($approval['approved_at'] ?? null) !== ''
+            || ($approval['signature'] ?? null) !== '') {
+            $errors[] = 'Existing page-media slot must be explicitly pending with no fabricated approval evidence: ' . $area . '/' . $slotId;
+        }
+    }
+}
+if ($pageMediaCount !== 33) {
+    $errors[] = 'Expected 33 total fixed page-media records; found ' . $pageMediaCount . '.';
+}
 if (strpos($siteMediaLoader, 'getimagesize') === false
     || strpos($siteMediaLoader, 'realpath') === false
     || strpos($siteMediaLoader, 'is_link') === false
