@@ -7,7 +7,7 @@ Production target: `https://www.hotelgarhjaisal.com`, hosted on cPanel. Reposito
 1. Require every applicable exact-head CI job: Site Checks (PHP 7.4 and 8.2), Browser E2E/screenshots, package preflight, responsive-image review and non-deploying Staging QA.
 2. Open the deployment-package workflow for the merged `main` SHA and download the ZIP, manifest and `.sha256` checksum.
 3. Verify `sha256sum -c <package-name>.sha256`; confirm the manifest commit matches the approved SHA.
-4. Inspect the manifest. The package contains tracked runtime PHP, `.htaccess`, sitemap/robots, CSS/JS, approved images and shared includes. It excludes Git history, docs, tests, scripts, workflows and server-only `include/site-config.local.php`.
+4. Inspect the manifest. The package contains tracked runtime PHP, the Sveltia `/admin/` dashboard and its non-secret repository configuration, `.htaccess`, sitemap/robots, CSS/JS, approved images and shared includes. It excludes Git history, docs, tests, scripts, workflows and server-only `include/site-config.local.php`.
 5. Preserve the existing server-side `include/site-config.local.php`. Never replace it with an example file or copy secrets into Git.
 
 ## Staging workflow (manual owner action)

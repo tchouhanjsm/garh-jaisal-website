@@ -36,6 +36,9 @@ def create_package_git_fixture(root: Path) -> str:
     """Create a minimal clean main checkout with generated, manifest-approved WebP."""
     runtime_files = {
         ".htaccess": "Options -Indexes\n",
+        "admin/index.html": "<!doctype html>\\n",
+        "admin/config.yml": "backend:\\n  name: github\\n  branch: cms-media\\n",
+        "admin/.htaccess": "Options -Indexes\\n",
         "404.php": "<?php http_response_code(404);\n",
         "contact.php": "<?php\n",
         "index.php": "<?php\n",
@@ -83,6 +86,7 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
     def test_selects_runtime_files_and_excludes_development_files(self):
         tracked = [
             ".htaccess", "index.php", "room.php", "robots.txt", "sitemap.xml",
+            "admin/index.html", "admin/config.yml", "admin/.htaccess",
             "contact.php", "404.php", "mail.php", "include/page-head.php",
             "include/site-config.php", EXAMPLE_CONFIG_PATH, "css/garh-v2.css",
             "img/facade.webp", "js/garh-v2.js", "docs/DEPLOY-CPANEL.md",
@@ -91,6 +95,9 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
         ]
         selected = select_runtime_paths(tracked)
         self.assertIn(".htaccess", selected)
+        self.assertIn("admin/index.html", selected)
+        self.assertIn("admin/config.yml", selected)
+        self.assertIn("admin/.htaccess", selected)
         self.assertIn("include/site-config.php", selected)
         self.assertIn("css/garh-v2.css", selected)
         self.assertIn("img/facade.webp", selected)
@@ -139,6 +146,7 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
             ".htaccess", "404.php", "contact.php", "index.php", "mail.php",
             "robots.txt", "sitemap.xml", "include/page-head.php",
             "include/site-config.php", "room.php",
+            "admin/index.html", "admin/config.yml", "admin/.htaccess",
         ]
         routes = validate_package_paths(selected, SITEMAP)
         self.assertEqual([route for route, _ in routes], ["/", "/contact.php", "/room.php"])
