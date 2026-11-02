@@ -15,7 +15,7 @@ if (!is_array($registry)) {
             $errors[] = 'Missing guest decision context: ' . $context;
             continue;
         }
-        foreach (['title', 'intro', 'cta_href', 'cta_label'] as $key) {
+        foreach (['title', 'intro', 'cta_href', 'cta_label', 'cta_id', 'cta_location'] as $key) {
             if (!isset($panel[$key]) || !is_string($panel[$key]) || trim($panel[$key]) === '') {
                 $errors[] = $context . ' must define non-empty ' . $key;
             }
@@ -53,6 +53,8 @@ if (!is_string($component)) {
         'Published on this site',
         'Confirm with the hotel',
         'target="_blank" rel="noopener"',
+        'data-cta-id=',
+        'data-cta-location=',
     ] as $needle) {
         if (strpos($component, $needle) === false) $errors[] = 'Guest decision partial missing contract: ' . $needle;
     }
@@ -83,6 +85,14 @@ if (!is_array($topics) || !isset($topics['stay']['message'])
     || strpos((string) $topics['stay']['message'], 'cancellation policy') === false
     || strpos((string) $topics['stay']['message'], 'maximum occupancy') === false) {
     $errors[] = 'The allowlisted stay topic must ask about occupancy and cancellation without asserting their values.';
+}
+
+$trackingPath = $root . '/js/garh-v2.js';
+$tracking = is_file($trackingPath) ? file_get_contents($trackingPath) : false;
+if (!is_string($tracking)
+    || strpos($tracking, 'room_details_enquiry_click') === false
+    || strpos($tracking, "destination.searchParams.get('topic') === 'stay'") === false) {
+    $errors[] = 'Room details enquiry intent must be attributed without guest data.';
 }
 
 $stylePath = $root . '/css/conversion-system.css';
