@@ -12,6 +12,11 @@ test('read-only media library reports usage, Gallery records and duplicate evide
   await expect(page.locator('#stat-storage')).not.toHaveText('—');
   await expect(page.locator('#stat-large-files')).not.toHaveText('—');
   await expect(page.locator('#stat-large-dimensions')).not.toHaveText('—');
+  const firstCard = page.locator('[data-media-card]').first();
+  const imagePath = (await firstCard.locator('.asset-path').first().textContent()).trim();
+  const historyLink = firstCard.getByRole('link', { name: 'View Git history for ' + imagePath });
+  await expect(historyLink).toHaveAttribute('href', 'https://github.com/tchouhanjsm/garh-jaisal-website/commits/main/' + imagePath.split('/').map(encodeURIComponent).join('/'));
+  await expect(historyLink).toHaveAttribute('rel', 'noopener noreferrer');
 
   const reportResponse = await page.request.get('/admin/media-library.php?format=json');
   expect(reportResponse.status()).toBe(200);

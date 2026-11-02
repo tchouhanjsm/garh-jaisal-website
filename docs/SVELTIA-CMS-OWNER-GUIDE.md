@@ -89,7 +89,7 @@ A CMS save, GitHub merge or branch-sync run does **not** upload files to cPanel.
 
 ## Rollback and recovery
 
-For a bad published change, revert the relevant pull request or restore the previous JSON/image from Git history in a new pull request. Do not edit production files directly in cPanel as the normal rollback path.
+For a bad published image, open **View Git history** on its Media Library card to inspect the file's commits on `main` and identify a known-good version. Restore the previous image from that revision or revert the publishing pull request, then submit the restoration through a new reviewed pull request. Do not edit production files directly in cPanel as the normal rollback path. The dashboard provides a history link only; it does not perform a restore or change repository files.
 
 If branch synchronisation fails, do not continue editing on a stale branch. Open the workflow run, resolve any merge conflict on `cms-media` with the repository's latest `main` baseline, and rerun the sync. Never force-push the CMS branch over owner changes.
 

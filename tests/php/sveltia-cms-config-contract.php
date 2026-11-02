@@ -124,6 +124,8 @@ if (strpos($mediaAudit, 'include/site-config.local.php') === false
     || strpos($mediaAudit, 'large_dimension_threshold_px') === false
     || strpos($mediaLibrary, 'stat-storage') === false
     || strpos($mediaLibrary, 'optimization-review') === false
+    || strpos($mediaLibrary, 'commits/main/') === false
+    || strpos($mediaLibrary, 'View Git history') === false
     || strpos($html, 'Owner tools') === false
     || strpos($mediaAudit, 'no-literal-reference') === false
     || strpos($mediaAudit, 'sha256') === false

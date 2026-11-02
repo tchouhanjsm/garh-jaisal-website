@@ -123,6 +123,8 @@ header('Content-Type: text/html; charset=utf-8');
     .tag.hidden { background: #f1e9e8; color: var(--red); }
     .tag.warning { background: #f7efe0; color: #8a632a; }
     .asset-path { margin: 8px 0 12px; color: var(--muted); font: 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+    .history-link { display: inline-flex; margin: -3px 0 11px; color: var(--gold); font-size: 11px; font-weight: 700; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    .history-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 2px; }
     .meta { display: flex; flex-wrap: wrap; gap: 7px 12px; color: var(--muted); font-size: 11px; }
     .uses { margin-top: 13px; padding-top: 12px; border-top: 1px solid var(--line); }
     .uses summary { cursor: pointer; color: #5d5143; font-size: 12px; font-weight: 650; }
@@ -219,7 +221,7 @@ header('Content-Type: text/html; charset=utf-8');
   <section id="media-grid" class="grid" aria-label="Image files"></section>
 
   <p class="footnote">
-    <strong>How to interpret this report:</strong> usage is based on literal paths found in the public PHP, HTML, CSS, JavaScript, JSON, XML and configuration source files scanned by the site. Dynamic path construction may not be detected. Duplicate groups use an exact SHA-256 file-content match, not visual similarity. The report is generated on request and is read-only.
+    <strong>How to interpret this report:</strong> usage is based on literal paths found in the public PHP, HTML, CSS, JavaScript, JSON, XML and configuration source files scanned by the site. Dynamic path construction may not be detected. Duplicate groups use an exact SHA-256 file-content match, not visual similarity. Each image links to its Git history on the reviewed <code>main</code> branch; inspect the commit history to identify a known-good version and restore it through a reviewed pull request. Never edit the production copy directly in cPanel. The report is generated on request and is read-only.
   </p>
 </main>
 <script id="media-library-data" type="application/json"><?= $encodedReport ?></script>
@@ -349,6 +351,13 @@ header('Content-Type: text/html; charset=utf-8');
       }
       body.append(head);
       body.append(make('p', 'asset-path', asset.path));
+      const historyLink = make('a', 'history-link', 'View Git history');
+      historyLink.href = 'https://github.com/tchouhanjsm/garh-jaisal-website/commits/main/'
+        + asset.path.split('/').map((segment) => encodeURIComponent(segment)).join('/');
+      historyLink.target = '_blank';
+      historyLink.rel = 'noopener noreferrer';
+      historyLink.setAttribute('aria-label', 'View Git history for ' + asset.path);
+      body.append(historyLink);
 
       const meta = make('div', 'meta');
       meta.append(make('span', '', bytes(asset.bytes)));
