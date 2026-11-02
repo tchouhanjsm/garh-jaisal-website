@@ -542,11 +542,13 @@ require __DIR__ . '/include/page-head.php';
 </section>
 
 
-<?php
-$guestDecisionContext = 'home';
-require __DIR__ . '/include/ui/guest-decision-panel.php';
-unset($guestDecisionContext);
-?>
+<section class="section home-planning-confidence" id="planning-confidence" aria-labelledby="guest-decision-home-title">
+  <?php
+  $guestDecisionContext = 'home';
+  require __DIR__ . '/include/ui/guest-decision-panel.php';
+  unset($guestDecisionContext);
+  ?>
+</section>
 
 <section class="section conversion-faq" aria-labelledby="conversion-faq-title">
   <div class="site-shell">
