@@ -622,19 +622,25 @@ foreach ($studioFiles as $studioFile) {
     $experiences[$slug] = $record;
 }
 
-$siteMediaSlots = require __DIR__ . '/site-media-slots.php';
-foreach ($experiences as $experienceSlug => &$experience) {
-    $slotImage = gj_site_media_slot($siteMediaSlots, 'experience-' . $experienceSlug . '-hero', [
-        'src' => $experience['hero_image'],
-        'alt' => $experience['hero_alt'],
-        'caption' => $experience['hero_caption'] ?? '',
-    ]);
-    $experience['hero_image'] = $slotImage['src'];
-    $experience['hero_alt'] = $slotImage['alt'];
-    if (trim((string) ($slotImage['caption'] ?? '')) !== '') {
-        $experience['hero_caption'] = $slotImage['caption'];
+$experiences = (static function ($experienceRecords) {
+    // Keep all temporary names in closure scope: this file is required inside
+    // the public route wrapper, where $experienceSlug identifies the request.
+    $pageMediaSlots = require __DIR__ . '/site-media-slots.php';
+    foreach ($experienceRecords as $pageMediaSlug => &$pageMediaRecord) {
+        $pageMediaImage = gj_site_media_slot($pageMediaSlots, 'experience-' . $pageMediaSlug . '-hero', [
+            'src' => $pageMediaRecord['hero_image'],
+            'alt' => $pageMediaRecord['hero_alt'],
+            'caption' => $pageMediaRecord['hero_caption'] ?? '',
+        ]);
+        $pageMediaRecord['hero_image'] = $pageMediaImage['src'];
+        $pageMediaRecord['hero_alt'] = $pageMediaImage['alt'];
+        if (trim((string) ($pageMediaImage['caption'] ?? '')) !== '') {
+            $pageMediaRecord['hero_caption'] = $pageMediaImage['caption'];
+        }
     }
-}
-unset($experience);
+    unset($pageMediaRecord, $pageMediaSlug, $pageMediaImage, $pageMediaSlots);
+    return $experienceRecords;
+})($experiences);
+
 return $experiences;
 

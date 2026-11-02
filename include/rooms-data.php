@@ -105,15 +105,20 @@ $rooms = [
     ],
 ];
 
-$siteMediaSlots = require __DIR__ . '/site-media-slots.php';
-foreach ($rooms as &$room) {
-    $roomSlug = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '-', $room['name']), '-'));
-    $slotImage = gj_site_media_slot($siteMediaSlots, 'room-' . $roomSlug . '-primary', [
-        'src' => $room['image'],
-        'alt' => $room['alt'],
-    ]);
-    $room['image'] = $slotImage['src'];
-    $room['alt'] = $slotImage['alt'];
-}
-unset($room);
+$rooms = (static function ($roomRecords) {
+    // The rooms include can run inside pages that already use $room/$roomSlug.
+    $pageMediaSlots = require __DIR__ . '/site-media-slots.php';
+    foreach ($roomRecords as &$pageMediaRoom) {
+        $pageMediaRoomSlug = strtolower(trim(preg_replace('/[^a-z0-9]+/i', '-', $pageMediaRoom['name']), '-'));
+        $pageMediaImage = gj_site_media_slot($pageMediaSlots, 'room-' . $pageMediaRoomSlug . '-primary', [
+            'src' => $pageMediaRoom['image'],
+            'alt' => $pageMediaRoom['alt'],
+        ]);
+        $pageMediaRoom['image'] = $pageMediaImage['src'];
+        $pageMediaRoom['alt'] = $pageMediaImage['alt'];
+    }
+    unset($pageMediaRoom, $pageMediaRoomSlug, $pageMediaImage, $pageMediaSlots);
+    return $roomRecords;
+})($rooms);
+
 return $rooms;
