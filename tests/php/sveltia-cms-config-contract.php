@@ -74,7 +74,6 @@ foreach ([
         'value_type: int',
         'default: 100',
         'min: 1',
-        'widget: hidden',
         'name: review_status',
         'name: caption',
         'folder: /content/gallery',
