@@ -16,6 +16,10 @@ $requiredFiles = [
     'include/gallery-data.php',
     'include/media-library-audit.php',
     'include/site-media-slots.php',
+    'include/page-media-approval.php',
+    'include/admin-auth.php',
+    'scripts/sign-page-media-approval.php',
+    'tests/php/admin-auth-contract.php',
     'content/page-media/home.json',
     'content/page-media/rooms.json',
     'content/page-media/dining.json',
@@ -46,6 +50,8 @@ $html = $read('admin/index.html');
 $mediaLibrary = $read('admin/media-library.php');
 $mediaAudit = $read('include/media-library-audit.php');
 $siteMediaLoader = $read('include/site-media-slots.php');
+$approvalHelper = $read('include/page-media-approval.php');
+$adminAuth = $read('include/admin-auth.php');
 $config = $read('admin/config.yml');
 $headers = $read('admin/.htaccess');
 $galleryLoader = $read('include/gallery-data.php');
@@ -125,6 +131,29 @@ if (strpos($mediaLibrary, 'Media library intelligence') === false
     || stripos($mediaLibrary, 'never delete from this report alone') === false) {
     $errors[] = 'Read-only media library dashboard must explain usage limitations and must not expose mutation actions.';
 }
+if (strpos($mediaLibrary, 'gj_require_media_admin_access') === false
+    || strpos($mediaLibrary, 'gj_require_media_admin_access') > strpos($mediaLibrary, 'gj_media_library_audit')) {
+    $errors[] = 'Media Library authorization must run before the inventory audit.';
+}
+if (strpos($adminAuth, 'password_verify') === false
+    || strpos($adminAuth, 'WWW-Authenticate: Basic') === false
+    || strpos($adminAuth, 'Vary: Authorization') === false
+    || strpos($adminAuth, 'media_admin_auth') === false) {
+    $errors[] = 'Owner dashboard must use server-configured HTTPS Basic authentication.';
+}
+if (strpos($approvalHelper, 'hash_hmac') === false
+    || strpos($approvalHelper, 'asset_sha256') === false
+    || strpos($siteMediaLoader, 'gj_page_media_approval_is_valid') === false
+    || strpos($siteMediaLoader, "['approved'] !== true") === false) {
+    $errors[] = 'Page image slots must require signed, asset-bound approval evidence.';
+}
+if (strpos($config, 'name: approval') === false
+    || strpos($config, 'name: source_credit') === false
+    || strpos($config, 'name: rights_basis') === false
+    || strpos($config, 'name: visual_match_review') === false
+    || strpos($config, 'name: alt_text_review') === false) {
+    $errors[] = 'Sveltia Page image slots must expose the review evidence fields.';
+}
 if (strpos($siteMediaLoader, 'getimagesize') === false
     || strpos($siteMediaLoader, 'realpath') === false
     || strpos($siteMediaLoader, 'is_link') === false
@@ -173,7 +202,9 @@ if (
 ) {
     $errors[] = 'The cPanel package builder must include the CMS runtime directory and entry points.';
 }
-if (strpos($guide, 'local storage') === false || strpos($guide, '15 MiB') === false || strpos($guide, 'cms-media') === false) {
+if (strpos($guide, 'local storage') === false || strpos($guide, '15 MiB') === false || strpos($guide, 'cms-media') === false
+    || strpos($guide, 'GJ_MEDIA_APPROVAL_HMAC_KEY') === false
+    || strpos($guide, 'media_admin_auth') === false) {
     $errors[] = 'Owner guide must explain token storage, upload limits and the CMS branch workflow.';
 }
 
