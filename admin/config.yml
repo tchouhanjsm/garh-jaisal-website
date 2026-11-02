@@ -13,16 +13,16 @@ public_folder: img/gallery
 # Shared options supported by Sveltia's internal Git media storage.
 # Browser-side raster optimisation runs before uploads are committed.
 media_libraries:
-  all:
-    max_file_size: 15728640
-    slugify_filename: true
-    filename_template: '{{year}}{{month}}{{day}}-{{uuid_short}}'
-    transformations:
-      raster_image:
-        format: webp
-        quality: 84
-        width: 1600
-        height: 1600
+  default:
+    config:
+      max_file_size: 15728640
+      slugify_filename: true
+      transformations:
+        raster_image:
+          format: webp
+          quality: 84
+          width: 1600
+          height: 1600
 
 collections:
   - name: gallery
