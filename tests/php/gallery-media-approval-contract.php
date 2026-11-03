@@ -92,6 +92,12 @@ $record = [
         'reviewer' => 'Owner Reviewer',
         'reviewedAt' => '2026-10-02',
     ],
+    'altTextReview' => [
+        'status' => 'matched',
+        'evidence' => 'Alt text accurately identifies the visible sandstone facade without keyword stuffing.',
+        'reviewer' => 'Owner Reviewer',
+        'reviewedAt' => '2026-10-02',
+    ],
     'technicalValidation' => [
         'status' => 'verified',
         'evidenceReference' => 'Image decoded and pixel dimensions checked in release review GJ-2026-01',
