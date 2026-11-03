@@ -58,9 +58,17 @@ $legacyBaseline = require $legacyBaselinePath;
 if (!is_array($legacyBaseline) || count($legacyBaseline) !== 36) {
     throw new RuntimeException('Gallery legacy approval baseline must contain exactly 36 records.');
 }
-foreach ($legacyBaseline as $legacyId => $legacyHash) {
+foreach ($legacyBaseline as $legacyId => $legacyEntry) {
     if (!is_string($legacyId) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $legacyId)
-        || !is_string($legacyHash) || !preg_match('/^[a-f0-9]{64}$/D', $legacyHash)) {
+        || !is_array($legacyEntry)
+        || !is_string($legacyEntry['record_sha256'] ?? null)
+        || !preg_match('/^[a-f0-9]{64}$/D', $legacyEntry['record_sha256'])
+        || !is_string($legacyEntry['image_path'] ?? null)
+        || !preg_match('~^img/[A-Za-z0-9._/-]+\\.(?:avif|jpe?g|png|webp)$~iD', $legacyEntry['image_path'])
+        || strpos($legacyEntry['image_path'], '..') !== false
+        || !is_string($legacyEntry['image_git_blob_sha1'] ?? null)
+        || !preg_match('/^[a-f0-9]{40}$/D', $legacyEntry['image_git_blob_sha1'])
+        || !is_int($legacyEntry['image_bytes'] ?? null) || $legacyEntry['image_bytes'] < 1) {
         throw new RuntimeException('Gallery legacy approval baseline contains an invalid entry.');
     }
 }
