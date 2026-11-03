@@ -177,6 +177,45 @@ if (!function_exists('gj_gallery_media_approval_is_valid')) {
         return $expected !== '' && hash_equals($expected, strtolower($signature));
     }
 }
+if (!function_exists('gj_gallery_media_legacy_asset_git_blob_sha1')) {
+    /**
+     * Return the Git blob object ID for a regular file without reading it all into memory.
+     * Git blob identity is SHA-1 over "blob <byte-length>\\0" followed by the exact bytes.
+     */
+    function gj_gallery_media_legacy_asset_git_blob_sha1($imagePath)
+    {
+        if (!is_string($imagePath) || is_link($imagePath) || !is_file($imagePath)) return false;
+        clearstatcache(true, $imagePath);
+        $size = @filesize($imagePath);
+        if (!is_int($size) || $size < 1) return false;
+
+        $handle = @fopen($imagePath, 'rb');
+        if (!is_resource($handle)) return false;
+        $context = hash_init('sha1');
+        hash_update($context, 'blob ' . $size . chr(0));
+        $readBytes = 0;
+        $failed = false;
+        while (!feof($handle)) {
+            $chunk = fread($handle, 1024 * 1024);
+            if (!is_string($chunk)) {
+                $failed = true;
+                break;
+            }
+            if ($chunk === '' && !feof($handle)) {
+                $failed = true;
+                break;
+            }
+            $readBytes += strlen($chunk);
+            hash_update($context, $chunk);
+        }
+        $closed = fclose($handle);
+        clearstatcache(true, $imagePath);
+        $finalSize = @filesize($imagePath);
+        if ($failed || $closed !== true || $readBytes !== $size || $finalSize !== $size) return false;
+        return hash_final($context);
+    }
+}
+
 if (!function_exists('gj_gallery_media_publication_is_approved')) {
     /**
      * One publication decision for both runtime rendering and regression tests.
@@ -195,9 +234,26 @@ if (!function_exists('gj_gallery_media_publication_is_approved')) {
             return $decodable && gj_gallery_media_approval_is_valid($record, $imagePath, $key, $approvers);
         }
 
-        $baselineHash = $legacyBaseline[$id] ?? null;
-        return is_string($baselineHash)
-            && preg_match('/^[a-f0-9]{64}$/D', $baselineHash) === 1
-            && hash_equals($baselineHash, hash('sha256', $recordJson));
+        $baseline = $legacyBaseline[$id] ?? null;
+        $image = is_array($record['image'] ?? null) ? $record['image'] : [];
+        $source = $image['src'] ?? null;
+        if (!is_array($baseline)
+            || !is_string($baseline['record_sha256'] ?? null)
+            || !preg_match('/^[a-f0-9]{64}$/D', $baseline['record_sha256'])
+            || !is_string($baseline['image_path'] ?? null)
+            || !is_string($source)
+            || !hash_equals($baseline['image_path'], $source)
+            || !is_string($baseline['image_git_blob_sha1'] ?? null)
+            || !preg_match('/^[a-f0-9]{40}$/D', $baseline['image_git_blob_sha1'])
+            || !is_int($baseline['image_bytes'] ?? null)
+            || $baseline['image_bytes'] < 1
+            || !is_string($imagePath) || is_link($imagePath) || !is_file($imagePath)) return false;
+
+        $actualBytes = @filesize($imagePath);
+        $actualGitBlob = gj_gallery_media_legacy_asset_git_blob_sha1($imagePath);
+        return is_int($actualBytes) && $actualBytes === $baseline['image_bytes']
+            && is_string($actualGitBlob)
+            && hash_equals($baseline['record_sha256'], hash('sha256', $recordJson))
+            && hash_equals($baseline['image_git_blob_sha1'], $actualGitBlob);
     }
 }
