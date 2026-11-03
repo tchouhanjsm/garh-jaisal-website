@@ -119,6 +119,10 @@ $expectedMediaConfig = "media_libraries:\n  default:\n    config:\n      max_fil
 if (strpos($config, $expectedMediaConfig) === false) {
     $errors[] = 'Sveltia internal media settings must be nested under media_libraries.default.config.';
 }
+if (substr_count($config, "\n  - name: gallery") !== 1
+    || substr_count($config, "\n  - name: page_media_slots") !== 1) {
+    $errors[] = 'Sveltia configuration must expose exactly one Gallery collection and one Page image slots collection.';
+}
 $galleryStart = strpos($config, "  - name: gallery");
 $nextCollection = $galleryStart === false ? false : strpos($config, "\n  - name: page_media_slots", $galleryStart + 1);
 $galleryConfig = $galleryStart === false ? '' : substr($config, $galleryStart, $nextCollection === false ? null : $nextCollection - $galleryStart);
