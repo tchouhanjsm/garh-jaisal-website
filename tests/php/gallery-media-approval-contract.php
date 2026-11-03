@@ -7,6 +7,24 @@ $root = dirname(__DIR__, 2);
 require_once $root . '/include/gallery-media-approval.php';
 $errors = [];
 
+// The optional server allowlist override must accept only a JSON list of non-empty identities.
+$previousApproversEnv = getenv('GJ_MEDIA_APPROVERS_JSON');
+putenv('GJ_MEDIA_APPROVERS_JSON=[" Gallery CI Reviewer ","Gallery CI Reviewer"]');
+$envConfig = require $root . '/include/site-config.php';
+if (($envConfig['media_approvers'] ?? null) !== ['Gallery CI Reviewer']) {
+    $errors[] = 'GJ_MEDIA_APPROVERS_JSON must normalize and deduplicate a valid allowlist.';
+}
+putenv('GJ_MEDIA_APPROVERS_JSON=not-json');
+$invalidEnvConfig = require $root . '/include/site-config.php';
+if (($invalidEnvConfig['media_approvers'] ?? null) !== []) {
+    $errors[] = 'Malformed explicit GJ_MEDIA_APPROVERS_JSON must fail closed.';
+}
+if ($previousApproversEnv === false) {
+    putenv('GJ_MEDIA_APPROVERS_JSON');
+} else {
+    putenv('GJ_MEDIA_APPROVERS_JSON=' . $previousApproversEnv);
+}
+
 $baseline = require $root . '/include/gallery-legacy-baseline.php';
 if (!is_array($baseline) || count($baseline) !== 36) {
     $errors[] = 'Legacy Gallery baseline must contain exactly 36 records.';
