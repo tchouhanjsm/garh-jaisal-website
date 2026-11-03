@@ -114,6 +114,9 @@ jobs:
       - name: Verify curated Gallery inventory and progressive enhancement
         run: php tests/php/gallery-curation.php
 
+      - name: Verify signed Gallery approvals and immutable legacy image baseline
+        run: php tests/php/gallery-media-approval-contract.php
+
       - name: Verify Sveltia owner CMS configuration and deployment contract
         run: php tests/php/sveltia-cms-config-contract.php
 
