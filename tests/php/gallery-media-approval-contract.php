@@ -54,9 +54,11 @@ $legacy = [
     'image' => ['src' => 'img/legacy.jpg', 'alt' => 'Original legacy image description', 'caption' => '', 'crop' => 'standard'],
 ];
 $legacyRaw = json_encode($legacy, JSON_UNESCAPED_SLASHES);
-$tempLegacyImage = $root . '/img/legacy-fixture-' . uniqid('', true) . '.jpg';
-$legacyImageBytes = "legacy-image-fixture";
-file_put_contents($tempLegacyImage, $legacyImageBytes);
+$tempLegacyImage = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'gj-gallery-legacy-image-' . uniqid('', true) . '.png';
+$legacyImageBytes = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=', true);
+if (!is_string($legacyImageBytes) || file_put_contents($tempLegacyImage, $legacyImageBytes) === false) {
+    $errors[] = 'Unable to create decodable legacy image fixture.';
+}
 $legacyBaselineFixture = [
     'legacy-fixture' => [
         'record_sha256' => hash('sha256', $legacyRaw),
@@ -72,7 +74,7 @@ if (gj_gallery_media_publication_is_approved($legacy, $legacyRaw . ' ', $tempLeg
     $errors[] = 'A byte-changed legacy record must not retain grandfathered publication.';
 }
 $changedLegacyImageBytes = "replaced-image-bytes";
-file_put_contents($tempLegacyImage, $changedLegacyImageBytes);
+file_put_contents($tempLegacyImage, $legacyImageBytes . 'changed');
 if (gj_gallery_media_publication_is_approved($legacy, $legacyRaw, $tempLegacyImage, $legacyBaselineFixture, '', [])) {
     $errors[] = 'Replacing a legacy source image without changing JSON must invalidate its baseline.';
 }
@@ -87,6 +89,8 @@ if (gj_gallery_media_publication_is_approved(
 )) {
     $errors[] = 'An explicit pending approval object must not fall through to legacy grandfathering.';
 }
+@unlink($tempLegacyImage);
+
 @unlink($tempLegacyImage);
 
 $tempRoot = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'gj-gallery-approval-' . uniqid('', true);
