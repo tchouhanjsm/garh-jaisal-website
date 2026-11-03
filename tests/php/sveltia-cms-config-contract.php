@@ -143,8 +143,13 @@ $visualReviewField = $galleryField('visualReview');
 $altTextReviewField = $galleryField('altTextReview');
 $technicalValidationField = $galleryField('technicalValidation');
 $signedApprovalField = $galleryField('approval');
-if ($reviewStatusField === '' || strpos($reviewStatusField, 'widget: select') === false || strpos($reviewStatusField, 'default: draft') === false || strpos($reviewStatusField, 'value: approved') === false || strpos($reviewStatusField, 'widget: hidden') !== false) {
-    $errors[] = 'Gallery editorial review status must be visible, selectable and default to Draft.';
+if ($reviewStatusField === '' || strpos($reviewStatusField, 'widget: select') === false
+    || strpos($reviewStatusField, 'default: draft') === false
+    || strpos($reviewStatusField, 'value: ready_for_review') === false
+    || strpos($reviewStatusField, 'value: approved_for_release') === false
+    || strpos($reviewStatusField, 'widget: hidden') !== false
+    || strpos($reviewStatusField, "value: approved\\n") !== false) {
+    $errors[] = 'Gallery editorial review must use the shared Draft, Ready for review and Approved for release states.';
 }
 foreach (['name: creator', 'name: sourceUrl', 'name: licenseName', 'name: evidenceReference', 'name: verifiedBy', 'name: verifiedAt'] as $marker) {
     if ($sourceEvidenceField === '' || strpos($sourceEvidenceField, $marker) === false) $errors[] = 'Gallery source/rights evidence is missing field: ' . $marker;
