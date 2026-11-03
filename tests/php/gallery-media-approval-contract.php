@@ -59,6 +59,10 @@ $legacyImageBytes = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCA
 if (!is_string($legacyImageBytes) || file_put_contents($tempLegacyImage, $legacyImageBytes) === false) {
     $errors[] = 'Unable to create decodable legacy image fixture.';
 }
+if (gj_gallery_media_legacy_asset_git_blob_sha1($tempLegacyImage) !== '2676aad561e54816c19347fcee2d5c09975b419e'
+    || strlen($legacyImageBytes) !== 68) {
+    $errors[] = 'Legacy Git blob identity must match the canonical Git object hash for the image fixture.';
+}
 $legacyBaselineFixture = [
     'legacy-fixture' => [
         'record_sha256' => hash('sha256', $legacyRaw),
