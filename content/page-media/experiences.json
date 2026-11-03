@@ -1,46 +1,178 @@
 {
   "experience-desert-safari-hero": {
     "src": "img/desert3.jpg",
-    "alt": "Sand dunes in the Thar Desert near Jaisalmer"
+    "alt": "Sand dunes in the Thar Desert near Jaisalmer",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "experience-guided-jaisalmer-tour-hero": {
     "src": "img/j10.jpg",
-    "alt": "Ornately carved sandstone architecture in Jaisalmer's historic centre"
+    "alt": "Ornately carved sandstone architecture in Jaisalmer's historic centre",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "experience-sunset-camel-safari-hero": {
     "src": "img/desert7.jpg",
-    "alt": "Camel riders travelling across the dunes near Jaisalmer"
+    "alt": "Camel riders travelling across the dunes near Jaisalmer",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "experience-sleep-under-the-stars-hero": {
     "src": "img/sleeping_under_stars/tour_9.jpeg",
-    "alt": "Desert campfire, shelter and jeep at dusk"
+    "alt": "Desert campfire, shelter and jeep at dusk",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "experience-swiss-tent-safari-hero": {
     "src": "img/v2/swiss-tent.webp",
-    "alt": "White Swiss-style tents at a desert accommodation near Jaisalmer"
+    "alt": "White Swiss-style tents at a desert accommodation near Jaisalmer",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "experience-cultural-safari-hero": {
     "src": "img/Desert_Camp/Prog.jpeg",
-    "alt": "An evening cultural programme at a desert camp near Jaisalmer"
+    "alt": "An evening cultural programme at a desert camp near Jaisalmer",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "experience-explore-the-desert-hero": {
     "src": "img/desert12.jpg",
-    "alt": "Camel riders on a desert route near Jaisalmer"
+    "alt": "Camel riders on a desert route near Jaisalmer",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "experience-half-day-jaisalmer-tour-hero": {
     "src": "img/j5.jpg",
-    "alt": "Carved sandstone balconies on a historic Jaisalmer haveli"
+    "alt": "Carved sandstone balconies on a historic Jaisalmer haveli",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "experience-full-day-jaisalmer-tour-hero": {
     "src": "img/j2.jpg",
-    "alt": "Carved sandstone architecture in historic Jaisalmer"
+    "alt": "Carved sandstone architecture in historic Jaisalmer",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "experience-longewala-tour-hero": {
     "src": "img/desert10.jpg",
-    "alt": "A jeep crossing open sand on a desert route near Jaisalmer"
+    "alt": "A jeep crossing open sand on a desert route near Jaisalmer",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "experience-rajasthan-tours-hero": {
     "src": "img/1.webp",
-    "alt": "Panoramic view across Jaisalmer's golden sandstone city"
+    "alt": "Panoramic view across Jaisalmer's golden sandstone city",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   }
 }

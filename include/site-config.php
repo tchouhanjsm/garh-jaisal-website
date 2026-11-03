@@ -25,6 +25,11 @@ $defaults = [
     'restaurant_closed_days' => [],
     // Zero leaves same-day cut-off disabled until owner supplies a value in minutes.
     'restaurant_same_day_cutoff_minutes' => 0,
+    // Owner-only media dashboard credentials; set only in site-config.local.php.
+    'media_admin_auth' => ['username' => '', 'password_hash' => ''],
+    // Trusted signers and HMAC secret for fixed page-image approvals; never commit real values.
+    'media_approvers' => [],
+    'media_approval_hmac_key' => '',
 ];
 
 $local = __DIR__ . '/site-config.local.php';
@@ -38,6 +43,11 @@ $config = array_replace($defaults, $overrides);
 $environmentSecret = getenv('GJ_RECAPTCHA_SECRET');
 if (is_string($environmentSecret) && $environmentSecret !== '') {
     $config['recaptcha_secret'] = $environmentSecret;
+}
+
+$mediaApprovalKey = getenv('GJ_MEDIA_APPROVAL_HMAC_KEY');
+if (is_string($mediaApprovalKey) && $mediaApprovalKey !== '') {
+    $config['media_approval_hmac_key'] = $mediaApprovalKey;
 }
 
 return $config;

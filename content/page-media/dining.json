@@ -1,6 +1,18 @@
 {
   "dining-hero": {
     "src": "img/rest2.jpg",
-    "alt": "Rooftop dining area at Garh Jaisal's Kitchen in Jaisalmer"
+    "alt": "Rooftop dining area at Garh Jaisal's Kitchen in Jaisalmer",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   }
 }

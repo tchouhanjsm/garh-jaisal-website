@@ -47,6 +47,8 @@ def create_package_git_fixture(root: Path) -> str:
         "sitemap.xml": SITEMAP,
         "include/page-head.php": "<?php\n",
         "include/site-config.php": "<?php\n",
+        "include/admin-auth.php": "<?php\n",
+        "include/page-media-approval.php": "<?php\n",
         "room.php": "<?php\n",
         "img/facade.jpg": "original-image-fallback",
         "scripts/responsive-image-assets-manifest.json": json.dumps({
@@ -172,7 +174,8 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
             ".htaccess", "index.php", "room.php", "robots.txt", "sitemap.xml",
             "admin/index.html", "admin/config.yml", "admin/.htaccess",
             "contact.php", "404.php", "mail.php", "include/page-head.php",
-            "include/site-config.php", EXAMPLE_CONFIG_PATH, "css/garh-v2.css",
+            "include/site-config.php", "include/admin-auth.php",
+            "include/page-media-approval.php", EXAMPLE_CONFIG_PATH, "css/garh-v2.css",
             "img/facade.webp", "js/garh-v2.js", "docs/DEPLOY-CPANEL.md",
             "scripts/check-site.php", "tests/e2e/site-smoke.spec.js",
             ".github/workflows/ci.yml", "package.json", "package-lock.json", "playwright.config.js",
@@ -183,6 +186,8 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
         self.assertIn("admin/config.yml", selected)
         self.assertIn("admin/.htaccess", selected)
         self.assertIn("include/site-config.php", selected)
+        self.assertIn("include/admin-auth.php", selected)
+        self.assertIn("include/page-media-approval.php", selected)
         self.assertIn("css/garh-v2.css", selected)
         self.assertIn("img/facade.webp", selected)
         self.assertIn("js/garh-v2.js", selected)
@@ -229,7 +234,8 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
         selected = [
             ".htaccess", "404.php", "contact.php", "index.php", "mail.php",
             "robots.txt", "sitemap.xml", "include/page-head.php",
-            "include/site-config.php", "room.php",
+            "include/site-config.php", "include/admin-auth.php",
+            "include/page-media-approval.php", "room.php",
             "admin/index.html", "admin/config.yml", "admin/.htaccess",
         ]
         routes = validate_package_paths(selected, SITEMAP)

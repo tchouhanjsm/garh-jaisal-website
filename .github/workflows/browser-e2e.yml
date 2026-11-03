@@ -42,6 +42,32 @@ jobs:
           php-version: '8.2'
           coverage: none
 
+      - name: Configure ephemeral owner credentials for Media Library E2E
+        shell: bash
+        run: |
+          set -euo pipefail
+          export GJ_MEDIA_ADMIN_E2E_USER="ci-media-owner"
+          export GJ_MEDIA_ADMIN_E2E_PASSWORD="$(php -r 'echo bin2hex(random_bytes(24));')"
+          export GJ_MEDIA_ADMIN_E2E_PASSWORD_HASH="$(php -r 'echo password_hash(getenv("GJ_MEDIA_ADMIN_E2E_PASSWORD"), PASSWORD_DEFAULT);')"
+          echo "::add-mask::$GJ_MEDIA_ADMIN_E2E_PASSWORD"
+          php -r '
+            $config = [
+              "media_admin_auth" => [
+                "username" => getenv("GJ_MEDIA_ADMIN_E2E_USER"),
+                "password_hash" => getenv("GJ_MEDIA_ADMIN_E2E_PASSWORD_HASH"),
+              ],
+            ];
+            $contents = "<?php\nreturn " . var_export($config, true) . ";\n";
+            if (file_put_contents("include/site-config.local.php", $contents) === false) {
+              fwrite(STDERR, "Unable to create ephemeral Media Library test config.\n");
+              exit(1);
+            }
+          '
+          {
+            printf 'GJ_MEDIA_ADMIN_E2E_USER=%s\n' "$GJ_MEDIA_ADMIN_E2E_USER"
+            printf 'GJ_MEDIA_ADMIN_E2E_PASSWORD=%s\n' "$GJ_MEDIA_ADMIN_E2E_PASSWORD"
+          } >> "$GITHUB_ENV"
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:

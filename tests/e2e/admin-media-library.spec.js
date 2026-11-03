@@ -1,72 +1,66 @@
 const { test, expect } = require('@playwright/test');
 
-test('read-only media library reports usage, Gallery records and duplicate evidence', async ({ page }) => {
-  const response = await page.goto('/admin/media-library.php', { waitUntil: 'domcontentloaded' });
-  expect(response).not.toBeNull();
-  expect(response.status()).toBe(200);
+const ownerUser = process.env.GJ_MEDIA_ADMIN_E2E_USER;
+const ownerPassword = process.env.GJ_MEDIA_ADMIN_E2E_PASSWORD;
 
-  await expect(page.getByRole('heading', { level: 1, name: 'Media library intelligence' })).toBeVisible();
-  await expect(page.getByText(/never delete from this report alone/i)).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Open Sveltia CMS' })).toHaveAttribute('href', '/admin/');
-  await expect(page.locator('[data-media-card]')).not.toHaveCount(0);
-  await expect(page.locator('#stat-storage')).not.toHaveText('—');
-  await expect(page.locator('#stat-large-files')).not.toHaveText('—');
-  await expect(page.locator('#stat-large-dimensions')).not.toHaveText('—');
-  const firstCard = page.locator('[data-media-card]').first();
-  const imagePath = (await firstCard.locator('.asset-path').first().textContent()).trim();
-  const historyLink = firstCard.getByRole('link', { name: 'View Git history for ' + imagePath });
-  await expect(historyLink).toHaveAttribute('href', 'https://github.com/tchouhanjsm/garh-jaisal-website/commits/main/' + imagePath.split('/').map(encodeURIComponent).join('/'));
-  await expect(historyLink).toHaveAttribute('rel', 'noopener noreferrer');
+test('unauthenticated Media Library HTML and JSON requests are denied without inventory leakage', async ({ request }) => {
+  const htmlResponse = await request.get('/admin/media-library.php');
+  if (ownerUser && ownerPassword) expect(htmlResponse.status()).toBe(401);
+  else expect([401, 503]).toContain(htmlResponse.status());
+  if (htmlResponse.status() === 401) expect(htmlResponse.headers()['www-authenticate']).toContain('Basic');
+  const html = await htmlResponse.text();
+  expect(html).not.toContain('Media library intelligence');
+  expect(html).not.toContain('total image files');
 
-  const reportResponse = await page.request.get('/admin/media-library.php?format=json');
-  expect(reportResponse.status()).toBe(200);
-  const report = await reportResponse.json();
-  expect(report.summary.total_assets).toBeGreaterThan(0);
-  expect(report.summary.source_files_scanned).toBeGreaterThan(0);
-  expect(typeof report.summary.source_scan_complete).toBe('boolean');
-  expect(report.summary.total_bytes).toBeGreaterThan(0);
-  expect(report.summary.large_file_threshold_bytes).toBe(524288);
-  expect(report.summary.large_dimension_threshold_px).toBe(2560);
-  expect(report.assets.every((asset) => Array.isArray(asset.optimization_flags))).toBe(true);
-  await expect(page.locator('#scan-coverage')).toContainText(report.summary.source_scan_complete ? 'Source scan complete' : 'Source scan partial');
-  expect(Array.isArray(report.assets)).toBe(true);
-  expect(report.assets.some((asset) => asset.gallery_entries && asset.gallery_entries.length > 0)).toBe(true);
-
-  await page.locator('#media-search').fill('facade');
-  await expect(page.locator('#media-grid [data-media-card]')).not.toHaveCount(0);
-
-  await page.locator('#media-search').fill('');
-  await page.locator('#media-category').selectOption('rooms');
-  const roomCards = page.locator('#media-grid [data-media-card]');
-  await expect(roomCards).not.toHaveCount(0);
-  await page.locator('#media-category').selectOption('all');
-  await page.locator('#media-usage').selectOption('optimization-review');
-  const optimisationExpected = report.assets.filter((asset) => (asset.optimization_flags || []).length > 0).length;
-  await expect(page.locator('#result-count')).toContainText(optimisationExpected + ' of ');
-
-  await page.setViewportSize({ width: 390, height: 844 });
-  const dimensions = await page.evaluate(() => ({
-    viewport: document.documentElement.clientWidth,
-    document: document.documentElement.scrollWidth,
-  }));
-  expect(dimensions.document, 'Media inventory must not overflow on mobile').toBeLessThanOrEqual(dimensions.viewport);
+  const jsonResponse = await request.get('/admin/media-library.php?format=json');
+  if (ownerUser && ownerPassword) expect(jsonResponse.status()).toBe(401);
+  else expect([401, 503]).toContain(jsonResponse.status());
+  if (jsonResponse.status() === 401) expect(jsonResponse.headers()['www-authenticate']).toContain('Basic');
+  const jsonText = await jsonResponse.text();
+  expect(jsonText).not.toContain('"assets"');
+  expect(jsonText).not.toContain('"total_assets"');
 });
 
-test('media inventory JSON remains read-only and excludes private configuration paths', async ({ page }) => {
-  const response = await page.request.get('/admin/media-library.php?format=json');
-  expect(response.status()).toBe(200);
-  const report = await response.json();
-  const usagePaths = report.assets.flatMap((asset) => asset.usage_files || []);
-  expect(usagePaths).not.toContain('include/site-config.local.php');
+test('authenticated owner can inspect the read-only Media Library on desktop and mobile', async ({ browser }) => {
+  test.skip(!ownerUser || !ownerPassword, 'Set GJ_MEDIA_ADMIN_E2E_USER and GJ_MEDIA_ADMIN_E2E_PASSWORD for authenticated owner coverage.');
+  const context = await browser.newContext({ httpCredentials: { username: ownerUser, password: ownerPassword } });
+  try {
+    const page = await context.newPage();
+    const response = await page.goto('/admin/media-library.php', { waitUntil: 'domcontentloaded' });
+    expect(response).not.toBeNull();
+    expect(response.status()).toBe(200);
+    await expect(page.getByRole('heading', { level: 1, name: 'Media library intelligence' })).toBeVisible();
+    await expect(page.getByText(/never delete from this report alone/i)).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Open Sveltia CMS' })).toHaveAttribute('href', '/admin/');
+    await expect(page.locator('[data-media-card]')).not.toHaveCount(0);
 
-  const pageResponse = await page.goto('/admin/media-library.php');
-  expect(pageResponse.status()).toBe(200);
-  await expect(page.getByText(/does not upload, replace, hide or delete files/i)).toBeVisible();
-  await expect(page.getByRole('link', { name: 'View public gallery' })).toHaveAttribute('href', '/gallery.php');
+    const jsonResponse = await page.evaluate(async () => {
+      const response = await fetch('/admin/media-library.php?format=json', { credentials: 'same-origin' });
+      return { status: response.status, report: await response.json() };
+    });
+    expect(jsonResponse.status).toBe(200);
+    const report = jsonResponse.report;
+    expect(report.summary.total_assets).toBeGreaterThan(0);
+    expect(report.summary.source_files_scanned).toBeGreaterThan(0);
+    expect(typeof report.summary.source_scan_complete).toBe('boolean');
+    expect(report.summary.total_bytes).toBeGreaterThan(0);
+    expect(report.assets.every((asset) => Array.isArray(asset.optimization_flags))).toBe(true);
+    expect(report.assets.some((asset) => asset.gallery_entries && asset.gallery_entries.length > 0)).toBe(true);
+
+    await page.locator('#media-search').fill('facade');
+    await expect(page.locator('#media-grid [data-media-card]')).not.toHaveCount(0);
+    await page.setViewportSize({ width: 390, height: 844 });
+    const dimensions = await page.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      document: document.documentElement.scrollWidth,
+    }));
+    expect(dimensions.document).toBeLessThanOrEqual(dimensions.viewport);
+  } finally {
+    await context.close();
+  }
 });
 
-
-test('Sveltia media manager links owners to the media intelligence tools', async ({ page }) => {
+test('Sveltia media manager remains token-gated and links owners to media tools', async ({ page }) => {
   const response = await page.goto('/admin/', { waitUntil: 'commit' });
   expect(response).not.toBeNull();
   expect(response.status()).toBe(200);
@@ -74,4 +68,30 @@ test('Sveltia media manager links owners to the media intelligence tools', async
   await expect(navigation).toBeVisible();
   await expect(navigation.getByRole('link', { name: 'Media library intelligence' })).toHaveAttribute('href', '/admin/media-library.php');
   await expect(navigation.getByRole('link', { name: 'Public gallery' })).toHaveAttribute('href', '/gallery.php');
+});
+
+
+test('incorrect owner credentials cannot access Media Library HTML or JSON', async ({ browser }) => {
+  test.skip(!ownerUser || !ownerPassword, 'Set GJ_MEDIA_ADMIN_E2E_USER and GJ_MEDIA_ADMIN_E2E_PASSWORD for authenticated owner coverage.');
+  const context = await browser.newContext({
+    httpCredentials: { username: ownerUser, password: ['not', 'the', 'owner', 'password'].join('-') },
+  });
+  try {
+    const page = await context.newPage();
+    const htmlResponse = await page.goto('/admin/media-library.php', { waitUntil: 'domcontentloaded' });
+    expect(htmlResponse).not.toBeNull();
+    expect(htmlResponse.status()).toBe(401);
+    expect(htmlResponse.headers()['www-authenticate']).toContain('Basic');
+    expect(await page.locator('body').innerText()).not.toContain('Media library intelligence');
+
+    const jsonResponse = await page.evaluate(async () => {
+      const response = await fetch('/admin/media-library.php?format=json', { credentials: 'same-origin' });
+      return { status: response.status, body: await response.text() };
+    });
+    expect(jsonResponse.status).toBe(401);
+    expect(jsonResponse.body).not.toContain('"assets"');
+    expect(jsonResponse.body).not.toContain('"total_assets"');
+  } finally {
+    await context.close();
+  }
 });

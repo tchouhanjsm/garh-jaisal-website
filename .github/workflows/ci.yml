@@ -47,6 +47,9 @@ jobs:
       - name: Check one-click Content Studio launcher syntax
         run: bash -n "tools/content-studio/Start Content Studio.command"
 
+      - name: Parse the Sveltia CMS YAML configuration
+        run: ruby -e 'require "yaml"; YAML.parse_file("admin/config.yml")'
+
       - name: Install Pillow for Content Studio photo placement checks
         run: python3 -c "import PIL" 2>/dev/null || python3 -m pip install --break-system-packages pillow
 
@@ -119,6 +122,9 @@ jobs:
 
       - name: Verify owner-managed Home, Rooms, Dining and Experience image slots
         run: php tests/php/site-media-slots-contract.php
+
+      - name: Verify owner Media Library authentication
+        run: php tests/php/admin-auth-contract.php
       - name: Verify shared quick-facts component contract
         run: php tests/php/at-a-glance-contract.php
 
