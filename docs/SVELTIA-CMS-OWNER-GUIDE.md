@@ -194,3 +194,34 @@ The Sveltia /admin/ sign-in screen remains reachable and still requires a reposi
 ### What the approval signature proves
 
 The HMAC is a server-held shared-secret integrity check. It proves that the exact slot, image bytes, descriptive text and evidence were signed by someone with access to the configured key, and it prevents a CMS-only editor from creating or silently changing a valid approval. The `approved_by` value is an audit attribution selected by the key holder; HMAC does **not** provide individual cryptographic non-repudiation. Keep the key with one trusted owner, or treat every person with the key as a fully privileged approver. Do not distribute it to ordinary CMS editors.
+
+
+## Gallery signed publication approval (M53)
+
+The Gallery now has the same trusted-signature publication boundary as the fixed Page image slots. The CMS records the editorial evidence, but it cannot create the server-held HMAC signature.
+
+### Existing 36 photographs — safe compatibility
+
+The original 36 migrated Gallery records remain visible during rollout only while their complete JSON files are byte-for-byte identical to the recorded SHA-256 baseline. This avoids hiding the existing Gallery or pretending that historical images have been reviewed. No rights, visual-match or alt-text evidence has been backfilled.
+
+Any edit to one of those records—including image path, alt text, caption, crop, order, status, evidence or JSON formatting—breaks its baseline match. A changed record then requires a complete signed approval before it can appear publicly. Adding or removing the approval object cannot bypass this rule. New records are not in the legacy baseline and require signed approval from their first publication.
+
+### Approving a new or changed Gallery photo
+
+1. In **Gallery photos**, keep the record as **Draft** while the review is incomplete.
+2. Record the actual creator or rights holder and a stable rights-evidence reference. For licensed work, also provide the original HTTPS source URL and licence name/scope. For owner-confirmed work, provide the actual commission, permission or owner-evidence reference. Do not infer rights from a filename or old publication.
+3. Inspect the image at full size. Set **Visual subject match** to Matched only when the image depicts the subject and context expected for the Gallery placement. Record what you inspected, reviewer and date.
+4. Review the accessible description separately. Set **Alt-text accuracy** to Matched only when the alt text accurately describes the visible image without keyword stuffing. Record what was checked, reviewer and date.
+5. Complete technical validation only after the image is decoded and its path/dimensions have been checked. Record a stable evidence reference.
+6. Set **Editorial review status** to Approved and **Publication status** to Live only after all evidence is complete. Set **Signed approval status** to Approved as the request for a trusted signature. These CMS fields alone do not publish the image.
+7. On a trusted local checkout with the server-only `media_approval_hmac_key` and `media_approvers` configured in `include/site-config.local.php`, run:
+
+   ```sh
+   php scripts/sign-gallery-media-approval.php <gallery-id> "<approved reviewer>"
+   ```
+
+8. Review the JSON diff. The signer records the current image SHA-256, reviewer attribution, timestamp and HMAC signature. Submit the changed record and image through the normal `cms-media` → reviewed PR → `main` workflow.
+
+The runtime verifies the record's publication state, source/rights evidence, visual review, alt-text review, technical-validation evidence, allowlisted approver, HMAC and exact image bytes. Any later change to those fields or to the image bytes invalidates the signature. Revoke an approval or return the publication status to Draft to remove the record from the public Gallery; any later Live publication requires a fresh signature.
+
+The legacy baseline is not an approval record and does not prove image ownership. It is a temporary byte-integrity compatibility measure for the exact 36 pre-existing JSON records. Do not refresh or add IDs to the baseline merely to make a changed photo publish. Use the signed review process instead. The same trusted HMAC key may sign fixed Page image slots and Gallery records; never provide it to ordinary CMS editors or commit it to Git.
