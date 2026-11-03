@@ -249,9 +249,11 @@ if (!function_exists('gj_gallery_media_publication_is_approved')) {
             || $baseline['image_bytes'] < 1
             || !is_string($imagePath) || is_link($imagePath) || !is_file($imagePath)) return false;
 
+        $imageInfo = @getimagesize($imagePath);
+        $decodable = is_array($imageInfo) && !empty($imageInfo[0]) && !empty($imageInfo[1]);
         $actualBytes = @filesize($imagePath);
         $actualGitBlob = gj_gallery_media_legacy_asset_git_blob_sha1($imagePath);
-        return is_int($actualBytes) && $actualBytes === $baseline['image_bytes']
+        return $decodable && is_int($actualBytes) && $actualBytes === $baseline['image_bytes']
             && is_string($actualGitBlob)
             && hash_equals($baseline['record_sha256'], hash('sha256', $recordJson))
             && hash_equals($baseline['image_git_blob_sha1'], $actualGitBlob);
