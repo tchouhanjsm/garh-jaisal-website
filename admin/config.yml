@@ -89,14 +89,14 @@ collections:
         widget: select
         required: true
         default: draft
-        hint: Approved is a recorded editorial decision only. It does not publish or import an image.
+        hint: Approved for release is an editorial decision only. The public Gallery still requires a trusted HMAC signature for this exact record and image.
         options:
           - label: Draft — not reviewed
             value: draft
-          - label: Review required
-            value: review_required
-          - label: Approved — evidence recorded and reviewed
-            value: approved
+          - label: Ready for review
+            value: ready_for_review
+          - label: Approved for release — evidence recorded and reviewed
+            value: approved_for_release
           - label: Rejected
             value: rejected
       - name: sourceEvidence
