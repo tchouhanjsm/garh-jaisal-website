@@ -91,8 +91,6 @@ if (gj_gallery_media_publication_is_approved(
 }
 @unlink($tempLegacyImage);
 
-@unlink($tempLegacyImage);
-
 $tempRoot = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'gj-gallery-approval-' . uniqid('', true);
 @mkdir($tempRoot, 0775, true);
 $imagePath = $tempRoot . DIRECTORY_SEPARATOR . 'reviewed.png';
