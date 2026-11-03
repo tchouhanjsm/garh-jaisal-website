@@ -213,7 +213,7 @@ Any edit to one of those records—including image path, alt text, caption, crop
 3. Inspect the image at full size. Set **Visual subject match** to Matched only when the image depicts the subject and context expected for the Gallery placement. Record what you inspected, reviewer and date.
 4. Review the accessible description separately. Set **Alt-text accuracy** to Matched only when the alt text accurately describes the visible image without keyword stuffing. Record what was checked, reviewer and date.
 5. Complete technical validation only after the image is decoded and its path/dimensions have been checked. Record a stable evidence reference.
-6. Set **Editorial review status** to Approved and **Publication status** to Live only after all evidence is complete. Set **Signed approval status** to Approved as the request for a trusted signature. These CMS fields alone do not publish the image.
+6. Set **Editorial review status** to Approved for release and **Publication status** to Live only after all evidence is complete. Set **Signed approval status** to Approved as the request for a trusted signature. These CMS fields alone do not publish the image.
 7. On a trusted local checkout with the server-only `media_approval_hmac_key` and `media_approvers` configured in `include/site-config.local.php`, run:
 
    ```sh
