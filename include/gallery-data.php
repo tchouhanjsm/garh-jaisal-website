@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/gallery-media-approval.php';
+
 /**
  * Public gallery presentation metadata plus the owner-managed JSON photo registry.
  *
