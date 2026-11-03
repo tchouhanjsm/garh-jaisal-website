@@ -178,6 +178,2491 @@ collections:
             pattern:
               - '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
               - Use a valid date in YYYY-MM-DD format.
+      - name: altTextReview
+        label: Alt-text review
+        widget: object
+        required: true
+        fields:
+          - name: status
+            label: Alt-text accuracy
+            widget: select
+            required: true
+            default: not_assessed
+            options:
+              - label: Not assessed
+                value: not_assessed
+              - label: Matched to the visible image
+                value: matched
+              - label: Mismatch — do not publish
+                value: mismatch
+          - name: evidence
+            label: What was checked in the alt text
+            widget: text
+            required: false
+          - name: reviewer
+            label: Alt-text reviewer
+            widget: string
+            required: false
+          - name: reviewedAt
+            label: Alt-text review date (YYYY-MM-DD)
+            widget: string
+            required: false
+            pattern:
+              - '^[0-9]{4}-[0-9]{2}-[0-9]{2}
+        required: true
+        fields:
+          - name: status
+            label: Technical validation status
+            widget: select
+            required: true
+            default: pending
+            options:
+              - label: Pending
+                value: pending
+              - label: Verified — decoded and dimensions checked
+                value: verified
+              - label: Failed — do not use
+                value: failed
+          - name: evidenceReference
+            label: Technical validation evidence reference
+            widget: string
+            required: false
+      - name: image
+        label: Photo
+        widget: object
+        fields:
+          - name: src
+            label: Image file
+            widget: image
+            required: true
+            hint: Existing photos retain their current site path. New uploads and replacements are stored under img/gallery/.
+          - name: alt
+            label: Accessible description (alt text)
+            widget: string
+            required: true
+            hint: Describe what is visible. Do not use keyword lists.
+          - name: caption
+            label: Caption (optional)
+            widget: string
+            required: false
+            default: ''
+          - name: crop
+            label: Display shape
+            widget: select
+            required: true
+            default: standard
+            options:
+              - label: Standard
+                value: standard
+              - label: Architectural arch
+                value: arch
+              - label: Landscape
+                value: landscape
+              - label: Portrait
+                value: portrait
+
+
+      - name: approval
+        label: Signed publication approval
+        widget: object
+        required: true
+        fields:
+          - name: status
+            label: Signed approval status
+            widget: select
+            required: true
+            default: pending
+            hint: Approved requires a trusted CLI signature. This CMS field alone never publishes a record.
+            options:
+              - label: Pending trusted signature
+                value: pending
+              - label: Approved — signed after review
+                value: approved
+              - label: Rejected
+                value: rejected
+              - label: Revoked
+                value: revoked
+          - name: asset_sha256
+            widget: hidden
+            default: ''
+          - name: approved_by
+            widget: hidden
+            default: ''
+          - name: approved_at
+            widget: hidden
+            default: ''
+          - name: signature
+            widget: hidden
+            default: ''
+
+  - name: page_media_slots
+    label: Page image slots
+    files:
+    - name: home
+      label: Home
+      file: content/page-media/home.json
+      fields:
+        - name: home-hero-mobile
+          label: Home hero — mobile
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: home-hero-desktop
+          label: Home hero — desktop
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: home-heritage-intro
+          label: Home — heritage introduction
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: home-rooftop-feature
+          label: Home — rooftop dining feature
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: home-desert-safari-feature
+          label: Home — camel safari feature
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: home-swiss-tent-feature
+          label: Home — Swiss tent feature
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: home-sleep-under-stars-feature
+          label: Home — sleep under the stars
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: home-city-discovery-feature
+          label: Home — city discovery feature
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: home-gallery-city
+          label: Home gallery — city view
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: home-gallery-courtyard
+          label: Home gallery — courtyard
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: home-gallery-reception
+          label: Home gallery — reception
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: home-gallery-rooftop
+          label: Home gallery — rooftop view
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: home-gallery-entrance
+          label: Home gallery — carved entrance
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+
+    - name: rooms
+      label: Rooms
+      file: content/page-media/rooms.json
+      fields:
+        - name: rooms-hero
+          label: Rooms page — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: room-sweet-purple-room-primary
+          label: Sweet Purple Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: room-rising-sun-room-primary
+          label: Rising Sun Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: room-scarlet-room-primary
+          label: Scarlet Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: room-opium-room-primary
+          label: Opium Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: room-red-maharani-room-primary
+          label: Red Maharani Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: room-green-room-primary
+          label: Green Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: room-bluesky-room-primary
+          label: BlueSky Room — primary photo
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+
+    - name: dining
+      label: Dining
+      file: content/page-media/dining.json
+      fields:
+        - name: dining-hero
+          label: Dining page — rooftop restaurant hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+
+    - name: experiences
+      label: Experiences
+      file: content/page-media/experiences.json
+      fields:
+        - name: experience-desert-safari-hero
+          label: Desert Safari — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: experience-guided-jaisalmer-tour-hero
+          label: Guided Jaisalmer Tour — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: experience-sunset-camel-safari-hero
+          label: Sunset Camel Safari — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: experience-sleep-under-the-stars-hero
+          label: Sleep Under the Stars — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: experience-swiss-tent-safari-hero
+          label: Swiss Tent Safari — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: experience-cultural-safari-hero
+          label: Cultural Safari — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: experience-explore-the-desert-hero
+          label: Explore the Desert — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: experience-half-day-jaisalmer-tour-hero
+          label: Half-Day Jaisalmer Tour — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: experience-full-day-jaisalmer-tour-hero
+          label: Full-Day Jaisalmer Tour — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: experience-longewala-tour-hero
+          label: Longewala Tour — hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+        - name: experience-rajasthan-tours-hero
+          label: Rajasthan Tours — draft hero
+          widget: object
+          fields:
+            - name: src
+              label: Image file
+              widget: image
+              required: true
+              hint: New uploads are stored under img/gallery/. Existing originals remain as fallbacks.
+            - name: alt
+              label: Accessible description
+              widget: string
+              required: true
+            - name: caption
+              label: Caption (optional)
+              widget: string
+              required: false
+              default: ''
+            - name: approval
+              label: Review and publication approval
+              widget: object
+              fields:
+                - name: status
+                  label: Approval status
+                  widget: select
+                  required: true
+                  default: pending
+                  options:
+                    - label: Pending review
+                      value: pending
+                    - label: Approved (requires signed review)
+                      value: approved
+                    - label: Rejected
+                      value: rejected
+                    - label: Revoked
+                      value: revoked
+                - name: source_credit
+                  label: Creator / source attribution
+                  widget: string
+                  required: false
+                  default: ''
+                - name: rights_basis
+                  label: Usage rights / licence basis
+                  widget: string
+                  required: false
+                  default: ''
+                - name: visual_match_review
+                  label: Visual match review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: alt_text_review
+                  label: Alt-text review
+                  widget: text
+                  required: false
+                  default: ''
+                - name: technical_validation
+                  widget: hidden
+                  default: ''
+                - name: asset_sha256
+                  widget: hidden
+                  default: ''
+                - name: approved_by
+                  widget: hidden
+                  default: ''
+                - name: approved_at
+                  widget: hidden
+                  default: ''
+                - name: signature
+                  widget: hidden
+                  default: ''
+
+
+              - Use a valid date in YYYY-MM-DD format.
       - name: technicalValidation
         label: Technical image validation
         widget: object
