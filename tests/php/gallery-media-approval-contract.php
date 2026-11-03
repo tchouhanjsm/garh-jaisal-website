@@ -77,7 +77,6 @@ if (!gj_gallery_media_publication_is_approved($legacy, $legacyRaw, $tempLegacyIm
 if (gj_gallery_media_publication_is_approved($legacy, $legacyRaw . ' ', $tempLegacyImage, $legacyBaselineFixture, '', [])) {
     $errors[] = 'A byte-changed legacy record must not retain grandfathered publication.';
 }
-$changedLegacyImageBytes = "replaced-image-bytes";
 file_put_contents($tempLegacyImage, $legacyImageBytes . 'changed');
 if (gj_gallery_media_publication_is_approved($legacy, $legacyRaw, $tempLegacyImage, $legacyBaselineFixture, '', [])) {
     $errors[] = 'Replacing a legacy source image without changing JSON must invalidate its baseline.';
