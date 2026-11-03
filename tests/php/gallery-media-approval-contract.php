@@ -11,26 +11,37 @@ $baseline = require $root . '/include/gallery-legacy-baseline.php';
 if (!is_array($baseline) || count($baseline) !== 36) {
     $errors[] = 'Legacy Gallery baseline must contain exactly 36 records.';
 } else {
-    foreach ($baseline as $id => $expectedHash) {
+    foreach ($baseline as $id => $expected) {
         $path = $root . '/content/gallery/' . $id . '.json';
         if (!is_string($id) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $id)
-            || !is_string($expectedHash) || !preg_match('/^[a-f0-9]{64}$/D', $expectedHash)
+            || !is_array($expected)
+            || !is_string($expected['record_sha256'] ?? null)
+            || !preg_match('/^[a-f0-9]{64}$/D', $expected['record_sha256'])
+            || !is_string($expected['image_path'] ?? null)
+            || !is_string($expected['image_git_blob_sha1'] ?? null)
+            || !preg_match('/^[a-f0-9]{40}$/D', $expected['image_git_blob_sha1'])
+            || !is_int($expected['image_bytes'] ?? null) || $expected['image_bytes'] < 1
             || is_link($path) || !is_file($path)) {
             $errors[] = 'Legacy Gallery baseline entry is missing or unsafe: ' . (string) $id;
             continue;
         }
         $raw = file_get_contents($path);
         $record = is_string($raw) ? json_decode($raw, true) : null;
-        if (!is_string($raw) || !is_array($record) || ($record['id'] ?? null) !== $id) {
-            $errors[] = 'Legacy Gallery baseline record is invalid: ' . $id;
+        if (!is_string($raw) || !is_array($record) || ($record['id'] ?? null) !== $id
+            || array_key_exists('approval', $record)) {
+            $errors[] = 'Legacy Gallery record identity or legacy state is invalid: ' . $id;
             continue;
         }
-        if (!array_key_exists('approval', $record)) {
-            if (!hash_equals($expectedHash, hash('sha256', $raw))) {
-                $errors[] = 'Changed legacy Gallery records must receive an explicit approval object: ' . $id;
-            } elseif (!gj_gallery_media_publication_is_approved($record, $raw, '', $baseline, '', [])) {
-                $errors[] = 'Unchanged legacy Gallery record must retain its baseline publication path: ' . $id;
-            }
+        $source = $record['image']['src'] ?? '';
+        $imagePath = is_string($source) ? $root . '/' . $source : '';
+        if (!hash_equals($expected['record_sha256'], hash('sha256', $raw))) {
+            $errors[] = 'Changed legacy Gallery record must receive a signed approval: ' . $id;
+        }
+        if ($source !== $expected['image_path']) {
+            $errors[] = 'Legacy Gallery source path changed: ' . $id;
+        }
+        if (!gj_gallery_media_publication_is_approved($record, $raw, $imagePath, $baseline, '', [])) {
+            $errors[] = 'Unchanged legacy JSON and source image must retain the exact baseline path: ' . $id;
         }
     }
 }
@@ -43,24 +54,40 @@ $legacy = [
     'image' => ['src' => 'img/legacy.jpg', 'alt' => 'Original legacy image description', 'caption' => '', 'crop' => 'standard'],
 ];
 $legacyRaw = json_encode($legacy, JSON_UNESCAPED_SLASHES);
-$legacyHash = hash('sha256', $legacyRaw);
-if (!gj_gallery_media_publication_is_approved($legacy, $legacyRaw, '', ['legacy-fixture' => $legacyHash], '', [])) {
-    $errors[] = 'Exact original legacy record must remain publishable during rollout.';
+$tempLegacyImage = $root . '/img/legacy-fixture-' . uniqid('', true) . '.jpg';
+$legacyImageBytes = "legacy-image-fixture";
+file_put_contents($tempLegacyImage, $legacyImageBytes);
+$legacyBaselineFixture = [
+    'legacy-fixture' => [
+        'record_sha256' => hash('sha256', $legacyRaw),
+        'image_path' => 'img/legacy.jpg',
+        'image_git_blob_sha1' => gj_gallery_media_legacy_asset_git_blob_sha1($tempLegacyImage),
+        'image_bytes' => strlen($legacyImageBytes),
+    ],
+];
+if (!gj_gallery_media_publication_is_approved($legacy, $legacyRaw, $tempLegacyImage, $legacyBaselineFixture, '', [])) {
+    $errors[] = 'Exact legacy JSON and exact source bytes must remain publishable during rollout.';
 }
-if (gj_gallery_media_publication_is_approved($legacy, $legacyRaw . ' ', '', ['legacy-fixture' => $legacyHash], '', [])) {
+if (gj_gallery_media_publication_is_approved($legacy, $legacyRaw . ' ', $tempLegacyImage, $legacyBaselineFixture, '', [])) {
     $errors[] = 'A byte-changed legacy record must not retain grandfathered publication.';
 }
-if (gj_gallery_media_publication_is_approved($legacy, $legacyRaw, '', [], '', [])) {
+$changedLegacyImageBytes = "replaced-image-bytes";
+file_put_contents($tempLegacyImage, $changedLegacyImageBytes);
+if (gj_gallery_media_publication_is_approved($legacy, $legacyRaw, $tempLegacyImage, $legacyBaselineFixture, '', [])) {
+    $errors[] = 'Replacing a legacy source image without changing JSON must invalidate its baseline.';
+}
+if (gj_gallery_media_publication_is_approved($legacy, $legacyRaw, $tempLegacyImage, [], '', [])) {
     $errors[] = 'A new record without a signed approval must not publish.';
 }
 $pendingLegacy = $legacy;
 $pendingLegacy['approval'] = ['status' => 'pending'];
 $pendingLegacyRaw = json_encode($pendingLegacy, JSON_UNESCAPED_SLASHES);
 if (gj_gallery_media_publication_is_approved(
-    $pendingLegacy, $pendingLegacyRaw, '', ['legacy-fixture' => hash('sha256', $pendingLegacyRaw)], '', []
+    $pendingLegacy, $pendingLegacyRaw, $tempLegacyImage, $legacyBaselineFixture, '', []
 )) {
     $errors[] = 'An explicit pending approval object must not fall through to legacy grandfathering.';
 }
+@unlink($tempLegacyImage);
 
 $tempRoot = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'gj-gallery-approval-' . uniqid('', true);
 @mkdir($tempRoot, 0775, true);
