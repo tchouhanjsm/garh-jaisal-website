@@ -177,7 +177,8 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
             "admin/index.html", "admin/config.yml", "admin/.htaccess",
             "contact.php", "404.php", "mail.php", "include/page-head.php",
             "include/site-config.php", "include/admin-auth.php",
-            "include/page-media-approval.php", EXAMPLE_CONFIG_PATH, "css/garh-v2.css",
+            "include/page-media-approval.php", "include/gallery-media-approval.php",
+            "include/gallery-legacy-baseline.php", EXAMPLE_CONFIG_PATH, "css/garh-v2.css",
             "img/facade.webp", "js/garh-v2.js", "docs/DEPLOY-CPANEL.md",
             "scripts/check-site.php", "tests/e2e/site-smoke.spec.js",
             ".github/workflows/ci.yml", "package.json", "package-lock.json", "playwright.config.js",
@@ -190,6 +191,8 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
         self.assertIn("include/site-config.php", selected)
         self.assertIn("include/admin-auth.php", selected)
         self.assertIn("include/page-media-approval.php", selected)
+        self.assertIn("include/gallery-media-approval.php", selected)
+        self.assertIn("include/gallery-legacy-baseline.php", selected)
         self.assertIn("css/garh-v2.css", selected)
         self.assertIn("img/facade.webp", selected)
         self.assertIn("js/garh-v2.js", selected)
