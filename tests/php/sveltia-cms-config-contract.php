@@ -133,7 +133,9 @@ $galleryField = static function ($name) use ($galleryConfig) {
     $start = strpos($galleryConfig, $marker);
     if ($start === false) return '';
     $next = strpos($galleryConfig, "\n      - name:", $start + strlen($marker));
-    return substr($galleryConfig, $start, $next === false ? null : $next - $start);
+    return $next === false
+        ? substr($galleryConfig, $start)
+        : substr($galleryConfig, $start, $next - $start);
 };
 $reviewStatusField = $galleryField('review_status');
 $sourceEvidenceField = $galleryField('sourceEvidence');
