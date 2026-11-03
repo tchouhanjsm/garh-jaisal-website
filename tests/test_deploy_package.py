@@ -49,6 +49,8 @@ def create_package_git_fixture(root: Path) -> str:
         "include/site-config.php": "<?php\n",
         "include/admin-auth.php": "<?php\n",
         "include/page-media-approval.php": "<?php\n",
+        "include/gallery-media-approval.php": "<?php\n",
+        "include/gallery-legacy-baseline.php": "<?php\n",
         "room.php": "<?php\n",
         "img/facade.jpg": "original-image-fallback",
         "scripts/responsive-image-assets-manifest.json": json.dumps({
@@ -235,7 +237,8 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
             ".htaccess", "404.php", "contact.php", "index.php", "mail.php",
             "robots.txt", "sitemap.xml", "include/page-head.php",
             "include/site-config.php", "include/admin-auth.php",
-            "include/page-media-approval.php", "room.php",
+            "include/page-media-approval.php", "include/gallery-media-approval.php",
+            "include/gallery-legacy-baseline.php", "room.php",
             "admin/index.html", "admin/config.yml", "admin/.htaccess",
         ]
         routes = validate_package_paths(selected, SITEMAP)
