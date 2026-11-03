@@ -184,7 +184,8 @@ if ($signedApprovalField === '' || strpos($signedApprovalField, 'widget: object'
 if (strpos($siteConfig, 'GJ_MEDIA_APPROVERS_JSON') === false
     || strpos($siteConfig, 'json_decode') === false
     || strpos($siteConfig, "array_unique") === false
-    || strpos($siteConfig, "$config['media_approvers'] = $validMediaApprovers") === false
+    || strpos($siteConfig, "media_approvers'] =") === false
+    || strpos($siteConfig, '= $validMediaApprovers') === false
     || strpos($siteConfig, ': []') === false) {
     $errors[] = 'Gallery approver environment configuration must accept JSON identities and fail closed when malformed.';
 }
