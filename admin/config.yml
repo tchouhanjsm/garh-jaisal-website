@@ -233,6 +233,40 @@ collections:
               - label: Portrait
                 value: portrait
 
+
+      - name: approval
+        label: Signed publication approval
+        widget: object
+        required: true
+        fields:
+          - name: status
+            label: Signed approval status
+            widget: select
+            required: true
+            default: pending
+            hint: Approved requires a trusted CLI signature. This CMS field alone never publishes a record.
+            options:
+              - label: Pending trusted signature
+                value: pending
+              - label: Approved — signed after review
+                value: approved
+              - label: Rejected
+                value: rejected
+              - label: Revoked
+                value: revoked
+          - name: asset_sha256
+            widget: hidden
+            default: ''
+          - name: approved_by
+            widget: hidden
+            default: ''
+          - name: approved_at
+            widget: hidden
+            default: ''
+          - name: signature
+            widget: hidden
+            default: ''
+
   - name: page_media_slots
     label: Page image slots
     files:
