@@ -99,7 +99,7 @@ if (!function_exists('gj_gallery_media_approval_is_valid')) {
         $visualReview = is_array($record['visualReview'] ?? null) ? $record['visualReview'] : [];
         $technicalValidation = is_array($record['technicalValidation'] ?? null) ? $record['technicalValidation'] : [];
 
-        if (($record['status'] ?? '') !== 'live' || ($record['review_status'] ?? '') !== 'approved'
+        if (($record['status'] ?? '') !== 'live' || ($record['review_status'] ?? '') !== 'approved_for_release'
             || !in_array($record['category'] ?? '', ['hotel', 'rooms', 'desert', 'restaurant'], true)
             || ($approval['status'] ?? '') !== 'approved') return false;
 
