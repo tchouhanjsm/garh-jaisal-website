@@ -127,9 +127,6 @@ if (gj_gallery_media_publication_is_approved($record, $fixtureJson, $imagePath, 
 
 $tampered = $record;
 $tampered['sourceEvidence']['evidenceReference'] = 'Different evidence reference after signing';
-if (gj_gallery_media_media_approval_is_valid ?? false) {
-    // Deliberately empty: this identifier must never exist; guard is below.
-}
 if (gj_gallery_media_approval_is_valid($tampered, $imagePath, $key, $approvers)) {
     $errors[] = 'Changing rights evidence must invalidate the signature.';
 }
