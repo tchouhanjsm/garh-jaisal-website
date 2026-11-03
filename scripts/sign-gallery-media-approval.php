@@ -68,7 +68,7 @@ if (!is_array($record) || json_last_error() !== JSON_ERROR_NONE || ($record['id'
     fwrite(STDERR, "ERROR Gallery record identity or JSON is invalid.\n");
     exit(1);
 }
-if (($record['status'] ?? '') !== 'live' || ($record['review_status'] ?? '') !== 'approved') {
+if (($record['status'] ?? '') !== 'live' || ($record['review_status'] ?? '') !== 'approved_for_release') {
     fwrite(STDERR, "ERROR Set publication status to Live and editorial review to Approved only after review.\n");
     exit(1);
 }
