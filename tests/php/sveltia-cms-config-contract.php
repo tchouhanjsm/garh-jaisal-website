@@ -14,12 +14,17 @@ $requiredFiles = [
     'admin/.htaccess',
     'docs/SVELTIA-CMS-OWNER-GUIDE.md',
     'include/gallery-data.php',
+    'include/gallery-media-approval.php',
+    'include/gallery-legacy-baseline.php',
     'include/media-library-audit.php',
     'include/site-media-slots.php',
+    'include/site-config.php',
     'include/page-media-approval.php',
     'include/admin-auth.php',
     'scripts/sign-page-media-approval.php',
+    'scripts/sign-gallery-media-approval.php',
     'tests/php/admin-auth-contract.php',
+    'tests/php/gallery-media-approval-contract.php',
     'content/page-media/home.json',
     'content/page-media/rooms.json',
     'content/page-media/dining.json',
@@ -50,11 +55,15 @@ $html = $read('admin/index.html');
 $mediaLibrary = $read('admin/media-library.php');
 $mediaAudit = $read('include/media-library-audit.php');
 $siteMediaLoader = $read('include/site-media-slots.php');
+$siteConfig = $read('include/site-config.php');
 $approvalHelper = $read('include/page-media-approval.php');
 $adminAuth = $read('include/admin-auth.php');
 $config = $read('admin/config.yml');
 $headers = $read('admin/.htaccess');
 $galleryLoader = $read('include/gallery-data.php');
+$galleryApprovalHelper = $read('include/gallery-media-approval.php');
+$galleryLegacyBaseline = $read('include/gallery-legacy-baseline.php');
+$gallerySigner = $read('scripts/sign-gallery-media-approval.php');
 $packageBuilder = $read('scripts/build_deploy_package.py');
 $guide = $read('docs/SVELTIA-CMS-OWNER-GUIDE.md');
 
@@ -112,6 +121,10 @@ $expectedMediaConfig = "media_libraries:\n  default:\n    config:\n      max_fil
 if (strpos($config, $expectedMediaConfig) === false) {
     $errors[] = 'Sveltia internal media settings must be nested under media_libraries.default.config.';
 }
+if (substr_count($config, "\n  - name: gallery") !== 1
+    || substr_count($config, "\n  - name: page_media_slots") !== 1) {
+    $errors[] = 'Sveltia configuration must expose exactly one Gallery collection and one Page image slots collection.';
+}
 $galleryStart = strpos($config, "  - name: gallery");
 $nextCollection = $galleryStart === false ? false : strpos($config, "\n  - name: page_media_slots", $galleryStart + 1);
 $galleryConfig = $galleryStart === false ? '' : substr($config, $galleryStart, $nextCollection === false ? null : $nextCollection - $galleryStart);
@@ -120,14 +133,23 @@ $galleryField = static function ($name) use ($galleryConfig) {
     $start = strpos($galleryConfig, $marker);
     if ($start === false) return '';
     $next = strpos($galleryConfig, "\n      - name:", $start + strlen($marker));
-    return substr($galleryConfig, $start, $next === false ? null : $next - $start);
+    return $next === false
+        ? substr($galleryConfig, $start)
+        : substr($galleryConfig, $start, $next - $start);
 };
 $reviewStatusField = $galleryField('review_status');
 $sourceEvidenceField = $galleryField('sourceEvidence');
 $visualReviewField = $galleryField('visualReview');
+$altTextReviewField = $galleryField('altTextReview');
 $technicalValidationField = $galleryField('technicalValidation');
-if ($reviewStatusField === '' || strpos($reviewStatusField, 'widget: select') === false || strpos($reviewStatusField, 'default: draft') === false || strpos($reviewStatusField, 'value: approved') === false || strpos($reviewStatusField, 'widget: hidden') !== false) {
-    $errors[] = 'Gallery editorial review status must be visible, selectable and default to Draft.';
+$signedApprovalField = $galleryField('approval');
+if ($reviewStatusField === '' || strpos($reviewStatusField, 'widget: select') === false
+    || strpos($reviewStatusField, 'default: draft') === false
+    || strpos($reviewStatusField, 'value: ready_for_review') === false
+    || strpos($reviewStatusField, 'value: approved_for_release') === false
+    || strpos($reviewStatusField, 'widget: hidden') !== false
+    || strpos($reviewStatusField, "value: approved\\n") !== false) {
+    $errors[] = 'Gallery editorial review must use the shared Draft, Ready for review and Approved for release states.';
 }
 foreach (['name: creator', 'name: sourceUrl', 'name: licenseName', 'name: evidenceReference', 'name: verifiedBy', 'name: verifiedAt'] as $marker) {
     if ($sourceEvidenceField === '' || strpos($sourceEvidenceField, $marker) === false) $errors[] = 'Gallery source/rights evidence is missing field: ' . $marker;
@@ -143,6 +165,62 @@ if (strpos($visualReviewField, 'default: not_assessed') === false || strpos($vis
 }
 if ($technicalValidationField === '' || strpos($technicalValidationField, 'default: pending') === false || strpos($technicalValidationField, 'value: verified') === false || strpos($technicalValidationField, 'name: evidenceReference') === false) {
     $errors[] = 'Gallery technical validation must default to Pending and link evidence for verified checks.';
+}
+
+foreach (['name: evidence', 'name: reviewer', 'name: reviewedAt'] as $marker) {
+    if ($altTextReviewField === '' || strpos($altTextReviewField, $marker) === false) {
+        $errors[] = 'Gallery alt-text review is missing field: ' . $marker;
+    }
+}
+if (strpos($altTextReviewField, 'default: not_assessed') === false
+    || strpos($altTextReviewField, 'value: matched') === false
+    || strpos($altTextReviewField, 'value: mismatch') === false) {
+    $errors[] = 'Gallery alt-text review must default to Not assessed and distinguish matched from mismatch.';
+}
+if ($signedApprovalField === '' || strpos($signedApprovalField, 'widget: object') === false
+    || strpos($signedApprovalField, 'default: pending') === false
+    || strpos($signedApprovalField, 'value: approved') === false
+    || strpos($signedApprovalField, 'value: revoked') === false
+    || strpos($signedApprovalField, 'name: asset_sha256') === false
+    || strpos($signedApprovalField, 'name: approved_by') === false
+    || strpos($signedApprovalField, 'name: approved_at') === false
+    || strpos($signedApprovalField, 'name: signature') === false
+    || strpos($signedApprovalField, 'widget: hidden') === false) {
+    $errors[] = 'Gallery signed approval must default to Pending and keep signature metadata hidden from editors.';
+}
+if (strpos($siteConfig, 'GJ_MEDIA_APPROVERS_JSON') === false
+    || strpos($siteConfig, 'json_decode') === false
+    || strpos($siteConfig, "array_unique") === false
+    || strpos($siteConfig, "media_approvers'] =") === false
+    || strpos($siteConfig, '= $validMediaApprovers') === false
+    || strpos($siteConfig, ': []') === false) {
+    $errors[] = 'Gallery approver environment configuration must accept JSON identities and fail closed when malformed.';
+}
+if (strpos($galleryApprovalHelper, 'hash_hmac') === false
+    || strpos($galleryApprovalHelper, 'asset_sha256') === false
+    || strpos($galleryApprovalHelper, 'altTextReview') === false
+    || strpos($galleryApprovalHelper, 'image_git_blob_sha1') === false
+    || strpos($galleryApprovalHelper, 'gj_gallery_media_publication_is_approved') === false
+    || strpos($galleryLoader, 'gj_gallery_media_publication_is_approved') === false
+    || strpos($galleryLoader, 'gallery-legacy-baseline.php') === false) {
+    $errors[] = 'Gallery runtime must validate signed evidence and immutable legacy JSON/image identities.';
+}
+if (strpos($galleryLegacyBaseline, 'record_sha256') === false
+    || strpos($galleryLegacyBaseline, 'image_path') === false
+    || strpos($galleryLegacyBaseline, 'image_git_blob_sha1') === false
+    || strpos($galleryLegacyBaseline, 'image_bytes') === false) {
+    $errors[] = 'Gallery legacy baseline must pin record JSON, source path, Git blob identity and exact file size.';
+}
+if (strpos($gallerySigner, "PHP_SAPI !== 'cli'") === false
+    || strpos($gallerySigner, 'gj_gallery_media_approval_is_valid') === false
+    || strpos($gallerySigner, 'tempnam') === false
+    || strpos($gallerySigner, 'hash_equals') === false) {
+    $errors[] = 'Gallery approval signer must be CLI-only, self-verifying and atomic against concurrent edits.';
+}
+if (strpos($guide, 'byte-for-byte') === false
+    || strpos($guide, 'scripts/sign-gallery-media-approval.php') === false
+    || strpos($guide, 'Git blob SHA-1') === false) {
+    $errors[] = 'Owner guide must explain the immutable Gallery baseline and trusted signing workflow.';
 }
 if (strpos($guide, 'Rights evidence status: Unverified') === false || strpos($guide, 'do not backfill the 36 existing Gallery records') === false || strpos($guide, 'not cryptographic signatures') === false) {
     $errors[] = 'Owner guide must explain fail-closed defaults, existing-record boundaries and reviewer identity limits.';
@@ -269,6 +347,8 @@ if (
     || strpos($packageBuilder, '"admin/index.html"') === false
     || strpos($packageBuilder, '"include/admin-auth.php"') === false
     || strpos($packageBuilder, '"include/page-media-approval.php"') === false
+    || strpos($packageBuilder, '"include/gallery-media-approval.php"') === false
+    || strpos($packageBuilder, '"include/gallery-legacy-baseline.php"') === false
 ) {
     $errors[] = 'The cPanel package builder must include the CMS runtime directory and entry points.';
 }
