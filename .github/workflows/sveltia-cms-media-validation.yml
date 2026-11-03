@@ -10,6 +10,8 @@ on:
       - 'img/gallery/**'
       - 'admin/config.yml'
       - 'include/gallery-data.php'
+      - 'include/gallery-media-approval.php'
+      - 'include/gallery-legacy-baseline.php'
       - 'include/site-media-slots.php'
       - 'include/page-media-approval.php'
       - 'include/admin-auth.php'
@@ -19,6 +21,8 @@ on:
       - 'tests/php/site-media-slots-contract.php'
       - 'tests/php/admin-auth-contract.php'
       - 'scripts/sign-page-media-approval.php'
+      - 'scripts/sign-gallery-media-approval.php'
+      - 'tests/php/gallery-media-approval-contract.php'
       - 'scripts/gallery_media.py'
       - 'tests/php/gallery-curation.php'
       - 'tests/php/sveltia-cms-config-contract.php'
@@ -46,8 +50,14 @@ jobs:
           php-version: '8.2'
           coverage: none
 
-      - name: Lint gallery runtime
-        run: php -l include/gallery-data.php
+      - name: Lint gallery runtime and approval signer
+        run: |
+          php -l include/gallery-data.php
+          php -l include/gallery-media-approval.php
+          php -l scripts/sign-gallery-media-approval.php
+
+      - name: Validate signed Gallery approvals and immutable legacy baseline
+        run: php tests/php/gallery-media-approval-contract.php
 
       - name: Validate managed gallery entries and image references
         run: php tests/php/gallery-curation.php
