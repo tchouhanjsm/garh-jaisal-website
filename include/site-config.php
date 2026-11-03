@@ -50,4 +50,25 @@ if (is_string($mediaApprovalKey) && $mediaApprovalKey !== '') {
     $config['media_approval_hmac_key'] = $mediaApprovalKey;
 }
 
+// Optional JSON-list override for deployments that inject owner identities as environment config.
+$mediaApproversJson = getenv('GJ_MEDIA_APPROVERS_JSON');
+if (is_string($mediaApproversJson) && $mediaApproversJson !== '') {
+    $decodedMediaApprovers = json_decode($mediaApproversJson);
+    $validMediaApprovers = is_array($decodedMediaApprovers);
+    $normalizedMediaApprovers = [];
+    if ($validMediaApprovers) {
+        foreach ($decodedMediaApprovers as $approver) {
+            if (!is_string($approver) || trim($approver) === '') {
+                $validMediaApprovers = false;
+                break;
+            }
+            $normalizedMediaApprovers[] = trim($approver);
+        }
+    }
+    // Invalid explicit environment configuration fails closed rather than retaining a stale allowlist.
+    $config['media_approvers'] = $validMediaApprovers
+        ? array_values(array_unique($normalizedMediaApprovers))
+        : [];
+}
+
 return $config;
