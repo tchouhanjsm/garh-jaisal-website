@@ -124,7 +124,7 @@ function signGalleryFixture(galleryId, reason) {
     approved_at: '',
     signature: '',
   };
-  fs.writeFileSync(recordPath, JSON.stringify(record, null, 2) + '\\n');
+  fs.writeFileSync(recordPath, JSON.stringify(record, null, 2) + '\n');
   const signer = spawnSync('php', [
     path.join(ROOT, 'scripts/sign-gallery-media-approval.php'),
     galleryId,
