@@ -164,3 +164,27 @@ if (!function_exists('gj_gallery_media_approval_is_valid')) {
         return $expected !== '' && hash_equals($expected, strtolower($signature));
     }
 }
+if (!function_exists('gj_gallery_media_publication_is_approved')) {
+    /**
+     * One publication decision for both runtime rendering and regression tests.
+     * Records outside the immutable baseline require an explicit signed approval object.
+     */
+    function gj_gallery_media_publication_is_approved($record, $recordJson, $imagePath, $legacyBaseline, $key, $approvers)
+    {
+        if (!is_array($record) || !is_string($recordJson) || !is_array($legacyBaseline)) return false;
+        $id = $record['id'] ?? null;
+        if (!is_string($id) || $id === '') return false;
+
+        if (array_key_exists('approval', $record)) {
+            if (!is_file($imagePath)) return false;
+            $imageInfo = @getimagesize($imagePath);
+            $decodable = is_array($imageInfo) && !empty($imageInfo[0]) && !empty($imageInfo[1]);
+            return $decodable && gj_gallery_media_approval_is_valid($record, $imagePath, $key, $approvers);
+        }
+
+        $baselineHash = $legacyBaseline[$id] ?? null;
+        return is_string($baselineHash)
+            && preg_match('/^[a-f0-9]{64}$/D', $baselineHash) === 1
+            && hash_equals($baselineHash, hash('sha256', $recordJson));
+    }
+}
