@@ -37,6 +37,12 @@ if (!function_exists('gj_gallery_media_approval_payload')) {
                 'reviewer' => $clean($visualReview['reviewer'] ?? null),
                 'reviewedAt' => $clean($visualReview['reviewedAt'] ?? null),
             ],
+            'altTextReview' => [
+                'status' => $clean(is_array($record['altTextReview'] ?? null) ? ($record['altTextReview']['status'] ?? null) : null),
+                'evidence' => $clean(is_array($record['altTextReview'] ?? null) ? ($record['altTextReview']['evidence'] ?? null) : null),
+                'reviewer' => $clean(is_array($record['altTextReview'] ?? null) ? ($record['altTextReview']['reviewer'] ?? null) : null),
+                'reviewedAt' => $clean(is_array($record['altTextReview'] ?? null) ? ($record['altTextReview']['reviewedAt'] ?? null) : null),
+            ],
             'technicalValidation' => [
                 'status' => $clean($technicalValidation['status'] ?? null),
                 'evidenceReference' => $clean($technicalValidation['evidenceReference'] ?? null),
@@ -123,6 +129,13 @@ if (!function_exists('gj_gallery_media_approval_is_valid')) {
             || strlen($visualReview['evidence']) > 1000
             || !is_string($visualReview['reviewer'] ?? null) || strlen(trim($visualReview['reviewer'])) < 2
             || !gj_gallery_media_approval_date_is_valid($visualReview['reviewedAt'] ?? null)) return false;
+
+        $altTextReview = is_array($record['altTextReview'] ?? null) ? $record['altTextReview'] : [];
+        if (($altTextReview['status'] ?? '') !== 'matched'
+            || !is_string($altTextReview['evidence'] ?? null) || strlen(trim($altTextReview['evidence'])) < 15
+            || strlen($altTextReview['evidence']) > 500
+            || !is_string($altTextReview['reviewer'] ?? null) || strlen(trim($altTextReview['reviewer'])) < 2
+            || !gj_gallery_media_approval_date_is_valid($altTextReview['reviewedAt'] ?? null)) return false;
 
         if (($technicalValidation['status'] ?? '') !== 'verified'
             || !is_string($technicalValidation['evidenceReference'] ?? null)
