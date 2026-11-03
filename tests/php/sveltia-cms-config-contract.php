@@ -18,6 +18,7 @@ $requiredFiles = [
     'include/gallery-legacy-baseline.php',
     'include/media-library-audit.php',
     'include/site-media-slots.php',
+    'include/site-config.php',
     'include/page-media-approval.php',
     'include/admin-auth.php',
     'scripts/sign-page-media-approval.php',
@@ -54,6 +55,7 @@ $html = $read('admin/index.html');
 $mediaLibrary = $read('admin/media-library.php');
 $mediaAudit = $read('include/media-library-audit.php');
 $siteMediaLoader = $read('include/site-media-slots.php');
+$siteConfig = $read('include/site-config.php');
 $approvalHelper = $read('include/page-media-approval.php');
 $adminAuth = $read('include/admin-auth.php');
 $config = $read('admin/config.yml');
@@ -178,6 +180,12 @@ if ($signedApprovalField === '' || strpos($signedApprovalField, 'widget: object'
     || strpos($signedApprovalField, 'name: signature') === false
     || strpos($signedApprovalField, 'widget: hidden') === false) {
     $errors[] = 'Gallery signed approval must default to Pending and keep signature metadata hidden from editors.';
+}
+if (strpos($siteConfig, 'GJ_MEDIA_APPROVERS_JSON') === false
+    || strpos($siteConfig, 'json_decode') === false
+    || strpos($siteConfig, "array_unique") === false
+    || strpos($siteConfig, "'media_approvers'] = []") === false) {
+    $errors[] = 'Gallery approver environment configuration must accept JSON identities and fail closed when malformed.';
 }
 if (strpos($galleryApprovalHelper, 'hash_hmac') === false
     || strpos($galleryApprovalHelper, 'asset_sha256') === false
