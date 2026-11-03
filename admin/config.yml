@@ -68,6 +68,7 @@ collections:
         widget: select
         required: true
         default: draft
+        hint: Keep Draft while source rights, visual match, descriptive alt text and technical validation are incomplete. Live is a publication state, not evidence of those checks.
         options:
           - label: Draft — not shown publicly
             value: draft
@@ -84,8 +85,120 @@ collections:
         min: 1
         hint: Lower numbers appear first within a category. Choose a unique number in that category.
       - name: review_status
-        widget: hidden
+        label: Editorial review status
+        widget: select
+        required: true
         default: draft
+        hint: Approved is a recorded editorial decision only. It does not publish or import an image.
+        options:
+          - label: Draft — not reviewed
+            value: draft
+          - label: Review required
+            value: review_required
+          - label: Approved — evidence recorded and reviewed
+            value: approved
+          - label: Rejected
+            value: rejected
+      - name: sourceEvidence
+        label: Source and rights evidence
+        widget: object
+        required: true
+        fields:
+          - name: status
+            label: Rights evidence status
+            widget: select
+            required: true
+            default: unverified
+            options:
+              - label: Unverified — not eligible for publication
+                value: unverified
+              - label: Owner-confirmed
+                value: owner-confirmed
+              - label: Licensed
+                value: licensed
+          - name: creator
+            label: Creator or rights holder
+            widget: string
+            required: false
+          - name: sourceUrl
+            label: Original HTTPS source URL
+            widget: string
+            required: false
+            pattern:
+              - '^https://'
+              - Use the original HTTPS source page.
+          - name: licenseName
+            label: Licence name and scope
+            widget: string
+            required: false
+          - name: evidenceReference
+            label: Rights evidence reference
+            widget: string
+            required: false
+          - name: verifiedBy
+            label: Rights verified by
+            widget: string
+            required: false
+          - name: verifiedAt
+            label: Rights verification date (YYYY-MM-DD)
+            widget: string
+            required: false
+            pattern:
+              - '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
+              - Use a valid date in YYYY-MM-DD format.
+      - name: visualReview
+        label: Human visual review
+        widget: object
+        required: true
+        fields:
+          - name: status
+            label: Visual subject match
+            widget: select
+            required: true
+            default: not_assessed
+            options:
+              - label: Not assessed
+                value: not_assessed
+              - label: Matched to the described subject
+                value: matched
+              - label: Mismatch — do not use
+                value: mismatch
+          - name: evidence
+            label: What was inspected and matched
+            widget: text
+            required: false
+          - name: reviewer
+            label: Visual reviewer
+            widget: string
+            required: false
+          - name: reviewedAt
+            label: Visual review date (YYYY-MM-DD)
+            widget: string
+            required: false
+            pattern:
+              - '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
+              - Use a valid date in YYYY-MM-DD format.
+      - name: technicalValidation
+        label: Technical image validation
+        widget: object
+        required: true
+        fields:
+          - name: status
+            label: Technical validation status
+            widget: select
+            required: true
+            default: pending
+            options:
+              - label: Pending
+                value: pending
+              - label: Verified — decoded and dimensions checked
+                value: verified
+              - label: Failed — do not use
+                value: failed
+          - name: evidenceReference
+            label: Technical validation evidence reference
+            widget: string
+            required: false
       - name: image
         label: Photo
         widget: object

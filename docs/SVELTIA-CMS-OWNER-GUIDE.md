@@ -72,6 +72,20 @@ Use JPG/JPEG, PNG or WebP photographs. Avoid animated images and SVGs for this G
 
 The repository's responsive-image pipeline discovers image paths from both Gallery JSON records and the four fixed Page image slot files. New slot uploads are included in responsive WebP candidate generation and cPanel package fallback validation.
 
+## Record source, rights and review evidence
+
+Each Gallery photo has separate fields for publication status, editorial review, source/rights evidence, human visual review and technical validation. A record marked **Live** or **Approved** is not proof that its underlying evidence is complete, and saving in Sveltia never publishes to the production server.
+
+1. Start with **Editorial review status: Draft** and **Rights evidence status: Unverified**.
+2. Record the named creator or rights holder and a stable evidence reference. Licensed images also require the original HTTPS source URL and licence name/scope. Owner-confirmed or commissioned work requires the actual permission or commission reference. Do not infer ownership from a filename, folder, website or old CMS record.
+3. Open the actual image at full size. Record whether the visible subject matches the intended description and crop. Set **Matched** only after inspection; record the reviewer, date and what was checked. Use **Mismatch** when the subject or context does not match.
+4. Complete technical validation only after the image has been decoded and its dimensions/path checked. Link the actual validation evidence. Technical validation does not establish rights or visual relevance.
+5. Keep publication status **Draft** while evidence is incomplete. The tourism-site audit also requires descriptive alt text and a separate review decision; a CMS field alone cannot satisfy all release gates.
+
+The safe defaults for new entries are deliberately unresolved: rights **Unverified**, visual review **Not assessed**, technical validation **Pending**, and editorial review **Draft**. These fields do not backfill the 36 existing Gallery records or change their statuses. Review existing records individually; do not bulk-mark them approved or owner-confirmed.
+
+The reviewer/date fields are editorial attestations, not cryptographic signatures or authenticated approval authority. Keep supporting evidence in the approved owner-controlled record system and submit final changes through the reviewed `cms-media` to `main` pull-request workflow. Do not paste private credentials, tokens, personal data or confidential contract details into a public repository record.
+
 ## Review and publish — no direct production edits
 
 Sveltia writes to the dedicated `cms-media` branch, not `main`.
