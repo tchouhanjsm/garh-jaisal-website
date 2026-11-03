@@ -1,54 +1,210 @@
 {
   "home-hero-mobile": {
     "src": "img/optimized/v2/facade.webp",
-    "alt": "Carved sandstone facade of Garh Jaisal Haveli inside Jaisalmer Fort"
+    "alt": "Carved sandstone facade of Garh Jaisal Haveli inside Jaisalmer Fort",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "home-hero-desktop": {
     "src": "img/optimized/v2/fort-from-roof.webp",
-    "alt": "Jaisalmer Fort seen from the rooftop at Garh Jaisal Haveli"
+    "alt": "Jaisalmer Fort seen from the rooftop at Garh Jaisal Haveli",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "home-heritage-intro": {
     "src": "img/5.webp",
-    "alt": "Carved sandstone architecture inside Garh Jaisal Haveli"
+    "alt": "Carved sandstone architecture inside Garh Jaisal Haveli",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "home-rooftop-feature": {
     "src": "img/roofslide.webp",
-    "alt": "Rooftop table at dusk overlooking the lights of Jaisalmer"
+    "alt": "Rooftop table at dusk overlooking the lights of Jaisalmer",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "home-desert-safari-feature": {
     "src": "img/desert7.jpg",
-    "alt": "Camel safari at sunset in the Thar Desert near Jaisalmer"
+    "alt": "Camel safari at sunset in the Thar Desert near Jaisalmer",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "home-swiss-tent-feature": {
     "src": "img/v2/swiss-tent.webp",
-    "alt": "Swiss tent accommodation at a desert camp near Jaisalmer"
+    "alt": "Swiss tent accommodation at a desert camp near Jaisalmer",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "home-sleep-under-stars-feature": {
     "src": "img/tent.jpg",
-    "alt": "Open-air sleeping arrangement beneath the night sky in the Jaisalmer desert"
+    "alt": "Open-air sleeping arrangement beneath the night sky in the Jaisalmer desert",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "home-city-discovery-feature": {
     "src": "img/jcity.jpg",
-    "alt": "Jaisalmer city seen from the fort"
+    "alt": "Jaisalmer city seen from the fort",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "home-gallery-city": {
     "src": "img/jcity.jpg",
-    "alt": "Jaisalmer city seen from the fort"
+    "alt": "Jaisalmer city seen from the fort",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "home-gallery-courtyard": {
     "src": "img/courtyard.jpg",
-    "alt": "Carved sandstone hallway inside a heritage haveli"
+    "alt": "Carved sandstone hallway inside a heritage haveli",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "home-gallery-reception": {
     "src": "img/recep1.jpg",
-    "alt": "Reception area with traditional furnishings at Garh Jaisal Haveli"
+    "alt": "Reception area with traditional furnishings at Garh Jaisal Haveli",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "home-gallery-rooftop": {
     "src": "img/s4.jpg",
-    "alt": "View across Jaisalmer from the rooftop"
+    "alt": "View across Jaisalmer from the rooftop",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   },
   "home-gallery-entrance": {
     "src": "img/big9.jpg",
-    "alt": "A carved entrance in a historic sandstone building"
+    "alt": "A carved entrance in a historic sandstone building",
+    "approval": {
+      "status": "pending",
+      "source_credit": "",
+      "rights_basis": "",
+      "visual_match_review": "",
+      "alt_text_review": "",
+      "technical_validation": "",
+      "asset_sha256": "",
+      "approved_by": "",
+      "approved_at": "",
+      "signature": ""
+    }
   }
 }

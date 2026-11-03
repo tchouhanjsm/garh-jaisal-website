@@ -43,3 +43,12 @@ The Sveltia dashboard at `/admin/` writes Gallery JSON and newly uploaded/replac
 
 
 The owner media report at /admin/media-library.php is a read-only runtime route included with the reviewed admin/ and include/ directories. It does not modify media or content. It is marked noindex/no-store, but it is not an authentication gate. No new deployment action is triggered by opening the report.
+
+
+## Owner Media Library access and page-media approval
+
+Before enabling the Media Library report on cPanel, add media_admin_auth to the existing untracked include/site-config.local.php. Generate the password hash on a trusted machine with PHP password_hash() and use HTTPS only. Test both /admin/media-library.php and /admin/media-library.php?format=json in a private browser window: both must deny anonymous access, then return the report only after valid owner credentials. If the local credentials are absent, the route must return 503 without running the inventory.
+
+For page image slots, configure the server-only media_approvers allowlist and a random media_approval_hmac_key. The same key must be available to the trusted local signing process and deployed PHP runtime. New or changed page-media entries remain on their reviewed PHP fallback until a trusted reviewer supplies evidence and runs scripts/sign-page-media-approval.php. Never deploy the HMAC key, password hash or local configuration file in the package. Verify that changing an image, path, alt text or caption invalidates its approval signature.
+
+These protections are implemented in application code, but actual cPanel authentication and environment/local-config setup still require owner verification on staging. Do not claim the production host is protected until both endpoints have been tested there.
