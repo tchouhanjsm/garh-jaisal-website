@@ -160,21 +160,10 @@ foreach ($galleryFiles as $galleryFile) {
         throw new RuntimeException('Duplicate Sveltia gallery source path: ' . $src);
     }
 
-    $hasApprovalObject = array_key_exists('approval', $record);
-    $approved = false;
-    if ($hasApprovalObject) {
-        // Explicitly governed records must pass rights, visual, technical, signer and asset checks.
-        $imageInfo = @getimagesize($realImagePath);
-        $decodable = is_array($imageInfo) && !empty($imageInfo[0]) && !empty($imageInfo[1]);
-        $approved = $decodable && gj_gallery_media_approval_is_valid(
-            $record, $realImagePath, $galleryApprovalKey, $galleryApprovers
-        );
-    } else {
-        // A byte-for-byte match is the only grandfathered path for the 36 original photos.
-        $baselineHash = $legacyBaseline[$id] ?? null;
-        $currentRecordHash = hash('sha256', $recordJson);
-        $approved = is_string($baselineHash) && hash_equals($baselineHash, $currentRecordHash);
-    }
+    // The same approval decision is exercised by Gallery contract tests.
+    $approved = gj_gallery_media_publication_is_approved(
+        $record, $recordJson, $realImagePath, $legacyBaseline, $galleryApprovalKey, $galleryApprovers
+    );
 
     $usedGalleryIds[$id] = true;
     $usedGallerySources[$src] = true;
