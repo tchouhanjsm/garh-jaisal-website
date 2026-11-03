@@ -14,12 +14,16 @@ $requiredFiles = [
     'admin/.htaccess',
     'docs/SVELTIA-CMS-OWNER-GUIDE.md',
     'include/gallery-data.php',
+    'include/gallery-media-approval.php',
+    'include/gallery-legacy-baseline.php',
     'include/media-library-audit.php',
     'include/site-media-slots.php',
     'include/page-media-approval.php',
     'include/admin-auth.php',
     'scripts/sign-page-media-approval.php',
+    'scripts/sign-gallery-media-approval.php',
     'tests/php/admin-auth-contract.php',
+    'tests/php/gallery-media-approval-contract.php',
     'content/page-media/home.json',
     'content/page-media/rooms.json',
     'content/page-media/dining.json',
@@ -55,6 +59,9 @@ $adminAuth = $read('include/admin-auth.php');
 $config = $read('admin/config.yml');
 $headers = $read('admin/.htaccess');
 $galleryLoader = $read('include/gallery-data.php');
+$galleryApprovalHelper = $read('include/gallery-media-approval.php');
+$galleryLegacyBaseline = $read('include/gallery-legacy-baseline.php');
+$gallerySigner = $read('scripts/sign-gallery-media-approval.php');
 $packageBuilder = $read('scripts/build_deploy_package.py');
 $guide = $read('docs/SVELTIA-CMS-OWNER-GUIDE.md');
 
@@ -125,7 +132,9 @@ $galleryField = static function ($name) use ($galleryConfig) {
 $reviewStatusField = $galleryField('review_status');
 $sourceEvidenceField = $galleryField('sourceEvidence');
 $visualReviewField = $galleryField('visualReview');
+$altTextReviewField = $galleryField('altTextReview');
 $technicalValidationField = $galleryField('technicalValidation');
+$signedApprovalField = $galleryField('approval');
 if ($reviewStatusField === '' || strpos($reviewStatusField, 'widget: select') === false || strpos($reviewStatusField, 'default: draft') === false || strpos($reviewStatusField, 'value: approved') === false || strpos($reviewStatusField, 'widget: hidden') !== false) {
     $errors[] = 'Gallery editorial review status must be visible, selectable and default to Draft.';
 }
@@ -143,6 +152,54 @@ if (strpos($visualReviewField, 'default: not_assessed') === false || strpos($vis
 }
 if ($technicalValidationField === '' || strpos($technicalValidationField, 'default: pending') === false || strpos($technicalValidationField, 'value: verified') === false || strpos($technicalValidationField, 'name: evidenceReference') === false) {
     $errors[] = 'Gallery technical validation must default to Pending and link evidence for verified checks.';
+}
+
+foreach (['name: evidence', 'name: reviewer', 'name: reviewedAt'] as $marker) {
+    if ($altTextReviewField === '' || strpos($altTextReviewField, $marker) === false) {
+        $errors[] = 'Gallery alt-text review is missing field: ' . $marker;
+    }
+}
+if (strpos($altTextReviewField, 'default: not_assessed') === false
+    || strpos($altTextReviewField, 'value: matched') === false
+    || strpos($altTextReviewField, 'value: mismatch') === false) {
+    $errors[] = 'Gallery alt-text review must default to Not assessed and distinguish matched from mismatch.';
+}
+if ($signedApprovalField === '' || strpos($signedApprovalField, 'widget: object') === false
+    || strpos($signedApprovalField, 'default: pending') === false
+    || strpos($signedApprovalField, 'value: approved') === false
+    || strpos($signedApprovalField, 'value: revoked') === false
+    || strpos($signedApprovalField, 'name: asset_sha256') === false
+    || strpos($signedApprovalField, 'name: approved_by') === false
+    || strpos($signedApprovalField, 'name: approved_at') === false
+    || strpos($signedApprovalField, 'name: signature') === false
+    || strpos($signedApprovalField, 'widget: hidden') === false) {
+    $errors[] = 'Gallery signed approval must default to Pending and keep signature metadata hidden from editors.';
+}
+if (strpos($galleryApprovalHelper, 'hash_hmac') === false
+    || strpos($galleryApprovalHelper, 'asset_sha256') === false
+    || strpos($galleryApprovalHelper, 'altTextReview') === false
+    || strpos($galleryApprovalHelper, 'image_git_blob_sha1') === false
+    || strpos($galleryApprovalHelper, 'gj_gallery_media_publication_is_approved') === false
+    || strpos($galleryLoader, 'gj_gallery_media_publication_is_approved') === false
+    || strpos($galleryLoader, 'gallery-legacy-baseline.php') === false) {
+    $errors[] = 'Gallery runtime must validate signed evidence and immutable legacy JSON/image identities.';
+}
+if (strpos($galleryLegacyBaseline, 'record_sha256') === false
+    || strpos($galleryLegacyBaseline, 'image_path') === false
+    || strpos($galleryLegacyBaseline, 'image_git_blob_sha1') === false
+    || strpos($galleryLegacyBaseline, 'image_bytes') === false) {
+    $errors[] = 'Gallery legacy baseline must pin record JSON, source path, Git blob identity and exact file size.';
+}
+if (strpos($gallerySigner, "PHP_SAPI !== 'cli'") === false
+    || strpos($gallerySigner, 'gj_gallery_media_approval_is_valid') === false
+    || strpos($gallerySigner, 'tempnam') === false
+    || strpos($gallerySigner, 'hash_equals') === false) {
+    $errors[] = 'Gallery approval signer must be CLI-only, self-verifying and atomic against concurrent edits.';
+}
+if (strpos($guide, 'byte-for-byte') === false
+    || strpos($guide, 'scripts/sign-gallery-media-approval.php') === false
+    || strpos($guide, 'Git blob SHA-1') === false) {
+    $errors[] = 'Owner guide must explain the immutable Gallery baseline and trusted signing workflow.';
 }
 if (strpos($guide, 'Rights evidence status: Unverified') === false || strpos($guide, 'do not backfill the 36 existing Gallery records') === false || strpos($guide, 'not cryptographic signatures') === false) {
     $errors[] = 'Owner guide must explain fail-closed defaults, existing-record boundaries and reviewer identity limits.';
@@ -269,6 +326,8 @@ if (
     || strpos($packageBuilder, '"admin/index.html"') === false
     || strpos($packageBuilder, '"include/admin-auth.php"') === false
     || strpos($packageBuilder, '"include/page-media-approval.php"') === false
+    || strpos($packageBuilder, '"include/gallery-media-approval.php"') === false
+    || strpos($packageBuilder, '"include/gallery-legacy-baseline.php"') === false
 ) {
     $errors[] = 'The cPanel package builder must include the CMS runtime directory and entry points.';
 }
