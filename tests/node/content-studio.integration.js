@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { spawn, spawnSync } = require('node:child_process');
 const http = require('node:http');
+const crypto = require('node:crypto');
 const vm = require('node:vm');
 
 const ROOT = path.resolve(__dirname, '../..');
@@ -80,6 +81,67 @@ function start(command, args, env, onOutput, onError) {
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Test-only authority: these fixtures must be explicitly signed before the public Gallery renders them.
+const galleryCiReviewer = 'Content Studio CI Reviewer';
+const galleryCiKey = crypto.randomBytes(32).toString('hex');
+
+function signGalleryFixture(galleryId, reason) {
+  const recordPath = path.join(galleryDir, galleryId + '.json');
+  const record = JSON.parse(fs.readFileSync(recordPath, 'utf8'));
+  const today = new Date().toISOString().slice(0, 10);
+  const evidenceNote = 'CI-only test fixture evidence for ' + reason + '; not a production rights claim.';
+  record.sourceEvidence = {
+    status: 'owner-confirmed',
+    creator: 'Content Studio integration fixture',
+    sourceUrl: '',
+    licenseName: '',
+    evidenceReference: evidenceNote,
+    verifiedBy: galleryCiReviewer,
+    verifiedAt: today,
+  };
+  record.visualReview = {
+    status: 'matched',
+    evidence: 'CI test inspected the selected fixture image and confirmed its test-only subject context.',
+    reviewer: galleryCiReviewer,
+    reviewedAt: today,
+  };
+  record.altTextReview = {
+    status: 'matched',
+    evidence: 'CI test confirmed the temporary alt text accurately describes the selected fixture image.',
+    reviewer: galleryCiReviewer,
+    reviewedAt: today,
+  };
+  record.technicalValidation = {
+    status: 'verified',
+    evidenceReference: 'CI image decode and dimension check for ' + reason,
+  };
+  record.approval = {
+    status: 'approved',
+    asset_sha256: '',
+    approved_by: '',
+    approved_at: '',
+    signature: '',
+  };
+  fs.writeFileSync(recordPath, JSON.stringify(record, null, 2) + '\\n');
+  const signer = spawnSync('php', [
+    path.join(ROOT, 'scripts/sign-gallery-media-approval.php'),
+    galleryId,
+    galleryCiReviewer,
+  ], {
+    cwd: ROOT,
+    env: { ...process.env },
+    encoding: 'utf8',
+  });
+  assert.equal(
+    signer.status,
+    0,
+    'test Gallery fixture must be signed by the isolated CI authority: ' + (signer.stdout || '') + (signer.stderr || ''),
+  );
+  const signedRecord = JSON.parse(fs.readFileSync(recordPath, 'utf8'));
+  assert.match(signedRecord.approval.signature, /^[a-f0-9]{64}$/);
+  return signedRecord;
 }
 
 async function waitFor(url, child, label) {
@@ -359,6 +421,8 @@ async function main() {
     'photo-library entries must be normalized, supported raster assets under img/ with positive file size');
   assert.ok(!assetLibrary.assets.some(asset => asset.src.startsWith('img/responsive/')), 'generated responsive derivatives must not appear as editable source photos');
 
+  process.env.GJ_MEDIA_APPROVAL_HMAC_KEY = galleryCiKey;
+  process.env.GJ_MEDIA_APPROVERS_JSON = JSON.stringify([galleryCiReviewer]);
   phpServer = start('php', ['-S', '127.0.0.1:' + PHP_PORT, '-t', ROOT], {}, s => { phpOutput += s; }, s => { phpErrors += s; });
   await waitFor(PHP_URL + '/blog.php', phpServer, 'PHP preview server');
 
@@ -775,11 +839,15 @@ async function main() {
   await transitionReview('gallery', galleryId, 'ready_for_review');
   await transitionReview('gallery', galleryId, 'approved_for_release');
   result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId + '/status', 'PATCH', { status: 'live' });
-  assert.equal(result.response.status, 200, 'approved Gallery entry can be made Live locally');
+  assert.equal(result.response.status, 200, 'approved editorial Gallery entry can be marked Live in the local editor');
+  response = await fetch(PHP_URL + '/gallery.php');
+  html = await response.text();
+  assert.ok(!html.includes('src="' + gallerySrc + '"'), 'Live status without a trusted media signature must not publish the Gallery image');
+  signGalleryFixture(galleryId, 'initial Gallery publication');
   response = await fetch(PHP_URL + '/gallery.php');
   assert.equal(response.status, 200);
   html = await response.text();
-  assert.ok(html.includes('src="' + gallerySrc + '"'), 'new Gallery image should render on the existing Gallery route');
+  assert.ok(html.includes('src="' + gallerySrc + '"'), 'signed Gallery image should render on the existing Gallery route');
   result = await requestJson(STUDIO_URL + '/api/content', 'GET');
   assert.ok(result.body.items.some(item => item.type === 'gallery' && item.slug === galleryId && item.status === 'live'));
   result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId, 'PUT', {
@@ -799,7 +867,14 @@ async function main() {
   await transitionReview('gallery', galleryId, 'ready_for_review');
   await transitionReview('gallery', galleryId, 'approved_for_release');
   result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId + '/status', 'PATCH', { status: 'live' });
-  assert.equal(result.response.status, 200, 'edited Gallery metadata can be published after re-approval');
+  assert.equal(result.response.status, 200, 'edited Gallery metadata can be marked Live after editorial re-approval');
+  response = await fetch(PHP_URL + '/gallery.php');
+  html = await response.text();
+  assert.ok(!html.includes('src="' + gallerySrc + '"'), 'editing invalidates the old HMAC approval and must hide the Gallery image');
+  signGalleryFixture(galleryId, 'republication after Gallery metadata edit');
+  response = await fetch(PHP_URL + '/gallery.php');
+  html = await response.text();
+  assert.ok(html.includes('src="' + gallerySrc + '"'), 'fresh signed approval must restore the edited Gallery entry');
   assert.equal(JSON.parse(fs.readFileSync(galleryRecordPath, 'utf8')).status, 'live');
   assert.equal(JSON.parse(fs.readFileSync(galleryRecordPath, 'utf8')).image.crop, 'portrait');
   result = await requestJson(STUDIO_URL + '/api/content/gallery/' + galleryId + '/status', 'PATCH', { status: 'draft' });
