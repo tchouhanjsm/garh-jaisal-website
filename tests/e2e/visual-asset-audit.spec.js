@@ -81,8 +81,6 @@ test.describe('Visual asset and typography evidence', () => {
             bodyFontFamily: getComputedStyle(body).fontFamily,
             bodyFontSizePx: Math.round(parseFloat(getComputedStyle(body).fontSize) * 100) / 100,
             documentFontsStatus: document.fonts.status,
-            sourceSerifReady: document.fonts.check('400 24px "Source Serif 4"'),
-            interReady: document.fonts.check('400 16px Inter'),
           },
           images,
           resources,
@@ -99,9 +97,9 @@ test.describe('Visual asset and typography evidence', () => {
       expect(missingAlt, route.path + ' images must declare alt (empty is valid when decorative)').toEqual([]);
       expect(failedVisibleImages, route.path + ' must not show broken visible images').toEqual([]);
       expect(routeReport.typography.h1FontFamily, route.path + ' H1 should use the declared display stack')
-        .toContain('Source Serif 4');
+        .toContain('Palatino');
       expect(routeReport.typography.bodyFontFamily, route.path + ' body should use the declared body stack')
-        .toContain('Inter');
+        .toContain('Trebuchet MS');
       report.routes.push({ route: route.path, ...routeReport });
     }
 

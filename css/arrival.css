@@ -439,7 +439,7 @@
   white-space:nowrap;
 }
 .arrival-section-nav a:hover{
-  border-bottom-color:var(--saffron);
+  border-bottom-color:var(--action-primary);
   color:var(--brown);
 }
 .arrival-section-nav a:focus-visible{
@@ -513,7 +513,7 @@
   min-width:100%;
 }
 .arrival-page .arrival-notice{
-  border-inline-start:4px solid var(--saffron);
+  border-inline-start:4px solid var(--action-primary);
 }
 
 @media(max-width:1000px){

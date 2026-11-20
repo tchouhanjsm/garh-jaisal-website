@@ -12,8 +12,8 @@ const VIEWPORTS = [
 ];
 
 const PAGE_ARCHETYPES = [
-  { route: '/', hero: 'main .hero' },
-  { route: '/room.php', hero: 'main .rooms-hero', media: 'main .room-card-media' },
+  { route: '/', hero: 'main .hero', maximumTitleSize: 88 },
+  { route: '/room.php', hero: 'main .rooms-hero', media: 'main .room-card-media .photo-carousel-slide img' },
   { route: '/pack.php', hero: 'main .package-hero', media: 'main .package-card-media' },
   { route: '/catalogue.php', hero: 'main .catalogue-hero', media: 'main .product-card-media' },
   { route: '/desert-safari.php', hero: 'main .experience-hero', media: 'main .experience-card-media' },
@@ -66,11 +66,12 @@ test('shared visual system stays consistent across five viewports and twelve pag
           const baseStylesheetIndex = cssLinks.findIndex(path => path.endsWith('/css/garh-v2.css'));
           const tokenStylesheetIndex = cssLinks.findIndex(path => path.endsWith('/css/tokens.css'));
           const conversionStylesheetIndex = cssLinks.findIndex(path => path.endsWith('/css/conversion-system.css'));
+          const themeStylesheetIndex = cssLinks.findIndex(path => path.endsWith('/css/fort-at-dusk.css'));
           const accessibilityStylesheetIndex = cssLinks.findIndex(path => path.endsWith('/css/accessibility.css'));
           // The accessibility preference layer intentionally follows route CSS and shared tokens.
           // It must not be counted as a route stylesheet expected to precede tokens.css.
           const routeStylesheets = cssLinks.filter(path => ![
-            '/css/garh-v2.css', '/css/tokens.css', '/css/conversion-system.css', '/css/accessibility.css'
+            '/css/garh-v2.css', '/css/tokens.css', '/css/conversion-system.css', '/css/fort-at-dusk.css', '/css/accessibility.css'
           ].includes(path));
           const h1Styles = h1 ? window.getComputedStyle(h1) : null;
           const shellRect = shell?.getBoundingClientRect() || null;
@@ -88,6 +89,7 @@ test('shared visual system stays consistent across five viewports and twelve pag
               && tokenStylesheetIndex > baseStylesheetIndex
               && routeStylesheets.every(path => tokenStylesheetIndex > cssLinks.indexOf(path)),
             conversionSystemAfterTokens: tokenStylesheetIndex >= 0 && conversionStylesheetIndex > tokenStylesheetIndex,
+            themeBeforeAccessibility: themeStylesheetIndex > conversionStylesheetIndex && accessibilityStylesheetIndex > themeStylesheetIndex,
             accessibilityAfterAllOtherStyles: accessibilityStylesheetIndex >= 0
               && cssLinks.every((path, index) => path.endsWith('/css/accessibility.css') || index < accessibilityStylesheetIndex),
             tokensPresent: Boolean(rootStyles.getPropertyValue('--page-gutter').trim())
@@ -100,15 +102,16 @@ test('shared visual system stays consistent across five viewports and twelve pag
         expect(state.hasMain, archetype.route + ' must have a main landmark').toBe(true);
         expect(state.h1Count, archetype.route + ' must have one page H1').toBe(1);
         expect(state.h1Visible, archetype.route + ' H1 must remain visible').toBe(true);
-        expect(state.h1FontSize, archetype.route + ' uses the shared responsive title scale').toBeGreaterThanOrEqual(33);
-        expect(state.h1FontSize, archetype.route + ' uses the shared responsive title scale').toBeLessThanOrEqual(61);
+        expect(state.h1FontSize, archetype.route + ' uses its responsive title scale').toBeGreaterThanOrEqual(archetype.minimumTitleSize ?? 33);
+        expect(state.h1FontSize, archetype.route + ' uses the shared responsive title scale').toBeLessThanOrEqual(archetype.maximumTitleSize ?? 61);
         expect(state.h1LineHeight, archetype.route + ' title line-height stays compact and readable').toBeGreaterThanOrEqual(32);
-        expect(state.h1FontFamily, archetype.route + ' keeps the approved display typeface in its CSS stack').toContain('Source Serif 4');
+        expect(state.h1FontFamily, archetype.route + ' keeps the approved display typeface in its CSS stack').toContain('Palatino');
         expect(state.hasShell, archetype.route + ' uses the shared content rail').toBe(true);
         expect(state.shellLeft, archetype.route + ' content rail must remain inside the viewport').toBeGreaterThanOrEqual(-0.5);
         expect(state.shellRight, archetype.route + ' content rail must remain inside the viewport').toBeLessThanOrEqual(viewport.width + 0.5);
         expect(state.tokensAfterRouteCSS, archetype.route + ' loads shared tokens after route-specific CSS').toBe(true);
         expect(state.conversionSystemAfterTokens, archetype.route + ' loads conversion components after shared tokens').toBe(true);
+        expect(state.themeBeforeAccessibility, archetype.route + ' loads the theme before preference overrides').toBe(true);
         expect(state.accessibilityAfterAllOtherStyles, archetype.route + ' loads preference overrides after every other stylesheet').toBe(true);
         expect(state.tokensPresent, archetype.route + ' receives the shared scale tokens').toBe(true);
         expect(state.horizontalOverflow, archetype.route + ' must not introduce horizontal page overflow').toBe(false);
@@ -234,11 +237,11 @@ test('premium semantic tokens are available and resolve to the approved identity
   for (const [name, value] of Object.entries(tokens)) {
     expect(value, name + ' must resolve to a non-empty shared token').not.toBe('');
   }
-  expect(tokens.surface.toLowerCase()).toBe('#f7efe0');
-  expect(tokens.actionPrimary.toLowerCase()).toBe('#b94a0e');
-  expect(tokens.actionHover.toLowerCase()).toBe('#963a08');
-  expect(tokens.surfaceDark.toLowerCase()).toBe('#14122b');
-  expect(tokens.focusRing.toLowerCase()).toBe('#1d4ed8');
+  expect(tokens.surface.toLowerCase()).toBe('#fbf4e5');
+  expect(tokens.actionPrimary.toLowerCase()).toBe('#29485e');
+  expect(tokens.actionHover.toLowerCase()).toBe('#1c354a');
+  expect(tokens.surfaceDark.toLowerCase()).toBe('#152636');
+  expect(tokens.focusRing.toLowerCase()).toBe('#285bbb');
 });
 
 

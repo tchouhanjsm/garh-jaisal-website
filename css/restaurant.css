@@ -11,7 +11,7 @@
 
 /* Keep the overline readable on the dark dining hero instead of inheriting dark body-copy ink. */
 .restaurant-hero-copy > .eyebrow{
-  color:#f4d19a;
+  color:var(--gold);
 }
 
 .restaurant-hero-grid{
@@ -25,13 +25,13 @@
 .restaurant-hero-copy h1{
   max-width:700px;
   font-size:clamp(2.5rem,6vw,4.6rem);
-  color:#f4d19a;
+  color:var(--parchment);
   margin:0 0 22px;
 }
 
 .restaurant-hero-copy > p:not(.eyebrow){
   max-width:560px;
-  color:#eadfD4;
+  color:var(--parchment);
   font-size:clamp(1rem,1.5vw,1.12rem);
 }
 
@@ -42,8 +42,8 @@
 
 .restaurant-hero-media{
   overflow:hidden;
-  border-radius:50% 50% 0 0 / 14% 14% 0 0;
-  border:6px solid var(--sand);
+  border-radius:var(--radius-media);
+  border:1px solid var(--line-on-dark);
   border-bottom:0;
   background:#3a2a21;
 }
@@ -673,7 +673,7 @@
 
 /* Sprint 37 — distinct dining identity while keeping information surfaces light. */
 .restaurant-page .restaurant-hero{
-  background:linear-gradient(132deg,var(--garnet) 0%,var(--night) 72%);
+  background:linear-gradient(132deg,var(--night-2) 0%,var(--night) 72%);
 }
 .restaurant-page .restaurant-feature-card{
   border-top:3px solid var(--gold);

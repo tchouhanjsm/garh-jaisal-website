@@ -6,8 +6,8 @@ const { REPOSITORY_ROOT } = require('./helpers/sitemap-routes');
 const BASE_URL = 'http://127.0.0.1:8080';
 const OUTPUT_DIR = path.join(REPOSITORY_ROOT, 'artifacts/screenshots/home-hero-review');
 const VIEWPORTS = [
-  { width: 320, height: 700, expectedStem: 'facade', maxBytes: 200 * 1024 },
-  { width: 390, height: 844, expectedStem: 'facade', maxBytes: 200 * 1024 },
+  { width: 320, height: 700, expectedStem: 'fort-from-roof', maxBytes: 200 * 1024 },
+  { width: 390, height: 844, expectedStem: 'fort-from-roof', maxBytes: 200 * 1024 },
   { width: 768, height: 900, expectedStem: 'fort-from-roof', maxBytes: 300 * 1024 },
   { width: 1280, height: 800, expectedStem: 'fort-from-roof', maxBytes: 400 * 1024 },
   { width: 1440, height: 900, expectedStem: 'fort-from-roof', maxBytes: 400 * 1024 },
@@ -33,7 +33,7 @@ test('homepage hero art direction selects responsive images within asset budgets
       expect(response, 'Homepage must respond at ' + viewport.width + 'px').not.toBeNull();
       expect(response.status(), 'Homepage must return a successful status at ' + viewport.width + 'px').toBeLessThan(400);
 
-      const hero = page.locator('.hero-media picture img');
+      const hero = page.locator('.hero-media img');
       await expect(hero).toBeVisible();
       await hero.evaluate(img => img.decode());
 
@@ -85,7 +85,7 @@ test('homepage hero art direction selects responsive images within asset budgets
       expect(state.fetchPriority).toBe('high');
       expect(state.alt).toBe('');
       expect(state.ariaHidden).toBe('true');
-      expect(fileBytes, viewport.expected + ' must remain under its tracked-byte budget').toBeLessThanOrEqual(viewport.maxBytes);
+      expect(fileBytes, viewport.expectedStem + ' must remain under its tracked-byte budget').toBeLessThanOrEqual(viewport.maxBytes);
       await expect(page.getByRole('heading', { level: 1, name: 'Wake up inside Jaisalmer Fort.', exact: true })).toBeVisible();
       await expect(page.locator('.hero-content > .eyebrow')).toContainText('Heritage stay');
       await expect(page.locator('.hero-content > p:not(.eyebrow)')).toContainText('individually styled rooms');
