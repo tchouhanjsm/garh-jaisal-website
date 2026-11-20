@@ -158,6 +158,7 @@ test.describe('Visual asset and typography evidence', () => {
       return {
         columns: style.gridTemplateColumns.split(' ').length,
         itemCount: items.length,
+        firstRowItemCount: items.filter(item => item.offsetTop === items[0].offsetTop).length,
         itemTextFits: items.every(item => item.scrollWidth <= item.clientWidth + 1),
         viewport: document.documentElement.clientWidth,
         document: document.documentElement.scrollWidth,
@@ -166,6 +167,7 @@ test.describe('Visual asset and typography evidence', () => {
 
     expect(layout.columns).toBe(3);
     expect(layout.itemCount).toBe(3);
+    expect(layout.firstRowItemCount).toBe(3);
     expect(layout.itemTextFits).toBe(true);
     expect(layout.document).toBeLessThanOrEqual(layout.viewport + 1);
   });

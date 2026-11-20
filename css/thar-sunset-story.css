@@ -1029,10 +1029,6 @@ dialog.room-comparison-dialog::backdrop{
     border-top: 0;
   }
 
-  main.thar-sunset-story--home .home-hero-facts .at-a-glance__item:nth-child(3) {
-    grid-column: 1 / -1;
-  }
-
   main.thar-sunset-story--home .home-hero-facts .at-a-glance__label {
     margin-bottom: 2px;
     font-size: 0.6rem;
