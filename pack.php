@@ -376,6 +376,7 @@ require __DIR__ . '/include/page-head.php';
         <p class="eyebrow">Need help choosing?</p>
         <h2>Tell us how much time you have in Jaisalmer.</h2>
         <p>We can help you compare the desert and city experiences available for your dates.</p>
+        <p>Planning a trip beyond Jaisalmer? <a href="custom-itinerary.php?mode=rajasthan">Enquire about a Rajasthan tour</a> with your route, dates and what you would like the quote to include.</p>
         <div class="actions">
           <a class="button button-primary" href="contact.php">Contact us</a>
           <a class="button button-secondary" href="direction.php">Plan your arrival</a>

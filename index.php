@@ -5,8 +5,13 @@ $bookingUrl = $siteConfig['booking_url'];
 $rooms = require __DIR__ . '/include/rooms-data.php';
 require_once __DIR__ . '/include/image-metadata.php';
 $siteMediaSlots = require __DIR__ . '/include/site-media-slots.php';
-$homeHeroMobile = gj_site_media_slot($siteMediaSlots, 'home-hero-mobile', ['src' => 'img/optimized/v2/facade.webp', 'alt' => 'Carved sandstone facade of Garh Jaisal Haveli inside Jaisalmer Fort']);
-$homeHeroDesktop = gj_site_media_slot($siteMediaSlots, 'home-hero-desktop', ['src' => 'img/optimized/v2/fort-from-roof.webp', 'alt' => 'Jaisalmer Fort seen from the rooftop at Garh Jaisal Haveli']);
+$homeHeroFallback = ['src' => 'img/optimized/v2/fort-from-roof.webp', 'alt' => 'Jaisalmer Fort seen from the rooftop at Garh Jaisal Haveli'];
+$homeHeroMobile = gj_site_media_slot($siteMediaSlots, 'home-hero-mobile', $homeHeroFallback);
+$homeHeroDesktop = gj_site_media_slot($siteMediaSlots, 'home-hero-desktop', $homeHeroFallback);
+$desktopHeroAttributes = gj_image_dimension_attributes($homeHeroDesktop['src'], '100vw');
+if (strpos($desktopHeroAttributes, 'srcset=') === false) {
+    $desktopHeroAttributes .= ' srcset="' . htmlspecialchars($homeHeroDesktop['src'], ENT_QUOTES, 'UTF-8') . '"';
+}
 $homeHeritageIntro = gj_site_media_slot($siteMediaSlots, 'home-heritage-intro', ['src' => 'img/5.webp', 'alt' => 'Carved sandstone architecture inside Garh Jaisal Haveli']);
 $homeRooftopFeature = gj_site_media_slot($siteMediaSlots, 'home-rooftop-feature', ['src' => 'img/roofslide.webp', 'alt' => 'Rooftop table at dusk overlooking the lights of Jaisalmer']);
 $homeDesertFeature = gj_site_media_slot($siteMediaSlots, 'home-desert-safari-feature', ['src' => 'img/desert7.jpg', 'alt' => 'Camel safari at sunset in the Thar Desert near Jaisalmer']);
@@ -30,17 +35,21 @@ $buildHeroPreload = static function ($source, $media) {
     if (!is_array($descriptor)) {
         return null;
     }
-    $descriptor['media'] = $media;
+    if ($media !== null) {
+        $descriptor['media'] = $media;
+    }
     return $descriptor;
 };
 $page = [
     'title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
     'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
     'path' => '/',
-    'preload' => array_values(array_filter([
-        $buildHeroPreload($homeHeroMobile['src'], '(max-width: 767px)'),
-        $buildHeroPreload($homeHeroDesktop['src'], '(min-width: 768px)'),
-    ])),
+    'preload' => array_values(array_filter($homeHeroMobile['src'] === $homeHeroDesktop['src']
+        ? [$buildHeroPreload($homeHeroMobile['src'], null)]
+        : [
+            $buildHeroPreload($homeHeroMobile['src'], '(max-width: 767px)'),
+            $buildHeroPreload($homeHeroDesktop['src'], '(min-width: 768px)'),
+        ])),
     'og_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
     'og_description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
     'og_image' => '/' . ltrim($homeHeroMobile['src'], '/'),
@@ -71,7 +80,7 @@ require __DIR__ . '/include/page-head.php';
     <picture class="hero-picture">
       <source
         media="(min-width: 768px)"
-        <?= gj_image_dimension_attributes($homeHeroDesktop['src'], '100vw') ?>>
+        <?= $desktopHeroAttributes ?>>
       <img
         src="<?= htmlspecialchars($homeHeroMobile['src'], ENT_QUOTES, 'UTF-8') ?>"
         <?= gj_image_dimension_attributes($homeHeroMobile['src'], '100vw') ?>
@@ -80,7 +89,6 @@ require __DIR__ . '/include/page-head.php';
         fetchpriority="high"
         decoding="async">
     </picture>
-    <div class="hero-overlay"></div>
   </div>
 
   <div class="site-shell hero-content">
@@ -103,7 +111,7 @@ require __DIR__ . '/include/page-head.php';
         Check rooms &amp; rates
       </a>
 
-      <a class="button button-light" href="room.php">
+      <a class="button button-light home-rooms-link" href="room.php">
         Explore the rooms
       </a>
     </div>

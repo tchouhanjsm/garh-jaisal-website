@@ -1,21 +1,21 @@
 const { test, expect } = require('@playwright/test');
 
-test('Thar Sunset tokens, CTA contrast and responsive navigation remain usable', async ({ page }) => {
+test('Fort at Dusk tokens, CTA contrast and responsive navigation remain usable', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
   const tokens = await page.evaluate(() => {
     const root = getComputedStyle(document.documentElement);
     return {
       night: root.getPropertyValue('--night').trim().toLowerCase(),
-      saffron: root.getPropertyValue('--saffron').trim().toLowerCase(),
+      brass: root.getPropertyValue('--gold').trim().toLowerCase(),
       parchment: root.getPropertyValue('--parchment').trim().toLowerCase(),
       peacock: root.getPropertyValue('--peacock').trim().toLowerCase()
     };
   });
   expect(tokens).toEqual({
-    night: '#14122b',
-    saffron: '#b94a0e',
-    parchment: '#f7efe0',
+    night: '#152636',
+    brass: '#eed29d',
+    parchment: '#fbf4e5',
     peacock: '#1d7472'
   });
 
@@ -29,10 +29,10 @@ test('Thar Sunset tokens, CTA contrast and responsive navigation remain usable',
   expect(primaryBox).not.toBeNull();
   expect(primaryBox.height).toBeGreaterThanOrEqual(44);
   const primaryRadius = await primaryAction.evaluate(element => getComputedStyle(element).borderTopLeftRadius);
-  expect(primaryRadius).toBe('6px');
+  expect(primaryRadius).toBe('2px');
 
-  const motifBackground = await page.locator('main.thar-sunset-story .section-head .eyebrow').first().evaluate(element => getComputedStyle(element, '::before').backgroundImage);
-  expect(motifBackground).toContain('bastion-line.svg');
+  const motifContent = await page.locator('main.thar-sunset-story .section-head .eyebrow').first().evaluate(element => getComputedStyle(element, '::before').content);
+  expect(motifContent).toBe('none');
 
   const width = page.viewportSize().width;
   const navToggle = page.locator('.nav-toggle');

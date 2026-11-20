@@ -8,6 +8,18 @@
   const whatsappBase = root.dataset.whatsappUrl;
   if (!form || !preview || !status || !whatsappLink || !whatsappBase) return;
 
+  const isRajasthan = root.dataset.itineraryMode === 'rajasthan';
+  const rajasthanFields = [
+    ['rajasthan-dates', 'Travel dates or month'],
+    ['rajasthan-duration', 'Duration'],
+    ['custom-group-size', 'Travellers'],
+    ['custom-places', 'Preferred route or stops'],
+    ['rajasthan-pickup', 'Pickup'],
+    ['rajasthan-dropoff', 'Drop-off'],
+    ['rajasthan-inclusions', 'Requested inclusions'],
+    ['rajasthan-budget', 'Budget or pricing questions'],
+  ];
+
   const valueOf = (id) => {
     const field = root.querySelector('#' + id);
     return field ? field.value.trim() : '';
@@ -19,6 +31,16 @@
     return option ? option.textContent.trim() : 'Not specified';
   };
   const buildMessage = () => {
+    if (isRajasthan) {
+      return [
+        'Hello, I would like to enquire about a Rajasthan tour.',
+        ...rajasthanFields.map(([id, label]) => label + ': ' + (valueOf(id) || 'Not specified')),
+        '',
+        'Please confirm a feasible route and duration, pickup and drop-off arrangements, availability, everything the quote includes or excludes, and the total price.',
+        'I understand this is an enquiry only and does not reserve a tour.'
+      ].join('\n');
+    }
+
     const interests = Array.from(form.querySelectorAll('input[name="interests"]:checked'))
       .map((field) => field.value.trim()).filter(Boolean);
     return [
@@ -39,7 +61,9 @@
     const hasInterests = form.querySelector('input[name="interests"]:checked') !== null;
     const hasPlaces = valueOf('custom-places') !== '';
     const hasPreferences = valueOf('custom-preferences') !== '';
-    const isReady = hasInterests || hasPlaces || hasPreferences;
+    const isReady = isRajasthan
+      ? rajasthanFields.some(([id]) => valueOf(id) !== '') && form.checkValidity()
+      : hasInterests || hasPlaces || hasPreferences;
     const message = buildMessage();
     preview.value = message;
     whatsappLink.setAttribute('aria-disabled', String(!isReady));
@@ -58,7 +82,9 @@
       }
     } else {
       whatsappLink.href = '#';
-      status.textContent = 'Select an interest or add a place/idea to prepare the message link.';
+      status.textContent = isRajasthan
+        ? 'Add at least one valid trip detail to prepare the message link.'
+        : 'Select an interest or add a place/idea to prepare the message link.';
     }
   };
   form.addEventListener('input', updateDraft);

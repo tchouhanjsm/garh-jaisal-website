@@ -4,46 +4,6 @@
  * Kept route-scoped so the shared visual system and other page families are untouched.
  */
 
-main.thar-sunset-story--home > .hero {
-  min-height: clamp(560px, calc(100svh - 76px), 760px);
-  isolation: isolate;
-}
-
-main.thar-sunset-story--home .hero-overlay {
-  background:
-    linear-gradient(90deg, rgba(20, 18, 43, .78) 0%, rgba(20, 18, 43, .52) 43%, rgba(20, 18, 43, .10) 86%),
-    linear-gradient(180deg, rgba(20, 18, 43, .06) 0%, rgba(20, 18, 43, .10) 44%, rgba(20, 18, 43, .88) 100%);
-}
-
-main.thar-sunset-story--home .hero-content {
-  max-width: 940px;
-  padding-top: clamp(112px, 14vh, 154px);
-  padding-bottom: clamp(34px, 5vh, 58px);
-}
-
-main.thar-sunset-story--home .hero-content h1 {
-  max-width: 13ch;
-  font-size: clamp(2.9rem, 5.6vw, 4.8rem);
-  line-height: .98;
-  letter-spacing: -.045em;
-  text-wrap: balance;
-}
-
-main.thar-sunset-story--home .hero-content > p:not(.eyebrow) {
-  max-width: 57ch;
-  font-size: clamp(1.02rem, 1.25vw, 1.16rem);
-  line-height: 1.62;
-}
-
-main.thar-sunset-story--home .hero-content .actions .button {
-  min-height: 52px;
-  padding-inline: clamp(18px, 2vw, 25px);
-}
-
-main.thar-sunset-story--home .hero-content .button-primary {
-  box-shadow: 0 10px 28px rgba(20, 18, 43, .28);
-}
-
 main.thar-sunset-story--home .home-place-story .image-panel {
   overflow: hidden;
   border: 1px solid var(--story-keyline, rgba(217, 164, 65, .5));
@@ -224,51 +184,5 @@ main.thar-sunset-story--home .home-room-section-booking {
     width: 100%;
     justify-content: center;
     white-space: normal;
-  }
-}
-
-/* The original compact-phone hero was tuned to keep all proof points above
-   the fixed action dock. Restore that compact hierarchy after the desktop
-   art-direction rule so the 320px first screen remains complete. */
-@media (max-width: 360px) {
-  main.thar-sunset-story--home > .hero {
-    min-height: max(500px, calc(100svh - 180px));
-  }
-
-  main.thar-sunset-story--home .hero-content {
-    padding-top: 72px;
-    padding-bottom: 14px;
-  }
-
-  main.thar-sunset-story--home .hero-content > .eyebrow {
-    margin-bottom: 7px;
-    font-size: 0.8125rem;
-  }
-
-  main.thar-sunset-story--home .hero-content h1 {
-    max-width: 15ch;
-    margin-bottom: 10px;
-    font-size: clamp(1.9rem, 8.6vw, 2.15rem);
-    line-height: 1.08;
-  }
-
-  main.thar-sunset-story--home .hero-content > p:not(.eyebrow) {
-    margin-bottom: 12px;
-    font-size: 0.9rem;
-    line-height: 1.38;
-  }
-
-  main.thar-sunset-story--home .hero-content .actions {
-    gap: 7px;
-  }
-
-  main.thar-sunset-story--home .hero-content .actions .button {
-    min-height: 44px;
-    padding-inline: 12px;
-  }
-
-  main.thar-sunset-story--home .home-hero-facts {
-    margin-top: 10px;
-    padding: 4px;
   }
 }
