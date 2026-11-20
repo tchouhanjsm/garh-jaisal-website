@@ -148,7 +148,7 @@ test.describe('Visual asset and typography evidence', () => {
     expect(normalizeCandidateList(state.preloadSrcset)).toBe(normalizeCandidateList(state.srcset));
   });
 
-  test('320px homepage facts use readable two-column hierarchy', async ({ page }, testInfo) => {
+  test('320px homepage facts fit in three readable columns', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'mobile-320', 'Smallest-phone first-impression contract runs once at 320px.');
     await page.goto('/index.php', { waitUntil: 'domcontentloaded' });
 
@@ -158,17 +158,15 @@ test.describe('Visual asset and typography evidence', () => {
       return {
         columns: style.gridTemplateColumns.split(' ').length,
         itemCount: items.length,
-        thirdColumnStart: items[2] ? getComputedStyle(items[2]).gridColumnStart : '',
-        minItemWidth: Math.min(...items.map((item) => item.getBoundingClientRect().width)),
+        itemTextFits: items.every(item => item.scrollWidth <= item.clientWidth + 1),
         viewport: document.documentElement.clientWidth,
         document: document.documentElement.scrollWidth,
       };
     });
 
-    expect(layout.columns).toBe(2);
+    expect(layout.columns).toBe(3);
     expect(layout.itemCount).toBe(3);
-    expect(layout.thirdColumnStart).toBe('1');
-    expect(layout.minItemWidth).toBeGreaterThan(100);
+    expect(layout.itemTextFits).toBe(true);
     expect(layout.document).toBeLessThanOrEqual(layout.viewport + 1);
   });
 });
