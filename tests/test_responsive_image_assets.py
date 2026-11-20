@@ -96,7 +96,11 @@ class ResponsiveImageAssetTests(unittest.TestCase):
             stem = source.rsplit("/", 1)[1].rsplit(".", 1)[0]
             self.assertEqual(manifest["variant_max_bytes"][f"img/responsive/Desert_Camp/{stem}-1280.webp"], 250000)
             self.assertEqual(manifest["variant_max_bytes"][f"img/responsive/Desert_Camp/{stem}-1440.webp"], 250000)
-        self.assertEqual(len(manifest["variant_max_bytes"]), 28)
+        for stem in ("j4", "j7", "j8", "j9"):
+            self.assertEqual(manifest["variant_max_bytes"][f"img/responsive/{stem}-1280.webp"], 240000)
+            self.assertIn(1280, assets.target_widths_for_source(manifest, f"img/{stem}.jpg"))
+        self.assertEqual(manifest["variant_max_bytes"]["img/responsive/j7-1200.webp"], 240000)
+        self.assertEqual(len(manifest["variant_max_bytes"]), 33)
         self.assertNotIn("img/responsive/v2/facade-1440.webp", manifest["variant_max_bytes"])
         self.assertNotIn("img/responsive/v2/facade-1800.webp", manifest["variant_max_bytes"])
         self.assertNotIn("img/responsive/jcity-1200.webp", manifest["variant_max_bytes"])
