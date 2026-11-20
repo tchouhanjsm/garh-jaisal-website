@@ -234,12 +234,12 @@ test('Rooms page presents all registered rooms with useful comparison and bookin
   await expect(roomFacts).toBeVisible();
   await expect(roomFacts.locator('.at-a-glance__item')).toHaveCount(4);
   await expect(roomFacts.locator('dt')).toHaveText([
-    'Room selection',
+    'Booking category',
     'Floor layout',
     'Room facilities',
     'Rates and availability',
   ]);
-  await expect(roomFacts.locator('dd').nth(0)).toHaveText('7 individually styled rooms');
+  await expect(roomFacts.locator('dd').nth(0)).toHaveText('Heritage Room');
   await expect(roomFacts.locator('dd').nth(1)).toHaveText('Ground floor and first floor');
   await expect(roomFacts.locator('dd').nth(2)).toHaveText('Vary by room');
   await expect(roomFacts.locator('dd').nth(3)).toHaveText('Check current rates for your dates');

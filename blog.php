@@ -69,11 +69,16 @@ require __DIR__ . '/include/page-head.php';
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 <main class="article-page thar-sunset-story thar-sunset-story--journal" id="main-content" tabindex="-1">
   <section class="article-hero">
-    <div class="site-shell article-hero-inner">
-      <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>
-      <p class="eyebrow">Blog</p>
-      <h1>Travel guides for Jaisalmer’s Fort, food and desert.</h1>
-      <p class="lede">Explore the living Fort, carved havelis, regional food, old-city markets and the landscapes beyond the city. Use these guides to plan your interests, then confirm date-sensitive access, menus and arrangements directly.</p>
+    <div class="site-shell article-hero-inner journal-hero-grid">
+      <div>
+        <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>
+        <p class="eyebrow">Blog</p>
+        <h1>Travel guides for Jaisalmer’s Fort, food and desert.</h1>
+        <p class="lede">Explore the living Fort, carved havelis, regional food, old-city markets and the landscapes beyond the city. Use these guides to plan your interests, then confirm date-sensitive access, menus and arrangements directly.</p>
+      </div>
+      <figure class="journal-hero-photo">
+        <img src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg', '(max-width: 760px) 100vw, 45vw') ?> alt="Sandstone rooftops seen from Jaisalmer Fort" decoding="async">
+      </figure>
     </div>
   </section>
   <section class="section" data-story-reveal>

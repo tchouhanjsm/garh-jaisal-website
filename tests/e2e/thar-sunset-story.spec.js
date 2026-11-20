@@ -102,14 +102,14 @@ test('story reveals run once when targets enter the viewport', async ({ page }, 
   expect(Number(opacity)).toBeGreaterThan(0.8);
 });
 
-test('catalogue and Car & City experience cards use the controlled arch image crop', async ({ page }, testInfo) => {
+test('catalogue and Car & City image frames retain their approved crop styles', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Card art direction runs once at desktop width');
 
   await page.goto('/catalogue.php', { waitUntil: 'domcontentloaded' });
   const productMedia = page.locator('main.thar-sunset-story--catalogue .product-card-media').first();
   await expect(productMedia).toBeVisible();
   const productRadius = await productMedia.evaluate(element => getComputedStyle(element).borderTopLeftRadius);
-  expect(productRadius, 'Catalogue image frame uses a soft arch, not a rounded card').toContain('48%');
+  expect(productRadius, 'Catalogue image frame uses the Fort at Dusk media radius').toBe('4px');
 
   await page.goto('/car-tours.php', { waitUntil: 'domcontentloaded' });
   const experienceMedia = page.locator('main .experience-card > a > .experience-card-media').first();

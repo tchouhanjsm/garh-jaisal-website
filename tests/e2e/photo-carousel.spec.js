@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 const experienceRoutes = [
+  '/city-tour.php',
   '/desert-safari.php',
   '/guided-jaisalmer-tour.php',
   '/sunset-camel-safari.php',
@@ -73,7 +74,7 @@ test('published experience and tour hubs provide an accessible next/previous pho
   }
 });
 
-test('room cards show two-photo room stories without changing booking and enquiry links', async ({ page }, testInfo) => {
+test('room galleries show distinct room photos and preserve booking and enquiry links', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Room card contracts run once on desktop-1280.');
   const response = await page.goto('/room.php', { waitUntil: 'domcontentloaded' });
   expect(response).not.toBeNull();
@@ -82,11 +83,25 @@ test('room cards show two-photo room stories without changing booking and enquir
   const cards = page.locator('.room-card');
   await expect(cards).toHaveCount(7);
 
+  const expectedPhotoCounts = {
+    'room-sweet-purple-room': 4,
+    'room-rising-sun-room': 4,
+    'room-scarlet-room': 3,
+    'room-opium-room': 3,
+    'room-red-maharani-room': 2,
+    'room-green-room': 3,
+    'room-bluesky-room': 3,
+  };
   for (const card of await cards.all()) {
     const name = (await card.locator('h3').innerText()).trim();
     const gallery = card.locator('[data-photo-carousel]');
     await expect(gallery, name + ': room gallery').toBeVisible();
-    await expect(gallery.locator('[data-photo-carousel-slide]')).toHaveCount(2);
+    const count = expectedPhotoCounts[await card.getAttribute('id')];
+    expect(count, name + ': registered room photo count').toBeGreaterThanOrEqual(2);
+    const slides = gallery.locator('[data-photo-carousel-slide]');
+    await expect(slides).toHaveCount(count);
+    const sources = await slides.locator('img').evaluateAll(images => images.map(image => image.getAttribute('src')));
+    expect(new Set(sources).size, name + ': distinct sources').toBe(count);
     await expect(gallery.locator('[data-photo-carousel-slide]:visible')).toHaveCount(1);
 
     const booking = card.locator('a.room-book');
@@ -96,7 +111,7 @@ test('room cards show two-photo room stories without changing booking and enquir
     await expect(card.locator('a.room-enquiry-link')).toHaveAttribute('href', /^contact\.php\?room=/);
 
     await gallery.locator('[data-photo-carousel-next]').click();
-    await expect(gallery.locator('[data-photo-carousel-status]')).toHaveText('Photo 2 of 2');
+    await expect(gallery.locator('[data-photo-carousel-status]')).toHaveText('Photo 2 of ' + count);
     await expect(gallery.locator('[data-photo-carousel-slide]:visible')).toHaveCount(1);
     const secondImage = gallery.locator('[data-photo-carousel-slide]').nth(1).locator('img');
     await expect(secondImage).toBeVisible();

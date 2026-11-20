@@ -17,6 +17,10 @@ return [
         'label' => 'Jaisalmer visit planning',
         'message' => 'Hello, I am planning a visit to Jaisalmer. My travel dates or month are: [add dates]. Planned trip length: [add number of days]. Please share general seasonal considerations and confirm current room, guide and desert options, prices and availability for those dates.',
     ],
+    'rajasthan-tours' => [
+        'label' => 'Rajasthan tour enquiry',
+        'message' => 'Hello, I would like to enquire about a Rajasthan tour. Travel dates and duration: [add dates and number of days]. Preferred route or stops: [add places]. Pickup and drop-off: [add locations]. Travellers: [add number]. Requested inclusions and budget: [add details]. Please confirm a feasible route, availability, what is included and excluded, and the total price. I understand this enquiry does not reserve a tour.',
+    ],
     'custom-itinerary' => [
         'label' => 'Custom Jaisalmer itinerary enquiry',
         'message' => 'Hello, I would like to enquire about a custom Jaisalmer itinerary. My travel date or period is: [add date]. Time available: [add time]. Group size: [add number]. Places or interests: [describe your route]. Please confirm route feasibility, current visitor access and rules, transport and guide availability, timings, applicable fees and the final price. I understand this is an enquiry, not a booking.',

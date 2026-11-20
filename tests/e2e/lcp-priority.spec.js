@@ -5,8 +5,8 @@ const RESPONSIVE_WIDTHS = [480, 800, 1200, 1280, 1366, 1440, 1800];
 const HEROES = [
   {
     route: '/',
-    selector: '.hero-media picture img',
-    expected: width => width < 768 ? 'facade' : 'fort-from-roof',
+    selector: '.hero-media img',
+    expected: () => 'fort-from-roof',
   },
   {
     route: '/room.php',

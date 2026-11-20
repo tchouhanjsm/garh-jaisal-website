@@ -1,6 +1,6 @@
 # Design system — Garh Jaisal Haveli
 
-## Brand idea
+## Fort at Dusk
 
 **A living fort, a family home.** The interface should feel like a real, welcoming heritage stay: sandstone, architectural detail, warm light and night-sky contrast. Use quiet confidence and local warmth, not generic luxury clichés, heavy ornament, fake scarcity, or animation for its own sake.
 
@@ -10,19 +10,19 @@ The canonical token source is `css/tokens.css`. Preserve existing variable names
 
 | Role | Token | Value |
 |---|---|---|
-| Fort Night | `--night` | `#14122B` |
-| Deep Night | `--night-2` | `#241B3F` |
-| Golden Stone accent | `--gold` | `#D9A441` |
-| Deep gold on light | `--gold-ink` | `#8A6212` |
-| Primary action | `--saffron` | `#B94A0E` |
-| Haveli Garnet | `--garnet` | `#5B1A2B` |
-| Stone Parchment | `--parchment` | `#F7EFE0` |
-| Sand | `--sand` | `#EADBC0` |
-| Body ink | `--ink` | `#231A14` |
+| Fort Night | `--night` | `#152636` |
+| Deep Night | `--night-2` | `#20374A` |
+| Brass on dark | `--gold` | `#EED29D` |
+| Deep gold on light | `--gold-ink` | `#745624` |
+| Primary action on paper | `--action-blue` | `#29485E` |
+| Secondary ink | `--garnet` | `#2C4356` |
+| Stone Parchment | `--parchment` | `#FBF4E5` |
+| Sand | `--sand` | `#EEE6D6` |
+| Body ink | `--ink` | `#212832` |
 | Functional teal | `--peacock` | `#1D7472` |
 
-- Display type: Source Serif 4. Body: Inter/system sans-serif stack.
-- Saffron is the primary CTA; gold is a graphic accent, not small text or a primary fill on light backgrounds.
+- Use Palatino for display text and Trebuchet for body copy. Both have system fallbacks.
+- Use slate blue for primary actions on cream and brass with dark ink for primary actions on midnight.
 - Standard buttons and cards use a restrained 6px radius.
 - Use the shared content rail and type/spacing variables. Avoid hard-coded near-duplicate scales in page CSS.
 - Keep forms, policies, prices, notes and dense information on light surfaces for clarity.
@@ -66,7 +66,7 @@ The canonical token source remains `css/tokens.css`. The first implementation ba
 - `--surface-dark` and `--surface-dark-raised` define immersive Fort Night storytelling layers. Keep body copy on dark surfaces at the documented muted-light role.
 - `--line` and `--line-strong` provide consistent separators and boundaries.
 - `--text-muted` is for secondary text on light surfaces; `--text-on-dark-muted` is for supporting text on dark surfaces.
-- `--action-primary` and `--action-primary-hover` are reserved for direct booking and the single primary action in a viewport. Gold remains a graphic accent and must not become small text on parchment.
+- `--action-primary` and `--action-primary-hover` are reserved for direct booking and the single primary action in a viewport. Use deep gold ink for small text on parchment.
 - `--focus-ring` remains a visible focus indicator. Do not remove it to achieve a visual treatment.
 - Motion roles must honour the existing `css/accessibility.css` reduced-motion preference layer.
 
@@ -74,7 +74,7 @@ The canonical token source remains `css/tokens.css`. The first implementation ba
 
 1. **Editorial rhythm:** use generous section spacing, varied full-bleed, split and restrained card compositions. A page should not become a repeated grid of identical boxes.
 2. **Photography:** use only the repository's approved property/experience photography and existing responsive-image helpers. Never add external image references as though they depict the property.
-3. **Typography:** Source Serif 4 remains the display face; Inter/system remains the body face. Prefer short, balanced headings and readable body measures.
+3. **Typography:** Use the Palatino and Trebuchet stacks throughout the site. Prefer short, balanced headings and readable body measures.
 4. **Actions:** 48px primary actions on public guest journeys; secondary actions must remain visually subordinate. Existing IDs, destinations and booking instrumentation are invariants.
 5. **Cards:** use the shared surface/line/shadow roles. Reserve card treatments for comparable items or decision units; let editorial storytelling sections breathe without enclosing every paragraph.
 6. **Responsive:** test 320, 390, 768, 1280 and 1440px. Review hero content, section-head stacking, text measure, image crop, fixed mobile dock clearance, cards, forms and footer.
@@ -85,6 +85,7 @@ The canonical token source remains `css/tokens.css`. The first implementation ba
 - `css/tokens.css` owns tokens and shared component-level normalization only.
 - `css/garh-v2.css` remains the base and legacy compatibility stylesheet.
 - `css/conversion-system.css` owns shared conversion, FAQ and planning components.
+- `css/fort-at-dusk.css` applies the shared midnight treatments to navigation, heroes and featured sections.
 - `css/thar-sunset-story.css` owns the story motif and scoped narrative treatments.
 - Route CSS owns only genuinely route-specific composition.
 - Do not duplicate a shared rule in multiple layers to win the cascade. Before consolidating historical overrides, search selector usage and compare computed styles and responsive screenshots.

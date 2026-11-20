@@ -22,7 +22,7 @@ const pages = [
     route: '/room.php',
     selector: '.rooms-hero-summary',
     facts: [
-      ['Room selection', '7 individually styled rooms'],
+      ['Booking category', 'Heritage Room'],
       ['Floor layout', 'Ground floor and first floor'],
       ['Room facilities', 'Vary by room'],
       ['Rates and availability', 'Check current rates for your dates'],

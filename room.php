@@ -65,7 +65,7 @@ $faqItems = [
     ['question' => "Where is Garh Jaisal Haveli?", 'answer' => "Garh Jaisal Haveli is inside Jaisalmer Fort. Vehicles cannot enter the fort lanes, so plan for a final walk from Fort Parking."],
     ['question' => "How do I check current room rates and availability?", 'answer' => "Use a Check availability or Book your stay link on this page to check current rates and availability for your dates."],
     ['question' => "Are all rooms on the same floor?", 'answer' => "No. The rooms are located on the ground and first floors of the haveli."],
-    ['question' => "Do all rooms have the same facilities?", 'answer' => "No. Facilities vary by room; compare each room’s listed features before choosing."],
+    ['question' => "Do all rooms have the same facilities?", 'answer' => "Facilities vary across the Heritage Room category. Use the photos and details to get a feel for the rooms."],
     ['question' => "Where can I find arrival instructions?", 'answer' => "The Directions page explains how to reach the fort and the final walk to the haveli."],
 ];
 require_once __DIR__ . '/include/image-metadata.php';
@@ -125,7 +125,7 @@ require __DIR__ . '/include/page-head.php';
         <p class="eyebrow">Stay inside Jaisalmer Fort</p>
         <h1 id="rooms-page-title">Find your room inside Jaisalmer Fort.</h1>
         <p class="rooms-hero-lede">
-          Compare the room photos and details, then check current rates, availability and room-specific facilities for your dates.
+          See photos of our Heritage Rooms and check current rates and availability for your dates.
         </p>
         <div class="rooms-hero-actions">
           <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="booking-rooms-hero" data-cta-location="rooms-hero">Check availability</a>
@@ -141,7 +141,7 @@ require __DIR__ . '/include/page-head.php';
         $atAGlance = [
             'class' => 'at-a-glance at-a-glance--stacked',
             'items' => [
-                ['label' => 'Room selection', 'value' => $roomCount . ' individually styled rooms'],
+                ['label' => 'Booking category', 'value' => 'Heritage Room'],
                 ['label' => 'Floor layout', 'value' => $roomFloorSummary],
                 ['label' => 'Room facilities', 'value' => 'Vary by room'],
                 ['label' => 'Rates and availability', 'value' => 'Check current rates for your dates'],
@@ -294,14 +294,11 @@ require __DIR__ . '/include/page-head.php';
         <?php
           $roomSlug = trim(preg_replace('/[^a-z0-9]+/i', '-', strtolower($room['name'])), '-');
           $roomId = 'room-' . $roomSlug;
-          $roomPhotoSlides = [[
+          $roomPhotoSlides = array_merge([[
               'src' => $room['image'],
               'alt' => $room['alt'],
               'caption' => $room['name'],
-          ]];
-          if (isset($roomPhotoDetails[$roomSlug]) && is_array($roomPhotoDetails[$roomSlug])) {
-              $roomPhotoSlides[] = $roomPhotoDetails[$roomSlug];
-          }
+          ]], $roomPhotoDetails[$roomSlug] ?? []);
         ?>
         <?php
           $roomFeatureKeys = array_values(array_unique(array_map(static function ($feature) {

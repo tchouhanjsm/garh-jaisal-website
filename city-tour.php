@@ -106,6 +106,20 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
+  <section class="section" aria-labelledby="fort-walk-photos-title">
+    <div class="site-shell">
+      <?php $walkPhotos = (require __DIR__ . '/include/experience-photo-collections.php')['city-tour']; ?>
+      <div class="section-head">
+        <h2 id="fort-walk-photos-title"><?= htmlspecialchars($walkPhotos['title'], ENT_QUOTES, 'UTF-8') ?></h2>
+      </div>
+      <?php
+      $photoCarousel = ['label' => $walkPhotos['title'], 'variant' => 'experience', 'slides' => $walkPhotos['slides']];
+      require __DIR__ . '/include/ui/photo-carousel.php';
+      unset($photoCarousel);
+      ?>
+    </div>
+  </section>
+
   <section class="section tour-language-section" aria-labelledby="fort-walk-language-title">
     <div class="site-shell tour-language-layout">
       <div>

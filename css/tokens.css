@@ -3,15 +3,15 @@
  * Preserve names for backwards compatibility with route stylesheets.
  */
 :root {
-  --night: #14122B;
-  --night-2: #241B3F;
-  --gold: #D9A441;
-  --gold-ink: #8A6212;
-  --saffron: #B94A0E;
-  --garnet: #5B1A2B;
-  --parchment: #F7EFE0;
-  --sand: #EADBC0;
-  --ink: #231A14;
+  --night: #152636;
+  --night-2: #20374a;
+  --gold: #eed29d;
+  --gold-ink: #745624;
+  --action-blue: #29485e;
+  --garnet: #2c4356;
+  --parchment: #fbf4e5;
+  --sand: #eee6d6;
+  --ink: #212832;
   --peacock: #1D7472;
   --alert: #A62B1F;
   --max: 1200px;
@@ -20,8 +20,8 @@
   --section-space: clamp(3.5rem, 5.25vw, 4.75rem);
   --card-gap: clamp(1rem, 2.25vw, 1.75rem);
   --reading-measure: 68ch;
-  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
-  --font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  --font-body: "Trebuchet MS", Arial, sans-serif;
   --fs-hero: clamp(2.125rem, 4.4vw, 3.75rem);
   --fs-h1: var(--fs-hero);
   --fs-h2: clamp(1.65rem, 3vw, 2.5rem);
@@ -49,18 +49,20 @@
   /* Semantic surface, hierarchy, action and motion roles. */
 
   --surface: var(--parchment);
-  --surface-raised: #FFFCF6;
-  --surface-muted: #F0E5D2;
+  --surface-raised: #fffaf0;
+  --surface-muted: #f0e9da;
   --surface-dark: var(--night);
   --surface-dark-raised: var(--night-2);
-  --line: #D9CBB5;
-  --line-strong: #BFAE94;
-  --text-muted: #65574F;
-  --text-on-dark-muted: #E8DCCB;
-  --action-primary: var(--saffron);
-  --action-primary-hover: #963A08;
+  --line: #d5cbb9;
+  --line-strong: #837b6d;
+  --text-muted: #52565b;
+  --text-on-dark-muted: #d9dee2;
+  --action-primary: var(--action-blue);
+  --action-primary-hover: #1c354a;
   --action-secondary: var(--garnet);
-  --focus-ring: #1D4ED8;
+  --line-on-dark: #476171;
+  --gold-hover: #f8e4bd;
+  --focus-ring: #285bbb;
   --motion-fast: 150ms;
   --motion-standard: 220ms;
   --motion-emphasis: 360ms;

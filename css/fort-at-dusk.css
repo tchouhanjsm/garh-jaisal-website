@@ -1,0 +1,343 @@
+/* Midnight, brass and warm paper across the Garh Jaisal Haveli site. */
+.site-header .nav-wrap {
+  background: var(--night);
+  color: var(--parchment);
+  border-color: var(--line-on-dark);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.site-header .brand strong {
+  color: var(--parchment);
+  font-size: clamp(1.08rem, 1.65vw, 1.42rem);
+  font-weight: 700;
+}
+
+.site-header .brand small,
+.site-header .main-nav .nav-sub .nav-group-title { color: var(--gold); }
+
+.site-header .brand img {
+  width: 36px;
+  height: 36px;
+  flex-basis: 36px;
+}
+
+.site-header .main-nav a:not(.nav-book) { color: var(--parchment); }
+.site-header .main-nav a:is(:hover, .is-active):not(.nav-book) { color: var(--gold); }
+.site-header .main-nav a:not(.nav-book)::after { background: var(--gold); }
+.site-header .nav-toggle span:not(.sr-only) { background: var(--parchment); }
+.site-header .nav-sub-toggle span { border-color: var(--gold); }
+.site-header .nav-sub { background: var(--night-2); border-color: var(--line-on-dark); }
+.site-header .main-nav .nav-sub a:is(:hover, :focus-visible, [aria-current="page"]) { background: var(--action-primary-hover); }
+.site-header .nav-mega-foot { border-color: var(--line-on-dark); }
+
+.site-header :is(a, button):focus-visible,
+.site-footer a:focus-visible,
+.mobile-cta a:focus-visible,
+main :is(.hero, .rooms-hero, .page-hero, .package-hero, .experience-hero, .catalogue-hero,
+  .article-hero, .restaurant-hero, .final-cta) > :is(div, .actions) :is(a, button):focus-visible {
+  outline-color: var(--gold);
+}
+
+.site-header .nav-book,
+.mobile-cta .mobile-cta-book,
+.site-footer .footer-booking-button,
+main :is(.hero, .rooms-hero, .home-rooms, .final-cta, .rooms-cta, .gallery-section-cta, .package-hero,
+  .experience-hero, .experience-cta, .catalogue-hero, .package-guide-service, .tour-enquiry-panel,
+  .article-footer-cta, .page-hero, .home-rooftop, .restaurant-hero) .button.button-primary {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+  box-shadow: none;
+}
+
+.site-header .nav-book:hover,
+.mobile-cta .mobile-cta-book:hover,
+.site-footer .footer-booking-button:is(:hover, :focus-visible),
+main :is(.hero, .rooms-hero, .home-rooms, .final-cta, .rooms-cta, .gallery-section-cta, .package-hero,
+  .experience-hero, .experience-cta, .catalogue-hero, .package-guide-service, .tour-enquiry-panel,
+  .article-footer-cta, .page-hero, .home-rooftop, .restaurant-hero) .button.button-primary:hover {
+  background: var(--gold-hover);
+  border-color: var(--gold-hover);
+  color: var(--ink);
+}
+
+.site-header .nav-book,
+.mobile-cta .mobile-cta-book,
+main.thar-sunset-story--home .hero .button {
+  border-radius: 2px;
+}
+
+.mobile-cta {
+  background: var(--night);
+  border-color: var(--line-on-dark);
+}
+
+.mobile-cta :is(.mobile-cta-contact, .mobile-cta-whatsapp) {
+  color: var(--parchment);
+  background: var(--night);
+}
+
+.contact-dock a:not(.whatsapp) { background: var(--night); }
+.site-footer { border-top: 1px solid var(--line-on-dark); }
+
+main.thar-sunset-story {
+  --story-keyline: var(--line);
+}
+
+main :is(.page-hero, .package-hero, .experience-hero, .catalogue-hero) {
+  background-color: var(--night);
+}
+
+main.thar-sunset-story :is(.package-hero, .experience-hero, .catalogue-hero) :is(h1, .eyebrow) {
+  color: var(--parchment);
+}
+
+main.thar-sunset-story :is(.page-hero, .package-hero, .experience-hero, .catalogue-hero) .eyebrow {
+  color: var(--gold);
+}
+
+main .page-hero.page-hero--photo::after {
+  background: linear-gradient(80deg, #111c29 4%, #152636dc 40%, #1526361a 100%);
+}
+
+main.thar-sunset-story :is(.package-hero-overlay, .experience-hero-overlay, .catalogue-hero-overlay) {
+  background: linear-gradient(180deg, #15263612 4%, #15263643 48%, #111c29ed 100%);
+}
+
+main :is(.article-hero, .contact-hero, .car-service-hero) {
+  color: var(--parchment);
+  background: var(--night);
+  border-color: var(--line-on-dark);
+}
+
+main :is(.article-hero, .contact-hero, .car-service-hero) :is(h1, h2, a, .lede, p:not(.eyebrow)) { color: var(--parchment); }
+main :is(.article-hero, .contact-hero, .car-service-hero) .eyebrow { color: var(--gold); }
+main :is(.article-hero, .contact-hero, .car-service-hero) .page-breadcrumb { color: var(--text-on-dark-muted); }
+
+main :is(.rooms-floor-alt, .rooms-info, .home-city-discovery, .conversion-journey, .package-overview, .tour-service-section) {
+  background: var(--surface-muted);
+}
+
+main :is(.room-card, .home-room-card, .package-card, .product-card, .experience-card, .blog-card) {
+  border-color: var(--line);
+  box-shadow: none;
+}
+
+main.thar-sunset-story :is(.photo-carousel--room .photo-carousel-slide, .blog-card-image, .product-card-media,
+  .roof-banner, .roof-banner img, .home-place-story .image-panel, .home-place-story .image-panel img) {
+  border-radius: var(--radius-media);
+}
+
+main.thar-sunset-story--rooms .room-card-media {
+  aspect-ratio: auto;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+}
+
+main.thar-sunset-story--rooms .room-card-media .photo-carousel-slide img {
+  height: auto;
+  aspect-ratio: 16 / 10;
+}
+
+main .map-preview {
+  background: var(--surface-muted);
+}
+
+@media (max-width: 1366px) {
+  .site-header .main-nav,
+  .site-header .nav-sub { background: var(--night); }
+  .site-header .main-nav { border-color: var(--line-on-dark); }
+}
+
+@media (max-width: 760px) {
+  main .page-hero.page-hero--photo::after {
+    background: linear-gradient(180deg, #152636aa, #111c29fa);
+  }
+}
+
+/* The homepage uses the full-width dusk view from the selected design. */
+main.thar-sunset-story--home > .hero {
+  display: grid;
+  align-items: end;
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(34rem, 70svh, 42rem);
+  max-height: none;
+  padding: 0;
+  color: var(--parchment);
+  background: var(--night);
+}
+
+main.thar-sunset-story--home .hero-media {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+main.thar-sunset-story--home .hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+}
+
+main.thar-sunset-story--home > .hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(74deg, #111c29 3%, #14202dea 31%, #15253638 76%);
+}
+
+main.thar-sunset-story--home .hero-content {
+  width: min(88%, 1240px);
+  max-width: none;
+  padding: clamp(2rem, 6vw, 4.75rem) 0 clamp(1.5rem, 4vw, 3.2rem);
+  margin-inline: auto;
+}
+
+main.thar-sunset-story--home .hero-content > .eyebrow {
+  color: var(--gold);
+  margin: 0 0 .65rem;
+  font-size: .825rem;
+}
+
+main.thar-sunset-story--home .hero-content > .eyebrow::before,
+main.thar-sunset-story--home .section-head .eyebrow::before { content: none; }
+
+main.thar-sunset-story--home .hero-content h1 {
+  max-width: 15ch;
+  color: var(--parchment);
+  font-size: clamp(2.35rem, 6vw, 5.5rem);
+  line-height: .98;
+  margin: 0 0 1rem;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+
+main.thar-sunset-story--home .hero-content > p:not(.eyebrow) {
+  max-width: 43ch;
+  margin: 0 0 1.35rem;
+  color: var(--parchment);
+  line-height: 1.5;
+}
+
+main.thar-sunset-story--home .hero-content .actions {
+  flex-flow: row wrap;
+  align-items: center;
+  gap: .5rem 1rem;
+  margin: 0;
+}
+
+main.thar-sunset-story--home .hero-content .actions .button {
+  min-height: 48px;
+  width: auto;
+  padding-inline: 1rem;
+}
+
+main.thar-sunset-story--home .hero-content .home-rooms-link {
+  color: var(--parchment);
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: .25em;
+}
+
+main.thar-sunset-story--home .hero-content .home-hero-facts {
+  max-width: 32rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .6rem;
+  margin: 1.15rem 0 0;
+  padding: .75rem 0 0;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid #f1e4c577;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+main.thar-sunset-story--home .home-hero-facts .at-a-glance__item { padding: 0; border: 0; grid-column: auto; }
+main.thar-sunset-story--home .home-hero-facts .at-a-glance__label { color: var(--gold); }
+main.thar-sunset-story--home .home-hero-facts .at-a-glance__value { color: var(--parchment); }
+
+main.thar-sunset-story--home .home-rooms {
+  background: var(--night);
+  color: var(--parchment);
+}
+
+main.thar-sunset-story--home .home-rooms .section-head :is(h2, p:not(.eyebrow)) { color: var(--parchment); }
+main.thar-sunset-story--home .home-rooms .eyebrow,
+main.thar-sunset-story--home .home-booking-note a { color: var(--gold); }
+main.thar-sunset-story--home .home-booking-note a { text-decoration: underline; }
+main.thar-sunset-story--home .home-room-card { color: var(--ink); background: var(--surface-raised); }
+main.thar-sunset-story--home .home-room-card .card-body { color: var(--ink); }
+main.thar-sunset-story--home .home-place-story .image-panel img { min-height: 0; aspect-ratio: 4 / 3; }
+
+@media (max-width: 767px) {
+  main.thar-sunset-story--home > .hero {
+    min-height: clamp(25.5rem, calc(100svh - 8.75rem), 34rem);
+  }
+
+  main.thar-sunset-story--home > .hero::after {
+    background: linear-gradient(0deg, #111c29 4%, #152434e8 57%, #15253630 100%);
+  }
+
+  main.thar-sunset-story--home .hero-content {
+    width: calc(100% - 2rem);
+    padding-block: 2.75rem 1.15rem;
+  }
+
+  main.thar-sunset-story--home .hero-content h1 { font-size: clamp(2.15rem, 9vw, 3.2rem); }
+  main.thar-sunset-story--home .hero-content .actions .button { padding-inline: .75rem; min-height: 44px; }
+}
+
+@media (max-width: 360px) {
+  main.thar-sunset-story--home .hero-content .actions { gap: .4rem; }
+  main.thar-sunset-story--home .hero-content .actions .button { padding-inline: .6rem; }
+}
+
+/* Keep arrival and contact information close to the top of their pages. */
+main .contact-hero .page-hero-inner {
+  padding-block: clamp(2rem, 5vw, 3.75rem);
+}
+
+main .contact-hero h1 { max-width: 24ch; }
+
+main.thar-sunset-story--rooms .rooms-hero-summary {
+  background: var(--night);
+  border-color: var(--line-on-dark);
+  box-shadow: none;
+}
+
+main.thar-sunset-story--rooms .rooms-hero-summary > .eyebrow,
+main.thar-sunset-story--rooms .rooms-hero-summary .at-a-glance__label { color: var(--gold); }
+
+main.thar-sunset-story--rooms .rooms-hero-summary .at-a-glance__value,
+main.thar-sunset-story--rooms .rooms-hero p.rooms-hero-note { color: var(--parchment); }
+
+main.thar-sunset-story--rooms .rooms-hero-summary .at-a-glance__item { border-color: var(--line-on-dark); }
+
+.journal-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .92fr);
+  align-items: center;
+  gap: clamp(1rem, 5vw, 4rem);
+}
+
+.journal-hero-photo { margin: 0; }
+.journal-hero-photo img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+
+@media (max-width: 760px) {
+  .journal-hero-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 767px) and (max-height: 580px) {
+  main.thar-sunset-story--home > .hero { min-height: 0; }
+  main.thar-sunset-story--home .hero-content { padding-block: 1rem; }
+  main.thar-sunset-story--home .hero-content > p:not(.eyebrow) { margin-bottom: .8rem; }
+  main.thar-sunset-story--home .hero-content .home-hero-facts { margin-top: .75rem; }
+}
