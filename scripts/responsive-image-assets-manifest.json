@@ -29,6 +29,11 @@
     "img/responsive/j10-1280.webp": 250000,
     "img/responsive/j2-1280.webp": 250000,
     "img/responsive/j5-1280.webp": 250000,
+    "img/responsive/j4-1280.webp": 240000,
+    "img/responsive/j7-1200.webp": 240000,
+    "img/responsive/j7-1280.webp": 240000,
+    "img/responsive/j8-1280.webp": 240000,
+    "img/responsive/j9-1280.webp": 240000,
     "img/responsive/Desert_Camp/Tent-1280.webp": 250000,
     "img/responsive/Desert_Camp/Tent-1440.webp": 250000,
     "img/responsive/Desert_Camp/CampingInJsm-1280.webp": 250000,
@@ -179,6 +184,18 @@
       1280
     ],
     "img/j5.jpg": [
+      1280
+    ],
+    "img/j4.jpg": [
+      1280
+    ],
+    "img/j7.jpg": [
+      1280
+    ],
+    "img/j8.jpg": [
+      1280
+    ],
+    "img/j9.jpg": [
       1280
     ],
     "img/Desert_Camp/Tent.jpeg": [
