@@ -4,7 +4,7 @@ test('restaurant keeps an emotional hero and light, legible information surfaces
   await page.goto('/restaurant.php');
   const hero = page.locator('.restaurant-hero');
   await expect(hero.getByRole('heading', { level: 1, name: 'Rooftop dining in the heart of Jaisalmer Fort.' })).toBeVisible();
-  expect(await hero.evaluate(element => getComputedStyle(element).backgroundImage)).toContain('linear-gradient');
+  expect(await hero.evaluate(element => getComputedStyle(element).backgroundImage)).toContain('rgb(21, 38, 54)');
 
   const formCard = page.locator('.restaurant-form-card').first();
   await expect(formCard).toBeVisible();
@@ -12,7 +12,7 @@ test('restaurant keeps an emotional hero and light, legible information surfaces
     background: getComputedStyle(element).backgroundColor,
     radius: getComputedStyle(element).borderRadius
   }));
-  expect(formStyles.background).toBe('rgb(247, 239, 224)');
+  expect(formStyles.background).toBe('rgb(251, 244, 229)');
   expect(formStyles.radius).toBe('6px');
   const featuredCards = page.locator('.restaurant-feature-card');
   if (await featuredCards.count() === 0) {

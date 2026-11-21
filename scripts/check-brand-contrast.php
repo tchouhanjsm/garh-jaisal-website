@@ -92,11 +92,11 @@ function gj_brand_contrast_ratio($foreground, $background)
 }
 
 $sources = [$tokenCss, $baseCss];
-$tokenNames = ['night', 'parchment', 'gold', 'saffron', 'garnet', 'ink', 'gold-ink', 'peacock', 'alert', 'white'];
+$tokenNames = ['night', 'parchment', 'gold', 'action-blue', 'garnet', 'ink', 'gold-ink', 'peacock', 'alert', 'white'];
 $semanticAliases = [
     'surface' => 'parchment',
     'surface-dark' => 'night',
-    'action-primary' => 'saffron',
+    'action-primary' => 'action-blue',
 ];
 foreach ($semanticAliases as $semantic => $target) {
     if (!preg_match('/--' . preg_quote($semantic, '/') . '\\s*:\\s*var\\(--' . preg_quote($target, '/') . '\\)\\s*;/', $tokenCss)) {
@@ -127,7 +127,8 @@ foreach (['radius-control', 'radius-card'] as $name) {
 
 $pairs = [
     ['ink on parchment', 'ink', 'parchment'],
-    ['white on saffron', 'white', 'saffron'],
+    ['white on slate blue', 'white', 'action-blue'],
+    ['ink on brass', 'ink', 'gold'],
     ['parchment on night', 'parchment', 'night'],
     ['gold on night', 'gold', 'night'],
     ['peacock on parchment', 'peacock', 'parchment'],

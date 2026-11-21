@@ -1,6 +1,6 @@
 :root{
-  /* Legacy aliases point to the owner-approved Thar Sunset tokens in css/tokens.css. */
-  --muted:#65574f;
+  /* Legacy aliases point to the shared Fort at Dusk tokens in css/tokens.css. */
+  --muted:var(--text-muted);
   --sand-light:var(--sand);
   --cream:var(--parchment);
   --line:#e0d3bf;
@@ -405,8 +405,8 @@ p{
 }
 
 .button-primary{
-  background:var(--saffron);
-  border-color:var(--saffron);
+  background:var(--action-primary);
+  border-color:var(--action-primary);
   color:#fff;
 }
 
@@ -2545,7 +2545,7 @@ p{
 /* Sprint 8 — shared FAQ treatment for room, dining and experience landing pages. */
 .site-faq .faq-list { max-width: 900px; margin: 24px auto 0; border-top: 1px solid rgba(107, 68, 45, .22); }
 .site-faq .faq-item { border-bottom: 1px solid rgba(107, 68, 45, .22); }
-.site-faq .faq-item summary { position: relative; min-height: 44px; padding: 15px 46px 15px 0; cursor: pointer; list-style: none; color: #29231e; font-family: "Source Serif 4", Georgia, "Times New Roman", serif; font-size: 1.25rem; font-weight: 600; line-height: 1.4; }
+.site-faq .faq-item summary { position: relative; min-height: 44px; padding: 15px 46px 15px 0; cursor: pointer; list-style: none; color: #29231e; font-family:var(--font-display); font-size: 1.25rem; font-weight: 600; line-height: 1.4; }
 .site-faq .faq-item summary::-webkit-details-marker { display: none; }
 .site-faq .faq-item summary::after { position: absolute; top: 13px; right: 8px; color: #6b442d; content: "+"; font-family: Arial, sans-serif; font-size: 1.35rem; line-height: 1.4; }
 .site-faq .faq-item[open] summary::after { content: "−"; }
@@ -2560,8 +2560,8 @@ p{
 .main-nav .nav-book,
 .mobile-cta-book,
 .site-footer .footer-booking-button{
-  background:var(--saffron);
-  border-color:var(--saffron);
+  background:var(--action-primary);
+  border-color:var(--action-primary);
   color:#fff;
 }
 .button-primary:hover,
@@ -2751,9 +2751,9 @@ p{
   gap:10px;
   min-height:48px;
   padding:10px 16px;
-  border:1px solid var(--saffron);
+  border:1px solid var(--action-primary);
   border-radius:999px;
-  background:var(--saffron);
+  background:var(--action-primary);
   color:#fff;
   font-size:.9rem;
   font-weight:700;
@@ -3278,7 +3278,7 @@ main.thar-sunset-story--rooms [hidden] {
   justify-content: center;
   padding: 0 18px;
   border-radius: var(--radius-control, 6px);
-  background: var(--action-primary, var(--saffron));
+  background: var(--action-primary);
   box-shadow: 0 6px 16px rgba(91, 26, 43, .12);
 }
 .main-nav .nav-book:hover {
@@ -3316,7 +3316,7 @@ main.thar-sunset-story--rooms [hidden] {
   font-weight: 700;
 }
 .mobile-cta .mobile-cta-book {
-  background: var(--action-primary, var(--saffron));
+  background: var(--action-primary);
 }
 .site-footer {
   background: var(--night);

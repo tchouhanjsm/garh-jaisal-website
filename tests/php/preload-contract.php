@@ -1,6 +1,6 @@
 <?php
 /**
- * Regression contract for safe, viewport-aware image preloads and font stylesheet delivery.
+ * Regression contract for safe image preloads and local typography.
  */
 $failures = [];
 $assertions = 0;
@@ -61,11 +61,40 @@ $assert(
     'Untrusted media text must not be emitted as a preload attribute.'
 );
 $assert(
-    strpos($html, 'rel="preload" as="style"') !== false
-        && strpos($html, 'media="print" onload="this.media=\'all\'"') !== false
-        && strpos($html, '<noscript><link') !== false,
-    'Google Fonts must be loaded without blocking first render and retain a no-JavaScript fallback.'
+    strpos($html, 'fonts.googleapis.com') === false && strpos($html, 'fonts.gstatic.com') === false,
+    'The shared head must not request remote fonts.'
 );
+
+$homeHtml = (static function () {
+    ob_start();
+    require dirname(__DIR__, 2) . '/index.php';
+    return (string) ob_get_clean();
+})();
+$homeHeroSource = 'img/optimized/v2/fort-from-roof.webp';
+preg_match_all('/<img\b[^>]*\bfetchpriority="high"[^>]*>/', $homeHtml, $priorityImages);
+$homeHero = $priorityImages[0][0] ?? '';
+$assert(
+    count($priorityImages[0]) === 1 && strpos($homeHero, 'src="' . $homeHeroSource . '"') !== false,
+    'The homepage must prioritize one full-width Fort panorama.'
+);
+preg_match_all('/<link rel="preload" as="image"[^>]*>/', $homeHtml, $imagePreloads);
+if (preg_match('/\bsrcset="([^"]+)"/', $homeHero, $heroCandidates) === 1) {
+    $preload = $imagePreloads[0][0] ?? '';
+    preg_match('/\bimagesrcset="([^"]+)"/', $preload, $preloadedCandidates);
+    // Both root-relative and relative candidates resolve from the homepage.
+    $candidateList = preg_replace('~(^|, )/~', '$1', $heroCandidates[1]);
+    $assert(
+        count($imagePreloads[0]) === 1
+            && strpos($preload, 'href="/' . $homeHeroSource . '"') !== false
+            && strpos($preload, 'fetchpriority="high"') !== false
+            && preg_replace('~(^|, )/~', '$1', $preloadedCandidates[1] ?? '') === $candidateList
+            && strpos($preload, 'imagesizes="100vw"') !== false
+            && strpos($homeHero, ' sizes="100vw"') !== false,
+        'The homepage preload must match the displayed panorama candidates and full-width slot.'
+    );
+} else {
+    $assert($imagePreloads[0] === [], 'The panorama fallback must not preload a missing responsive candidate.');
+}
 
 foreach ($failures as $failure) {
     fwrite(STDERR, 'FAIL: ' . $failure . PHP_EOL);

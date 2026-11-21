@@ -33,31 +33,6 @@ main.thar-sunset-story .article-hero .eyebrow::before{
   opacity:.9;
 }
 
-main.thar-sunset-story--home .hero-overlay{
-  background:
-    linear-gradient(90deg,rgba(20,18,43,.66) 0%,rgba(20,18,43,.42) 42%,rgba(20,18,43,.08) 82%),
-    linear-gradient(180deg,rgba(20,18,43,.04) 4%,rgba(91,26,43,.12) 42%,rgba(20,18,43,.88) 100%);
-}
-
-main.thar-sunset-story--rooms .page-hero.page-hero--photo::after,
-main.thar-sunset-story--dining .page-hero.page-hero--photo::after{
-  background:
-    linear-gradient(90deg,rgba(20,18,43,.84) 0%,rgba(91,26,43,.54) 50%,rgba(20,18,43,.12) 100%),
-    linear-gradient(180deg,rgba(20,18,43,.1) 0%,rgba(20,18,43,.3) 100%);
-}
-
-main.thar-sunset-story--experiences .package-hero-overlay{
-  background:linear-gradient(180deg,rgba(20,18,43,.12) 7%,rgba(91,26,43,.32) 44%,rgba(20,18,43,.88) 100%);
-}
-
-main.thar-sunset-story--experience .experience-hero-overlay{
-  background:linear-gradient(180deg,rgba(20,18,43,.12) 8%,rgba(91,26,43,.28) 44%,rgba(20,18,43,.9) 100%);
-}
-
-main.thar-sunset-story--catalogue .catalogue-hero-overlay{
-  background:linear-gradient(90deg,rgba(20,18,43,.94) 0%,rgba(91,26,43,.68) 53%,rgba(20,18,43,.16) 100%);
-}
-
 main.thar-sunset-story--dining .roof-banner{
   padding:7px;
   border:1px solid var(--story-keyline);
@@ -103,15 +78,6 @@ main.thar-sunset-story [data-story-reveal].story-is-visible{
 }
 
 @media(max-width:760px){
-  main.thar-sunset-story--rooms .page-hero.page-hero--photo::after,
-  main.thar-sunset-story--dining .page-hero.page-hero--photo::after{
-    background:linear-gradient(180deg,rgba(20,18,43,.46) 0%,rgba(91,26,43,.52) 48%,rgba(20,18,43,.92) 100%);
-  }
-
-  main.thar-sunset-story--catalogue .catalogue-hero-overlay{
-    background:linear-gradient(180deg,rgba(20,18,43,.18) 0%,rgba(91,26,43,.62) 46%,rgba(20,18,43,.95) 100%);
-  }
-
   main.thar-sunset-story--dining .roof-banner{
     border-radius:48% 48% 7px 7px / 24% 24% 7px 7px;
   }
@@ -324,7 +290,7 @@ main.thar-sunset-story--rooms .room-finder-intro .eyebrow{
 }
 main.thar-sunset-story--rooms .room-finder-intro h3{
   margin:0 0 10px;
-  font-family:var(--font-display,"Source Serif 4",Georgia,serif);
+  font-family:var(--font-display);
   font-size:clamp(1.45rem,2.5vw,2rem);
   line-height:1.15;
   text-wrap:balance;
@@ -800,7 +766,7 @@ dialog.room-comparison-dialog::backdrop{
 .room-comparison-header h2{
   max-width:22ch;
   margin:0;
-  font-family:var(--font-display,"Source Serif 4",Georgia,serif);
+  font-family:var(--font-display);
   font-size:clamp(1.6rem,3vw,2.35rem);
   font-weight:400;
   line-height:1.12;
@@ -965,9 +931,9 @@ dialog.room-comparison-dialog::backdrop{
   justify-content:center;
   min-height:46px;
   padding:11px 16px;
-  border:1px solid var(--saffron,#b94a0e);
+  border:1px solid var(--action-primary);
   border-radius:5px;
-  background:var(--saffron,#b94a0e);
+  background:var(--action-primary);
   color:#fff!important;
   font-weight:750;
   line-height:1.3;
@@ -1061,10 +1027,6 @@ dialog.room-comparison-dialog::backdrop{
 
   main.thar-sunset-story--home .home-hero-facts .at-a-glance__item:nth-child(-n+2) {
     border-top: 0;
-  }
-
-  main.thar-sunset-story--home .home-hero-facts .at-a-glance__item:nth-child(3) {
-    grid-column: 1 / -1;
   }
 
   main.thar-sunset-story--home .home-hero-facts .at-a-glance__label {

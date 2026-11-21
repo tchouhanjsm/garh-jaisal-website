@@ -81,8 +81,6 @@ test.describe('Visual asset and typography evidence', () => {
             bodyFontFamily: getComputedStyle(body).fontFamily,
             bodyFontSizePx: Math.round(parseFloat(getComputedStyle(body).fontSize) * 100) / 100,
             documentFontsStatus: document.fonts.status,
-            sourceSerifReady: document.fonts.check('400 24px "Source Serif 4"'),
-            interReady: document.fonts.check('400 16px Inter'),
           },
           images,
           resources,
@@ -99,9 +97,9 @@ test.describe('Visual asset and typography evidence', () => {
       expect(missingAlt, route.path + ' images must declare alt (empty is valid when decorative)').toEqual([]);
       expect(failedVisibleImages, route.path + ' must not show broken visible images').toEqual([]);
       expect(routeReport.typography.h1FontFamily, route.path + ' H1 should use the declared display stack')
-        .toContain('Source Serif 4');
+        .toContain('Palatino');
       expect(routeReport.typography.bodyFontFamily, route.path + ' body should use the declared body stack')
-        .toContain('Inter');
+        .toContain('Trebuchet MS');
       report.routes.push({ route: route.path, ...routeReport });
     }
 
@@ -150,7 +148,7 @@ test.describe('Visual asset and typography evidence', () => {
     expect(normalizeCandidateList(state.preloadSrcset)).toBe(normalizeCandidateList(state.srcset));
   });
 
-  test('320px homepage facts use readable two-column hierarchy', async ({ page }, testInfo) => {
+  test('320px homepage facts fit in three readable columns', async ({ page }, testInfo) => {
     test.skip(testInfo.project.name !== 'mobile-320', 'Smallest-phone first-impression contract runs once at 320px.');
     await page.goto('/index.php', { waitUntil: 'domcontentloaded' });
 
@@ -160,17 +158,17 @@ test.describe('Visual asset and typography evidence', () => {
       return {
         columns: style.gridTemplateColumns.split(' ').length,
         itemCount: items.length,
-        thirdColumnStart: items[2] ? getComputedStyle(items[2]).gridColumnStart : '',
-        minItemWidth: Math.min(...items.map((item) => item.getBoundingClientRect().width)),
+        firstRowItemCount: items.filter(item => item.offsetTop === items[0].offsetTop).length,
+        itemTextFits: items.every(item => item.scrollWidth <= item.clientWidth + 1),
         viewport: document.documentElement.clientWidth,
         document: document.documentElement.scrollWidth,
       };
     });
 
-    expect(layout.columns).toBe(2);
+    expect(layout.columns).toBe(3);
     expect(layout.itemCount).toBe(3);
-    expect(layout.thirdColumnStart).toBe('1');
-    expect(layout.minItemWidth).toBeGreaterThan(100);
+    expect(layout.firstRowItemCount).toBe(3);
+    expect(layout.itemTextFits).toBe(true);
     expect(layout.document).toBeLessThanOrEqual(layout.viewport + 1);
   });
 });

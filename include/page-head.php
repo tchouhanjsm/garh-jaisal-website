@@ -181,12 +181,6 @@ $analyticsIds = array_values(array_unique(array_filter(
 <?php endif; ?>
 
   <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <?php $googleFontsHref = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap'; ?>
-  <link rel="preload" as="style" href="<?= $htmlEscape($googleFontsHref) ?>">
-  <link href="<?= $htmlEscape($googleFontsHref) ?>" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="<?= $htmlEscape($googleFontsHref) ?>" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="css/garh-v2.css">
 <?php foreach ($extraStylesheets as $stylesheet): ?>
   <link rel="stylesheet" href="<?= $htmlEscape($stylesheet) ?>">
@@ -194,6 +188,7 @@ $analyticsIds = array_values(array_unique(array_filter(
   <!-- Shared type, spacing and component normalization intentionally follows page CSS. -->
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/conversion-system.css">
+  <link rel="stylesheet" href="css/fort-at-dusk.css">
   <!-- User motion preferences override page-specific animation and transition rules. -->
   <link rel="stylesheet" href="css/accessibility.css">
 <?php foreach ($preloads as $preload): ?>

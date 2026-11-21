@@ -41,6 +41,7 @@ test('custom itinerary builder combines interests and prepares an explicit Whats
   expect(targetUrl.searchParams.get('text')).toContain('Gadisar Lake, local crafts and any other suitable stops');
   await expect(page).toHaveURL(initialUrl);
 
+  await page.context().route(url => url.origin === targetUrl.origin, route => route.fulfill({ body: 'Synthetic enquiry draft' }));
   const popupPromise = page.waitForEvent('popup');
   await whatsapp.click();
   const popup = await popupPromise;
@@ -64,4 +65,44 @@ test('custom itinerary page stays responsive without horizontal overflow', async
   expect(dimensions.document, 'Custom itinerary page must not overflow horizontally at ' + testInfo.project.name)
     .toBeLessThanOrEqual(dimensions.viewport + 1);
   await expect(page.getByRole('link', { name: 'Use the contact page instead' })).toHaveAttribute('href', 'contact.php?topic=custom-itinerary');
+});
+
+test('Rajasthan enquiry prepares a route and quote request from the Tours hub', async ({ page, baseURL }, testInfo) => {
+  test.skip(!['mobile-320', 'desktop-1280'].includes(testInfo.project.name), 'Check the Rajasthan enquiry on a narrow phone and desktop.');
+  const origin = new URL(baseURL).origin;
+  await page.route(url => url.origin !== origin, route => route.abort());
+  await page.goto('/pack.php', { waitUntil: 'domcontentloaded' });
+  await page.getByRole('link', { name: 'Enquire about a Rajasthan tour', exact: true }).click();
+  await expect(page).toHaveURL(/\/custom-itinerary\.php\?mode=rajasthan$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Enquire about a Rajasthan tour.' })).toBeVisible();
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/custom-itinerary\.php$/);
+
+  const whatsapp = page.getByRole('link', { name: 'Open WhatsApp with this enquiry' });
+  await expect(whatsapp).toHaveAttribute('aria-disabled', 'true');
+  await page.getByLabel('Travel dates or month').fill('February 2027');
+  await page.getByLabel('Duration').fill('5 days');
+  await page.getByLabel('Preferred route or places to visit').fill('Jaisalmer and two other stops');
+  await page.getByLabel('Pickup city or location').fill('Jodhpur Railway Station');
+  await page.getByLabel('Drop-off city or location').fill('Jaipur Airport');
+  await page.getByLabel('Number of travellers (optional)').fill('2');
+  await page.getByLabel('What should the quote include?').fill('Vehicle and guide, with hotels priced separately');
+  await page.getByLabel('Budget or pricing questions (optional)').fill('Quote in INR');
+  await expect(whatsapp).toHaveAttribute('aria-disabled', 'false');
+
+  const draft = await page.getByLabel('Message preview').inputValue();
+  for (const line of [
+    'Travel dates or month: February 2027', 'Duration: 5 days', 'Preferred route or stops: Jaisalmer and two other stops',
+    'Pickup: Jodhpur Railway Station', 'Drop-off: Jaipur Airport', 'Travellers: 2',
+    'Requested inclusions: Vehicle and guide, with hotels priced separately', 'Budget or pricing questions: Quote in INR',
+    'everything the quote includes or excludes, and the total price', 'does not reserve a tour',
+  ]) {
+    expect(draft).toContain(line);
+  }
+  const destination = new URL(await whatsapp.getAttribute('href'));
+  expect(destination.hostname).toMatch(/^(?:wa\.me|api\.whatsapp\.com)$/);
+  expect(destination.searchParams.get('text')).toBe(draft);
+  await expect(page.getByRole('link', { name: 'Use the contact page instead' }))
+    .toHaveAttribute('href', 'contact.php?topic=rajasthan-tours');
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
 });
