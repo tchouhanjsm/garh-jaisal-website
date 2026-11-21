@@ -10,7 +10,17 @@ $galleryPath = $root . '/gallery.php';
 $scriptPath = $root . '/js/garh-v2.js';
 $stylePath = $root . '/css/gallery.css';
 $contentRoot = $root . '/content/gallery';
+require_once $root . '/include/gallery-media-approval.php';
+$legacyBaseline = require $root . '/include/gallery-legacy-baseline.php';
+$runtimeConfig = require $root . '/include/site-config.php';
+$approvalKey = is_array($runtimeConfig) ? ($runtimeConfig['media_approval_hmac_key'] ?? '') : '';
+$approvers = is_array($runtimeConfig) ? ($runtimeConfig['media_approvers'] ?? []) : [];
+if (!is_string($approvalKey)) $approvalKey = '';
+if (!is_array($approvers)) $approvers = [];
 $errors = [];
+if (!is_array($legacyBaseline) || count($legacyBaseline) !== 36) {
+    $errors[] = 'Immutable Gallery baseline must contain exactly 36 original records.';
+}
 
 if (!is_file($registryPath) || is_link($registryPath)) {
     fwrite(STDERR, "ERROR missing or unsafe include/gallery-data.php\n");
@@ -102,10 +112,14 @@ foreach ($recordFiles as $recordFile) {
         $errors[] = $id . ': duplicate image reference ' . $src;
         continue;
     }
+    $approved = gj_gallery_media_publication_is_approved(
+        $record, $recordJson, $candidate, $legacyBaseline, $approvalKey, $approvers
+    );
     $allSources[$src] = true;
     $recordsByCategory[$category][] = [
         'id' => $id,
         'status' => $status,
+        'approved' => $approved,
         'order' => $order,
         'src' => $src,
         'alt' => $alt,
@@ -129,7 +143,7 @@ foreach ($expectedCategories as $category) {
 
     $expectedLiveSources = [];
     foreach ($recordsByCategory[$category] as $record) {
-        if ($record['status'] === 'live') {
+        if ($record['status'] === 'live' && ($record['approved'] ?? false) === true) {
             $expectedLiveSources[] = $record['src'];
         }
     }
@@ -145,7 +159,7 @@ foreach ($expectedCategories as $category) {
         $errors[] = $category . ': PHP renderer must publish only live records in numeric order';
     }
     foreach ($recordsByCategory[$category] as $record) {
-        if ($record['status'] !== 'live') {
+        if ($record['status'] !== 'live' || ($record['approved'] ?? false) !== true) {
             continue;
         }
         $publishedPhoto = $actualLivePhotos[$record['src']] ?? [];
