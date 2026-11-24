@@ -219,12 +219,17 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section arrival-faq">
+  <section class="section arrival-faq planning-path" aria-labelledby="arrival-faq-title">
     <div class="site-shell arrival-split">
       <div>
         <p class="eyebrow">Questions</p>
         <h2 id="arrival-faq-title">Before you set out.</h2>
-        <p>If your train or flight changes, call, WhatsApp, or send a note through the <a href="contact.php?topic=arrival">arrival enquiry form</a>.</p>
+        <p>If your train or flight changes, let the hotel know.</p>
+        <nav class="arrival-planning-links" aria-label="Related planning pages">
+          <a href="how-to-reach-jaisalmer.php">Travel to Jaisalmer</a>
+          <a href="car-rental.php">Transfer options</a>
+          <a href="contact.php?topic=arrival">Arrival enquiry form</a>
+        </nav>
       </div>
       <?php
       $faq = [
