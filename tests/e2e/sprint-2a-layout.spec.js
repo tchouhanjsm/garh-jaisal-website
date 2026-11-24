@@ -19,7 +19,7 @@ test.describe('Sprint 2A page-group layout', () => {
 
   test('Directions leads with the parking walk answer', async ({ page }) => {
     await page.goto('/direction.php', { waitUntil: 'domcontentloaded' });
-    await expect(page.locator('.arrival-hero-copy')).toContainText('300 metres (5–6 minutes)');
+    await expect(page.locator('.arrival-hero-copy')).toContainText(/300 metres\s*About 5–6 min/);
     await expect(page.locator('.arrival-route-steps > li')).toHaveCount(3);
   });
 

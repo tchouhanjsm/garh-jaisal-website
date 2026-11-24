@@ -109,9 +109,9 @@ test('shared FAQ partial preserves arrival links and experience FAQ structure', 
     let response = await page.goto('/direction.php', { waitUntil: 'domcontentloaded', timeout: 20_000 });
     expect(response, 'No response for /direction.php').not.toBeNull();
     expect(response.status()).toBeLessThan(400);
-    await expect(page.locator('.arrival-faq .faq-list details')).toHaveCount(9);
-    await expect(page.locator('.arrival-faq .faq-list')).toContainText('Can my car enter the fort?');
-    await expect(page.locator('.arrival-faq .faq-list a[href="roof.php"]')).toHaveText('rooftop dining page');
+    await expect(page.locator('.arrival-faq .faq-list details')).toHaveCount(3);
+    await expect(page.locator('.arrival-faq .faq-list')).toContainText('Can I check in early or leave luggage before check-in?');
+    await expect(page.locator('.arrival-faq .faq-list a[href="roof.php"]')).toHaveText('rooftop restaurant');
     await expect(page.locator('.arrival-faq a[href="contact.php?topic=arrival"]')).toHaveCount(1);
 
     response = await page.goto('/sunset-camel-safari.php', { waitUntil: 'domcontentloaded', timeout: 20_000 });

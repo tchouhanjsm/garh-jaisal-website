@@ -60,7 +60,7 @@ test('Directions has a responsive map and preserves the exact hotel Google Maps 
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
   const map = page.locator('.arrival-map');
-  await expect(map.getByRole('heading', { name: 'Find the hotel inside Jaisalmer Fort.' })).toBeVisible();
+  await expect(map.getByRole('heading', { name: 'Map & address' })).toBeVisible();
   await expect(map.locator('iframe')).toHaveAttribute('title', 'Map of Garh Jaisal Haveli near Fort Kotari Para inside Jaisalmer Fort');
   await expect(map.getByRole('link', { name: 'Open exact hotel pin in Google Maps' }))
     .toHaveAttribute('href', 'https://maps.app.goo.gl/nAbRiZhv78FSbju48');

@@ -364,7 +364,7 @@ test('arrival and dining contact links preserve their topic in the editable enqu
   await page.goto('/direction.php', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.arrival-contact a[href="contact.php?topic=arrival"]')).toContainText('Contact the hotel');
   await expect(page.locator('.final-cta a[href="contact.php?topic=arrival"]')).toContainText('Contact us');
-  await expect(page.locator('.arrival-faq a[href="contact.php?topic=arrival"]')).toContainText('arrival enquiry form');
+  await expect(page.locator('.arrival-faq a[href="contact.php?topic=arrival"]')).toContainText(/arrival enquiry form/i);
   await page.goto('/contact.php?topic=arrival', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.contact-topic-context')).toContainText('Arrival arrangements');
   await expect(page.locator('#message')).toHaveValue(/confirm arrival arrangements/);

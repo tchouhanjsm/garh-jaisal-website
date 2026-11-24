@@ -8,8 +8,8 @@ test('Directions avoids unconfirmed check-in, reception and arrival promises', a
   expect(response.status(), 'Directions should load successfully').toBeLessThan(400);
 
   const arrival = page.locator('.arrival-contact');
-  await expect(arrival.getByRole('heading', { level: 2, name: 'Confirm your arrival plan.' })).toBeVisible();
-  await expect(arrival).toContainText('confirm reception hours, luggage or mobility assistance');
+  await expect(arrival.getByRole('heading', { level: 2, name: 'Need help arriving?' })).toBeVisible();
+  await expect(arrival).toContainText('ask about luggage or mobility help');
   await expect(arrival).toContainText('Share your expected arrival time');
   await expect(arrival.getByRole('link', { name: 'Call', exact: true })).toBeVisible();
   await expect(arrival.getByRole('link', { name: 'WhatsApp', exact: true })).toBeVisible();

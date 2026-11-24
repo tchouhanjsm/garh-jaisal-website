@@ -23,7 +23,6 @@ const RESPONSIVE_IMAGE_MANIFEST = JSON.parse(
 const ENFORCED_RESPONSIVE_VARIANT_BUDGETS = Object.entries(
   RESPONSIVE_IMAGE_MANIFEST.variant_max_bytes || {}
 ).map(([path, maxBytes]) => ({ path, maxBytes }));
-const responsiveBudgetFor = candidatePath => RESPONSIVE_IMAGE_MANIFEST.variant_max_bytes?.[candidatePath];
 
 const VIEWPORTS = [
   { name: 'mobile-390', width: 390, height: 844 },
@@ -68,58 +67,22 @@ test('home and rooftop photo slots reserve dimensions and match their layouts', 
   }
 });
 
-test('Directions LCP hero matches its preload and selects width-appropriate candidates', async ({ browser }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Directions hero selection runs once with controlled mobile/desktop viewports.');
-  test.setTimeout(45_000);
-  const cases = [
-    { viewport: { width: 390, height: 844 }, file: 'img/responsive/v2/courtyard-480.webp', maxBytes: responsiveBudgetFor('img/responsive/v2/courtyard-480.webp') },
-    { viewport: { width: 1280, height: 800 }, file: 'img/responsive/v2/courtyard-1200.webp', maxBytes: responsiveBudgetFor('img/responsive/v2/courtyard-1200.webp') },
-  ];
-  for (const item of cases) {
-    const context = await browser.newContext({ baseURL: BASE_URL, viewport: item.viewport, deviceScaleFactor: 1 });
+test('Directions text loads without preloading imagery and the entrance photo fits its slot', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Verify the Directions photo on controlled mobile and desktop viewports.');
+  for (const width of [390, 1280]) {
+    const context = await browser.newContext({ baseURL: BASE_URL, viewport: { width, height: 844 }, deviceScaleFactor: 1 });
     try {
       const page = await context.newPage();
       const response = await page.goto('/direction.php', { waitUntil: 'domcontentloaded' });
-      expect(response).not.toBeNull();
       expect(response.status()).toBe(200);
-      const hero = page.locator('.page-hero-media img').first();
-      await expect(hero).toBeVisible();
-      await expect.poll(() => hero.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
-      const state = await page.evaluate(() => {
-        const img = document.querySelector('.page-hero-media img');
-        const preloads = [...document.querySelectorAll('link[rel="preload"][as="image"]')];
-        const preload = preloads.find(link => link.hasAttribute('imagesrcset'));
-        return {
-          srcset: img?.getAttribute('srcset') || '',
-          sizes: img?.getAttribute('sizes') || '',
-          currentSrc: img?.currentSrc || '',
-          naturalWidth: img?.naturalWidth || 0,
-          naturalHeight: img?.naturalHeight || 0,
-          fetchPriority: img?.fetchPriority || '',
-          loading: img?.getAttribute('loading') || '',
-          preloadCount: preloads.length,
-          preloadHref: preload?.getAttribute('href') || '',
-          preloadSrcset: preload?.getAttribute('imagesrcset') || '',
-          preloadSizes: preload?.getAttribute('imagesizes') || '',
-          renderedWidth: img?.getBoundingClientRect().width || 0,
-        };
-      });
-      expect(state.sizes).toBe('100vw');
-      expect(state.fetchPriority).toBe('high');
-      expect(state.loading).toBe('eager');
-      expect(state.preloadCount).toBe(1);
-      expect(state.preloadHref).toBe('/img/v2/courtyard.jpg');
-      expect(state.preloadSizes).toBe('100vw');
-      expect(state.currentSrc).toContain('/' + item.file);
-      expect(state.naturalWidth).toBeGreaterThan(0);
-      expect(state.naturalHeight).toBeGreaterThan(0);
-      expect(state.renderedWidth).toBeGreaterThan(0);
-      expect(Math.abs(state.naturalWidth / state.naturalHeight - 1333 / 2000)).toBeLessThanOrEqual(0.01);
-      const normalizeSrcset = value => value.split(',').map(candidate => candidate.trim().replace(/^\/+/, '')).join(', ');
-      expect(normalizeSrcset(state.preloadSrcset)).toBe(normalizeSrcset(state.srcset));
-      expect(item.maxBytes, item.file + ' must have a manifest-owned byte budget').toBeGreaterThan(0);
-      const bytes = fs.statSync(path.join(ROOT, item.file)).size;
-      expect(bytes, item.file + ' should stay under its viewport-specific transfer budget').toBeLessThanOrEqual(item.maxBytes);
+      await expect(page.locator('link[rel="preload"][as="image"]')).toHaveCount(0);
+      const photo = page.locator('.arrival-entrance img');
+      await expect(photo).toHaveAttribute('loading', 'lazy');
+      await expect(photo).toHaveAttribute('sizes', '(max-width: 520px) 128px, 200px');
+      await photo.scrollIntoViewIfNeeded();
+      await expect.poll(() => photo.evaluate(img => img.currentSrc)).toMatch(/facade-480\.webp$/);
+      await expect.poll(() => photo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+      expect(await photo.evaluate(img => img.getBoundingClientRect().width)).toBe(width === 390 ? 128 : 200);
     } finally {
       await context.close();
     }
