@@ -12,13 +12,14 @@ const DRAFT_AND_HIDDEN_ROUTES = [
   '/explore-the-desert.php',
 ];
 
-// These articles were added after the original frozen head baseline. They remain
-// covered by rendered SEO metadata tests and editorial-content-cluster.spec.js.
+// New routes remain covered by their own SEO and visible content tests.
 const ROUTES_ADDED_AFTER_FROZEN_HEAD_BASELINE = [
   '/jaisalmer-3-day-itinerary.php',
   '/jaisalmer-honeymoon-guide.php',
   '/catalogue.php',
   '/custom-itinerary.php',
+  '/privacy.php',
+  '/booking-policy.php',
   '/best-time-to-visit-jaisalmer.php',
   '/how-to-reach-jaisalmer.php',
   '/jaisalmer-desert-safari-packing-list.php',

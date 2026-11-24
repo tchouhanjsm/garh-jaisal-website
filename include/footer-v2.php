@@ -53,6 +53,10 @@ $footerNav = $footerNavData['footer'];
 
   <div class="site-shell footer-bottom">
     <span>© <?= date('Y') ?> Hotel Garh Jaisal Haveli</span>
+    <nav class="footer-policies" aria-label="Hotel policies">
+      <a href="privacy.php">Privacy Policy</a>
+      <a href="booking-policy.php">Booking Terms and Conditions</a>
+    </nav>
     <span>Jaisalmer, Rajasthan</span>
   </div>
 </footer>
