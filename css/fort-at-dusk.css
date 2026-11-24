@@ -107,7 +107,12 @@ main.thar-sunset-story--home .hero .button {
 .footer-link-group li + li { margin-block-start: .5rem; }
 .footer-link-group a { display: inline-flex; align-items: center; min-height: 2rem; padding-block: .25rem; }
 .footer-visit { overflow-wrap: anywhere; }
-.site-footer .footer-bottom { border-top-color: var(--line-on-dark); }
+.site-footer .footer-bottom {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: .25rem clamp(1rem, 3vw, 2.5rem);
+  border-top-color: var(--line-on-dark);
+}
 
 @media (max-width: 920px) {
   .site-footer .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
