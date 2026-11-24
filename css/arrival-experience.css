@@ -93,6 +93,8 @@
 @media (max-width: 760px) {
   .arrival-page .arrival-hero::before { background: linear-gradient(180deg,rgba(21,38,54,.24),rgba(21,38,54,.94)); }
   .arrival-page .arrival-hero-layout { gap: 24px; }
+  .arrival-page .arrival-hero-copy .actions { flex-direction: row; flex-wrap: wrap; gap: .65rem; }
+  .arrival-page .arrival-hero-copy .actions .button { flex: 1 1 125px; width: auto; padding-inline: .6rem; }
   .arrival-page .arrival-hero-copy h1 { max-width: 11ch; font-size: clamp(2.45rem,10vw,3.45rem); }
   .arrival-page .arrival-route-steps { grid-template-columns: minmax(0,1fr); }
   .arrival-page .arrival-route-steps .step { flex-direction: row; gap: .85rem; }

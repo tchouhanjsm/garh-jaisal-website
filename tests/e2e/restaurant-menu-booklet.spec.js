@@ -40,6 +40,11 @@ test('restaurant only publishes approved menu content and keeps the booklet usab
   const categories = await categoryLinks.allTextContents();
   const dishRows = booklet.locator('.restaurant-dish');
   await expect(dishRows).toHaveCount(142);
+  const firstDish = dishRows.first();
+  const nameBox = await firstDish.getByRole('heading').boundingBox();
+  const priceBox = await firstDish.locator('.restaurant-price').boundingBox();
+  expect(nameBox.x + nameBox.width).toBeLessThanOrEqual(priceBox.x);
+  expect(nameBox.width).toBeGreaterThan(priceBox.width);
   await expect(booklet.locator('[data-menu-page-status]')).toHaveText(`Page 1 of ${categories.length}: ${categories[0]}`);
   await expect(booklet.locator('[data-menu-previous]')).toBeDisabled();
   await expect(booklet.locator('[data-menu-next]')).toBeEnabled();

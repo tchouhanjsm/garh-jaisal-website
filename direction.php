@@ -99,15 +99,14 @@ require __DIR__ . '/include/page-head.php';
             Cars stop at Fort Parking. From there, walk about 300 metres (5–6 minutes) through the fort lanes to Garh Jaisal Haveli.
           </p>
           <div class="actions">
-            <a class="button button-primary" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>" data-cta-id="call-arrival-hero" data-cta-location="arrival-hero">Call <?= htmlspecialchars($hotelPhoneDisplay, ENT_QUOTES, 'UTF-8') ?></a>
+            <a class="button button-primary" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>" data-cta-id="call-arrival-hero" data-cta-location="arrival-hero">Call the hotel</a>
             <a class="button button-light" href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-arrival-hero" data-cta-location="arrival-hero">WhatsApp the hotel</a>
           </div>
         </div>
 
         <aside class="arrival-quick-card" aria-labelledby="arrival-quick-card-title">
-          <p class="eyebrow">Before you set out</p>
           <h2 id="arrival-quick-card-title">Plan for the final walk.</h2>
-          <p>The walk includes uneven cobbles and short stair sections. Share your arrival time with the hotel to ask about luggage or mobility assistance.</p>
+          <p>Expect uneven cobbles and short stair sections. Contact us if you need help with the walk.</p>
           <a class="button button-primary arrival-quick-map" href="<?= htmlspecialchars($hotelMapsUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Open exact hotel pin <span aria-hidden="true">↗</span></a>
         </aside>
       </div>
