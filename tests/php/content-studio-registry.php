@@ -91,7 +91,8 @@ try {
     $matches = array_filter($galleryRegistry['hotel']['images'] ?? [], static function ($item) use ($testImage) {
         return is_array($item) && ($item['src'] ?? null) === $testImage;
     });
-    if (count($matches) !== 1) $errors[] = 'Live Gallery overlay was not appended exactly once.';
+    // A new Live record without owner-signed approval must remain absent from the public Gallery.
+    if (count($matches) !== 0) $errors[] = 'Unsigned live Gallery overlay must remain excluded until signed approval is verified.';
 } catch (Throwable $error) {
     $errors[] = 'Overlay integration test failed: ' . $error->getMessage();
 } finally {

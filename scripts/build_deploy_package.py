@@ -33,6 +33,7 @@ REQUIRED_RUNTIME_FILES = {
     ".htaccess", "404.php", "contact.php", "index.php", "mail.php",
     "robots.txt", "sitemap.xml", "include/page-head.php", "include/site-config.php",
     "include/admin-auth.php", "include/page-media-approval.php",
+    "include/gallery-media-approval.php", "include/gallery-legacy-baseline.php",
     "admin/index.html", "admin/config.yml", "admin/.htaccess",
 }
 PRIVATE_CONFIG_PATH = "include/site-config.local.php"
