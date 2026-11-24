@@ -22,7 +22,7 @@ test('restaurant keeps an emotional hero and light, legible information surfaces
     await expect(menu.getByRole('link', { name: 'Ask on WhatsApp ↗' })).toBeVisible();
   } else {
     expect(await page.locator('.restaurant-tabs a').first().evaluate(element => getComputedStyle(element).borderRadius)).toBe('6px');
-    expect(await page.locator('.restaurant-vegtoggle').evaluate(element => getComputedStyle(element).borderRadius)).toBe('6px');
+    expect(await page.locator('#breakfast').evaluate(element => getComputedStyle(element).backgroundImage)).toContain('repeating-linear-gradient');
   }
   await expect(page.locator('.restaurant-hero .button-primary')).toBeVisible();
   await expect(page.locator('.restaurant-instagram-panel a.button')).toBeVisible();

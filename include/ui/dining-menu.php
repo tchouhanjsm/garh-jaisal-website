@@ -14,45 +14,53 @@ $dietLabels = [
     <div class="site-shell">
       <div class="section-head restaurant-menu-head">
         <div>
-          <p class="eyebrow">Menu</p>
-          <h2 id="menu-heading">What is on the menu.</h2>
+          <p class="eyebrow">Garh Jaisal’s Kitchen</p>
+          <h2 id="menu-heading">Our menu</h2>
         </div>
-        <button class="restaurant-vegtoggle" type="button" aria-pressed="false" hidden>Vegetarian only</button>
       </div>
       <ul class="restaurant-diet-key" aria-label="Dietary symbols">
         <?php foreach ($dietLabels as $diet => $label): ?>
           <li class="restaurant-diet-badge">
-            <span class="restaurant-mark is-<?= e($diet) ?>" aria-hidden="true"></span><?= e($label) ?>
+            <span class="restaurant-mark is-<?= e($diet) ?>" aria-hidden="true"></span>
+            <?php if ($diet === 'vegan'): ?>
+              <a href="contact.php?topic=dining">Ask about vegan options</a>
+            <?php else: ?>
+              <?= e($label) ?>
+            <?php endif; ?>
           </li>
         <?php endforeach; ?>
       </ul>
-      <p class="restaurant-diet-note">Some dishes have no dietary label. Ask the kitchen to confirm vegan options, Jain options or allergy requirements before ordering.</p>
+      <p class="restaurant-diet-note">Please tell us about Jain dietary needs or allergies.</p>
 
       <div class="restaurant-menu-booklet" data-menu-booklet>
-        <p class="sr-only" data-restaurant-menu-status role="status" aria-live="polite" aria-atomic="true"></p>
         <nav class="restaurant-tabs" aria-label="Menu sections">
-          <?php foreach ($menuCategories as $menuIndex => $category): ?>
-            <a href="#<?= e(gj_dining_menu_slug($category)) ?>" data-menu-tab aria-controls="<?= e(gj_dining_menu_slug($category)) ?>" <?= $menuIndex === 0 ? 'aria-current="location"' : '' ?>><?= e($category) ?></a>
+          <?php foreach ($menuCategories as $category): ?>
+            <a href="#<?= e(gj_dining_menu_slug($category)) ?>" data-menu-tab><?= e($category) ?></a>
           <?php endforeach; ?>
         </nav>
-
-        <div class="restaurant-booklet-controls" aria-label="Menu booklet controls">
-          <button type="button" data-menu-previous disabled>← Previous</button>
-          <p data-menu-page-status aria-live="polite" role="status">Page 1 of <?= count($menuCategories) ?>: <?= e($menuCategories[0] ?? 'Menu') ?></p>
-          <button type="button" data-menu-next>Next →</button>
-          <button type="button" data-menu-print>Print menu</button>
+        <div class="restaurant-booklet-controls" hidden>
+          <div class="restaurant-booklet-turn" data-menu-top role="group" aria-label="Turn menu pages">
+            <button type="button" data-menu-turn="-1" disabled>← Previous</button>
+            <p data-menu-page-status role="status" aria-atomic="true"></p>
+            <button type="button" data-menu-turn="1">Next →</button>
+          </div>
+          <div class="restaurant-booklet-actions">
+            <button type="button" data-menu-all aria-controls="all-dishes">View all dishes</button>
+            <button type="button" data-menu-print>Print menu</button>
+          </div>
         </div>
 
-        <div class="restaurant-menu-pages">
+        <div class="restaurant-menu-pages" id="all-dishes">
           <?php foreach ($menu as $category => $dishes): ?>
             <section class="restaurant-category" id="<?= e(gj_dining_menu_slug($category)) ?>" data-menu-page data-menu-page-label="<?= e($category) ?>" aria-labelledby="restaurant-menu-heading-<?= e(gj_dining_menu_slug($category)) ?>">
-              <h3 id="restaurant-menu-heading-<?= e(gj_dining_menu_slug($category)) ?>"><?= e($category) ?></h3>
+              <h3 id="restaurant-menu-heading-<?= e(gj_dining_menu_slug($category)) ?>" tabindex="-1"><?= e($category) ?></h3>
               <?php
               $groups = [];
               foreach ($dishes as $dish) {
                   $groups[$dish['group'] ?? ''][] = $dish;
               }
               ?>
+              <div class="restaurant-menu-columns">
               <?php foreach ($groups as $group => $groupDishes): ?>
                 <div class="restaurant-menu-group">
                   <?php if ($group !== ''): ?><h4><?= e($group) ?></h4><?php endif; ?>
@@ -63,9 +71,8 @@ $dietLabels = [
                           $dishDiet = $dish['veg'] ? 'vegetarian' : 'non-vegetarian';
                       }
                       $dietLabel = $dietLabels[$dishDiet] ?? null;
-                      $vegetarian = in_array($dishDiet, ['vegetarian', 'vegan'], true);
                     ?>
-                      <li class="restaurant-dish" data-veg="<?= $vegetarian ? '1' : '0' ?>">
+                      <li class="restaurant-dish">
                         <div>
                           <?php $dishHeading = $group === '' ? 'h4' : 'h5'; ?>
                           <<?= $dishHeading ?>><?= e($dish['n']) ?></<?= $dishHeading ?>>
@@ -82,12 +89,16 @@ $dietLabels = [
                   </ul>
                 </div>
               <?php endforeach; ?>
-              <p class="restaurant-note" data-menu-filter-empty hidden>No dishes in this section are marked vegetarian or vegan.</p>
+              </div>
             </section>
           <?php endforeach; ?>
         </div>
 
-        <p class="restaurant-note">Menu items and listed prices may change. Please confirm the current menu and prices with the hotel.</p>
+        <div class="restaurant-booklet-turn restaurant-booklet-footer" data-menu-footer hidden role="group" aria-label="Turn menu pages after dishes">
+          <button type="button" data-menu-turn="-1" disabled>← Previous</button>
+          <button type="button" data-menu-turn="1">Next →</button>
+        </div>
+        <p class="restaurant-note">Prices in INR. Dishes and prices may change.</p>
       </div>
     </div>
   </section>

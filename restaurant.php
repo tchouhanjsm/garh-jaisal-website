@@ -160,7 +160,7 @@ require __DIR__ . '/include/page-head.php';
           <a class="button button-primary" href="#reserve" data-cta-id="enquiry-restaurant-table" data-cta-location="restaurant-hero">Enquire about a table</a>
           <a class="button button-light" href="<?= e($waLink) ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-restaurant-hero" data-cta-location="restaurant-hero">WhatsApp</a>
         </div>
-        <p class="restaurant-rooftop-link">Planning a meal or candlelight dinner? <a href="roof.php">Explore the rooftop dining space</a>.</p>
+        <p class="restaurant-rooftop-link"><a href="#menu"><?= $menuOwnerConfirmed ? 'View the menu' : 'Ask about the menu' ?></a> · <a href="roof.php">Explore rooftop dining</a></p>
       </div>
 
       <div class="restaurant-hero-media">
