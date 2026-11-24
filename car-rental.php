@@ -113,6 +113,7 @@ require __DIR__ . '/include/page-head.php';
       <div>
         <h2 id="car-quote-title">Ask for a quote</h2>
         <p>Review and send your draft in WhatsApp. Wait for us to confirm the route, pickup point, availability, inclusions and price before making plans.</p>
+        <p>For a pickup from Jaisalmer airport or railway station, share your arrival time. If you are staying at the haveli, use Fort Parking as your drop-off and <a href="direction.php#arrival-overview-title">check the final walking route</a>.</p>
         <a class="text-link" href="<?= htmlspecialchars($carWhatsAppUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Request a car quote on WhatsApp</a>
       </div>
       <form class="car-quote-form" data-car-quote-form data-whatsapp-url="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" hidden>

@@ -95,7 +95,7 @@ test('shared footer leads to the published Privacy Policy and Booking Terms and 
     await expect(page).toHaveURL(new RegExp(route.replace('.', '\\.') + '$'));
     await expect(page.locator('main h1')).toHaveText(title);
     await expect(page.getByRole('heading', { name: section })).toBeVisible();
-    await expect(page.locator('head meta[name="robots"]')).toHaveAttribute('content', 'index,follow');
+    await expect(page.locator('head meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
     await expect(page.locator('head link[rel="canonical"]')).toHaveAttribute('href', 'https://www.hotelgarhjaisal.com' + route);
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize().width);
   }

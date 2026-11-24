@@ -197,7 +197,7 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
 
         result.robots = (await page.locator('head meta[name="robots"]').getAttribute('content').catch(() => '')) || '';
         record(Boolean(result.robots), 'Robots meta tag is missing.', { route, viewport: viewport.width });
-        if (EXTERNAL_STAGING) record(/noindex/i.test(result.robots), 'Staging page must be noindex.', { route, viewport: viewport.width, robots: result.robots });
+        record(/noindex/i.test(result.robots), 'Staging and preview pages must be noindex.', { route, viewport: viewport.width, robots: result.robots });
 
         result.h1Count = await page.locator('main h1').count();
         record(result.h1Count === 1, 'Page must have exactly one main H1.', { route, viewport: viewport.width, count: result.h1Count });

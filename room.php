@@ -190,7 +190,7 @@ require __DIR__ . '/include/page-head.php';
         <p class="eyebrow">Explore the rooms</p>
         <h2 id="room-directory-title">Choose the room that feels right.</h2>
       </div>
-      <p>Compare the room descriptions and listed features below. Room facilities vary; use the availability link to check the current rate for your stay.</p>
+      <p>The booking engine shows rates and availability for the Heritage Room category. Use the photos and features below to compare individual rooms, then use “Ask about this room” to enquire about a specific one.</p>
     </div>
 
     <section class="site-shell room-finder" data-room-finder hidden aria-labelledby="room-finder-title">
@@ -353,7 +353,7 @@ require __DIR__ . '/include/page-head.php';
             ?>
             <a
               class="button button-primary room-book"
-              aria-label="Check availability for <?= htmlspecialchars($room['name'], ENT_QUOTES, 'UTF-8') ?>"
+              aria-label="Check availability in the Heritage Room category"
               href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>"
               target="_blank"
               rel="noopener"
@@ -428,9 +428,8 @@ require __DIR__ . '/include/page-head.php';
         <div class="rooms-info-copy">
 
           <p>
-            Garh Jaisal Haveli is inside Jaisalmer Fort. Vehicles cannot
-            enter the fort lanes, so guests should expect a short walk
-            from Fort Parking.
+            Garh Jaisal Haveli is inside Jaisalmer Fort. Arrive by car at Fort Parking,
+            then walk the final stretch to the haveli.
           </p>
 
           <p>

@@ -15,6 +15,12 @@ $defaults = [
     'hotel_email' => 'info@hotelgarhjaisal.com',
     // Existing secondary public contact address, retained from Contact and Directions.
     'hotel_email_alt' => 'mukeshkila@yahoo.com',
+    'hotel_map_url' => 'https://maps.app.goo.gl/nAbRiZhv78FSbju48',
+    'hotel_social_profiles' => [
+        'Instagram' => 'https://www.instagram.com/garhjaisal/',
+        'Facebook' => 'https://www.facebook.com/garhjaisal',
+        'YouTube' => 'https://www.youtube.com/@garhjaisal',
+    ],
     'recaptcha_site_key' => '6LcPO8wqAAAAAKCGR-vt2pvgN8d0lj3flL7_DDtY',
     'recaptcha_secret' => '',
     // Owner-approved: keep both GA4 IDs; shared page head loads gtag.js once and configures each ID once.

@@ -141,10 +141,10 @@
     "A Jaisalmer Fort guide from Garh Jaisal Haveli covering arrival, walks, guided tours, rooms, rooftop dining and desert plans.",
     "https://www.hotelgarhjaisal.com/jaisalmer-fort-guide.php",
     "Jaisalmer Fort viewed from a rooftop in the fort",
-    "Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli",
-    "Explore desert safaris and guided Jaisalmer tours from Garh Jaisal Haveli, including camel safaris, overnight stays and half-day or full-day city tours.",
+    "Jaisalmer Tours & Desert Safaris | Garh Jaisal Haveli",
+    "Compare Jaisalmer city tours, sunset camel safaris and overnight desert stays. Ask Garh Jaisal Haveli about a trip to Tanot Mata Temple.",
     "https://www.hotelgarhjaisal.com/pack.php",
-    "Choose from desert safari experiences and guided Jaisalmer tours arranged from Garh Jaisal Haveli inside Jaisalmer Fort.",
+    "Plan a guided city tour or desert safari from Jaisalmer, or enquire about a trip to Tanot Mata Temple.",
     "Garh Jaisal's Kitchen | Restaurant in Jaisalmer",
     "Rooftop dining at Garh Jaisal's Kitchen inside Jaisalmer Fort. Ask the hotel about the current menu and request a table; confirm hours, dishes and prices before visiting.",
     "https://www.hotelgarhjaisal.com/restaurant.php",
@@ -184,7 +184,7 @@
     "Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.",
     "Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and help planning local experiences.",
     "Explore guided Jaisalmer city tours or enquire about car arrangements. Share your route and dates so the hotel can confirm options.",
-    "Walk Jaisalmer Fort on a planned heritage route. Confirm guide availability, access, price and any entry fees with the hotel for your date.",
+    "Enquire about a guided Jaisalmer Fort walk with the Jain temples, Palace Museum and heritage lanes. Confirm the route and access for your date.",
     "Contact Garh Jaisal Haveli about rooms, arrival, rooftop dining and desert or city experiences. Call, email or send an enquiry for your stay.",
     "Compare sunset camel safaris, cultural evenings and overnight stays from Jaisalmer Fort. Confirm timing, inclusions, price and availability.",
     "Jaisalmer Desert Safari | Camel Safaris & Overnight Stays",
@@ -206,7 +206,14 @@
     "Enquire about Delhi Airport pickup and return, a Rajasthan tour with hotels and a car, or vehicle-only travel. Share your route and dates for a quote.",
     "A jeep crossing open sand on a desert route near Jaisalmer",
     "768",
-    "1366"
+    "1366",
+    "Heritage Hotel Inside Jaisalmer Fort | Garh Jaisal Haveli",
+    "Book a Heritage Room at Garh Jaisal Haveli inside Jaisalmer Fort. Explore the rooftop restaurant, guided city walks and Thar Desert safaris.",
+    "Reach Garh Jaisal Haveli inside Jaisalmer Fort from Fort Parking. See the 300-metre walk, the hotel map pin and how to ask about transfers.",
+    "Restaurant Menu | Garh Jaisal's Kitchen, Jaisalmer",
+    "Browse breakfast, Rajasthani dishes, drinks and prices at Garh Jaisal's Kitchen inside Jaisalmer Fort. Ask about dietary options or request a table.",
+    "Candlelight Rooftop Dining | Jaisalmer Fort",
+    "Request a candlelight dinner or rooftop table at Garh Jaisal's Kitchen inside Jaisalmer Fort. Ask about availability for your preferred date."
   ],
   "sitemapRoutes": [
     0,
@@ -239,14 +246,14 @@
   "pageHeads": [
     [
       0,
-      26,
-      180,
+      206,
+      207,
       28,
-      29,
+      175,
       [
         [
           30,
-          180
+          207
         ],
         [
           32,
@@ -254,7 +261,7 @@
         ],
         [
           34,
-          26
+          206
         ],
         [
           35,
@@ -270,7 +277,7 @@
         ],
         [
           40,
-          180
+          207
         ],
         [
           41,
@@ -278,7 +285,7 @@
         ],
         [
           42,
-          26
+          206
         ]
       ],
       [
@@ -299,7 +306,7 @@
       191,
       192,
       51,
-      29,
+      175,
       [
         [
           30,
@@ -377,7 +384,7 @@
       58,
       59,
       60,
-      29,
+      175,
       [
         [
           30,
@@ -434,7 +441,7 @@
       62,
       63,
       64,
-      29,
+      175,
       [
         [
           30,
@@ -491,7 +498,7 @@
       65,
       66,
       67,
-      29,
+      175,
       [
         [
           30,
@@ -555,7 +562,7 @@
       201,
       202,
       74,
-      29,
+      175,
       [
         [
           30,
@@ -639,7 +646,7 @@
       76,
       182,
       78,
-      29,
+      175,
       [
         [
           30,
@@ -704,7 +711,7 @@
       81,
       183,
       83,
-      29,
+      175,
       [
         [
           30,
@@ -768,7 +775,7 @@
       85,
       184,
       87,
-      29,
+      175,
       [
         [
           30,
@@ -808,9 +815,7 @@
         ]
       ],
       [
-        89,
-        43,
-        44
+        89
       ],
       0,
       1,
@@ -824,7 +829,7 @@
       90,
       91,
       92,
-      29,
+      175,
       [
         [
           30,
@@ -888,7 +893,7 @@
       96,
       97,
       98,
-      29,
+      175,
       [
         [
           30,
@@ -952,7 +957,7 @@
       186,
       185,
       106,
-      29,
+      175,
       [
         [
           30,
@@ -1017,13 +1022,13 @@
     [
       12,
       107,
-      108,
+      208,
       109,
-      29,
+      175,
       [
         [
           30,
-          108
+          208
         ],
         [
           32,
@@ -1047,7 +1052,7 @@
         ],
         [
           40,
-          112
+          208
         ],
         [
           41,
@@ -1058,10 +1063,7 @@
           111
         ]
       ],
-      [
-        113,
-        44
-      ],
+      [],
       0,
       1,
       [
@@ -1074,7 +1076,7 @@
       114,
       115,
       116,
-      29,
+      175,
       [
         [
           30,
@@ -1138,7 +1140,7 @@
       119,
       120,
       121,
-      29,
+      175,
       [
         [
           30,
@@ -1195,7 +1197,7 @@
       125,
       187,
       127,
-      29,
+      175,
       [
         [
           30,
@@ -1260,7 +1262,7 @@
       128,
       129,
       130,
-      29,
+      175,
       [
         [
           30,
@@ -1324,7 +1326,7 @@
       132,
       133,
       134,
-      29,
+      175,
       [
         [
           30,
@@ -1388,7 +1390,7 @@
       136,
       137,
       138,
-      29,
+      175,
       [
         [
           30,
@@ -1452,7 +1454,7 @@
       140,
       141,
       142,
-      29,
+      175,
       [
         [
           30,
@@ -1513,14 +1515,14 @@
     ],
     [
       20,
-      144,
-      188,
+      209,
+      210,
       146,
-      29,
+      175,
       [
         [
           30,
-          188
+          210
         ],
         [
           32,
@@ -1528,7 +1530,7 @@
         ],
         [
           34,
-          144
+          209
         ],
         [
           35,
@@ -1544,7 +1546,7 @@
         ],
         [
           40,
-          188
+          210
         ],
         [
           41,
@@ -1552,7 +1554,7 @@
         ],
         [
           42,
-          144
+          209
         ]
       ],
       [
@@ -1585,14 +1587,14 @@
     ],
     [
       21,
-      150,
-      189,
+      211,
+      212,
       152,
-      29,
+      175,
       [
         [
           30,
-          189
+          212
         ],
         [
           32,
@@ -1600,7 +1602,7 @@
         ],
         [
           34,
-          150
+          211
         ],
         [
           35,
@@ -1616,7 +1618,7 @@
         ],
         [
           40,
-          189
+          212
         ],
         [
           41,
@@ -1624,7 +1626,7 @@
         ],
         [
           42,
-          150
+          211
         ]
       ],
       [
@@ -1654,7 +1656,7 @@
       154,
       190,
       156,
-      29,
+      175,
       [
         [
           30,
@@ -1722,7 +1724,7 @@
       159,
       160,
       161,
-      29,
+      175,
       [
         [
           30,
@@ -1786,7 +1788,7 @@
       164,
       165,
       166,
-      29,
+      175,
       [
         [
           30,
@@ -1850,7 +1852,7 @@
       168,
       169,
       170,
-      29,
+      175,
       [
         [
           30,

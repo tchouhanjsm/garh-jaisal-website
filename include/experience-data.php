@@ -83,7 +83,7 @@ $experiences = [
         'timeline_note' => 'The exact departure and sunset timing changes with the season. The hotel confirms the final schedule for your date.',
         'timeline' => [
             ['step' => '01', 'title' => 'Depart Jaisalmer', 'text' => 'Leave town by jeep and travel towards the desert route.'],
-            ['step' => '02', 'title' => 'Khuldhara and local route', 'text' => 'Visit the abandoned village of Khuldhara before continuing deeper into the desert.'],
+            ['step' => '02', 'title' => 'Kuldhara and local route', 'text' => 'Visit the abandoned village of Kuldhara before continuing deeper into the desert.'],
             ['step' => '03', 'title' => 'Natural pond and nomadic village', 'text' => 'Continue through the route with stops described in the current package itinerary.'],
             ['step' => '04', 'title' => 'Camel ride towards the dunes', 'text' => 'Meet the camel riders and continue into the dunes.'],
             ['step' => '05', 'title' => 'Sunset in the dunes', 'text' => 'Watch the light change across the dunes with tea, coffee and snacks.'],
@@ -91,7 +91,7 @@ $experiences = [
         ],
         'included' => [
             'Jeep transport',
-            'Visit to the abandoned village of Khuldhara',
+            'Visit to the abandoned village of Kuldhara',
             'Drive to a natural pond',
             'Visit to a nomadic village',
             'Camel riding',
@@ -163,7 +163,7 @@ $experiences = [
         'timeline_note' => 'The exact departure and return times vary by season and operating conditions. Confirm the final schedule with the hotel.',
         'timeline' => [
             ['step' => '01', 'title' => 'Depart Jaisalmer', 'text' => 'Travel by jeep from Jaisalmer towards the desert.'],
-            ['step' => '02', 'title' => 'Khuldhara and local stops', 'text' => 'Visit Khuldhara, continue to the natural pond and a nomadic village as part of the route.'],
+            ['step' => '02', 'title' => 'Kuldhara and local stops', 'text' => 'Visit Kuldhara, continue to the natural pond and a nomadic village as part of the route.'],
             ['step' => '03', 'title' => 'Camel ride', 'text' => 'Ride by camel towards the dunes.'],
             ['step' => '04', 'title' => 'Sunset', 'text' => 'Watch the sunset from the dunes with tea, coffee and snacks.'],
             ['step' => '05', 'title' => 'Desert dinner', 'text' => 'Have a pure-vegetarian dinner prepared in the desert.'],
@@ -172,7 +172,7 @@ $experiences = [
         ],
         'included' => [
             'Jeep transport',
-            'Visit to the abandoned village of Khuldhara',
+            'Visit to the abandoned village of Kuldhara',
             'Drive to a natural pond',
             'Visit to a nomadic village',
             'Camel riding',
@@ -256,7 +256,7 @@ $experiences = [
         'timeline_note' => 'The final departure, sunset and programme times depend on the season and camp operations.',
         'timeline' => [
             ['step' => '01', 'title' => 'Depart Jaisalmer', 'text' => 'Travel by jeep into the desert.'],
-            ['step' => '02', 'title' => 'Route and local stops', 'text' => 'Visit Khuldhara, continue through the natural pond and nomadic village route.'],
+            ['step' => '02', 'title' => 'Route and local stops', 'text' => 'Visit Kuldhara, continue through the natural pond and nomadic village route.'],
             ['step' => '03', 'title' => 'Camel ride', 'text' => 'Continue into the dunes by camel.'],
             ['step' => '04', 'title' => 'Welcome at the camp', 'text' => 'Arrive at camp and settle into the evening programme.'],
             ['step' => '05', 'title' => 'High tea and cultural programme', 'text' => 'Enjoy high tea with snacks followed by folk music and the cultural programme.'],
@@ -265,7 +265,7 @@ $experiences = [
         ],
         'included' => [
             'Jeep transport',
-            'Visit to the abandoned village of Khuldhara',
+            'Visit to the abandoned village of Kuldhara',
             'Drive to a natural pond',
             'Visit to a nomadic village',
             'Camel riding',
@@ -325,7 +325,7 @@ $experiences = [
         'timeline_note' => 'The timing of sunset and the cultural programme varies with the season and camp schedule.',
         'timeline' => [
             ['step' => '01', 'title' => 'Depart Jaisalmer', 'text' => 'Travel by jeep into the desert.'],
-            ['step' => '02', 'title' => 'Route and local stops', 'text' => 'Visit Khuldhara, continue to the natural pond and nomadic village route.'],
+            ['step' => '02', 'title' => 'Route and local stops', 'text' => 'Visit Kuldhara, continue to the natural pond and nomadic village route.'],
             ['step' => '03', 'title' => 'Camel ride', 'text' => 'Ride through the dunes by camel.'],
             ['step' => '04', 'title' => 'Camp arrival', 'text' => 'Arrive at camp and settle in for the evening.'],
             ['step' => '05', 'title' => 'Tea and cultural programme', 'text' => 'Enjoy tea and snacks followed by folk music and the cultural programme.'],
@@ -334,7 +334,7 @@ $experiences = [
         ],
         'included' => [
             'Jeep transport',
-            'Visit to the abandoned village of Khuldhara',
+            'Visit to the abandoned village of Kuldhara',
             'Drive to a natural pond',
             'Visit to a nomadic village',
             'Camel riding',
@@ -368,7 +368,7 @@ $experiences = [
         'order' => 50,
         'status' => 'hidden',
         'title' => 'Explore the Desert near Jaisalmer | Garh Jaisal Haveli',
-        'description' => 'Explore the desert near Jaisalmer with jeep transport, Khuldhara, local route stops, a camel ride, sunset in the dunes and return to town.',
+        'description' => 'Explore the desert near Jaisalmer with jeep transport, Kuldhara, local route stops, a camel ride, sunset in the dunes and return to town.',
         'h1' => 'Explore the Desert near Jaisalmer',
         'eyebrow' => 'Day desert experience',
         'hero_image' => 'img/desert12.jpg',
@@ -389,7 +389,7 @@ $experiences = [
         'timeline_note' => 'The exact route and departure time can change with the season and operating conditions.',
         'timeline' => [
             ['step' => '01', 'title' => 'Depart Jaisalmer', 'text' => 'Travel by jeep towards the desert.'],
-            ['step' => '02', 'title' => 'Khuldhara', 'text' => 'Visit the abandoned village of Khuldhara.'],
+            ['step' => '02', 'title' => 'Kuldhara', 'text' => 'Visit the abandoned village of Kuldhara.'],
             ['step' => '03', 'title' => 'Natural pond and village route', 'text' => 'Continue through the natural pond and nomadic village stops.'],
             ['step' => '04', 'title' => 'Camel ride', 'text' => 'Continue into the dunes by camel.'],
             ['step' => '05', 'title' => 'Sunset and refreshments', 'text' => 'Spend time in the dunes with tea, coffee and snacks as the sun sets.'],
@@ -397,7 +397,7 @@ $experiences = [
         ],
         'included' => [
             'Jeep transport',
-            'Visit to the abandoned village of Khuldhara',
+            'Visit to the abandoned village of Kuldhara',
             'Drive to a natural pond',
             'Visit to a nomadic village',
             'Camel riding',

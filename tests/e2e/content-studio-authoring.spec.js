@@ -374,7 +374,7 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     expect(fs.readFileSync(sitemapPath, 'utf8')).toContain('/' + tourSlug + '.php</loc>');
     const localTourResponse = await fetch(phpPreview + '/' + tourSlug + '.php');
     expect(localTourResponse.status).toBe(200);
-    expect(await localTourResponse.text()).not.toMatch(/noindex,follow/);
+    expect(await localTourResponse.text()).toContain('<meta name="robots" content="noindex,follow">');
     const unpublishTourResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/tours/' + tourSlug + '/status' && response.request().method() === 'PATCH');
     await tourCard.getByRole('button', { name: 'Set to Draft' }).click();
     expect((await unpublishTourResponsePromise).status()).toBe(200);
@@ -455,7 +455,7 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     expect(fs.readFileSync(sitemapPath, 'utf8')).toContain('/' + pageSlug + '.php</loc>');
     const livePageHtml = await (await fetch(phpPreview + '/' + pageSlug + '.php')).text();
     expect(livePageHtml).toContain('Browser UI test landing page');
-    expect(livePageHtml).not.toMatch(/noindex,follow/);
+    expect(livePageHtml).toContain('<meta name="robots" content="noindex,follow">');
 
     await pageCard.getByRole('button', { name: 'Edit' }).click();
     await expect(page.locator('#pane-pages')).toBeVisible();

@@ -41,7 +41,7 @@ include __DIR__ . '/include/header-v2.php';
     <?php else: ?>
       <p>Thank you for visiting Hotel Garh Jaisal Haveli in Jaisalmer Fort.</p>
     <?php endif; ?>
-    <p><a class="button button-primary" href="index.php">Back to home</a></p>
+    <p><a class="button button-primary" href="/">Back to home</a></p>
     <p><a class="button button-primary" href="contact.php">Contact the hotel</a></p>
   </div>
 </main>

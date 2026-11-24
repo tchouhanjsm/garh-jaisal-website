@@ -3,7 +3,7 @@
 $root = dirname(__DIR__, 2);
 $errors = [];
 $requiredMarkers = [
-    'custom-itinerary.php' => ['data-custom-itinerary-builder', 'id="custom-itinerary-form"', 'id="custom-itinerary-draft"', 'custom-itinerary.js', 'gj_schema_breadcrumb_list', 'gj_schema_faq', 'contact.php?topic=custom-itinerary'],
+    'custom-itinerary.php' => ['data-custom-itinerary-builder', 'id="custom-itinerary-form"', 'id="custom-itinerary-draft"', 'custom-itinerary.js', 'gj_schema_breadcrumb_list', 'contact.php?topic=custom-itinerary'],
     'car-tours.php' => ['href="custom-itinerary.php"', 'not a complete list', 'tour-ideas-custom-builder'],
     'include/contact-topics.php' => ["'custom-itinerary' =>", 'custom Jaisalmer itinerary'],
     'scripts/generate-sitemap.php' => ["['path' => '/custom-itinerary.php', 'priority' => '0.7']"],
@@ -42,6 +42,9 @@ if (!$hasValidCustomItineraryLastmod) {
 
 $page = file_get_contents($root . '/custom-itinerary.php');
 if (is_string($page)) {
+    if (strpos($page, 'gj_schema_faq(') !== false) {
+        $errors[] = 'Custom itinerary must not declare FAQs absent from the page.';
+    }
     foreach (['$_POST', 'method="post"', 'file_put_contents(', 'INSERT INTO'] as $forbidden) {
         if (stripos($page, $forbidden) !== false) $errors[] = 'Custom itinerary page must not submit or persist guest data: found ' . $forbidden;
     }

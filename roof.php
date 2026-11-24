@@ -28,20 +28,20 @@ $faqItems = [
         ? "See the Menu tab and confirm current dishes and prices with the hotel."
         : "Use the Menu tab to ask the hotel about current dishes, prices and dietary options."],
     ['question' => "How do I check table availability?", 'answer' => "Use the Book a Table tab to send a request. The hotel must confirm availability. For same-day enquiries, call or WhatsApp the hotel."],
-    ['question' => "Can the kitchen help with dietary requests?", 'answer' => "Ask the hotel to confirm current vegetarian, vegan, Jain and allergy options before you visit."],
+    ['question' => "Can I request a candlelight dinner inside Jaisalmer Fort?", 'answer' => "Yes. Use the Book a Table tab to ask Garh Jaisal’s Kitchen about a rooftop candlelight dinner. The hotel will confirm availability and dinner details for your date."],
 ];
 $page = [
-    'title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
-    'description' => "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
+    'title' => "Candlelight Rooftop Dining | Jaisalmer Fort",
+    'description' => "Request a candlelight dinner or rooftop table at Garh Jaisal's Kitchen inside Jaisalmer Fort. Ask about availability for your preferred date.",
     'path' => '/roof.php',
     'preload' => is_array($roofHeroPreload) ? [$roofHeroPreload] : [],
     'og_type' => 'website',
-    'og_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
-    'og_description' => "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
+    'og_title' => "Candlelight Rooftop Dining | Jaisalmer Fort",
+    'og_description' => "Request a candlelight dinner or rooftop table at Garh Jaisal's Kitchen inside Jaisalmer Fort. Ask about availability for your preferred date.",
     'og_image' => '/img/roofslide.webp',
     'og_image_alt' => 'Candlelit rooftop terrace and Jaisalmer city view at dusk',
-    'twitter_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
-    'twitter_description' => "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
+    'twitter_title' => "Candlelight Rooftop Dining | Jaisalmer Fort",
+    'twitter_description' => "Request a candlelight dinner or rooftop table at Garh Jaisal's Kitchen inside Jaisalmer Fort. Ask about availability for your preferred date.",
     'twitter_image' => '/img/roofslide.webp',
     'css' => ['css/restaurant.css', 'css/roof.css', 'css/roof-dining.css', 'css/thar-sunset-story.css'],
     'schema' => [

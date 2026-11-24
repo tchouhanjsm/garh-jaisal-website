@@ -23,9 +23,9 @@ $footerNav = $footerNavData['footer'];
       </div>
 <?php endif; ?>
       <div class="social-links" aria-label="Social media">
-        <a href="https://www.instagram.com/garhjaisal/" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://www.facebook.com/garhjaisal" target="_blank" rel="noopener">Facebook</a>
-        <a href="https://www.youtube.com/@garhjaisal" target="_blank" rel="noopener">YouTube</a>
+<?php foreach ($siteConfig['hotel_social_profiles'] as $profileName => $profileUrl): ?>
+        <a href="<?= htmlspecialchars($profileUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener"><?= htmlspecialchars($profileName, ENT_QUOTES, 'UTF-8') ?></a>
+<?php endforeach; ?>
         <a href="<?= htmlspecialchars($footerWhatsapp, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-footer" data-cta-location="footer-contact">WhatsApp</a>
       </div>
     </div>

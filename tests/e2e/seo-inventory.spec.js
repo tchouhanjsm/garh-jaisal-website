@@ -122,8 +122,8 @@ test('write rendered SEO inventory for sitemap routes', async ({ browser }, test
     if (route.jsonLd.some(block => !block.validJson)) {
       findings.push({ type: 'invalid-json-ld', routes: [route.route], severity: 'review' });
     }
-    if (route.robotsMeta && /(?:^|,)\s*noindex\b/i.test(route.robotsMeta)) {
-      findings.push({ type: 'noindex-directive', routes: [route.route], severity: 'review' });
+    if (route.robotsMeta !== 'noindex,follow') {
+      findings.push({ type: 'unexpected-preview-robots', routes: [route.route], severity: 'review' });
     }
   }
 

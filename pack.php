@@ -68,16 +68,19 @@ $faqItems = [
     ['question' => "How do I confirm current prices and availability?", 'answer' => "Contact the hotel for the current price, availability, route, pickup arrangement, guide availability and exact inclusions for your travel date."],
     ['question' => "Can I combine a city tour with a desert safari?", 'answer' => "The page lists city and desert options separately. Contact the hotel to check the timing and arrangements for your dates before planning both."],
 ];
+$pageTitle = 'Jaisalmer Tours & Desert Safaris | Garh Jaisal Haveli';
+$pageDescription = 'Compare Jaisalmer city tours, sunset camel safaris and overnight desert stays. Ask Garh Jaisal Haveli about a trip to Tanot Mata Temple.';
+$socialDescription = 'Plan a guided city tour or desert safari from Jaisalmer, or enquire about a trip to Tanot Mata Temple.';
 $page = [
-    'title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
-    'description' => 'Explore desert safaris and guided Jaisalmer tours from Garh Jaisal Haveli, including camel safaris, overnight stays and half-day or full-day city tours.',
+    'title' => $pageTitle,
+    'description' => $pageDescription,
     'path' => '/pack.php',
-    'og_title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
-    'og_description' => 'Choose from desert safari experiences and guided Jaisalmer tours arranged from Garh Jaisal Haveli inside Jaisalmer Fort.',
+    'og_title' => $pageTitle,
+    'og_description' => $socialDescription,
     'og_image' => '/img/desert11.jpg',
     'og_image_alt' => 'A camel rider travelling across sand dunes in the Thar Desert',
-    'twitter_title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
-    'twitter_description' => 'Choose from desert safari experiences and guided Jaisalmer tours arranged from Garh Jaisal Haveli inside Jaisalmer Fort.',
+    'twitter_title' => $pageTitle,
+    'twitter_description' => $socialDescription,
     'twitter_image' => '/img/desert11.jpg',
     'css' => ['css/packages.css', 'css/experiences.css', 'css/thar-sunset-story.css'],
     'schema' => [
@@ -85,8 +88,8 @@ $page = [
             '@type' => 'WebPage',
             '@id' => $canonical . '#webpage',
             'url' => $canonical,
-            'name' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
-            'description' => 'Explore desert safari and guided Jaisalmer tour options arranged from Garh Jaisal Haveli.',
+            'name' => $pageTitle,
+            'description' => $pageDescription,
             'isPartOf' => ['@id' => $siteUrl . '/#website'],
             'about' => ['@id' => $siteUrl . '/#hotel'],
             'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
@@ -300,10 +303,10 @@ require __DIR__ . '/include/page-head.php';
       </div>
 
       <div class="planner-grid">
-        <article><strong>4 hours</strong><p>Choose the half-day guided Jaisalmer tour when your time is limited.</p></article>
+        <article><strong>4 hours</strong><p>Choose the <a href="half-day-jaisalmer-tour.php">half-day guided Jaisalmer tour</a> when your time is limited.</p></article>
         <article><strong>One evening</strong><p>Choose a sunset camel safari or cultural desert safari and return to Jaisalmer.</p></article>
         <article><strong>One night</strong><p>Choose sleeping under the stars or a Swiss tent depending on the overnight setup you prefer.</p></article>
-        <article><strong>Full day</strong><p>Choose the full-day guided city tour or a broader desert experience.</p></article>
+        <article><strong>Full day</strong><p>Choose the <a href="full-day-jaisalmer-tour.php">full-day guided city tour</a> or <a href="desert-safari.php">compare desert experiences</a>.</p></article>
       </div>
 
       <div class="package-note">

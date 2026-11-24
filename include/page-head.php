@@ -59,7 +59,11 @@ $isProductionOrigin = is_array($siteUrlParts)
     && !isset($siteUrlParts['user'])
     && !isset($siteUrlParts['pass'])
     && (($siteUrlParts['path'] ?? '') === '');
-$robots = $isProductionOrigin
+// A preview can inherit production canonical settings. Only the actual production
+// request may opt into indexing. Proxy-supplied host headers do not override this.
+$requestHost = strtolower((string) ($_SERVER['HTTP_HOST'] ?? ''));
+$isProductionRequest = in_array($requestHost, ['www.hotelgarhjaisal.com', 'www.hotelgarhjaisal.com:443'], true);
+$robots = $isProductionOrigin && $isProductionRequest
     ? ($page['robots'] ?? 'index,follow')
     : 'noindex,follow';
 $ogType = $page['og_type'] ?? 'website';

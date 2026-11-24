@@ -945,8 +945,8 @@ document.addEventListener('DOMContentLoaded', () => {
           link.href = sourceLink.href;
           link.target = sourceLink.target || '_blank';
           link.rel = sourceLink.rel || 'noopener';
-          link.textContent = 'Check availability';
-          link.setAttribute('aria-label', 'Check availability for ' + roomName(card));
+          link.textContent = sourceLink.textContent.trim();
+          link.setAttribute('aria-label', sourceLink.getAttribute('aria-label') || link.textContent);
           cell.appendChild(link);
         }
         const removeButton = document.createElement('button');

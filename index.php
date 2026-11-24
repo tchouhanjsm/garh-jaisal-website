@@ -41,8 +41,8 @@ $buildHeroPreload = static function ($source, $media) {
     return $descriptor;
 };
 $page = [
-    'title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
-    'description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
+    'title' => 'Heritage Hotel Inside Jaisalmer Fort | Garh Jaisal Haveli',
+    'description' => 'Book a Heritage Room at Garh Jaisal Haveli inside Jaisalmer Fort. Explore the rooftop restaurant, guided city walks and Thar Desert safaris.',
     'path' => '/',
     'preload' => array_values(array_filter($homeHeroMobile['src'] === $homeHeroDesktop['src']
         ? [$buildHeroPreload($homeHeroMobile['src'], null)]
@@ -50,12 +50,12 @@ $page = [
             $buildHeroPreload($homeHeroMobile['src'], '(max-width: 767px)'),
             $buildHeroPreload($homeHeroDesktop['src'], '(min-width: 768px)'),
         ])),
-    'og_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
-    'og_description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
+    'og_title' => 'Heritage Hotel Inside Jaisalmer Fort | Garh Jaisal Haveli',
+    'og_description' => 'Book a Heritage Room at Garh Jaisal Haveli inside Jaisalmer Fort. Explore the rooftop restaurant, guided city walks and Thar Desert safaris.',
     'og_image' => '/' . ltrim($homeHeroMobile['src'], '/'),
     'og_image_alt' => $homeHeroMobile['alt'],
-    'twitter_title' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
-    'twitter_description' => 'Stay inside Jaisalmer Fort at Garh Jaisal Haveli. Explore heritage rooms, rooftop dining, guided city walks and Thar Desert experiences.',
+    'twitter_title' => 'Heritage Hotel Inside Jaisalmer Fort | Garh Jaisal Haveli',
+    'twitter_description' => 'Book a Heritage Room at Garh Jaisal Haveli inside Jaisalmer Fort. Explore the rooftop restaurant, guided city walks and Thar Desert safaris.',
     'twitter_image' => '/' . ltrim($homeHeroMobile['src'], '/'),
     'css' => ['css/thar-sunset-story.css', 'css/home-premium-story.css'],
     'schema' => [
@@ -63,9 +63,9 @@ $page = [
             '@type' => 'WebPage',
             '@id' => $schemaPageUrl . '#webpage',
             'url' => $schemaPageUrl,
-            'name' => 'Garh Jaisal Haveli | Wake Up Inside Jaisalmer Fort',
+            'name' => 'Heritage Hotel Inside Jaisalmer Fort | Garh Jaisal Haveli',
             'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
-            'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
+            'mainEntity' => ['@id' => $schemaSiteUrl . '/#hotel'],
         ],
     ],
 ];
@@ -97,7 +97,7 @@ require __DIR__ . '/include/page-head.php';
     <h1>Wake up inside Jaisalmer Fort.</h1>
 
     <p>
-      A heritage haveli with individually styled rooms, rooftop dining above the sandstone city, and experiences that take you from the Fort into the Thar Desert.
+      Garh Jaisal Haveli is a heritage hotel inside Jaisalmer Fort, with individually styled rooms, a rooftop restaurant and local city and desert tours.
     </p>
 
     <div class="actions">
@@ -579,7 +579,7 @@ require __DIR__ . '/include/page-head.php';
     <div class="section-head"><div><p class="eyebrow">Before you decide</p><h2 id="conversion-faq-title">A few useful things to know.</h2></div><p>We would rather help you arrive prepared than leave you guessing about practical details.</p></div>
     <div class="conversion-faq__list">
       <details><summary>Can a car drive up to the haveli?</summary><p>No. Vehicles cannot enter Jaisalmer Fort, so the final stretch is on foot. Read the <a href="direction.php">arrival guide</a> and contact the hotel if you need to discuss assistance.</p></details>
-      <details><summary>How do I choose a room and rate?</summary><p>Room features vary. Review the details and check current rates and availability for your exact dates.</p></details>
+      <details><summary>How do I book a Heritage Room?</summary><p>Use Check rooms &amp; rates to see Heritage Room availability and prices for your dates. To enquire about a specific room, <a href="room.php">compare the rooms</a> and contact the hotel.</p></details>
       <details><summary>Can I add a guided tour or desert safari?</summary><p>Ask about options for your date. Confirm the route, timing, transport, guide availability, price and inclusions before deciding.</p></details>
       <details><summary>Can I request a rooftop dinner?</summary><p>Send a dining enquiry with your preferred date, time and group size. It is not confirmed until the team confirms current hours and availability.</p></details>
     </div>

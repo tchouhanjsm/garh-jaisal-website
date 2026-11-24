@@ -9,7 +9,7 @@ $hotelPhoneAltDisplay = $siteConfig['hotel_phone_alt_display'];
 $hotelEmail = (string) ($siteConfig['hotel_email'] ?? '');
 $hotelEmailAlt = (string) ($siteConfig['hotel_email_alt'] ?? '');
 $whatsappUrl = $siteConfig['whatsapp_url'];
-$hotelMapsUrl = 'https://maps.app.goo.gl/nAbRiZhv78FSbju48';
+$hotelMapsUrl = $siteConfig['hotel_map_url'];
 $hotelMapsEmbedUrl = 'https://www.google.com/maps?q=Garh+Jaisal+Haveli%2C+Fort+Kotari+Para%2C+Inside+Jaisalmer+Fort%2C+Jaisalmer%2C+Rajasthan+345001&output=embed';
 $arrivalAddress = 'Fort Kotari Para, Inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001';
 $arrivalDriverNote = implode("\n", [
@@ -33,14 +33,14 @@ $breadcrumbs = [
 $breadcrumbSchema = gj_schema_breadcrumb_list($schemaSiteUrl, '/direction.php', $breadcrumbs);
 $page = [
     'title' => 'Directions to Garh Jaisal Haveli | Jaisalmer Fort',
-    'description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival guidance and hotel contact details.',
+    'description' => 'Reach Garh Jaisal Haveli inside Jaisalmer Fort from Fort Parking. See the 300-metre walk, the hotel map pin and how to ask about transfers.',
     'path' => '/direction.php',
     'og_title' => 'Getting to Garh Jaisal Haveli inside Jaisalmer Fort',
-    'og_description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival guidance and hotel contact details.',
+    'og_description' => 'Reach Garh Jaisal Haveli inside Jaisalmer Fort from Fort Parking. See the 300-metre walk, the hotel map pin and how to ask about transfers.',
     'og_image' => '/img/jcity.jpg',
     'og_image_alt' => 'View over Jaisalmer’s historic city from the fort edge',
     'twitter_title' => 'Getting to Garh Jaisal Haveli inside Jaisalmer Fort',
-    'twitter_description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. Check the walking route from Fort Parking, travel notes, and hotel contact details.',
+    'twitter_description' => 'Reach Garh Jaisal Haveli inside Jaisalmer Fort from Fort Parking. See the 300-metre walk, the hotel map pin and how to ask about transfers.',
     'twitter_image' => '/img/jcity.jpg',
     'preload' => [
         [
@@ -57,26 +57,12 @@ $page = [
             '@id' => $schemaPageUrl . '#webpage',
             'url' => $schemaPageUrl,
             'name' => 'Directions to Garh Jaisal Haveli | Jaisalmer Fort',
-            'description' => 'Find Garh Jaisal Haveli inside Jaisalmer Fort. See the walk from Fort Parking, arrival guidance and hotel contact details.',
+            'description' => 'Reach Garh Jaisal Haveli inside Jaisalmer Fort from Fort Parking. See the 300-metre walk, the hotel map pin and how to ask about transfers.',
             'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
-            'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
+            'mainEntity' => ['@id' => $schemaSiteUrl . '/#hotel'],
             'breadcrumb' => ['@id' => $schemaPageUrl . '#breadcrumb'],
         ],
         $breadcrumbSchema,
-        [
-            '@type' => 'Place',
-            'name' => 'Garh Jaisal Haveli',
-            'url' => $schemaPageUrl,
-            'telephone' => ['+91 77270 47567', '+91 2992 253836'],
-            'address' => [
-                '@type' => 'PostalAddress',
-                'streetAddress' => 'Fort Kotari Para, Inside Jaisalmer Fort',
-                'addressLocality' => 'Jaisalmer',
-                'addressRegion' => 'Rajasthan',
-                'postalCode' => '345001',
-                'addressCountry' => 'IN',
-            ],
-        ],
     ],
 ];
 require __DIR__ . '/include/page-head.php';

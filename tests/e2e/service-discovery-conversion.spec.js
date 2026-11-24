@@ -14,7 +14,7 @@ test('Fort walk describes its intended stops and sends price enquiries to WhatsA
   const response = await page.goto('/city-tour.php', { waitUntil: 'domcontentloaded' });
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
-  await expect(page.getByRole('heading', { level: 1, name: 'Discover the stories inside Jaisalmer Fort.' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Guided walk inside Jaisalmer Fort' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Jain temples inside Jaisalmer Fort' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Palace Museum' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Heritage street walk' })).toBeVisible();

@@ -7,7 +7,7 @@ test.describe('Sprint 3A launch hardening', () => {
     expect(response.status()).toBe(404);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
     await expect(page.getByRole('heading', { level: 1 })).toContainText('We couldn’t find that page');
-    await expect(page.getByRole('link', { name: 'Back to home' })).toHaveAttribute('href', 'index.php');
+    await expect(page.getByRole('link', { name: 'Back to home' })).toHaveAttribute('href', '/');
     await expect(page.getByRole('link', { name: 'Explore rooms' })).toHaveAttribute('href', 'room.php');
     await expect(page.getByRole('link', { name: 'Contact the hotel' })).toHaveAttribute('href', 'contact.php');
     await expect(page.locator('#main-content').getByRole('link', { name: 'WhatsApp' })).toHaveAttribute('href', /^https:\/\//);

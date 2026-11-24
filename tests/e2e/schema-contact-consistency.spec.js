@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 
 const schemaRoutes = ['/', '/contact.php', '/direction.php', '/roof.php', '/restaurant.php'];
 const SHARED_HOTEL_TELEPHONE = '+91-7727047567';
-const CONTACT_PHONES = ['+91 77270 47567', '+91 2992 253836'];
+const CONTACT_PHONES = ['+917727047567', '+912992253836'];
 const CONTACT_EMAILS = ['mukeshkila@yahoo.com', 'info@hotelgarhjaisal.com'];
 
 test('shared Hotel JSON-LD telephone remains configuration-backed with unchanged output', async ({ page }, testInfo) => {
@@ -37,18 +37,34 @@ test('shared Hotel JSON-LD telephone remains configuration-backed with unchanged
     expect(hotels[0].telephone, route + ': established schema phone format is preserved')
       .toBe(SHARED_HOTEL_TELEPHONE);
 
-    if (route === '/contact.php') {
-      const contactHotel = data.nodes.find(node => node['@type'] === 'Hotel'
-        && !node['@id'] && Array.isArray(node.telephone) && Array.isArray(node.email));
-      expect(contactHotel, 'ContactPage retains its detailed hotel contact entity').toBeTruthy();
-      expect(contactHotel.telephone).toEqual(CONTACT_PHONES);
-      expect(contactHotel.email).toEqual(CONTACT_EMAILS);
+    expect(hotels[0].email, route + ': same public hotel email').toBe('info@hotelgarhjaisal.com');
+    expect(hotels[0].hasMap, route + ': same verified hotel map pin').toBe('https://maps.app.goo.gl/nAbRiZhv78FSbju48');
+    for (const url of hotels[0].sameAs) {
+      await expect(page.locator('.site-footer a[href="' + url + '"]')).toHaveCount(1);
+    }
+    if (route === '/contact.php' || route === '/direction.php') {
+      const guide = data.nodes.find(node => node['@id'] === data.base.slice(0, -1) + route + '#webpage');
+      expect(guide.mainEntity).toEqual({ '@id': hotels[0]['@id'] });
+      expect(data.nodes.filter(node => node['@type'] === 'Hotel')).toHaveLength(1);
+      for (const phone of CONTACT_PHONES) {
+        expect(await page.locator('main a[href="tel:' + phone + '"]').count()).toBeGreaterThan(0);
+      }
+      for (const email of CONTACT_EMAILS) {
+        expect(await page.locator('main a[href="mailto:' + email + '"]').count()).toBeGreaterThan(0);
+      }
     }
     if (route === '/restaurant.php') {
       const restaurant = data.nodes.find(node => node['@type'] === 'Restaurant'
         && node['@id'] === data.base + 'restaurant.php#restaurant');
       expect(restaurant, 'Restaurant schema entity remains available').toBeTruthy();
       expect(restaurant.telephone).toBe('+917727047567');
+      expect(restaurant.address).toEqual(hotels[0].address);
+      expect(restaurant.parentOrganization).toEqual({ '@id': hotels[0]['@id'] });
+      if (await page.locator('[data-menu-booklet]').count()) {
+        expect(restaurant.hasMenu).toBe(data.base + 'restaurant.php#menu');
+        await expect(page.locator('#menu .restaurant-dish').first()).toBeAttached();
+      }
+      expect(restaurant.hasMap).toBe('https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8');
     }
   }
 });

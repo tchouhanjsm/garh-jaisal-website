@@ -5,7 +5,7 @@ $whatsappUrl = rtrim($siteConfig['whatsapp_url'], '/');
 $walkWhatsAppUrl = $whatsappUrl . '?text=' . rawurlencode(
     'Hello, I would like to enquire about the guided walk inside Jaisalmer Fort, including the Jain temples, Palace Museum and heritage street walk. '
     . 'Preferred date: [add date]. Preferred guide language: [add language]. '
-    . 'Please confirm the current price, guide availability, route, opening/access rules and any entry fees.'
+    . 'Please confirm the meeting point, expected duration, route, access rules, guide availability, current price and any entry fees.'
 );
 ?>
 <!doctype html>
@@ -19,16 +19,17 @@ $faqItems = [
     ['question' => "Which guide languages can I request, and how do I confirm the current price?", 'answer' => "Ask about English, Hindi, Bengali, Italian, French, Spanish or German. Message the hotel on WhatsApp with your date and preferred guide language to confirm availability, current price and any applicable entry fees."],
     ['question' => "Can I compare it with a longer guided tour?", 'answer' => "Yes. The Guided Jaisalmer Tours page links to half-day and full-day options, which can be discussed separately."],
 ];
+$pageDescription = 'Enquire about a guided Jaisalmer Fort walk with the Jain temples, Palace Museum and heritage lanes. Confirm the route and access for your date.';
 $page = [
     'title' => 'Jaisalmer Fort Guided Walk | Garh Jaisal Haveli',
-    'description' => 'Walk Jaisalmer Fort on a planned heritage route. Confirm guide availability, access, price and any entry fees with the hotel for your date.',
+    'description' => $pageDescription,
     'path' => '/city-tour.php',
     'og_title' => 'Jaisalmer Fort Guided Walk | Garh Jaisal Haveli',
-    'og_description' => 'Walk Jaisalmer Fort on a planned heritage route. Confirm guide availability, access, price and any entry fees with the hotel for your date.',
+    'og_description' => $pageDescription,
     'og_image' => '/img/1.webp',
     'og_image_alt' => 'Historic sandstone architecture inside Jaisalmer Fort',
     'twitter_title' => 'Jaisalmer Fort Guided Walk | Garh Jaisal Haveli',
-    'twitter_description' => 'Walk Jaisalmer Fort on a planned heritage route. Confirm guide availability, access, price and any entry fees with the hotel for your date.',
+    'twitter_description' => $pageDescription,
     'twitter_image' => '/img/1.webp',
     'css' => ['css/packages.css', 'css/tour.css'],
     'schema' => [
@@ -71,7 +72,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
     <div class="site-shell page-hero-inner">
       <p class="eyebrow">Guided Fort walk</p>
-      <h1>Discover the stories inside Jaisalmer Fort.</h1>
+      <h1>Guided walk inside Jaisalmer Fort</h1>
       <p>Explore the living Fort on foot, with a route that may include Jain temples, the Palace Museum and heritage streets subject to current access and opening rules. Confirm the guide, route and any entry fees before you set out.</p>
       <div class="actions">
         <a class="button button-primary" href="<?= htmlspecialchars($walkWhatsAppUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Ask about route, guide &amp; price on WhatsApp</a>
@@ -137,7 +138,7 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell tour-enquiry-panel-inner">
       <p class="eyebrow">Confirm before you go</p>
       <h2>Plan your Fort walk with the details confirmed.</h2>
-      <p>Send your date and preferred guide language. We will confirm the available route, guide availability, access rules, current price and any applicable entry fees before you decide.</p>
+      <p>Send your date and preferred guide language. Ask us to confirm the meeting point, duration, route, access, current price and any entry fees.</p>
       <div class="actions">
         <a class="button button-primary" href="<?= htmlspecialchars($walkWhatsAppUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Enquire on WhatsApp</a>
         <a class="button button-secondary" href="direction.php">Plan your arrival</a>

@@ -5,7 +5,6 @@ $siteMediaSlots = require __DIR__ . '/include/site-media-slots.php';
 $diningHero = gj_site_media_slot($siteMediaSlots, 'dining-hero', ['src' => 'img/rest2.jpg', 'alt' => "Rooftop dining area at Garh Jaisal's Kitchen in Jaisalmer"]);
 require_once __DIR__ . '/include/schema.php';
 $siteUrl = rtrim((string) ($siteConfig['site_url'] ?? ''), '/');
-$hotelPhoneSchema = gj_schema_hotel($siteUrl, $siteConfig)['telephone'];
 $hotelPhone = $siteConfig['hotel_phone'];
 $hotelPhoneDisplay = $siteConfig['hotel_phone_display'];
 $whatsappUrl = $siteConfig['whatsapp_url'];
@@ -18,14 +17,14 @@ $restaurant = [
 ];
 $googleMapsUrl = 'https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8';
 $googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.6918725708306!2d70.9117074793457!3d26.913272400000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3947bd9e89a679cf%3A0xd196c3f044898c10!2sGarh%20Jaisal's%20Kitchen!5e0!3m2!1sen!2sin!4v1791990366078!5m2!1sen!2sin";
-$instagramUrl = 'https://www.instagram.com/garhjaisal/';
+$instagramUrl = $siteConfig['hotel_social_profiles']['Instagram'];
 
 /* The dining pages share the owner-supplied menu and prices. */
 $menuConfig = require __DIR__ . '/include/menu-data.php';
 $menuConfig = is_array($menuConfig) ? $menuConfig : [];
 $menu = isset($menuConfig['items']) && is_array($menuConfig['items']) ? $menuConfig['items'] : [];
 $menuCategories = array_keys($menu);
-$menuOwnerConfirmed = !empty($menuConfig['owner_confirmed']);
+$menuOwnerConfirmed = !empty($menuConfig['owner_confirmed']) && $menu !== [];
 $restaurantGallerySections = require __DIR__ . '/include/gallery-data.php';
 $restaurantPhotoSlides = $restaurantGallerySections['restaurant']['images'] ?? [];
 
@@ -35,83 +34,29 @@ require __DIR__ . '/include/dining-reservation.php';
 $pageUrl = $siteUrl . '/restaurant.php';
 $heroImage = $siteUrl . '/' . ltrim($diningHero['src'], '/');
 
-$schema = [
-    '@context' => 'https://schema.org',
-    '@graph' => [
-        [
-            '@type' => 'Hotel',
-            '@id' => $siteUrl . '/#hotel',
-            'name' => 'Hotel Garh Jaisal Haveli',
-            'url' => $siteUrl . '/',
-            'telephone' => $hotelPhoneSchema,
-            'address' => [
-                '@type' => 'PostalAddress',
-                'streetAddress' => 'Fort Kotari Para, Inside Jaisalmer Fort',
-                'addressLocality' => 'Jaisalmer',
-                'addressRegion' => 'Rajasthan',
-                'postalCode' => '345001',
-                'addressCountry' => 'IN',
-            ],
-        ],
-        [
-            '@type' => 'WebSite',
-            '@id' => $siteUrl . '/#website',
-            'url' => $siteUrl . '/',
-            'name' => 'Garh Jaisal Haveli',
-            'publisher' => ['@id' => $siteUrl . '/#hotel'],
-        ],
-        [
-            '@type' => 'WebPage',
-            '@id' => $pageUrl . '#webpage',
-            'url' => $pageUrl,
-            'name' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
-            'isPartOf' => ['@id' => $siteUrl . '/#website'],
-            'about' => ['@id' => $pageUrl . '#restaurant'],
-            'primaryImageOfPage' => ['@id' => $pageUrl . '#primaryimage'],
-        ],
-        [
-            '@type' => 'ImageObject',
-            '@id' => $pageUrl . '#primaryimage',
-            'url' => $heroImage,
-        ],
-        [
-            '@type' => 'Restaurant',
-            '@id' => $pageUrl . '#restaurant',
-            'name' => $restaurant['name'],
-            'url' => $pageUrl,
-            'image' => [$heroImage],
-            'servesCuisine' => 'Rajasthani',
-            'telephone' => $hotelPhone,
-            'address' => [
-                '@type' => 'PostalAddress',
-                'streetAddress' => 'Fort Kotari Para, Inside Jaisalmer Fort',
-                'addressLocality' => 'Jaisalmer',
-                'addressRegion' => 'Rajasthan',
-                'postalCode' => '345001',
-                'addressCountry' => 'IN',
-            ],
-            'parentOrganization' => ['@id' => $siteUrl . '/#hotel'],
-            'acceptsReservations' => true,
-        ],
-        [
-            '@type' => 'BreadcrumbList',
-            '@id' => $pageUrl . '#breadcrumb',
-            'itemListElement' => [
-                [
-                    '@type' => 'ListItem',
-                    'position' => 1,
-                    'name' => 'Home',
-                    'item' => $siteUrl . '/',
-                ],
-                [
-                    '@type' => 'ListItem',
-                    'position' => 2,
-                    'name' => $restaurant['name'],
-                    'item' => $pageUrl,
-                ],
-            ],
-        ],
-    ],
+$pageTitle = "Restaurant Menu | Garh Jaisal's Kitchen, Jaisalmer";
+$pageDescription = $menuOwnerConfirmed
+    ? "Browse breakfast, Rajasthani dishes, drinks and prices at Garh Jaisal's Kitchen inside Jaisalmer Fort. Ask about dietary options or request a table."
+    : "Visit Garh Jaisal's Kitchen inside Jaisalmer Fort for rooftop dining. Ask about the current menu, dietary options and table availability.";
+$restaurantEntity = [
+    '@type' => 'Restaurant',
+    '@id' => $pageUrl . '#restaurant',
+    'name' => $restaurant['name'],
+    'url' => $pageUrl,
+    'image' => [$heroImage],
+    'servesCuisine' => 'Rajasthani',
+    'telephone' => $hotelPhone,
+    'address' => gj_schema_hotel_address(),
+    'hasMap' => $googleMapsUrl,
+    'parentOrganization' => ['@id' => $siteUrl . '/#hotel'],
+    'acceptsReservations' => true,
+];
+if ($menuOwnerConfirmed) {
+    $restaurantEntity['hasMenu'] = $pageUrl . '#menu';
+}
+$restaurantBreadcrumbs = [
+    ['label' => 'Home', 'href' => '/'],
+    ['label' => $restaurant['name']],
 ];
 ?>
 <!doctype html>
@@ -119,29 +64,45 @@ $schema = [
 <?php
 $faqItems = [
     ['question' => "Where is Garh Jaisal’s Kitchen?", 'answer' => "Garh Jaisal’s Kitchen is located at Fort Kotari Para, inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001."],
-    ['question' => "Can menu items and prices change?", 'answer' => "Yes. Menu items and listed prices may change; confirm the current menu and prices with the hotel before visiting."],
+    ['question' => "Where can I see the menu and prices?", 'answer' => $menuOwnerConfirmed
+        ? "Open our menu to see breakfast, drinks, Rajasthani dishes and prices in Indian rupees. Select View all dishes to read the full menu at once."
+        : "Contact the hotel for the current menu and prices."],
     ['question' => "How do I request a table?", 'answer' => "Use the table enquiry form when online requests are available, or contact the hotel by phone or WhatsApp. A request is not confirmed until the hotel replies. Availability can vary, especially for larger groups."],
     ['question' => "Can I ask about dietary requirements?", 'answer' => "Ask the hotel about current vegetarian, vegan, Jain and allergy options before confirming your meal."],
 ];
 $page = [
-    'title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
-    'description' => "Enjoy rooftop dining at " . $restaurant['name'] . " inside Jaisalmer Fort. Enquire about a table and confirm current hours, menu and prices.",
+    'title' => $pageTitle,
+    'description' => $pageDescription,
     'path' => '/restaurant.php',
     'og_type' => 'website',
-    'og_title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
-    'og_description' => "Enjoy rooftop dining at " . $restaurant['name'] . " inside Jaisalmer Fort. Enquire about a table and confirm current hours, menu and prices.",
+    'og_title' => $pageTitle,
+    'og_description' => $pageDescription,
     'og_image' => '/' . ltrim($diningHero['src'], '/'),
     'og_image_alt' => $diningHero['alt'],
-    'twitter_title' => $restaurant['name'] . ' | Restaurant in Jaisalmer',
-    'twitter_description' => "Enjoy rooftop dining at " . $restaurant['name'] . " inside Jaisalmer Fort. Enquire about a table and confirm current hours, menu and prices.",
+    'twitter_title' => $pageTitle,
+    'twitter_description' => $pageDescription,
     'twitter_image' => '/' . ltrim($diningHero['src'], '/'),
     'css' => ['css/restaurant.css', 'css/map-preview.css'],
-    'schema' => array_values(array_filter(
-        $schema['@graph'],
-        static function ($node) {
-            return !in_array($node['@type'] ?? '', ['Hotel', 'WebSite'], true);
-        }
-    )),
+    'schema' => [
+        [
+            '@type' => 'WebPage',
+            '@id' => $pageUrl . '#webpage',
+            'url' => $pageUrl,
+            'name' => $pageTitle,
+            'description' => $pageDescription,
+            'isPartOf' => ['@id' => $siteUrl . '/#website'],
+            'mainEntity' => ['@id' => $restaurantEntity['@id']],
+            'primaryImageOfPage' => ['@id' => $pageUrl . '#primaryimage'],
+            'breadcrumb' => ['@id' => $pageUrl . '#breadcrumb'],
+        ],
+        [
+            '@type' => 'ImageObject',
+            '@id' => $pageUrl . '#primaryimage',
+            'url' => $heroImage,
+        ],
+        $restaurantEntity,
+        gj_schema_breadcrumb_list($siteUrl, '/restaurant.php', $restaurantBreadcrumbs),
+    ],
 ];
 $page['schema'][] = gj_schema_faq($faqItems, $pageUrl);
 require __DIR__ . '/include/page-head.php';

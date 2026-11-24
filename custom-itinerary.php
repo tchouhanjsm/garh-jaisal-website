@@ -14,17 +14,6 @@ $builderDescription = $isRajasthan
     ? 'Ask about a Rajasthan route using your preferred stops, duration and pickup details. Request a quote with inclusions for your travel dates.'
     : 'Shape a Jaisalmer itinerary around your interests. Combine ideas or add your own places, then ask Garh Jaisal Haveli to confirm what may be arranged.';
 
-$faqItems = [
-    ['question' => 'Are these confirmed tours or bookable packages?', 'answer' => 'No. The page helps you describe an itinerary enquiry. The hotel must confirm whether a route can be arranged, current access and visitor rules, transport and guide availability, timings, applicable fees and the final price. Sending an enquiry does not reserve a tour.'],
-    ['question' => 'Can I ask about places beyond the suggested themes?', 'answer' => 'Yes. The interest choices are starting points, not a complete catalogue. Add any other places or ideas in the notes so the hotel can review the request.'],
-    ['question' => 'Does the form submit or save my travel details?', 'answer' => 'No. Your choices stay in this browser while you use the page. It prepares a WhatsApp message only when you choose to open it; nothing is submitted or reserved by this page.'],
-];
-if ($isRajasthan) {
-    $faqItems[1] = [
-        'question' => 'Can I enquire before choosing every stop?',
-        'answer' => 'Yes. Share the places you have in mind, your travel dates or the city where you want to start. The hotel can reply about feasible routes and what can be included.',
-    ];
-}
 $breadcrumbs = [
     ['label' => 'Home', 'href' => '/'],
     ['label' => 'Packages', 'href' => '/pack.php'],
@@ -59,7 +48,6 @@ $page = [
         gj_schema_breadcrumb_list($siteUrl, '/custom-itinerary.php', $breadcrumbs),
     ],
 ];
-$page['schema'][] = gj_schema_faq($faqItems, $canonical);
 ?>
 <!doctype html>
 <html lang="en">
