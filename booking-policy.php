@@ -14,8 +14,10 @@ $page = [
     'css' => ['css/article.css'],
     'schema' => [gj_schema_breadcrumb_list($siteConfig['site_url'], '/booking-policy.php', $breadcrumbs)],
 ];
-require __DIR__ . '/include/page-head.php';
 ?>
+<!doctype html>
+<html lang="en">
+<?php require __DIR__ . '/include/page-head.php'; ?>
 <body>
 <?php include __DIR__ . '/include/header-v2.php'; ?>
 <?php require __DIR__ . '/include/ui/policy-page.php'; ?>
