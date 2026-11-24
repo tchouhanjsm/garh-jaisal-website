@@ -23,8 +23,8 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | 2 | Rajasthan tours: which routes, single or multi-day, price shown or "on request" | | `rajasthan-tours.php` |
 | 3 | Is `explore-the-desert` a different full-day product from the sunset safari? If yes, how? | | restore or redirect |
 | 4 | Show "from" prices on room cards? If yes, per room and the wording ("from ₹X per night, taxes extra"?) | | Rooms |
-| 5 | Cancellation and booking policy (your words) | NEEDS OWNER INPUT: owner will supply approved policy wording. Keep policy pages noindex/off-navigation until the text is provided and approved. | `booking-policy.php` |
-| 6 | Privacy: who is the data controller, which email handles requests | | `privacy.php` |
+| 5 | Cancellation and booking policy | Owner supplied the guest-facing Booking Terms and Conditions on 2026-11-24. | `booking-policy.php` |
+| 6 | Guest privacy policy | Owner supplied the guest-facing Privacy Policy on 2026-11-24. | `privacy.php` |
 | 7 | Check-in and check-out times, early-arrival access and luggage storage | NEEDS OWNER INPUT: confirm official times and whether early check-in or luggage storage can be arranged. Do not publish a specific time or promise before approval. | Rooms, Directions, schema |
 | 8 | Real guest reviews you may quote (text, first name, source, date) | | Home, Rooms |
 | 9 | Rooftop kitchen: opening hours, closed days, last seating and same-day cut-off | NEEDS OWNER INPUT: the site is being changed to accept unconfirmed table enquiries. Supply actual service hours, closed days, last seating and cut-off values; the code must not infer a schedule. | Dining and server-only configuration |

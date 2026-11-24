@@ -36,6 +36,8 @@ $staticPages = [
     ['path' => '/gallery.php', 'priority' => '0.8'],
     ['path' => '/about.php', 'priority' => '0.7'],
     ['path' => '/contact.php', 'priority' => '0.8'],
+    ['path' => '/privacy.php', 'priority' => '0.3'],
+    ['path' => '/booking-policy.php', 'priority' => '0.3'],
     ['path' => '/blog.php', 'priority' => '0.6'],
     ['path' => '/book-rooms-in-jaisalmer.php', 'priority' => '0.7'],
     ['path' => '/jaisalmer-fort-guide.php', 'priority' => '0.7'],
@@ -216,6 +218,10 @@ foreach ($urls as $path => $priority) {
         $sourceFiles[] = 'include/editorial-guides-data.php';
     } elseif ($path === '/gallery.php') {
         $sourceFiles[] = 'include/gallery-data.php';
+    } elseif ($path === '/privacy.php') {
+        $sourceFiles[] = 'include/ui/privacy-policy-content.php';
+    } elseif ($path === '/booking-policy.php') {
+        $sourceFiles[] = 'include/ui/booking-terms-content.php';
     } elseif ($path === '/pack.php' || $path === '/catalogue.php') {
         $sourceFiles[] = 'include/experience-data.php';
         if ($path === '/catalogue.php') {
