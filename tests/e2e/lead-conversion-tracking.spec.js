@@ -58,7 +58,7 @@ test('rooftop table CTA emits a privacy-safe table enquiry intent with stable at
   expect(response.status(), 'Rooftop dining page should load').toBeLessThan(400);
 
   const cta = page.locator('.page-hero-inner').getByRole('link', { name: 'Enquire about a table', exact: true });
-  await expect(cta).toHaveAttribute('href', 'restaurant.php#reserve');
+  await expect(cta).toHaveAttribute('href', '#reserve');
   await expect(cta).toHaveAttribute('data-cta-id', 'enquiry-rooftop-table');
   await expect(cta).toHaveAttribute('data-cta-location', 'rooftop-dining-hero');
 
@@ -66,7 +66,7 @@ test('rooftop table CTA emits a privacy-safe table enquiry intent with stable at
     window.gtag = (...args) => window.__captureGtagEvent(...args);
   });
   await cta.click();
-  await expect(page).toHaveURL(/\/restaurant\.php#reserve$/);
+  await expect(page).toHaveURL(/\/roof\.php#reserve$/);
   await expect.poll(() => capturedEvents.some(call => call[0] === 'event' && call[1] === 'table_enquiry_click')).toBe(true);
 
   const eventCall = capturedEvents.find(call => call[0] === 'event' && call[1] === 'table_enquiry_click');

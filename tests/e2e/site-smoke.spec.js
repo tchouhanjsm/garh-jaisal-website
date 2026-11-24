@@ -249,12 +249,13 @@ test('contact page presents direct booking and arrival paths beside the enquiry 
   await expect(page.getByRole('heading', { name: 'Send an enquiry' })).toBeVisible();
 });
 
-test('rooftop menu CTA opens the restaurant menu section directly', async ({ page }, testInfo) => {
+test('rooftop menu CTA opens the in-page menu section', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Rooftop-to-menu journey is checked once');
   await page.goto('/roof.php');
-  const menuLink = page.getByRole('link', { name: 'View the menu' });
-  await expect(menuLink).toHaveAttribute('href', 'restaurant.php#menu');
-  await page.goto('restaurant.php#menu');
+  const menuLink = page.getByRole('link', { name: /^(?:View|Ask about) the menu$/ });
+  await expect(menuLink).toHaveAttribute('href', '#menu');
+  await menuLink.click();
+  await expect(page).toHaveURL(/\/roof\.php#menu$/);
   await expect(page.locator('#menu')).toBeVisible();
   await expect(page.locator('#menu h2')).toHaveText(/^(?:Ask about the current menu\.|What is on the menu\.)$/);
 });

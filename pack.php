@@ -5,6 +5,11 @@ $activePage = 'packages';
 $siteUrl = rtrim($siteConfig['site_url'], '/');
 $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] ?? []), 'is_string'));
 $canonical = $siteUrl . '/pack.php';
+$tanotWhatsAppUrl = rtrim((string) $siteConfig['whatsapp_url'], '/') . '?text=' . rawurlencode(
+    'Hello, I would like to ask about a trip from Jaisalmer to Tanot Mata Temple. '
+    . 'Travel date: [date]. Travellers: [number]. Pickup: [location]. '
+    . 'Please confirm availability, current visitor access, pickup and the total quote.'
+);
 $visibleExperiences = array_filter($experiences, static function ($item) {
     return ($item['status'] ?? 'live') === 'live' && ($item['duration_type'] ?? '') !== 'hub';
 });
@@ -118,7 +123,7 @@ require __DIR__ . '/include/page-head.php';
       </p>
       <div class="actions">
         <a class="button button-primary" href="#experience-categories">Explore tour categories</a>
-        <a class="button button-light" href="catalogue.php">Build your trip</a>
+        <a class="button button-light" href="#tanot-trip">Tanot Temple trip</a>
       </div>
     </div>
   </section>
@@ -265,6 +270,22 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
+  <section class="section tours-day-trip" id="tanot-trip" aria-labelledby="tanot-trip-title">
+    <div class="site-shell">
+      <div class="tours-day-trip-inner">
+        <div>
+          <p class="eyebrow">From Jaisalmer</p>
+          <h2 id="tanot-trip-title">A trip to Tanot Mata Temple</h2>
+          <p>Ask about a private car to the temple and back. Share your date, pickup location and group size so we can confirm the route, current visitor access and a quote.</p>
+        </div>
+        <div class="actions">
+          <a class="button button-primary" href="<?= htmlspecialchars($tanotWhatsAppUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Enquire about Tanot on WhatsApp</a>
+          <a class="text-link" href="car-rental.php">Compare car services</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section packages-planning" id="plan-by-time" data-story-reveal>
     <div class="site-shell">
       <div class="section-head">
@@ -342,8 +363,8 @@ require __DIR__ . '/include/page-head.php';
       <aside class="package-guide-service" aria-labelledby="package-guide-service-title">
         <div class="package-guide-service-copy">
           <p class="eyebrow">Need a vehicle?</p>
-          <h3 id="package-guide-service-title">Ask about SUV and sedan arrangements.</h3>
-          <p>Share your travel date, route, pickup point, travellers and luggage so the hotel can confirm vehicle availability and a current quote.</p>
+          <h3 id="package-guide-service-title">Plan a Rajasthan route from Delhi Airport.</h3>
+          <p>Choose a private car or a car with hotel stays arranged along the way.</p>
         </div>
         <div class="actions">
           <a class="button button-primary" href="car-rental.php">Explore car arrangements</a>

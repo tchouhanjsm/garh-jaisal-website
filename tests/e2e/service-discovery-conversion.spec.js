@@ -1,13 +1,13 @@
 const { test, expect } = require('@playwright/test');
 
-async function expectWhatsAppLink(link) {
+async function expectWhatsAppLink(link, dateLabel = /Travel date|Preferred date/) {
   await expect(link).toHaveAttribute('href', /^https:\/\/wa\.me\//);
   await expect(link).toHaveAttribute('target', '_blank');
   await expect(link).toHaveAttribute('rel', /noopener/);
   const target = new URL(await link.getAttribute('href'));
   const message = target.searchParams.get('text') || '';
-  expect(message).toMatch(/Travel date|Preferred date/);
-  expect(message).toMatch(/current price|current quote/i);
+  expect(message).toMatch(dateLabel);
+  expect(message).toMatch(/current price|current quote|total price/i);
 }
 
 test('Fort walk describes its intended stops and sends price enquiries to WhatsApp', async ({ page }) => {
@@ -31,13 +31,14 @@ test('car service page shows confirmed vehicles, regions and driver communicatio
   const response = await page.goto('/car-rental.php', { waitUntil: 'domcontentloaded' });
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
-  await expect(page.getByRole('heading', { level: 1, name: 'Car services across Rajasthan and Delhi.' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Desert pickup and drop-off' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Intercity journeys' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Delhi Airport transfers and Rajasthan tours' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Rajasthan tour with hotels and a car' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Vehicle only' })).toBeVisible();
   await expect(page.locator('main')).toContainText('SUV');
   await expect(page.locator('main')).toContainText('sedan');
   await expect(page.locator('main')).toContainText('Hindi and English');
-  await expectWhatsAppLink(page.getByRole('link', { name: 'Request a car quote on WhatsApp' }));
+  await expect(page.locator('.car-route-ideas')).toContainText('These are sample city combinations.');
+  await expectWhatsAppLink(page.getByRole('link', { name: 'Request a car quote on WhatsApp' }), /Pickup date and location.*Drop-off date and location/);
   await expect(page.locator('main')).not.toContainText(/₹\s*[\d,]+|\bINR\s*[\d,]+/i);
 });
 

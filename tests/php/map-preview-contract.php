@@ -54,7 +54,7 @@ if ($renderMapPreview($unsafeHost) !== '') {
 foreach ([
     'direction.php' => ['include/ui/map-preview.php', 'css/map-preview.css', 'js/map-preview.js', 'arrival-map-frame'],
     'restaurant.php' => ['include/ui/map-preview.php', 'css/map-preview.css', 'js/map-preview.js', 'restaurant-map-frame'],
-    'roof.php' => ['restaurant.php#reserve', 'enquiry-rooftop-table', 'Enquire about a table'],
+    'roof.php' => ['href="#reserve"', 'enquiry-rooftop-table', 'Enquire about a table'],
 ] as $path => $needles) {
     $source = is_file($root . '/' . $path) ? file_get_contents($root . '/' . $path) : false;
     if (!is_string($source)) {

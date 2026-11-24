@@ -12,9 +12,9 @@ test.describe('Sprint 2A page-group layout', () => {
     await expect(page.locator('.contact-layout .contact-form')).toBeVisible();
   });
 
-  test('Dining hub links to the menu page', async ({ page }) => {
+  test('Dining hub links to the in-page menu', async ({ page }) => {
     await page.goto('/roof.php', { waitUntil: 'domcontentloaded' });
-    await expect(page.locator('a[href="restaurant.php#menu"]').first()).toBeVisible();
+    await expect(page.locator('a[href="#menu"]').first()).toBeVisible();
   });
 
   test('Directions leads with the parking walk answer', async ({ page }) => {

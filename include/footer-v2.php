@@ -11,15 +11,15 @@ $footerNavData = require __DIR__ . '/nav-data.php';
 $footerNav = $footerNavData['footer'];
 ?>
 <footer class="site-footer">
+  <div class="footer-fort-art" aria-hidden="true"></div>
   <div class="site-shell footer-grid">
     <div>
       <p class="eyebrow">Garh Jaisal Haveli</p>
-      <h2>Let Jaisalmer begin inside the Fort.</h2>
-      <p class="footer-copy">A heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and locally arranged city and desert experiences.</p>
+      <h2>Stay inside Jaisalmer Fort.</h2>
+      <p class="footer-copy">A Chouhan family haveli with Heritage Rooms, rooftop dining and tours from Jaisalmer.</p>
 <?php if ($footerBookingUrl !== ''): ?>
       <div class="footer-booking-cta">
         <a class="button button-primary footer-booking-button" href="<?= htmlspecialchars($footerBookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="booking-footer" data-cta-location="footer-booking-band">Check dates &amp; current rates</a>
-        <p>Choose your dates first; contact the hotel to confirm room details or arrival questions.</p>
       </div>
 <?php endif; ?>
       <div class="social-links" aria-label="Social media">
@@ -30,24 +30,24 @@ $footerNav = $footerNavData['footer'];
       </div>
     </div>
 
-    <div>
-      <p class="footer-title">Visit</p>
-      <p>Fort Kotari Para<br>Inside Jaisalmer Fort<br>Jaisalmer, Rajasthan 345001</p>
-      <a href="direction.php">Plan your arrival →</a>
-    </div>
+<?php foreach ($footerNav as $footerGroup): ?>
+    <nav class="footer-link-group" aria-label="<?= htmlspecialchars($footerGroup['label'], ENT_QUOTES, 'UTF-8') ?>">
+      <h3 class="footer-title"><?= htmlspecialchars($footerGroup['label'], ENT_QUOTES, 'UTF-8') ?></h3>
+      <ul>
+<?php foreach ($footerGroup['children'] as $footerItem): ?>
+        <li><a href="<?= htmlspecialchars($footerItem['url'], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($footerItem['label'], ENT_QUOTES, 'UTF-8') ?></a></li>
+<?php endforeach; ?>
+      </ul>
+    </nav>
+<?php endforeach; ?>
 
-    <div>
-      <p class="footer-title">Contact</p>
+    <div class="footer-visit">
+      <h3 class="footer-title">Visit &amp; contact</h3>
+      <p>Fort Kotari Para<br>Jaisalmer, Rajasthan 345001</p>
+      <p><a href="direction.php">Plan your arrival →</a></p>
       <p><a href="tel:<?= htmlspecialchars($footerPhone, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($footerPhoneDisplay, ENT_QUOTES, 'UTF-8') ?></a><br><?php if ($footerPhoneAlt !== ''): ?><a href="tel:<?= htmlspecialchars($footerPhoneAlt, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($footerPhoneAltDisplay, ENT_QUOTES, 'UTF-8') ?></a><?php endif; ?></p>
       <p><a href="mailto:<?= htmlspecialchars($footerEmail, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($footerEmail, ENT_QUOTES, 'UTF-8') ?></a></p>
       <a href="contact.php" data-cta-id="enquiry-footer" data-cta-location="footer-contact">Send an enquiry →</a>
-    </div>
-
-    <div>
-      <p class="footer-title">Plan your stay</p>
-<?php foreach ($footerNav as $footerItem): ?>
-      <p><a href="<?= htmlspecialchars($footerItem['url'], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($footerItem['label'], ENT_QUOTES, 'UTF-8') ?></a></p>
-<?php endforeach; ?>
     </div>
   </div>
 
@@ -57,7 +57,6 @@ $footerNav = $footerNavData['footer'];
       <a href="privacy.php">Privacy Policy</a>
       <a href="booking-policy.php">Booking Terms and Conditions</a>
     </nav>
-    <span>Jaisalmer, Rajasthan</span>
   </div>
 </footer>
 

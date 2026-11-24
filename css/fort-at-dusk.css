@@ -7,9 +7,14 @@
   backdrop-filter: none;
 }
 
+.site-header .nav-inner {
+  min-height: 5rem;
+  gap: clamp(.75rem, 1.75vw, 1.55rem);
+}
+
 .site-header .brand strong {
   color: var(--parchment);
-  font-size: clamp(1.08rem, 1.65vw, 1.42rem);
+  font-size: clamp(1.16rem, 1.65vw, 1.46rem);
   font-weight: 700;
 }
 
@@ -17,9 +22,9 @@
 .site-header .main-nav .nav-sub .nav-group-title { color: var(--gold); }
 
 .site-header .brand img {
-  width: 36px;
-  height: 36px;
-  flex-basis: 36px;
+  width: 48px;
+  height: 48px;
+  flex-basis: 48px;
 }
 
 .site-header .main-nav a:not(.nav-book) { color: var(--parchment); }
@@ -80,6 +85,45 @@ main.thar-sunset-story--home .hero .button {
 
 .contact-dock a:not(.whatsapp) { background: var(--night); }
 .site-footer { border-top: 1px solid var(--line-on-dark); }
+
+.site-footer .footer-fort-art {
+  height: clamp(6rem, 15vw, 13rem);
+  background-image: linear-gradient(180deg, transparent 55%, var(--night)), url("../img/brand/footer-fort-illustrations.webp");
+  background-position: center, center top;
+  background-repeat: no-repeat;
+  background-size: 100% 100%, max(100%, 42rem) auto;
+}
+
+.site-footer .footer-grid {
+  grid-template-columns: minmax(15rem, 1.35fr) repeat(2, minmax(7rem, .82fr)) minmax(12rem, 1fr);
+  align-items: start;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding-block: clamp(2rem, 4vw, 3.5rem);
+}
+
+.site-footer .footer-grid h2 { font-size: clamp(1.4rem, 2.3vw, 2rem); }
+.site-footer .footer-title { margin: 0 0 .85rem; }
+.footer-link-group ul { list-style: none; margin: 0; padding: 0; }
+.footer-link-group li + li { margin-block-start: .5rem; }
+.footer-link-group a { display: inline-flex; align-items: center; min-height: 2rem; padding-block: .25rem; }
+.footer-visit { overflow-wrap: anywhere; }
+.site-footer .footer-bottom { border-top-color: var(--line-on-dark); }
+
+@media (max-width: 920px) {
+  .site-footer .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 480px) {
+  .site-footer .footer-grid { column-gap: 1.25rem; }
+  .footer-link-group a { min-height: 44px; }
+  .site-footer .footer-grid > :first-child, .site-footer .footer-visit { grid-column: 1 / -1; }
+}
+
+@media (max-width: 360px) {
+  .site-header .brand img { width: 35px; height: 35px; flex-basis: 35px; }
+  .site-header .brand strong { font-size: 1.08rem; }
+}
+
 
 main.thar-sunset-story {
   --story-keyline: var(--line);
@@ -146,6 +190,9 @@ main .map-preview {
 }
 
 @media (max-width: 1366px) {
+  .site-header .nav-inner { min-height: 4.35rem; }
+  .site-header .brand img { width: 42px; height: 42px; flex-basis: 42px; }
+  .site-header .main-nav { top: 100%; max-height: calc(100dvh - 4.35rem); }
   .site-header .main-nav,
   .site-header .nav-sub { background: var(--night); }
   .site-header .main-nav { border-color: var(--line-on-dark); }

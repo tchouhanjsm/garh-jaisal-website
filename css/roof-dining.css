@@ -1,0 +1,37 @@
+.roof-dining-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  padding-block: 1rem;
+}
+
+.roof-dining-tabs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 1rem;
+  border: 1px solid var(--action-primary);
+  border-radius: var(--radius-control);
+  color: var(--action-primary);
+  font-weight: 700;
+}
+
+.roof-dining-tabs a[aria-selected="true"] {
+  background: var(--action-primary);
+  color: var(--text-on-dark);
+}
+
+.roof-dining > [hidden] { display: none; }
+.roof-dining :is(#menu, #reserve) { scroll-margin-top: 5rem; }
+.roof-dining .restaurant-field select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: .55rem .75rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-control);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+.roof-dining .restaurant-field select[aria-invalid="true"] { border-color: var(--alert); }

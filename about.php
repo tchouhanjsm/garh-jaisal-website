@@ -9,15 +9,15 @@ $bookingUrl = $siteConfig['booking_url'];
 $schemaSiteUrl = rtrim((string) $siteConfig['site_url'], '/');
 $schemaPageUrl = $schemaSiteUrl . '/about.php';
 $page = [
-    'title' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
-    'description' => 'Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and help planning local experiences.',
+    'title' => 'Garh Jaisal Haveli History | A Family-Run Fort Stay',
+    'description' => 'Discover the roughly 750-year-old Garh Jaisal Haveli inside Jaisalmer Fort, renovated into a heritage hotel and run by the Chouhan family.',
     'path' => '/about.php',
-    'og_title' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
-    'og_description' => 'Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and help planning local experiences.',
+    'og_title' => 'Garh Jaisal Haveli History | A Family-Run Fort Stay',
+    'og_description' => 'Discover the roughly 750-year-old Garh Jaisal Haveli inside Jaisalmer Fort, renovated into a heritage hotel and run by the Chouhan family.',
     'og_image' => '/img/courtyard.jpg',
     'og_image_alt' => 'Courtyard balconies inside Garh Jaisal Haveli',
-    'twitter_title' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
-    'twitter_description' => 'Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and help planning local experiences.',
+    'twitter_title' => 'Garh Jaisal Haveli History | A Family-Run Fort Stay',
+    'twitter_description' => 'Discover the roughly 750-year-old Garh Jaisal Haveli inside Jaisalmer Fort, renovated into a heritage hotel and run by the Chouhan family.',
     'twitter_image' => '/img/courtyard.jpg',
     'css' => ['css/about.css'],
     'schema' => [
@@ -25,8 +25,8 @@ $page = [
             '@type' => 'WebPage',
             '@id' => $schemaPageUrl . '#webpage',
             'url' => $schemaPageUrl,
-            'name' => 'About Garh Jaisal Haveli | A Stay in Jaisalmer Fort',
-            'description' => 'Discover Garh Jaisal Haveli, a heritage-style stay inside Jaisalmer Fort, with characterful rooms, rooftop dining and help planning local experiences.',
+            'name' => 'Garh Jaisal Haveli History | A Family-Run Fort Stay',
+            'description' => 'Discover the roughly 750-year-old Garh Jaisal Haveli inside Jaisalmer Fort, renovated into a heritage hotel and run by the Chouhan family.',
             'isPartOf' => ['@id' => $schemaSiteUrl . '/#website'],
             'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
             'primaryImageOfPage' => [
@@ -71,9 +71,9 @@ require __DIR__ . '/include/page-head.php';
       require __DIR__ . '/include/ui/breadcrumb.php';
       ?>
       <p class="eyebrow">About</p>
-      <h1>Stay inside the Fort. Feel closer to Jaisalmer.</h1>
+      <h1>The story of Garh Jaisal Haveli.</h1>
       <p>
-        Garh Jaisal Haveli places you inside Jaisalmer Fort, among the sandstone lanes and the everyday life of this living landmark. Come for the character of the house; stay close to the city, the rooftop and the routes that lead into the Thar Desert.
+        This sandstone haveli inside Jaisalmer Fort is roughly 750 years old. Renovated into a heritage hotel, it is now run by the Chouhan family.
       </p>
       <div class="actions">
         <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Book your stay</a>
@@ -86,15 +86,15 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell intro-grid">
       <div class="intro-copy">
         <p class="eyebrow">The house</p>
-        <h2>A place to experience Jaisalmer from within.</h2>
+        <h2>From a Fort home to a family-run hotel.</h2>
         <p>
-          Some places are simply a base for a trip. Here, the Fort is part of the address. Step out into its lanes, notice the sandstone details and local rhythm, then come back to a room within the walls.
+          Renovating an old house inside the Fort meant adapting its sandstone rooms and courtyards for guests. Look up from the courtyard to see the carved balconies, then follow the stairs to the rooftop over the city.
         </p>
         <p>
           Carved jharokhas, traditional furnishings and hand-painted details give the house its character. Practical comforts, including en-suite bathrooms, Wi-Fi and housekeeping, help make the stay straightforward.
         </p>
         <p>
-          Each room has its own look, so take time to compare the photos and listed features before choosing. If a particular facility matters to you, ask us to confirm that it is available in the room you book.
+          The rooms are individually furnished and book under one Heritage Room category. Ask the Chouhan family about access or a particular facility before you reserve.
         </p>
       </div>
       <div class="image-panel">
@@ -125,7 +125,7 @@ require __DIR__ . '/include/page-head.php';
         </article>
         <article class="about-point">
           <h3>Comfort with character</h3>
-          <p>Traditional furnishings sit alongside practical comforts. Room facilities vary, so check the details for your selected room.</p>
+          <p>Traditional furnishings sit alongside practical comforts. Room facilities vary, so ask about any detail that matters to your stay.</p>
         </article>
         <article class="about-point">
           <h3>Help planning the days</h3>

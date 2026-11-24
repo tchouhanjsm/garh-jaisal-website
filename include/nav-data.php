@@ -60,7 +60,7 @@ return [
                         ['label' => 'Half-day Jaisalmer tour', 'url' => 'half-day-jaisalmer-tour.php'],
                         ['label' => 'Full-day Jaisalmer tour', 'url' => 'full-day-jaisalmer-tour.php'],
                         ['label' => 'Walk inside Jaisalmer Fort', 'url' => 'city-tour.php'],
-                        ['label' => 'Car for arrival or a desert day', 'url' => 'car-rental.php'],
+                        ['label' => 'Delhi Airport & Rajasthan transfers', 'url' => 'car-rental.php'],
                     ],
                 ],
             ],
@@ -86,16 +86,25 @@ return [
         ],
     ],
 
-    // Footer "Plan your stay" column.
     'footer' => [
-        ['label' => 'Rooms', 'url' => 'room.php'],
-        ['label' => 'Book direct guide', 'url' => 'book-rooms-in-jaisalmer.php'],
-        ['label' => 'Rooftop dining', 'url' => 'roof.php'],
-        ['label' => 'Restaurant and menu', 'url' => 'restaurant.php'],
-        ['label' => 'Desert tours', 'url' => 'desert-safari.php'],
-        ['label' => 'Car & City Tours', 'url' => 'car-tours.php'],
-        ['label' => 'Gallery', 'url' => 'gallery.php'],
-        ['label' => 'Blog', 'url' => 'blog.php'],
-        ['label' => 'Build a trip', 'url' => 'catalogue.php'],
+        [
+            'label' => 'Stay & dine',
+            'children' => [
+                ['label' => 'Heritage Rooms', 'url' => 'room.php'],
+                ['label' => 'Book direct guide', 'url' => 'book-rooms-in-jaisalmer.php'],
+                ['label' => 'Rooftop dining', 'url' => 'roof.php'],
+                ['label' => 'Garh Jaisal’s Kitchen', 'url' => 'restaurant.php'],
+            ],
+        ],
+        [
+            'label' => 'Explore',
+            'children' => [
+                ['label' => 'Tours & experiences', 'url' => 'pack.php'],
+                ['label' => 'Delhi Airport & Rajasthan transfers', 'url' => 'car-rental.php'],
+                ['label' => 'Build a trip', 'url' => 'catalogue.php'],
+                ['label' => 'Travel Journal', 'url' => 'blog.php'],
+                ['label' => 'Photo gallery', 'url' => 'gallery.php'],
+            ],
+        ],
     ],
 ];

@@ -4,14 +4,14 @@ $root = dirname(__DIR__, 2);
 $errors = [];
 $required = [
     'index.php' => ['Wake up inside Jaisalmer Fort.', 'Heritage stay · Inside Jaisalmer Fort', 'individually styled rooms', 'home-hero-facts', 'Explore the rooms', 'conversion-journey', 'home-planning-panel', 'id="arrival-guide"', 'conversion-faq', 'Check rooms &amp; rates', 'guided-jaisalmer-tour.php', 'desert-safari.php', 'home-city-discovery', 'The Golden City has more stories to tell.', 'car-tours.php', 'home-planning-confidence', 'Know what to expect before you book.', 'home-room-section-booking', 'booking-home-rooms', 'booking-home-final', 'tracking_id'],
-    'about.php' => ['Stay inside the Fort. Feel closer to Jaisalmer.', 'Good hospitality begins before you arrive.', 'conversion-promise'],
+    'about.php' => ['The story of Garh Jaisal Haveli.', 'Good hospitality begins before you arrive.', 'conversion-promise'],
     'desert-safari.php' => ['Find the Jaisalmer desert safari that fits your trip.', 'desert-options', 'conversion-checklist', 'Confirm my safari details'],
     'guided-jaisalmer-tour.php' => ['See Jaisalmer with a guide, at your pace.', 'guided-options', 'Plan my guided tour'],
     'city-tour.php' => ['Discover the stories inside Jaisalmer Fort.', 'Ask about route, guide'],
     'room.php' => ['Find your room inside Jaisalmer Fort.'],
     'restaurant.php' => ['Rooftop dining in the heart of Jaisalmer Fort.', 'Enquire about a table'],
     'include/experience-page.php' => ['An enquiry is not a confirmed booking.', 'Build the day around what you want to discover.'],
-    'include/footer-v2.php' => ['Let Jaisalmer begin inside the Fort.', 'Check dates &amp; current rates'],
+    'include/footer-v2.php' => ['Stay inside Jaisalmer Fort.', 'Check dates &amp; current rates'],
 ];
 foreach ($required as $relative => $needles) {
     $path = $root . '/' . $relative;

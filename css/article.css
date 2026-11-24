@@ -204,13 +204,13 @@
 
 
 /* Sprint 80 — editorial topic navigation for the Journal archive. */
-.journal-topic-index {
+:is(.journal-start-links, .journal-topic-index) {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin: 24px 0 30px;
 }
-.journal-topic-index a {
+:is(.journal-start-links, .journal-topic-index) a {
   display: inline-flex;
   align-items: center;
   min-height: 42px;
@@ -222,11 +222,11 @@
   font-weight: 700;
   text-decoration: none;
 }
-.journal-topic-index a:hover {
+:is(.journal-start-links, .journal-topic-index) a:hover {
   border-color: var(--garnet, #5b1a2b);
   color: var(--garnet, #5b1a2b);
 }
-.journal-topic-index a:focus-visible {
+:is(.journal-start-links, .journal-topic-index) a:focus-visible {
   outline: 3px solid var(--gold-ink, #8a6212);
   outline-offset: 3px;
 }

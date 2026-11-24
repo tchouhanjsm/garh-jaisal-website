@@ -45,7 +45,7 @@ test.describe('Sprint 2B content and layout', () => {
 
   test('Dining pages cross-link at the start of each guest journey', async ({ page }) => {
     await page.goto('/roof.php', { waitUntil: 'domcontentloaded' });
-    await expect(page.locator('a[href="restaurant.php#menu"]').first()).toBeVisible();
+    await expect(page.locator('a[href="#menu"]').first()).toBeVisible();
     await page.goto('/restaurant.php', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('.restaurant-rooftop-link a[href="roof.php"]')).toBeVisible();
   });

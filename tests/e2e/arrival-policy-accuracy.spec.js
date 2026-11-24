@@ -114,9 +114,9 @@ test('rooftop dining copy does not imply unconfirmed sunrise or all-day meal ser
   expect(renderedCopy).not.toMatch(/stay for the sunrise or sunset while you eat/i);
   expect(renderedCopy).not.toMatch(/breakfast is available daily|breakfast service/i);
   expect(renderedCopy).toContain('Contact the hotel to confirm current dining service times before visiting.');
-  await expect(rooftop.getByRole('link', { name: 'View the menu' })).toHaveAttribute('href', 'restaurant.php#menu');
+  await expect(rooftop.getByRole('link', { name: /^(?:View|Ask about) the menu$/ })).toHaveAttribute('href', '#menu');
   const rooftopEnquiry = rooftop.locator('.page-hero-inner').getByRole('link', { name: 'Enquire about a table', exact: true });
-  await expect(rooftopEnquiry).toHaveAttribute('href', 'restaurant.php#reserve');
+  await expect(rooftopEnquiry).toHaveAttribute('href', '#reserve');
   await expect(rooftopEnquiry).toHaveAttribute('data-cta-id', 'enquiry-rooftop-table');
 });
 

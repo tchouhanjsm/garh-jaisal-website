@@ -1,0 +1,51 @@
+.car-rental-page .car-offer-grid,
+.car-rental-page .car-quote-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 2.5rem);
+}
+.car-offer {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: .8rem;
+  padding: clamp(1.25rem, 4vw, 2.75rem);
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+}
+.car-rental-page .car-offer-package {
+  border-top: 3px solid var(--gold-ink);
+  background: var(--surface-muted);
+}
+.car-offer h3,
+.car-offer p,
+.car-route-ideas h3,
+.car-quote-grid h2 { margin: 0; }
+.car-offer .button { margin-top: .35rem; }
+.car-route-ideas {
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+  padding-block: 1.2rem;
+  border-block: 1px solid var(--line);
+}
+.car-route-ideas ul { padding-inline-start: 1.2rem; }
+.car-route-ideas p { margin-bottom: 0; }
+.car-rental-page .car-quote { background: var(--surface-muted); }
+.car-rental-page .car-quote-grid { grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); }
+.car-quote-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 1rem;
+  min-width: 0;
+}
+.car-quote-form[hidden] { display: none; }
+.car-quote-form label { display: grid; gap: .35rem; min-width: 0; font-weight: 700; }
+.car-quote-form :is(input, select, textarea) { width: 100%; min-width: 0; min-height: 46px; font-size: 1rem; }
+.car-quote-form .car-quote-wide { grid-column: 1 / -1; }
+.car-quote-form button { justify-self: start; }
+@media (max-width: 760px) {
+  .car-rental-page :is(.car-offer-grid, .car-quote-grid) { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 440px) {
+  .car-quote-form { grid-template-columns: minmax(0, 1fr); }
+}

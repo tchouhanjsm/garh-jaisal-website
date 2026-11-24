@@ -15,6 +15,9 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | Garh Jaisal's Kitchen Maps destination | `https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8`; use this destination for the restaurant directions QR. Owner also supplied the Google Maps embed URL. | 2026-10-14 |
 | Desert Camp imagery | Owner-provided image assets are in `img/Desert_Camp/`; visually review subject/caption mapping before release. Do not restore removed or unlicensed images. | 2026-10-14 |
 | Jaisalmer Fort walk | Planned walk focuses on Jain temples inside Jaisalmer Fort, the Palace Museum and a heritage street walk. Current price and guide-language availability are confirmed on WhatsApp for the requested date. | 2026-10-14 |
+| Haveli history | Owner describes the haveli inside Jaisalmer Fort as approximately 750 years old, renovated into a hotel run by the Chouhan family. | 2026-11-24 |
+| Delhi Airport and Rajasthan travel | Offer Delhi Airport pickup and return, car-only Rajasthan travel, and Rajasthan tours with a car and hotels arranged by enquiry. | 2026-11-24 |
+| Tanot Mata Temple | Offer a car trip by enquiry. Confirm travel-date availability, route, access and price with the guest. | 2026-11-24 |
 
 ## Needed to unblock pages
 | # | Question | Answer | Unblocks |

@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (
       destination.origin === window.location.origin &&
-      /\/restaurant\.php$/i.test(destination.pathname) &&
+      /\/(?:restaurant|roof)\.php$/i.test(destination.pathname) &&
       destination.hash === '#reserve'
     ) {
       trackIntentEvent('table_enquiry_click', Object.assign({}, eventContext, ctaMetadataForLink(anchor), {
@@ -447,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }, attributionForCurrentPage()));
     });
 
-    const firstInvalidRestaurantField = restaurantForm.querySelector('.restaurant-field.has-error input[aria-invalid="true"]');
+    const firstInvalidRestaurantField = restaurantForm.querySelector('.restaurant-field.has-error [aria-invalid="true"]');
     if (firstInvalidRestaurantField) {
       const recoverRestaurantFieldFocus = () => {
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
