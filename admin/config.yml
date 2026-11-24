@@ -89,14 +89,14 @@ collections:
         widget: select
         required: true
         default: draft
-        hint: Approved is a recorded editorial decision only. It does not publish or import an image.
+        hint: Approved for release is an editorial decision only. The public Gallery still requires a trusted HMAC signature for this exact record and image.
         options:
           - label: Draft — not reviewed
             value: draft
-          - label: Review required
-            value: review_required
-          - label: Approved — evidence recorded and reviewed
-            value: approved
+          - label: Ready for review
+            value: ready_for_review
+          - label: Approved for release — evidence recorded and reviewed
+            value: approved_for_release
           - label: Rejected
             value: rejected
       - name: sourceEvidence
@@ -178,6 +178,38 @@ collections:
             pattern:
               - '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
               - Use a valid date in YYYY-MM-DD format.
+      - name: altTextReview
+        label: Alt-text review
+        widget: object
+        required: true
+        fields:
+          - name: status
+            label: Alt-text accuracy
+            widget: select
+            required: true
+            default: not_assessed
+            options:
+              - label: Not assessed
+                value: not_assessed
+              - label: Matched to the visible image
+                value: matched
+              - label: Mismatch — do not publish
+                value: mismatch
+          - name: evidence
+            label: What was checked in the alt text
+            widget: text
+            required: false
+          - name: reviewer
+            label: Alt-text reviewer
+            widget: string
+            required: false
+          - name: reviewedAt
+            label: Alt-text review date (YYYY-MM-DD)
+            widget: string
+            required: false
+            pattern:
+              - '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'
+              - Use a valid date in YYYY-MM-DD format.
       - name: technicalValidation
         label: Technical image validation
         widget: object
@@ -233,6 +265,39 @@ collections:
               - label: Portrait
                 value: portrait
 
+
+      - name: approval
+        label: Signed publication approval
+        widget: object
+        required: true
+        fields:
+          - name: status
+            label: Signed approval status
+            widget: select
+            required: true
+            default: pending
+            hint: Approved requires a trusted CLI signature. This CMS field alone never publishes a record.
+            options:
+              - label: Pending trusted signature
+                value: pending
+              - label: Approved — signed after review
+                value: approved
+              - label: Rejected
+                value: rejected
+              - label: Revoked
+                value: revoked
+          - name: asset_sha256
+            widget: hidden
+            default: ''
+          - name: approved_by
+            widget: hidden
+            default: ''
+          - name: approved_at
+            widget: hidden
+            default: ''
+          - name: signature
+            widget: hidden
+            default: ''
   - name: page_media_slots
     label: Page image slots
     files:
@@ -2598,4 +2663,3 @@ collections:
                 - name: signature
                   widget: hidden
                   default: ''
-

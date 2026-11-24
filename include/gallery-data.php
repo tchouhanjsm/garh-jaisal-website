@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/gallery-media-approval.php';
+
 /**
  * Public gallery presentation metadata plus the owner-managed JSON photo registry.
  *
@@ -45,6 +47,36 @@ $galleryImageRoot = $galleryRoot . '/img';
 $allowedCategories = ['hotel', 'rooms', 'desert', 'restaurant'];
 $allowedStatuses = ['live', 'draft', 'hidden'];
 $allowedCrops = ['arch', 'landscape', 'portrait', 'standard'];
+
+// Only the exact 36 original JSON records are grandfathered during rollout.
+// Any byte-level edit exits the legacy path and requires a signed approval.
+$legacyBaselinePath = __DIR__ . '/gallery-legacy-baseline.php';
+if (is_link($legacyBaselinePath) || !is_file($legacyBaselinePath)) {
+    throw new RuntimeException('Gallery legacy approval baseline is missing or unsafe.');
+}
+$legacyBaseline = require $legacyBaselinePath;
+if (!is_array($legacyBaseline) || count($legacyBaseline) !== 36) {
+    throw new RuntimeException('Gallery legacy approval baseline must contain exactly 36 records.');
+}
+foreach ($legacyBaseline as $legacyId => $legacyEntry) {
+    if (!is_string($legacyId) || !preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/D', $legacyId)
+        || !is_array($legacyEntry)
+        || !is_string($legacyEntry['record_sha256'] ?? null)
+        || !preg_match('/^[a-f0-9]{64}$/D', $legacyEntry['record_sha256'])
+        || !is_string($legacyEntry['image_path'] ?? null)
+        || !preg_match('~^img/[A-Za-z0-9._/-]+\\.(?:avif|jpe?g|png|webp)$~iD', $legacyEntry['image_path'])
+        || strpos($legacyEntry['image_path'], '..') !== false
+        || !is_string($legacyEntry['image_git_blob_sha1'] ?? null)
+        || !preg_match('/^[a-f0-9]{40}$/D', $legacyEntry['image_git_blob_sha1'])
+        || !is_int($legacyEntry['image_bytes'] ?? null) || $legacyEntry['image_bytes'] < 1) {
+        throw new RuntimeException('Gallery legacy approval baseline contains an invalid entry.');
+    }
+}
+$galleryConfig = require __DIR__ . '/site-config.php';
+$galleryApprovalKey = is_array($galleryConfig) ? ($galleryConfig['media_approval_hmac_key'] ?? '') : '';
+$galleryApprovers = is_array($galleryConfig) ? ($galleryConfig['media_approvers'] ?? []) : [];
+if (!is_string($galleryApprovalKey)) $galleryApprovalKey = '';
+if (!is_array($galleryApprovers)) $galleryApprovers = [];
 $galleryRecords = [];
 $usedGalleryIds = [];
 $usedGallerySources = [];
@@ -136,11 +168,20 @@ foreach ($galleryFiles as $galleryFile) {
         throw new RuntimeException('Duplicate Sveltia gallery source path: ' . $src);
     }
 
+    // The same approval decision is exercised by Gallery contract tests.
+    $approved = gj_gallery_media_publication_is_approved(
+        $record, $recordJson, $realImagePath, $legacyBaseline, $galleryApprovalKey, $galleryApprovers
+    );
+
     $usedGalleryIds[$id] = true;
     $usedGallerySources[$src] = true;
     $galleryRecords[$category][] = [
         'id' => $id,
         'status' => $status,
+        'approved' => $approved,
+        'approval_status' => is_array($record['approval'] ?? null)
+            ? (string) ($record['approval']['status'] ?? 'pending')
+            : ($approved ? 'legacy-baseline' : 'pending'),
         'order' => $order,
         'image' => [
             'src' => $src,
@@ -161,7 +202,7 @@ foreach ($allowedCategories as $category) {
         return $orderCompare !== 0 ? $orderCompare : strcmp($left['id'], $right['id']);
     });
     foreach ($records as $record) {
-        if ($record['status'] !== 'live') {
+        if ($record['status'] !== 'live' || ($record['approved'] ?? false) !== true) {
             continue;
         }
         $gallerySections[$category]['images'][] = $record['image'];
