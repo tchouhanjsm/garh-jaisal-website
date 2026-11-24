@@ -20,7 +20,7 @@ $googleMapsUrl = 'https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8';
 $googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.6918725708306!2d70.9117074793457!3d26.913272400000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3947bd9e89a679cf%3A0xd196c3f044898c10!2sGarh%20Jaisal's%20Kitchen!5e0!3m2!1sen!2sin!4v1791990366078!5m2!1sen!2sin";
 $instagramUrl = 'https://www.instagram.com/garhjaisal/';
 
-/* Menu/prices are from the supplied restaurant design. Verify the live menu before staging. */
+/* The dining pages share the owner-supplied menu and prices. */
 $menuConfig = require __DIR__ . '/include/menu-data.php';
 $menuConfig = is_array($menuConfig) ? $menuConfig : [];
 $menu = isset($menuConfig['items']) && is_array($menuConfig['items']) ? $menuConfig['items'] : [];
@@ -155,7 +155,7 @@ require __DIR__ . '/include/page-head.php';
       <div class="restaurant-hero-copy">
         <p class="eyebrow">Garh Jaisal's Kitchen</p>
         <h1>Rooftop dining in the heart of Jaisalmer Fort.</h1>
-        <p>Settle in above the sandstone rooftops at Garh Jaisal's Kitchen. Explore the menu, then ask us to confirm current dishes, dietary options, service hours and a table for your date.</p>
+        <p>Settle in above the sandstone rooftops at Garh Jaisal's Kitchen. <?= $menuOwnerConfirmed ? 'Browse the menu and ask us' : 'Ask us' ?> to confirm current dishes, dietary options, service hours and a table for your date.</p>
         <div class="actions">
           <a class="button button-primary" href="#reserve" data-cta-id="enquiry-restaurant-table" data-cta-location="restaurant-hero">Enquire about a table</a>
           <a class="button button-light" href="<?= e($waLink) ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-restaurant-hero" data-cta-location="restaurant-hero">WhatsApp</a>
@@ -240,34 +240,6 @@ require __DIR__ . '/include/page-head.php';
       </div>
     </div>
   </section>
-
-<?php if ($menuOwnerConfirmed && $menu !== []): ?>
-  <section class="section restaurant-featured" aria-labelledby="featured-heading">
-    <div class="site-shell">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">From the menu</p>
-          <h2 id="featured-heading">Featured dishes.</h2>
-        </div>
-        <p>Menu descriptions are a preview. Please contact the hotel to confirm the current dishes and prices.</p>
-      </div>
-
-      <div class="restaurant-feature-grid">
-        <?php foreach ($menu as $dishes): foreach ($dishes as $dish): if (!$dish['sig']) continue; ?>
-          <article class="restaurant-feature-card">
-            <span class="restaurant-diet <?= $dish['veg'] ? 'is-veg' : 'is-nonveg' ?>">
-              <?= $dish['veg'] ? 'Vegetarian' : 'Non-vegetarian' ?>
-            </span>
-            <h3><?= e($dish['n']) ?></h3>
-            <p><?= e($dish['d']) ?></p>
-            <?php if ($menuOwnerConfirmed): ?><span class="restaurant-price">₹<?= number_format($dish['p']) ?></span><?php else: ?><span class="restaurant-price">Price on request</span><?php endif; ?>
-          </article>
-        <?php endforeach; endforeach; ?>
-      </div>
-    </div>
-  </section>
-
-<?php endif; ?>
 
 <?php require __DIR__ . '/include/ui/dining-menu.php'; ?>
 

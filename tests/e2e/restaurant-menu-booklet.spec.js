@@ -36,27 +36,34 @@ test('restaurant only publishes approved menu content and keeps the booklet usab
   }
   await expect(booklet).toHaveClass(/is-enhanced/);
   await expect(booklet.locator('[data-menu-page]:visible')).toHaveCount(1);
-  await expect(booklet.locator('[data-menu-page-status]')).toHaveText('Page 1 of 4: Starters');
+  const categoryLinks = booklet.locator('[data-menu-tab]');
+  const categories = await categoryLinks.allTextContents();
+  const dishRows = booklet.locator('.restaurant-dish');
+  await expect(dishRows).toHaveCount(142);
+  await expect(booklet.locator('[data-menu-page-status]')).toHaveText(`Page 1 of ${categories.length}: ${categories[0]}`);
   await expect(booklet.locator('[data-menu-previous]')).toBeDisabled();
   await expect(booklet.locator('[data-menu-next]')).toBeEnabled();
 
-  await booklet.getByRole('link', { name: 'Desserts' }).click();
-  await expect(page).toHaveURL(/#desserts$/);
+  await categoryLinks.last().click();
+  const lastCategoryHash = await categoryLinks.last().getAttribute('href');
+  expect(new URL(page.url()).hash).toBe(lastCategoryHash);
   await expect(booklet.locator('[data-menu-page]:visible')).toHaveCount(1);
-  await expect(booklet.locator('#desserts')).toBeVisible();
-  await expect(booklet.locator('#starters')).toBeHidden();
-  await expect(booklet.locator('[data-menu-page-status]')).toHaveText('Page 4 of 4: Desserts');
+  await expect(booklet.locator(lastCategoryHash)).toBeVisible();
+  await expect(booklet.locator('[data-menu-page]').first()).toBeHidden();
+  await expect(booklet.locator('[data-menu-page-status]')).toHaveText(`Page ${categories.length} of ${categories.length}: ${categories.at(-1)}`);
   await expect(booklet.locator('[data-menu-next]')).toBeDisabled();
 
   await booklet.locator('[data-menu-previous]').click();
-  await expect(booklet.locator('[data-menu-page-status]')).toHaveText('Page 3 of 4: Dal, Bati & Breads');
-  await booklet.locator('[data-menu-tab][href="#starters"]').click();
+  await expect(booklet.locator('[data-menu-page-status]')).toHaveText(`Page ${categories.length - 1} of ${categories.length}: ${categories.at(-2)}`);
+  await categoryLinks.first().click();
 
   const vegetarianOnly = page.getByRole('button', { name: 'Vegetarian only' });
   await vegetarianOnly.click();
   await expect(vegetarianOnly).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.getByRole('heading', { name: 'Laal Maas Tikka' })).toBeHidden();
-  await expect(page.getByRole('heading', { name: 'Pyaaz Kachori' })).toBeVisible();
+  await expect(booklet.locator('.restaurant-dish[data-veg="0"]:not([hidden])')).toHaveCount(0);
+  expect(await booklet.locator('.restaurant-dish[data-veg="1"]:not([hidden])').count()).toBeGreaterThan(0);
+  await expect(booklet.locator('.restaurant-dish .is-vegan')).toHaveCount(0);
+  await expect(page.locator('#menu')).toContainText('Ask the kitchen to confirm vegan');
 
   await booklet.locator('[data-menu-print]').click();
   expect(await page.evaluate(() => window.__restaurantPrintCalled)).toBe(true);
@@ -66,6 +73,24 @@ test('restaurant only publishes approved menu content and keeps the booklet usab
     document: document.documentElement.scrollWidth,
   }));
   expect(dimensions.document, 'Restaurant menu booklet must not cause horizontal overflow').toBeLessThanOrEqual(dimensions.viewport + 1);
+
+  const menuText = await dishRows.allTextContents();
+  const dalFry = dishRows.filter({ has: page.getByRole('heading', { name: 'Dal Fry', exact: true, includeHidden: true }) });
+  await expect(dalFry).toContainText('₹250');
+  await expect(dalFry).toContainText('Vegetarian');
+  const lalMaas = dishRows.filter({ has: page.getByRole('heading', { name: 'Lal Maas', exact: true, includeHidden: true }) });
+  await expect(lalMaas).toContainText('₹700');
+  await expect(lalMaas).toContainText('Non-vegetarian');
+  const rooftopResponse = await page.goto('/roof.php#menu', { waitUntil: 'domcontentloaded' });
+  expect(rooftopResponse.ok()).toBe(true);
+  await expect(booklet).toHaveClass(/is-enhanced/);
+  expect(await dishRows.allTextContents()).toEqual(menuText);
+  await expect(booklet.locator('.restaurant-dish .is-vegetarian').first()).toBeAttached();
+  await expect(booklet.locator('.restaurant-dish .is-non-vegetarian').first()).toBeAttached();
+  await page.getByRole('button', { name: 'Vegetarian only' }).click();
+  await page.emulateMedia({ media: 'print' });
+  await expect(booklet.locator('[data-menu-page]:visible')).toHaveCount(categories.length);
+  await expect(dishRows.filter({ visible: true })).toHaveCount(142);
 });
 
 test('restaurant directions QR, map and Instagram link use the verified destinations', async ({ page }) => {

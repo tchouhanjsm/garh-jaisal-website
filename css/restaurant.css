@@ -191,6 +191,28 @@
   color:#fff;
 }
 
+.restaurant-vegtoggle[hidden],
+.restaurant-menu-group[hidden] { display:none; }
+
+.restaurant-diet-key {
+  display:flex;
+  flex-wrap:wrap;
+  padding:0;
+  margin:16px 0 8px;
+  gap:8px 18px;
+  list-style:none;
+}
+
+.restaurant-diet-badge {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:.85rem;
+  color:var(--ink);
+}
+
+.restaurant-diet-note { margin:0 0 16px; color:var(--muted); font-size:.9rem; }
+
 .restaurant-tabs{
   position:sticky;
   top:64px;
@@ -241,9 +263,16 @@
   margin:0;
 }
 
+.restaurant-menu-group > h4{
+  margin:18px 0 0;
+  color:var(--ink);
+  font-size:1.05rem;
+  font-weight:700;
+}
+
 .restaurant-dish{
   display:grid;
-  grid-template-columns:16px minmax(0,1fr) auto;
+  grid-template-columns:minmax(0,1fr) auto;
   gap:14px;
   align-items:start;
   padding:18px 0;
@@ -256,33 +285,36 @@
 }
 
 .restaurant-mark{
-  width:13px;
-  height:13px;
-  border:2px solid #28652b;
+  display:inline-grid;
+  place-items:center;
+  inline-size:15px;
+  block-size:15px;
+  flex:none;
+  border:1px solid currentColor;
   border-radius:3px;
-  margin-top:7px;
-  position:relative;
 }
 
 .restaurant-mark::after{
   content:"";
-  position:absolute;
-  width:5px;
-  height:5px;
-  left:2px;
-  top:2px;
+  width:7px;
+  height:7px;
   border-radius:50%;
   background:currentColor;
 }
 
-.restaurant-mark.is-veg{ color:#28652b; }
-.restaurant-mark.is-nonveg{ border-color:#8a382c; color:#8a382c; }
+.restaurant-mark.is-vegetarian{ color:#28652b; }
+.restaurant-mark.is-non-vegetarian{ color:#8a382c; }
+.restaurant-mark.is-non-vegetarian::after{ border-radius:0; clip-path:polygon(50% 0,100% 100%,0 100%); }
+.restaurant-mark.is-vegan{ color:#1c5b47; }
+.restaurant-mark.is-vegan::after{ border-radius:7px 0 7px 0; transform:rotate(-12deg); }
 
-.restaurant-dish h4{
+.restaurant-dish :is(h4,h5){
   margin:0 0 4px;
   font-size:1.05rem;
   font-weight:600;
 }
+
+.restaurant-dish .restaurant-diet-badge { margin-top:4px; }
 
 .restaurant-dish p{
   margin:0;
@@ -619,11 +651,16 @@
   .restaurant-map-qr-card { padding:20px 16px; }
 }
 @media print {
-  .restaurant-page .restaurant-hero,.restaurant-page .restaurant-intro,.restaurant-page .restaurant-featured,.restaurant-page .restaurant-info-section,.restaurant-page .restaurant-find-us,.restaurant-page .restaurant-reserve,.restaurant-page .restaurant-faq,.restaurant-page .restaurant-booklet-controls,.restaurant-page .restaurant-tabs,.restaurant-page .site-header,.restaurant-page .site-footer { display:none !important; }
-  .restaurant-page .restaurant-menu { padding:0; border:0; background:#fff; }
-  .restaurant-page .restaurant-category,.restaurant-page .restaurant-category[hidden] { display:block !important; break-inside:avoid; page-break-inside:avoid; }
-  .restaurant-page .restaurant-category h3 { break-after:avoid; }
-  .restaurant-page .restaurant-dish { break-inside:avoid; }
+  body:has([data-menu-booklet]) > :not(main),
+  main:has([data-menu-booklet]) > :not(.restaurant-menu,.roof-dining),
+  .roof-dining:has([data-menu-booklet]) > :not(.restaurant-menu),
+  .restaurant-menu :is(.restaurant-booklet-controls,.restaurant-tabs,.restaurant-vegtoggle,[data-menu-filter-empty]) { display:none !important; }
+  .restaurant-menu:has([data-menu-booklet]) { display:block !important; padding:0; border:0; background:#fff; }
+  .restaurant-menu-booklet.is-enhanced .restaurant-category[hidden],
+  .restaurant-menu-booklet .restaurant-menu-group[hidden] { display:block !important; }
+  .restaurant-menu-booklet .restaurant-dish[hidden] { display:grid; }
+  .restaurant-menu-booklet :is(.restaurant-category h3,.restaurant-menu-group > h4) { break-after:avoid; }
+  .restaurant-menu-booklet .restaurant-dish { break-inside:avoid; }
 }
 
 /* Sprint 34 — bring the approved bastion motif and arch crop to dining. */

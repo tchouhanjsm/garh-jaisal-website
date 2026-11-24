@@ -15,9 +15,9 @@ $arrivalAddress = 'Fort Kotari Para, Inside Jaisalmer Fort, Jaisalmer, Rajasthan
 $arrivalDriverNote = implode("\n", [
     'Garh Jaisal Haveli',
     $arrivalAddress,
-    'Vehicles cannot enter Jaisalmer Fort. Please use Fort Parking as the drop-off point.',
+    'Cars cannot enter Jaisalmer Fort. Please use Fort Parking as the drop-off point.',
     'From Fort Parking, the final walk is approximately 300 metres (5–6 minutes) through narrow fort lanes with uneven cobbles and short stair sections.',
-    'Exact hotel map pin: ' . $hotelMapsUrl,
+    'Hotel pin for the final walk: ' . $hotelMapsUrl,
 ]);
 ?>
 <!doctype html>
@@ -96,7 +96,7 @@ require __DIR__ . '/include/page-head.php';
           <p class="eyebrow">Getting here</p>
           <h1>Arrive inside Jaisalmer Fort.</h1>
           <p>
-            Garh Jaisal Haveli is inside the fort. Cars stop at Fort Parking, then it is a short walk through the lanes. Contact the hotel before travel to ask whether arrival or luggage assistance can be arranged.
+            Cars stop at Fort Parking. From there, walk about 300 metres (5–6 minutes) through the fort lanes to Garh Jaisal Haveli.
           </p>
           <div class="actions">
             <a class="button button-primary" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>" data-cta-id="call-arrival-hero" data-cta-location="arrival-hero">Call <?= htmlspecialchars($hotelPhoneDisplay, ENT_QUOTES, 'UTF-8') ?></a>
@@ -107,29 +107,7 @@ require __DIR__ . '/include/page-head.php';
         <aside class="arrival-quick-card" aria-labelledby="arrival-quick-card-title">
           <p class="eyebrow">Before you set out</p>
           <h2 id="arrival-quick-card-title">Plan for the final walk.</h2>
-          <ul class="arrival-quick-list">
-            <li>
-              <span class="arrival-quick-number" aria-hidden="true">01</span>
-              <div>
-                <strong>Start at Fort Parking</strong>
-                <p>Cars cannot enter the fort, so plan to stop here.</p>
-              </div>
-            </li>
-            <li>
-              <span class="arrival-quick-number" aria-hidden="true">02</span>
-              <div>
-                <strong>Continue on foot</strong>
-                <p>The last stretch follows narrow fort lanes with uneven cobbles and short stair sections.</p>
-              </div>
-            </li>
-            <li>
-              <span class="arrival-quick-number" aria-hidden="true">03</span>
-              <div>
-                <strong>Confirm any help</strong>
-                <p>Call or WhatsApp ahead to ask what arrival or luggage assistance can be arranged.</p>
-              </div>
-            </li>
-          </ul>
+          <p>The walk includes uneven cobbles and short stair sections. Share your arrival time with the hotel to ask about luggage or mobility assistance.</p>
           <a class="button button-primary arrival-quick-map" href="<?= htmlspecialchars($hotelMapsUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Open exact hotel pin <span aria-hidden="true">↗</span></a>
         </aside>
       </div>
@@ -146,156 +124,52 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </nav>
 
-  <section class="section arrival-overview">
+  <section class="section arrival-overview" aria-labelledby="arrival-overview-title">
     <div class="site-shell">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">The last stretch</p>
-          <h2 id="arrival-overview-title">How guests reach the haveli.</h2>
-        </div>
-        <p>
-          From Fort Parking, allow a 5–6 minute walk (roughly 300 metres). Travel time from the railway station or airport depends on your route and pickup arrangements; confirm the transfer plan for your date. The final stretch to the haveli is on foot through the fort lanes.
-        </p>
-      </div>
-
-      <div class="arrival-facts">
-        <article class="arrival-fact">
-          <span>From Fort Parking</span>
-          <strong>5–6 min walk</strong>
-          <p>The walk is roughly 300 metres and can take longer when the fort is busy. Contact the hotel before arrival to ask whether assistance can be arranged.</p>
-        </article>
-        <article class="arrival-fact">
-          <span>From the fort entrance</span>
-          <strong>3–4 min walk</strong>
-          <p>About 200 metres from the fort entrance to the haveli.</p>
-        </article>
-        <article class="arrival-fact">
-          <span>Reception and arrival help</span>
-          <strong>Contact to confirm</strong>
-          <p>Call or WhatsApp the hotel before arrival to confirm current reception hours, share your ETA, and ask what arrival assistance can be arranged.</p>
-        </article>
-      </div>
-
-      <?php
-      $guestDecisionContext = 'arrival';
-      $guestDecisionPrimaryHref = 'contact.php?topic=arrival';
-      $guestDecisionPrimaryLabel = 'Confirm arrival arrangements';
-      $guestDecisionSecondaryHref = $whatsappUrl;
-      $guestDecisionSecondaryLabel = 'WhatsApp the hotel';
-      $guestDecisionSecondaryExternal = true;
-      require __DIR__ . '/include/ui/guest-decision-panel.php';
-      unset($guestDecisionContext, $guestDecisionPrimaryHref, $guestDecisionPrimaryLabel, $guestDecisionSecondaryHref, $guestDecisionSecondaryLabel, $guestDecisionSecondaryExternal);
-      ?>
+      <h2 id="arrival-overview-title">From Fort Parking to the haveli</h2>
+      <ol class="steps arrival-route-steps" aria-label="Steps from Fort Parking to the hotel">
+        <li class="step">
+          <span class="arrival-route-number" aria-hidden="true">1</span>
+          <div>
+            <h3>Stop at Fort Parking</h3>
+            <p>Use Fort Parking as your drop-off if you are coming by car or taxi.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="arrival-route-number" aria-hidden="true">2</span>
+          <div>
+            <h3 id="walking-access-title">Walk through the Fort</h3>
+            <p>Allow about 5–6 minutes for 300 metres on narrow, uneven cobbles with two short stair sections.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="arrival-route-number" aria-hidden="true">3</span>
+          <div>
+            <h3>Find Garh Jaisal Haveli</h3>
+            <p>Follow the <a href="#arrival-map-title">hotel pin</a> on foot to Fort Kotari Para.</p>
+          </div>
+        </li>
+      </ol>
 
       <aside class="arrival-driver-card" aria-labelledby="arrival-driver-title">
         <div class="arrival-driver-card__copy">
           <p class="eyebrow">For your driver</p>
           <h3 id="arrival-driver-title">Share the right drop-off point.</h3>
-          <p>Vehicles cannot enter Jaisalmer Fort. Use Fort Parking as the drop-off point, then follow the final walk to the haveli through the fort lanes.</p>
+          <p>Cars cannot enter Jaisalmer Fort. Drop off at Fort Parking and use the hotel pin for the final walk.</p>
           <p class="arrival-driver-card__address"><?= htmlspecialchars($arrivalAddress, ENT_QUOTES, 'UTF-8') ?></p>
+          <a href="<?= htmlspecialchars($hotelMapsUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Hotel pin for the final walk</a>
         </div>
         <div class="arrival-driver-card__action">
           <button class="button button-primary arrival-driver-copy-button" type="button" data-arrival-copy="<?= htmlspecialchars($arrivalDriverNote, ENT_QUOTES, 'UTF-8') ?>" hidden>Copy arrival note for driver</button>
           <p class="arrival-driver-card__status" data-arrival-copy-status role="status" aria-live="polite"></p>
         </div>
       </aside>
-    </div>
-  </section>
 
-  <section class="section">
-    <div class="site-shell">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">On the day</p>
-          <h2>From the parking area to the door.</h2>
-        </div>
-        <p>Most guests find the short walk part of staying in the living fort.</p>
+      <div class="arrival-transfer">
+        <h3 id="travel-options-title">Coming by train or plane?</h3>
+        <p><a href="car-rental.php#car-travel-quote">Ask for a transfer quote</a> from the station or airport to Fort Parking. Rickshaw access inside the fort varies. Confirm current access with the hotel before relying on a ride.</p>
+        <a class="arrival-transfer-call" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>" data-cta-id="call-arrival-notice" data-cta-location="arrival-notice">Call about current access</a>
       </div>
-
-      <ol class="steps arrival-route-steps" aria-label="Steps from Fort Parking to the hotel">
-        <li class="step">
-          <span class="arrival-route-number" aria-hidden="true">01</span>
-          <strong>Share your ETA</strong>
-          <p>Call or WhatsApp when you are on the way and share your expected arrival time.</p>
-        </li>
-        <li class="step">
-          <span class="arrival-route-number" aria-hidden="true">02</span>
-          <strong>Stop at Fort Parking</strong>
-          <p>Cars cannot enter the fort. Use Fort Parking as the drop-off point.</p>
-        </li>
-        <li class="step">
-          <span class="arrival-route-number" aria-hidden="true">03</span>
-          <strong>Confirm any assistance</strong>
-          <p>Ask the hotel whether staff can meet you or help with luggage. Wait for confirmation before relying on an arrangement.</p>
-        </li>
-        <li class="step">
-          <span class="arrival-route-number" aria-hidden="true">04</span>
-          <strong>Walk to the haveli</strong>
-          <p>Follow the route through the fort lanes. Open the exact hotel pin if you need help finding the way.</p>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <section class="section arrival-travel">
-    <div class="site-shell">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Stations and the airport</p>
-          <h2 id="travel-options-title">Ways to reach Fort Parking.</h2>
-        </div>
-        <p>Transfer options, fares and journey times vary by route, provider and date. Contact the hotel to confirm the pickup point, vehicle, current quote, timing and availability before arranging a transfer.</p>
-      </div>
-
-      <div class="travel-grid">
-        <article class="travel-card">
-          <h3>Railway station</h3>
-          <p>Ask the hotel whether a rickshaw or other pickup can be arranged from the railway station. Confirm the pickup point, fare, timing and availability for your date.</p>
-        </article>
-        <article class="travel-card">
-          <h3>Jaisalmer airport</h3>
-          <p>Ask about a private sedan transfer to Fort Parking. Confirm the route, fare, pickup point and expected timing with the hotel before booking.</p>
-        </article>
-        <article class="travel-card">
-          <h3>Inside the fort</h3>
-          <p>Cars cannot enter the fort. A rickshaw may be an option when local access rules permit it; confirm current access and fare, and plan for the final walk from Fort Parking.</p>
-        </article>
-      </div>
-
-      <div class="arrival-notice">
-        <div>
-          <p class="eyebrow">Busy hours</p>
-          <h3>Rickshaws often stay outside from 8:00 AM to 8:00 PM.</h3>
-          <p>
-            In those hours, rickshaws are often not allowed inside the fort because the lanes are narrow and crowded. Contact the hotel to ask whether walking or luggage assistance can be arranged, and confirm before relying on it. Outside those hours, rickshaws often go inside the fort.
-          </p>
-        </div>
-        <a class="button button-primary" href="tel:<?= htmlspecialchars($hotelPhone, ENT_QUOTES, 'UTF-8') ?>" data-cta-id="call-arrival-notice" data-cta-location="arrival-notice">Call when you arrive</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section arrival-access">
-    <div class="site-shell arrival-split">
-      <div>
-        <p class="eyebrow">Walking in</p>
-        <h2 id="walking-access-title">The route is cobbled, with two short stair sections.</h2>
-        <p>The fort lanes are narrow and uneven in places. Contact the hotel before arrival to ask whether luggage or escort help can be arranged, and confirm any service hours in advance.</p>
-      </div>
-      <ul class="access-list">
-        <li>
-          <strong>Vehicle access</strong>
-          <span>Cars cannot enter. Fort Parking is the drop-off.</span>
-        </li>
-        <li>
-          <strong>Surface and steps</strong>
-          <span>Uneven cobbles and short stair sections along the route.</span>
-        </li>
-        <li>
-          <strong>Arrival assistance</strong>
-          <span>Ask the hotel whether luggage help or meet-and-assist can be arranged for your date.</span>
-        </li>
-      </ul>
     </div>
   </section>
 
@@ -303,23 +177,22 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell">
       <div class="section-head">
         <div><p class="eyebrow">Map and navigation</p><h2 id="arrival-map-title">Find the hotel inside Jaisalmer Fort.</h2></div>
-        <p>Use the map for the surrounding area, then open the hotel's exact Google Maps pin before travelling. Cars cannot enter the narrow Fort lanes.</p>
+        <p>Use the hotel pin for the walking portion from Fort Parking.</p>
       </div>
       <div class="arrival-map-grid">
         <?php
         $mapPreview = [
             'class' => 'arrival-map-frame',
-            'title' => 'Explore the area around Jaisalmer Fort.',
-            'description' => 'Load the interactive map when you need it. The exact hotel pin and the final walk from Fort Parking are available alongside.',
+            'title' => 'Preview the hotel location',
+            'description' => 'Open the interactive map to see the hotel and surrounding fort lanes.',
             'embed_url' => $hotelMapsEmbedUrl,
             'frame_title' => 'Map of Garh Jaisal Haveli near Fort Kotari Para inside Jaisalmer Fort',
         ];
         require __DIR__ . '/include/ui/map-preview.php';
         ?>
         <div class="arrival-map-copy">
-          <p class="eyebrow">Last part on foot</p>
-          <h3>Stop at Fort Parking.</h3>
-          <p>From the parking area, follow the walking route through the Fort lanes. If you need pickup or luggage assistance, contact the hotel in advance to confirm what can be arranged.</p>
+          <h3>Garh Jaisal Haveli</h3>
+          <p><?= htmlspecialchars($arrivalAddress, ENT_QUOTES, 'UTF-8') ?></p>
           <div class="actions">
             <a class="button button-primary" href="<?= htmlspecialchars($hotelMapsUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Open exact hotel pin in Google Maps</a>
             <a class="button button-secondary" href="contact.php?topic=arrival" data-cta-id="enquiry-arrival-confirm" data-cta-location="arrival-access">Confirm arrival arrangements</a>
@@ -329,12 +202,12 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
-  <section class="section arrival-contact">
+  <section class="section arrival-contact" id="arrivals">
     <div class="site-shell arrival-split">
       <div>
         <p class="eyebrow">Arrival arrangements</p>
         <h2>Confirm your arrival plan.</h2>
-        <p>Please contact the hotel before travel to confirm current reception hours, check-in and check-out times, early-arrival access, luggage storage, and arrangements for arrivals outside reception hours. Share your expected arrival time so the team can advise what may be arranged for your date.</p>
+        <p>Share your expected arrival time. Ask the hotel to confirm reception hours, luggage or mobility assistance, and what to do if you arrive early or late.</p>
         <div class="actions">
           <a class="button button-primary" href="contact.php?topic=arrival" data-cta-id="enquiry-arrival-footer" data-cta-location="arrival-contact-panel">Contact the hotel</a>
           <a class="button button-light" href="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-arrival-footer" data-cta-location="arrival-contact-panel">WhatsApp</a>
@@ -371,19 +244,13 @@ require __DIR__ . '/include/page-head.php';
       <?php
       $faq = [
           'items' => [
-              ['question' => 'Can my car enter the fort?', 'answer' => 'No. Park at Fort Parking. The haveli is roughly 300 metres away, a 5–6 minute walk; allow more time when the lanes are busy.'],
-              ['question' => 'Can you meet me at the parking area?', 'answer' => 'Contact the hotel before travel with your expected arrival time and ask whether staff can meet you. Do not assume meet-and-assist is confirmed until the hotel replies.'],
-              ['question' => 'Are rickshaws allowed inside?', 'answer' => 'Not during busy hours, about 8:00 AM–8:00 PM. Outside those times, rickshaws often go inside the fort.'],
-              ['question' => 'Can I check in early or leave luggage before check-in?', 'answer' => 'Contact the hotel before travel to confirm check-in times, whether early check-in is available, and whether luggage storage can be arranged.'],
-              ['question' => 'What if I arrive outside reception hours?', 'answer' => 'Call or WhatsApp the hotel before travel to confirm current reception hours and ask whether a meet-and-assist arrangement can be made for your expected arrival time.'],
+              ['question' => 'Can I check in early or leave luggage before check-in?', 'answer' => 'Ask the hotel to confirm check-in times and whether early access or luggage storage can be arranged.'],
+              ['question' => 'What if I arrive outside reception hours?', 'answer' => 'Confirm current reception hours and share your arrival time by phone or WhatsApp. Ask what assistance can be arranged before relying on it.'],
               ['question' => 'Is there a restaurant on site?', 'answer' => [
-                  ['text' => 'The rooftop restaurant is on site. Confirm current service times, breakfast availability, and menu options with the hotel before visiting. See the '],
-                  ['link' => ['label' => 'rooftop dining page', 'href' => 'roof.php']],
-                  ['text' => ' for the dining space.'],
+                  ['text' => 'The '],
+                  ['link' => ['label' => 'rooftop restaurant', 'href' => 'roof.php']],
+                  ['text' => ' is at the hotel. Confirm current service times, breakfast availability, and menu options.'],
               ]],
-              ['question' => 'I am arriving late at night by train. What should I do?', 'answer' => 'Call or WhatsApp the hotel before travel with your expected arrival time. Confirm current reception hours and whether late-arrival assistance can be arranged; do not assume a late-night meet is confirmed until the team confirms it.'],
-              ['question' => 'Can I get help with luggage at Fort Parking?', 'answer' => 'Call or WhatsApp before arrival to confirm what luggage assistance can be arranged at Fort Parking. Your driver can also call the hotel when you are close.'],
-              ['question' => 'Can I get a ride from the station or airport?', 'answer' => 'Ask the hotel about transfer options. Confirm the route, vehicle, pickup point, current quote, timing and availability for your date before travelling.'],
           ],
           'list_class' => 'faq-list',
       ];
@@ -391,18 +258,18 @@ require __DIR__ . '/include/page-head.php';
       ?>   </div>
   </section>
 
-  <section class="section arrival-more">
-    <div class="site-shell section-head">
-      <div>
-        <p class="eyebrow">After you arrive</p>
-        <h2>Desert experiences are arranged from the hotel.</h2>
-      </div>
-      <p>
-        Camel safaris, sunset trips, and overnight desert stays are described on the desert page. Confirm the price and timing for your date there.
-        <a class="text-link" href="pack.php">View desert experiences</a>
-      </p>
-    </div>
-  </section>
+  <div class="site-shell arrival-decision">
+      <?php
+      $guestDecisionContext = 'arrival';
+      $guestDecisionPrimaryHref = 'contact.php?topic=arrival';
+      $guestDecisionPrimaryLabel = 'Confirm arrival arrangements';
+      $guestDecisionSecondaryHref = $whatsappUrl;
+      $guestDecisionSecondaryLabel = 'WhatsApp the hotel';
+      $guestDecisionSecondaryExternal = true;
+      require __DIR__ . '/include/ui/guest-decision-panel.php';
+      unset($guestDecisionContext, $guestDecisionPrimaryHref, $guestDecisionPrimaryLabel, $guestDecisionSecondaryHref, $guestDecisionSecondaryLabel, $guestDecisionSecondaryExternal);
+      ?>
+  </div>
 
   <?php
 $ctaBand = [
@@ -430,18 +297,6 @@ $ctaBand = [
 require __DIR__ . '/include/ui/cta-band.php';
 ?>
 
-<?php
-$planningPath = [
-    'title' => 'Ready to plan your stay?',
-    'intro' => 'Use the arrival guide alongside room information and direct contact so practical details can be confirmed before travel.',
-    'links' => [
-        ['label' => 'Compare rooms', 'href' => 'room.php', 'description' => 'Review room features and current availability.'],
-        ['label' => 'Direct booking guide', 'href' => 'book-rooms-in-jaisalmer.php', 'description' => 'Understand the booking steps and what to confirm.'],
-        ['label' => 'Contact the hotel', 'href' => 'contact.php?topic=arrival', 'description' => 'Ask about arrival timing or assistance.'],
-    ],
-];
-require __DIR__ . '/include/ui/planning-path.php';
-?>
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>

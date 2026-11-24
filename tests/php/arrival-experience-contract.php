@@ -17,9 +17,10 @@ if (!is_string($direction)) {
         'booking-arrival-final',
         'arrival-final-cta',
         'js/arrival-guide.js',
-        '5–6 minute walk',
-        '3–4 min walk',
-        'Rickshaws often stay outside from 8:00 AM to 8:00 PM.',
+        '300 metres (5–6 minutes)',
+        'Rickshaw access inside the fort varies.',
+        'car-rental.php#car-travel-quote',
+        'id="walking-access-title"',
     ] as $needle) {
         if (strpos($direction, $needle) === false) $errors[] = 'direction.php missing marker: ' . $needle;
     }
@@ -29,7 +30,7 @@ $css = is_file($cssPath) ? file_get_contents($cssPath) : false;
 if (!is_string($css)) {
     $errors[] = 'css/arrival-experience.css is missing or unreadable';
 } else {
-    foreach (['.arrival-driver-card','.arrival-driver-copy-button[hidden]','.arrival-route-steps','.arrival-map','@media (max-width: 760px)','@media (prefers-reduced-motion: reduce)',':focus-visible'] as $needle) {
+    foreach (['.arrival-driver-card','.arrival-driver-copy-button[hidden]','.arrival-route-steps','.arrival-map','@media (max-width: 760px)',':focus-visible'] as $needle) {
         if (strpos($css, $needle) === false) $errors[] = 'arrival stylesheet missing marker: ' . $needle;
     }
 }

@@ -3,6 +3,11 @@ function gj_dining_menu_slug(string $value): string {
     $slug = strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/', '-', $value), '-'));
     return $slug ?: 'section';
 }
+$dietLabels = [
+    'vegan' => 'Vegan',
+    'vegetarian' => 'Vegetarian',
+    'non-vegetarian' => 'Non-vegetarian',
+];
 ?>
 <?php if ($menuOwnerConfirmed && $menu !== []): ?>
   <section id="menu" class="section restaurant-menu" aria-labelledby="menu-heading">
@@ -12,8 +17,16 @@ function gj_dining_menu_slug(string $value): string {
           <p class="eyebrow">Menu</p>
           <h2 id="menu-heading">What is on the menu.</h2>
         </div>
-        <button class="restaurant-vegtoggle" type="button" aria-pressed="false">Vegetarian only</button>
+        <button class="restaurant-vegtoggle" type="button" aria-pressed="false" hidden>Vegetarian only</button>
       </div>
+      <ul class="restaurant-diet-key" aria-label="Dietary symbols">
+        <?php foreach ($dietLabels as $diet => $label): ?>
+          <li class="restaurant-diet-badge">
+            <span class="restaurant-mark is-<?= e($diet) ?>" aria-hidden="true"></span><?= e($label) ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+      <p class="restaurant-diet-note">Some dishes have no dietary label. Ask the kitchen to confirm vegan options, Jain options or allergy requirements before ordering.</p>
 
       <div class="restaurant-menu-booklet" data-menu-booklet>
         <p class="sr-only" data-restaurant-menu-status role="status" aria-live="polite" aria-atomic="true"></p>
@@ -34,18 +47,42 @@ function gj_dining_menu_slug(string $value): string {
           <?php foreach ($menu as $category => $dishes): ?>
             <section class="restaurant-category" id="<?= e(gj_dining_menu_slug($category)) ?>" data-menu-page data-menu-page-label="<?= e($category) ?>" aria-labelledby="restaurant-menu-heading-<?= e(gj_dining_menu_slug($category)) ?>">
               <h3 id="restaurant-menu-heading-<?= e(gj_dining_menu_slug($category)) ?>"><?= e($category) ?></h3>
-              <ul>
-                <?php foreach ($dishes as $dish): ?>
-                  <li class="restaurant-dish" data-veg="<?= $dish['veg'] ? '1' : '0' ?>">
-                    <span class="restaurant-mark <?= $dish['veg'] ? 'is-veg' : 'is-nonveg' ?>" aria-hidden="true"></span>
-                    <div>
-                      <h4><?= e($dish['n']) ?></h4>
-                      <p><?= e($dish['d']) ?></p>
-                    </div>
-                    <?php if ($menuOwnerConfirmed): ?><span class="restaurant-price">₹<?= number_format($dish['p']) ?></span><?php else: ?><span class="restaurant-price">Price on request</span><?php endif; ?>
-                  </li>
-                <?php endforeach; ?>
-              </ul>
+              <?php
+              $groups = [];
+              foreach ($dishes as $dish) {
+                  $groups[$dish['group'] ?? ''][] = $dish;
+              }
+              ?>
+              <?php foreach ($groups as $group => $groupDishes): ?>
+                <div class="restaurant-menu-group">
+                  <?php if ($group !== ''): ?><h4><?= e($group) ?></h4><?php endif; ?>
+                  <ul>
+                    <?php foreach ($groupDishes as $dish):
+                      $dishDiet = $dish['diet'] ?? null;
+                      if ($dishDiet === null && is_bool($dish['veg'] ?? null)) {
+                          $dishDiet = $dish['veg'] ? 'vegetarian' : 'non-vegetarian';
+                      }
+                      $dietLabel = $dietLabels[$dishDiet] ?? null;
+                      $vegetarian = in_array($dishDiet, ['vegetarian', 'vegan'], true);
+                    ?>
+                      <li class="restaurant-dish" data-veg="<?= $vegetarian ? '1' : '0' ?>">
+                        <div>
+                          <?php $dishHeading = $group === '' ? 'h4' : 'h5'; ?>
+                          <<?= $dishHeading ?>><?= e($dish['n']) ?></<?= $dishHeading ?>>
+                          <?php if (!empty($dish['d'])): ?><p><?= e($dish['d']) ?></p><?php endif; ?>
+                          <?php if ($dietLabel !== null): ?>
+                            <span class="restaurant-diet-badge">
+                              <span class="restaurant-mark is-<?= e($dishDiet) ?>" aria-hidden="true"></span><?= e($dietLabel) ?>
+                            </span>
+                          <?php endif; ?>
+                        </div>
+                        <span class="restaurant-price">₹<?= number_format($dish['p']) ?></span>
+                      </li>
+                    <?php endforeach; ?>
+                  </ul>
+                </div>
+              <?php endforeach; ?>
+              <p class="restaurant-note" data-menu-filter-empty hidden>No dishes in this section are marked vegetarian or vegan.</p>
             </section>
           <?php endforeach; ?>
         </div>

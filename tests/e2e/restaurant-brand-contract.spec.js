@@ -14,15 +14,13 @@ test('restaurant keeps an emotional hero and light, legible information surfaces
   }));
   expect(formStyles.background).toBe('rgb(251, 244, 229)');
   expect(formStyles.radius).toBe('6px');
-  const featuredCards = page.locator('.restaurant-feature-card');
-  if (await featuredCards.count() === 0) {
+  if (await page.locator('[data-menu-booklet]').count() === 0) {
     // The owner-unconfirmed menu must not be replaced with placeholder dishes.
     const menu = page.locator('#menu');
     await expect(menu.getByRole('heading', { name: 'Ask about the current menu.' })).toBeVisible();
     await expect(menu.getByRole('link', { name: 'Ask about the current menu' })).toBeVisible();
     await expect(menu.getByRole('link', { name: 'Ask on WhatsApp ↗' })).toBeVisible();
   } else {
-    expect(await featuredCards.first().evaluate(element => getComputedStyle(element).borderRadius)).toBe('6px');
     expect(await page.locator('.restaurant-tabs a').first().evaluate(element => getComputedStyle(element).borderRadius)).toBe('6px');
     expect(await page.locator('.restaurant-vegtoggle').evaluate(element => getComputedStyle(element).borderRadius)).toBe('6px');
   }

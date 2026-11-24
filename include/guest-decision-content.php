@@ -69,7 +69,7 @@ return [
             ['label' => 'A table enquiry is a request', 'detail' => 'Sending a request does not reserve a table. Wait for the hotel to confirm the service hours and availability.'],
         ],
         'confirm' => [
-            ['label' => 'Current menu and prices', 'detail' => 'Ask which dishes and prices are current for your visit. Unapproved menu previews are not presented as the live menu.'],
+            ['label' => 'Dish availability', 'detail' => 'If you have a particular dish in mind, ask what the kitchen is serving on your date.'],
             ['label' => 'Service hours and last seating', 'detail' => 'Confirm opening hours, closed days, last seating and any same-day request cut-off.'],
             ['label' => 'Dietary needs and table availability', 'detail' => 'Discuss Jain, allergy or other dietary requirements, group size and the preferred date and time before relying on an arrangement.'],
         ],

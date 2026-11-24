@@ -52,17 +52,23 @@
     if (previous) previous.addEventListener('click', function () { showMenuPage(activePage - 1, true); });
     if (next) next.addEventListener('click', function () { showMenuPage(activePage + 1, true); });
     if (printButton) printButton.addEventListener('click', function () { window.print(); });
+    window.addEventListener('hashchange', function () {
+      Array.prototype.forEach.call(pages, function (page, index) {
+        if (window.location.hash === '#' + page.id) showMenuPage(index, false);
+      });
+    });
   }
 
-  var vegToggle = document.querySelector('.restaurant-vegtoggle');
-  if (vegToggle) {
-    var menuStatus = menuBooklet ? menuBooklet.querySelector('[data-restaurant-menu-status]') : null;
+  var vegToggle = menuBooklet && document.querySelector('#menu .restaurant-vegtoggle');
+  if (vegToggle && menuBooklet.querySelector('.restaurant-dish[data-veg="1"]')) {
+    var menuStatus = menuBooklet.querySelector('[data-restaurant-menu-status]');
+    vegToggle.hidden = false;
 
     var updateMenuFilter = function (vegOnly) {
       var matchingDishCount = 0;
       var matchingCategoryCount = 0;
 
-      document.querySelectorAll('.restaurant-dish').forEach(function (dish) {
+      menuBooklet.querySelectorAll('.restaurant-dish').forEach(function (dish) {
         var matchesFilter = !vegOnly || dish.dataset.veg === '1';
         dish.hidden = !matchesFilter;
         if (matchesFilter) matchingDishCount += 1;
@@ -70,13 +76,12 @@
 
       // The booklet owns each category's hidden state. Count matching entries
       // across the full menu without revealing inactive pages or hiding pages.
-      document.querySelectorAll('.restaurant-category').forEach(function (category) {
-        var hasMatchingDish = Array.prototype.some.call(
-          category.querySelectorAll('.restaurant-dish'),
-          function (dish) {
-            return !vegOnly || dish.dataset.veg === '1';
-          }
-        );
+      menuBooklet.querySelectorAll('.restaurant-menu-group').forEach(function (group) {
+        group.hidden = !group.querySelector('.restaurant-dish:not([hidden])');
+      });
+      menuBooklet.querySelectorAll('.restaurant-category').forEach(function (category) {
+        var hasMatchingDish = Boolean(category.querySelector('.restaurant-dish:not([hidden])'));
+        category.querySelector('[data-menu-filter-empty]').hidden = hasMatchingDish;
         if (hasMatchingDish) matchingCategoryCount += 1;
       });
 

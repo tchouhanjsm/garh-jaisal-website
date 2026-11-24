@@ -137,7 +137,7 @@ require __DIR__ . '/include/page-head.php';
         </p>
         <p>
           Ask the hotel to confirm current dishes, prices and dietary options before you visit.
-          <a href="#menu">See how to ask about the menu</a>.
+          <a href="#menu"><?= $menuOwnerConfirmed ? 'See the menu' : 'Ask about the menu' ?></a>.
         </p>
         <p>
           <a class="text-link" href="contact.php?topic=dining">Contact the hotel</a>

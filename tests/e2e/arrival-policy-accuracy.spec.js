@@ -9,7 +9,7 @@ test('Directions avoids unconfirmed check-in, reception and arrival promises', a
 
   const arrival = page.locator('.arrival-contact');
   await expect(arrival.getByRole('heading', { level: 2, name: 'Confirm your arrival plan.' })).toBeVisible();
-  await expect(arrival).toContainText('confirm current reception hours, check-in and check-out times, early-arrival access, luggage storage');
+  await expect(arrival).toContainText('confirm reception hours, luggage or mobility assistance');
   await expect(arrival).toContainText('Share your expected arrival time');
   await expect(arrival.getByRole('link', { name: 'Call', exact: true })).toBeVisible();
   await expect(arrival.getByRole('link', { name: 'WhatsApp', exact: true })).toBeVisible();
@@ -19,7 +19,7 @@ test('Directions avoids unconfirmed check-in, reception and arrival promises', a
   await expect(arrivalFaq).toContainText('What if I arrive outside reception hours?');
   await expect(arrivalFaq).toContainText('Confirm current reception hours');
   await expect(arrivalFaq).toContainText('Confirm current service times, breakfast availability, and menu options');
-  await expect(arrivalFaq).toContainText('Confirm the route, vehicle, pickup point, current quote, timing and availability for your date before travelling.');
+  await expect(page.locator('.arrival-transfer')).toContainText('Rickshaw access inside the fort varies.');
 
   const renderedCopy = await page.locator('main.arrival-page').innerText();
   for (const unconfirmedClaim of [
@@ -43,6 +43,8 @@ test('Directions avoids unconfirmed check-in, reception and arrival promises', a
     '₹1100',
     '₹120–₹150',
     'Typical door-to-door time',
+    '8:00 AM to 8:00 PM',
+    '8:00 AM–8:00 PM',
     'within 8 minutes of the train arriving',
     'about 12 minutes of travel in total',
     'about 20 minutes',

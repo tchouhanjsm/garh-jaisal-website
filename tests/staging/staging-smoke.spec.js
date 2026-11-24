@@ -239,7 +239,7 @@ test('staging release gate: route inventory, SEO, images, responsive layout and 
             const driverCopy = await driverCard.innerText();
             for (const fact of [
               'Fort Kotari Para, Inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001',
-              'Vehicles cannot enter Jaisalmer Fort',
+              'Cars cannot enter Jaisalmer Fort',
               'Fort Parking',
             ]) {
               record(driverCopy.includes(fact), 'Directions driver card is missing an approved arrival fact.', { route, viewport: viewport.width, fact });
