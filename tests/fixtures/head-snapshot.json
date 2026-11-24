@@ -191,7 +191,22 @@
     "Compare half-day and full-day guided Jaisalmer tours from the Fort. Confirm guide availability, language, itinerary and current price.",
     "Enjoy rooftop dining at Garh Jaisal's Kitchen inside Jaisalmer Fort. Enquire about a table and confirm current hours, menu and prices.",
     "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
-    "Compare heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort. Review each room's features and check availability for your dates."
+    "Compare heritage rooms at Garh Jaisal Haveli inside Jaisalmer Fort. Review each room's features and check availability for your dates.",
+    "Garh Jaisal Haveli History | A Family-Run Fort Stay",
+    "Discover the roughly 750-year-old Garh Jaisal Haveli inside Jaisalmer Fort, renovated into a heritage hotel and run by the Chouhan family.",
+    "Courtyard balconies inside Garh Jaisal Haveli",
+    "og:image:height",
+    "1467",
+    "og:image:type",
+    "image/jpeg",
+    "og:image:width",
+    "2200",
+    "twitter:image:alt",
+    "Delhi Airport Transfers & Rajasthan Tours | Garh Jaisal",
+    "Enquire about Delhi Airport pickup and return, a Rajasthan tour with hotels and a car, or vehicle-only travel. Share your route and dates for a quote.",
+    "A jeep crossing open sand on a desert route near Jaisalmer",
+    "768",
+    "1366"
   ],
   "sitemapRoutes": [
     0,
@@ -281,22 +296,38 @@
     ],
     [
       1,
-      49,
-      181,
+      191,
+      192,
       51,
       29,
       [
         [
           30,
-          181
+          192
         ],
         [
           32,
           53
         ],
         [
+          94,
+          193
+        ],
+        [
+          194,
+          195
+        ],
+        [
+          196,
+          197
+        ],
+        [
+          198,
+          199
+        ],
+        [
           34,
-          49
+          191
         ],
         [
           35,
@@ -312,15 +343,19 @@
         ],
         [
           40,
-          181
+          192
         ],
         [
           41,
           53
         ],
         [
+          200,
+          193
+        ],
+        [
           42,
-          49
+          191
         ]
       ],
       [
@@ -517,22 +552,38 @@
     ],
     [
       5,
-      72,
-      73,
+      201,
+      202,
       74,
       29,
       [
         [
           30,
-          73
+          202
         ],
         [
           32,
           75
         ],
         [
+          94,
+          203
+        ],
+        [
+          194,
+          204
+        ],
+        [
+          196,
+          197
+        ],
+        [
+          198,
+          205
+        ],
+        [
           34,
-          72
+          201
         ],
         [
           35,
@@ -548,15 +599,19 @@
         ],
         [
           40,
-          73
+          202
         ],
         [
           41,
           75
         ],
         [
+          200,
+          203
+        ],
+        [
           42,
-          72
+          201
         ]
       ],
       [
