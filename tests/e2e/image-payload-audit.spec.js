@@ -331,6 +331,18 @@ test('representative guest routes decode their LCP image and keep below-fold pho
       const page = await context.newPage();
       for (const route of IMAGE_ROUTE_SMOKE) {
         await page.goto(route, { waitUntil: 'domcontentloaded' });
+        // Directions has a text-first hero and a separate entrance photograph.
+        // The dedicated Directions image test checks responsive sizing and preload policy.
+        if (route === '/direction.php') {
+          await expect(page.locator('.arrival-hero h1')).toHaveText('Getting here');
+          await expect(page.locator('.arrival-hero img')).toHaveCount(0);
+          const entrance = page.locator('.arrival-entrance img');
+          await expect(entrance).toHaveAttribute('loading', 'lazy');
+          await expect(entrance).toHaveAttribute('alt', /\S+/);
+          await entrance.scrollIntoViewIfNeeded();
+          await expect.poll(() => entrance.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 10_000 }).toBe(true);
+          continue;
+        }
         const hero = page.locator('main img').first();
         await expect(hero, `${route} should render its first main image`).toHaveCount(1);
         await expect.poll(() => hero.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 10_000 }).toBe(true);

@@ -257,7 +257,10 @@ test('rooftop menu CTA opens the in-page menu section', async ({ page }, testInf
   await menuLink.click();
   await expect(page).toHaveURL(/\/roof\.php#menu$/);
   await expect(page.locator('#menu')).toBeVisible();
-  await expect(page.locator('#menu h2')).toHaveText(/^(?:Ask about the current menu\.|What is on the menu\.)$/);
+  await expect(page.locator('#menu h2')).toHaveText('Our menu');
+  await expect(page.locator('#menu [data-menu-booklet]')).toBeVisible();
+  await expect(page.locator('#menu .restaurant-dish')).toHaveCount(142);
+  await expect(page.locator('#menu [data-menu-page]:visible')).toHaveCount(1);
 });
 
 
@@ -376,7 +379,9 @@ test('arrival and dining contact links preserve their topic in the editable enqu
 
   await page.goto('/restaurant.php', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('link', { name: 'Send a dining enquiry →', exact: true })).toHaveAttribute('href', 'contact.php?topic=dining');
-  await expect(page.locator('.restaurant-note')).toContainText('confirming the current dishes, descriptions, prices and dietary options');
+  await expect(page.locator('#menu h2')).toHaveText('Our menu');
+  await expect(page.locator('#menu .restaurant-note')).toHaveText('Prices in INR. Dishes and prices may change.');
+  await expect(page.locator('#menu .restaurant-dish')).toHaveCount(142);
 
   await page.goto('/contact.php?topic=dining', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.contact-topic-context')).toContainText('Rooftop dining');

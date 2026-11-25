@@ -21,9 +21,9 @@ const CTA_CASES = [
   {
     route: '/direction.php',
     section: '.final-cta',
-    heading: 'Stay at Garh Jaisal Haveli.',
+    heading: null,
     links: [
-      { label: 'Book your stay', opensNewTab: true },
+      { label: 'Check rooms & rates', opensNewTab: true, matchesNavBooking: true },
       { label: 'Contact us', href: 'contact.php?topic=arrival' },
     ],
   },
@@ -74,12 +74,19 @@ test('shared CTA partials preserve existing copy, classes and destinations', asy
 
       const section = page.locator(item.section);
       await expect(section, item.route + ': CTA section').toHaveCount(1);
-      await expect(section.locator('h2')).toHaveText(item.heading);
+      if (item.heading === null) {
+        await expect(section.locator('h2')).toHaveCount(0);
+      } else {
+        await expect(section.locator('h2')).toHaveText(item.heading);
+      }
 
       for (const expectedLink of item.links) {
         const link = section.getByRole('link', { name: expectedLink.label, exact: true });
         await expect(link, item.route + ': ' + expectedLink.label).toHaveCount(1);
-        if (expectedLink.href) {
+        await expect(link).toBeVisible();
+        if (expectedLink.matchesNavBooking) {
+          await expect(link).toHaveAttribute('href', await page.locator('.nav-book').getAttribute('href'));
+        } else if (expectedLink.href) {
           await expect(link).toHaveAttribute('href', expectedLink.href);
         } else {
           await expect(link).toHaveAttribute('href', /\S+/);
