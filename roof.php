@@ -249,8 +249,8 @@ require __DIR__ . '/include/ui/planning-path.php';
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
-<script src="js/garh-v2.js"></script>
-<script src="js/roof-dining.js" defer></script>
-<script src="js/restaurant.js" defer></script>
+<script src="<?= $htmlEscape($versionedAssetUrl('js/garh-v2.js')) ?>"></script>
+<script src="<?= $htmlEscape($versionedAssetUrl('js/roof-dining.js')) ?>" defer></script>
+<script src="<?= $htmlEscape($versionedAssetUrl('js/restaurant.js')) ?>" defer></script>
 </body>
 </html>

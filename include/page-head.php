@@ -87,6 +87,18 @@ $htmlEscape = static function ($value) {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 };
 
+// Archives preserve timestamps, so use the file contents to version cached assets.
+$versionedAssetUrl = static function (string $path): string {
+    if (!preg_match('#^(?:css|js)/[a-zA-Z0-9_./-]+\.(?:css|js)$#D', $path)
+        || in_array('..', explode('/', $path), true)) {
+        return $path;
+    }
+
+    $file = dirname(__DIR__) . '/' . $path;
+    $hash = is_readable($file) && is_file($file) ? hash_file('sha256', $file) : false;
+    return $hash === false ? $path : $path . '?v=' . substr($hash, 0, 12);
+};
+
 $absoluteAssetUrl = static function ($value) use ($siteUrl) {
     $value = (string) $value;
     if (preg_match('#^https://#i', $value)) {
@@ -185,16 +197,16 @@ $analyticsIds = array_values(array_unique(array_filter(
 <?php endif; ?>
 
   <link rel="icon" type="image/png" href="img/jaisalmerlogo.png">
-  <link rel="stylesheet" href="css/garh-v2.css">
+  <link rel="stylesheet" href="<?= $htmlEscape($versionedAssetUrl('css/garh-v2.css')) ?>">
 <?php foreach ($extraStylesheets as $stylesheet): ?>
-  <link rel="stylesheet" href="<?= $htmlEscape($stylesheet) ?>">
+  <link rel="stylesheet" href="<?= $htmlEscape($versionedAssetUrl($stylesheet)) ?>">
 <?php endforeach; ?>
   <!-- Shared type, spacing and component normalization intentionally follows page CSS. -->
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/conversion-system.css">
-  <link rel="stylesheet" href="css/fort-at-dusk.css">
+  <link rel="stylesheet" href="<?= $htmlEscape($versionedAssetUrl('css/tokens.css')) ?>">
+  <link rel="stylesheet" href="<?= $htmlEscape($versionedAssetUrl('css/conversion-system.css')) ?>">
+  <link rel="stylesheet" href="<?= $htmlEscape($versionedAssetUrl('css/fort-at-dusk.css')) ?>">
   <!-- User motion preferences override page-specific animation and transition rules. -->
-  <link rel="stylesheet" href="css/accessibility.css">
+  <link rel="stylesheet" href="<?= $htmlEscape($versionedAssetUrl('css/accessibility.css')) ?>">
 <?php foreach ($preloads as $preload): ?>
 <?php if (is_array($preload) && isset($preload['href']) && is_string($preload['href']) && $preload['href'] !== ''): ?>
   <link rel="preload" as="image" href="<?= $htmlEscape($preloadAssetUrl($preload['href'])) ?>"<?php if (isset($preload['media']) && is_string($preload['media']) && preg_match('/^\((?:min|max)-width:\s*[1-9][0-9]*px\)$/D', trim($preload['media']))): ?> media="<?= $htmlEscape(trim($preload['media'])) ?>"<?php endif; ?><?php if (($preload['fetchpriority'] ?? '') === 'high'): ?> fetchpriority="high"<?php endif; ?><?php if (!empty($preload['imagesrcset'])): ?> imagesrcset="<?= $htmlEscape(preg_replace('~(^|,\\s*)/~', '$1', $preload['imagesrcset'])) ?>"<?php endif; ?><?php if (!empty($preload['imagesizes'])): ?> imagesizes="<?= $htmlEscape($preload['imagesizes']) ?>"<?php endif; ?>>

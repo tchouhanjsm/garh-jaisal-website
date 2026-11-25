@@ -17,7 +17,7 @@ $restaurant = [
 ];
 $googleMapsUrl = 'https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8';
 $googleMapsEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.6918725708306!2d70.9117074793457!3d26.913272400000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3947bd9e89a679cf%3A0xd196c3f044898c10!2sGarh%20Jaisal's%20Kitchen!5e0!3m2!1sen!2sin!4v1791990366078!5m2!1sen!2sin";
-$instagramUrl = $siteConfig['hotel_social_profiles']['Instagram'];
+$instagramUrl = $siteConfig['hotel_social_profiles']['Instagram'] ?? 'https://www.instagram.com/garhjaisal/';
 
 /* The dining pages share the owner-supplied menu and prices. */
 $menuConfig = require __DIR__ . '/include/menu-data.php';
@@ -46,7 +46,7 @@ $restaurantEntity = [
     'image' => [$heroImage],
     'servesCuisine' => 'Rajasthani',
     'telephone' => $hotelPhone,
-    'address' => gj_schema_hotel_address(),
+    'address' => gj_schema_hotel($siteUrl, $siteConfig)['address'],
     'hasMap' => $googleMapsUrl,
     'parentOrganization' => ['@id' => $siteUrl . '/#hotel'],
     'acceptsReservations' => true,
@@ -290,8 +290,8 @@ require __DIR__ . '/include/ui/planning-path.php';
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
-<script src="js/restaurant.js" defer></script>
-<script src="js/garh-v2.js"></script>
-<script src="js/map-preview.js" defer></script>
+<script src="<?= $htmlEscape($versionedAssetUrl('js/restaurant.js')) ?>" defer></script>
+<script src="<?= $htmlEscape($versionedAssetUrl('js/garh-v2.js')) ?>"></script>
+<script src="<?= $htmlEscape($versionedAssetUrl('js/map-preview.js')) ?>" defer></script>
 </body>
 </html>

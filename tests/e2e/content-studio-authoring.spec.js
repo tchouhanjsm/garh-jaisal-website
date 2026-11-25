@@ -124,7 +124,7 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     const phpPage = page.frameLocator('#php-preview-frame');
     await expect(phpPage.getByRole('heading', { name: 'Browser UI test tour', exact: true }).first()).toBeVisible({ timeout: 10000 });
     await expect(phpPage.locator('base')).toHaveAttribute('href', '/');
-    await expect(phpPage.locator('link[rel="stylesheet"][href="css/garh-v2.css"]')).toHaveCount(1);
+    await expect(phpPage.locator('link[rel="stylesheet"][href^="css/garh-v2.css?v="]')).toHaveCount(1);
     await expect.poll(() => phpPage.locator('.experience-hero-media img').evaluate((image) => image.complete && image.naturalWidth > 0)).toBe(true);
     await page.locator('#preview-mobile').click();
     await expect(page.locator('#php-preview-frame')).toHaveClass(/mobile/);

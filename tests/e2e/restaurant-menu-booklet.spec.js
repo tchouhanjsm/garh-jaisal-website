@@ -1,3 +1,6 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const { createHash } = require('node:crypto');
 const { test, expect } = require('@playwright/test');
 
 test('restaurant only publishes approved menu content and keeps the booklet usable when enabled', async ({ page }) => {
@@ -8,6 +11,11 @@ test('restaurant only publishes approved menu content and keeps the booklet usab
   const response = await page.goto('/restaurant.php#menu', { waitUntil: 'domcontentloaded' });
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
+
+  for (const asset of ['css/restaurant.css', 'js/restaurant.js']) {
+    const hash = createHash('sha256').update(fs.readFileSync(path.join(__dirname, '../..', asset))).digest('hex').slice(0, 12);
+    await expect(page.locator(`[href="${asset}?v=${hash}"],[src="${asset}?v=${hash}"]`)).toHaveCount(1);
+  }
 
   const booklet = page.locator('[data-menu-booklet]');
   if (await booklet.count() === 0) {
