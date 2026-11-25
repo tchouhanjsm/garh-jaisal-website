@@ -290,8 +290,8 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await expect(landingPreviewFrame.getByRole('heading', { name: 'A closer look', level: 2 })).toBeVisible();
     await expect(landingPreviewFrame.getByRole('heading', { name: 'Useful details', level: 2 })).toBeVisible();
     await expect(landingPreviewFrame.locator('main.studio-page')).toHaveAttribute('data-page-theme', 'sandstone');
-    await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href="css/page-builder.css"]')).toHaveCount(1);
-    await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href="css/pages/' + pagePreviewSlug + '.css"]')).toHaveCount(1);
+    await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href^="css/page-builder.css?v="]')).toHaveCount(1);
+    await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href^="css/pages/' + pagePreviewSlug + '.css?v="]')).toHaveCount(1);
     await expect.poll(() => landingPreviewFrame.locator('.studio-page-hero-media img').evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
     const landingHero = landingPreviewFrame.locator('.studio-page-hero-media img');
     await expect(landingHero).toHaveAttribute('aria-describedby', 'studio-page-hero-caption');
