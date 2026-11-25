@@ -1,564 +1,87 @@
-/* Arrival guide page. Shared chrome stays in garh-v2.css. */
-
-.arrival-page{
-  background:var(--cream);
+/* Directions layout: practical arrival card, walking guide, and map sidebar. */
+.arrival-page .arrival-shell {
+  width: min(calc(100% - 2rem), 1120px);
+  padding-block: clamp(1.25rem, 3vw, 2.5rem) 3rem;
 }
 
-.arrival-page .page-hero p{
-  max-width:680px;
-  color:#d9d1c9;
-  font-size:1.05rem;
+.arrival-page .arrival-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(260px, 1fr);
+  align-items: stretch;
+  gap: clamp(1rem, 3vw, 2rem);
 }
 
-.arrival-page .page-hero .actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  margin-top:28px;
+.arrival-hero-copy { min-width: 0; }
+.arrival-facts, .arrival-travel-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .65rem;
+  margin: 1rem 0;
 }
+.arrival-facts dd, .arrival-travel-options dd { margin: 0; }
 
-.arrival-overview{
-  background:var(--sand-light);
+.arrival-contact-actions, .arrival-section-nav, .arrival-planning-links, .arrival-stay {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.2rem;
+  align-items: center;
 }
-
-.arrival-facts,
-.travel-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
+.arrival-section-nav { margin-block: .65rem 1rem; }
+.arrival-section-nav a, .arrival-planning-links a, .arrival-help-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
-
-.arrival-fact,
-.travel-card{
-  padding:26px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.5);
+.arrival-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.85fr) minmax(260px, 1fr);
+  grid-template-areas: "route sidebar" "travel sidebar" "faq sidebar";
+  gap: 1rem;
+  align-items: start;
 }
+.arrival-overview { grid-area: route; }
+.arrival-sidebar { grid-area: sidebar; min-width: 0; }
+.arrival-transfer { grid-area: travel; }
+.arrival-faq { grid-area: faq; }
 
-.arrival-fact span,
-.arrival-address .eyebrow{
-  display:block;
+.arrival-route-steps {
+  display: grid;
+  gap: .6rem;
+  padding: 0;
+  margin: .9rem 0 1.1rem;
+  list-style: none;
 }
-
-.arrival-fact strong{
-  display:block;
-  margin:8px 0;
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:1.7rem;
-  font-weight:400;
+.arrival-route-steps li { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: .8rem; }
+.arrival-entrance {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  align-items: center;
+  gap: .9rem;
+  margin: 0;
 }
+.arrival-entrance img { width: 100%; height: 145px; object-fit: cover; object-position: 54% 100%; }
+.arrival-entrance figcaption span, .arrival-address a { display: block; }
+.arrival-address { overflow-wrap: anywhere; }
+.arrival-arrangements { margin-block-start: 1rem; }
 
-.arrival-fact p,
-.travel-card p,
-.arrival-split > div > p,
-.access-list span,
-.faq-list p,
-.arrival-address p{
-  margin:0;
-  color:var(--muted);
-}
-
-.travel-card h3,
-.arrival-notice h3,
-.arrival-address h3{
-  margin:0 0 10px;
-  font-size:1.55rem;
-}
-
-.arrival-travel{
-  background:#fff;
-}
-
-.arrival-notice{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:28px;
-  margin-top:28px;
-  padding:28px;
-  background:#eee4d7;
-  border:1px solid #d9c9b6;
-}
-
-.arrival-notice p:not(.eyebrow){
-  max-width:720px;
-  margin:0;
-  color:#65594f;
-}
-
-.arrival-notice .button{
-  flex:0 0 auto;
-}
-
-.arrival-access{
-  background:#f7f2eb;
-}
-
-.arrival-split{
-  display:grid;
-  grid-template-columns:.9fr 1.1fr;
-  gap:56px;
-  align-items:start;
-}
-
-.arrival-split h2{
-  margin:0 0 16px;
-  font-size:clamp(2.2rem,4.4vw,3.6rem);
-}
-
-.arrival-contact h2 span{
-  display:block;
-}
-
-.access-list{
-  margin:0;
-  padding:0;
-  list-style:none;
-  border-top:1px solid var(--line);
-}
-
-.access-list li{
-  display:grid;
-  grid-template-columns:180px 1fr;
-  gap:18px;
-  padding:18px 0;
-  border-bottom:1px solid var(--line);
-}
-
-.access-list strong{
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:1.15rem;
-  font-weight:400;
-}
-
-.arrival-contact{
-  background:#2a211b;
-  color:#fff;
-}
-
-.arrival-contact .eyebrow{
-  color:#d9b27a;
-}
-
-.arrival-contact .arrival-split > div > p,
-.arrival-address p{
-  color:#d7cdc4;
-}
-
-.arrival-contact .actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  margin-top:24px;
-}
-
-.arrival-address{
-  font-style:normal;
-  padding:28px;
-  border:1px solid rgba(255,255,255,.16);
-}
-
-.arrival-address p + p{
-  margin-top:14px;
-}
-
-.arrival-page a:not(.button){
-  text-decoration:underline;
-  text-underline-offset:3px;
-}
-
-.arrival-page a:not(.button):hover,
-.arrival-page a:not(.button):focus-visible{
-  color:var(--sand);
-}
-
-.arrival-faq{
-  background:var(--sand-light);
-}
-
-.faq-list details{
-  border-bottom:1px solid var(--line);
-}
-
-.faq-list details:first-child{
-  border-top:1px solid var(--line);
-}
-
-.faq-list summary{
-  position:relative;
-  padding:18px 36px 18px 0;
-  cursor:pointer;
-  list-style:none;
-  font-family:Georgia,"Times New Roman",serif;
-  font-size:1.15rem;
-}
-
-.faq-list summary::marker{
-  content:"";
-}
-
-.faq-list summary::-webkit-details-marker{
-  display:none;
-}
-
-.faq-list summary::after{
-  content:"+";
-  position:absolute;
-  right:0;
-  top:16px;
-  color:var(--brown);
-  font-family:system-ui,sans-serif;
-}
-
-.faq-list details[open] summary::after{
-  content:"\2212";
-}
-
-.faq-list details p{
-  padding:0 36px 18px 0;
-}
-
-.arrival-more .text-link{
-  display:inline-block;
-  margin-top:12px;
-}
-
-.arrival-more .section-head p{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-}
-
-@media (max-width:1000px){
-  .arrival-facts,
-  .travel-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .arrival-split{
-    grid-template-columns:1fr;
-    gap:32px;
+@media (max-width: 880px) {
+  .arrival-page .arrival-hero { grid-template-columns: minmax(0, 1fr); gap: .9rem; }
+  .arrival-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "route" "sidebar" "travel" "faq";
   }
 }
 
-@media (max-width:760px){
-  .arrival-facts,
-  .travel-grid{
-    grid-template-columns:1fr;
+@media (max-width: 520px) {
+  .arrival-facts { gap: .35rem; }
+  .arrival-facts dd { font-size: .88rem; }
+  .arrival-travel-options { grid-template-columns: minmax(0, 1fr); }
+  .arrival-entrance { grid-template-columns: 128px minmax(0, 1fr); }
+  .arrival-entrance img { height: 120px; }
+  .arrival-section-nav {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
   }
-
-  .arrival-page .page-hero .actions{
-    flex-direction:column;
-  }
-
-  .arrival-page .page-hero .actions .button{
-    width:100%;
-  }
-
-  .arrival-notice{
-    display:block;
-  }
-
-  .arrival-notice .button{
-    width:100%;
-    margin-top:18px;
-  }
-
-  .access-list li{
-    grid-template-columns:1fr;
-    gap:4px;
-  }
-
-  .arrival-contact .actions{
-    flex-direction:column;
-  }
-
-  .arrival-contact .actions .button{
-    width:100%;
-  }
-}
-
-
-/* Sprint 2A: protect grid alignment and long labels on narrow devices. */
-.arrival-page .site-shell>*,.arrival-split>*,.arrival-fact,.travel-card{min-width:0}
-.arrival-page .page-hero h1{max-width:16ch;text-wrap:balance}
-.arrival-page .section-head{align-items:start;gap:clamp(20px,4vw,48px)}
-.arrival-page .section-head>*{min-width:0}
-@media(max-width:760px){.arrival-page .section-head{grid-template-columns:minmax(0,1fr);gap:12px}.arrival-page .arrival-fact,.arrival-page .travel-card,.arrival-page .arrival-notice,.arrival-page .arrival-address{padding:20px}}
-
-
-/* Batch 3 — responsive Google Maps panel for the Fort arrival guide. */
-.arrival-map { background:#fff; }
-.arrival-map-grid { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(260px,.8fr); gap:clamp(20px,4vw,42px); align-items:stretch; margin-top:26px; }
-.arrival-map-frame { min-width:0; min-height:320px; overflow:hidden; border:1px solid var(--line); background:#e8ded1; }
-.arrival-map-frame iframe { display:block; width:100%; height:100%; min-height:340px; border:0; }
-.arrival-map-copy { display:flex; min-width:0; flex-direction:column; align-items:flex-start; justify-content:center; padding:clamp(20px,3vw,32px); border:1px solid var(--line); background:var(--sand-light); }
-.arrival-map-copy h3 { margin:0 0 12px; font-size:clamp(1.4rem,2.5vw,2rem); }
-.arrival-map-copy p:not(.eyebrow) { margin:0 0 14px; color:var(--muted); line-height:1.65; }
-.arrival-map-copy .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
-.arrival-map-copy .button { min-height:44px; white-space:normal; text-align:center; }
-@media(max-width:900px) { .arrival-map-grid { grid-template-columns:minmax(0,1fr); } }
-@media(max-width:600px) {
-  .arrival-map-frame,.arrival-map-frame iframe { min-height:280px; }
-  .arrival-map-copy .actions { width:100%; flex-direction:column; align-items:stretch; }
-  .arrival-map-copy .button { width:100%; justify-content:center; }
-}
-
-
-/* Directions refresh — arrival summary and scannable route guidance. */
-.arrival-page .arrival-hero-inner{
-  min-height:0;
-  gap:clamp(22px,3vw,34px);
-  padding-block:clamp(2.5rem,6vw,5rem);
-}
-.arrival-hero-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1.15fr) minmax(300px,.72fr);
-  gap:clamp(24px,4vw,52px);
-  align-items:center;
-}
-.arrival-hero-copy{
-  min-width:0;
-  max-width:740px;
-}
-.arrival-page .arrival-hero-copy h1{
-  max-width:15ch;
-  margin-bottom:18px;
-  font-size:clamp(2.5rem,5vw,4.35rem);
-  line-height:1.02;
-  text-wrap:balance;
-}
-.arrival-page .arrival-hero-copy > p:not(.eyebrow){
-  max-width:650px;
-  margin:0;
-  color:#f5eee7;
-  font-size:clamp(1rem,1.4vw,1.12rem);
-  line-height:1.7;
-}
-.arrival-page .arrival-hero-copy .actions{
-  margin-top:26px;
-}
-.arrival-quick-card{
-  min-width:0;
-  padding:clamp(22px,3vw,32px);
-  border:1px solid rgba(255,255,255,.7);
-  background:var(--cream);
-  color:var(--ink);
-  box-shadow:0 18px 48px rgba(0,0,0,.2);
-}
-.arrival-page .page-hero .arrival-quick-card .eyebrow{
-  margin-bottom:10px;
-  color:var(--brown);
-}
-.arrival-page .page-hero .arrival-quick-card h2{
-  margin:0 0 18px;
-  color:var(--ink);
-  font-size:clamp(1.65rem,2.4vw,2.15rem);
-  line-height:1.12;
-  letter-spacing:-.025em;
-}
-.arrival-quick-list{
-  display:grid;
-  gap:0;
-  margin:0 0 22px;
-  padding:0;
-  list-style:none;
-  border-top:1px solid var(--line);
-}
-.arrival-quick-list li{
-  display:grid;
-  grid-template-columns:34px minmax(0,1fr);
-  gap:12px;
-  align-items:start;
-  padding:15px 0;
-  border-bottom:1px solid var(--line);
-}
-.arrival-quick-number{
-  display:grid;
-  place-items:center;
-  width:30px;
-  height:30px;
-  border:1px solid var(--line);
-  border-radius:50%;
-  color:var(--brown);
-  font-size:.72rem;
-  font-weight:800;
-}
-.arrival-quick-list strong{
-  display:block;
-  margin:0 0 3px;
-  color:var(--ink);
-  font-size:.96rem;
-}
-.arrival-page .page-hero .arrival-quick-card p,
-.arrival-page .page-hero .arrival-quick-card p:last-child{
-  max-width:none;
-  margin:0;
-  color:var(--muted);
-  font-size:.88rem;
-  line-height:1.55;
-}
-.arrival-page .arrival-quick-map{
-  display:flex;
-  width:100%;
-  min-height:48px;
-  gap:8px;
-  text-align:center;
-  white-space:normal;
-}
-.arrival-quick-map span{
-  font-size:1rem;
-}
-
-/* Compact in-page jump links let guests reach the right answer without scanning the full page. */
-.arrival-section-nav{
-  position:relative;
-  z-index:2;
-  border-bottom:1px solid var(--line);
-  background:#fff;
-}
-.arrival-section-nav .site-shell{
-  display:flex;
-  align-items:stretch;
-  gap:clamp(8px,2vw,24px);
-  overflow-x:auto;
-  overscroll-behavior-inline:contain;
-  scrollbar-width:thin;
-}
-.arrival-section-nav a{
-  display:inline-flex;
-  flex:0 0 auto;
-  align-items:center;
-  min-height:54px;
-  padding:0 4px;
-  border-bottom:2px solid transparent;
-  color:var(--ink);
-  font-size:.86rem;
-  font-weight:700;
-  text-decoration:none!important;
-  white-space:nowrap;
-}
-.arrival-section-nav a:hover{
-  border-bottom-color:var(--action-primary);
-  color:var(--brown);
-}
-.arrival-section-nav a:focus-visible{
-  outline:3px solid var(--focus);
-  outline-offset:-4px;
-}
-.arrival-page [id]{
-  scroll-margin-top:100px;
-}
-
-/* Turn the parking-to-door guidance into an actual ordered route, not an unnumbered card grid. */
-.arrival-route-steps{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:14px;
-  margin:0;
-  padding:0;
-  list-style:none;
-  counter-reset:arrival-route;
-}
-.arrival-page .arrival-route-steps .step{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  min-width:0;
-  min-height:100%;
-  padding:22px;
-  border:1px solid var(--line);
-  background:#fff;
-  box-shadow:0 5px 18px rgba(42,33,27,.045);
-}
-.arrival-page .arrival-route-steps .arrival-route-number{
-  display:grid;
-  place-items:center;
-  width:38px;
-  height:38px;
-  margin-bottom:12px;
-  border-radius:50%;
-  background:var(--sand);
-  color:var(--brown);
-  font-size:.76rem;
-  font-weight:800;
-}
-.arrival-page .arrival-route-steps .step strong{
-  display:block;
-  margin:0 0 8px;
-  color:var(--ink);
-  font-size:1.08rem;
-  line-height:1.3;
-}
-.arrival-page .arrival-route-steps .step p{
-  margin:0;
-  color:var(--muted);
-  font-size:.9rem;
-  line-height:1.6;
-}
-.arrival-page .travel-card{
-  min-height:100%;
-  background:#fff;
-  transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease;
-}
-.arrival-page .travel-card:hover{
-  transform:translateY(-2px);
-  border-color:#c9ae8d;
-  box-shadow:0 10px 24px rgba(42,33,27,.07);
-}
-.arrival-page .travel-card h3{
-  line-height:1.2;
-}
-.arrival-page .arrival-map-frame iframe{
-  min-width:100%;
-}
-.arrival-page .arrival-notice{
-  border-inline-start:4px solid var(--action-primary);
-}
-
-@media(max-width:1000px){
-  .arrival-hero-layout{
-    grid-template-columns:minmax(0,1fr);
-    gap:24px;
-  }
-  .arrival-hero-copy{
-    max-width:760px;
-  }
-  .arrival-quick-card{
-    max-width:760px;
-  }
-  .arrival-route-steps{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-}
-@media(max-width:760px){
-  .arrival-page .arrival-hero-inner{
-    padding-block:clamp(2.25rem,8vw,3.5rem);
-  }
-  .arrival-page .arrival-hero-copy h1{
-    max-width:12ch;
-    font-size:clamp(2.4rem,10vw,3.25rem);
-  }
-  .arrival-hero-layout{
-    gap:22px;
-  }
-  .arrival-quick-card{
-    padding:22px;
-  }
-  .arrival-route-steps{
-    grid-template-columns:minmax(0,1fr);
-    gap:10px;
-  }
-  .arrival-page .arrival-route-steps .step{
-    padding:18px;
-  }
-  .arrival-section-nav a{
-    min-height:50px;
-    font-size:.82rem;
-  }
-}
-@media(prefers-reduced-motion:reduce){
-  .arrival-page .travel-card{
-    transition:none;
-  }
+  .arrival-section-nav a { justify-content: center; }
 }

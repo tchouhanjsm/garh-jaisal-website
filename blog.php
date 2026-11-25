@@ -74,7 +74,7 @@ require __DIR__ . '/include/page-head.php';
         <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>
         <p class="eyebrow">Blog</p>
         <h1>Travel guides for Jaisalmer’s Fort, food and desert.</h1>
-        <p class="lede">Explore the living Fort, carved havelis, regional food, old-city markets and the landscapes beyond the city. Use these guides to plan your interests, then confirm date-sensitive access, menus and arrangements directly.</p>
+        <p class="lede">Plan your arrival, explore the living Fort and its carved havelis, and choose how to spend time in the Thar Desert.</p>
       </div>
       <figure class="journal-hero-photo">
         <img src="img/jcity.jpg" <?= gj_image_dimension_attributes('img/jcity.jpg', '(max-width: 760px) 100vw, 45vw') ?> alt="Sandstone rooftops seen from Jaisalmer Fort" decoding="async">
@@ -83,7 +83,14 @@ require __DIR__ . '/include/page-head.php';
   </section>
   <section class="section" data-story-reveal>
     <div class="site-shell">
-      <div class="section-head"><div><p class="eyebrow">Start with the useful stuff</p><h2>Guides written around an actual stay.</h2></div><p>These guides use the hotel's current guest information and are designed to answer practical questions before you arrive. Time-sensitive details should always be confirmed for your travel date.</p></div>
+      <div class="section-head"><div><h2>Plan your time in Jaisalmer</h2></div></div>
+      <nav class="journal-start-links" aria-label="Start planning your visit">
+        <a href="how-to-reach-jaisalmer.php">Getting to Jaisalmer</a>
+        <a href="jaisalmer-fort-guide.php">Inside Jaisalmer Fort</a>
+        <a href="jaisalmer-havelis-guide.php">Haveli architecture</a>
+        <a href="desert-safari-guide.php">Choosing a desert safari</a>
+        <a href="jaisalmer-beyond-the-fort-guide.php">Beyond the Fort</a>
+      </nav>
       <form class="journal-search" role="search" aria-label="Search Jaisalmer travel guides" data-journal-search-form hidden>
         <div class="journal-search-fields">
           <div class="journal-search-field">

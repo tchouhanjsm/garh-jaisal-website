@@ -8,35 +8,41 @@ test('Directions puts the arrival essentials and section links within immediate 
   expect(response.status()).toBeLessThan(400);
 
   const hero = page.locator('.arrival-hero');
-  await expect(hero.getByRole('heading', { level: 1, name: 'Arrive inside Jaisalmer Fort.' })).toBeVisible();
+  await expect(hero.getByRole('heading', { level: 1, name: 'Getting here' })).toBeVisible();
 
   const arrivalCard = page.locator('.arrival-quick-card');
-  await expect(arrivalCard.getByRole('heading', { level: 2, name: 'Plan for the final walk.' })).toBeVisible();
-  await expect(arrivalCard).toContainText('Start at Fort Parking');
-  await expect(arrivalCard).toContainText('Cars cannot enter the fort');
-  await expect(arrivalCard).toContainText('uneven cobbles and short stair sections');
-  await expect(arrivalCard.getByRole('link', { name: /Open exact hotel pin/ }))
+  await expect(arrivalCard.getByRole('heading', { level: 2, name: 'Need help arriving?' })).toBeVisible();
+  await expect(hero).toContainText('Cars stop at Fort Parking');
+  await expect(hero.locator('.arrival-facts')).toContainText(/300 metres\s*About 5–6 min/);
+  await expect(hero.locator('.arrival-facts')).toContainText('Cobbles and steps');
+  await expect(hero.getByRole('link', { name: /Open hotel pin/ }))
     .toHaveAttribute('href', /^https:\/\/maps\.app\.goo\.gl\//);
 
   const sectionNav = page.getByRole('navigation', { name: 'Directions page sections' });
   for (const item of [
-    { label: 'Quick directions', href: '#arrival-overview-title' },
-    { label: 'Travel options', href: '#travel-options-title' },
-    { label: 'Walking & mobility', href: '#walking-access-title' },
-    { label: 'Map & navigation', href: '#arrival-map-title' },
+    { label: 'Walk', href: '#arrival-overview-title' },
+    { label: 'Transfers', href: '#travel-options-title' },
+    { label: 'Access', href: '#walking-access-title' },
+    { label: 'Map', href: '#arrival-map-title' },
     { label: 'FAQs', href: '#arrival-faq-title' },
   ]) {
     await expect(sectionNav.getByRole('link', { name: item.label, exact: true }))
       .toHaveAttribute('href', item.href);
   }
 
-  await sectionNav.getByRole('link', { name: 'Walking & mobility' }).click();
+  await sectionNav.getByRole('link', { name: 'Access' }).click();
   await expect(page).toHaveURL(/#walking-access-title$/);
   await expect(page.locator('#walking-access-title')).toBeVisible();
 
   const routeSteps = page.locator('.arrival-route-steps > li');
-  await expect(routeSteps).toHaveCount(4);
-  await expect(routeSteps.nth(1)).toContainText('Stop at Fort Parking');
+  await expect(routeSteps).toHaveCount(3);
+  await expect(routeSteps.first()).toContainText('Get dropped at Fort Parking');
+  await expect(routeSteps.nth(1)).toContainText('Walk through the fort');
+  await expect(page.locator('.arrival-access')).toContainText('two short stair sections');
+  await expect(routeSteps.last()).toContainText('Find the haveli entrance');
+  await expect(page.locator('.arrival-entrance img')).toHaveAttribute('alt', /Hotel Garh Jaisal sign/);
+  await expect(page.getByRole('link', { name: 'Ask for a transfer quote' }))
+    .toHaveAttribute('href', 'car-rental.php#car-travel-quote');
 });
 
 test('Directions hero, route cards and section navigation remain usable at key viewport widths', async ({ page }, testInfo) => {
@@ -60,6 +66,16 @@ test('Directions hero, route cards and section navigation remain usable at key v
     }));
     expect(dimensions.document, 'Directions must not overflow horizontally at ' + dimensions.viewport + 'px')
       .toBeLessThanOrEqual(dimensions.viewport + 1);
+
+    const walkingGuide = await page.locator('.arrival-overview').boundingBox();
+    const map = await page.locator('.arrival-map').boundingBox();
+    if (viewport.width > 880) {
+      expect(Math.abs(walkingGuide.y - map.y)).toBeLessThan(2);
+      expect(map.x).toBeGreaterThan(walkingGuide.x + walkingGuide.width);
+    } else {
+      expect(map.y).toBeGreaterThan(walkingGuide.y + walkingGuide.height);
+      if (viewport.width === 390) expect(walkingGuide.y).toBeLessThan(viewport.height - 58);
+    }
 
     await page.waitForFunction(() => {
       const card = document.querySelector('.arrival-quick-card');
@@ -123,7 +139,7 @@ test('Directions hero, route cards and section navigation remain usable at key v
     await expect(page.locator('.arrival-quick-card')).toBeVisible();
     await expect(page.locator('.arrival-driver-card')).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Directions page sections' })).toBeVisible();
-    await expect(page.locator('.arrival-route-steps > li')).toHaveCount(4);
+    await expect(page.locator('.arrival-route-steps > li')).toHaveCount(3);
   }
 });
 
@@ -138,7 +154,7 @@ test('driver arrival note copies the approved drop-off, walking and exact map-pi
   });
   await page.goto('/direction.php', { waitUntil: 'domcontentloaded' });
   const driverCard = page.locator('.arrival-driver-card');
-  await expect(driverCard.getByRole('heading', { level: 3, name: 'Share the right drop-off point.' })).toBeVisible();
+  await expect(driverCard.getByRole('heading', { level: 3, name: 'Note for your driver' })).toBeVisible();
   await expect(driverCard).toContainText('Fort Kotari Para, Inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001');
   const copyButton = driverCard.getByRole('button', { name: 'Copy arrival note for driver' });
   await expect(copyButton).toBeVisible();
@@ -148,7 +164,7 @@ test('driver arrival note copies the approved drop-off, walking and exact map-pi
   );
   const copied = await page.evaluate(() => window.__arrivalCopiedText);
   expect(copied).toContain('Garh Jaisal Haveli');
-  expect(copied).toContain('Vehicles cannot enter Jaisalmer Fort');
+  expect(copied).toContain('Cars cannot enter Jaisalmer Fort');
   expect(copied).toContain('Fort Parking');
   expect(copied).toContain('300 metres (5–6 minutes)');
   expect(copied).toContain('https://maps.app.goo.gl/nAbRiZhv78FSbju48');
@@ -161,7 +177,9 @@ test('driver arrival details remain readable when the enhancement script is unav
   await page.goto('/direction.php', { waitUntil: 'domcontentloaded' });
   const driverCard = page.locator('.arrival-driver-card');
   await expect(driverCard).toContainText('Fort Kotari Para, Inside Jaisalmer Fort, Jaisalmer, Rajasthan 345001');
-  await expect(driverCard).toContainText('Vehicles cannot enter Jaisalmer Fort');
+  await expect(driverCard).toContainText('Cars cannot enter Jaisalmer Fort');
+  await expect(driverCard.getByRole('link', { name: 'Hotel pin for the final walk' }))
+    .toHaveAttribute('href', 'https://maps.app.goo.gl/nAbRiZhv78FSbju48');
   const copyButton = driverCard.locator('button[data-arrival-copy]');
   await expect(copyButton).toHaveAttribute('hidden', '');
   await expect(copyButton).toBeHidden();

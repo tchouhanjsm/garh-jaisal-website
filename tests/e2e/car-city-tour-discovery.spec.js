@@ -55,9 +55,9 @@ test('Rooms, Rooftop Dining and Car & City preserve the booking/FAQ experience',
   await expect(page.locator('.rooms-hero-actions a').filter({ hasText: 'Check availability' })).toBeVisible();
 
   await page.goto('/roof.php', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('.page-hero-inner .actions a').filter({ hasText: 'View the menu' })).toHaveAttribute('href', 'restaurant.php#menu');
+  await expect(page.locator('.page-hero-inner .actions a').filter({ hasText: /^(?:View|Ask about) the menu$/ })).toHaveAttribute('href', '#menu');
   const rooftopEnquiry = page.locator('.page-hero-inner .actions a').filter({ hasText: 'Enquire about a table' });
-  await expect(rooftopEnquiry).toHaveAttribute('href', 'restaurant.php#reserve');
+  await expect(rooftopEnquiry).toHaveAttribute('href', '#reserve');
   await expect(rooftopEnquiry).toHaveAttribute('data-cta-id', 'enquiry-rooftop-table');
 
   await page.goto('/car-tours.php', { waitUntil: 'domcontentloaded' });

@@ -80,7 +80,7 @@ require __DIR__ . '/include/page-head.php';
     <?php require __DIR__ . '/include/ui/experience-hub-media.php'; ?>
     <div class="site-shell experience-hero-content">
       <nav class="experience-breadcrumbs" aria-label="Breadcrumb">
-        <a href="index.php">Home</a><span aria-hidden="true">/</span><a href="pack.php">Packages</a><span aria-hidden="true">/</span><span aria-current="page">Guided Jaisalmer Tours</span>
+        <a href="/">Home</a><span aria-hidden="true">/</span><a href="pack.php">Packages</a><span aria-hidden="true">/</span><span aria-current="page">Guided Jaisalmer Tours</span>
       </nav>
       <p class="eyebrow">Jaisalmer tours</p>
       <h1>See Jaisalmer with a guide, at your pace.</h1>

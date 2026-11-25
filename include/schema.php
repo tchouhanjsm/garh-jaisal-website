@@ -19,7 +19,7 @@ function gj_schema_hotel($siteUrl, $siteConfig = null)
         $telephone = '+91-' . substr($phoneDigits, 2);
     }
 
-    return [
+    $hotel = [
         '@type' => 'Hotel',
         '@id' => $baseUrl . '/#hotel',
         'name' => 'Hotel Garh Jaisal Haveli',
@@ -29,14 +29,30 @@ function gj_schema_hotel($siteUrl, $siteConfig = null)
             $baseUrl . '/img/v2/facade.jpg',
             $baseUrl . '/img/5.webp',
         ],
-        'address' => [
-            '@type' => 'PostalAddress',
-            'streetAddress' => 'Fort Kotari Para, Inside Jaisalmer Fort',
-            'addressLocality' => 'Jaisalmer',
-            'addressRegion' => 'Rajasthan',
-            'postalCode' => '345001',
-            'addressCountry' => 'IN',
-        ],
+        'address' => gj_schema_hotel_address(),
+    ];
+    if (!empty($siteConfig['hotel_email'])) {
+        $hotel['email'] = $siteConfig['hotel_email'];
+    }
+    if (!empty($siteConfig['hotel_map_url'])) {
+        $hotel['hasMap'] = $siteConfig['hotel_map_url'];
+    }
+    if (!empty($siteConfig['hotel_social_profiles'])) {
+        $hotel['sameAs'] = array_values($siteConfig['hotel_social_profiles']);
+    }
+
+    return $hotel;
+}
+
+function gj_schema_hotel_address()
+{
+    return [
+        '@type' => 'PostalAddress',
+        'streetAddress' => 'Fort Kotari Para, Inside Jaisalmer Fort',
+        'addressLocality' => 'Jaisalmer',
+        'addressRegion' => 'Rajasthan',
+        'postalCode' => '345001',
+        'addressCountry' => 'IN',
     ];
 }
 

@@ -741,3 +741,41 @@ main.thar-sunset-story--experiences .experience-duration-label{
   height:100%;
   transform:translateX(-50%);
 }
+
+
+/* The Tours hub gives the route choices more room than the photography. */
+main.thar-sunset-story--experiences .package-hero {
+  min-height: clamp(25rem, 54svh, 33rem);
+}
+
+main.thar-sunset-story--experiences .package-hero-content {
+  padding-block: clamp(3rem, 8svh, 6rem) clamp(2rem, 5svh, 3.75rem);
+}
+
+main.thar-sunset-story--experiences .experience-card > a > img {
+  width: 100%;
+  height: clamp(9rem, 15vw, 13rem);
+  aspect-ratio: auto;
+  object-fit: cover;
+  object-position: center 55%;
+}
+
+.tours-day-trip-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(14rem, .48fr);
+  align-items: center;
+  gap: clamp(1rem, 4vw, 3rem);
+  padding: clamp(1.25rem, 4vw, 3rem);
+  border-inline-start: 4px solid var(--gold-ink);
+  background: var(--surface-raised);
+}
+
+.tours-day-trip-inner h2 { margin-block: .35rem .6rem; }
+.tours-day-trip-inner p:last-child { margin-bottom: 0; }
+.tours-day-trip-inner .actions { align-items: start; }
+
+@media (max-width: 760px) {
+  main.thar-sunset-story--experiences .package-hero { min-height: 23rem; }
+  main.thar-sunset-story--experiences .experience-card > a > img { height: clamp(11rem, 42vw, 13rem); }
+  .tours-day-trip-inner { grid-template-columns: minmax(0, 1fr); }
+}

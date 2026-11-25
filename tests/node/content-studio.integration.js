@@ -180,11 +180,14 @@ async function transitionReview(type, slug, reviewStatus) {
   return result;
 }
 
-function requestStatusWithHost(url, host) {
+function requestWithHost(url, host) {
   return new Promise((resolve, reject) => {
     const request = http.request(url, { headers: { Host: host } }, response => {
-      response.resume();
-      resolve({ statusCode: response.statusCode });
+      response.setEncoding('utf8');
+      let body = '';
+      response.on('data', chunk => { body += chunk; });
+      response.on('end', () => resolve({ statusCode: response.statusCode, body }));
+      response.on('error', reject);
     });
     request.on('error', reject);
     request.end();
@@ -444,7 +447,7 @@ async function main() {
   assert.match(html, /class="experience-hero-caption">Draft preview image — add a reviewed caption before publishing\.<\/p>/,
     'an unpublished draft preview should display a clear editorial caption reminder without weakening live publication requirements');
   assert.match(html, /noindex,follow/, 'preview must be non-indexable');
-  const foreignHostPreview = await requestStatusWithHost(PHP_URL + result.body.pagePath, 'example.com');
+  const foreignHostPreview = await requestWithHost(PHP_URL + result.body.pagePath, 'example.com');
   assert.equal(foreignHostPreview.statusCode, 404, 'preview route must reject requests with a non-local Host header');
   let managedResponse = await requestJson(STUDIO_URL + '/api/content', 'GET');
   assert.ok(!managedResponse.body.items.some(item => item.slug === previewSlug), 'ephemeral preview records must not appear in content manager');
@@ -599,7 +602,10 @@ async function main() {
   assert.ok(sitemap.includes('/' + slugs[1] + '.php</loc>'), 'publishing should add the route to the sitemap');
   response = await fetch(PHP_URL + '/' + slugs[1] + '.php');
   html = await response.text();
-  assert.doesNotMatch(html, /noindex,follow/, 'published tour should no longer be noindex');
+  assert.match(html, /<meta name="robots" content="noindex,follow">/, 'localhost remains unindexed after publishing a tour');
+  const productionTour = await requestWithHost(PHP_URL + '/' + slugs[1] + '.php', 'www.hotelgarhjaisal.com');
+  assert.equal(productionTour.statusCode, 200);
+  assert.match(productionTour.body, /<meta name="robots" content="index,follow">/, 'published tour is indexable for the production Host');
   result = await requestJson(STUDIO_URL + '/api/content/tours/' + slugs[1], 'DELETE');
   assert.equal(result.response.status, 409, 'a live record must never be deleted directly');
 
@@ -766,7 +772,10 @@ async function main() {
   assert.match(html, /studio-page-image-text[^>]*>[\s\S]{0,2500}href="\/room\.php"/, 'approved section links should retain local page destinations');
   assert.match(html, /studio-page-cta[^>]*>[\s\S]{0,1500}href="\/contact\.php"/, 'CTA links should retain approved local routes');
   assert.ok(html.includes('css/page-builder.css') && html.includes('css/thar-sunset-story.css') && html.includes('css/pages/' + pageSlug + '.css'));
-  assert.doesNotMatch(html, /noindex,follow/, 'released landing page should be indexable');
+  assert.match(html, /<meta name="robots" content="noindex,follow">/, 'localhost remains unindexed after publishing a landing page');
+  const productionPage = await requestWithHost(PHP_URL + '/' + pageSlug + '.php', 'www.hotelgarhjaisal.com');
+  assert.equal(productionPage.statusCode, 200);
+  assert.match(productionPage.body, /<meta name="robots" content="index,follow">/, 'published landing page is indexable for the production Host');
   assert.ok(html.includes('og:title') && html.includes('application/ld+json'), 'landing page must retain site SEO metadata and structured schema');
 
   const editedLandingPage = landingPagePayload(pageSlug, 'sandstone');

@@ -78,7 +78,7 @@ require __DIR__ . '/include/page-head.php';
       <div class="section-head">
         <div>
           <p class="eyebrow">A simple booking path</p>
-          <h2 id="booking-path-title">Choose the room, check the dates, then plan the rest.</h2>
+          <h2 id="booking-path-title">Compare rooms, check your dates, then plan the rest.</h2>
         </div>
         <p>Room rates and availability are shown in the booking system. Tours, dining and arrival requests should be confirmed with the hotel for your travel dates.</p>
       </div>
@@ -86,7 +86,7 @@ require __DIR__ . '/include/page-head.php';
         <li>
           <span aria-hidden="true">01</span>
           <h3>Compare the rooms</h3>
-          <p>Review room photos and listed facilities before choosing the room that fits your stay.</p>
+          <p>Compare room photos and listed facilities. Ask the hotel about a specific room before booking the Heritage Room category.</p>
           <a href="room.php">Explore the rooms <span aria-hidden="true">→</span></a>
         </li>
         <li>
@@ -123,7 +123,7 @@ require __DIR__ . '/include/page-head.php';
         <p>The rooms are Sweet Purple, Rising Sun, Scarlet, Opium, Red Maharani, Green, and BlueSky. Each is different. Sweet Purple has a carved bed and a second bed. Green has a window seat. Rates stay on the booking engine, not on this page. <a href="room.php">See the rooms</a>.</p>
         <p class="eyebrow" id="eat">Eat</p>
         <h2>Meals on the roof.</h2>
-        <p>Garh Jaisal’s Kitchen is the rooftop restaurant. The menu includes vegetarian, vegan, and non-vegetarian dishes, and candlelight dinners can be arranged. Hours and prices are confirmed with the hotel. From the terrace you look over the havelis and the lit city. <a href="roof.php">Rooftop dining</a>.</p>
+        <p>Garh Jaisal’s Kitchen is the rooftop restaurant. <a href="roof.php#menu">See the rooftop menu</a> and ask the kitchen to confirm vegan, Jain or allergy options. For candlelight dinners, confirm arrangements and availability with the hotel.</p>
         <p>Planning a honeymoon or couples’ escape? Our <a href="jaisalmer-honeymoon-guide.php">Jaisalmer honeymoon guide</a> helps you plan a Fort stay, rooftop dinner and desert experience while checking details that depend on your dates.</p>
         <p class="eyebrow" id="desert">Desert</p>
         <h2>The Thar, arranged from the fort.</h2>

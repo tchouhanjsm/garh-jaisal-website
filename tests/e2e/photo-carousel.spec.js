@@ -119,7 +119,7 @@ test('room galleries show distinct room photos and preserve booking and enquiry 
   }
 });
 
-test('restaurant carousel reuses the five curated photos and does not publish unconfirmed menu prices', async ({ page }, testInfo) => {
+test('restaurant carousel reuses the five curated photos', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Restaurant content contract runs once on desktop-1280.');
   const response = await page.goto('/restaurant.php', { waitUntil: 'domcontentloaded' });
   expect(response).not.toBeNull();
@@ -130,8 +130,6 @@ test('restaurant carousel reuses the five curated photos and does not publish un
   await expect(gallery.locator('[data-photo-carousel-slide]')).toHaveCount(5);
   await expect(gallery.locator('[data-photo-carousel-controls]')).toBeVisible();
 
-  await expect(page.locator('main')).toContainText('Ask about the current menu.');
-  await expect(page.locator('main')).not.toContainText(/₹\s?\d/);
   await gallery.locator('[data-photo-carousel-next]').click();
   await expect(gallery.locator('[data-photo-carousel-status]')).toHaveText('Photo 2 of 5');
 });

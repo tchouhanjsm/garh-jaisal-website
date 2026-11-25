@@ -6,9 +6,9 @@
  *   php scripts/generate-sitemap.php       # write sitemap.xml
  *   php scripts/generate-sitemap.php --check # fail if sitemap.xml is stale
  *
- * Each lastmod is the latest Git committer date that changed that URL's PHP
- * source file. Run only in a full-history Git checkout; production serves the
- * committed sitemap.xml and does not need Git or shell execution.
+ * Editorial and Content Studio records use their own revision dates. Other
+ * routes use the latest Git committer date of their sources. Run in a full-history
+ * checkout. Production serves the committed sitemap without Git.
  */
 $root = dirname(__DIR__);
 $config = require $root . '/include/site-config.php';
@@ -229,8 +229,8 @@ foreach ($urls as $path => $priority) {
         }
     }
 
-    // Local Content Studio records have explicit dates so a generated sitemap is
-    // deterministic before their first Git commit.
+    // A published article owns its revision date even when several articles
+    // share one PHP data file. Local Studio records already use explicit dates.
     $contentRecordPath = null;
     if ($routeSlug !== '') {
         foreach ([
@@ -244,19 +244,17 @@ foreach ($urls as $path => $priority) {
             }
         }
     }
-    $lastmod = null;
+    $contentRecord = $editorialGuides[$routeSlug] ?? [];
     if ($contentRecordPath !== null) {
         $contentRecord = json_decode((string) file_get_contents($contentRecordPath), true);
-        $contentDate = is_array($contentRecord)
-            ? (string) ($contentRecord['date_modified'] ?? $contentRecord['date_published'] ?? '')
-            : '';
-        if (
-            preg_match('/^\d{4}-\d{2}-\d{2}$/D', $contentDate)
-            && checkdate((int) substr($contentDate, 5, 2), (int) substr($contentDate, 8, 2), (int) substr($contentDate, 0, 4))
-        ) {
-            $lastmod = $contentDate;
-        }
     }
+    $contentDate = is_array($contentRecord)
+        ? (string) ($contentRecord['date_modified'] ?? $contentRecord['date_published'] ?? '')
+        : '';
+    $lastmod = preg_match('/^\d{4}-\d{2}-\d{2}$/D', $contentDate)
+        && checkdate((int) substr($contentDate, 5, 2), (int) substr($contentDate, 8, 2), (int) substr($contentDate, 0, 4))
+        ? $contentDate
+        : null;
     if ($lastmod === null) {
         $lastmod = $lastmodForSource($sourceFiles);
     }

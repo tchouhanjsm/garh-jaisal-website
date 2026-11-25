@@ -21,7 +21,7 @@ $page = [
     <h1>We couldn’t find that page.</h1>
     <p>The link may be old or the address may have been entered incorrectly. You can return to the main site or contact us for help.</p>
     <div class="actions" style="display:flex;flex-wrap:wrap;gap:12px;margin-top:24px">
-      <a class="button button-primary" href="index.php">Back to home</a>
+      <a class="button button-primary" href="/">Back to home</a>
       <a class="button button-secondary" href="room.php">Explore rooms</a>
       <a class="button button-secondary" href="contact.php">Contact the hotel</a>
       <a class="button button-secondary" href="<?= htmlspecialchars($siteConfig['whatsapp_url'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">WhatsApp</a>

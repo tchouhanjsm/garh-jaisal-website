@@ -8,8 +8,8 @@ test('Directions avoids unconfirmed check-in, reception and arrival promises', a
   expect(response.status(), 'Directions should load successfully').toBeLessThan(400);
 
   const arrival = page.locator('.arrival-contact');
-  await expect(arrival.getByRole('heading', { level: 2, name: 'Confirm your arrival plan.' })).toBeVisible();
-  await expect(arrival).toContainText('confirm current reception hours, check-in and check-out times, early-arrival access, luggage storage');
+  await expect(arrival.getByRole('heading', { level: 2, name: 'Need help arriving?' })).toBeVisible();
+  await expect(arrival).toContainText('ask about luggage or mobility help');
   await expect(arrival).toContainText('Share your expected arrival time');
   await expect(arrival.getByRole('link', { name: 'Call', exact: true })).toBeVisible();
   await expect(arrival.getByRole('link', { name: 'WhatsApp', exact: true })).toBeVisible();
@@ -19,7 +19,7 @@ test('Directions avoids unconfirmed check-in, reception and arrival promises', a
   await expect(arrivalFaq).toContainText('What if I arrive outside reception hours?');
   await expect(arrivalFaq).toContainText('Confirm current reception hours');
   await expect(arrivalFaq).toContainText('Confirm current service times, breakfast availability, and menu options');
-  await expect(arrivalFaq).toContainText('Confirm the route, vehicle, pickup point, current quote, timing and availability for your date before travelling.');
+  await expect(page.locator('.arrival-transfer')).toContainText('Rickshaw access inside the fort varies.');
 
   const renderedCopy = await page.locator('main.arrival-page').innerText();
   for (const unconfirmedClaim of [
@@ -43,6 +43,8 @@ test('Directions avoids unconfirmed check-in, reception and arrival promises', a
     '₹1100',
     '₹120–₹150',
     'Typical door-to-door time',
+    '8:00 AM to 8:00 PM',
+    '8:00 AM–8:00 PM',
     'within 8 minutes of the train arriving',
     'about 12 minutes of travel in total',
     'about 20 minutes',
@@ -114,9 +116,9 @@ test('rooftop dining copy does not imply unconfirmed sunrise or all-day meal ser
   expect(renderedCopy).not.toMatch(/stay for the sunrise or sunset while you eat/i);
   expect(renderedCopy).not.toMatch(/breakfast is available daily|breakfast service/i);
   expect(renderedCopy).toContain('Contact the hotel to confirm current dining service times before visiting.');
-  await expect(rooftop.getByRole('link', { name: 'View the menu' })).toHaveAttribute('href', 'restaurant.php#menu');
+  await expect(rooftop.getByRole('link', { name: /^(?:View|Ask about) the menu$/ })).toHaveAttribute('href', '#menu');
   const rooftopEnquiry = rooftop.locator('.page-hero-inner').getByRole('link', { name: 'Enquire about a table', exact: true });
-  await expect(rooftopEnquiry).toHaveAttribute('href', 'restaurant.php#reserve');
+  await expect(rooftopEnquiry).toHaveAttribute('href', '#reserve');
   await expect(rooftopEnquiry).toHaveAttribute('data-cta-id', 'enquiry-rooftop-table');
 });
 

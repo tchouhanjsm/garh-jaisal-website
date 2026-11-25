@@ -182,6 +182,7 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
             "img/facade.webp", "js/garh-v2.js", "docs/DEPLOY-CPANEL.md",
             "scripts/check-site.php", "tests/e2e/site-smoke.spec.js",
             ".github/workflows/ci.yml", "package.json", "package-lock.json", "playwright.config.js",
+            "playwright.staging.config.js",
         ]
         selected = select_runtime_paths(tracked)
         self.assertIn(".htaccess", selected)
@@ -201,6 +202,7 @@ class DeploymentPackageSelectionTests(unittest.TestCase):
             "docs/DEPLOY-CPANEL.md", "scripts/check-site.php",
             "tests/e2e/site-smoke.spec.js", ".github/workflows/ci.yml",
             "package.json", "package-lock.json", "playwright.config.js",
+            "playwright.staging.config.js",
         ):
             self.assertNotIn(development_path, selected)
 

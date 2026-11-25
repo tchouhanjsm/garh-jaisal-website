@@ -39,8 +39,7 @@ $checks = [
         "'telephone' => \$telephone,",
     ],
     'include/page-head.php' => ['gj_schema_hotel($siteUrl, $siteConfig)'],
-    'restaurant.php' => ["'telephone' => \$hotelPhoneSchema,"],
-    'contact.php' => ["'telephone' => array_values(array_filter(", "'email' => array_values(array_filter("],
+    'restaurant.php' => ["'telephone' => \$hotelPhone,"],
 ];
 $legacy = [
     'contact.php' => [

@@ -124,7 +124,7 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     const phpPage = page.frameLocator('#php-preview-frame');
     await expect(phpPage.getByRole('heading', { name: 'Browser UI test tour', exact: true }).first()).toBeVisible({ timeout: 10000 });
     await expect(phpPage.locator('base')).toHaveAttribute('href', '/');
-    await expect(phpPage.locator('link[rel="stylesheet"][href="css/garh-v2.css"]')).toHaveCount(1);
+    await expect(phpPage.locator('link[rel="stylesheet"][href^="css/garh-v2.css?v="]')).toHaveCount(1);
     await expect.poll(() => phpPage.locator('.experience-hero-media img').evaluate((image) => image.complete && image.naturalWidth > 0)).toBe(true);
     await page.locator('#preview-mobile').click();
     await expect(page.locator('#php-preview-frame')).toHaveClass(/mobile/);
@@ -290,8 +290,8 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     await expect(landingPreviewFrame.getByRole('heading', { name: 'A closer look', level: 2 })).toBeVisible();
     await expect(landingPreviewFrame.getByRole('heading', { name: 'Useful details', level: 2 })).toBeVisible();
     await expect(landingPreviewFrame.locator('main.studio-page')).toHaveAttribute('data-page-theme', 'sandstone');
-    await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href="css/page-builder.css"]')).toHaveCount(1);
-    await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href="css/pages/' + pagePreviewSlug + '.css"]')).toHaveCount(1);
+    await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href^="css/page-builder.css?v="]')).toHaveCount(1);
+    await expect(landingPreviewFrame.locator('link[rel="stylesheet"][href^="css/pages/' + pagePreviewSlug + '.css?v="]')).toHaveCount(1);
     await expect.poll(() => landingPreviewFrame.locator('.studio-page-hero-media img').evaluate(image => image.complete && image.naturalWidth > 0)).toBe(true);
     const landingHero = landingPreviewFrame.locator('.studio-page-hero-media img');
     await expect(landingHero).toHaveAttribute('aria-describedby', 'studio-page-hero-caption');
@@ -374,7 +374,7 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     expect(fs.readFileSync(sitemapPath, 'utf8')).toContain('/' + tourSlug + '.php</loc>');
     const localTourResponse = await fetch(phpPreview + '/' + tourSlug + '.php');
     expect(localTourResponse.status).toBe(200);
-    expect(await localTourResponse.text()).not.toMatch(/noindex,follow/);
+    expect(await localTourResponse.text()).toContain('<meta name="robots" content="noindex,follow">');
     const unpublishTourResponsePromise = page.waitForResponse(response => response.url() === studioUrl + '/api/content/tours/' + tourSlug + '/status' && response.request().method() === 'PATCH');
     await tourCard.getByRole('button', { name: 'Set to Draft' }).click();
     expect((await unpublishTourResponsePromise).status()).toBe(200);
@@ -455,7 +455,7 @@ test('Content Studio guides a nontechnical user through tour and blog drafts', a
     expect(fs.readFileSync(sitemapPath, 'utf8')).toContain('/' + pageSlug + '.php</loc>');
     const livePageHtml = await (await fetch(phpPreview + '/' + pageSlug + '.php')).text();
     expect(livePageHtml).toContain('Browser UI test landing page');
-    expect(livePageHtml).not.toMatch(/noindex,follow/);
+    expect(livePageHtml).toContain('<meta name="robots" content="noindex,follow">');
 
     await pageCard.getByRole('button', { name: 'Edit' }).click();
     await expect(page.locator('#pane-pages')).toBeVisible();

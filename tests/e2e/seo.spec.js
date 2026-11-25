@@ -14,7 +14,7 @@ const routes = [...new Set(getSitemapEntries())];
 
 test.describe('technical SEO metadata', () => {
   for (const route of routes) {
-    test(`${route} has valid indexable page metadata`, async ({ page }, testInfo) => {
+    test(`${route} has valid metadata and stays noindex locally`, async ({ page }, testInfo) => {
       test.skip(testInfo.project.name !== 'desktop-1280', 'SEO metadata is viewport-independent');
 
       const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
@@ -43,8 +43,7 @@ test.describe('technical SEO metadata', () => {
 
       await expect(page.locator('main h1'), 'Expected one primary H1 inside main').toHaveCount(1);
 
-      const robots = (await page.locator('head meta[name="robots"]').getAttribute('content')) || '';
-      expect(robots.toLowerCase(), 'Sitemap routes must not be explicitly noindex').not.toContain('noindex');
+      await expect(page.locator('head meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
 
       const structuredData = await page.locator('script[type="application/ld+json"]').allTextContents();
       for (const [index, source] of structuredData.entries()) {
@@ -267,7 +266,7 @@ test('Rooms page presents all registered rooms with useful comparison and bookin
       `${name}: every room photo should have descriptive alt text`
     ).toBe(true);
     await expect(card.locator('.room-features li').first()).toBeVisible();
-    await expect(card.getByRole('link', { name: `Check availability for ${name}` })).toHaveAttribute('href', /\S/);
+    await expect(card.getByRole('link', { name: 'Check availability in the Heritage Room category' })).toHaveAttribute('href', /\S/);
   }
 
   const floorLinks = page.locator('.rooms-floor-nav-links a');
@@ -283,7 +282,7 @@ test('Rooms page presents all registered rooms with useful comparison and bookin
   await expect(page.locator('.rooms-hero-actions a.button-primary')).toHaveAttribute('target', '_blank');
   await expect(page.locator('.rooms-hero-actions a.button-primary')).toHaveAttribute('rel', /noopener/);
   for (let index = 0; index < await cards.count(); index += 1) {
-    const bookingLink = cards.nth(index).getByRole('link', { name: /Check availability for/ });
+    const bookingLink = cards.nth(index).getByRole('link', { name: 'Check availability in the Heritage Room category' });
     await expect(bookingLink).toHaveAttribute('href', bookingHref);
     await expect(bookingLink).toHaveAttribute('target', '_blank');
     await expect(bookingLink).toHaveAttribute('rel', /noopener/);
