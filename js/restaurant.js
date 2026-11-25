@@ -1,99 +1,86 @@
 (function () {
   'use strict';
 
-  var menuBooklet = document.querySelector('[data-menu-booklet]');
-  var tabs = menuBooklet ? menuBooklet.querySelectorAll('[data-menu-tab]') : [];
-  var pages = menuBooklet ? menuBooklet.querySelectorAll('[data-menu-page]') : [];
-  var previous = menuBooklet ? menuBooklet.querySelector('[data-menu-previous]') : null;
-  var next = menuBooklet ? menuBooklet.querySelector('[data-menu-next]') : null;
-  var printButton = menuBooklet ? menuBooklet.querySelector('[data-menu-print]') : null;
-  var pageStatus = menuBooklet ? menuBooklet.querySelector('[data-menu-page-status]') : null;
-  var activePage = 0;
+  const booklet = document.querySelector('[data-menu-booklet]');
+  if (booklet) {
+    const pages = Array.from(booklet.querySelectorAll('[data-menu-page]'));
+    const tabs = Array.from(booklet.querySelectorAll('[data-menu-tab]'));
+    const pageTurns = Array.from(booklet.querySelectorAll('[data-menu-turn]'));
+    const footer = booklet.querySelector('[data-menu-footer]');
+    const status = booklet.querySelector('[data-menu-page-status]');
+    const viewAll = booklet.querySelector('[data-menu-all]');
+    let activePage = 0;
+    let showAll = false;
 
-  if (menuBooklet && tabs.length && pages.length) {
-    var initialId = window.location.hash ? window.location.hash.slice(1) : '';
-    Array.prototype.forEach.call(pages, function (page, index) {
-      if (page.id === initialId) activePage = index;
-    });
-
-    function showMenuPage(index, updateAddress) {
-      activePage = Math.max(0, Math.min(index, pages.length - 1));
-      Array.prototype.forEach.call(pages, function (page, pageIndex) {
-        page.hidden = pageIndex !== activePage;
+    function showMenu(pageIndex, all, animate) {
+      const direction = pageIndex < activePage ? 1 : -1;
+      const page = pages[pageIndex];
+      activePage = pageIndex;
+      showAll = all;
+      pages.forEach((item, index) => {
+        item.hidden = !all && index !== pageIndex;
+        item.classList.remove('is-turning');
+        if (!all && index === pageIndex) tabs[index].setAttribute('aria-current', 'location');
+        else tabs[index].removeAttribute('aria-current');
       });
-      Array.prototype.forEach.call(tabs, function (tab, tabIndex) {
-        if (tabIndex === activePage) {
-          tab.classList.add('is-active');
-          tab.setAttribute('aria-current', 'location');
-        } else {
-          tab.classList.remove('is-active');
-          tab.removeAttribute('aria-current');
-        }
+      if (animate && !all) {
+        page.style.setProperty('--page-turn-angle', (direction * 8) + 'deg');
+        page.classList.add('is-turning');
+      }
+      footer.hidden = all;
+      pageTurns.forEach(button => {
+        const target = pageIndex + Number(button.dataset.menuTurn);
+        button.hidden = all;
+        button.disabled = target < 0 || target >= pages.length;
       });
-      if (previous) previous.disabled = activePage === 0;
-      if (next) next.disabled = activePage === pages.length - 1;
-      if (pageStatus) {
-        var label = pages[activePage].getAttribute('data-menu-page-label') || 'Menu';
-        pageStatus.textContent = 'Page ' + (activePage + 1) + ' of ' + pages.length + ': ' + label;
-      }
-      if (updateAddress && window.history && window.history.replaceState) {
-        window.history.replaceState(null, '', '#' + pages[activePage].id);
-      }
+      viewAll.textContent = all ? 'Back to booklet' : 'View all dishes';
+      status.textContent = all
+        ? 'All dishes'
+        : 'Page ' + (pageIndex + 1) + ' of ' + pages.length + ' · ' + page.dataset.menuPageLabel;
     }
 
-    menuBooklet.classList.add('is-enhanced');
-    showMenuPage(activePage, false);
-    Array.prototype.forEach.call(tabs, function (tab, index) {
-      tab.addEventListener('click', function (event) {
+    function restoreMenu() {
+      const hash = window.location.hash;
+      const pageIndex = pages.findIndex(page => '#' + page.id === hash);
+      if (pageIndex >= 0) showMenu(pageIndex, false, false);
+      else if (hash === '#all-dishes') showMenu(activePage, true, false);
+      else if (hash === '#menu' || !hash) showMenu(0, false, false);
+    }
+
+    function openPage(pageIndex) {
+      showMenu(pageIndex, false, showAll || pageIndex !== activePage);
+      window.history.replaceState(null, '', '#' + pages[pageIndex].id);
+    }
+
+    booklet.classList.add('is-enhanced');
+    booklet.querySelector('.restaurant-booklet-controls').hidden = false;
+    showMenu(0, false, false);
+    restoreMenu();
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', event => {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
         event.preventDefault();
-        showMenuPage(index, true);
+        openPage(index);
       });
     });
-    if (previous) previous.addEventListener('click', function () { showMenuPage(activePage - 1, true); });
-    if (next) next.addEventListener('click', function () { showMenuPage(activePage + 1, true); });
-    if (printButton) printButton.addEventListener('click', function () { window.print(); });
-  }
-
-  var vegToggle = document.querySelector('.restaurant-vegtoggle');
-  if (vegToggle) {
-    var menuStatus = menuBooklet ? menuBooklet.querySelector('[data-restaurant-menu-status]') : null;
-
-    var updateMenuFilter = function (vegOnly) {
-      var matchingDishCount = 0;
-      var matchingCategoryCount = 0;
-
-      document.querySelectorAll('.restaurant-dish').forEach(function (dish) {
-        var matchesFilter = !vegOnly || dish.dataset.veg === '1';
-        dish.hidden = !matchesFilter;
-        if (matchesFilter) matchingDishCount += 1;
+    pageTurns.forEach(button => {
+      button.addEventListener('click', () => {
+        openPage(activePage + Number(button.dataset.menuTurn));
+        if (footer.contains(button)) {
+          pages[activePage].querySelector('h3').focus({ preventScroll: true });
+          pages[activePage].scrollIntoView({ block: 'start' });
+        } else if (button.disabled) {
+          tabs[activePage].focus();
+        }
       });
-
-      // The booklet owns each category's hidden state. Count matching entries
-      // across the full menu without revealing inactive pages or hiding pages.
-      document.querySelectorAll('.restaurant-category').forEach(function (category) {
-        var hasMatchingDish = Array.prototype.some.call(
-          category.querySelectorAll('.restaurant-dish'),
-          function (dish) {
-            return !vegOnly || dish.dataset.veg === '1';
-          }
-        );
-        if (hasMatchingDish) matchingCategoryCount += 1;
-      });
-
-      if (menuStatus) {
-        var dishLabel = matchingDishCount === 1 ? 'dish' : 'dishes';
-        var categoryLabel = matchingCategoryCount === 1 ? 'category' : 'categories';
-        menuStatus.textContent = (vegOnly ? 'Vegetarian filter on' : 'Vegetarian filter off')
-          + ': ' + matchingDishCount + ' matching ' + dishLabel
-          + ' across ' + matchingCategoryCount + ' menu ' + categoryLabel + '.';
-      }
-    };
-
-    vegToggle.addEventListener('click', function () {
-      var vegOnly = vegToggle.getAttribute('aria-pressed') !== 'true';
-      vegToggle.setAttribute('aria-pressed', String(vegOnly));
-      updateMenuFilter(vegOnly);
     });
+    viewAll.addEventListener('click', () => {
+      showMenu(activePage, !showAll, false);
+      window.history.replaceState(null, '', showAll ? '#all-dishes' : '#' + pages[activePage].id);
+    });
+    booklet.querySelector('[data-menu-print]').addEventListener('click', () => window.print());
+    window.addEventListener('hashchange', restoreMenu);
   }
 
   var form = document.querySelector('.restaurant-form');

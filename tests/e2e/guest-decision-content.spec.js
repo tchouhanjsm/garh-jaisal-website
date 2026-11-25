@@ -18,6 +18,7 @@ test('guest decision panels render one truthful, actionable guide on every route
     expect(response, route.path + ' should return an HTTP response').not.toBeNull();
     expect(response.status(), route.path + ' should load successfully').toBeLessThan(400);
 
+    if (route.context === 'arrival') await page.getByText('More about arrival arrangements', { exact: true }).click();
     const panel = page.locator('[data-guest-decision-context="' + route.context + '"]');
     await expect(panel, route.path + ' should render exactly one guest decision panel').toHaveCount(1);
     await expect(panel.getByText('Published on this site', { exact: true })).toBeVisible();
@@ -75,6 +76,7 @@ test('guest decision panels remain contained and switch layout across required v
       expect(response, route.path + ' should load at ' + width + 'px').not.toBeNull();
       expect(response.status(), route.path + ' should load at ' + width + 'px').toBeLessThan(400);
 
+      if (route.context === 'arrival') await page.getByText('More about arrival arrangements', { exact: true }).click();
       const panel = page.locator('[data-guest-decision-context="' + route.context + '"]');
       await expect(panel).toBeVisible();
       const layout = await panel.evaluate(element => {

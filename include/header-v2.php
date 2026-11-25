@@ -21,7 +21,7 @@ $e = static function ($value) {
   <div class="nav-wrap">
     <div class="site-shell nav-inner">
 
-      <a class="brand" href="index.php" aria-label="Garh Jaisal Haveli home">
+      <a class="brand" href="/" aria-label="Garh Jaisal Haveli home">
         <img
           src="img/jaisalmerlogo.png"
           alt="Garh Jaisal Haveli"
@@ -47,7 +47,7 @@ $e = static function ($value) {
       </button>
 
       <nav id="main-nav" class="main-nav" aria-label="Primary navigation">
-        <a class="nav-link nav-home-mobile<?= $activePage === 'home' ? ' is-active' : '' ?>" href="index.php"<?= $currentFile === 'index.php' ? ' aria-current="page"' : '' ?>>Home</a>
+        <a class="nav-link nav-home-mobile<?= $activePage === 'home' ? ' is-active' : '' ?>" href="/"<?= $currentFile === 'index.php' ? ' aria-current="page"' : '' ?>>Home</a>
 <?php foreach ($navMain as $navItem):
     $hasGroups = !empty($navItem['groups']);
     $hasChildren = !empty($navItem['children']);

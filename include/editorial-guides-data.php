@@ -146,7 +146,7 @@ $editorialGuides = [
         'hero_alt' => 'Sandstone fort walls rising above the landscape near Jaisalmer',
         'hero_caption' => 'The sandstone Fort setting is easier to navigate when arrival details are confirmed before you set out.',
         'date_published' => '2026-10-15',
-        'date_modified' => '2026-10-15',
+        'date_modified' => '2026-11-24',
         'date_display' => '15 October 2026',
         'toc' => [
             ['id' => 'choose-route', 'label' => 'Choose your route'],
@@ -163,7 +163,7 @@ $editorialGuides = [
                 'paragraphs' => [
                     'Jaisalmer can be approached by air, rail and road. Rajasthan Tourism’s official destination guide lists the city’s airport facility and describes rail and road connections. Those pages are useful starting points, but routes, timetables, frequency and availability can change. Verify the current schedule directly with the airline, railway or transport provider before you buy a ticket.',
                     'Compare the whole journey rather than only the first leg. A convenient arrival time may be more useful than a route that looks shorter on paper, especially when you have a hotel check-in to coordinate or want to request a car arrangement. Leave a buffer for delayed services and transfer time. Do not plan a time-sensitive activity around an arrival that has not yet happened.',
-                    'Once you know how and when you reach Jaisalmer, plan the transfer from the airport, railway station or road arrival point separately. If you would like to discuss a vehicle arrangement, contact the hotel with your date, arrival point, arrival time and number of passengers so the current route and vehicle availability can be checked.',
+                    'Once you know how and when you reach Jaisalmer, plan the transfer from the airport, railway station or road arrival point. To [request a car quote](car-rental.php#car-travel-quote), share your date, arrival point, arrival time and passenger count. Wait for the hotel to confirm the route, vehicle and price.',
                 ],
                 'items' => [
                     'Use live schedules for your exact date rather than relying on an old timetable screenshot.',
@@ -208,7 +208,7 @@ $editorialGuides = [
                 'heading' => 'The final stretch into Jaisalmer Fort is on foot',
                 'paragraphs' => [
                     'This is the important detail many first-time visitors miss: cars cannot enter the lanes inside Jaisalmer Fort. Garh Jaisal Haveli is inside the Fort, so the final part of the journey is a walk rather than a vehicle drop at the hotel door. Plan for this before choosing how much luggage to bring or deciding how tightly to schedule your arrival.',
-                    'The hotel’s current guest guidance places it approximately 300 metres, or about a 5–6 minute walk, from Fort Parking and approximately 200 metres, or about a 3–4 minute walk, from the Fort entrance. Walking time varies by pace, luggage and exact stopping point; use these as planning estimates, not an assisted-arrival promise.',
+                    'From Fort Parking, allow about 5–6 minutes to walk 300 metres through narrow lanes with uneven cobbles and two short stair sections. Give yourself extra time if you are carrying luggage.',
                     'Read the full [Directions guide](direction.php) for the arrival route and save the contact details. If your group includes anyone who may need help with bags or walking, ask what assistance can be arranged before departure. Do not assume an arrangement is available until the hotel confirms it.',
                 ],
                 'items' => [

@@ -21,9 +21,15 @@ test('Contact, Directions and Rooftop retain the existing public contact channel
     const main = page.locator('main');
     for (const key of contract.phones) {
       const channel = channels[key];
-      const link = main.locator('a[href="' + channel.href + '"]').first();
-      await expect(link, contract.route + ': ' + key).toBeVisible();
-      await expect(link).toContainText(channel.text);
+      const links = main.locator('a[href="' + channel.href + '"]');
+      const number = links.filter({ hasText: channel.text }).filter({ visible: true }).first();
+      await expect(number, contract.route + ': visible ' + key).toBeVisible();
+      await expect(number).toContainText(channel.text);
+      if (contract.route === '/direction.php' && key === 'primaryPhone') {
+        const call = main.getByRole('link', { name: 'Call', exact: true });
+        await expect(call).toBeVisible();
+        await expect(call).toHaveAttribute('href', channel.href);
+      }
     }
     for (const key of contract.emails) {
       const channel = channels[key];

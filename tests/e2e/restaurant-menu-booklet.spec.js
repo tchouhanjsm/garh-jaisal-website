@@ -1,3 +1,6 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const { createHash } = require('node:crypto');
 const { test, expect } = require('@playwright/test');
 
 test('restaurant only publishes approved menu content and keeps the booklet usable when enabled', async ({ page }) => {
@@ -8,6 +11,11 @@ test('restaurant only publishes approved menu content and keeps the booklet usab
   const response = await page.goto('/restaurant.php#menu', { waitUntil: 'domcontentloaded' });
   expect(response).not.toBeNull();
   expect(response.status()).toBeLessThan(400);
+
+  for (const asset of ['css/restaurant.css', 'js/restaurant.js']) {
+    const hash = createHash('sha256').update(fs.readFileSync(path.join(__dirname, '../..', asset))).digest('hex').slice(0, 12);
+    await expect(page.locator(`[href="${asset}?v=${hash}"],[src="${asset}?v=${hash}"]`)).toHaveCount(1);
+  }
 
   const booklet = page.locator('[data-menu-booklet]');
   if (await booklet.count() === 0) {
@@ -35,37 +43,92 @@ test('restaurant only publishes approved menu content and keeps the booklet usab
     return;
   }
   await expect(booklet).toHaveClass(/is-enhanced/);
-  await expect(booklet.locator('[data-menu-page]:visible')).toHaveCount(1);
-  await expect(booklet.locator('[data-menu-page-status]')).toHaveText('Page 1 of 4: Starters');
-  await expect(booklet.locator('[data-menu-previous]')).toBeDisabled();
-  await expect(booklet.locator('[data-menu-next]')).toBeEnabled();
+  const categories = ['Breakfast', 'Drinks & Light Bites', 'Mains & Sides', 'Chicken & Mutton'];
+  const links = booklet.getByRole('navigation', { name: 'Menu sections' }).getByRole('link');
+  const pages = booklet.locator('[data-menu-page]');
+  const dishRows = booklet.locator('.restaurant-dish');
+  const status = booklet.locator('[data-menu-page-status]');
+  const top = booklet.getByRole('group', { name: 'Turn menu pages', exact: true });
+  const footer = booklet.getByRole('group', { name: 'Turn menu pages after dishes' });
+  await expect(links).toHaveText(categories);
+  await expect(dishRows).toHaveCount(142);
+  await expect(dishRows.filter({ visible: true })).toHaveCount(38);
+  await expect(pages.first()).toHaveAttribute('id', 'breakfast');
+  await expect(pages.first().getByRole('heading', { name: 'Plain Paratha', exact: true })).toBeVisible();
+  await expect(pages.first().getByRole('heading', { name: 'Omelette Plain', exact: true })).toBeVisible();
+  await expect(status).toHaveText('Page 1 of 4 · Breakfast');
+  await expect(top.getByRole('button', { name: /Previous/ })).toBeDisabled();
+  await expect(top.getByRole('button', { name: /Next/ })).toBeEnabled();
+  const firstDish = dishRows.first();
+  const nameBox = await firstDish.getByRole('heading').boundingBox();
+  const priceBox = await firstDish.locator('.restaurant-price').boundingBox();
+  expect(nameBox.x + nameBox.width).toBeLessThanOrEqual(priceBox.x);
+  expect(nameBox.width).toBeGreaterThan(priceBox.width);
 
-  await booklet.getByRole('link', { name: 'Desserts' }).click();
-  await expect(page).toHaveURL(/#desserts$/);
-  await expect(booklet.locator('[data-menu-page]:visible')).toHaveCount(1);
-  await expect(booklet.locator('#desserts')).toBeVisible();
-  await expect(booklet.locator('#starters')).toBeHidden();
-  await expect(booklet.locator('[data-menu-page-status]')).toHaveText('Page 4 of 4: Desserts');
-  await expect(booklet.locator('[data-menu-next]')).toBeDisabled();
+  await links.last().click();
+  expect(new URL(page.url()).hash).toBe('#chicken-mutton');
+  await expect(pages.filter({ visible: true })).toHaveCount(1);
+  await expect(dishRows.filter({ visible: true })).toHaveCount(9);
+  await expect(status).toHaveText('Page 4 of 4 · Chicken & Mutton');
+  await expect(top.getByRole('button', { name: /Next/ })).toBeDisabled();
 
-  await booklet.locator('[data-menu-previous]').click();
-  await expect(booklet.locator('[data-menu-page-status]')).toHaveText('Page 3 of 4: Dal, Bati & Breads');
-  await booklet.locator('[data-menu-tab][href="#starters"]').click();
+  await footer.getByRole('button', { name: /Previous/ }).click();
+  await expect(booklet.getByRole('heading', { name: 'Mains & Sides', exact: true })).toBeFocused();
+  await expect(status).toHaveText('Page 3 of 4 · Mains & Sides');
+  await expect(page.getByRole('button', { name: 'Vegetarian only' })).toHaveCount(0);
+  await booklet.getByRole('button', { name: 'View all dishes' }).click();
+  await expect(status).toHaveText('All dishes');
+  await expect(dishRows.filter({ visible: true })).toHaveCount(142);
+  await expect(footer).toBeHidden();
+  await expect(booklet.locator('.restaurant-dish .is-vegan')).toHaveCount(0);
+  await expect(page.locator('#menu').getByRole('link', { name: 'Ask about vegan options' }))
+    .toHaveAttribute('href', 'contact.php?topic=dining');
+  await booklet.getByRole('button', { name: 'Back to booklet' }).click();
+  await expect(status).toHaveText('Page 3 of 4 · Mains & Sides');
+  await expect(dishRows.filter({ visible: true })).toHaveCount(46);
 
-  const vegetarianOnly = page.getByRole('button', { name: 'Vegetarian only' });
-  await vegetarianOnly.click();
-  await expect(vegetarianOnly).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.getByRole('heading', { name: 'Laal Maas Tikka' })).toBeHidden();
-  await expect(page.getByRole('heading', { name: 'Pyaaz Kachori' })).toBeVisible();
-
-  await booklet.locator('[data-menu-print]').click();
+  await booklet.getByRole('button', { name: 'Print menu' }).click();
   expect(await page.evaluate(() => window.__restaurantPrintCalled)).toBe(true);
 
-  const dimensions = await page.evaluate(() => ({
-    viewport: window.innerWidth,
-    document: document.documentElement.scrollWidth,
-  }));
-  expect(dimensions.document, 'Restaurant menu booklet must not cause horizontal overflow').toBeLessThanOrEqual(dimensions.viewport + 1);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth))
+    .toBeLessThanOrEqual(await page.evaluate(() => window.innerWidth + 1));
+
+  const menuText = await dishRows.allTextContents();
+  const dalFry = dishRows.filter({ has: page.getByRole('heading', { name: 'Dal Fry', exact: true, includeHidden: true }) });
+  await expect(dalFry).toContainText('₹250');
+  await expect(dalFry).toContainText('Vegetarian');
+  const lalMaas = dishRows.filter({ has: page.getByRole('heading', { name: 'Lal Maas', exact: true, includeHidden: true }) });
+  await expect(lalMaas).toContainText('₹700');
+  await expect(lalMaas).toContainText('Non-vegetarian');
+  const rooftopResponse = await page.goto('/roof.php#drinks-light-bites', { waitUntil: 'domcontentloaded' });
+  expect(rooftopResponse.ok()).toBe(true);
+  await expect(booklet).toHaveClass(/is-enhanced/);
+  expect(await dishRows.allTextContents()).toEqual(menuText);
+  await expect(booklet.locator('.restaurant-dish .is-vegetarian').first()).toBeAttached();
+  await expect(booklet.locator('.restaurant-dish .is-non-vegetarian').first()).toBeAttached();
+  await expect(status).toHaveText('Page 2 of 4 · Drinks & Light Bites');
+  await expect(dishRows.filter({ visible: true })).toHaveCount(49);
+  await page.emulateMedia({ media: 'print' });
+  await expect(booklet.locator('[data-menu-page]:visible')).toHaveCount(categories.length);
+  await expect(dishRows.filter({ visible: true })).toHaveCount(142);
+});
+
+test('both dining pages show the full menu with JavaScript disabled', async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'The fallback uses the same markup at every viewport.');
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    for (const route of ['/restaurant.php', '/roof.php']) {
+      await page.goto(testInfo.project.use.baseURL + route + '#menu', { waitUntil: 'domcontentloaded' });
+      await expect(page.locator('.restaurant-dish:visible')).toHaveCount(142);
+      await expect(page.getByRole('button', { name: 'Print menu' })).toBeHidden();
+      await expect(page.locator('[data-menu-footer]')).toBeHidden();
+      await page.getByRole('navigation', { name: 'Menu sections' }).getByRole('link', { name: 'Breakfast' }).click();
+      await expect(page).toHaveURL(/#breakfast$/);
+    }
+  } finally {
+    await context.close();
+  }
 });
 
 test('restaurant directions QR, map and Instagram link use the verified destinations', async ({ page }) => {

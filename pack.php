@@ -5,6 +5,11 @@ $activePage = 'packages';
 $siteUrl = rtrim($siteConfig['site_url'], '/');
 $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] ?? []), 'is_string'));
 $canonical = $siteUrl . '/pack.php';
+$tanotWhatsAppUrl = rtrim((string) $siteConfig['whatsapp_url'], '/') . '?text=' . rawurlencode(
+    'Hello, I would like to ask about a trip from Jaisalmer to Tanot Mata Temple. '
+    . 'Travel date: [date]. Travellers: [number]. Pickup: [location]. '
+    . 'Please confirm availability, current visitor access, pickup and the total quote.'
+);
 $visibleExperiences = array_filter($experiences, static function ($item) {
     return ($item['status'] ?? 'live') === 'live' && ($item['duration_type'] ?? '') !== 'hub';
 });
@@ -63,16 +68,19 @@ $faqItems = [
     ['question' => "How do I confirm current prices and availability?", 'answer' => "Contact the hotel for the current price, availability, route, pickup arrangement, guide availability and exact inclusions for your travel date."],
     ['question' => "Can I combine a city tour with a desert safari?", 'answer' => "The page lists city and desert options separately. Contact the hotel to check the timing and arrangements for your dates before planning both."],
 ];
+$pageTitle = 'Jaisalmer Tours & Desert Safaris | Garh Jaisal Haveli';
+$pageDescription = 'Compare Jaisalmer city tours, sunset camel safaris and overnight desert stays. Ask Garh Jaisal Haveli about a trip to Tanot Mata Temple.';
+$socialDescription = 'Plan a guided city tour or desert safari from Jaisalmer, or enquire about a trip to Tanot Mata Temple.';
 $page = [
-    'title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
-    'description' => 'Explore desert safaris and guided Jaisalmer tours from Garh Jaisal Haveli, including camel safaris, overnight stays and half-day or full-day city tours.',
+    'title' => $pageTitle,
+    'description' => $pageDescription,
     'path' => '/pack.php',
-    'og_title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
-    'og_description' => 'Choose from desert safari experiences and guided Jaisalmer tours arranged from Garh Jaisal Haveli inside Jaisalmer Fort.',
+    'og_title' => $pageTitle,
+    'og_description' => $socialDescription,
     'og_image' => '/img/desert11.jpg',
     'og_image_alt' => 'A camel rider travelling across sand dunes in the Thar Desert',
-    'twitter_title' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
-    'twitter_description' => 'Choose from desert safari experiences and guided Jaisalmer tours arranged from Garh Jaisal Haveli inside Jaisalmer Fort.',
+    'twitter_title' => $pageTitle,
+    'twitter_description' => $socialDescription,
     'twitter_image' => '/img/desert11.jpg',
     'css' => ['css/packages.css', 'css/experiences.css', 'css/thar-sunset-story.css'],
     'schema' => [
@@ -80,8 +88,8 @@ $page = [
             '@type' => 'WebPage',
             '@id' => $canonical . '#webpage',
             'url' => $canonical,
-            'name' => 'Jaisalmer Desert Experiences & Tours | Garh Jaisal Haveli',
-            'description' => 'Explore desert safari and guided Jaisalmer tour options arranged from Garh Jaisal Haveli.',
+            'name' => $pageTitle,
+            'description' => $pageDescription,
             'isPartOf' => ['@id' => $siteUrl . '/#website'],
             'about' => ['@id' => $siteUrl . '/#hotel'],
             'breadcrumb' => ['@id' => $canonical . '#breadcrumb'],
@@ -118,7 +126,7 @@ require __DIR__ . '/include/page-head.php';
       </p>
       <div class="actions">
         <a class="button button-primary" href="#experience-categories">Explore tour categories</a>
-        <a class="button button-light" href="catalogue.php">Build your trip</a>
+        <a class="button button-light" href="#tanot-trip">Tanot Temple trip</a>
       </div>
     </div>
   </section>
@@ -265,6 +273,22 @@ require __DIR__ . '/include/page-head.php';
     </div>
   </section>
 
+  <section class="section tours-day-trip" id="tanot-trip" aria-labelledby="tanot-trip-title">
+    <div class="site-shell">
+      <div class="tours-day-trip-inner">
+        <div>
+          <p class="eyebrow">From Jaisalmer</p>
+          <h2 id="tanot-trip-title">A trip to Tanot Mata Temple</h2>
+          <p>Ask about a private car to the temple and back. Share your date, pickup location and group size so we can confirm the route, current visitor access and a quote.</p>
+        </div>
+        <div class="actions">
+          <a class="button button-primary" href="<?= htmlspecialchars($tanotWhatsAppUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Enquire about Tanot on WhatsApp</a>
+          <a class="text-link" href="car-rental.php">Compare car services</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="section packages-planning" id="plan-by-time" data-story-reveal>
     <div class="site-shell">
       <div class="section-head">
@@ -279,10 +303,10 @@ require __DIR__ . '/include/page-head.php';
       </div>
 
       <div class="planner-grid">
-        <article><strong>4 hours</strong><p>Choose the half-day guided Jaisalmer tour when your time is limited.</p></article>
+        <article><strong>4 hours</strong><p>Choose the <a href="half-day-jaisalmer-tour.php">half-day guided Jaisalmer tour</a> when your time is limited.</p></article>
         <article><strong>One evening</strong><p>Choose a sunset camel safari or cultural desert safari and return to Jaisalmer.</p></article>
         <article><strong>One night</strong><p>Choose sleeping under the stars or a Swiss tent depending on the overnight setup you prefer.</p></article>
-        <article><strong>Full day</strong><p>Choose the full-day guided city tour or a broader desert experience.</p></article>
+        <article><strong>Full day</strong><p>Choose the <a href="full-day-jaisalmer-tour.php">full-day guided city tour</a> or <a href="desert-safari.php">compare desert experiences</a>.</p></article>
       </div>
 
       <div class="package-note">
@@ -342,8 +366,8 @@ require __DIR__ . '/include/page-head.php';
       <aside class="package-guide-service" aria-labelledby="package-guide-service-title">
         <div class="package-guide-service-copy">
           <p class="eyebrow">Need a vehicle?</p>
-          <h3 id="package-guide-service-title">Ask about SUV and sedan arrangements.</h3>
-          <p>Share your travel date, route, pickup point, travellers and luggage so the hotel can confirm vehicle availability and a current quote.</p>
+          <h3 id="package-guide-service-title">Plan a Rajasthan route from Delhi Airport.</h3>
+          <p>Choose a private car or a car with hotel stays arranged along the way.</p>
         </div>
         <div class="actions">
           <a class="button button-primary" href="car-rental.php">Explore car arrangements</a>

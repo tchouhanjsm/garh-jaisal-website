@@ -54,7 +54,7 @@ test.describe('operational contact readiness (F13)', () => {
     const response = await page.goto('/direction.php', { waitUntil: 'domcontentloaded' });
     expect(response, 'Arrival guide must return an HTTP response').not.toBeNull();
     expect(response.status(), 'Arrival guide must be available').toBeLessThan(400);
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Arrive inside Jaisalmer Fort');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Getting here');
 
     const contact = page.locator('.arrival-contact');
     await expect(contact.getByRole('link', { name: 'Contact the hotel' })).toHaveAttribute('href', 'contact.php?topic=arrival');

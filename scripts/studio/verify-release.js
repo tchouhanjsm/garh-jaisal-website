@@ -61,7 +61,9 @@ const meta = (html, re) => { const m = re.exec(html); return m ? m[1] : ''; };
       add(4.4, 'Hero image uses asynchronous decoding', usesAsyncDecoding, 'decodingAsync=' + usesAsyncDecoding);
     }
     const robots = meta(html, /<meta name="robots" content="([^"]*)"/);
-    add(9, 'Canonical present; robots matches status', /rel="canonical"/.test(html) && (status === 'live' ? !/noindex/.test(robots) : page.status === 404), 'robots=' + robots);
+    const expectsIndex = new URL(base).origin === 'https://www.hotelgarhjaisal.com';
+    const expectedRobots = expectsIndex ? 'index,follow' : 'noindex,follow';
+    add(9, 'Canonical present; robots matches origin and status', /rel="canonical"/.test(html) && (status === 'live' ? robots === expectedRobots : page.status === 404), 'robots=' + robots);
     const imgs = [...html.matchAll(/<img[^>]+src="([^"]+)"[^>]*>/g)].map(m => ({ src: m[1], tag: m[0] }));
     const bad = [];
     for (const im of imgs) {

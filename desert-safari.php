@@ -85,7 +85,7 @@ require __DIR__ . '/include/page-head.php';
     <?php require __DIR__ . '/include/ui/experience-hub-media.php'; ?>
     <div class="site-shell experience-hero-content">
       <nav class="experience-breadcrumbs" aria-label="Breadcrumb">
-        <a href="index.php">Home</a><span aria-hidden="true">/</span><a href="pack.php">Packages</a><span aria-hidden="true">/</span><span aria-current="page">Desert Safari</span>
+        <a href="/">Home</a><span aria-hidden="true">/</span><a href="pack.php">Packages</a><span aria-hidden="true">/</span><span aria-current="page">Desert Safari</span>
       </nav>
       <p class="eyebrow">Desert safari</p>
       <h1>Find the Jaisalmer desert safari that fits your trip.</h1>

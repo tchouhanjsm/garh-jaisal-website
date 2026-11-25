@@ -15,6 +15,9 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | Garh Jaisal's Kitchen Maps destination | `https://maps.app.goo.gl/28gGJ6tX8xoanQ9D8`; use this destination for the restaurant directions QR. Owner also supplied the Google Maps embed URL. | 2026-10-14 |
 | Desert Camp imagery | Owner-provided image assets are in `img/Desert_Camp/`; visually review subject/caption mapping before release. Do not restore removed or unlicensed images. | 2026-10-14 |
 | Jaisalmer Fort walk | Planned walk focuses on Jain temples inside Jaisalmer Fort, the Palace Museum and a heritage street walk. Current price and guide-language availability are confirmed on WhatsApp for the requested date. | 2026-10-14 |
+| Haveli history | Owner describes the haveli inside Jaisalmer Fort as approximately 750 years old, renovated into a hotel run by the Chouhan family. | 2026-11-24 |
+| Delhi Airport and Rajasthan travel | Offer Delhi Airport pickup and return, car-only Rajasthan travel, and Rajasthan tours with a car and hotels arranged by enquiry. | 2026-11-24 |
+| Tanot Mata Temple | Offer a car trip by enquiry. Confirm travel-date availability, route, access and price with the guest. | 2026-11-24 |
 
 ## Needed to unblock pages
 | # | Question | Answer | Unblocks |
@@ -33,7 +36,7 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | 12 | Photos missing for any page (list pages where you want new images) | Owner-provided Desert Camp photos are available in `img/Desert_Camp/`; continue to request page-specific images where the current library is insufficient. | Design |
 | 13 | Which researched Jaisalmer itinerary themes may become actual offerings? Approve each theme and confirm route/stops, duration, vehicle, guide, access/permissions, fees, inclusions and price | | Car & City Tours and future detail pages |
 | 14 | Which exact Instagram posts/reels should be embedded on the restaurant page? | NEEDS OWNER INPUT: profile URL is confirmed, but specific public post/reel URLs have not been supplied. Keep a lightweight profile link until direct URLs are approved. | `restaurant.php` |
-| 15 | Are the current restaurant menu items and prices still accurate? | NEEDS OWNER INPUT: menu data is being separated into `include/menu-data.php`; prices must remain hidden until live-menu approval. | `include/menu-data.php`, `restaurant.php` |
+| 15 | Are the current restaurant menu items and prices still accurate? | The owner supplied the printed menu for website use on 2026-11-24. Use it as the source for dishes and prices. Ask the kitchen to confirm recipe details and vegan options. | `include/menu-data.php`, `restaurant.php` |
 | 16 | Current railway-station, airport and local rickshaw transfer fares and journey-time estimates | NEEDS OWNER INPUT: do not publish fixed fares or pickup/travel-time promises until the current route, provider, quote and timing are approved. Confirm details for the requested date. | `direction.php` and future transport enquiry/quote UI |
 
 

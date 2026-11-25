@@ -184,6 +184,11 @@ foreach (($sitemapBlocks[1] ?? []) as $block) {
     $validDate = preg_match('/^\d{4}-\d{2}-\d{2}$/D', $lastmod)
         && checkdate((int) substr($lastmod, 5, 2), (int) substr($lastmod, 8, 2), (int) substr($lastmod, 0, 4));
     $assert((bool) $validDate, 'Sitemap lastmod must be a valid YYYY-MM-DD date: ' . $loc . ' → ' . $lastmod);
+    $guideSlug = basename($routeKey, '.php');
+    if (isset($liveRoutes[$routeKey])) {
+        $expectedDate = $guides[$guideSlug]['date_modified'] ?? $guides[$guideSlug]['date_published'] ?? '';
+        $assert($lastmod === $expectedDate, 'Editorial sitemap lastmod must match the article revision date: ' . $loc);
+    }
 
     $relativePath = $routeKey === '/' ? 'index.php' : rawurldecode(ltrim($routeKey, '/'));
     $assert($routeKey === '/' || preg_match('/\.php$/i', $relativePath), 'Sitemap entries must be public PHP routes or the homepage: ' . $loc);

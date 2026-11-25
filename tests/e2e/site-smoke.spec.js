@@ -249,14 +249,18 @@ test('contact page presents direct booking and arrival paths beside the enquiry 
   await expect(page.getByRole('heading', { name: 'Send an enquiry' })).toBeVisible();
 });
 
-test('rooftop menu CTA opens the restaurant menu section directly', async ({ page }, testInfo) => {
+test('rooftop menu CTA opens the in-page menu section', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Rooftop-to-menu journey is checked once');
   await page.goto('/roof.php');
-  const menuLink = page.getByRole('link', { name: 'View the menu' });
-  await expect(menuLink).toHaveAttribute('href', 'restaurant.php#menu');
-  await page.goto('restaurant.php#menu');
+  const menuLink = page.getByRole('link', { name: /^(?:View|Ask about) the menu$/ });
+  await expect(menuLink).toHaveAttribute('href', '#menu');
+  await menuLink.click();
+  await expect(page).toHaveURL(/\/roof\.php#menu$/);
   await expect(page.locator('#menu')).toBeVisible();
-  await expect(page.locator('#menu h2')).toHaveText(/^(?:Ask about the current menu\.|What is on the menu\.)$/);
+  await expect(page.locator('#menu h2')).toHaveText('Our menu');
+  await expect(page.locator('#menu [data-menu-booklet]')).toBeVisible();
+  await expect(page.locator('#menu .restaurant-dish')).toHaveCount(142);
+  await expect(page.locator('#menu [data-menu-page]:visible')).toHaveCount(1);
 });
 
 
@@ -363,7 +367,7 @@ test('arrival and dining contact links preserve their topic in the editable enqu
   await page.goto('/direction.php', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.arrival-contact a[href="contact.php?topic=arrival"]')).toContainText('Contact the hotel');
   await expect(page.locator('.final-cta a[href="contact.php?topic=arrival"]')).toContainText('Contact us');
-  await expect(page.locator('.arrival-faq a[href="contact.php?topic=arrival"]')).toContainText('arrival enquiry form');
+  await expect(page.locator('.arrival-faq a[href="contact.php?topic=arrival"]')).toContainText(/arrival enquiry form/i);
   await page.goto('/contact.php?topic=arrival', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.contact-topic-context')).toContainText('Arrival arrangements');
   await expect(page.locator('#message')).toHaveValue(/confirm arrival arrangements/);
@@ -375,7 +379,9 @@ test('arrival and dining contact links preserve their topic in the editable enqu
 
   await page.goto('/restaurant.php', { waitUntil: 'domcontentloaded' });
   await expect(page.getByRole('link', { name: 'Send a dining enquiry →', exact: true })).toHaveAttribute('href', 'contact.php?topic=dining');
-  await expect(page.locator('.restaurant-note')).toContainText('confirming the current dishes, descriptions, prices and dietary options');
+  await expect(page.locator('#menu h2')).toHaveText('Our menu');
+  await expect(page.locator('#menu .restaurant-note')).toHaveText('Prices in INR. Dishes and prices may change.');
+  await expect(page.locator('#menu .restaurant-dish')).toHaveCount(142);
 
   await page.goto('/contact.php?topic=dining', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('.contact-topic-context')).toContainText('Rooftop dining');

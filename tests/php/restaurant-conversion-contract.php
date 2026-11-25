@@ -13,6 +13,7 @@ $read = static function ($relative) use ($root, &$errors) {
 };
 $restaurant = $read('restaurant.php');
 $roof = $read('roof.php');
+$reservation = $read('include/ui/dining-reservation.php');
 $restaurantCss = $read('css/restaurant.css');
 $roofCss = $read('css/roof.css');
 
@@ -36,8 +37,8 @@ $checks = [
     ['restaurant hero does not contain the Trip partial', strpos($restaurantHero, 'trip-add-button.php') === false],
     ['restaurant Trip partial is rendered after the planning panel', $restaurantTripPanel !== false && $restaurantTripPartial !== false && $restaurantTripPartial > $restaurantTripPanel && strpos($restaurant, 'restaurant-trip-planner-actions') !== false],
     ['restaurant and rooftop share the stable Trip item ID', strpos($restaurant, "'id' => 'rooftop-dining'") !== false && strpos($roof, "'id' => 'rooftop-dining'") !== false],
-    ['reservation form destination uses truthful request wording', strpos($restaurant, '<p class="eyebrow eyebrow-light">Table enquiry</p>') !== false && strpos($restaurant, '<h2>Request a table.</h2>') !== false],
-    ['roof hero retains enquiry and menu discovery', strpos($roofHero, 'data-cta-id="enquiry-rooftop-table"') !== false && strpos($roofHero, 'href="restaurant.php#menu"') !== false],
+    ['reservation form destination uses truthful request wording', strpos($reservation, '<p class="eyebrow eyebrow-light">Table enquiry</p>') !== false && strpos($reservation, '<h2>Request a table.</h2>') !== false],
+    ['roof hero retains enquiry and menu discovery', strpos($roofHero, 'data-cta-id="enquiry-rooftop-table"') !== false && strpos($roofHero, 'href="#menu"') !== false],
     ['roof hero does not contain the Trip partial', strpos($roofHero, 'trip-add-button.php') === false],
     ['roof Trip partial is rendered inside the lower planning panel', $roofTripPanel !== false && $roofTripPartial !== false && $roofTripPartial > $roofTripPanel],
     ['restaurant Trip panel has responsive styles and focus treatment', strpos($restaurantCss, '.restaurant-trip-planner-inner') !== false && strpos($restaurantCss, '@media (max-width: 760px)') !== false && strpos($restaurantCss, ':focus-visible') !== false],

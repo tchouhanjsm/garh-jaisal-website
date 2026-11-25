@@ -24,3 +24,7 @@ css/pages/content-studio-preview-*.css
 # Content Studio working folders (packs and staged photos are build artifacts)
 content/_stage/
 content/_inbox/
+
+# Local-only previews and generated Python caches
+/_preview
+__pycache__/

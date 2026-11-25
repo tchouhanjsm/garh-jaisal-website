@@ -251,30 +251,7 @@ $page = [
             'about' => ['@id' => $schemaSiteUrl . '/#hotel'],
             'breadcrumb' => ['@id' => $schemaPageUrl . '#breadcrumb'],
             'url' => $schemaPageUrl,
-            'mainEntity' => [
-                '@type' => 'Hotel',
-                'name' => 'Hotel Garh Jaisal Haveli',
-                'telephone' => array_values(array_filter(
-                    [$hotelPhoneDisplay, $hotelPhoneAltDisplay],
-                    static function ($value) {
-                        return is_string($value) && trim($value) !== '';
-                    }
-                )),
-                'email' => array_values(array_filter(
-                    [$hotelEmailAlt, $hotelEmail],
-                    static function ($value) {
-                        return is_string($value) && trim($value) !== '';
-                    }
-                )),
-                'address' => [
-                    '@type' => 'PostalAddress',
-                    'streetAddress' => 'Hotel Garh Jaisal Haveli, Fort Kotari Para',
-                    'addressLocality' => 'Jaisalmer',
-                    'addressRegion' => 'Rajasthan',
-                    'postalCode' => '345001',
-                    'addressCountry' => 'IN',
-                ],
-            ],
+            'mainEntity' => ['@id' => $schemaSiteUrl . '/#hotel'],
         ],
         $breadcrumbSchema,
     ],

@@ -4,6 +4,15 @@ $siteConfig = require __DIR__ . '/include/site-config.php';
 $bookingUrl = $siteConfig['booking_url'];
 $hotelPhone = (string) ($siteConfig['hotel_phone'] ?? '');
 $hotelPhoneDisplay = (string) ($siteConfig['hotel_phone_display'] ?? $hotelPhone);
+$hotelEmail = $siteConfig['hotel_email'];
+$whatsappUrl = $siteConfig['whatsapp_url'];
+$restaurant = ['name' => "Garh Jaisal's Kitchen"];
+$showReservationTimeSlots = true;
+require __DIR__ . '/include/dining-reservation.php';
+$menuConfig = require __DIR__ . '/include/menu-data.php';
+$menu = is_array($menuConfig['items'] ?? null) ? $menuConfig['items'] : [];
+$menuCategories = array_keys($menu);
+$menuOwnerConfirmed = !empty($menuConfig['owner_confirmed']) && $menu !== [];
 $siteUrl = rtrim($siteConfig['site_url'], '/');
 $canonical = $siteUrl . '/roof.php';
 ?>
@@ -15,24 +24,26 @@ require_once __DIR__ . '/include/image-metadata.php';
 $roofHeroPreload = gj_image_responsive_preload_descriptor('img/roofslide.webp', '100vw');
 $faqItems = [
     ['question' => "Where is rooftop dining?", 'answer' => "Garh Jaisal’s Kitchen is the rooftop restaurant at Garh Jaisal Haveli, inside Jaisalmer Fort."],
-    ['question' => "Can I check the menu before visiting?", 'answer' => "Yes. Open the restaurant menu page to review the menu; dishes and listed prices may change, so confirm current details with the hotel."],
-    ['question' => "How do I check table availability?", 'answer' => "Contact the hotel to confirm current table availability. For same-day enquiries, calling or WhatsApp is a direct way to reach the team."],
-    ['question' => "Can the kitchen help with dietary requests?", 'answer' => "The menu includes vegetarian, vegan and non-vegetarian dishes. Ask the hotel about current Jain and allergy options before confirming."],
+    ['question' => "Can I check the menu before visiting?", 'answer' => $menuOwnerConfirmed
+        ? "See the Menu tab and confirm current dishes and prices with the hotel."
+        : "Use the Menu tab to ask the hotel about current dishes, prices and dietary options."],
+    ['question' => "How do I check table availability?", 'answer' => "Use the Book a Table tab to send a request. The hotel must confirm availability. For same-day enquiries, call or WhatsApp the hotel."],
+    ['question' => "Can I request a candlelight dinner inside Jaisalmer Fort?", 'answer' => "Yes. Use the Book a Table tab to ask Garh Jaisal’s Kitchen about a rooftop candlelight dinner. The hotel will confirm availability and dinner details for your date."],
 ];
 $page = [
-    'title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
-    'description' => "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
+    'title' => "Candlelight Rooftop Dining | Jaisalmer Fort",
+    'description' => "Request a candlelight dinner or rooftop table at Garh Jaisal's Kitchen inside Jaisalmer Fort. Ask about availability for your preferred date.",
     'path' => '/roof.php',
     'preload' => is_array($roofHeroPreload) ? [$roofHeroPreload] : [],
     'og_type' => 'website',
-    'og_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
-    'og_description' => "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
+    'og_title' => "Candlelight Rooftop Dining | Jaisalmer Fort",
+    'og_description' => "Request a candlelight dinner or rooftop table at Garh Jaisal's Kitchen inside Jaisalmer Fort. Ask about availability for your preferred date.",
     'og_image' => '/img/roofslide.webp',
     'og_image_alt' => 'Candlelit rooftop terrace and Jaisalmer city view at dusk',
-    'twitter_title' => "Rooftop Dining in Jaisalmer | Garh Jaisal's Kitchen",
-    'twitter_description' => "Dine on the rooftop at Garh Jaisal's Kitchen inside Jaisalmer Fort, with city views and candlelight dinner options. Confirm hours and menu.",
+    'twitter_title' => "Candlelight Rooftop Dining | Jaisalmer Fort",
+    'twitter_description' => "Request a candlelight dinner or rooftop table at Garh Jaisal's Kitchen inside Jaisalmer Fort. Ask about availability for your preferred date.",
     'twitter_image' => '/img/roofslide.webp',
-    'css' => ['css/roof.css', 'css/thar-sunset-story.css'],
+    'css' => ['css/restaurant.css', 'css/roof.css', 'css/roof-dining.css', 'css/thar-sunset-story.css'],
     'schema' => [
         [
             '@type' => 'WebPage',
@@ -74,14 +85,23 @@ require __DIR__ . '/include/page-head.php';
       <div class="actions">
         <a
           class="button button-primary"
-          href="restaurant.php#reserve"
+          href="#reserve"
           data-cta-id="enquiry-rooftop-table"
           data-cta-location="rooftop-dining-hero"
         >Enquire about a table</a>
-        <a class="button button-light" href="restaurant.php#menu">View the menu</a>
+        <a class="button button-light" href="#menu"><?= $menuOwnerConfirmed ? 'View the menu' : 'Ask about the menu' ?></a>
       </div>
     </div>
   </section>
+
+  <div class="roof-dining" data-roof-dining data-default-panel="<?= $sent || $errors !== [] ? 'reserve' : 'menu' ?>">
+    <nav class="site-shell roof-dining-tabs" aria-label="Rooftop dining options">
+      <a id="roof-menu-tab" href="#menu">Menu</a>
+      <a id="roof-reserve-tab" href="#reserve">Book a Table</a>
+    </nav>
+    <?php require __DIR__ . '/include/ui/dining-menu.php'; ?>
+    <?php require __DIR__ . '/include/ui/dining-reservation.php'; ?>
+  </div>
 
   <section class="section" data-story-reveal>
     <div class="site-shell">
@@ -93,7 +113,7 @@ require __DIR__ . '/include/page-head.php';
         <p>
           The restaurant is at the hotel: Fort Kotari Para, inside Jaisalmer Fort,
           Jaisalmer, Rajasthan 345001.
-          <a href="restaurant.php#menu">Explore the menu and dishes</a>.
+          <a href="#menu">See menu information</a>.
         </p>
       </div>
 
@@ -116,9 +136,8 @@ require __DIR__ . '/include/page-head.php';
           current dining service times before visiting.
         </p>
         <p>
-          The menu includes vegetarian, vegan, and non-vegetarian dishes. Visit
-          <a href="restaurant.php#menu">Garh Jaisal's Kitchen menu</a> for the menu details.
-          Confirm current menu options and prices with the hotel before you visit.
+          Ask the hotel to confirm current dishes, prices and dietary options before you visit.
+          <a href="#menu"><?= $menuOwnerConfirmed ? 'See the menu' : 'Ask about the menu' ?></a>.
         </p>
         <p>
           <a class="text-link" href="contact.php?topic=dining">Contact the hotel</a>
@@ -202,7 +221,7 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell">
       <div class="section-head">
         <div><p class="eyebrow">Common questions</p><h2 id="roof-faq-title">Rooftop dining questions.</h2></div>
-        <p>Check the menu and contact the hotel to confirm current availability before you visit.</p>
+        <p>Ask about current menu options and confirm availability before you visit.</p>
       </div>
       <?php
       $faq = [
@@ -230,6 +249,8 @@ require __DIR__ . '/include/ui/planning-path.php';
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
-<script src="js/garh-v2.js"></script>
+<script src="<?= $htmlEscape($versionedAssetUrl('js/garh-v2.js')) ?>"></script>
+<script src="<?= $htmlEscape($versionedAssetUrl('js/roof-dining.js')) ?>" defer></script>
+<script src="<?= $htmlEscape($versionedAssetUrl('js/restaurant.js')) ?>" defer></script>
 </body>
 </html>

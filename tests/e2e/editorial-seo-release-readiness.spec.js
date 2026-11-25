@@ -176,8 +176,8 @@ test('editorial release gate: rendered metadata, schema, links and reader anchor
     } catch (error) {
       addFinding(findings, 'canonical-invalid', route, 'Canonical is missing or not an absolute URL.');
     }
-    if (rendered.robots.length !== 1 || /\bnoindex\b/i.test(rendered.robots[0] || '') || !/\bindex\b/i.test(rendered.robots[0] || '')) {
-      addFinding(findings, 'live-route-indexability', route, 'Sitemap-listed live guides must render indexable robots metadata.');
+    if (rendered.robots.length !== 1 || rendered.robots[0] !== 'noindex,follow') {
+      addFinding(findings, 'preview-robots-directive', route, 'Sitemap-listed guides must remain noindex in this preview.');
     }
 
     const social = [
