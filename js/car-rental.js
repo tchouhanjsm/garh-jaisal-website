@@ -32,6 +32,21 @@
     });
   });
 
+  document.querySelectorAll('[data-car-route]').forEach((link) => {
+    link.previousElementSibling.hidden = true;
+    link.hidden = false;
+    link.addEventListener('click', () => {
+      fields.namedItem('route').value = link.dataset.carRoute;
+      for (const name of ['pickup', 'dropoff']) {
+        const field = fields.namedItem(name);
+        if (!value(name)) {
+          field.value = 'Delhi Airport';
+          field.setCustomValidity('');
+        }
+      }
+    });
+  });
+
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     validateDates();
@@ -43,9 +58,11 @@
       'Drop-off: ' + value('dropoff') + ' on ' + value('dropoffDate'),
       'Passengers: ' + value('passengers'),
       'Luggage: ' + (value('luggage') || 'Not specified'),
+      value('route') && 'Sample route: ' + value('route'),
       'Stops or other details: ' + (value('stops') || 'Not specified'),
       'Please confirm availability, what the quote includes, and the total price.'
-    ].join('\n'));
+    ].filter(Boolean).join('\n'));
+    form.dispatchEvent(new Event('garh:car-quote-ready', { bubbles: true }));
     window.location.assign(target.href);
   });
 

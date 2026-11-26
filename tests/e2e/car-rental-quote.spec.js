@@ -9,14 +9,16 @@ test('prepares a Delhi Airport return quote with the selected package', async ({
 
   const form = page.locator('[data-car-quote-form]');
   await expect(form.getByLabel('What would you like?')).toHaveValue('Car with hotels');
-  await form.getByLabel('Pickup location').fill('Delhi Airport');
+  await form.getByLabel('Stops or other details (optional)').fill('Jaipur and Jaisalmer');
+  await page.getByRole('link', { name: 'Delhi Airport → Jaipur → Jodhpur → Jaisalmer → Delhi Airport' }).click();
+  await expect(form.getByLabel('Sample route (optional)')).toHaveValue('Jaipur → Jodhpur → Jaisalmer');
+  await expect(form.getByLabel('Pickup location')).toHaveValue('Delhi Airport');
+  await expect(form.getByLabel('Drop-off location')).toHaveValue('Delhi Airport');
+  await expect(form.getByLabel('Stops or other details (optional)')).toHaveValue('Jaipur and Jaisalmer');
   await form.getByLabel('Pickup date').fill('2099-01-10');
-  await form.getByLabel('Drop-off location').fill('Delhi Airport');
   await form.getByLabel('Drop-off date').fill('2099-01-09');
   await form.getByLabel('Passengers').fill('3');
   await form.getByLabel('Luggage (optional)').fill('2 suitcases');
-  await form.getByLabel('Stops or other details (optional)').fill('Jaipur and Jaisalmer');
-
   const submit = form.getByRole('button', { name: 'Continue to WhatsApp' });
   await submit.click();
   expect(await form.getByLabel('Drop-off date').evaluate(input => input.validity.rangeUnderflow)).toBe(true);
@@ -32,7 +34,7 @@ test('prepares a Delhi Airport return quote with the selected package', async ({
   await expect.poll(() => draftUrl?.pathname).toBe(target.pathname);
   for (const line of ['Package: Car with hotels', 'Pickup: Delhi Airport on 2099-01-10',
     'Drop-off: Delhi Airport on 2099-01-16', 'Passengers: 3', 'Luggage: 2 suitcases',
-    'Stops or other details: Jaipur and Jaisalmer', 'the total price']) {
+    'Sample route: Jaipur → Jodhpur → Jaisalmer', 'Stops or other details: Jaipur and Jaisalmer', 'the total price']) {
     expect(draftUrl.searchParams.get('text')).toContain(line);
   }
 });

@@ -8,6 +8,7 @@ $hotelEmail = $siteConfig['hotel_email'];
 $whatsappUrl = $siteConfig['whatsapp_url'];
 $restaurant = ['name' => "Garh Jaisal's Kitchen"];
 $showReservationTimeSlots = true;
+$reservationPath = 'roof.php';
 require __DIR__ . '/include/dining-reservation.php';
 $menuConfig = require __DIR__ . '/include/menu-data.php';
 $menu = is_array($menuConfig['items'] ?? null) ? $menuConfig['items'] : [];

@@ -8,6 +8,15 @@ function e($value): string {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
 
+function gj_dining_send_email(string $recipient, string $subject, string $body, string $headers): bool {
+    try {
+        return @mail($recipient, $subject, $body, $headers);
+    } catch (Throwable $exception) {
+        error_log('Restaurant enquiry email could not be sent.');
+        return false;
+    }
+}
+
 $waLink = $whatsappUrl . '?text=' . rawurlencode(
     'Hello, I would like to enquire about a table at ' . $restaurant['name']
     . '. Preferred date: [add date]. Preferred time: [add time]. Number of guests: [add number].'
@@ -43,7 +52,16 @@ if (empty($_SESSION['gjk_csrf'])) {
     $_SESSION['gjk_csrf'] = bin2hex(random_bytes(16));
 }
 
-if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+$receipt = $_SESSION['gjk_receipts'][$reservationPath] ?? null;
+$receiptUrl = $reservationPath . '?table-request=received#reserve';
+if ($method === 'GET' && ($_GET['table-request'] ?? '') === 'received' && is_array($receipt)) {
+    $sent = true;
+    $reservationReference = $receipt['reference'];
+    $reservationEmailNotified = $receipt['email_notified'];
+}
+
+if ($method === 'POST') {
     foreach ($old as $key => $_) {
         $raw = $_POST[$key] ?? '';
         $old[$key] = is_string($raw) ? trim($raw) : '';
@@ -55,7 +73,12 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
         exit;
     }
 
-    if (!hash_equals($_SESSION['gjk_csrf'], (is_string($_POST['csrf'] ?? null) ? $_POST['csrf'] : ''))) {
+    $submittedToken = is_string($_POST['csrf'] ?? null) ? $_POST['csrf'] : '';
+    if (!hash_equals($_SESSION['gjk_csrf'], $submittedToken)) {
+        if (is_array($receipt) && hash_equals($receipt['submitted_token'], $submittedToken)) {
+            header('Location: ' . $receiptUrl, true, 303);
+            exit;
+        }
         $errors['form'] = 'Your session expired. Please reload the page and try again.';
     }
 
@@ -171,7 +194,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             }
 
             foreach ($recipients as $recipient) {
-                if (@mail($recipient, $subject, $body, $headers)) {
+                if (gj_dining_send_email($recipient, $subject, $body, $headers)) {
                     $reservationEmailNotified = true;
                 }
             }
@@ -187,12 +210,18 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
                 if (filter_var($hotelEmail, FILTER_VALIDATE_EMAIL) !== false) {
                     $guestHeaders .= 'From: ' . $hotelEmail . "\r\n";
                 }
-                $guestSent = @mail($old['email'], $guestSubject, $guestBody, $guestHeaders);
+                $guestSent = gj_dining_send_email($old['email'], $guestSubject, $guestBody, $guestHeaders);
                 gj_record_lead_event($reservationReference, $guestSent ? 'guest_acknowledgement_sent' : 'guest_acknowledgement_failed');
             }
 
-            $sent = true;
+            $_SESSION['gjk_receipts'][$reservationPath] = [
+                'reference' => $reservationReference,
+                'email_notified' => $reservationEmailNotified,
+                'submitted_token' => $submittedToken,
+            ];
             $_SESSION['gjk_csrf'] = bin2hex(random_bytes(16));
+            header('Location: ' . $receiptUrl, true, 303);
+            exit;
         }
     }
 }

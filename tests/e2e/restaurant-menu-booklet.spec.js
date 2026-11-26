@@ -65,6 +65,17 @@ test('restaurant only publishes approved menu content and keeps the booklet usab
   expect(nameBox.x + nameBox.width).toBeLessThanOrEqual(priceBox.x);
   expect(nameBox.width).toBeGreaterThan(priceBox.width);
 
+  const search = booklet.getByRole('searchbox', { name: 'Find a dish' });
+  await search.fill('DAL fry');
+  await expect(status).toHaveText('1 dish found');
+  await expect(dishRows.filter({ visible: true })).toContainText('Dal Fry');
+  await expect(dishRows.filter({ visible: true })).toContainText('₹250');
+  await search.fill('no-such-dish');
+  await expect(status).toHaveText('No dishes found');
+  await expect(dishRows.filter({ visible: true })).toHaveCount(0);
+  await search.clear();
+  await expect(status).toHaveText('Page 1 of 4 · Breakfast');
+
   await links.last().click();
   expect(new URL(page.url()).hash).toBe('#chicken-mutton');
   await expect(pages.filter({ visible: true })).toHaveCount(1);
