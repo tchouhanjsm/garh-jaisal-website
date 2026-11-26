@@ -42,7 +42,7 @@ Review failed or unrecorded notification references against the private log and 
 
 ## Read-only production health
 
-The Production health workflow tests offline fixtures on pull requests. After merging to main, its scheduled run (09:00 IST daily) and manual main-branch dispatch check eight fixed public URLs, direct HTTP 200, canonical links, H1, obvious noindex and sitemap/robots references. It never follows redirects or invokes forms, analytics or booking providers. It is a smoke check, not a full crawl, release SHA check, field performance audit or proof of enquiry delivery. Investigate failures against staging and the deployed release manifest; never automatically deploy or roll back.
+The Production health workflow tests offline fixtures on pull requests. After merging to main, its scheduled run (09:00 IST daily) and manual main-branch dispatch check eight fixed public URLs, direct HTTP 200, canonical links, H1, obvious noindex and sitemap/robots references. Four further fixed routing probes verify HTTP-to-HTTPS and apex-to-www redirects with a synthetic query, the legacy index.php redirect, and a genuine missing-route HTTP 404. It never follows redirects or invokes forms, analytics or booking providers. It is a smoke check, not a full crawl, release SHA check, field performance audit or proof of enquiry delivery. Investigate failures against staging and the deployed release manifest; never automatically deploy or roll back.
 
 ## Rollback and release approval
 
