@@ -779,3 +779,14 @@ main.thar-sunset-story--experiences .experience-card > a > img {
   main.thar-sunset-story--experiences .experience-card > a > img { height: clamp(11rem, 42vw, 13rem); }
   .tours-day-trip-inner { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Compact, progressively enhanced holiday discovery: every option is a link. */
+.holiday-ideas h3{margin:0 0 .5rem;font-size:clamp(1.25rem,2vw,1.65rem)}
+.holiday-ideas-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;list-style:none;margin:16px 0;padding:0}
+.holiday-ideas-grid li{min-width:0;margin:0;padding:0}
+.holiday-ideas-grid a{display:flex;flex-direction:column;justify-content:center;gap:5px;height:100%;min-height:64px;padding:12px;border:1px solid var(--line,#d7c6b4);color:inherit;text-decoration:none;overflow-wrap:anywhere}
+.holiday-ideas-grid a strong{text-decoration:underline;text-underline-offset:3px}
+.holiday-ideas-grid a span{font-size:.9rem;line-height:1.45}
+.holiday-ideas-grid a:focus-visible{outline:3px solid var(--focus,#b28c56);outline-offset:3px}
+@media(max-width:850px){.holiday-ideas-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.holiday-ideas-grid{grid-template-columns:minmax(0,1fr)}}
