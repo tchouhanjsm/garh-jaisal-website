@@ -58,6 +58,12 @@ PR #178 exact head `7d95c92ab7f57b622995020d7702f80f5acfcfe9` passed Site checks
 - Browser regression coverage targets 320px and desktop, visible holiday choices, 44px minimum link targets, no horizontal overflow, selected-idea handoff and contextual cross-selling. Exact-head validation is required; source changes are not visual approval or field performance evidence.
 - Outstanding: supplier/owner-approved operational details, separate review of additional tour variants before selling as fixed offers, actual staging CAPTCHA and mailbox delivery, authorised recovery and retention, real Google Analytics/Search Console, external availability, field Core Web Vitals, and human visual/keyboard/accessibility review. Do not invent business terms or infer ranking gains.
 
+## PR #179 — guest-facing copy refinement and CI correction
+
+- The commercial discovery head passed Site checks, cPanel package, local Staging QA and production-health fixtures. Browser E2E had 708 passes and two failures: a three-question expectation for the new four-question Packages FAQ, and the old frozen Packages meta/social description. Correct only those reviewed expectations; retain the complete schema parity and metadata checks.
+- Owner requested removing unnecessary explanatory guest-facing copy, including the booking-engine category paragraph above the room directory. Remove the paragraph; retain all seven room cards, existing booking links and selected-room enquiry actions. Shorten shared guest guides across Home, Rooms, Restaurant, Directions and Contact, and simplify Packages, Car & City and itinerary helper text. Preserve actual arrival/access guidance, explicit enquiry-only notices, consent and policies.
+- Retain registry-backed room count/floors and safe destination checks, and assert the unwanted room paragraph does not return. New exact-head CI and visual review remain required.
+
 ## Previous release evidence
 
 - Checked the 39 public sitemap URLs for HTTP errors and canonical mismatches against cPanel release `863f47f`. All passed. The release candidate also passed an internal-link and anchor check across 106 destinations.
