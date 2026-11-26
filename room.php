@@ -501,7 +501,7 @@ $planningPath = [
     'intro' => 'Once you have shortlisted a room, plan dining and local experiences around your dates and interests.',
     'links' => [
         ['label' => 'Rooftop dining', 'href' => 'roof.php', 'description' => 'Explore rooftop dining and ask about current hours and menu.'],
-        ['label' => 'Desert experiences', 'href' => 'desert-safari.php', 'description' => 'Compare desert options and confirm current inclusions.'],
+        ['label' => 'Tailor-made holidays', 'href' => 'pack.php', 'description' => 'Combine your Fort stay with desert, guided tours and other experiences by enquiry.'],
         ['label' => 'Arrival guide', 'href' => 'direction.php', 'description' => 'Plan the final walk into Jaisalmer Fort.'],
     ],
 ];
