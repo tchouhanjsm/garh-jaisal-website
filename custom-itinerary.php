@@ -137,6 +137,12 @@ $page = [
               <textarea id="custom-places" name="places" rows="3" maxlength="700" placeholder="List any cities or stops you have in mind."><?= htmlspecialchars($selectedIdea, ENT_QUOTES, 'UTF-8') ?></textarea>
             </div>
             <div class="custom-itinerary-field">
+              <label for="rajasthan-service">Travel arrangement</label>
+              <select id="rajasthan-service" name="service">
+                <option value="">Not decided yet</option>
+                <option value="Private car with driver">Private car with driver</option>
+                <option value="Private car with accommodation arranged">Private car with accommodation arranged</option>
+              </select>
               <label for="rajasthan-inclusions">What should the quote include?</label>
               <textarea id="rajasthan-inclusions" name="inclusions" rows="3" maxlength="500" placeholder="Ask about transport, a guide, accommodation or entry fees."></textarea>
             </div>
