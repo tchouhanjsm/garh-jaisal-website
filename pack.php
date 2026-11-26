@@ -140,7 +140,7 @@ require __DIR__ . '/include/page-head.php';
           <p class="eyebrow">Choose your experience</p>
           <h2 id="experience-categories-title">Find your kind of journey.</h2>
         </div>
-        <p>Open a category to compare the available options, then contact us to confirm current details for your dates.</p>
+        <p>Find the experience that suits your trip.</p>
       </div>
 
       <nav class="actions" aria-label="Travel service shortcuts">
@@ -346,7 +346,7 @@ require __DIR__ . '/include/page-head.php';
           <p class="eyebrow">Plan before you enquire</p>
           <h2 id="planning-guides-title">Use a guide to shape your Jaisalmer visit.</h2>
         </div>
-        <p>These practical guides help you compare the Fort, desert and short-stay options. Confirm travel-date details with the hotel before relying on timings, routes or inclusions.</p>
+        <p>Explore the Fort, desert and short-stay itineraries.</p>
       </div>
 
       <div class="experience-card-grid package-guide-grid">
