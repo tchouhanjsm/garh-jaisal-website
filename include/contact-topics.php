@@ -19,7 +19,7 @@ return [
     ],
     'travel-trade' => [
         'label' => 'Travel trade enquiry',
-        'message' => 'Hello, I am enquiring on behalf of a travel agency. Agency name and country: [add details]. Travel dates and group size: [add details]. Services requested: [add stays, tours or transport]. Please confirm availability and share a quote for these dates.',
+        'message' => 'Namaste, I am enquiring on behalf of a travel agency. Agency name and country: [add details]. Request type: [FIT / group / seasonal rate sheet / multi-service quotation]. Travel dates or season: [add details]. Guests and room requirements: [add details]. Meal plan: [add preference]. Services requested: [accommodation, safari, guided tours, private car or Rajasthan journeys]. Pickup/drop-off and route, if applicable: [add details]. Please share current trade rates or a tailored quote, availability, inclusions, payment and cancellation terms. I understand that this enquiry is not a confirmed reservation.',
     ],
     'rajasthan-tours' => [
         'label' => 'Rajasthan tour enquiry',
