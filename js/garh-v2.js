@@ -402,7 +402,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const requestedTopic = query.get('topic') || '';
       const travelPlanningTopics = [
         'visit-planning', 'desert-packing', 'fort-guide', 'desert-safari',
-        'two-day-itinerary', 'three-day-itinerary', 'honeymoon', 'travel-trade'
+        'two-day-itinerary', 'three-day-itinerary', 'honeymoon', 'rajasthan-tours',
+        'city-tour', 'custom-itinerary', 'heritage-havelis', 'jain-temples',
+        'lake-cenotaph-photo', 'kuldhara-landscape', 'natural-history', 'longewala-history'
       ];
       let enquiryContext = 'general';
       const contextParameters = {};
@@ -421,9 +423,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(roomSlug)) {
           contextParameters.room_slug = roomSlug;
         }
-      } else if (requestedTopic === 'arrival' || requestedTopic === 'dining') {
-        enquiryContext = requestedTopic;
-      } else if (travelPlanningTopics.includes(requestedTopic)) {
+      } else if (contactForm.querySelector('.contact-rooms-context')) {
+        enquiryContext = 'room_shortlist';
+      } else if (contactForm.querySelector('.contact-trip-context')) {
+        enquiryContext = 'trip_shortlist';
+      } else if (contactForm.querySelector('.contact-topic-context') && ['arrival', 'dining', 'stay', 'travel-trade'].includes(requestedTopic)) {
+        enquiryContext = requestedTopic === 'travel-trade' ? 'travel_trade' : requestedTopic;
+      } else if (contactForm.querySelector('.contact-topic-context') && travelPlanningTopics.includes(requestedTopic)) {
         enquiryContext = 'travel_planning';
       }
 
