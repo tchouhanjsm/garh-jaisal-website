@@ -71,6 +71,26 @@ lead_test_assert(gj_record_lead_event($first['reference'], 'owner_notification_s
 $records = file($logPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 lead_test_assert(count($records) === 2 && (json_decode($records[1], true)['status'] ?? '') === 'owner_notification_sent', 'event is valid JSONL');
 
+require_once __DIR__ . '/../../scripts/lead-recovery-report.php';
+$pending = gj_store_lead('contact', ['name' => 'Synthetic confidential guest', 'email' => 'confidential@example.test'], '192.0.2.30');
+lead_test_assert(!empty($pending['ok']), 'second request stored for recovery');
+$beforeReport = file_get_contents($logPath);
+$report = gj_lead_recovery_report($logPath);
+lead_test_assert($report['requests'] === 2, 'report counts requests');
+lead_test_assert($report['notification_counts'] === ['sent' => 1, 'failed' => 0, 'unrecorded' => 1], 'report distinguishes unrecorded notification');
+lead_test_assert($report['needs_review'][0]['reference'] === $pending['reference'], 'report identifies pending reference');
+lead_test_assert(strpos(json_encode($report), 'confidential') === false, 'report contains no guest contact details');
+lead_test_assert(file_get_contents($logPath) === $beforeReport, 'report is read-only');
+lead_test_assert(gj_record_lead_event($pending['reference'], 'owner_notification_failed'), 'failed event written');
+$report = gj_lead_recovery_report($logPath);
+lead_test_assert($report['notification_counts']['failed'] === 1, 'report identifies explicit notification failure');
+lead_test_assert(gj_record_lead_event($pending['reference'], 'owner_notification_sent'), 'sent event written');
+$report = gj_lead_recovery_report($logPath);
+lead_test_assert($report['needs_review'] === [], 'later success clears notification review');
+file_put_contents($logPath, "malformed synthetic line\n", FILE_APPEND);
+$report = gj_lead_recovery_report($logPath);
+lead_test_assert($report['malformed_or_orphan_records'] === 1, 'report detects malformed data');
+
 putenv('GJ_LEAD_STORAGE_DIR=' . ($public . DIRECTORY_SEPARATOR . 'private'));
 $unsafe = gj_store_lead('contact', ['message' => 'must not be written'], '192.0.2.30', '1234567890');
 lead_test_assert(empty($unsafe['ok']) && ($unsafe['error'] ?? '') === 'storage_unavailable', 'path inside document root is rejected');
