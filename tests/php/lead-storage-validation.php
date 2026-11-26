@@ -91,6 +91,29 @@ file_put_contents($logPath, "malformed synthetic line\n", FILE_APPEND);
 $report = gj_lead_recovery_report($logPath);
 lead_test_assert($report['malformed_or_orphan_records'] === 1, 'report detects malformed data');
 
+// Contact retry with optional phone omitted: exact validated payload only.
+$contactData = ['name' => 'Synthetic contact', 'email' => 'retry@example.test', 'phone' => '', 'message' => 'Test', 'consent' => true];
+$retryLimits = ['max_per_ip' => 1, 'duplicate_window_seconds' => 300];
+$contactFirst = gj_store_lead('contact', $contactData, '192.0.2.70', '', $retryLimits);
+lead_test_assert(!empty($contactFirst['ok']), 'contact without phone is stored');
+$contactRetry = gj_store_lead('contact', $contactData, '192.0.2.70', '', $retryLimits);
+lead_test_assert(!empty($contactRetry['duplicate']) && $contactRetry['reference'] === $contactFirst['reference'] && !$contactRetry['email_notified'], 'exact contact retry reuses unnotified receipt');
+lead_test_assert(gj_record_lead_event($contactFirst['reference'], 'owner_notification_sent'), 'contact notification recorded');
+$contactRetry = gj_store_lead('contact', $contactData, '192.0.2.71', '', $retryLimits);
+lead_test_assert(!empty($contactRetry['duplicate']) && $contactRetry['email_notified'], 'contact retry recovers notification status');
+$changedContact = $contactData;
+$changedContact['message'] = 'Different enquiry';
+$distinct = gj_store_lead('contact', $changedContact, '192.0.2.71', '', $retryLimits);
+lead_test_assert(!empty($distinct['ok']) && empty($distinct['duplicate']) && $distinct['reference'] !== $contactFirst['reference'], 'distinct contact request not collapsed');
+
+// A crash-truncated record must never swallow the next valid JSONL record.
+file_put_contents($logPath, '{"type":', FILE_APPEND);
+$damaged = file_get_contents($logPath);
+$blocked = gj_store_lead('contact', ['message' => 'New record'], '192.0.2.72');
+lead_test_assert(($blocked['error'] ?? '') === 'storage_unavailable', 'new request blocked on truncated final record');
+lead_test_assert(!gj_record_lead_event($contactFirst['reference'], 'owner_notification_sent'), 'event blocked on truncated final record');
+lead_test_assert(file_get_contents($logPath) === $damaged, 'damaged evidence preserved byte for byte');
+
 putenv('GJ_LEAD_STORAGE_DIR=' . ($public . DIRECTORY_SEPARATOR . 'private'));
 $unsafe = gj_store_lead('contact', ['message' => 'must not be written'], '192.0.2.30', '1234567890');
 lead_test_assert(empty($unsafe['ok']) && ($unsafe['error'] ?? '') === 'storage_unavailable', 'path inside document root is rejected');
