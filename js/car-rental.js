@@ -9,7 +9,11 @@
   const dropoffDate = fields.namedItem('dropoffDate');
 
   function validateDates() {
-    dropoffDate.min = pickupDate.value;
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
+    const part = (type) => today.find((p) => p.type === type).value;
+    pickupDate.min = `${part('year')}-${part('month')}-${part('day')}`;
+    pickupDate.setCustomValidity(pickupDate.validity.rangeUnderflow ? 'Choose today or a future pickup date.' : '');
+    dropoffDate.min = pickupDate.value > pickupDate.min ? pickupDate.value : pickupDate.min;
     dropoffDate.setCustomValidity(dropoffDate.validity.rangeUnderflow ? 'Choose a drop-off date on or after pickup.' : '');
   }
 

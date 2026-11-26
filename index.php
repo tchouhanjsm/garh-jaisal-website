@@ -97,7 +97,7 @@ require __DIR__ . '/include/page-head.php';
     <h1>Wake up inside Jaisalmer Fort.</h1>
 
     <p>
-      Garh Jaisal Haveli is a heritage hotel inside Jaisalmer Fort, with individually styled rooms, a rooftop restaurant and local city and desert tours.
+      Stay in an individually styled heritage room, dine on the rooftop and explore Jaisalmer through guided walks, desert safaris and private journeys.
     </p>
 
     <div class="actions">
