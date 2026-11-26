@@ -115,7 +115,7 @@ require __DIR__ . '/include/page-head.php';
         </div>
         <p>The six themes below are starting points, not a fixed menu. Combine interests or describe other places in the custom itinerary builder.</p>
       </div>
-      <p class="tour-ideas-disclaimer">Flexible ideas, not a complete list. Routes and prices are confirmed on enquiry.</p>
+      <p class="tour-ideas-disclaimer">These are enquiry ideas, not bookable products and not a complete list. An enquiry does not reserve a tour.</p>
       <div class="tour-ideas-custom-builder">
         <div>
           <p class="eyebrow">Have a different idea?</p>
