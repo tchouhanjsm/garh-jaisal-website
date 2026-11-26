@@ -11,7 +11,11 @@ $read = static function ($relative) use ($root, &$errors) {
 $thankYou = $read('thank-you.php');
 $contact = $read('contact.php');
 $analytics = $read('js/garh-v2.js');
+$mail = $read('mail.php');
 $expectations = [
+    ['duplicate receipts bypass the email branch', strpos($mail, "if (!empty(\$leadResult['duplicate']))") !== false && strpos($mail, "if (!empty(\$leadResult['duplicate']))") < strpos($mail, '$recipients = array_values')],
+    ['duplicate receipts do not emit a second lead conversion', strpos($thankYou, "\$enquiryDuplicate ? 'false' : 'true'") !== false],
+    ['travel trade and shortlist intent use distinct safe categories', strpos($analytics, "'travel_trade'") !== false && strpos($analytics, "'room_shortlist'") !== false && strpos($analytics, "'trip_shortlist'") !== false],
     ['thank-you.php uses shared page head', strpos($thankYou, "require __DIR__ . '/include/page-head.php';") !== false],
     ['thank-you remains noindex', strpos($thankYou, "'robots' => 'noindex,nofollow'") !== false],
     ['success event uses GA4 generate_lead', strpos($thankYou, "window.gtag('event', 'generate_lead'") !== false],
