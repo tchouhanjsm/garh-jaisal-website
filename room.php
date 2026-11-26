@@ -65,7 +65,7 @@ $faqItems = [
     ['question' => "Where is Garh Jaisal Haveli?", 'answer' => "Garh Jaisal Haveli is inside Jaisalmer Fort. Vehicles cannot enter the fort lanes, so plan for a final walk from Fort Parking."],
     ['question' => "How do I check current room rates and availability?", 'answer' => "Use a Check availability or Book your stay link on this page to check current rates and availability for your dates."],
     ['question' => "Are all rooms on the same floor?", 'answer' => "No. The rooms are located on the ground and first floors of the haveli."],
-    ['question' => "Do all rooms have the same facilities?", 'answer' => "Facilities vary across the Heritage Room category. Use the photos and details to get a feel for the rooms."],
+    ['question' => "Do all rooms have the same facilities?", 'answer' => "Each room has its own character and facilities. Compare the individual room features."],
     ['question' => "Where can I find arrival instructions?", 'answer' => "The Directions page explains how to reach the fort and the final walk to the haveli."],
 ];
 require_once __DIR__ . '/include/image-metadata.php';
@@ -190,7 +190,6 @@ require __DIR__ . '/include/page-head.php';
         <p class="eyebrow">Explore the rooms</p>
         <h2 id="room-directory-title">Choose the room that feels right.</h2>
       </div>
-      <p>The booking engine shows rates and availability for the Heritage Room category. Use the photos and features below to compare individual rooms, then use “Ask about this room” to enquire about a specific one.</p>
     </div>
 
     <section class="site-shell room-finder" data-room-finder hidden aria-labelledby="room-finder-title">
@@ -198,7 +197,7 @@ require __DIR__ . '/include/page-head.php';
         <div class="room-finder-intro">
           <p class="eyebrow">Make a shortlist</p>
           <h3 id="room-finder-title">Find a room by its details.</h3>
-          <p>Search the room names, descriptions or listed features, then combine a floor and feature filter to narrow the selection.</p>
+          <p>Find a room by name, floor or feature.</p>
         </div>
         <label class="room-finder-search">
           <span>Search rooms and features</span>
