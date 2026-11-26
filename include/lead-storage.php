@@ -63,6 +63,15 @@ function gj_open_lead_log(string $path)
         fclose($handle);
         return false;
     }
+    // PHP may cache the pre-chmod lstat mode. Verify the actual mode of the
+    // locked descriptor and invalidate path metadata for subsequent callers.
+    clearstatcache(true, $path);
+    $secured = fstat($handle);
+    if (!is_array($secured) || ($secured['mode'] & 0777) !== 0600) {
+        flock($handle, LOCK_UN);
+        fclose($handle);
+        return false;
+    }
     return $handle;
 }
 
