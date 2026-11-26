@@ -129,3 +129,20 @@ test('travel agents can request a rate sheet or tailored quotation from Contact'
   await expect(message).toHaveValue(/payment and cancellation terms/);
   await expect(page.locator('[data-cta-id="enquiry-travel-trade"]')).toHaveCount(0);
 });
+
+
+test('itinerary draft can be copied without WhatsApp or persisting guest text', async ({ page }, testInfo) => {
+  test.skip(!['mobile-320', 'desktop-1280'].includes(testInfo.project.name), 'Test narrow mobile and desktop.');
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async (value) => { window.__copiedDraft = value; } } });
+  });
+  await page.goto('/custom-itinerary.php?idea=golden-city');
+  const copy = page.getByRole('button', { name: 'Copy enquiry draft' });
+  await expect(copy).toBeEnabled();
+  await copy.click();
+  await expect(page.locator('#custom-itinerary-status')).toContainText('Draft copied');
+  expect(await page.evaluate(() => window.__copiedDraft)).toBe(await page.locator('#custom-itinerary-draft').inputValue());
+  await page.locator('#custom-group-size').fill('0');
+  await expect(copy).toBeDisabled();
+  await expect(page.getByRole('link', { name: 'Use the contact page instead' })).toHaveAttribute('href', 'contact.php?topic=custom-itinerary');
+});
