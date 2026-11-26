@@ -36,7 +36,46 @@ async function checkProduction(fetcher = fetch) {
     }
     results.push(result);
   }
-  return { checked_at: new Date().toISOString(), results, passed: results.every(result => result.issues.length === 0) };
+  // Separate transport/routing contracts from content checks. Never follow a
+  // Location header or send data to a destination discovered in a response.
+  const routing = [];
+  const expectedCanonical = ORIGIN + '/room.php?health=1';
+  const redirectCases = [
+    ['http://www.hotelgarhjaisal.com/room.php?health=1', expectedCanonical],
+    ['https://hotelgarhjaisal.com/room.php?health=1', expectedCanonical],
+    [ORIGIN + '/index.php', ORIGIN + '/'],
+  ];
+  for (const [url, expected] of redirectCases) {
+    const result = { url, status: null, issues: [] };
+    try {
+      const response = await fetcher(url, {
+        redirect: 'manual', signal: AbortSignal.timeout(15000),
+        headers: { 'User-Agent': 'GarhJaisal-ReadOnly-HealthCheck/1.0' },
+      });
+      result.status = response.status;
+      const location = response.headers.get('location');
+      if (![301, 308].includes(response.status)) result.issues.push('Expected permanent redirect');
+      if (!location || new URL(location, url).href !== expected) result.issues.push('Unexpected canonical redirect destination or query loss');
+      if (response.body) await response.body.cancel();
+    } catch {
+      result.issues.push('Network or invalid redirect response');
+    }
+    routing.push(result);
+  }
+  const missing = { url: ORIGIN + '/__gj_health_missing_route_7a5d.php', status: null, issues: [] };
+  try {
+    const response = await fetcher(missing.url, {
+      redirect: 'manual', signal: AbortSignal.timeout(15000),
+      headers: { 'User-Agent': 'GarhJaisal-ReadOnly-HealthCheck/1.0' },
+    });
+    missing.status = response.status;
+    if (response.status !== 404) missing.issues.push('Unknown route must return real HTTP 404');
+    if (response.body) await response.body.cancel();
+  } catch {
+    missing.issues.push('Network or response error');
+  }
+  routing.push(missing);
+  return { checked_at: new Date().toISOString(), results, routing, passed: [...results, ...routing].every(result => result.issues.length === 0) };
 }
 if (require.main === module) {
   checkProduction().then(report => {
