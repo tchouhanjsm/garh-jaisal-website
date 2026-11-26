@@ -19,7 +19,8 @@ test.describe('technical SEO metadata', () => {
 
       const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
       expect(response, `No HTTP response for ${route}`).not.toBeNull();
-      expect(response.status(), `Unexpected HTTP status for ${route}`).toBeLessThan(400);
+      expect(response.status(), `Unexpected HTTP status for ${route}`).toBe(200);
+      expect(response.request().redirectedFrom(), `Sitemap route must not redirect: ${route}`).toBeNull();
 
       await expect(page).toHaveTitle(/\S/);
       const titleText = (await page.title()).trim();
@@ -39,6 +40,8 @@ test.describe('technical SEO metadata', () => {
       expect(canonicalHref, 'Canonical URL must be absolute HTTPS').toMatch(/^https:\/\//);
       const canonicalUrl = new URL(canonicalHref);
       expect(canonicalUrl.pathname, 'Canonical path must match the sitemap route').toBe(route);
+      expect(canonicalHref, 'Canonical must equal the production sitemap URL').toBe('https://www.hotelgarhjaisal.com' + route);
+      await expect(page.locator('head meta[property="og:url"]')).toHaveAttribute('content', canonicalHref);
       expect(canonicalUrl.search, 'Canonical URL should not include tracking/query parameters').toBe('');
 
       await expect(page.locator('main h1'), 'Expected one primary H1 inside main').toHaveCount(1);
@@ -445,7 +448,8 @@ test('public sitemap pages have reachable internal destinations and anchors', as
   const faults = [];
   for (const path of routes) {
     const response = await page.goto(path, { waitUntil: 'domcontentloaded' });
-    if (!response || response.status() >= 400) { faults.push(path + ' returned ' + response?.status()); continue; }
+    if (!response || response.status() !== 200) { faults.push(path + ' returned ' + response?.status()); continue; }
+    if (response.request().redirectedFrom()) { faults.push(path + ' redirected unexpectedly'); continue; }
     const snapshot = await page.evaluate(() => ({
       ids: Array.from(document.querySelectorAll('[id], a[name]'), node => node.id || node.getAttribute('name')),
       hrefs: Array.from(document.querySelectorAll('a[href]'), node => node.getAttribute('href'))
@@ -468,7 +472,11 @@ test('public sitemap pages have reachable internal destinations and anchors', as
       if (response.status() >= 400) faults.push(from + ' → ' + target.pathname + ' returned ' + response.status());
     }
     if (target.hash && !target.search && ids.has(target.pathname)) {
-      const fragment = decodeURIComponent(target.hash.slice(1));
+      let fragment;
+      try { fragment = decodeURIComponent(target.hash.slice(1)); } catch {
+        faults.push(from + ' → ' + target.pathname + target.hash + ' malformed anchor encoding');
+        continue;
+      }
       if (fragment && !ids.get(target.pathname).has(fragment)) faults.push(from + ' → ' + target.pathname + target.hash + ' missing anchor');
     }
   }
