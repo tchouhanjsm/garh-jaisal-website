@@ -6,6 +6,7 @@
   const status = root.querySelector('#custom-itinerary-status');
   const whatsappLink = root.querySelector('#custom-itinerary-whatsapp');
   const whatsappBase = root.dataset.whatsappUrl;
+  const copyButton = root.querySelector('#custom-itinerary-copy');
   if (!form || !preview || !status || !whatsappLink || !whatsappBase) return;
 
   const isRajasthan = root.dataset.itineraryMode === 'rajasthan';
@@ -73,6 +74,7 @@
       : (hasInterests || hasPlaces || hasPreferences) && form.checkValidity();
     const message = buildMessage();
     preview.value = message;
+    if (copyButton) copyButton.disabled = !isReady;
     whatsappLink.setAttribute('aria-disabled', String(!isReady));
     whatsappLink.tabIndex = isReady ? 0 : -1;
     if (isReady) {
@@ -104,5 +106,21 @@
       form.reportValidity();
     }
   });
+  if (copyButton) {
+    copyButton.hidden = false;
+    copyButton.addEventListener('click', async () => {
+      updateDraft();
+      if (copyButton.disabled) return;
+      try {
+        if (!navigator.clipboard || !navigator.clipboard.writeText) throw new Error('Clipboard unavailable');
+        await navigator.clipboard.writeText(preview.value);
+        status.textContent = 'Draft copied. You can paste it into the contact form.';
+      } catch {
+        preview.focus();
+        preview.select();
+        status.textContent = 'Draft selected. Copy the selected text manually, then paste it into the contact form.';
+      }
+    });
+  }
   updateDraft();
 })();
