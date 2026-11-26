@@ -36,6 +36,55 @@ function gj_lead_storage_directory(): ?string
     return $directory;
 }
 
+/** Open and lock only a regular, private lead file; reject aliases to other files. */
+function gj_open_lead_log(string $path)
+{
+    clearstatcache(true, $path);
+    if (is_link($path) || (file_exists($path) && !is_file($path))) {
+        return false;
+    }
+    $handle = @fopen($path, 'c+');
+    if (!is_resource($handle)) {
+        return false;
+    }
+    if (!@flock($handle, LOCK_EX)) {
+        fclose($handle);
+        return false;
+    }
+    clearstatcache(true, $path);
+    $opened = fstat($handle);
+    $named = @lstat($path);
+    if (!is_array($opened) || !is_array($named)
+        || ($opened['mode'] & 0170000) !== 0100000
+        || ($named['mode'] & 0170000) !== 0100000
+        || $opened['dev'] !== $named['dev'] || $opened['ino'] !== $named['ino']
+        || $opened['nlink'] !== 1 || !@chmod($path, 0600)) {
+        flock($handle, LOCK_UN);
+        fclose($handle);
+        return false;
+    }
+    return $handle;
+}
+
+/** Append under the existing lock and roll back a failed partial write. */
+function gj_append_lead_line($handle, string $line): bool
+{
+    if ($line === '' || fseek($handle, 0, SEEK_END) !== 0) {
+        return false;
+    }
+    $offset = ftell($handle);
+    if ($offset === false) {
+        return false;
+    }
+    $written = @fwrite($handle, $line);
+    if ($written === strlen($line) && @fflush($handle)) {
+        return true;
+    }
+    @ftruncate($handle, $offset);
+    @fflush($handle);
+    return false;
+}
+
 /**
  * Store a validated request and apply per-source daily IP/mobile limits.
  * Raw IP addresses are not stored; irreversible hashes support duplicate counting.
@@ -48,11 +97,8 @@ function gj_store_lead(string $source, array $fields, string $ipAddress = '', st
     }
 
     $path = $directory . DIRECTORY_SEPARATOR . 'guest-enquiries.jsonl';
-    $handle = @fopen($path, 'c+');
-    if (!is_resource($handle) || !@flock($handle, LOCK_EX)) {
-        if (is_resource($handle)) {
-            fclose($handle);
-        }
+    $handle = gj_open_lead_log($path);
+    if (!is_resource($handle)) {
         return ['ok' => false, 'error' => 'storage_unavailable'];
     }
 
@@ -66,7 +112,6 @@ function gj_store_lead(string $source, array $fields, string $ipAddress = '', st
     $maxPerPhone = array_key_exists('max_per_phone', $limits) ? max(0, (int) $limits['max_per_phone']) : 5;
 
     rewind($handle);
-    $existing = stream_get_contents($handle);
     $ipCount = 0;
     $phoneCount = 0;
     // Only callers opting in deduplicate identical validated requests briefly.
@@ -74,39 +119,42 @@ function gj_store_lead(string $source, array $fields, string $ipAddress = '', st
     $duplicateWindow = min(600, max(0, (int) ($limits['duplicate_window_seconds'] ?? 0)));
     $duplicateReference = '';
     $duplicateNotified = false;
-    if (is_string($existing) && $existing !== '') {
-        foreach (explode("\n", $existing) as $line) {
-            $record = json_decode($line, true);
-            if (!is_array($record)) continue;
-            if ($duplicateReference !== '' && ($record['type'] ?? '') === 'event'
-                && ($record['reference'] ?? '') === $duplicateReference
-                && ($record['status'] ?? '') === 'owner_notification_sent') {
-                $duplicateNotified = true;
-            }
-            if ($duplicateWindow > 0 && ($record['type'] ?? '') === 'request'
-                && ($record['source'] ?? '') === $source && $phoneHash !== ''
-                && hash_equals($phoneHash, (string) ($record['phone_hash'] ?? ''))
-                && ($record['data'] ?? null) === $fields
-                && is_string($record['reference'] ?? null)
-                && preg_match('/^GJ-[0-9]{8}-[A-F0-9]{8}$/D', $record['reference'])) {
-                $receivedAt = strtotime((string) ($record['received_at'] ?? ''));
-                if ($receivedAt !== false && $receivedAt <= $now && $receivedAt >= $now - $duplicateWindow) {
-                    $duplicateReference = $record['reference'];
-                    $duplicateNotified = false;
-                }
-            }
-            if (($record['type'] ?? '') !== 'request'
-                || ($record['source'] ?? '') !== $source
-                || substr((string) ($record['received_at'] ?? ''), 0, 10) !== $today) {
-                continue;
-            }
-            if ($ipHash !== '' && hash_equals($ipHash, (string) ($record['ip_hash'] ?? ''))) {
-                $ipCount++;
-            }
-            if ($phoneHash !== '' && hash_equals($phoneHash, (string) ($record['phone_hash'] ?? ''))) {
-                $phoneCount++;
+    while (($line = fgets($handle)) !== false) {
+        $record = json_decode($line, true);
+        if (!is_array($record)) continue;
+        if ($duplicateReference !== '' && ($record['type'] ?? '') === 'event'
+            && ($record['reference'] ?? '') === $duplicateReference
+            && ($record['status'] ?? '') === 'owner_notification_sent') {
+            $duplicateNotified = true;
+        }
+        if ($duplicateWindow > 0 && ($record['type'] ?? '') === 'request'
+            && ($record['source'] ?? '') === $source && $phoneHash !== ''
+            && hash_equals($phoneHash, (string) ($record['phone_hash'] ?? ''))
+            && ($record['data'] ?? null) === $fields
+            && is_string($record['reference'] ?? null)
+            && preg_match('/^GJ-[0-9]{8}-[A-F0-9]{8}$/D', $record['reference'])) {
+            $receivedAt = strtotime((string) ($record['received_at'] ?? ''));
+            if ($receivedAt !== false && $receivedAt <= $now && $receivedAt >= $now - $duplicateWindow) {
+                $duplicateReference = $record['reference'];
+                $duplicateNotified = false;
             }
         }
+        if (($record['type'] ?? '') !== 'request'
+            || ($record['source'] ?? '') !== $source
+            || substr((string) ($record['received_at'] ?? ''), 0, 10) !== $today) {
+            continue;
+        }
+        if ($ipHash !== '' && hash_equals($ipHash, (string) ($record['ip_hash'] ?? ''))) {
+            $ipCount++;
+        }
+        if ($phoneHash !== '' && hash_equals($phoneHash, (string) ($record['phone_hash'] ?? ''))) {
+            $phoneCount++;
+        }
+    }
+    if (!feof($handle)) {
+        flock($handle, LOCK_UN);
+        fclose($handle);
+        return ['ok' => false, 'error' => 'storage_unavailable'];
     }
 
     if ($duplicateReference !== '') {
@@ -147,15 +195,11 @@ function gj_store_lead(string $source, array $fields, string $ipAddress = '', st
         return ['ok' => false, 'error' => 'storage_unavailable'];
     }
 
-    fseek($handle, 0, SEEK_END);
-    $line = $encoded . "\n";
-    $written = fwrite($handle, $line);
-    $flushed = fflush($handle);
-    @chmod($path, 0600);
+    $stored = gj_append_lead_line($handle, $encoded . "\n");
     flock($handle, LOCK_UN);
     fclose($handle);
 
-    if ($written !== strlen($line) || !$flushed) {
+    if (!$stored) {
         return ['ok' => false, 'error' => 'storage_unavailable'];
     }
     return ['ok' => true, 'reference' => $reference];
@@ -173,11 +217,8 @@ function gj_record_lead_event(string $reference, string $status): bool
         return false;
     }
     $path = $directory . DIRECTORY_SEPARATOR . 'guest-enquiries.jsonl';
-    $handle = @fopen($path, 'ab');
-    if (!is_resource($handle) || !@flock($handle, LOCK_EX)) {
-        if (is_resource($handle)) {
-            fclose($handle);
-        }
+    $handle = gj_open_lead_log($path);
+    if (!is_resource($handle)) {
         return false;
     }
     $encoded = json_encode([
@@ -187,10 +228,8 @@ function gj_record_lead_event(string $reference, string $status): bool
         'status' => $status,
     ], JSON_UNESCAPED_SLASHES);
     $line = is_string($encoded) ? $encoded . "\n" : '';
-    $written = $line !== '' ? fwrite($handle, $line) : false;
-    $flushed = fflush($handle);
-    @chmod($path, 0600);
+    $stored = gj_append_lead_line($handle, $line);
     flock($handle, LOCK_UN);
     fclose($handle);
-    return is_int($written) && $written === strlen($line) && $flushed;
+    return $stored;
 }
