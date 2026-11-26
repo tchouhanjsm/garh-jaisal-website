@@ -25,6 +25,10 @@ return [
         'label' => 'Rajasthan tour enquiry',
         'message' => 'Hello, I would like to enquire about a Rajasthan tour. Travel dates and duration: [add dates and number of days]. Preferred route or stops: [add places]. Pickup and drop-off: [add locations]. Travellers: [add number]. Requested inclusions and budget: [add details]. Please confirm a feasible route, availability, what is included and excluded, and the total price. I understand this enquiry does not reserve a tour.',
     ],
+    'city-tour' => [
+        'label' => 'Jaisalmer city tour and car arrangements',
+        'message' => 'Hello, I would like to enquire about exploring Jaisalmer. Travel date: [add date]. Travellers: [add number]. Preferred option: [Fort walk, guided city tour or private car outing]. Time available: [add details]. Please confirm feasible stops, guide or vehicle availability, access requirements, inclusions and current price.',
+    ],
     'custom-itinerary' => [
         'label' => 'Custom Jaisalmer itinerary enquiry',
         'message' => 'Hello, I would like to enquire about a custom Jaisalmer itinerary. My travel date or period is: [add date]. Time available: [add time]. Group size: [add number]. Places or interests: [describe your route]. Please confirm route feasibility, current visitor access and rules, transport and guide availability, timings, applicable fees and the final price. I understand this is an enquiry, not a booking.',
