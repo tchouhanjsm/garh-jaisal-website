@@ -23,7 +23,7 @@ const FAQ_ROUTES = [
     "route": "/pack.php",
     "section": ".packages-faq",
     "heading": "Questions about Jaisalmer experiences.",
-    "count": 3
+    "count": 4
   },
   {
     "route": "/desert-safari.php",
