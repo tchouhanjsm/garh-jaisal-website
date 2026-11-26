@@ -16,6 +16,8 @@ test('every room card preserves the primary booking and secondary selected-room 
 
   const cards = page.locator('.room-card');
   await expect(cards).toHaveCount(EXPECTED_ROOM_COUNT);
+  await expect(page.locator('.rooms-directory-head')).not.toContainText('The booking engine shows rates and availability');
+  await expect(page.locator('.rooms-directory-head')).not.toContainText('Use the photos and features below');
 
   const destinations = [];
   for (let index = 0; index < EXPECTED_ROOM_COUNT; index += 1) {
