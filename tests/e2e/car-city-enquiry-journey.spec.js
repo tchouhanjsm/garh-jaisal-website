@@ -70,3 +70,33 @@ test('Car & City hub stays usable at supported widths and its local photos load'
   })));
   expect(imageStates.every(image => image.alt !== null && image.loaded), 'Car & City images have alt text and load').toBeTruthy();
 });
+
+
+test('custom itinerary rejects past dates and invalid traveller counts before handoff', async ({ page }, testInfo) => {
+  test.skip(!['mobile-320', 'desktop-1280'].includes(testInfo.project.name), 'Test narrow mobile and desktop.');
+  await page.goto('/custom-itinerary.php?idea=golden-city');
+  const link = page.locator('#custom-itinerary-whatsapp');
+  const date = page.locator('#custom-travel-date');
+  const travellers = page.locator('#custom-group-size');
+  await expect(link).toHaveAttribute('aria-disabled', 'false');
+  await date.fill('2000-01-01');
+  await expect(link).toHaveAttribute('aria-disabled', 'true');
+  await date.fill('2099-01-01');
+  await travellers.fill('0');
+  await expect(link).toHaveAttribute('aria-disabled', 'true');
+  await travellers.fill('2');
+  await expect(link).toHaveAttribute('aria-disabled', 'false');
+  expect(new URL(await link.getAttribute('href')).searchParams.get('text')).toContain('Group size: 2');
+});
+
+test('malformed contact arrays are rejected before CAPTCHA or email processing', async ({ request }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Server validation is viewport independent.');
+  for (const field of ['csrf_token', 'enquiry_context_token', 'name', 'email', 'phone', 'message', 'consent', 'g-recaptcha-response']) {
+    const response = await request.post('/mail.php', {
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      data: encodeURIComponent(field + '[]') + '=synthetic', maxRedirects: 0,
+    });
+    expect(response.status()).toBe(303);
+    expect(response.headers().location).toBe('contact.php?error=invalid');
+  }
+});
