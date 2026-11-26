@@ -16,6 +16,7 @@
     ['custom-places', 'Preferred route or stops'],
     ['rajasthan-pickup', 'Pickup'],
     ['rajasthan-dropoff', 'Drop-off'],
+    ['rajasthan-service', 'Travel arrangement'],
     ['rajasthan-inclusions', 'Requested inclusions'],
     ['rajasthan-budget', 'Budget or pricing questions'],
   ];
