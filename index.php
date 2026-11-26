@@ -454,10 +454,7 @@ require __DIR__ . '/include/page-head.php';
         <h2 id="arrival-guide-title">Arriving at the fort is part of the experience.</h2>
       </div>
 
-      <p>
-        Garh Jaisal Haveli is inside Jaisalmer Fort. Vehicles cannot enter
-        the fort, so your final stretch is on foot through the fort lanes.
-      </p>
+      <p>Save these four steps for your arrival day.</p>
     </div>
 
     <div class="steps">
@@ -490,7 +487,7 @@ require __DIR__ . '/include/page-head.php';
 
     <div class="callout">
       <p>
-        <strong>Before travelling:</strong> Confirm current reception hours and ask whether late-arrival arrangements can be made, or <a href="contact.php?topic=arrival">send an arrival enquiry</a>.
+        <strong>Need help with your arrival?</strong> <a href="contact.php?topic=arrival">Send your arrival details</a> before travelling.
       </p>
 
       <a class="button" href="direction.php">

@@ -300,6 +300,11 @@ require __DIR__ . '/include/page-head.php';
           </p>
           <h2>Address</h2>
           <p>Hotel Garh Jaisal Haveli, Fort Kotari Para, Jaisalmer, Rajasthan 345001</p>
+          <?php if ($contactTopicKey !== 'travel-trade'): ?>
+            <h2>Travel agents</h2>
+            <p>Request a seasonal rate sheet, FIT or group quotation, or a combined stay and tour proposal.</p>
+            <p><a class="text-link" href="contact.php?topic=travel-trade#contact-form" data-cta-id="enquiry-travel-trade" data-cta-location="contact-facts">Travel trade enquiry</a></p>
+          <?php endif; ?>
         </div>
 
         <form class="contact-form" id="contact-form" action="mail.php" method="post">
