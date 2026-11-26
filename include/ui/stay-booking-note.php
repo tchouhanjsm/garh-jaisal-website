@@ -10,7 +10,7 @@ $gjStayBookingUrl = (string) ($gjStayBookingConfig['booking_url'] ?? '');
   <div class="site-shell stay-booking-note-inner">
     <div class="stay-booking-note-copy">
       <p class="eyebrow">Stay inside the Fort</p>
-      <p><strong>Planning an overnight stay?</strong> Room booking is separate from tour enquiries. Check the current room rate and availability, then ask the hotel to confirm any tour route, timing and inclusions for your dates.</p>
+      <p><strong>Planning an overnight stay?</strong> Check room availability for your dates.</p>
     </div>
     <div class="stay-booking-note-actions">
       <?php if ($gjStayBookingUrl !== ''): ?>
