@@ -446,6 +446,7 @@ test('public sitemap pages have reachable internal destinations and anchors', as
   const ids = new Map();
   const links = [];
   const faults = [];
+  const external = new Map();
   for (const path of routes) {
     const response = await page.goto(path, { waitUntil: 'domcontentloaded' });
     if (!response || response.status() !== 200) { faults.push(path + ' returned ' + response?.status()); continue; }
@@ -459,27 +460,68 @@ test('public sitemap pages have reachable internal destinations and anchors', as
       if (!raw || raw === '#') continue;
       let target;
       try { target = new URL(raw, new URL(path, origin)); } catch { continue; }
-      if (!['http:', 'https:'].includes(target.protocol) || !allowedHosts.has(target.hostname)) continue;
+      if (!['http:', 'https:'].includes(target.protocol)) continue;
+      if (!allowedHosts.has(target.hostname)) {
+        // Inventory only; no third-party requests or private query values in the evidence.
+        const destination = target.origin + target.pathname;
+        if (!external.has(destination)) external.set(destination, new Set());
+        external.get(destination).add(path);
+        continue;
+      }
       if (target.pathname !== '/' && !target.pathname.endsWith('.php')) continue;
       links.push({ from: path, target });
     }
   }
   const checked = new Set(ids.keys());
+  const checkedQueryAnchors = new Set();
   for (const { from, target } of links) {
     if (!checked.has(target.pathname)) {
       checked.add(target.pathname);
       const response = await page.request.get(target.pathname, { maxRedirects: 0 });
       if (response.status() >= 400) faults.push(from + ' → ' + target.pathname + ' returned ' + response.status());
     }
-    if (target.hash && !target.search && ids.has(target.pathname)) {
+    // Only published pages are safe to render with query parameters.
+    // Form actions and non-public routes are never exercised with query data here.
+    if (target.hash && target.search && routes.includes(target.pathname)) {
+      const key = target.pathname + target.search;
+      if (!checkedQueryAnchors.has(key)) {
+        checkedQueryAnchors.add(key);
+        const response = await page.goto(key, { waitUntil: 'domcontentloaded' });
+        if (!response || response.status() !== 200 || response.request().redirectedFrom()) {
+          faults.push(from + ' → ' + target.pathname + ' query route did not return a direct 200');
+        } else {
+          const anchors = await page.locator('[id], a[name]').evaluateAll(nodes => nodes.map(node => node.id || node.getAttribute('name')));
+          ids.set(key, new Set(anchors));
+        }
+      }
+    }
+    const anchorKey = target.pathname + target.search;
+    if (target.hash && ids.has(anchorKey)) {
       let fragment;
       try { fragment = decodeURIComponent(target.hash.slice(1)); } catch {
         faults.push(from + ' → ' + target.pathname + target.hash + ' malformed anchor encoding');
         continue;
       }
-      if (fragment && !ids.get(target.pathname).has(fragment)) faults.push(from + ' → ' + target.pathname + target.hash + ' missing anchor');
+      if (fragment && !ids.get(anchorKey).has(fragment)) faults.push(from + ' → ' + target.pathname + target.hash + ' missing anchor');
     }
   }
-  await testInfo.attach('internal-route-audit', { body: JSON.stringify({ pages: routes.length, checkedDestinations: checked.size, links: links.length, faults: [...new Set(faults)] }, null, 2), contentType: 'application/json' });
+  const report = {
+    pages: routes.length, checkedDestinations: checked.size, queryAnchorPages: checkedQueryAnchors.size,
+    links: links.length, faults: [...new Set(faults)],
+    externalDestinations: [...external].map(([destination, sources]) => ({ destination, sources: [...sources] })),
+  };
+  const reportDir = path.join(process.cwd(), 'artifacts', 'seo-inventory');
+  fs.mkdirSync(reportDir, { recursive: true });
+  fs.writeFileSync(path.join(reportDir, 'internal-route-audit.json'), JSON.stringify(report, null, 2));
+  await testInfo.attach('internal-route-audit', { body: JSON.stringify(report, null, 2), contentType: 'application/json' });
   expect([...new Set(faults)]).toEqual([]);
+});
+
+// Verify the actual guest-facing CTA resolves to its allowlisted contact context.
+test('Car and City Tours enquiry preserves the intended topic', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Context route is viewport independent');
+  await page.goto('/car-tours.php');
+  await page.locator('.package-hero a[href="contact.php?topic=city-tour"]').click();
+  await expect(page.locator('.contact-topic-context')).toContainText('Jaisalmer city tour and car arrangements');
+  await expect(page.locator('#message')).toHaveValue(/Preferred option:.*Fort walk/);
 });
