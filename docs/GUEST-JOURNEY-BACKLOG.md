@@ -33,3 +33,9 @@
 
 - Update the source contract to verify the corrected shared canonical path, keep metadata within the existing SEO bounds, and shorten repetitive commercial copy without removing the main guest journeys.
 - Add isolated storage idempotency checks, filtered print checks and sitemap-derived same-site URL and anchor audit. Tests are pending exact-head CI, not a live crawl.
+
+## Follow-up: scope and regression alignment
+
+- Restored the open-ended itinerary copy contract after Site checks failed on PHP 7.4 and 8.2. The six examples are explicitly not an exhaustive list.
+- Guided tour comparison remains limited to the actual guided city tours; private day trips and Rajasthan travel remain separate enquiry journeys. Custom desert options have explicit enquiry wording.
+- Updated live/unknown/hub contact tests and expanded the existing editorial media audit to include all three restored pages. Exact-head CI remains the acceptance gate.

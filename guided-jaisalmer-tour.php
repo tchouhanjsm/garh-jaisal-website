@@ -6,7 +6,7 @@ $siteUrl = rtrim($siteConfig['site_url'], '/');
 $analyticsIds = array_values(array_filter((array) ($siteConfig['analytics_ids'] ?? []), 'is_string'));
 $canonical = $siteUrl . '/guided-jaisalmer-tour.php';
 $items = array_keys(array_filter($experiences, static function ($item) {
-    return ($item['status'] ?? 'live') === 'live' && ($item['category'] ?? '') === 'city' && ($item['duration_type'] ?? '') !== 'hub';
+    return ($item['status'] ?? 'live') === 'live' && ($item['category'] ?? '') === 'city' && ($item['duration_type'] ?? '') !== 'hub' && empty($item['enquiry_only']);
 }));
 usort($items, static function ($a, $b) use ($experiences) {
     return ($experiences[$a]['order'] ?? 999) <=> ($experiences[$b]['order'] ?? 999);
@@ -174,6 +174,7 @@ require __DIR__ . '/include/page-head.php';
       </div>
       <div class="actions guided-tour-planning-actions">
         <a class="button button-secondary" href="catalogue.php">Build your trip shortlist</a>
+        <a class="text-link" href="car-tours.php#proposed-itineraries">Explore private car day-tour ideas →</a>
       </div>
     </div>
   </section>

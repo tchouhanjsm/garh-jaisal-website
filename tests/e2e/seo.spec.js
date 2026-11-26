@@ -375,6 +375,11 @@ test('restored travel enquiry routes are discoverable without claiming confirmed
   for (const route of ['explore-the-desert.php', 'longewala-tour.php', 'rajasthan-tours.php']) {
     await expect(page.locator('main a[href="'+route+'"]').first()).toBeAttached();
   }
+  await page.goto('/guided-jaisalmer-tour.php');
+  await expect(page.locator('#guided-options .experience-card')).toHaveCount(2);
+  await expect(page.locator('#guided-options a[href="rajasthan-tours.php"], #guided-options a[href="longewala-tour.php"]')).toHaveCount(0);
+  await page.goto('/desert-safari.php');
+  await expect(page.locator('#desert-options .experience-card a[href="explore-the-desert.php"]')).toBeVisible();
   await page.goto('/custom-itinerary.php?idea=golden-city');
   await expect(page.locator('#custom-places')).toHaveValue(/Golden City Escape/);
   await page.goto('/custom-itinerary.php?idea=%3Cscript%3E');
