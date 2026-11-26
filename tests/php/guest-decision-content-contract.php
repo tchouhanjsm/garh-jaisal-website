@@ -178,8 +178,8 @@ if (!is_string($component)) {
         'gj_guest_decision_safe_internal_href',
         'gj_guest_decision_safe_external_href',
         'data-guest-decision-context=',
-        'Published on this site',
-        'Confirm with the hotel',
+        '>Explore</h3>',
+        '>Ask us</h3>',
         'rel="noopener noreferrer"',
     ] as $needle) {
         if (strpos($component, $needle) === false) {

@@ -95,6 +95,13 @@ function gj_append_lead_line($handle, string $line): bool
     if ($offset === false) {
         return false;
     }
+    // Do not concatenate a new record onto a truncated final record. Preserve
+    // the damaged log for the authorised operator instead of overwriting it.
+    if ($offset > 0) {
+        if (fseek($handle, -1, SEEK_END) !== 0 || fread($handle, 1) !== "\n" || fseek($handle, 0, SEEK_END) !== 0) {
+            return false;
+        }
+    }
     $written = @fwrite($handle, $line);
     if ($written === strlen($line) && @fflush($handle)) {
         return true;
@@ -136,6 +143,8 @@ function gj_store_lead(string $source, array $fields, string $ipAddress = '', st
     // Only callers opting in deduplicate identical validated requests briefly.
     // The same exclusive lock covers both duplicate lookup and append.
     $duplicateWindow = min(600, max(0, (int) ($limits['duplicate_window_seconds'] ?? 0)));
+    $canMatchContact = $source === 'contact' && is_string($fields['email'] ?? null)
+        && filter_var($fields['email'], FILTER_VALIDATE_EMAIL) !== false;
     $duplicateReference = '';
     $duplicateNotified = false;
     while (($line = fgets($handle)) !== false) {
@@ -147,8 +156,9 @@ function gj_store_lead(string $source, array $fields, string $ipAddress = '', st
             $duplicateNotified = true;
         }
         if ($duplicateWindow > 0 && ($record['type'] ?? '') === 'request'
-            && ($record['source'] ?? '') === $source && $phoneHash !== ''
-            && hash_equals($phoneHash, (string) ($record['phone_hash'] ?? ''))
+            && ($record['source'] ?? '') === $source
+            && ($canMatchContact || ($phoneHash !== ''
+                && hash_equals($phoneHash, (string) ($record['phone_hash'] ?? ''))))
             && ($record['data'] ?? null) === $fields
             && is_string($record['reference'] ?? null)
             && preg_match('/^GJ-[0-9]{8}-[A-F0-9]{8}$/D', $record['reference'])) {

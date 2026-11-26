@@ -4,6 +4,8 @@ require_once __DIR__ . '/include/session.php';
 $enquiryReceived = !empty($_SESSION['enquiry_received']);
 $enquiryReference = is_string($_SESSION['enquiry_reference'] ?? null) ? $_SESSION['enquiry_reference'] : '';
 $enquiryNotificationSent = !empty($_SESSION['enquiry_notification_sent']);
+$enquiryDuplicate = !empty($_SESSION['enquiry_duplicate']);
+unset($_SESSION['enquiry_duplicate']);
 
 // Consume the success flag before rendering. Refreshing this page must not emit
 // a second generate_lead event or repeat the one-time enquiry confirmation.
@@ -50,7 +52,7 @@ include __DIR__ . '/include/header-v2.php';
 <script>
   // This confirmation is reached only after mail.php has validated and stored
   // the enquiry. Never send a guest's contact details or free-text message to GA4.
-  if (typeof window.gtag === 'function') {
+  if (<?= $enquiryDuplicate ? 'false' : 'true' ?> && typeof window.gtag === 'function') {
     window.gtag('event', 'generate_lead', {
       lead_source: 'hotel_website_contact_form',
       method: 'contact_form',

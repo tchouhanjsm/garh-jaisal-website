@@ -74,13 +74,11 @@ $guestDecisionCtaLocation = preg_match('/^[a-z0-9]+(?:-[a-z0-9]+){0,7}$/D', $gue
     <header class="guest-decision__header">
       <p class="eyebrow">Guest decision guide</p>
       <h2 id="<?= $guestDecisionId ?>-title"><?= $guestDecisionEscape($guestDecisionTitle) ?></h2>
-      <p><?= $guestDecisionEscape($guestDecisionIntro) ?></p>
     </header>
 
     <div class="guest-decision__columns">
       <section class="guest-decision__column guest-decision__column--shown" aria-labelledby="<?= $guestDecisionId ?>-shown">
-        <p class="guest-decision__status">Published on this site</p>
-        <h3 id="<?= $guestDecisionId ?>-shown">What you can review now</h3>
+        <h3 id="<?= $guestDecisionId ?>-shown">Explore</h3>
         <ul>
           <?php foreach ($guestDecisionShown as $item): ?>
             <li><strong><?= $guestDecisionEscape($item['label']) ?></strong><p><?= $guestDecisionEscape($item['detail']) ?></p></li>
@@ -89,8 +87,7 @@ $guestDecisionCtaLocation = preg_match('/^[a-z0-9]+(?:-[a-z0-9]+){0,7}$/D', $gue
       </section>
 
       <section class="guest-decision__column guest-decision__column--confirm" aria-labelledby="<?= $guestDecisionId ?>-confirm">
-        <p class="guest-decision__status">Confirm with the hotel</p>
-        <h3 id="<?= $guestDecisionId ?>-confirm">What to confirm before you decide</h3>
+        <h3 id="<?= $guestDecisionId ?>-confirm">Ask us</h3>
         <ul>
           <?php foreach ($guestDecisionConfirm as $item): ?>
             <li><strong><?= $guestDecisionEscape($item['label']) ?></strong><p><?= $guestDecisionEscape($item['detail']) ?></p></li>
