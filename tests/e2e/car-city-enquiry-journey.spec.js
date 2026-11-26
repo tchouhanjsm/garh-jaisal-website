@@ -146,3 +146,28 @@ test('itinerary draft can be copied without WhatsApp or persisting guest text', 
   await expect(copy).toBeDisabled();
   await expect(page.getByRole('link', { name: 'Use the contact page instead' })).toHaveAttribute('href', 'contact.php?topic=custom-itinerary');
 });
+
+
+test('holiday discovery offers six visible enquiry choices with accessible touch targets', async ({ page }, testInfo) => {
+  test.skip(!['mobile-320', 'desktop-1280'].includes(testInfo.project.name), 'Test compact mobile and desktop.');
+  await page.goto('/pack.php');
+  const section = page.locator('#holiday-ideas');
+  await expect(section.getByRole('heading', { name: 'Tailor-made holiday ideas' })).toBeVisible();
+  await expect(section).toContainText('not fixed packages or guaranteed inclusions');
+  const cards = section.locator('.holiday-ideas-grid a');
+  await expect(cards).toHaveCount(6);
+  const sizes = await cards.evaluateAll(links => links.map(link => ({ width: link.getBoundingClientRect().width, height: link.getBoundingClientRect().height })));
+  expect(sizes.every(size => size.width >= 44 && size.height >= 44)).toBeTruthy();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBeTruthy();
+  await cards.filter({ hasText: 'Romantic Jaisalmer' }).click();
+  await expect(page.locator('#custom-places')).toHaveValue(/Romantic Jaisalmer/);
+  await page.goto('/pack.php');
+  await section.locator('[data-cta-id="holiday-rajasthan"]').click();
+  await expect(page.locator('#custom-places')).toHaveValue(/Rajasthan Heritage Journey/);
+});
+
+test('room planning cross-links to the existing holiday discovery page', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Link destination independent of viewport.');
+  await page.goto('/room.php');
+  await expect(page.locator('.planning-path').getByRole('link', { name: /Tailor-made holidays/ })).toHaveAttribute('href', 'pack.php');
+});
