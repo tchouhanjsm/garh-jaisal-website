@@ -57,13 +57,19 @@
       'I understand this is an enquiry only, not a booking. Nothing is reserved until the hotel confirms.'
     ].join('\n');
   };
+  const travelDate = root.querySelector('#custom-travel-date');
   const updateDraft = () => {
+    if (travelDate) {
+      const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(new Date());
+      const part = (type) => parts.find(item => item.type === type).value;
+      travelDate.min = part('year') + '-' + part('month') + '-' + part('day');
+    }
     const hasInterests = form.querySelector('input[name="interests"]:checked') !== null;
     const hasPlaces = valueOf('custom-places') !== '';
     const hasPreferences = valueOf('custom-preferences') !== '';
     const isReady = isRajasthan
       ? rajasthanFields.some(([id]) => valueOf(id) !== '') && form.checkValidity()
-      : hasInterests || hasPlaces || hasPreferences;
+      : (hasInterests || hasPlaces || hasPreferences) && form.checkValidity();
     const message = buildMessage();
     preview.value = message;
     whatsappLink.setAttribute('aria-disabled', String(!isReady));
@@ -84,14 +90,18 @@
       whatsappLink.href = '#';
       status.textContent = isRajasthan
         ? 'Add at least one valid trip detail to prepare the message link.'
-        : 'Select an interest or add a place/idea to prepare the message link.';
+        : 'Select an interest or add a place/idea, and check any dates or traveller count to prepare the message link.';
     }
   };
   form.addEventListener('input', updateDraft);
   form.addEventListener('change', updateDraft);
   form.addEventListener('submit', (event) => event.preventDefault());
   whatsappLink.addEventListener('click', (event) => {
-    if (whatsappLink.getAttribute('aria-disabled') === 'true') event.preventDefault();
+    updateDraft();
+    if (whatsappLink.getAttribute('aria-disabled') === 'true') {
+      event.preventDefault();
+      form.reportValidity();
+    }
   });
   updateDraft();
 })();
