@@ -167,7 +167,7 @@ $leadResult = gj_store_lead(
     ],
     (string) ($_SERVER['REMOTE_ADDR'] ?? ''),
     $phone,
-    ['max_per_ip' => 10, 'max_per_phone' => 5]
+    ['max_per_ip' => 10, 'max_per_phone' => 5, 'duplicate_window_seconds' => 300]
 );
 if (empty($leadResult['ok'])) {
     header('Location: ' . gj_contact_context_return_url($enquiryContext, (($leadResult['error'] ?? '') === 'rate_limited' ? 'send' : 'storage')));
@@ -181,6 +181,20 @@ if (
 ) {
     unset($_SESSION['contact_context_tokens'][$contactContextToken]);
 }
+
+// A validated exact retry reuses the stored receipt, without a second email
+// or conversion event. An unconfirmed notification stays recoverable.
+if (!empty($leadResult['duplicate'])) {
+    session_regenerate_id(true);
+    unset($_SESSION['contact_csrf']);
+    $_SESSION['enquiry_received'] = true;
+    $_SESSION['enquiry_reference'] = $leadReference;
+    $_SESSION['enquiry_notification_sent'] = !empty($leadResult['email_notified']);
+    $_SESSION['enquiry_duplicate'] = true;
+    header('Location: thank-you.php', true, 303);
+    exit;
+}
+unset($_SESSION['enquiry_duplicate']);
 
 $recipients = array_values(array_filter((array) ($siteConfig['inquiry_recipients'] ?? []), static function ($value) {
     return is_string($value) && filter_var($value, FILTER_VALIDATE_EMAIL);
@@ -249,5 +263,5 @@ unset($_SESSION['contact_csrf']);
 $_SESSION['enquiry_received'] = true;
 $_SESSION['enquiry_reference'] = $leadReference;
 $_SESSION['enquiry_notification_sent'] = $sent;
-header('Location: thank-you.php');
+header('Location: thank-you.php', true, 303);
 exit;

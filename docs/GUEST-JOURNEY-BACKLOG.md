@@ -38,6 +38,41 @@ The log scan remains linear in record count; measure real retention and workload
 - Existing commercial ideas, package shortcuts, room comparison and tour builder are retained. Validate operating details, permissions, price and supplier availability before converting enquiry ideas into confirmed products.
 - Remaining external gates: exact-head CI, owner-reviewed merge/release, staging mailbox and CAPTCHA, staff operator/retention, both real GA4 properties, Search Console and field Core Web Vitals, visual accessibility, legacy redirects and third-party availability. Production health workflow is not yet active on main.
 
+## Next phase — contact recovery, conversion accuracy and guest handoff
+
+PR #178 exact head `7d95c92ab7f57b622995020d7702f80f5acfcfe9` passed Site checks (PHP 7.4/8.2), Browser E2E, package preflight, local Staging QA and production-health fixtures. The final CI defect was a stale Contact page sitemap lastmod; the strict source-history gate remains. PR #178 was still open when this successor branch was created; merge/release authority remains with the owner.
+
+- Contact submissions now opt into the same five-minute exact-payload duplicate protection as restaurant requests, including validated contact enquiries without a phone. CAPTCHA and validation still precede storage. A duplicate restores its existing reference and does not send another email or conversion event.
+- A truncated final lead record blocks subsequent appends and leaves the damaged bytes untouched for authorised recovery; test synthetic damaged logs before considering host recovery.
+- The itinerary builder offers an explicit local Copy enquiry draft action with a manual-selection fallback. Guests can paste into the existing Contact form instead of relying on WhatsApp. No draft is stored by this feature or passed as URL data.
+- Travel trade, trip shortlist, room shortlist and validated planning contexts receive distinct privacy-safe intent categories; actual analytics delivery remains unverified.
+- Continue operational validation of tours, prices and terms; production redirects/external availability, real mailbox and CAPTCHA, visual accessibility and field performance are still release gates. No new confirmed services or production release claimed.
+
+## PR #179 — consolidated commercial discovery and quality follow-up
+
+- PR #178 is now merged. The successor remains PR #179; no additional competing PR.
+- Make the six existing tailor-made holiday ideas directly discoverable in the Packages planning section with responsive links, enquiry-only language and no new product promises. Room planning links now lead to the same Packages journey.
+- Align Packages metadata and the shared visible FAQ/schema with approved car-only/car-with-hotels enquiries and flexible stay/tour combinations.
+- Track itinerary discovery using an explicit allowlist of idea identifiers, mode and existing CTA metadata; no guest text, dates, contact details or booking claim.
+- Improve itinerary action wrapping and touch sizes, remove redundant live-region behaviour on the draft textarea, and use existing content-hash script URLs for cache-safe itinerary updates.
+- Browser regression coverage targets 320px and desktop, visible holiday choices, 44px minimum link targets, no horizontal overflow, selected-idea handoff and contextual cross-selling. Exact-head validation is required; source changes are not visual approval or field performance evidence.
+- Outstanding: supplier/owner-approved operational details, separate review of additional tour variants before selling as fixed offers, actual staging CAPTCHA and mailbox delivery, authorised recovery and retention, real Google Analytics/Search Console, external availability, field Core Web Vitals, and human visual/keyboard/accessibility review. Do not invent business terms or infer ranking gains.
+
+## PR #179 — guest-facing copy refinement and CI correction
+
+- The commercial discovery head passed Site checks, cPanel package, local Staging QA and production-health fixtures. Browser E2E had 708 passes and two failures: a three-question expectation for the new four-question Packages FAQ, and the old frozen Packages meta/social description. Correct only those reviewed expectations; retain the complete schema parity and metadata checks.
+- Owner requested removing unnecessary explanatory guest-facing copy, including the booking-engine category paragraph above the room directory. Remove the paragraph; retain all seven room cards, existing booking links and selected-room enquiry actions. Shorten shared guest guides across Home, Rooms, Restaurant, Directions and Contact, and simplify Packages, Car & City and itinerary helper text. Preserve actual arrival/access guidance, explicit enquiry-only notices, consent and policies.
+- Retain registry-backed room count/floors and safe destination checks, and assert the unwanted room paragraph does not return. New exact-head CI and visual review remain required.
+
+- The copy-refinement head failed four browser regressions. Align the Car & City disclaimer, separate room-booking action and homepage guide assertions with the approved copy, and include the fourth Packages question and answer in the strict JSON-LD snapshot. Keep keyboard-focused holiday cards above the mobile contact bar.
+
+### Next release sequence
+
+1. Verify the exact release candidate on cPanel staging. Exercise CAPTCHA, delivery to the hotel inbox and authorised lead recovery with synthetic enquiries. Check legacy redirects and external destinations.
+2. Review the real guest journeys on mobile and with a keyboard. Start with Rooms, Directions, Dining and Rajasthan quotes. Record accessibility, performance and recovery evidence before release.
+3. Approve a first set of fixed tours and combined holidays. Record route, pickup, duration, access, guide, inclusions and price before changing enquiry ideas into offers. Confirm kitchen hours and dietary classifications with the hotel.
+4. Baseline Search Console and both GA4 properties after release. Check that booking-engine clicks, WhatsApp handoffs and recorded enquiries are measured as separate events.
+
 ## Previous release evidence
 
 - Checked the 39 public sitemap URLs for HTTP errors and canonical mismatches against cPanel release `863f47f`. All passed. The release candidate also passed an internal-link and anchor check across 106 destinations.

@@ -42,3 +42,9 @@
 @media(max-width:900px){.custom-itinerary-hero-grid,.custom-itinerary-content-grid,.custom-itinerary-next-inner{grid-template-columns:minmax(0,1fr)}.custom-itinerary-hero-grid{gap:24px}.custom-itinerary-draft-panel textarea{min-height:260px}}
 @media(max-width:600px){.custom-itinerary-hero{padding-block:32px}.custom-itinerary-interest-grid,.custom-itinerary-fields{grid-template-columns:minmax(0,1fr)}.custom-itinerary-interest{min-height:50px}.custom-itinerary-form,.custom-itinerary-draft-panel{padding:16px}.custom-itinerary-next-inner .actions{display:grid;grid-template-columns:minmax(0,1fr)}.custom-itinerary-next-inner .button{width:100%;text-align:center}}
 @media(prefers-reduced-motion:reduce){.custom-itinerary-interest{transition:none}}
+
+/* Equal-width actions avoid clipped labels at 320px. */
+#custom-itinerary-copy:not([hidden]){display:flex;align-items:center;justify-content:center;width:100%;min-height:44px;margin-top:10px;text-align:center;white-space:normal}
+#custom-itinerary-copy:disabled{opacity:.55;cursor:not-allowed}
+.custom-itinerary-contact-link{line-height:1.5;padding-block:12px;overflow-wrap:anywhere}
+.custom-itinerary-whatsapp{white-space:normal;min-height:44px}

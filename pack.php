@@ -67,11 +67,12 @@ $breadcrumbSchema = gj_schema_breadcrumb_list($siteUrl, '/pack.php', $breadcrumb
 $faqItems = [
     ['question' => "How should I choose an experience?", 'answer' => "Start with how much time you have and whether you want to return to Jaisalmer the same evening or stay overnight."],
     ['question' => "How do I confirm current prices and availability?", 'answer' => "Contact the hotel for the current price, availability, route, pickup arrangement, guide availability and exact inclusions for your travel date."],
-    ['question' => "Can I combine a city tour with a desert safari?", 'answer' => "The page lists city and desert options separately. Contact the hotel to check the timing and arrangements for your dates before planning both."],
+    ['question' => "Can I combine a city tour with a desert safari?", 'answer' => "Yes, you can request a tailor-made quote combining a Fort stay, guided sightseeing and a desert safari. The hotel must confirm dates, timing, availability and inclusions before booking."],
+    ['question' => "Can I request a private car for a Rajasthan holiday?", 'answer' => "Yes. Ask about car-only travel or a car with hotel stays arranged. Share your route, pickup, drop-off, dates and group size for a tailored quote."],
 ];
 $pageTitle = 'Jaisalmer Tours & Desert Safaris | Garh Jaisal Haveli';
-$pageDescription = 'Compare Jaisalmer city tours, sunset camel safaris and overnight desert stays. Ask Garh Jaisal Haveli about a trip to Tanot Mata Temple.';
-$socialDescription = 'Plan a guided city tour or desert safari from Jaisalmer, or enquire about a trip to Tanot Mata Temple.';
+$pageDescription = 'Compare Jaisalmer guided tours, desert safaris and tailor-made Fort stays. Enquire about holiday combinations, private cars or Tanot Mata Temple trips.';
+$socialDescription = 'Compare guided tours, desert safaris and tailor-made Jaisalmer holidays; ask about private cars and Tanot Mata Temple trips.';
 $page = [
     'title' => $pageTitle,
     'description' => $pageDescription,
@@ -139,7 +140,7 @@ require __DIR__ . '/include/page-head.php';
           <p class="eyebrow">Choose your experience</p>
           <h2 id="experience-categories-title">Find your kind of journey.</h2>
         </div>
-        <p>Open a category to compare the available options, then contact us to confirm current details for your dates.</p>
+        <p>Find the experience that suits your trip.</p>
       </div>
 
       <nav class="actions" aria-label="Travel service shortcuts">
@@ -317,18 +318,19 @@ require __DIR__ . '/include/page-head.php';
         <article><strong>Full day</strong><p>Choose the <a href="full-day-jaisalmer-tour.php">full-day guided city tour</a> or <a href="desert-safari.php">compare desert experiences</a>.</p></article>
       </div>
 
-      <details class="package-note">
-        <summary><strong>Holiday ideas — combine your stay and experiences</strong></summary>
-        <ul>
-          <li><a href="custom-itinerary.php?idea=golden-city">Golden City Escape</a> — heritage stay, guided city tour and sunset safari.</li>
-          <li><a href="custom-itinerary.php?idea=fort-desert">Fort to Desert</a> — Fort stay and an overnight desert experience.</li>
-          <li><a href="custom-itinerary.php?idea=romantic">Romantic Jaisalmer</a> — ask about private experiences and rooftop dining.</li>
-          <li><a href="custom-itinerary.php?idea=family">Family Desert Holiday</a> — a flexible pace and suitable desert activities.</li>
-          <li><a href="custom-itinerary.php?idea=festive">Festive Jaisalmer</a> — request Diwali, Christmas or New Year arrangements.</li>
-          <li><a href="custom-itinerary.php?mode=rajasthan&amp;idea=western-rajasthan">Rajasthan Heritage Journey</a> — custom multi-city car and hotel enquiry.</li>
+      <section class="package-note holiday-ideas" id="holiday-ideas" aria-labelledby="holiday-ideas-title">
+        <h3 id="holiday-ideas-title">Tailor-made holiday ideas</h3>
+        <p>Choose a starting point for your personalised quote. These are enquiry ideas, not fixed packages or guaranteed inclusions.</p>
+        <ul class="holiday-ideas-grid">
+          <li><a data-cta-id="holiday-golden-city" data-cta-location="packages-holiday-ideas" href="custom-itinerary.php?idea=golden-city"><strong>Golden City Escape</strong><span>Heritage stay, guided city tour and sunset safari.</span></a></li>
+          <li><a data-cta-id="holiday-fort-desert" data-cta-location="packages-holiday-ideas" href="custom-itinerary.php?idea=fort-desert"><strong>Fort to Desert</strong><span>Fort stay and an overnight desert experience.</span></a></li>
+          <li><a data-cta-id="holiday-romantic" data-cta-location="packages-holiday-ideas" href="custom-itinerary.php?idea=romantic"><strong>Romantic Jaisalmer</strong><span>Ask about private experiences and rooftop dining.</span></a></li>
+          <li><a data-cta-id="holiday-family" data-cta-location="packages-holiday-ideas" href="custom-itinerary.php?idea=family"><strong>Family Desert Holiday</strong><span>A flexible pace and suitable desert activities.</span></a></li>
+          <li><a data-cta-id="holiday-festive" data-cta-location="packages-holiday-ideas" href="custom-itinerary.php?idea=festive"><strong>Festive Jaisalmer</strong><span>Ask about Diwali, Christmas or New Year arrangements.</span></a></li>
+          <li><a data-cta-id="holiday-rajasthan" data-cta-location="packages-holiday-ideas" href="custom-itinerary.php?mode=rajasthan&amp;idea=western-rajasthan"><strong>Rajasthan Heritage Journey</strong><span>Custom multi-city car and hotel enquiry.</span></a></li>
         </ul>
-        <p>Ideas for a tailor-made quote, not fixed packages or guaranteed inclusions.</p>
-      </details>
+        <p><a href="custom-itinerary.php">Prefer something different? Build your own itinerary.</a></p>
+      </section>
       <div class="package-note">
         <p><strong>Current rates and timings:</strong> Confirm the price, availability, route, pickup arrangement, guide availability and exact inclusions for your travel date before booking.</p>
       </div>
@@ -344,7 +346,7 @@ require __DIR__ . '/include/page-head.php';
           <p class="eyebrow">Plan before you enquire</p>
           <h2 id="planning-guides-title">Use a guide to shape your Jaisalmer visit.</h2>
         </div>
-        <p>These practical guides help you compare the Fort, desert and short-stay options. Confirm travel-date details with the hotel before relying on timings, routes or inclusions.</p>
+        <p>Explore the Fort, desert and short-stay itineraries.</p>
       </div>
 
       <div class="experience-card-grid package-guide-grid">

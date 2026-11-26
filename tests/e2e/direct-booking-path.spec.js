@@ -42,7 +42,7 @@ test('the stay guide has an above-the-fold booking path with the configured book
   await expect(page.locator('.booking-path-steps')).toContainText('Plan the extras');
 });
 
-test('the experience and tour hubs explain the separate room-booking step and preserve the existing booking action', async ({ page }, testInfo) => {
+test('the experience and tour hubs keep a separate room-booking action', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Experience-to-stay crosslinks run once on desktop-1280.');
 
   for (const route of experienceHubRoutes) {
@@ -52,10 +52,11 @@ test('the experience and tour hubs explain the separate room-booking step and pr
 
     const note = page.locator('[data-stay-booking-note]');
     await expect(note, route + ': room-first note').toBeVisible();
-    await expect(note).toContainText('Room booking is separate from tour enquiries');
+    await expect(note).toContainText('Planning an overnight stay?');
     const checkRooms = note.locator('a').filter({ hasText: 'Check room availability' });
     await expect(checkRooms).toBeVisible();
     await expect(checkRooms).toHaveAttribute('href', /^https:\/\/asiatech\.in\/booking_engine\/index3\?/);
+    expect(new URL(await checkRooms.getAttribute('href')).searchParams.get('token')).toBe('NjA2Ng==');
     await expect(note.locator('a[href="book-rooms-in-jaisalmer.php"]')).toBeVisible();
   }
 });

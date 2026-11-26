@@ -21,10 +21,8 @@ test('guest decision panels render one truthful, actionable guide on every route
     if (route.context === 'arrival') await page.getByText('More about arrival arrangements', { exact: true }).click();
     const panel = page.locator('[data-guest-decision-context="' + route.context + '"]');
     await expect(panel, route.path + ' should render exactly one guest decision panel').toHaveCount(1);
-    await expect(panel.getByText('Published on this site', { exact: true })).toBeVisible();
-    await expect(panel.getByText('Confirm with the hotel', { exact: true })).toBeVisible();
-    await expect(panel.getByRole('heading', { name: 'What you can review now' })).toBeVisible();
-    await expect(panel.getByRole('heading', { name: 'What to confirm before you decide' })).toBeVisible();
+    await expect(panel.getByRole('heading', { name: 'Explore' })).toBeVisible();
+    await expect(panel.getByRole('heading', { name: 'Ask us' })).toBeVisible();
     expect(await panel.locator('ul').first().locator('li').count()).toBeGreaterThan(0);
     expect(await panel.locator('ul').nth(1).locator('li').count()).toBeGreaterThan(0);
 
