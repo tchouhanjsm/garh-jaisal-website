@@ -383,6 +383,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    if (destination.origin === window.location.origin && /\/custom-itinerary\.php$/i.test(destination.pathname)) {
+      const idea = destination.searchParams.get('idea') || '';
+      const allowedIdeas = ['golden-city', 'fort-desert', 'romantic', 'family', 'festive', 'western-rajasthan', 'custom-desert', 'sunrise-walk', 'food-crafts', 'desert-heritage', 'temples-royal', 'nature'];
+      const mode = destination.searchParams.get('mode') === 'rajasthan' ? 'rajasthan' : 'jaisalmer';
+      trackIntentEvent('itinerary_builder_click', Object.assign({}, eventContext, ctaMetadataForLink(anchor), {
+        itinerary_mode: mode,
+        itinerary_idea: allowedIdeas.includes(idea) ? idea : 'custom'
+      }));
+      return;
+    }
+
     if (destination.origin === window.location.origin && /\/contact\.php$/i.test(destination.pathname)) {
       trackIntentEvent('contact_enquiry_click', Object.assign({}, eventContext, ctaMetadataForLink(anchor), {
         cta_label: labelForTrackedLink(anchor, 'enquiry')
