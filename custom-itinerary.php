@@ -201,14 +201,13 @@ $page = [
         <aside class="custom-itinerary-draft-panel" aria-labelledby="custom-itinerary-draft-title">
           <p class="eyebrow">Your enquiry draft</p>
           <h2 id="custom-itinerary-draft-title">Review before opening WhatsApp.</h2>
-          <p>The message updates as you fill in the form. Check the details below before you open WhatsApp.</p>
           <label for="custom-itinerary-draft">Message preview</label>
           <textarea id="custom-itinerary-draft" rows="14" readonly aria-describedby="custom-itinerary-status"></textarea>
           <p id="custom-itinerary-status" class="custom-itinerary-status" role="status" aria-live="polite"><?= $isRajasthan ? 'Add at least one trip detail to prepare the message link.' : 'Select an interest or add a place/idea to prepare the message link.' ?></p>
           <a id="custom-itinerary-whatsapp" data-cta-id="<?= $isRajasthan ? 'whatsapp-rajasthan-itinerary' : 'whatsapp-jaisalmer-itinerary' ?>" data-cta-location="custom-itinerary-builder" class="button button-primary custom-itinerary-whatsapp" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true" tabindex="-1">Open WhatsApp with this enquiry</a>
           <button type="button" id="custom-itinerary-copy" class="button button-secondary" hidden disabled>Copy enquiry draft</button>
           <a class="custom-itinerary-contact-link" href="<?= $isRajasthan ? 'contact.php?topic=rajasthan-tours' : 'contact.php?topic=custom-itinerary' ?>">Use the contact page instead</a>
-          <p>Prefer the contact form? Copy the draft, then paste it into your message there. Nothing is saved automatically.</p>
+          <p>Copy and paste your draft into the contact form.</p>
           <p class="custom-itinerary-booking-note">This is an enquiry only. It does not book a tour or confirm availability.</p>
         </aside>
       </div>
