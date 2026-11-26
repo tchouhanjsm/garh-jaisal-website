@@ -27,6 +27,17 @@ Do not mark a task complete solely because a commit exists. Separate repository 
 
 The log scan remains linear in record count; measure real retention and workload before introducing an index or database. Host permissions, storage fault recovery, actual mailbox delivery, CAPTCHA, staff lead retrieval, mobile visual review and production performance still require validation. External destinations are inventoried, not checked for uptime. No production deployment.
 
+## Consolidated follow-up (PR #178)
+
+- The initial expanded head passed browser, deployment package and local staging QA; PHP 8.2 failed the lead file privacy assertion while PHP 7.4 passed. The fix creates logs with a restrictive umask, invalidates path stat metadata and verifies actual directory/file modes. Root cause and resolution require exact-head CI confirmation; do not waive the privacy assertion.
+- Route evidence now includes local declared assets and a non-sitemap root PHP inventory, without executing unknown handlers. External availability, actual legacy HTTP statuses and redirects remain staging/live verification tasks.
+- Read-only notification recovery CLI reports failed/unrecorded references without guest fields. Synthetic tests exercise privacy, state transitions and malformed data. Real host recovery requires an authorised operator and private log access.
+- Travel trade contact draft and a discoverable CTA support FIT/group, rate-sheet and combined service quotations. No agency rates or commercial terms are invented.
+- Reduced repeat homepage arrival text while retaining practical steps and existing links.
+- Daily read-only production health workflow (09:00 IST, after merge) checks fixed public URLs; PRs only test offline fixtures. It does not replace comprehensive production checks.
+- Existing commercial ideas, package shortcuts, room comparison and tour builder are retained. Validate operating details, permissions, price and supplier availability before converting enquiry ideas into confirmed products.
+- Remaining external gates: exact-head CI, owner-reviewed merge/release, staging mailbox and CAPTCHA, staff operator/retention, both real GA4 properties, Search Console and field Core Web Vitals, visual accessibility, legacy redirects and third-party availability. Production health workflow is not yet active on main.
+
 ## Previous release evidence
 
 - Checked the 39 public sitemap URLs for HTTP errors and canonical mismatches against cPanel release `863f47f`. All passed. The release candidate also passed an internal-link and anchor check across 106 destinations.
