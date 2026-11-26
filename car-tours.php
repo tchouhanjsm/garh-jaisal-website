@@ -66,7 +66,7 @@ require __DIR__ . '/include/page-head.php';
       <?php require __DIR__ . '/include/ui/breadcrumb.php'; ?>
       <p class="eyebrow">Car &amp; City Tours</p>
       <h1>Explore Jaisalmer and plan your route.</h1>
-      <p>Choose a guided walk inside Jaisalmer Fort, compare the half-day and full-day city tours, or enquire separately about SUV/sedan pickup, drop-off and intercity journeys across Rajasthan and Delhi. New themed routes remain ideas until the hotel confirms feasibility, access, transport, timings, inclusions and price.</p>
+      <p>Discover Jaisalmer on foot, with a guide or by private car. Plan transfers and longer journeys across Rajasthan and Delhi.</p>
       <div class="actions">
         <a class="button button-primary" href="catalogue.php">Build your trip shortlist</a>
         <a class="button button-light" href="contact.php?topic=city-tour">Ask about arrangements</a>
@@ -77,7 +77,7 @@ require __DIR__ . '/include/page-head.php';
     <div class="site-shell">
       <div class="section-head">
         <div><p class="eyebrow">Start with your plan</p><h2 id="car-city-choice-title">Choose what you need help arranging.</h2></div>
-        <p>Begin with an existing tour page or tell us about a route you have in mind. The hotel will confirm feasibility and details for your date.</p>
+        <p>Choose a guided tour, private car or personalised route.</p>
       </div>
       <div class="car-city-route-grid">
         <a class="car-city-route" href="guided-jaisalmer-tour.php">
@@ -98,7 +98,6 @@ require __DIR__ . '/include/page-head.php';
       </div>
       <div class="section-head car-city-existing-heading">
         <div><p class="eyebrow">Existing pages</p><h2>Explore the current options.</h2></div>
-        <p>Open the relevant page for more context, then use its enquiry or trip-planning action.</p>
       </div>
       <div class="experience-card-grid">
         <article class="experience-card"><a href="guided-jaisalmer-tour.php"><div class="experience-card-media"><img src="img/j10.jpg" <?= gj_image_dimension_attributes('img/j10.jpg', '(max-width: 760px) 100vw, (max-width: 900px) 50vw, 33vw') ?> alt="Ornately carved sandstone architecture in Jaisalmer&#x27;s historic centre" loading="lazy" decoding="async"></div><div class="experience-card-copy"><p class="experience-card-kicker">Guided city tours</p><h2>Guided Jaisalmer Tours</h2><p>Compare the existing half-day and full-day guided tour options.</p><span>View guided city tours →</span></div></a><div class="experience-card-plan-action"><?php $tripItem = ['id' => 'guided-jaisalmer-tour', 'title' => 'Guided Jaisalmer Tours', 'url' => 'guided-jaisalmer-tour.php']; $tripButtonClass = 'button button-secondary'; require __DIR__ . '/include/ui/trip-add-button.php'; unset($tripItem, $tripButtonClass); ?></div></article>
@@ -116,7 +115,7 @@ require __DIR__ . '/include/page-head.php';
         </div>
         <p>The six themes below are starting points, not a fixed menu. Combine interests or describe other places in the custom itinerary builder.</p>
       </div>
-      <p class="tour-ideas-disclaimer">These are flexible enquiry ideas, not bookable products and not a complete list. We will confirm access, transport, guide, timing and price for your dates. Sending an enquiry does not reserve a tour.</p>
+      <p class="tour-ideas-disclaimer">Flexible ideas, not a complete list. Routes and prices are confirmed on enquiry.</p>
       <div class="tour-ideas-custom-builder">
         <div>
           <p class="eyebrow">Have a different idea?</p>
