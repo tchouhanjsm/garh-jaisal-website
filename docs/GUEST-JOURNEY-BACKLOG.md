@@ -38,6 +38,16 @@ The log scan remains linear in record count; measure real retention and workload
 - Existing commercial ideas, package shortcuts, room comparison and tour builder are retained. Validate operating details, permissions, price and supplier availability before converting enquiry ideas into confirmed products.
 - Remaining external gates: exact-head CI, owner-reviewed merge/release, staging mailbox and CAPTCHA, staff operator/retention, both real GA4 properties, Search Console and field Core Web Vitals, visual accessibility, legacy redirects and third-party availability. Production health workflow is not yet active on main.
 
+## Next phase — contact recovery, conversion accuracy and guest handoff
+
+PR #178 exact head `7d95c92ab7f57b622995020d7702f80f5acfcfe9` passed Site checks (PHP 7.4/8.2), Browser E2E, package preflight, local Staging QA and production-health fixtures. The final CI defect was a stale Contact page sitemap lastmod; the strict source-history gate remains. PR #178 was still open when this successor branch was created; merge/release authority remains with the owner.
+
+- Contact submissions now opt into the same five-minute exact-payload duplicate protection as restaurant requests, including validated contact enquiries without a phone. CAPTCHA and validation still precede storage. A duplicate restores its existing reference and does not send another email or conversion event.
+- A truncated final lead record blocks subsequent appends and leaves the damaged bytes untouched for authorised recovery; test synthetic damaged logs before considering host recovery.
+- The itinerary builder offers an explicit local Copy enquiry draft action with a manual-selection fallback. Guests can paste into the existing Contact form instead of relying on WhatsApp. No draft is stored by this feature or passed as URL data.
+- Travel trade, trip shortlist, room shortlist and validated planning contexts receive distinct privacy-safe intent categories; actual analytics delivery remains unverified.
+- Continue operational validation of tours, prices and terms; production redirects/external availability, real mailbox and CAPTCHA, visual accessibility and field performance are still release gates. No new confirmed services or production release claimed.
+
 ## Previous release evidence
 
 - Checked the 39 public sitemap URLs for HTTP errors and canonical mismatches against cPanel release `863f47f`. All passed. The release candidate also passed an internal-link and anchor check across 106 destinations.
