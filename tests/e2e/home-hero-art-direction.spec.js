@@ -88,7 +88,7 @@ test('homepage hero art direction selects responsive images within asset budgets
       expect(fileBytes, viewport.expectedStem + ' must remain under its tracked-byte budget').toBeLessThanOrEqual(viewport.maxBytes);
       await expect(page.getByRole('heading', { level: 1, name: 'Wake up inside Jaisalmer Fort.', exact: true })).toBeVisible();
       await expect(page.locator('.hero-content > .eyebrow')).toContainText('Heritage stay');
-      await expect(page.locator('.hero-content > p:not(.eyebrow)')).toContainText('individually styled rooms');
+      await expect(page.locator('.hero-content > p:not(.eyebrow)')).toContainText('individually styled heritage room');
       const primaryCta = page.locator('.hero-content a.button-primary');
       await expect(primaryCta).toHaveText('Check rooms & rates');
       await expect(primaryCta).toHaveAttribute('href', /asiatech\.in\/booking_engine\/index3\?token=/);
