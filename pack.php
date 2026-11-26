@@ -317,18 +317,19 @@ require __DIR__ . '/include/page-head.php';
         <article><strong>Full day</strong><p>Choose the <a href="full-day-jaisalmer-tour.php">full-day guided city tour</a> or <a href="desert-safari.php">compare desert experiences</a>.</p></article>
       </div>
 
-      <details class="package-note">
-        <summary><strong>Holiday ideas — combine your stay and experiences</strong></summary>
-        <ul>
-          <li><a href="custom-itinerary.php?idea=golden-city">Golden City Escape</a> — heritage stay, guided city tour and sunset safari.</li>
-          <li><a href="custom-itinerary.php?idea=fort-desert">Fort to Desert</a> — Fort stay and an overnight desert experience.</li>
-          <li><a href="custom-itinerary.php?idea=romantic">Romantic Jaisalmer</a> — ask about private experiences and rooftop dining.</li>
-          <li><a href="custom-itinerary.php?idea=family">Family Desert Holiday</a> — a flexible pace and suitable desert activities.</li>
-          <li><a href="custom-itinerary.php?idea=festive">Festive Jaisalmer</a> — request Diwali, Christmas or New Year arrangements.</li>
-          <li><a href="custom-itinerary.php?mode=rajasthan&amp;idea=western-rajasthan">Rajasthan Heritage Journey</a> — custom multi-city car and hotel enquiry.</li>
+      <section class="package-note holiday-ideas" id="holiday-ideas" aria-labelledby="holiday-ideas-title">
+        <h3 id="holiday-ideas-title">Tailor-made holiday ideas</h3>
+        <p>Choose a starting point for your personalised quote. These are enquiry ideas, not fixed packages or guaranteed inclusions.</p>
+        <ul class="holiday-ideas-grid">
+          <li><a data-cta-id="holiday-golden-city" data-cta-location="packages-holiday-ideas" href="custom-itinerary.php?idea=golden-city"><strong>Golden City Escape</strong><span>Heritage stay, guided city tour and sunset safari.</span></a></li>
+          <li><a data-cta-id="holiday-fort-desert" data-cta-location="packages-holiday-ideas" href="custom-itinerary.php?idea=fort-desert"><strong>Fort to Desert</strong><span>Fort stay and an overnight desert experience.</span></a></li>
+          <li><a data-cta-id="holiday-romantic" data-cta-location="packages-holiday-ideas" href="custom-itinerary.php?idea=romantic"><strong>Romantic Jaisalmer</strong><span>Ask about private experiences and rooftop dining.</span></a></li>
+          <li><a data-cta-id="holiday-family" data-cta-location="packages-holiday-ideas" href="custom-itinerary.php?idea=family"><strong>Family Desert Holiday</strong><span>A flexible pace and suitable desert activities.</span></a></li>
+          <li><a data-cta-id="holiday-festive" data-cta-location="packages-holiday-ideas" href="custom-itinerary.php?idea=festive"><strong>Festive Jaisalmer</strong><span>Ask about Diwali, Christmas or New Year arrangements.</span></a></li>
+          <li><a data-cta-id="holiday-rajasthan" data-cta-location="packages-holiday-ideas" href="custom-itinerary.php?mode=rajasthan&amp;idea=western-rajasthan"><strong>Rajasthan Heritage Journey</strong><span>Custom multi-city car and hotel enquiry.</span></a></li>
         </ul>
-        <p>Ideas for a tailor-made quote, not fixed packages or guaranteed inclusions.</p>
-      </details>
+        <p><a href="custom-itinerary.php">Prefer something different? Build your own itinerary.</a></p>
+      </section>
       <div class="package-note">
         <p><strong>Current rates and timings:</strong> Confirm the price, availability, route, pickup arrangement, guide availability and exact inclusions for your travel date before booking.</p>
       </div>
