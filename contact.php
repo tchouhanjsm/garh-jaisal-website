@@ -379,7 +379,7 @@ require __DIR__ . '/include/page-head.php';
 <?php
 $planningPath = [
     'title' => 'Choose the right next step',
-    'intro' => 'Use the room and planning guides to share a more specific question with the hotel.',
+    'intro' => 'Explore our rooms and experiences.',
     'links' => [
         ['label' => 'Direct booking guide', 'href' => 'book-rooms-in-jaisalmer.php', 'description' => 'Review the booking path and details to confirm.'],
         ['label' => 'Compare rooms', 'href' => 'room.php', 'description' => 'Check room features and availability for your dates.'],
