@@ -30,6 +30,20 @@ Production target: `https://www.hotelgarhjaisal.com`, hosted on cPanel. Reposito
 - [ ] Confirm metadata/canonicals/schema/sitemap and draft/policy publication state.
 - [ ] Confirm production PHP version and Apache/.htaccess behavior with the host.
 
+## Private enquiry notification recovery
+
+The repository provides `scripts/lead-recovery-report.php`, a CLI-only read-only report. It is deliberately excluded from the web deployment package. An authorised operator with server-shell access should run the reviewed script outside the document root against the private JSONL log:
+
+```sh
+php /private/tools/lead-recovery-report.php /absolute/private/guest-enquiries.jsonl
+```
+
+Review failed or unrecorded notification references against the private log and mailbox. A recorded notification is not proof of mailbox receipt or a confirmed booking. Do not blindly resend mail. The report contains no names, contact details or guest messages; nevertheless keep reference reports private. A malformed/orphan record returns exit code 1; a permissions/read error returns 2. The script never edits the log or sends mail. Confirm the authorised operator, retention and backup policy before rollout. Verify with synthetic staging records, then compare mailbox receipt and the reference report before release.
+
+## Read-only production health
+
+The Production health workflow tests offline fixtures on pull requests. After merging to main, its scheduled run (09:00 IST daily) and manual main-branch dispatch check eight fixed public URLs, direct HTTP 200, canonical links, H1, obvious noindex and sitemap/robots references. It never follows redirects or invokes forms, analytics or booking providers. It is a smoke check, not a full crawl, release SHA check, field performance audit or proof of enquiry delivery. Investigate failures against staging and the deployed release manifest; never automatically deploy or roll back.
+
 ## Rollback and release approval
 
 Keep the pre-release backup and identify the previous package SHA. If a release fails, restore that backup/package and verify routing, assets, contact channels and booking link. A Git revert may be appropriate for code regression; it does not restore server-side configuration by itself.

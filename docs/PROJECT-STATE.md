@@ -4,8 +4,9 @@ Last updated: 26 November 2026.
 
 ## Current repository status — 26 November 2026
 
-- Main baseline: merge commit `a7b6096e6a92adc222b10cd09e52ae4b7440c297` (PR #176).
-- Active work: PR #177, `codex/guest-journey-reliability`. See `docs/GUEST-JOURNEY-BACKLOG.md` for implemented changes and remaining validation.
+- Main baseline: merge commit `97d794201b42989d687d3905c15057d3880f33c7` (PR #177, merged 26 November 2026).
+- PR #177 final head `6c207d89cf0492d701f1b1711d3bf3909b57a2c8` passed Site checks, Browser E2E and screenshots, cPanel deployment package, and Staging QA workflows. No actual deployment is established by these results.
+- Active work: post-177 reliability and master-plan backlog. See `docs/GUEST-JOURNEY-BACKLOG.md` for remaining validation and acceptance gates.
 - No merge or production release is implied by a commit or green CI. Check the current PR head and all required workflows before release.
 - The owner supplied booking terms, privacy wording and printed menu on 24 November. Remaining operating details, reviews, tour arrangements, pricing and private lead recovery still require confirmation.
 - CI and repository-local tests are not proof of live host, mail, CAPTCHA, analytics or field performance.

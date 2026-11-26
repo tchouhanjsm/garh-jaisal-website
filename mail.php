@@ -9,6 +9,13 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     exit;
 }
 
+// Reject malformed form values before casting, validating or calling CAPTCHA.
+foreach (['csrf_token', 'enquiry_context_token', 'website', 'name', 'email', 'phone', 'message', 'consent', 'g-recaptcha-response'] as $field) {
+    if (array_key_exists($field, $_POST) && !is_string($_POST[$field])) {
+        header('Location: contact.php?error=invalid', true, 303);
+        exit;
+    }
+}
 $csrfToken = (string) ($_POST['csrf_token'] ?? '');
 $sessionToken = (string) ($_SESSION['contact_csrf'] ?? '');
 if ($csrfToken === '' || $sessionToken === '' || !hash_equals($sessionToken, $csrfToken)) {

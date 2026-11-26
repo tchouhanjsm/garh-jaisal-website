@@ -19,7 +19,8 @@ test.describe('technical SEO metadata', () => {
 
       const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
       expect(response, `No HTTP response for ${route}`).not.toBeNull();
-      expect(response.status(), `Unexpected HTTP status for ${route}`).toBeLessThan(400);
+      expect(response.status(), `Unexpected HTTP status for ${route}`).toBe(200);
+      expect(response.request().redirectedFrom(), `Sitemap route must not redirect: ${route}`).toBeNull();
 
       await expect(page).toHaveTitle(/\S/);
       const titleText = (await page.title()).trim();
@@ -39,6 +40,8 @@ test.describe('technical SEO metadata', () => {
       expect(canonicalHref, 'Canonical URL must be absolute HTTPS').toMatch(/^https:\/\//);
       const canonicalUrl = new URL(canonicalHref);
       expect(canonicalUrl.pathname, 'Canonical path must match the sitemap route').toBe(route);
+      expect(canonicalHref, 'Canonical must equal the production sitemap URL').toBe('https://www.hotelgarhjaisal.com' + route);
+      await expect(page.locator('head meta[property="og:url"]')).toHaveAttribute('content', canonicalHref);
       expect(canonicalUrl.search, 'Canonical URL should not include tracking/query parameters').toBe('');
 
       await expect(page.locator('main h1'), 'Expected one primary H1 inside main').toHaveCount(1);
@@ -443,35 +446,118 @@ test('public sitemap pages have reachable internal destinations and anchors', as
   const ids = new Map();
   const links = [];
   const faults = [];
+  const external = new Map();
+  const assets = new Map();
+  let sourcePage = '';
+  page.on('response', response => {
+    const url = new URL(response.url());
+    if (url.origin !== origin || !['stylesheet', 'script', 'font', 'image'].includes(response.request().resourceType())) return;
+    if (response.status() >= 400) faults.push(sourcePage + ' → ' + url.pathname + ' asset returned ' + response.status());
+  });
   for (const path of routes) {
+    sourcePage = path;
     const response = await page.goto(path, { waitUntil: 'domcontentloaded' });
-    if (!response || response.status() >= 400) { faults.push(path + ' returned ' + response?.status()); continue; }
+    if (!response || response.status() !== 200) { faults.push(path + ' returned ' + response?.status()); continue; }
+    if (response.request().redirectedFrom()) { faults.push(path + ' redirected unexpectedly'); continue; }
     const snapshot = await page.evaluate(() => ({
       ids: Array.from(document.querySelectorAll('[id], a[name]'), node => node.id || node.getAttribute('name')),
-      hrefs: Array.from(document.querySelectorAll('a[href]'), node => node.getAttribute('href'))
+      hrefs: Array.from(document.querySelectorAll('a[href]'), node => node.getAttribute('href')),
+      assets: Array.from(document.querySelectorAll('img[src], script[src], link[rel="stylesheet"][href], source[src], video[poster]'), node =>
+        node.getAttribute('src') || node.getAttribute('href') || node.getAttribute('poster'))
     }));
     ids.set(path, new Set(snapshot.ids));
+    for (const raw of snapshot.assets) {
+      if (!raw) continue;
+      let target;
+      try { target = new URL(raw, new URL(path, origin)); } catch { continue; }
+      if (!['http:', 'https:'].includes(target.protocol) || !allowedHosts.has(target.hostname)) continue;
+      if (!assets.has(target.pathname)) assets.set(target.pathname, new Set());
+      assets.get(target.pathname).add(path);
+    }
     for (const raw of snapshot.hrefs) {
       if (!raw || raw === '#') continue;
       let target;
       try { target = new URL(raw, new URL(path, origin)); } catch { continue; }
-      if (!['http:', 'https:'].includes(target.protocol) || !allowedHosts.has(target.hostname)) continue;
+      if (!['http:', 'https:'].includes(target.protocol)) continue;
+      if (!allowedHosts.has(target.hostname)) {
+        // Inventory only; no third-party requests or private query values in the evidence.
+        const destination = target.origin + target.pathname;
+        if (!external.has(destination)) external.set(destination, new Set());
+        external.get(destination).add(path);
+        continue;
+      }
       if (target.pathname !== '/' && !target.pathname.endsWith('.php')) continue;
       links.push({ from: path, target });
     }
   }
   const checked = new Set(ids.keys());
+  const checkedQueryAnchors = new Set();
   for (const { from, target } of links) {
     if (!checked.has(target.pathname)) {
       checked.add(target.pathname);
       const response = await page.request.get(target.pathname, { maxRedirects: 0 });
       if (response.status() >= 400) faults.push(from + ' → ' + target.pathname + ' returned ' + response.status());
     }
-    if (target.hash && !target.search && ids.has(target.pathname)) {
-      const fragment = decodeURIComponent(target.hash.slice(1));
-      if (fragment && !ids.get(target.pathname).has(fragment)) faults.push(from + ' → ' + target.pathname + target.hash + ' missing anchor');
+    // Only published pages are safe to render with query parameters.
+    // Form actions and non-public routes are never exercised with query data here.
+    if (target.hash && target.search && routes.includes(target.pathname)) {
+      const key = target.pathname + target.search;
+      if (!checkedQueryAnchors.has(key)) {
+        checkedQueryAnchors.add(key);
+        const response = await page.goto(key, { waitUntil: 'domcontentloaded' });
+        if (!response || response.status() !== 200 || response.request().redirectedFrom()) {
+          faults.push(from + ' → ' + target.pathname + ' query route did not return a direct 200');
+        } else {
+          const anchors = await page.locator('[id], a[name]').evaluateAll(nodes => nodes.map(node => node.id || node.getAttribute('name')));
+          ids.set(key, new Set(anchors));
+        }
+      }
+    }
+    const anchorKey = target.pathname + target.search;
+    if (target.hash && ids.has(anchorKey)) {
+      let fragment;
+      try { fragment = decodeURIComponent(target.hash.slice(1)); } catch {
+        faults.push(from + ' → ' + target.pathname + target.hash + ' malformed anchor encoding');
+        continue;
+      }
+      if (fragment && !ids.get(anchorKey).has(fragment)) faults.push(from + ' → ' + target.pathname + target.hash + ' missing anchor');
     }
   }
-  await testInfo.attach('internal-route-audit', { body: JSON.stringify({ pages: routes.length, checkedDestinations: checked.size, links: links.length, faults: [...new Set(faults)] }, null, 2), contentType: 'application/json' });
+  // Check declared local assets without downloading all photos in this audit.
+  // Browser image/decode coverage remains in the existing visual suite.
+  const root = path.resolve(__dirname, '../..');
+  for (const [asset, sources] of assets) {
+    let local;
+    try { local = path.resolve(root, '.' + decodeURIComponent(asset)); } catch {
+      faults.push(asset + ' has invalid URL encoding');
+      continue;
+    }
+    if (!local.startsWith(root + path.sep) || !fs.existsSync(local) || !fs.statSync(local).isFile()) {
+      faults.push([...sources].join(', ') + ' → ' + asset + ' missing local asset');
+    }
+  }
+  // Classify root PHP files not represented by the public sitemap without
+  // executing unknown handlers (including private and legacy endpoints).
+  const nonSitemapRoutes = fs.readdirSync(root, { withFileTypes: true })
+    .filter(entry => entry.isFile() && entry.name.endsWith('.php') && !routes.includes('/' + entry.name))
+    .map(entry => ({ route: '/' + entry.name, linkedFromPublicPages: links.filter(link => link.target.pathname === '/' + entry.name).map(link => link.from).filter((value, i, all) => all.indexOf(value) === i) }));
+  const report = {
+    pages: routes.length, localAssetCount: assets.size, nonSitemapRoutes, checkedDestinations: checked.size, queryAnchorPages: checkedQueryAnchors.size,
+    links: links.length, faults: [...new Set(faults)],
+    externalDestinations: [...external].map(([destination, sources]) => ({ destination, sources: [...sources] })),
+  };
+  const reportDir = path.join(process.cwd(), 'artifacts', 'seo-inventory');
+  fs.mkdirSync(reportDir, { recursive: true });
+  fs.writeFileSync(path.join(reportDir, 'internal-route-audit.json'), JSON.stringify(report, null, 2));
+  await testInfo.attach('internal-route-audit', { body: JSON.stringify(report, null, 2), contentType: 'application/json' });
   expect([...new Set(faults)]).toEqual([]);
+});
+
+// Verify the actual guest-facing CTA resolves to its allowlisted contact context.
+test('Car and City Tours enquiry preserves the intended topic', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Context route is viewport independent');
+  await page.goto('/car-tours.php');
+  await page.locator('.package-hero a[href="contact.php?topic=city-tour"]').click();
+  await expect(page.locator('.contact-topic-context')).toContainText('Jaisalmer city tour and car arrangements');
+  await expect(page.locator('#message')).toHaveValue(/Preferred option:.*Fort walk/);
 });
