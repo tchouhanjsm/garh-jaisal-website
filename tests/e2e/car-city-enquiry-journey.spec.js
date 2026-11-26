@@ -24,10 +24,15 @@ test('Car & City hub separates existing options from proposed itinerary ideas an
 
   const ideaSection = page.locator('#proposed-itineraries');
   await expect(ideaSection.locator('.tour-idea-card')).toHaveCount(proposedTopics.length);
-  await expect(ideaSection.locator('.tour-ideas-disclaimer')).toContainText('not bookable products');
-  await expect(ideaSection.locator('.tour-ideas-disclaimer')).toContainText('not a complete list');
+  await expect(ideaSection.locator('p.tour-ideas-disclaimer')).toContainText('not bookable products');
+  await expect(ideaSection.locator('p.tour-ideas-disclaimer')).toContainText('not a complete list');
   await expect(ideaSection.locator('.tour-ideas-custom-builder a[href="custom-itinerary.php"]')).toBeVisible();
-  await expect(ideaSection.locator('.tour-ideas-disclaimer')).toContainText('does not reserve a tour');
+  await expect(ideaSection.locator('p.tour-ideas-disclaimer')).toContainText('does not reserve a tour');
+
+  await expect(ideaSection.locator('details.tour-ideas-disclaimer summary')).toBeVisible();
+  await ideaSection.locator('details.tour-ideas-disclaimer summary').click();
+  await expect(ideaSection.locator('a[href="longewala-tour.php"]')).toBeVisible();
+  await expect(ideaSection.locator('a[href="rajasthan-tours.php"]')).toBeVisible();
 
   for (const topic of proposedTopics) {
     const link = ideaSection.locator('a[href="contact.php?topic=' + topic + '"]');

@@ -9,6 +9,13 @@
     const footer = booklet.querySelector('[data-menu-footer]');
     const status = booklet.querySelector('[data-menu-page-status]');
     const viewAll = booklet.querySelector('[data-menu-all]');
+    const search = booklet.querySelector('[data-menu-search]');
+    const groups = Array.from(booklet.querySelectorAll('[data-menu-group]'));
+    const dishes = groups.flatMap(group => Array.from(group.querySelectorAll('[data-menu-dish]'), row => ({
+      row,
+      text: [row.dataset.menuDish, row.dataset.menuDescription, group.dataset.menuGroup].join(' ').toLowerCase(),
+      diet: (row.dataset.menuDiet || '').toLowerCase()
+    })));
     let activePage = 0;
     let showAll = false;
 
@@ -17,30 +24,47 @@
       const page = pages[pageIndex];
       activePage = pageIndex;
       showAll = all;
+      const words = search.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      const searching = words.length > 0;
+      let matchCount = 0;
+      dishes.forEach(({ row, text, diet }) => {
+        row.hidden = !words.every(word => {
+          if (['vegetarian', 'non-vegetarian', 'vegan'].includes(word)) return diet === word;
+          return text.includes(word);
+        });
+        if (!row.hidden) matchCount += 1;
+      });
+      groups.forEach(group => {
+        group.hidden = searching && !group.querySelector('[data-menu-dish]:not([hidden])');
+      });
+      const expanded = all || searching;
       pages.forEach((item, index) => {
-        item.hidden = !all && index !== pageIndex;
+        item.hidden = searching ? !item.querySelector('[data-menu-group]:not([hidden])') : !all && index !== pageIndex;
         item.classList.remove('is-turning');
-        if (!all && index === pageIndex) tabs[index].setAttribute('aria-current', 'location');
+        if (!expanded && index === pageIndex) tabs[index].setAttribute('aria-current', 'location');
         else tabs[index].removeAttribute('aria-current');
       });
-      if (animate && !all) {
+      if (animate && !expanded) {
         page.style.setProperty('--page-turn-angle', (direction * 8) + 'deg');
         page.classList.add('is-turning');
       }
-      footer.hidden = all;
+      footer.hidden = expanded;
       pageTurns.forEach(button => {
         const target = pageIndex + Number(button.dataset.menuTurn);
-        button.hidden = all;
+        button.hidden = expanded;
         button.disabled = target < 0 || target >= pages.length;
       });
-      viewAll.textContent = all ? 'Back to booklet' : 'View all dishes';
-      status.textContent = all
-        ? 'All dishes'
-        : 'Page ' + (pageIndex + 1) + ' of ' + pages.length + ' · ' + page.dataset.menuPageLabel;
+      viewAll.textContent = all && !searching ? 'Back to booklet' : 'View all dishes';
+      if (searching) {
+        status.textContent = matchCount === 0 ? 'No dishes found' : matchCount + (matchCount === 1 ? ' dish found' : ' dishes found');
+      } else {
+        status.textContent = all ? 'All dishes' : 'Page ' + (pageIndex + 1) + ' of ' + pages.length + ' · ' + page.dataset.menuPageLabel;
+      }
     }
 
     function restoreMenu() {
       const hash = window.location.hash;
+      search.value = '';
       const pageIndex = pages.findIndex(page => '#' + page.id === hash);
       if (pageIndex >= 0) showMenu(pageIndex, false, false);
       else if (hash === '#all-dishes') showMenu(activePage, true, false);
@@ -48,10 +72,13 @@
     }
 
     function openPage(pageIndex) {
+      search.value = '';
       showMenu(pageIndex, false, showAll || pageIndex !== activePage);
       window.history.replaceState(null, '', '#' + pages[pageIndex].id);
     }
 
+    search.closest('[data-menu-search-wrap]').hidden = false;
+    search.addEventListener('input', () => showMenu(activePage, showAll, false));
     booklet.classList.add('is-enhanced');
     booklet.querySelector('.restaurant-booklet-controls').hidden = false;
     showMenu(0, false, false);
@@ -76,7 +103,9 @@
       });
     });
     viewAll.addEventListener('click', () => {
-      showMenu(activePage, !showAll, false);
+      const wasSearching = search.value.trim() !== '';
+      search.value = '';
+      showMenu(activePage, wasSearching || !showAll, false);
       window.history.replaceState(null, '', showAll ? '#all-dishes' : '#' + pages[activePage].id);
     });
     booklet.querySelector('[data-menu-print]').addEventListener('click', () => window.print());

@@ -50,6 +50,7 @@ $experienceDurationLabel = static function ($duration) {
         'half-day' => 'Half-day',
         'full-day' => 'Full-day',
         'overnight' => 'Overnight',
+        'flexible' => 'Flexible enquiry',
     ];
     return $labels[$duration] ?? ucwords(str_replace('-', ' ', (string) $duration));
 };
@@ -136,11 +137,18 @@ require __DIR__ . '/include/page-head.php';
       <div class="section-head">
         <div>
           <p class="eyebrow">Choose your experience</p>
-          <h2 id="experience-categories-title">Start with desert or city experiences.</h2>
+          <h2 id="experience-categories-title">Find your kind of journey.</h2>
         </div>
         <p>Open a category to compare the available options, then contact us to confirm current details for your dates.</p>
       </div>
 
+      <nav class="actions" aria-label="Travel service shortcuts">
+        <a class="button button-secondary" href="desert-safari.php">Desert safaris</a>
+        <a class="button button-secondary" href="city-tour.php">Walking tours</a>
+        <a class="button button-secondary" href="car-tours.php#proposed-itineraries">Private day tours</a>
+        <a class="button button-secondary" href="rajasthan-tours.php">Rajasthan journeys</a>
+        <a class="button button-secondary" href="car-rental.php">Car services</a>
+      </nav>
       <div class="package-category-grid" role="group" aria-label="Tour categories">
         <article class="package-category-card package-category-card--desert">
           <p class="package-category-kicker">01 / Desert experiences</p>
@@ -225,7 +233,7 @@ require __DIR__ . '/include/page-head.php';
                 <p class="experience-card-kicker"><?= htmlspecialchars($item['eyebrow'], ENT_QUOTES, 'UTF-8') ?></p>
                 <h3><?= htmlspecialchars($item['h1'], ENT_QUOTES, 'UTF-8') ?></h3>
                 <p><?= htmlspecialchars($item['summary'], ENT_QUOTES, 'UTF-8') ?></p>
-                <span>View itinerary →</span>
+                <span><?= !empty($item['enquiry_only']) ? 'Explore enquiry options →' : 'View itinerary →' ?></span>
               </div>
             </a>
             <?php
@@ -259,7 +267,7 @@ require __DIR__ . '/include/page-head.php';
                 <p class="experience-card-kicker"><?= htmlspecialchars($item['eyebrow'], ENT_QUOTES, 'UTF-8') ?></p>
                 <h3><?= htmlspecialchars($item['h1'], ENT_QUOTES, 'UTF-8') ?></h3>
                 <p><?= htmlspecialchars($item['summary'], ENT_QUOTES, 'UTF-8') ?></p>
-                <span>View itinerary →</span>
+                <span><?= !empty($item['enquiry_only']) ? 'Explore enquiry options →' : 'View itinerary →' ?></span>
               </div>
             </a>
             <?php
@@ -309,6 +317,18 @@ require __DIR__ . '/include/page-head.php';
         <article><strong>Full day</strong><p>Choose the <a href="full-day-jaisalmer-tour.php">full-day guided city tour</a> or <a href="desert-safari.php">compare desert experiences</a>.</p></article>
       </div>
 
+      <details class="package-note">
+        <summary><strong>Holiday ideas — combine your stay and experiences</strong></summary>
+        <ul>
+          <li><a href="custom-itinerary.php?idea=golden-city">Golden City Escape</a> — heritage stay, guided city tour and sunset safari.</li>
+          <li><a href="custom-itinerary.php?idea=fort-desert">Fort to Desert</a> — Fort stay and an overnight desert experience.</li>
+          <li><a href="custom-itinerary.php?idea=romantic">Romantic Jaisalmer</a> — ask about private experiences and rooftop dining.</li>
+          <li><a href="custom-itinerary.php?idea=family">Family Desert Holiday</a> — a flexible pace and suitable desert activities.</li>
+          <li><a href="custom-itinerary.php?idea=festive">Festive Jaisalmer</a> — request Diwali, Christmas or New Year arrangements.</li>
+          <li><a href="custom-itinerary.php?mode=rajasthan&amp;idea=western-rajasthan">Rajasthan Heritage Journey</a> — custom multi-city car and hotel enquiry.</li>
+        </ul>
+        <p>Ideas for a tailor-made quote, not fixed packages or guaranteed inclusions.</p>
+      </details>
       <div class="package-note">
         <p><strong>Current rates and timings:</strong> Confirm the price, availability, route, pickup arrangement, guide availability and exact inclusions for your travel date before booking.</p>
       </div>

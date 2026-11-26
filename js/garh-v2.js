@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (route === 'roof.php' || route === 'restaurant.php') return 'dining';
     if (route === 'direction.php') return 'arrival';
     if (route === 'contact.php') return 'contact';
-    if (route === 'pack.php' || route === 'car-tours.php' || route === 'desert-safari.php' ||
+    if (route === 'car-rental.php' || route === 'pack.php' || route === 'car-tours.php' || route === 'desert-safari.php' ||
         route === 'camping.php' || route.includes('safari') || route.includes('tour')) return 'experiences';
     if (route.includes('guide') || route.includes('itinerary') || route === 'blog.php') return 'guides';
     return 'site_content';
@@ -224,6 +224,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     return attribution;
   };
+  document.addEventListener('garh:car-quote-ready', event => {
+    if (!event.target.matches('[data-car-quote-form]')) return;
+    trackIntentEvent('click_whatsapp', Object.assign({
+      page_path: window.location.pathname || '/',
+      page_context: currentPageContext(),
+      cta_id: 'whatsapp-car-quote',
+      cta_location: 'car-travel-quote',
+      cta_label: 'whatsapp'
+    }, attributionForCurrentPage()));
+  });
+
   const isWhatsAppHost = (hostname) => ['wa.me', 'whatsapp.com', 'api.whatsapp.com']
     .includes(String(hostname || '').toLowerCase());
   const whatsappTopicForCurrentPage = () => {
@@ -391,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const requestedTopic = query.get('topic') || '';
       const travelPlanningTopics = [
         'visit-planning', 'desert-packing', 'fort-guide', 'desert-safari',
-        'two-day-itinerary', 'three-day-itinerary', 'honeymoon'
+        'two-day-itinerary', 'three-day-itinerary', 'honeymoon', 'travel-trade'
       ];
       let enquiryContext = 'general';
       const contextParameters = {};

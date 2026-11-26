@@ -297,7 +297,9 @@ if (!is_file($rendererPath)) {
         'page-head.php',
         "'title' => \$experience['title']",
         "'description' => \$experience['description']",
-        "'path' => '/' . \$experience['slug'] . '.php'",
+        "'path' => \$experiencePath",
+        "\$canonical = \$siteUrl . \$experiencePath",
+        "\$experiencePath = '/' . (\$experience['slug'] === 'not-found' ? 'pack' : \$experience['slug']) . '.php'",
         "'robots' => \$isIndexableExperience ? 'index,follow' : 'noindex,follow'",
     ] as $marker) {
         if (strpos($renderer, $marker) === false) {

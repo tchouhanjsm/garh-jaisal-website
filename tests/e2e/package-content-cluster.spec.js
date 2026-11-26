@@ -57,8 +57,8 @@ test('Packages finder searches published experiences and combines category and d
   const finder = page.locator('[data-experience-finder]');
   const cards = page.locator('[data-experience-filter-card]:visible');
   await expect(finder).toBeVisible();
-  await expect(cards).toHaveCount(6);
-  await expect(finder.locator('[data-experience-result-status]')).toHaveText('Showing 6 of 6 experiences.');
+  await expect(cards).toHaveCount(9);
+  await expect(finder.locator('[data-experience-result-status]')).toHaveText('Showing 9 of 9 experiences.');
 
   const search = finder.locator('[data-experience-search]');
   await search.fill('Swiss tent');
@@ -68,9 +68,9 @@ test('Packages finder searches published experiences and combines category and d
   await search.fill('this option does not exist');
   await expect(cards).toHaveCount(0);
   await expect(finder.locator('[data-experience-empty]')).toBeVisible();
-  await expect(finder.locator('[data-experience-result-status]')).toHaveText('Showing 0 of 6 experiences.');
+  await expect(finder.locator('[data-experience-result-status]')).toHaveText('Showing 0 of 9 experiences.');
   await finder.locator('[data-experience-reset]').first().click();
-  await expect(cards).toHaveCount(6);
+  await expect(cards).toHaveCount(9);
   await expect(finder.locator('[data-experience-empty]')).toBeHidden();
 
   await finder.locator('[data-experience-category]').selectOption('city');
@@ -78,12 +78,16 @@ test('Packages finder searches published experiences and combines category and d
   await expect(cards).toHaveCount(1);
   await expect(cards.locator('h3')).toHaveText('Full-Day Guided Jaisalmer Tour');
 
+  await finder.locator('[data-experience-duration]').selectOption('flexible');
+  await expect(cards).toHaveCount(2);
+  await expect(cards.locator('a[href="longewala-tour.php"]')).toBeVisible();
+  await expect(cards.locator('a[href="rajasthan-tours.php"]')).toBeVisible();
   await finder.locator('[data-experience-duration]').selectOption('overnight');
   await expect(cards).toHaveCount(0);
   await expect(finder.locator('[data-experience-empty]')).toBeVisible();
 
   await finder.locator('[data-experience-reset]').last().click();
-  await expect(cards).toHaveCount(6);
+  await expect(cards).toHaveCount(9);
   await expect(finder.locator('[data-experience-category]')).toHaveValue('all');
   await expect(finder.locator('[data-experience-duration]')).toHaveValue('all');
   await expect(search).toHaveValue('');
@@ -125,10 +129,10 @@ test('Packages experience list remains complete when JavaScript is unavailable',
     expect(noJsResponse).not.toBeNull();
     expect(noJsResponse.status()).toBeLessThan(400);
     await expect(noJsPage.locator('[data-experience-finder]')).toBeHidden();
-    await expect(noJsPage.locator('[data-experience-filter-card]')).toHaveCount(6);
-    await expect(noJsPage.locator('#desert-options [data-experience-filter-card]')).toHaveCount(4);
-    await expect(noJsPage.locator('#city-options [data-experience-filter-card]')).toHaveCount(2);
-    await expect(noJsPage.locator('[data-experience-filter-card] a[href$=".php"]')).toHaveCount(6);
+    await expect(noJsPage.locator('[data-experience-filter-card]')).toHaveCount(9);
+    await expect(noJsPage.locator('#desert-options [data-experience-filter-card]')).toHaveCount(5);
+    await expect(noJsPage.locator('#city-options [data-experience-filter-card]')).toHaveCount(4);
+    await expect(noJsPage.locator('[data-experience-filter-card] a[href$=".php"]')).toHaveCount(9);
   } finally {
     await context.close();
   }

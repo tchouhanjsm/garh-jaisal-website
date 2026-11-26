@@ -223,6 +223,6 @@ require __DIR__ . '/include/page-head.php';
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
 <script src="js/garh-v2.js"></script>
 <script src="js/arrival-guide.js"></script>
-<script src="js/map-preview.js" defer></script>
+<script src="<?= htmlspecialchars($versionedAssetUrl('js/map-preview.js'), ENT_QUOTES, 'UTF-8') ?>" defer></script>
 </body>
 </html>

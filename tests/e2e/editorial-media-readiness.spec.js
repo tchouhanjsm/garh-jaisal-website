@@ -25,6 +25,9 @@ const routes = [
   { path: '/cultural-safari.php', kind: 'experience' },
   { path: '/half-day-jaisalmer-tour.php', kind: 'experience' },
   { path: '/full-day-jaisalmer-tour.php', kind: 'experience' },
+  { path: '/explore-the-desert.php', kind: 'experience' },
+  { path: '/longewala-tour.php', kind: 'experience' },
+  { path: '/rajasthan-tours.php', kind: 'experience' },
 ];
 
 test('editorial and experience hero media is publish-ready', async ({ page }, testInfo) => {

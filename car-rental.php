@@ -15,6 +15,10 @@ $carWhatsAppUrl = $whatsappUrl . '?text=' . rawurlencode(
 $siteUrl = rtrim($siteConfig['site_url'], '/');
 $canonical = $siteUrl . '/car-rental.php';
 require_once __DIR__ . '/include/schema.php';
+$routeIdeas = [
+    'Jaipur → Jodhpur → Jaisalmer',
+    'Jaipur → Udaipur → Jodhpur',
+];
 $title = 'Delhi Airport Transfers & Rajasthan Tours | Garh Jaisal';
 $description = 'Enquire about Delhi Airport pickup and return, a Rajasthan tour with hotels and a car, or vehicle-only travel. Share your route and dates for a quote.';
 $faqItems = [
@@ -100,8 +104,12 @@ require __DIR__ . '/include/page-head.php';
       <div class="car-route-ideas">
         <h3>Route ideas from Delhi Airport</h3>
         <ul>
-          <li>Delhi Airport → Jaipur → Jodhpur → Jaisalmer → Delhi Airport</li>
-          <li>Delhi Airport → Jaipur → Udaipur → Jodhpur → Delhi Airport</li>
+          <?php foreach ($routeIdeas as $routeIdea): ?>
+            <li>
+              <span data-car-route-label>Delhi Airport → <?= $htmlEscape($routeIdea) ?> → Delhi Airport</span>
+              <a class="text-link" href="#car-travel-quote" data-car-route="<?= $htmlEscape($routeIdea) ?>" hidden>Delhi Airport → <?= $htmlEscape($routeIdea) ?> → Delhi Airport</a>
+            </li>
+          <?php endforeach; ?>
         </ul>
         <p>These are sample city combinations. Share your own stops and dates so we can check what is feasible.</p>
       </div>
@@ -114,6 +122,7 @@ require __DIR__ . '/include/page-head.php';
         <h2 id="car-quote-title">Ask for a quote</h2>
         <p>Review and send your draft in WhatsApp. Wait for us to confirm the route, pickup point, availability, inclusions and price before making plans.</p>
         <p>For a pickup from Jaisalmer airport or railway station, share your arrival time. If you are staying at the haveli, use Fort Parking as your drop-off and <a href="direction.php#arrival-overview-title">check the final walking route</a>.</p>
+        <p>Arranging a trip for clients? <a href="contact.php?topic=travel-trade">Send a travel trade enquiry</a>.</p>
         <a class="text-link" href="<?= htmlspecialchars($carWhatsAppUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Request a car quote on WhatsApp</a>
       </div>
       <form class="car-quote-form" data-car-quote-form data-whatsapp-url="<?= htmlspecialchars($whatsappUrl, ENT_QUOTES, 'UTF-8') ?>" hidden>
@@ -130,6 +139,14 @@ require __DIR__ . '/include/page-head.php';
         <label>Drop-off date <input name="dropoffDate" type="date" required></label>
         <label>Passengers <input name="passengers" type="number" min="1" step="1" inputmode="numeric" required></label>
         <label>Luggage (optional) <input name="luggage" type="text" maxlength="120" placeholder="e.g. 2 suitcases"></label>
+        <label class="car-quote-wide">Sample route (optional)
+          <select name="route">
+            <option value="">I'll enter my own stops</option>
+            <?php foreach ($routeIdeas as $routeIdea): ?>
+              <option><?= $htmlEscape($routeIdea) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </label>
         <label class="car-quote-wide">Stops or other details (optional) <textarea name="stops" rows="3" maxlength="350" placeholder="Cities, flight times or accommodation preferences"></textarea></label>
         <button class="button button-primary car-quote-wide" type="submit">Continue to WhatsApp</button>
       </form>
@@ -155,7 +172,7 @@ require __DIR__ . '/include/page-head.php';
 </main>
 
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
-<script src="js/garh-v2.js"></script>
-<script src="js/car-rental.js" defer></script>
+<script src="<?= $htmlEscape($versionedAssetUrl('js/garh-v2.js')) ?>"></script>
+<script src="<?= $htmlEscape($versionedAssetUrl('js/car-rental.js')) ?>" defer></script>
 </body>
 </html>

@@ -359,60 +359,32 @@ test('Car & City discovery paths remain connected without retiring legacy URLs',
   }
 });
 
-test('draft tour entries remain absent from public navigation and footer', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Publication boundary checks run once');
-  for (const route of ['/', '/pack.php', '/car-tours.php', '/desert-safari.php', '/guided-jaisalmer-tour.php']) {
+test('restored travel enquiry routes are discoverable without claiming confirmed itineraries', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Publication checks run once');
+  for (const route of ['/explore-the-desert.php', '/longewala-tour.php', '/rajasthan-tours.php']) {
+    expect(getSitemapEntries()).toContain(route);
     const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
-    expect(response).not.toBeNull();
-    expect(response.status()).toBeLessThan(400);
-    await expect(page.locator('header a[href="longewala-tour.php"], footer a[href="longewala-tour.php"]')).toHaveCount(0);
-    await expect(page.locator('header a[href="rajasthan-tours.php"], footer a[href="rajasthan-tours.php"]')).toHaveCount(0);
+    expect(response.status()).toBe(200);
+    await expect(page.locator('main h1')).toBeVisible();
+    expect(new URL(await page.locator('link[rel=canonical]').getAttribute('href')).pathname).toBe(route);
+    await expect(page.locator('#experience-details-title')).toHaveText('What to discuss');
+    await expect(page.locator('.experience-enquiry-note')).toContainText('not a confirmed booking');
+    await expect(page.locator('main')).not.toContainText(/NEEDS OWNER INPUT|Draft tour page/);
   }
-});
-
-test('public Draft tour routes return 404 and remain excluded from the sitemap', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Publication status checks run once');
-  const sitemapRoutes = getSitemapEntries();
-  for (const route of ['/longewala-tour.php', '/rajasthan-tours.php']) {
-    expect(sitemapRoutes, `${route} must stay out of sitemap.xml until approved`).not.toContain(route);
-    const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
-    expect(response, `No HTTP response for draft ${route}`).not.toBeNull();
-    expect(response.status(), `Public Draft route ${route} must return 404`).toBe(404);
-    await expect(page.locator('main h1')).toHaveText('Experience not found');
-    await expect(page.locator('main')).not.toContainText(/Longewala|Rajasthan tours/i);
+  await page.goto('/pack.php');
+  for (const route of ['explore-the-desert.php', 'longewala-tour.php', 'rajasthan-tours.php']) {
+    await expect(page.locator('main a[href="'+route+'"]').first()).toBeAttached();
   }
+  await page.goto('/guided-jaisalmer-tour.php');
+  await expect(page.locator('#guided-options .experience-card')).toHaveCount(2);
+  await expect(page.locator('#guided-options a[href="rajasthan-tours.php"], #guided-options a[href="longewala-tour.php"]')).toHaveCount(0);
+  await page.goto('/desert-safari.php');
+  await expect(page.locator('#desert-options .experience-card a[href="explore-the-desert.php"]')).toBeVisible();
+  await page.goto('/custom-itinerary.php?idea=golden-city');
+  await expect(page.locator('#custom-places')).toHaveValue(/Golden City Escape/);
+  await page.goto('/custom-itinerary.php?idea=%3Cscript%3E');
+  await expect(page.locator('#custom-places')).toHaveValue('');
 });
-
-test('hidden overlap pages return 404 and stay out of public discovery until approved', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Publication status checks run once');
-  const hiddenRoute = '/explore-the-desert.php';
-  expect(getSitemapEntries(), `${hiddenRoute} must stay out of sitemap.xml while hidden`).not.toContain(hiddenRoute);
-
-  for (const route of getSitemapEntries()) {
-    const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
-    expect(response, `No HTTP response for sitemap route ${route}`).not.toBeNull();
-    expect(response.status(), `Unexpected status for sitemap route ${route}`).toBeLessThan(400);
-
-    const hiddenLinks = await page.locator('a[href]').evaluateAll((anchors, expected) =>
-      anchors.filter(anchor => new URL(anchor.getAttribute('href'), document.baseURI).pathname === expected).length,
-      hiddenRoute
-    );
-    expect(hiddenLinks, `${route} must not link to the hidden page ${hiddenRoute}`).toBe(0);
-
-    if (route === '/desert-safari.php') {
-      await expect(page.locator('.route-planner')).not.toContainText(/Explore the Desert is the broader day experience/i);
-      await expect(page.locator('.route-planner').getByRole('link', { name: 'Ask about desert options' }))
-        .toHaveAttribute('href', 'contact.php');
-    }
-  }
-
-  const response = await page.goto(hiddenRoute, { waitUntil: 'domcontentloaded' });
-  expect(response, `No HTTP response for hidden ${hiddenRoute}`).not.toBeNull();
-  expect(response.status(), 'Hidden public route must return 404 until approved').toBe(404);
-  await expect(page.locator('main h1')).toHaveText('Experience not found');
-  await expect(page.locator('main')).not.toContainText(/Explore the Desert is the broader day experience/i);
-});
-
 
 test('high-intent routes expose three contextual internal planning links', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Planning path contracts run once');
@@ -456,4 +428,50 @@ test('high-intent routes expose three contextual internal planning links', async
       `Planning links must stay on internal PHP routes on ${route}`
     ).toBeTruthy();
   }
+});
+
+// Audit rendered same-site links across the public registry; no external navigation or POST.
+test('public sitemap pages have reachable internal destinations and anchors', async ({ page, baseURL }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Sitewide route audit runs once');
+  test.setTimeout(180000);
+  const origin = new URL(baseURL).origin;
+  const allowedHosts = new Set([new URL(baseURL).hostname, 'www.hotelgarhjaisal.com', 'hotelgarhjaisal.com']);
+  await page.route('**/*', route => {
+    const url = new URL(route.request().url());
+    return url.origin !== origin || ['image', 'font', 'media'].includes(route.request().resourceType()) ? route.abort() : route.continue();
+  });
+  const ids = new Map();
+  const links = [];
+  const faults = [];
+  for (const path of routes) {
+    const response = await page.goto(path, { waitUntil: 'domcontentloaded' });
+    if (!response || response.status() >= 400) { faults.push(path + ' returned ' + response?.status()); continue; }
+    const snapshot = await page.evaluate(() => ({
+      ids: Array.from(document.querySelectorAll('[id], a[name]'), node => node.id || node.getAttribute('name')),
+      hrefs: Array.from(document.querySelectorAll('a[href]'), node => node.getAttribute('href'))
+    }));
+    ids.set(path, new Set(snapshot.ids));
+    for (const raw of snapshot.hrefs) {
+      if (!raw || raw === '#') continue;
+      let target;
+      try { target = new URL(raw, new URL(path, origin)); } catch { continue; }
+      if (!['http:', 'https:'].includes(target.protocol) || !allowedHosts.has(target.hostname)) continue;
+      if (target.pathname !== '/' && !target.pathname.endsWith('.php')) continue;
+      links.push({ from: path, target });
+    }
+  }
+  const checked = new Set(ids.keys());
+  for (const { from, target } of links) {
+    if (!checked.has(target.pathname)) {
+      checked.add(target.pathname);
+      const response = await page.request.get(target.pathname, { maxRedirects: 0 });
+      if (response.status() >= 400) faults.push(from + ' → ' + target.pathname + ' returned ' + response.status());
+    }
+    if (target.hash && !target.search && ids.has(target.pathname)) {
+      const fragment = decodeURIComponent(target.hash.slice(1));
+      if (fragment && !ids.get(target.pathname).has(fragment)) faults.push(from + ' → ' + target.pathname + target.hash + ' missing anchor');
+    }
+  }
+  await testInfo.attach('internal-route-audit', { body: JSON.stringify({ pages: routes.length, checkedDestinations: checked.size, links: links.length, faults: [...new Set(faults)] }, null, 2), contentType: 'application/json' });
+  expect([...new Set(faults)]).toEqual([]);
 });

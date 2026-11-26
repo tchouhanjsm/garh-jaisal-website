@@ -8,6 +8,15 @@ function e($value): string {
     return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
 
+function gj_dining_send_email(string $recipient, string $subject, string $body, string $headers): bool {
+    try {
+        return @mail($recipient, $subject, $body, $headers);
+    } catch (Throwable $exception) {
+        error_log('Restaurant enquiry email could not be sent.');
+        return false;
+    }
+}
+
 $waLink = $whatsappUrl . '?text=' . rawurlencode(
     'Hello, I would like to enquire about a table at ' . $restaurant['name']
     . '. Preferred date: [add date]. Preferred time: [add time]. Number of guests: [add number].'
@@ -43,9 +52,20 @@ if (empty($_SESSION['gjk_csrf'])) {
     $_SESSION['gjk_csrf'] = bin2hex(random_bytes(16));
 }
 
-if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+$receipt = $_SESSION['gjk_receipts'][$reservationPath] ?? null;
+$receiptUrl = $reservationPath . '?table-request=received#reserve';
+if ($method === 'GET' && ($_GET['table-request'] ?? '') === 'received' && is_array($receipt)) {
+    $sent = true;
+    $reservationReference = $receipt['reference'];
+    $reservationEmailNotified = $receipt['email_notified'];
+}
+
+if ($method === 'POST') {
     foreach ($old as $key => $_) {
-        $old[$key] = trim((string) ($_POST[$key] ?? ''));
+        $raw = $_POST[$key] ?? '';
+        $old[$key] = is_string($raw) ? trim($raw) : '';
+        if (!is_string($raw)) $errors['form'] = 'Please submit valid form values.';
     }
 
     if (!empty($_POST['website'])) {
@@ -53,12 +73,25 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
         exit;
     }
 
-    if (!hash_equals($_SESSION['gjk_csrf'], (string) ($_POST['csrf'] ?? ''))) {
+    $submittedToken = is_string($_POST['csrf'] ?? null) ? $_POST['csrf'] : '';
+    $submittedPayloadHash = hash('sha256', serialize($old));
+    if (!hash_equals($_SESSION['gjk_csrf'], $submittedToken)) {
+        if (!$errors && is_array($receipt) && hash_equals($receipt['submitted_token'], $submittedToken)
+            && hash_equals((string) ($receipt['payload_hash'] ?? ''), $submittedPayloadHash)) {
+            header('Location: ' . $receiptUrl, true, 303);
+            exit;
+        }
         $errors['form'] = 'Your session expired. Please reload the page and try again.';
     }
 
     $phone = preg_replace('/[^0-9+]/', '', $old['whatsapp']);
-    $today = date('Y-m-d');
+    $timezone = new DateTimeZone('Asia/Kolkata');
+    $now = new DateTimeImmutable('now', $timezone);
+    $today = $now->format('Y-m-d');
+    $requestedDate = preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/D', $old['date'])
+        ? DateTimeImmutable::createFromFormat('!Y-m-d', $old['date'], $timezone)
+        : false;
+    $validDate = $requestedDate !== false && $requestedDate->format('Y-m-d') === $old['date'];
 
     $nameLength = function_exists('mb_strlen') ? mb_strlen($old['name'], 'UTF-8') : strlen($old['name']);
     if ($old['name'] === '' || $nameLength > 80) {
@@ -70,13 +103,13 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     if ($old['email'] !== '' && !filter_var($old['email'], FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'Enter a valid email address.';
     }
-    if ($old['date'] === '' || $old['date'] < $today) {
+    if (!$validDate || $old['date'] < $today) {
         $errors['date'] = 'Choose today or a future date.';
     }
     if (!preg_match('/^(?:[01][0-9]|2[0-3]):(?:00|30)$/D', $old['time'])) {
         $errors['time'] = 'Choose a preferred time on the hour or half-hour.';
     }
-    if ((int) $old['guests'] < 1 || (int) $old['guests'] > 20) {
+    if (!preg_match('/^(?:[1-9]|1[0-9]|20)$/D', $old['guests'])) {
         $errors['guests'] = 'Guests must be between 1 and 20.';
     }
     if (strlen($old['note']) > 500) {
@@ -87,9 +120,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
     }
 
     // Enforce only schedule values explicitly supplied by the owner in private config.
-    if ($old['date'] !== '' && $old['date'] >= $today) {
-        $requestedWeekday = (int) date('w', strtotime($old['date']));
-        $requestedWeekdayName = strtolower(date('l', strtotime($old['date'])));
+    if ($validDate && $old['date'] >= $today) {
+        $requestedWeekday = (int) $requestedDate->format('w');
+        $requestedWeekdayName = strtolower($requestedDate->format('l'));
         $closedDays = $siteConfig['restaurant_closed_days'] ?? [];
         if (!is_array($closedDays)) {
             $closedDays = [];
@@ -106,9 +139,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             $errors['date'] = 'The restaurant is marked closed on that day. Choose another date or contact the hotel.';
         }
         $sameDayCutoff = max(0, (int) ($siteConfig['restaurant_same_day_cutoff_minutes'] ?? 0));
-        if ($old['date'] === $today && $sameDayCutoff > 0
+        if ($old['date'] === $today
             && preg_match('/^(?:[01][0-9]|2[0-3]):(?:00|30)$/D', $old['time'])
-            && strtotime($old['date'] . ' ' . $old['time']) < time() + ($sameDayCutoff * 60)) {
+            && (new DateTimeImmutable($old['date'] . ' ' . $old['time'], $timezone))->getTimestamp() <= $now->getTimestamp() + ($sameDayCutoff * 60)) {
             $errors['time'] = 'That time is inside the same-day request cut-off. Please call or message the hotel.';
         }
     }
@@ -128,7 +161,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             ],
             (string) ($_SERVER['REMOTE_ADDR'] ?? ''),
             $phone,
-            ['max_per_ip' => 8, 'max_per_phone' => 3]
+            ['max_per_ip' => 8, 'max_per_phone' => 3, 'duplicate_window_seconds' => 300]
         );
 
         if (empty($leadResult['ok'])) {
@@ -137,6 +170,17 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
                 : 'We could not securely record the request. Please call or message the hotel so your enquiry is not lost.';
         } else {
             $reservationReference = $leadResult['reference'];
+            if (!empty($leadResult['duplicate'])) {
+                $_SESSION['gjk_receipts'][$reservationPath] = [
+                    'reference' => $reservationReference,
+                    'email_notified' => !empty($leadResult['email_notified']),
+                    'submitted_token' => $submittedToken,
+                    'payload_hash' => $submittedPayloadHash,
+                ];
+                $_SESSION['gjk_csrf'] = bin2hex(random_bytes(16));
+                header('Location: ' . $receiptUrl, true, 303);
+                exit;
+            }
             $subject = 'Restaurant table enquiry [' . $reservationReference . ']';
             $body = "A new restaurant table enquiry was recorded. This is not a confirmed booking.\n\n"
                 . "Reference: {$reservationReference}\n"
@@ -165,7 +209,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             }
 
             foreach ($recipients as $recipient) {
-                if (@mail($recipient, $subject, $body, $headers)) {
+                if (gj_dining_send_email($recipient, $subject, $body, $headers)) {
                     $reservationEmailNotified = true;
                 }
             }
@@ -181,12 +225,19 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
                 if (filter_var($hotelEmail, FILTER_VALIDATE_EMAIL) !== false) {
                     $guestHeaders .= 'From: ' . $hotelEmail . "\r\n";
                 }
-                $guestSent = @mail($old['email'], $guestSubject, $guestBody, $guestHeaders);
+                $guestSent = gj_dining_send_email($old['email'], $guestSubject, $guestBody, $guestHeaders);
                 gj_record_lead_event($reservationReference, $guestSent ? 'guest_acknowledgement_sent' : 'guest_acknowledgement_failed');
             }
 
-            $sent = true;
+            $_SESSION['gjk_receipts'][$reservationPath] = [
+                'reference' => $reservationReference,
+                'email_notified' => $reservationEmailNotified,
+                'submitted_token' => $submittedToken,
+                    'payload_hash' => $submittedPayloadHash,
+            ];
             $_SESSION['gjk_csrf'] = bin2hex(random_bytes(16));
+            header('Location: ' . $receiptUrl, true, 303);
+            exit;
         }
     }
 }

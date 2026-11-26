@@ -29,6 +29,7 @@ $restaurantGallerySections = require __DIR__ . '/include/gallery-data.php';
 $restaurantPhotoSlides = $restaurantGallerySections['restaurant']['images'] ?? [];
 
 
+$reservationPath = 'restaurant.php';
 require __DIR__ . '/include/dining-reservation.php';
 
 $pageUrl = $siteUrl . '/restaurant.php';
