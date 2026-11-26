@@ -2,10 +2,10 @@
 
 ## In review
 
-- Checked the 39 public sitemap URLs for HTTP errors and canonical mismatches against cPanel release `863f47f`. All passed.
+- Checked the 39 public sitemap URLs for HTTP errors and canonical mismatches against cPanel release `863f47f`. All passed. The release candidate also passed an internal-link and anchor check across 106 destinations.
 - Table enquiries keep a reference after refresh or a repeated submit. Notification failures leave the request recoverable in guest lead storage.
 - Both dining pages share dish search, printable full menus and a full-menu fallback.
-- Rajasthan quote requests support airport return, sample routes and car-only or car-with-hotels options. Travel trade enquiries use the existing contact form. Quote handoffs send a WhatsApp intent event without enquiry details.
+- Rajasthan quote requests support airport return, sample routes and car-only or car-with-hotels options. Travel trade enquiries use the existing contact form. Quote handoffs send a WhatsApp intent event without enquiry details. The mobile action bar stays clear of the active form.
 
 ## Next
 

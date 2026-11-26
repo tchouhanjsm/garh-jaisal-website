@@ -43,6 +43,9 @@
 .car-quote-form :is(input, select, textarea) { width: 100%; min-width: 0; min-height: 46px; font-size: 1rem; }
 .car-quote-form .car-quote-wide { grid-column: 1 / -1; }
 .car-quote-form button { justify-self: start; }
+@media (max-width: 1080px) {
+  body:has(.car-quote-form:focus-within) .mobile-cta { visibility: hidden; }
+}
 @media (max-width: 760px) {
   .car-rental-page :is(.car-offer-grid, .car-quote-grid) { grid-template-columns: minmax(0, 1fr); }
 }
