@@ -447,15 +447,33 @@ test('public sitemap pages have reachable internal destinations and anchors', as
   const links = [];
   const faults = [];
   const external = new Map();
+  const assets = new Map();
+  let sourcePage = '';
+  page.on('response', response => {
+    const url = new URL(response.url());
+    if (url.origin !== origin || !['stylesheet', 'script', 'font', 'image'].includes(response.request().resourceType())) return;
+    if (response.status() >= 400) faults.push(sourcePage + ' → ' + url.pathname + ' asset returned ' + response.status());
+  });
   for (const path of routes) {
+    sourcePage = path;
     const response = await page.goto(path, { waitUntil: 'domcontentloaded' });
     if (!response || response.status() !== 200) { faults.push(path + ' returned ' + response?.status()); continue; }
     if (response.request().redirectedFrom()) { faults.push(path + ' redirected unexpectedly'); continue; }
     const snapshot = await page.evaluate(() => ({
       ids: Array.from(document.querySelectorAll('[id], a[name]'), node => node.id || node.getAttribute('name')),
-      hrefs: Array.from(document.querySelectorAll('a[href]'), node => node.getAttribute('href'))
+      hrefs: Array.from(document.querySelectorAll('a[href]'), node => node.getAttribute('href')),
+      assets: Array.from(document.querySelectorAll('img[src], script[src], link[rel="stylesheet"][href], source[src], video[poster]'), node =>
+        node.getAttribute('src') || node.getAttribute('href') || node.getAttribute('poster'))
     }));
     ids.set(path, new Set(snapshot.ids));
+    for (const raw of snapshot.assets) {
+      if (!raw) continue;
+      let target;
+      try { target = new URL(raw, new URL(path, origin)); } catch { continue; }
+      if (!['http:', 'https:'].includes(target.protocol) || !allowedHosts.has(target.hostname)) continue;
+      if (!assets.has(target.pathname)) assets.set(target.pathname, new Set());
+      assets.get(target.pathname).add(path);
+    }
     for (const raw of snapshot.hrefs) {
       if (!raw || raw === '#') continue;
       let target;
@@ -505,8 +523,26 @@ test('public sitemap pages have reachable internal destinations and anchors', as
       if (fragment && !ids.get(anchorKey).has(fragment)) faults.push(from + ' → ' + target.pathname + target.hash + ' missing anchor');
     }
   }
+  // Check declared local assets without downloading all photos in this audit.
+  // Browser image/decode coverage remains in the existing visual suite.
+  const root = path.resolve(__dirname, '../..');
+  for (const [asset, sources] of assets) {
+    let local;
+    try { local = path.resolve(root, '.' + decodeURIComponent(asset)); } catch {
+      faults.push(asset + ' has invalid URL encoding');
+      continue;
+    }
+    if (!local.startsWith(root + path.sep) || !fs.existsSync(local) || !fs.statSync(local).isFile()) {
+      faults.push([...sources].join(', ') + ' → ' + asset + ' missing local asset');
+    }
+  }
+  // Classify root PHP files not represented by the public sitemap without
+  // executing unknown handlers (including private and legacy endpoints).
+  const nonSitemapRoutes = fs.readdirSync(root, { withFileTypes: true })
+    .filter(entry => entry.isFile() && entry.name.endsWith('.php') && !routes.includes('/' + entry.name))
+    .map(entry => ({ route: '/' + entry.name, linkedFromPublicPages: links.filter(link => link.target.pathname === '/' + entry.name).map(link => link.from).filter((value, i, all) => all.indexOf(value) === i) }));
   const report = {
-    pages: routes.length, checkedDestinations: checked.size, queryAnchorPages: checkedQueryAnchors.size,
+    pages: routes.length, localAssetCount: assets.size, nonSitemapRoutes, checkedDestinations: checked.size, queryAnchorPages: checkedQueryAnchors.size,
     links: links.length, faults: [...new Set(faults)],
     externalDestinations: [...external].map(([destination, sources]) => ({ destination, sources: [...sources] })),
   };
