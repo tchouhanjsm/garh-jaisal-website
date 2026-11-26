@@ -32,8 +32,12 @@ function gj_lead_storage_directory(): ?string
     if ($directory === $documentRoot || strpos($directory . DIRECTORY_SEPARATOR, $rootPrefix) === 0) {
         return null;
     }
-    @chmod($directory, 0700);
-    return $directory;
+    if (!@chmod($directory, 0700)) {
+        return null;
+    }
+    clearstatcache(true, $directory);
+    $permissions = @fileperms($directory);
+    return is_int($permissions) && ($permissions & 0777) === 0700 ? $directory : null;
 }
 
 /** Open and lock only a regular, private lead file; reject aliases to other files. */
@@ -43,7 +47,13 @@ function gj_open_lead_log(string $path)
     if (is_link($path) || (file_exists($path) && !is_file($path))) {
         return false;
     }
-    $handle = @fopen($path, 'c+');
+    // Create new logs private from the first open, not only after chmod.
+    $previousMask = umask(0077);
+    try {
+        $handle = @fopen($path, 'c+');
+    } finally {
+        umask($previousMask);
+    }
     if (!is_resource($handle)) {
         return false;
     }
