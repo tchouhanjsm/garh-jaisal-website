@@ -100,3 +100,19 @@ test('malformed contact arrays are rejected before CAPTCHA or email processing',
     expect(response.headers().location).toBe('contact.php?error=invalid');
   }
 });
+
+
+test('Rajasthan enquiry clearly distinguishes car-only and car-with-hotels arrangements', async ({ page }, testInfo) => {
+  test.skip(!['mobile-320', 'desktop-1280'].includes(testInfo.project.name), 'Test narrow mobile and desktop.');
+  await page.goto('/custom-itinerary.php?mode=rajasthan&idea=western-rajasthan');
+  const link = page.locator('#custom-itinerary-whatsapp');
+  await expect(link).toHaveAttribute('data-cta-id', 'whatsapp-rajasthan-itinerary');
+  const service = page.getByLabel('Travel arrangement');
+  for (const option of ['Private car with driver', 'Private car with accommodation arranged']) {
+    await service.selectOption(option);
+    await expect(link).toHaveAttribute('aria-disabled', 'false');
+    expect(new URL(await link.getAttribute('href')).searchParams.get('text')).toContain('Travel arrangement: ' + option);
+  }
+  await page.goto('/custom-itinerary.php?idea=golden-city');
+  await expect(page.locator('#custom-itinerary-whatsapp')).toHaveAttribute('data-cta-id', 'whatsapp-jaisalmer-itinerary');
+});
