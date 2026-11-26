@@ -8,7 +8,8 @@ test('sitemap gives every published URL a valid Git-derived lastmod date', async
   const entries = [...sitemap.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<priority>([^<]+)<\/priority>\s*<\/url>/gi)]
     .map(([, loc, lastmod, priority]) => ({ loc, lastmod, priority }));
 
-  expect(entries.length, 'All published sitemap entries must be parsed').toBe(39);
+  expect(entries.length, 'All published sitemap entries must be parsed').toBe((sitemap.match(/<url>/g) || []).length);
+  expect(new Set(entries.map(entry => entry.loc)).size).toBe(entries.length);
   expect(entries.some(entry => entry.loc.endsWith('/catalogue.php')), 'Trip catalogue must be indexable').toBe(true);
   for (const route of [
     '/best-time-to-visit-jaisalmer.php',
@@ -19,6 +20,9 @@ test('sitemap gives every published URL a valid Git-derived lastmod date', async
     '/jaisalmer-beyond-the-fort-guide.php',
     '/jaisalmer-markets-and-crafts-guide.php',
     '/custom-itinerary.php',
+    '/explore-the-desert.php',
+    '/longewala-tour.php',
+    '/rajasthan-tours.php',
     '/privacy.php',
     '/booking-policy.php',
   ]) {

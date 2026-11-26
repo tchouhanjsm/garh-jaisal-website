@@ -13,11 +13,14 @@ test('catalogue renders the reviewed product choices without unapproved prices',
   expect(canonical).toBe('https://www.hotelgarhjaisal.com/catalogue.php');
 
   const cards = page.locator('[data-product-card]');
-  await expect(cards).toHaveCount(9);
+  await expect(cards).toHaveCount(12);
+  for (const id of ['explore-the-desert', 'longewala-tour', 'rajasthan-tours']) {
+    await expect(cards.filter({ has: page.locator(`a[href="${id}.php"]`) })).toHaveCount(1);
+  }
   for (const image of await cards.locator('img').all()) {
     await expect(image).toHaveAttribute('alt', /\S+/);
   }
-  await expect(cards.locator('[data-trip-add]')).toHaveCount(9);
+  await expect(cards.locator('[data-trip-add]')).toHaveCount(12);
   for (const card of await cards.all()) {
     await expect(card).toContainText('Current price on request');
   }
@@ -31,7 +34,7 @@ test('catalogue renders the reviewed product choices without unapproved prices',
   await expect(campComparisons.nth(1).locator('.catalogue-compare-fact[data-comparison-field="Bathroom"] dd')).toHaveText('Attached bathroom with hot and cold shower.');
   await expect(page.locator('#transport-compare-title')).toHaveText('Choose the journey you need.');
   await expect(page.locator('main')).not.toContainText('₹');
-  await expect(page.locator('.product-card-planning-note')).toHaveCount(9);
+  await expect(page.locator('.product-card-planning-note')).toHaveCount(12);
 });
 
 test('Trip tray combines a selected room and experience, then prepares travel context without server storage', async ({ page }, testInfo) => {
@@ -178,8 +181,9 @@ test('experience discovery hubs let guests shortlist verified options without tu
 
   await page.goto('/desert-safari.php', { waitUntil: 'domcontentloaded' });
   const desertCards = page.locator('.experience-card');
-  await expect(desertCards).toHaveCount(4);
-  await expect(desertCards.locator('[data-trip-add]')).toHaveCount(4);
+  await expect(desertCards).toHaveCount(5);
+  await expect(desertCards.filter({ has: page.locator('a[href="explore-the-desert.php"]') })).toContainText('Explore enquiry options');
+  await expect(desertCards.locator('[data-trip-add]')).toHaveCount(5);
   await page.locator('.experience-card [data-trip-add]').first().click();
   await expect(page.locator('[data-trip-count]')).toHaveText('1');
 

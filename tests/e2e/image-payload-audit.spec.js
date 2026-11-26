@@ -316,9 +316,9 @@ test('audit every published route for image slots and payloads at mobile and des
   expect(routes.length, 'The image audit should cover all sitemap routes').toBeGreaterThan(0);
   expect(routeResults.length, 'Every published route must be checked at both viewport sizes').toBe(routes.length * VIEWPORTS.length);
   expect(
-    summary.largeImageCandidates,
+    images.filter(image => image.reviewCandidate).map(image => ({ url: image.url, bytes: image.transferBytes, routes: image.routes })),
     'No selected responsive image resource should exceed the 250 KiB review threshold after hero budgets are enforced.'
-  ).toBe(0);
+  ).toEqual([]);
   const failedLoads = imageUsages.filter(image => image.visibleAtInitialViewport && image.renderedWidth > 0 && image.src && (!image.complete || image.naturalWidth < 1));
   expect(failedLoads.map(image => `${image.route} @${image.viewport.width}px: ${image.src}`), 'Visible images must load at initial viewport').toEqual([]);
 });
