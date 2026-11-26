@@ -76,7 +76,7 @@ $dietLabels = [
                       }
                       $dietLabel = $dietLabels[$dishDiet] ?? null;
                     ?>
-                      <li class="restaurant-dish" data-menu-dish="<?= e($dish['n']) ?>">
+                      <li class="restaurant-dish" data-menu-dish="<?= e($dish['n']) ?>" data-menu-description="<?= e($dish['d'] ?? '') ?>" data-menu-diet="<?= e($dietLabel ?? '') ?>">
                         <div>
                           <?php $dishHeading = $group === '' ? 'h4' : 'h5'; ?>
                           <<?= $dishHeading ?>><?= e($dish['n']) ?></<?= $dishHeading ?>>

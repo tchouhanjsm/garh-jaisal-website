@@ -86,7 +86,9 @@ if ($method === 'POST') {
     $timezone = new DateTimeZone('Asia/Kolkata');
     $now = new DateTimeImmutable('now', $timezone);
     $today = $now->format('Y-m-d');
-    $requestedDate = DateTimeImmutable::createFromFormat('!Y-m-d', $old['date'], $timezone);
+    $requestedDate = preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/D', $old['date'])
+        ? DateTimeImmutable::createFromFormat('!Y-m-d', $old['date'], $timezone)
+        : false;
     $validDate = $requestedDate !== false && $requestedDate->format('Y-m-d') === $old['date'];
 
     $nameLength = function_exists('mb_strlen') ? mb_strlen($old['name'], 'UTF-8') : strlen($old['name']);
@@ -157,7 +159,7 @@ if ($method === 'POST') {
             ],
             (string) ($_SERVER['REMOTE_ADDR'] ?? ''),
             $phone,
-            ['max_per_ip' => 8, 'max_per_phone' => 3]
+            ['max_per_ip' => 8, 'max_per_phone' => 3, 'duplicate_window_seconds' => 300]
         );
 
         if (empty($leadResult['ok'])) {
@@ -166,6 +168,16 @@ if ($method === 'POST') {
                 : 'We could not securely record the request. Please call or message the hotel so your enquiry is not lost.';
         } else {
             $reservationReference = $leadResult['reference'];
+            if (!empty($leadResult['duplicate'])) {
+                $_SESSION['gjk_receipts'][$reservationPath] = [
+                    'reference' => $reservationReference,
+                    'email_notified' => !empty($leadResult['email_notified']),
+                    'submitted_token' => $submittedToken,
+                ];
+                $_SESSION['gjk_csrf'] = bin2hex(random_bytes(16));
+                header('Location: ' . $receiptUrl, true, 303);
+                exit;
+            }
             $subject = 'Restaurant table enquiry [' . $reservationReference . ']';
             $body = "A new restaurant table enquiry was recorded. This is not a confirmed booking.\n\n"
                 . "Reference: {$reservationReference}\n"

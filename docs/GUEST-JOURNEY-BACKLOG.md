@@ -15,3 +15,10 @@
 - Confirm any agency rates, commissions or allotments with the hotel before publishing trade terms.
 - Check real GA4 events on both properties. Compare booking-engine handoffs, contact enquiries and WhatsApp clicks by guest journey.
 - Recheck redirect, indexing, performance and accessibility after the release, and automate any regression found.
+
+## Follow-up hardening (pending CI)
+
+- Shared error canonical and page-head path now agree; non-public experience routes remain noindex.
+- Strict date syntax before PHP parsing; synthetic malformed-date and fractional-guest regression checks.
+- Identical validated restaurant enquiries are deduplicated under the private storage lock for five minutes, including fresh sessions. No second email is attempted for a duplicate; the receipt advises contact when notification is unconfirmed. Distinct or later requests remain subject to existing rate limits.
+- Menu search includes published descriptions and exact dietary labels; category navigation and print remain available.

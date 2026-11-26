@@ -69,11 +69,33 @@ function gj_store_lead(string $source, array $fields, string $ipAddress = '', st
     $existing = stream_get_contents($handle);
     $ipCount = 0;
     $phoneCount = 0;
+    // Only callers opting in deduplicate identical validated requests briefly.
+    // The same exclusive lock covers both duplicate lookup and append.
+    $duplicateWindow = min(600, max(0, (int) ($limits['duplicate_window_seconds'] ?? 0)));
+    $duplicateReference = '';
+    $duplicateNotified = false;
     if (is_string($existing) && $existing !== '') {
         foreach (explode("\n", $existing) as $line) {
             $record = json_decode($line, true);
-            if (!is_array($record)
-                || ($record['type'] ?? '') !== 'request'
+            if (!is_array($record)) continue;
+            if ($duplicateReference !== '' && ($record['type'] ?? '') === 'event'
+                && ($record['reference'] ?? '') === $duplicateReference
+                && ($record['status'] ?? '') === 'owner_notification_sent') {
+                $duplicateNotified = true;
+            }
+            if ($duplicateWindow > 0 && ($record['type'] ?? '') === 'request'
+                && ($record['source'] ?? '') === $source && $phoneHash !== ''
+                && hash_equals($phoneHash, (string) ($record['phone_hash'] ?? ''))
+                && ($record['data'] ?? null) === $fields
+                && is_string($record['reference'] ?? null)
+                && preg_match('/^GJ-[0-9]{8}-[A-F0-9]{8}$/D', $record['reference'])) {
+                $receivedAt = strtotime((string) ($record['received_at'] ?? ''));
+                if ($receivedAt !== false && $receivedAt <= $now && $receivedAt >= $now - $duplicateWindow) {
+                    $duplicateReference = $record['reference'];
+                    $duplicateNotified = false;
+                }
+            }
+            if (($record['type'] ?? '') !== 'request'
                 || ($record['source'] ?? '') !== $source
                 || substr((string) ($record['received_at'] ?? ''), 0, 10) !== $today) {
                 continue;
@@ -85,6 +107,12 @@ function gj_store_lead(string $source, array $fields, string $ipAddress = '', st
                 $phoneCount++;
             }
         }
+    }
+
+    if ($duplicateReference !== '') {
+        flock($handle, LOCK_UN);
+        fclose($handle);
+        return ['ok' => true, 'reference' => $duplicateReference, 'duplicate' => true, 'email_notified' => $duplicateNotified];
     }
 
     if (($maxPerIp > 0 && $ipHash !== '' && $ipCount >= $maxPerIp)

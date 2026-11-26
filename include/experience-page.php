@@ -64,7 +64,8 @@ $experienceHeroPreload = gj_image_responsive_preload_descriptor($experience['her
 
 $activePage = 'packages';
 $siteUrl = rtrim($siteConfig['site_url'], '/');
-$canonical = $siteUrl . '/' . ($experience['slug'] === 'not-found' ? 'pack' : $experience['slug']) . '.php';
+$experiencePath = '/' . ($experience['slug'] === 'not-found' ? 'pack' : $experience['slug']) . '.php';
+$canonical = $siteUrl . $experiencePath;
 
 $breadcrumbs = [
     ['name' => 'Home', 'url' => $siteUrl . '/'],
@@ -140,7 +141,7 @@ foreach ($breadcrumbs as $index => $crumb) {
 $page = [
     'title' => $experience['title'],
     'description' => $experience['description'],
-    'path' => '/' . $experience['slug'] . '.php',
+    'path' => $experiencePath,
     'robots' => $isIndexableExperience ? 'index,follow' : 'noindex,follow',
     'og_type' => 'website',
     'og_title' => $experience['title'],

@@ -97,3 +97,18 @@ test('restaurant form start and submit attempt events exclude personal fields an
   expect(attempt).not.toHaveProperty('submission_status');
   expect(attempt).not.toHaveProperty('booking_confirmed');
 });
+
+// Invalid synthetic posts must never reach storage or send email.
+test('restaurant rejects malformed dates and fractional guests without PHP errors', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Server validation runs once');
+  await page.goto('/restaurant.php');
+  const token = await page.locator('input[name=csrf]').inputValue();
+  for (const date of ['2099-02-30', '2099-01-01\u0000bad', 'tomorrow']) {
+    const response = await page.request.post('/restaurant.php', { form: { csrf: token, name: 'Synthetic validation only', whatsapp: 'invalid', date, time: '12:00', guests: '1.5', consent: '1' } });
+    expect(response.status()).toBe(200);
+    const body = await response.text();
+    expect(body).toContain('restaurant-error-date');
+    expect(body).toContain('restaurant-error-guests');
+    expect(body).not.toContain('Request recorded.');
+  }
+});

@@ -379,6 +379,8 @@ test('public Draft tour routes return 404 and remain excluded from the sitemap',
     expect(response, `No HTTP response for draft ${route}`).not.toBeNull();
     expect(response.status(), `Public Draft route ${route} must return 404`).toBe(404);
     await expect(page.locator('main h1')).toHaveText('Experience not found');
+    await expect(page.locator('link[rel=canonical]')).toHaveAttribute('href', /\/pack\.php$/);
+    await expect(page.locator('meta[name=robots]')).toHaveAttribute('content', /noindex/);
     await expect(page.locator('main')).not.toContainText(/Longewala|Rajasthan tours/i);
   }
 });

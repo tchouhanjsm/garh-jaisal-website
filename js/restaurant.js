@@ -13,7 +13,8 @@
     const groups = Array.from(booklet.querySelectorAll('[data-menu-group]'));
     const dishes = groups.flatMap(group => Array.from(group.querySelectorAll('[data-menu-dish]'), row => ({
       row,
-      text: (row.dataset.menuDish + ' ' + group.dataset.menuGroup).toLowerCase()
+      text: [row.dataset.menuDish, row.dataset.menuDescription, group.dataset.menuGroup].join(' ').toLowerCase(),
+      diet: (row.dataset.menuDiet || '').toLowerCase()
     })));
     let activePage = 0;
     let showAll = false;
@@ -26,8 +27,11 @@
       const words = search.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
       const searching = words.length > 0;
       let matchCount = 0;
-      dishes.forEach(({ row, text }) => {
-        row.hidden = !words.every(word => text.includes(word));
+      dishes.forEach(({ row, text, diet }) => {
+        row.hidden = !words.every(word => {
+          if (['vegetarian', 'non-vegetarian', 'vegan'].includes(word)) return diet === word;
+          return text.includes(word);
+        });
         if (!row.hidden) matchCount += 1;
       });
       groups.forEach(group => {
@@ -60,6 +64,7 @@
 
     function restoreMenu() {
       const hash = window.location.hash;
+      search.value = '';
       const pageIndex = pages.findIndex(page => '#' + page.id === hash);
       if (pageIndex >= 0) showMenu(pageIndex, false, false);
       else if (hash === '#all-dishes') showMenu(activePage, true, false);
