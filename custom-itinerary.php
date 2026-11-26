@@ -7,6 +7,22 @@ $canonical = $siteUrl . '/custom-itinerary.php';
 require_once __DIR__ . '/include/schema.php';
 
 $isRajasthan = ($_GET['mode'] ?? '') === 'rajasthan';
+$journeyIdeas = [
+    'custom-desert' => 'Custom desert day: ask about sunrise or sunset, jeep travel or camel ride, a camel-free option, photography, village heritage, stargazing, private dinner or a longer desert outing.',
+    'golden-city' => 'Golden City Escape: enquire about a heritage stay, guided sightseeing and a sunset safari.',
+    'fort-desert' => 'Fort to Desert: enquire about a Fort stay and an overnight desert experience.',
+    'romantic' => 'Romantic Jaisalmer: enquire about a heritage stay, private desert or walking experiences and rooftop dining.',
+    'family' => 'Family Desert Holiday: enquire about a heritage stay, a relaxed pace, suitable transport and desert activities.',
+    'festive' => 'Festive Jaisalmer: enquire about a heritage stay, dining and experiences for Diwali, Christmas or New Year.',
+    'sunrise-walk' => 'Sunrise heritage or photography walk; ask about routes, timings and guide availability.',
+    'food-crafts' => 'Local food, artisans and bazaars walk; ask about food stops, dietary needs, crafts and guide availability.',
+    'desert-heritage' => 'Kuldhara, Khaba and desert heritage: ask about a feasible private car route and visitor access.',
+    'temples-royal' => 'Lodurva, Amar Sagar and Bada Bagh: ask about a feasible private car route and visitor access.',
+    'nature' => 'Ask about Akal Wood Fossil Park OR a Desert National Park nature excursion, separately as appropriate.',
+];
+$rajasthanIdeas = ['western-rajasthan' => 'Rajasthan Heritage Journey: Jaisalmer, Jodhpur and Bikaner, or suggest another multi-city route.'];
+$ideaKey = is_string($_GET['idea'] ?? null) ? $_GET['idea'] : '';
+$selectedIdea = ($isRajasthan ? $rajasthanIdeas : $journeyIdeas)[$ideaKey] ?? '';
 $builderTitle = $isRajasthan
     ? 'Rajasthan Tour Enquiry | Garh Jaisal Haveli'
     : 'Build a Custom Jaisalmer Itinerary | Garh Jaisal Haveli';
@@ -118,7 +134,7 @@ $page = [
             </div>
             <div class="custom-itinerary-field">
               <label for="custom-places">Preferred route or places to visit</label>
-              <textarea id="custom-places" name="places" rows="3" maxlength="700" placeholder="List any cities or stops you have in mind."></textarea>
+              <textarea id="custom-places" name="places" rows="3" maxlength="700" placeholder="List any cities or stops you have in mind."><?= htmlspecialchars($selectedIdea, ENT_QUOTES, 'UTF-8') ?></textarea>
             </div>
             <div class="custom-itinerary-field">
               <label for="rajasthan-inclusions">What should the quote include?</label>
@@ -167,7 +183,7 @@ $page = [
           </div>
           <div class="custom-itinerary-field">
             <label for="custom-places">Places or ideas you want to include</label>
-            <textarea id="custom-places" name="places" rows="4" maxlength="700" placeholder="Add places, markets, architecture, landscapes or another idea. You are not limited to the examples above."></textarea>
+            <textarea id="custom-places" name="places" rows="4" maxlength="700" placeholder="Add places, markets, architecture, landscapes or another idea. You are not limited to the examples above."><?= htmlspecialchars($selectedIdea, ENT_QUOTES, 'UTF-8') ?></textarea>
           </div>
           <div class="custom-itinerary-field">
             <label for="custom-preferences">Preferred pace or other requests (optional)</label>

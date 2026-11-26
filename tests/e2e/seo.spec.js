@@ -359,62 +359,27 @@ test('Car & City discovery paths remain connected without retiring legacy URLs',
   }
 });
 
-test('draft tour entries remain absent from public navigation and footer', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Publication boundary checks run once');
-  for (const route of ['/', '/pack.php', '/car-tours.php', '/desert-safari.php', '/guided-jaisalmer-tour.php']) {
+test('restored travel enquiry routes are discoverable without claiming confirmed itineraries', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Publication checks run once');
+  for (const route of ['/explore-the-desert.php', '/longewala-tour.php', '/rajasthan-tours.php']) {
+    expect(getSitemapEntries()).toContain(route);
     const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
-    expect(response).not.toBeNull();
-    expect(response.status()).toBeLessThan(400);
-    await expect(page.locator('header a[href="longewala-tour.php"], footer a[href="longewala-tour.php"]')).toHaveCount(0);
-    await expect(page.locator('header a[href="rajasthan-tours.php"], footer a[href="rajasthan-tours.php"]')).toHaveCount(0);
+    expect(response.status()).toBe(200);
+    await expect(page.locator('main h1')).toBeVisible();
+    expect(new URL(await page.locator('link[rel=canonical]').getAttribute('href')).pathname).toBe(route);
+    await expect(page.locator('#experience-details-title')).toHaveText('What to discuss');
+    await expect(page.locator('.experience-enquiry-note')).toContainText('not a confirmed booking');
+    await expect(page.locator('main')).not.toContainText(/NEEDS OWNER INPUT|Draft tour page/);
   }
-});
-
-test('public Draft tour routes return 404 and remain excluded from the sitemap', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Publication status checks run once');
-  const sitemapRoutes = getSitemapEntries();
-  for (const route of ['/longewala-tour.php', '/rajasthan-tours.php']) {
-    expect(sitemapRoutes, `${route} must stay out of sitemap.xml until approved`).not.toContain(route);
-    const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
-    expect(response, `No HTTP response for draft ${route}`).not.toBeNull();
-    expect(response.status(), `Public Draft route ${route} must return 404`).toBe(404);
-    await expect(page.locator('main h1')).toHaveText('Experience not found');
-    await expect(page.locator('link[rel=canonical]')).toHaveAttribute('href', /\/pack\.php$/);
-    await expect(page.locator('meta[name=robots]')).toHaveAttribute('content', /noindex/);
-    await expect(page.locator('main')).not.toContainText(/Longewala|Rajasthan tours/i);
+  await page.goto('/pack.php');
+  for (const route of ['explore-the-desert.php', 'longewala-tour.php', 'rajasthan-tours.php']) {
+    await expect(page.locator('main a[href="'+route+'"]').first()).toBeAttached();
   }
+  await page.goto('/custom-itinerary.php?idea=golden-city');
+  await expect(page.locator('#custom-places')).toHaveValue(/Golden City Escape/);
+  await page.goto('/custom-itinerary.php?idea=%3Cscript%3E');
+  await expect(page.locator('#custom-places')).toHaveValue('');
 });
-
-test('hidden overlap pages return 404 and stay out of public discovery until approved', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'desktop-1280', 'Publication status checks run once');
-  const hiddenRoute = '/explore-the-desert.php';
-  expect(getSitemapEntries(), `${hiddenRoute} must stay out of sitemap.xml while hidden`).not.toContain(hiddenRoute);
-
-  for (const route of getSitemapEntries()) {
-    const response = await page.goto(route, { waitUntil: 'domcontentloaded' });
-    expect(response, `No HTTP response for sitemap route ${route}`).not.toBeNull();
-    expect(response.status(), `Unexpected status for sitemap route ${route}`).toBeLessThan(400);
-
-    const hiddenLinks = await page.locator('a[href]').evaluateAll((anchors, expected) =>
-      anchors.filter(anchor => new URL(anchor.getAttribute('href'), document.baseURI).pathname === expected).length,
-      hiddenRoute
-    );
-    expect(hiddenLinks, `${route} must not link to the hidden page ${hiddenRoute}`).toBe(0);
-
-    if (route === '/desert-safari.php') {
-      await expect(page.locator('.route-planner')).not.toContainText(/Explore the Desert is the broader day experience/i);
-      await expect(page.locator('.route-planner').getByRole('link', { name: 'Ask about desert options' }))
-        .toHaveAttribute('href', 'contact.php');
-    }
-  }
-
-  const response = await page.goto(hiddenRoute, { waitUntil: 'domcontentloaded' });
-  expect(response, `No HTTP response for hidden ${hiddenRoute}`).not.toBeNull();
-  expect(response.status(), 'Hidden public route must return 404 until approved').toBe(404);
-  await expect(page.locator('main h1')).toHaveText('Experience not found');
-  await expect(page.locator('main')).not.toContainText(/Explore the Desert is the broader day experience/i);
-});
-
 
 test('high-intent routes expose three contextual internal planning links', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Planning path contracts run once');

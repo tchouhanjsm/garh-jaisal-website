@@ -116,7 +116,7 @@ require __DIR__ . '/include/page-head.php';
         </div>
         <p>The six themes below are starting points, not a fixed menu. Combine interests or describe other places in the custom itinerary builder.</p>
       </div>
-      <p class="tour-ideas-disclaimer">These six themes are conversation starters, not bookable products and not a complete list. The hotel has not published them as confirmed itineraries. Ask the hotel to confirm feasible routes, current access and visitor rules, transport, guide availability, timings, fees and the final price. Sending an enquiry does not reserve a tour.</p>
+      <p class="tour-ideas-disclaimer">These are flexible enquiry ideas. We will confirm access, transport, guide, timing and price for your dates.</p>
       <div class="tour-ideas-custom-builder">
         <div>
           <p class="eyebrow">Have a different idea?</p>
@@ -125,6 +125,18 @@ require __DIR__ . '/include/page-head.php';
         </div>
         <a class="button button-secondary" href="custom-itinerary.php">Build a custom itinerary</a>
       </div>
+      <details class="tour-ideas-disclaimer">
+        <summary><strong>More personalised walking and car tour ideas</strong></summary>
+        <ul>
+          <li><a href="custom-itinerary.php?idea=sunrise-walk">Sunrise heritage or photography walk</a></li>
+          <li><a href="custom-itinerary.php?idea=food-crafts">Local food, artisans and bazaars walk</a></li>
+          <li><a href="custom-itinerary.php?idea=desert-heritage">Kuldhara, Khaba and desert heritage</a></li>
+          <li><a href="custom-itinerary.php?idea=temples-royal">Lodurva, Amar Sagar and Bada Bagh</a></li>
+          <li><a href="longewala-tour.php">Longewala and Tanot enquiry</a></li>
+          <li><a href="custom-itinerary.php?idea=nature">Fossil Park or Desert National Park</a></li>
+          <li><a href="rajasthan-tours.php">Multi-day Rajasthan journeys</a></li>
+        </ul>
+      </details>
       <div class="tour-idea-grid">
         <article class="tour-idea-card">
           <p class="tour-idea-kicker">Architecture & heritage</p>

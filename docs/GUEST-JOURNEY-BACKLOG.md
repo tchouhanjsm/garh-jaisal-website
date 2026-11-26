@@ -22,3 +22,9 @@
 - Strict date syntax before PHP parsing; synthetic malformed-date and fractional-guest regression checks.
 - Identical validated restaurant enquiries are deduplicated under the private storage lock for five minutes, including fresh sessions. No second email is attempted for a duplicate; the receipt advises contact when notification is unconfirmed. Distinct or later requests remain subject to existing rate limits.
 - Menu search includes published descriptions and exact dietary labels; category navigation and print remain available.
+
+## Tour discovery and conversion (pending CI)
+
+- Restored three legacy URLs as enquiry-led pages using the existing renderer, nav, catalogue and sitemap; no new fixed service promises. Custom desert avoids a duplicate fixed safari, Longewala remains feasibility-led, Rajasthan uses the approved car/car-with-hotels model.
+- Five travel shortcuts on Packages; optional signature holiday and themed walk/day-trip ideas use the existing allowlisted custom itinerary form. No new booking or trip system.
+- Pending: verify all new and existing routes against the exact PR head; confirm actual tour operating details, photos, prices, hours, production mail/CAPTCHA, accessibility, mobile layout, and real analytics. Expand approved offerings only after operational validation.

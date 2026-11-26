@@ -88,11 +88,16 @@ $experienceGallerySlides = !empty($experience['gallery'])
 $experienceGalleryTitle = (string) ($experience['gallery_title'] ?? $experiencePhotoCollection['title'] ?? 'Explore the experience');
 $experienceGalleryIntro = (string) ($experience['gallery_intro'] ?? $experiencePhotoCollection['intro'] ?? 'Explore photos from the existing experience collection. Confirm the exact route and arrangements for your date.');
 
+$enquiryOnly = !empty($experience['enquiry_only']);
 $experienceContactUrl = 'contact.php';
 $experienceContactLabel = 'Ask about availability';
 $experienceBottomContactLabel = 'Contact us';
 $isWhatsAppCityTour = in_array($experience['slug'] ?? '', ['half-day-jaisalmer-tour', 'full-day-jaisalmer-tour'], true);
-if ($isWhatsAppCityTour) {
+if ($enquiryOnly) {
+    $experienceContactUrl = (string) $experience['planning_url'];
+    $experienceContactLabel = 'Plan your enquiry';
+    $experienceBottomContactLabel = 'Plan your enquiry';
+} elseif ($isWhatsAppCityTour) {
     $message = 'Hello, I would like to enquire about the ' . $experience['h1'] . '. '
         . 'Travel date: [add date]. Preferred guide language: [add language]. '
         . 'Please confirm the current price, route, guide availability, start time and any applicable entry fees.';
@@ -216,8 +221,8 @@ require __DIR__ . '/page-head.php';
       <?php if (count($experienceGallerySlides) > 1): ?>
         <a href="#experience-photo-gallery">Photo gallery</a>
       <?php endif; ?>
-      <a href="#experience-itinerary">Itinerary</a>
-      <a href="#experience-details">What's included</a>
+      <a href="#experience-itinerary"><?= $enquiryOnly ? 'Ideas' : 'Itinerary' ?></a>
+      <a href="#experience-details"><?= $enquiryOnly ? 'What to discuss' : "What's included" ?></a>
       <?php if (!empty($experience['faq'])): ?>
         <a href="#experience-faq">Questions</a>
       <?php endif; ?>
@@ -288,7 +293,7 @@ require __DIR__ . '/page-head.php';
       <div class="section-head">
         <div>
           <p class="eyebrow"><?= htmlspecialchars($experience['timeline_label'], ENT_QUOTES, 'UTF-8') ?></p>
-          <h2 id="experience-itinerary-title">Follow the experience.</h2>
+          <h2 id="experience-itinerary-title"><?= $enquiryOnly ? 'Shape your journey.' : 'Follow the experience.' ?></h2>
         </div>
         <p><?= htmlspecialchars($experience['timeline_note'], ENT_QUOTES, 'UTF-8') ?></p>
       </div>
@@ -310,8 +315,8 @@ require __DIR__ . '/page-head.php';
   <section class="section experience-details" data-story-reveal id="experience-details" aria-labelledby="experience-details-title">
     <div class="site-shell experience-details-grid">
       <div class="experience-detail-card">
-        <p class="eyebrow">Included</p>
-        <h2 id="experience-details-title">What's included</h2>
+        <p class="eyebrow"><?= $enquiryOnly ? 'Your quote' : 'Included' ?></p>
+        <h2 id="experience-details-title"><?= $enquiryOnly ? 'What to discuss' : "What's included" ?></h2>
         <ul>
           <?php foreach ($experience['included'] as $item): ?>
             <li><?= htmlspecialchars($item, ENT_QUOTES, 'UTF-8') ?></li>

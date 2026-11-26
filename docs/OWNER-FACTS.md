@@ -22,9 +22,9 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 ## Needed to unblock pages
 | # | Question | Answer | Unblocks |
 |---|---|---|---|
-| 1 | Longewala tour: route and stops, distance, duration, start time, vehicle and capacity, guide language, fees included?, meals?, pickup | | `longewala-tour.php` |
-| 2 | Rajasthan tours: which routes, single or multi-day, price shown or "on request" | | `rajasthan-tours.php` |
-| 3 | Is `explore-the-desert` a different full-day product from the sunset safari? If yes, how? | | restore or redirect |
+| 1 | Longewala tour: route and stops, distance, duration, start time, vehicle and capacity, guide language, fees included?, meals?, pickup | Still unconfirmed; enquiry-only presentation, no fixed itinerary or operating promise. | `longewala-tour.php` |
+| 2 | Rajasthan tours: which routes, single or multi-day, price shown or "on request" | Car-only or car with hotels by enquiry approved 2026-11-24. Sample city combinations are suggestions; route and quote require confirmation. | `rajasthan-tours.php` |
+| 3 | Is `explore-the-desert` a different full-day product from the sunset safari? If yes, how? | No distinct fixed package confirmed; use a custom desert enquiry rather than duplicate the sunset safari. | `explore-the-desert.php` |
 | 4 | Show "from" prices on room cards? If yes, per room and the wording ("from ₹X per night, taxes extra"?) | | Rooms |
 | 5 | Cancellation and booking policy | Owner supplied the guest-facing Booking Terms and Conditions on 2026-11-24. | `booking-policy.php` |
 | 6 | Guest privacy policy | Owner supplied the guest-facing Privacy Policy on 2026-11-24. | `privacy.php` |
@@ -83,6 +83,6 @@ The shared public wording is maintained in `include/guest-decision-content.php` 
 - **Confirm with the hotel** means the site intentionally does not publish a fixed value or service promise. Do not change this status or add a public value until the owner confirms the exact wording and operating details.
 - Room dimensions, maximum occupancy, bed configuration where not stated, room-specific access details, check-in/check-out, cancellation terms, current dining hours/menu/prices, dietary arrangements, transfer quotes, reception hours and luggage assistance must remain in the confirmation group until approved.
 - The `stay` Contact topic creates a structured question for room suitability and booking terms. It does not change rates, reserve a room or imply policy approval.
-- Keep `include/menu-data.php` owner confirmation disabled until the current dishes, descriptions, dietary classifications and prices have been reviewed together.
+- Superseded by the owner-supplied printed menu on 2026-11-24: publish approved dishes and prices; ask the kitchen to confirm recipe details and vegan options.
 
 When approving a fact, update the answer here first, then update the matching guest decision record and the source page/data registry in the same change. Record the date of approval. Do not infer that a blank answer is a negative or a service that is not offered.

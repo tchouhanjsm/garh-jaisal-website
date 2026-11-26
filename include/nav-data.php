@@ -50,6 +50,7 @@ return [
                         ['label' => 'Cultural evening and folk dance', 'url' => 'cultural-safari.php'],
                         ['label' => 'Sleep under the stars', 'url' => 'sleep-under-the-stars.php'],
                         ['label' => 'Swiss tent safari', 'url' => 'swiss-tent-safari.php'],
+                        ['label' => 'Custom desert day', 'url' => 'explore-the-desert.php'],
                     ],
                 ],
                 [
@@ -60,6 +61,8 @@ return [
                         ['label' => 'Half-day Jaisalmer tour', 'url' => 'half-day-jaisalmer-tour.php'],
                         ['label' => 'Full-day Jaisalmer tour', 'url' => 'full-day-jaisalmer-tour.php'],
                         ['label' => 'Walk inside Jaisalmer Fort', 'url' => 'city-tour.php'],
+                        ['label' => 'Longewala enquiry', 'url' => 'longewala-tour.php'],
+                        ['label' => 'Rajasthan journeys', 'url' => 'rajasthan-tours.php'],
                         ['label' => 'Delhi Airport & Rajasthan transfers', 'url' => 'car-rental.php'],
                     ],
                 ],
