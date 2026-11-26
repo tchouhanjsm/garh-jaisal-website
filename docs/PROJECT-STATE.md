@@ -1,15 +1,14 @@
 # Project state and release gates
 
-Last updated: 1 November 2026.
+Last updated: 26 November 2026.
 
-## Current repository status — 1 November 2026
+## Current repository status — 26 November 2026
 
-- `main` is at merge commit `74c625dff0916d4e6c32caf0920a0d9be3665bc7`, which merged PR #164 (on-demand maps and rooftop dining enquiry journey).
-- PR #164 is merged; there were no open pull requests when the next implementation batch began.
-- PR #161 homepage storytelling and Directions arrival work, PR #162 release-provenance/image-delivery work, and PR #164 map/dining-enquiry work are repository history, not active pull requests.
-- The repository is the sole implementation source of truth for this work. Do not inspect, change, upload to or deploy the separately hosted live website as part of a repository-only task.
-- CI, screenshot artifacts and package preflight are repository-local evidence. They do not authorize a cPanel upload, staging/production release, booking submission or real guest enquiry.
-- Remaining business-content blockers still require owner confirmation in `docs/OWNER-FACTS.md`: booking/cancellation terms, check-in/check-out, reception/late-arrival process, restaurant menu/prices/hours, approved reviews, transfer quotes and tour-specific operational details.
+- Main baseline: merge commit `a7b6096e6a92adc222b10cd09e52ae4b7440c297` (PR #176).
+- Active work: PR #177, `codex/guest-journey-reliability`. See `docs/GUEST-JOURNEY-BACKLOG.md` for implemented changes and remaining validation.
+- No merge or production release is implied by a commit or green CI. Check the current PR head and all required workflows before release.
+- The owner supplied booking terms, privacy wording and printed menu on 24 November. Remaining operating details, reviews, tour arrangements, pricing and private lead recovery still require confirmation.
+- CI and repository-local tests are not proof of live host, mail, CAPTCHA, analytics or field performance.
 
 ## Current objective
 

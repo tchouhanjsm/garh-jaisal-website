@@ -35,6 +35,7 @@ const responsiveSlots = [
   { route: '/pack.php', selector: '.package-hero img[src="img/desert11.jpg"]', sizes: '100vw' },
   { route: '/desert-safari.php', selector: '.experience-hero-media img[src="img/desert3.jpg"]', sizes: '100vw' },
   { route: '/desert-safari.php', selector: '.experience-card-grid img[src="img/desert7.jpg"]', sizes: CARD_SIZES },
+  { route: '/desert-safari.php', selector: '.experience-card-grid img[src="img/desert10.jpg"]', sizes: CARD_SIZES },
   { route: '/guided-jaisalmer-tour.php', selector: '.experience-hero-media img[src="img/j5.jpg"]', sizes: '100vw' },
   { route: '/guided-jaisalmer-tour.php', selector: '.experience-card-grid--two img[src="img/j2.jpg"]', sizes: '(max-width: 760px) 100vw, 50vw' },
   { route: '/restaurant.php', selector: '.restaurant-hero-media img[src="img/rest2.jpg"]', sizes: '(max-width: 760px) 100vw, 45vw' },

@@ -617,6 +617,14 @@
 .restaurant-instagram-panel > p:not(.eyebrow):not(.restaurant-instagram-wordmark) { color:var(--muted); line-height:1.65; }
 .restaurant-instagram-panel .button { min-height:46px; max-width:100%; white-space:normal; text-align:center; }
 .restaurant-instagram-note { margin:18px 0 0; font-size:.8rem; }
+.restaurant-menu-search { max-width:26rem; margin-block:1rem; color:var(--ink); }
+.restaurant-menu-search label { display:block; margin-bottom:.35rem; font-weight:650; }
+.restaurant-menu-search input {
+  width:100%; min-height:44px; padding:.55rem .75rem; border:1px solid #a69374;
+  border-radius:6px; background:#fffaf0; color:inherit; font:inherit;
+}
+.restaurant-menu-group[hidden], .restaurant-dish[hidden] { display:none; }
+
 .restaurant-booklet-controls,
 .restaurant-booklet-footer{ display:none; }
 
@@ -676,7 +684,7 @@
   body:has([data-menu-booklet]) > :not(main),
   main:has([data-menu-booklet]) > :not(.restaurant-menu,.roof-dining),
   .roof-dining:has([data-menu-booklet]) > :not(.restaurant-menu),
-  .restaurant-menu :is(.restaurant-booklet-controls,.restaurant-booklet-footer,.restaurant-tabs) { display:none !important; }
+  .restaurant-menu :is(.restaurant-menu-search,.restaurant-booklet-controls,.restaurant-booklet-footer,.restaurant-tabs) { display:none !important; }
   .restaurant-menu:has([data-menu-booklet]) { display:block !important; padding:0; border:0; background:#fff; }
   .restaurant-menu-booklet .restaurant-category,
   .restaurant-menu-booklet .restaurant-category[hidden] {
@@ -689,7 +697,8 @@
   }
   .restaurant-menu-columns { columns:2; column-rule:none; }
   .restaurant-menu-booklet :is(.restaurant-category h3,.restaurant-menu-group > h4) { break-after:avoid; }
-  .restaurant-menu-booklet .restaurant-dish { break-inside:avoid; }
+  .restaurant-menu-booklet .restaurant-menu-group[hidden] { display:block!important; }
+  .restaurant-menu-booklet .restaurant-dish { display:grid!important; break-inside:avoid; }
 }
 
 /* Sprint 34 — bring the approved bastion motif and arch crop to dining. */

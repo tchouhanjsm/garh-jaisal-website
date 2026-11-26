@@ -33,6 +33,10 @@ $dietLabels = [
       <p class="restaurant-diet-note">Please tell us about Jain dietary needs or allergies.</p>
 
       <div class="restaurant-menu-booklet" data-menu-booklet>
+        <div class="restaurant-menu-search" data-menu-search-wrap hidden>
+          <label for="menu-search">Find a dish</label>
+          <input type="search" id="menu-search" data-menu-search aria-controls="all-dishes" placeholder="e.g. pancake or chai">
+        </div>
         <nav class="restaurant-tabs" aria-label="Menu sections">
           <?php foreach ($menuCategories as $category): ?>
             <a href="#<?= e(gj_dining_menu_slug($category)) ?>" data-menu-tab><?= e($category) ?></a>
@@ -62,7 +66,7 @@ $dietLabels = [
               ?>
               <div class="restaurant-menu-columns">
               <?php foreach ($groups as $group => $groupDishes): ?>
-                <div class="restaurant-menu-group">
+                <div class="restaurant-menu-group" data-menu-group="<?= e($group) ?>">
                   <?php if ($group !== ''): ?><h4><?= e($group) ?></h4><?php endif; ?>
                   <ul>
                     <?php foreach ($groupDishes as $dish):
@@ -72,7 +76,7 @@ $dietLabels = [
                       }
                       $dietLabel = $dietLabels[$dishDiet] ?? null;
                     ?>
-                      <li class="restaurant-dish">
+                      <li class="restaurant-dish" data-menu-dish="<?= e($dish['n']) ?>" data-menu-description="<?= e($dish['d'] ?? '') ?>" data-menu-diet="<?= e($dietLabel ?? '') ?>">
                         <div>
                           <?php $dishHeading = $group === '' ? 'h4' : 'h5'; ?>
                           <<?= $dishHeading ?>><?= e($dish['n']) ?></<?= $dishHeading ?>>

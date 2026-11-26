@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 const hubRoutes = [
-  { route: '/desert-safari.php', expectedCards: 4 },
+  { route: '/desert-safari.php', expectedCards: 5 },
   { route: '/guided-jaisalmer-tour.php', expectedCards: 2 },
 ];
 
@@ -22,12 +22,15 @@ test('tour discovery cards show registry-backed comparison facts and preserve pl
       await expect(heroActions.locator('a.button-primary')).toHaveAttribute('href', 'contact.php?topic=visit-planning');
       await expect(heroActions.locator('a[href="#guided-options"]')).toHaveText('Compare tour options');
       await expect(heroActions.getByRole('link', { name: 'Build your trip shortlist' })).toHaveCount(0);
-      await expect(page.locator('.guided-tour-planning-actions a'))
+      await expect(page.locator('.guided-tour-planning-actions a[href="catalogue.php"]'))
         .toHaveAttribute('href', 'catalogue.php');
-      await expect(page.locator('.guided-tour-planning-actions a'))
+      await expect(page.locator('.guided-tour-planning-actions a[href="catalogue.php"]'))
         .toHaveText('Build your trip shortlist');
     }
 
+    if (item.route === '/guided-jaisalmer-tour.php') {
+      await expect(page.locator('.guided-tour-planning-actions a[href="car-tours.php#proposed-itineraries"]')).toBeVisible();
+    }
     for (const card of await cards.all()) {
       const details = card.locator('dl.experience-card-facts');
       await expect(details, item.route + ': quick facts').toBeVisible();

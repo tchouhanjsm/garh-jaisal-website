@@ -6,14 +6,13 @@ const { getSitemapRoutes, REPOSITORY_ROOT } = require('./helpers/sitemap-routes'
 const BASE_URL = 'http://127.0.0.1:8080';
 const FIXTURE_PATH = path.join(REPOSITORY_ROOT, 'tests/fixtures/head-snapshot.json');
 const ARTIFACT_PATH = path.join(REPOSITORY_ROOT, 'artifacts/head-snapshot/head-snapshot.json');
-const DRAFT_AND_HIDDEN_ROUTES = [
-  '/longewala-tour.php',
-  '/rajasthan-tours.php',
-  '/explore-the-desert.php',
-];
+// The three formerly unpublished routes are now explicit enquiry-only public pages.
+const DRAFT_AND_HIDDEN_ROUTES = [];
+const RESTORED_ROUTES = ['/longewala-tour.php', '/rajasthan-tours.php', '/explore-the-desert.php'];
 
 // New routes remain covered by their own SEO and visible content tests.
 const ROUTES_ADDED_AFTER_FROZEN_HEAD_BASELINE = [
+  ...RESTORED_ROUTES,
   '/jaisalmer-3-day-itinerary.php',
   '/jaisalmer-honeymoon-guide.php',
   '/catalogue.php',
@@ -286,6 +285,15 @@ test('sitemap head output matches the reviewed public-page metadata baseline', a
       pageHeads.push(await captureHead(page, route));
     }
 
+    for (const route of RESTORED_ROUTES) {
+      const restored = pageHeads.find(head => head.route === route);
+      expect(restored, route + ': restored route is in sitemap').toBeDefined();
+      expect(restored.status).toBe(200);
+      expect(restored.canonical).toBe('https://www.hotelgarhjaisal.com' + route);
+      expect(restored.title).toBeTruthy();
+      expect(restored.description).toBeTruthy();
+      expect(restored.invalidJsonLdScripts).toBe(0);
+    }
     for (const route of DRAFT_AND_HIDDEN_ROUTES) {
       const head = await captureHead(page, route, 404);
       draftAndHiddenPages.push({

@@ -55,6 +55,15 @@ return [
         'category' => 'Guided sightseeing',
     ],
     [
+        'id' => 'explore-the-desert', 'source' => 'experience', 'slug' => 'explore-the-desert', 'category' => 'Custom desert enquiry',
+    ],
+    [
+        'id' => 'longewala-tour', 'source' => 'experience', 'slug' => 'longewala-tour', 'category' => 'Private day-tour enquiry',
+    ],
+    [
+        'id' => 'rajasthan-tours', 'source' => 'experience', 'slug' => 'rajasthan-tours', 'category' => 'Rajasthan journeys',
+    ],
+    [
         'id' => 'car-arrangements',
         'source' => 'service',
         'category' => 'Transport',

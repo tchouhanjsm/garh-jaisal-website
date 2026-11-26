@@ -42,7 +42,7 @@
                 ['name', 'Name *', 'text', 'required autocomplete="name"'],
                 ['whatsapp', 'WhatsApp number *', 'tel', 'required autocomplete="tel" inputmode="tel"'],
                 ['email', 'Email', 'email', 'autocomplete="email"'],
-                ['date', 'Date *', 'date', 'required min="' . date('Y-m-d') . '" autocomplete="off"'],
+                ['date', 'Date *', 'date', 'required min="' . (new DateTimeImmutable('now', new DateTimeZone('Asia/Kolkata')))->format('Y-m-d') . '" autocomplete="off"'],
                 ['time', 'Preferred time *', 'time', 'required step="1800" min="00:00" max="23:30" autocomplete="off"'],
                 ['guests', 'Guests *', 'number', 'required min="1" max="20" inputmode="numeric" autocomplete="off"'],
             ];

@@ -307,9 +307,18 @@ test('experience availability CTAs carry live tour context into the enquiry form
   }
 });
 
-test('hidden, draft and unknown experiences cannot prefill a public enquiry', async ({ page }, testInfo) => {
+test('public travel enquiries resolve from the registry; unknown and hub slugs do not', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-1280', 'Experience publication boundary is checked once');
-  for (const slug of ['explore-the-desert', 'longewala-tour', 'rajasthan-tours', 'not-a-real-experience']) {
+  for (const [slug, title] of [
+    ['explore-the-desert', 'Explore the Desert Your Way'],
+    ['longewala-tour', 'Longewala Excursion Enquiry'],
+    ['rajasthan-tours', 'Private Rajasthan Journeys'],
+  ]) {
+    await page.goto('/contact.php?experience=' + slug, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('.contact-experience-context')).toContainText(title);
+    await expect(page.locator('#message')).toHaveValue(new RegExp(title));
+  }
+  for (const slug of ['not-a-real-experience', 'desert-safari', 'guided-jaisalmer-tour']) {
     await page.goto('/contact.php?experience=' + slug, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('.contact-experience-context')).toHaveCount(0);
     await expect(page.locator('#message')).toHaveValue('');

@@ -97,7 +97,7 @@ require __DIR__ . '/include/page-head.php';
     <h1>Wake up inside Jaisalmer Fort.</h1>
 
     <p>
-      Garh Jaisal Haveli is a heritage hotel inside Jaisalmer Fort, with individually styled rooms, a rooftop restaurant and local city and desert tours.
+      Stay in an individually styled heritage room, dine on the rooftop and explore Jaisalmer through guided walks, desert safaris and private journeys.
     </p>
 
     <div class="actions">
@@ -171,11 +171,9 @@ require __DIR__ . '/include/page-head.php';
       <h2>Experience the Golden City from inside its living Fort.</h2>
 
       <p>
-        Jaisalmer is more than a landmark to photograph. Staying inside the Fort
-        makes its sandstone lanes part of your everyday rhythm: step out to
-        explore, then return to a room with its own character. Add rooftop
-        dining, a guided city experience or a desert outing to shape the visit
-        around the time and interests you bring.
+        Wake to the sandstone lanes of a living fort, then return to a heritage
+        room with its own character. Make the Golden City your base for desert,
+        culture and private journeys.
       </p>
 
       <div class="feature-list">
@@ -409,14 +407,9 @@ require __DIR__ . '/include/page-head.php';
       <p class="eyebrow">Discover Jaisalmer</p>
       <h2 id="city-discovery-title">The Golden City has more stories to tell.</h2>
       <p>
-        The Fort is only the beginning. Discover the streets, architecture and
-        places that give Jaisalmer its character, then choose how far beyond
-        the old city you would like to explore.
-      </p>
-      <p>
-        Ask about a guided Fort walk or a car-based city experience that fits
-        the time you have. Routes, guide availability, timings, prices and
-        inclusions are confirmed for your requested date.
+        Explore the old city on foot or ask about a private car day tour.
+        Travelling further? Plan a <a href="rajasthan-tours.php">private Rajasthan journey</a>
+        with a car alone or hotels arranged as well.
       </p>
       <div class="actions home-city-discovery__actions">
         <a class="button button-primary" href="guided-jaisalmer-tour.php">Explore guided city walks</a>
@@ -439,7 +432,7 @@ require __DIR__ . '/include/page-head.php';
       <div class="home-planning-copy">
         <p class="eyebrow">Plan your stay</p>
         <h2 id="conversion-journey-title">Begin with the room. Shape the rest around you.</h2>
-        <p>Compare the rooms first, then add a guided Fort walk or a desert experience that fits your time. Routes, rates and availability are confirmed with the hotel for your dates.</p>
+        <p>Choose your room, then add a guided walk, desert safari or private journey to your shortlist.</p>
         <p class="home-planning-guide">New to booking directly? <a href="book-rooms-in-jaisalmer.php">Read our guide to staying inside the Fort</a>.</p>
       </div>
       <nav class="home-planning-actions" aria-label="Plan the rest of your stay">

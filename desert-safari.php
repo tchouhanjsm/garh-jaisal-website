@@ -35,7 +35,7 @@ $experienceHubMedia = [
     'caption' => $desertSafariHeroCaption,
 ];
 $faqItems = [
-    ['question' => "Which desert options are listed here?", 'answer' => "The hub links to a sunset camel safari, cultural desert evening, Sleep Under the Stars and the Swiss Tent Safari. A separate Camping page explains the two overnight setups."],
+    ['question' => "Which desert options are listed here?", 'answer' => "Compare the sunset camel safari, cultural evening, Sleep Under the Stars and Swiss Tent Safari. For a different pace or a camel-free outing, ask about a custom desert day."],
     ['question' => "Do desert departure times stay the same all year?", 'answer' => "No. Departure and sunset timings change with the season. Confirm the schedule with the hotel for your travel date."],
     ['question' => "How do I choose between a same-evening trip and an overnight stay?", 'answer' => "Choose based on whether you want to return to Jaisalmer the same evening or sleep in the desert, then compare the overnight setup and confirmed inclusions."],
     ['question' => "How do I confirm the route and inclusions?", 'answer' => "Ask the hotel to confirm the current price, departure details, route, pickup arrangement, availability and exact inclusions for your date."],
@@ -89,7 +89,7 @@ require __DIR__ . '/include/page-head.php';
       </nav>
       <p class="eyebrow">Desert safari</p>
       <h1>Find the Jaisalmer desert safari that fits your trip.</h1>
-      <p>A sunset outing and an overnight stay are very different experiences. Compare the options below, then ask us to confirm the route, transport, timings, accommodation, meals and total price for your date.</p>
+      <p>Choose a sunset outing, an overnight stay or a custom desert day. Compare the experiences below and ask for current timings, inclusions and prices.</p>
       <div class="actions experience-hero-actions">
         <a class="button button-primary" href="#desert-options">Compare safari options</a>
         <a class="button button-light" href="contact.php?topic=desert-safari">Check dates &amp; prices</a>
@@ -102,7 +102,7 @@ require __DIR__ . '/include/page-head.php';
       <div class="section-head">
         <div>
           <p class="eyebrow">Choose by the kind of evening you want</p>
-          <h2>Pick the kind of evening you want to remember.</h2>
+          <h2>Choose your desert experience.</h2>
         </div>
         <p>The route and timing depend on the selected package and season. Confirm the current operating details with the hotel before booking.</p>
       </div>
@@ -123,7 +123,7 @@ require __DIR__ . '/include/page-head.php';
                 require __DIR__ . '/include/ui/experience-card-facts.php';
                 unset($experienceCardItem, $experienceCardFactPriority, $experienceCardFactLimit);
                 ?>
-                <span class="experience-card-detail-cta">More details →</span>
+                <span class="experience-card-detail-cta"><?= !empty($item['enquiry_only']) ? 'Explore enquiry options →' : 'More details →' ?></span>
               </div>
             </a>
             <div class="experience-card-plan-action">
