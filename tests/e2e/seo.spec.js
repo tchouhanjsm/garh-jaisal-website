@@ -424,3 +424,49 @@ test('high-intent routes expose three contextual internal planning links', async
     ).toBeTruthy();
   }
 });
+
+// Audit rendered same-site links across the public registry; no external navigation or POST.
+test('public sitemap pages have reachable internal destinations and anchors', async ({ page, baseURL }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Sitewide route audit runs once');
+  test.setTimeout(180000);
+  const origin = new URL(baseURL).origin;
+  const allowedHosts = new Set([new URL(baseURL).hostname, 'www.hotelgarhjaisal.com', 'hotelgarhjaisal.com']);
+  await page.route('**/*', route => {
+    const url = new URL(route.request().url());
+    return url.origin !== origin || ['image', 'font', 'media'].includes(route.request().resourceType()) ? route.abort() : route.continue();
+  });
+  const ids = new Map();
+  const links = [];
+  const faults = [];
+  for (const path of routes) {
+    const response = await page.goto(path, { waitUntil: 'domcontentloaded' });
+    if (!response || response.status() >= 400) { faults.push(path + ' returned ' + response?.status()); continue; }
+    const snapshot = await page.evaluate(() => ({
+      ids: Array.from(document.querySelectorAll('[id], a[name]'), node => node.id || node.getAttribute('name')),
+      hrefs: Array.from(document.querySelectorAll('a[href]'), node => node.getAttribute('href'))
+    }));
+    ids.set(path, new Set(snapshot.ids));
+    for (const raw of snapshot.hrefs) {
+      if (!raw || raw === '#') continue;
+      let target;
+      try { target = new URL(raw, new URL(path, origin)); } catch { continue; }
+      if (!['http:', 'https:'].includes(target.protocol) || !allowedHosts.has(target.hostname)) continue;
+      if (target.pathname !== '/' && !target.pathname.endsWith('.php')) continue;
+      links.push({ from: path, target });
+    }
+  }
+  const checked = new Set(ids.keys());
+  for (const { from, target } of links) {
+    if (!checked.has(target.pathname)) {
+      checked.add(target.pathname);
+      const response = await page.request.get(target.pathname, { maxRedirects: 0 });
+      if (response.status() >= 400) faults.push(from + ' → ' + target.pathname + ' returned ' + response.status());
+    }
+    if (target.hash && !target.search && ids.has(target.pathname)) {
+      const fragment = decodeURIComponent(target.hash.slice(1));
+      if (fragment && !ids.get(target.pathname).has(fragment)) faults.push(from + ' → ' + target.pathname + target.hash + ' missing anchor');
+    }
+  }
+  await testInfo.attach('internal-route-audit', { body: JSON.stringify({ pages: routes.length, checkedDestinations: checked.size, links: links.length, faults: [...new Set(faults)] }, null, 2), contentType: 'application/json' });
+  expect([...new Set(faults)]).toEqual([]);
+});

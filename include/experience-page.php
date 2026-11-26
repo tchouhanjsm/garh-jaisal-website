@@ -351,7 +351,7 @@ require __DIR__ . '/page-head.php';
         $sectionHead = [
             'eyebrow' => 'Questions',
             'h2' => 'Questions about this experience.',
-            'intro' => 'These answers describe the current experience at a practical level. Confirm final timings, availability and inclusions for your travel date.',
+            'intro' => 'Practical answers to help you choose.',
         ];
         require __DIR__ . '/ui/section-head.php';
 
@@ -404,7 +404,7 @@ require __DIR__ . '/page-head.php';
     <div class="site-shell experience-cta-inner">
       <p class="eyebrow">Plan your experience</p>
       <h2>Build the day around what you want to discover.</h2>
-      <p>Share your travel date, group size and priorities. We will confirm the current price, route, timings, guide or transport arrangements and exact inclusions before you commit.</p>
+      <p>Share your dates, group size and interests for a tailored quote.</p>
       <div class="actions">
         <a class="button button-primary" href="<?= htmlspecialchars($experienceContactUrl, ENT_QUOTES, 'UTF-8') ?>" data-cta-id="enquiry-experience-bottom" data-cta-location="experience-detail-checkpoint" <?= $isWhatsAppCityTour ? 'target="_blank" rel="noopener"' : '' ?>><?= htmlspecialchars($experienceBottomContactLabel, ENT_QUOTES, 'UTF-8') ?></a>
         <a class="button button-secondary" href="room.php">View rooms</a>
@@ -414,6 +414,6 @@ require __DIR__ . '/page-head.php';
 </main>
 
 <?php include __DIR__ . '/footer-v2.php'; ?>
-<script src="js/garh-v2.js"></script>
+<script src="<?= htmlspecialchars($versionedAssetUrl('js/garh-v2.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>

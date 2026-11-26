@@ -28,3 +28,8 @@
 - Restored three legacy URLs as enquiry-led pages using the existing renderer, nav, catalogue and sitemap; no new fixed service promises. Custom desert avoids a duplicate fixed safari, Longewala remains feasibility-led, Rajasthan uses the approved car/car-with-hotels model.
 - Five travel shortcuts on Packages; optional signature holiday and themed walk/day-trip ideas use the existing allowlisted custom itinerary form. No new booking or trip system.
 - Pending: verify all new and existing routes against the exact PR head; confirm actual tour operating details, photos, prices, hours, production mail/CAPTCHA, accessibility, mobile layout, and real analytics. Expand approved offerings only after operational validation.
+
+## Regression and guest-copy follow-up
+
+- Update the source contract to verify the corrected shared canonical path, keep metadata within the existing SEO bounds, and shorten repetitive commercial copy without removing the main guest journeys.
+- Add isolated storage idempotency checks, filtered print checks and sitemap-derived same-site URL and anchor audit. Tests are pending exact-head CI, not a live crawl.

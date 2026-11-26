@@ -112,3 +112,13 @@ test('restaurant rejects malformed dates and fractional guests without PHP error
     expect(body).not.toContain('Request recorded.');
   }
 });
+
+ test('isolated storage deduplicates retries without sending email', async ({}, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Storage contract runs once');
+  const { execFileSync } = require('node:child_process');
+  const path = require('node:path');
+  const output = execFileSync('php', ['tests/php/restaurant-lead-idempotency.php'], {
+    cwd: path.join(__dirname, '../..'), encoding: 'utf8'
+  });
+  expect(output).toContain('PASS restaurant lead idempotency');
+});

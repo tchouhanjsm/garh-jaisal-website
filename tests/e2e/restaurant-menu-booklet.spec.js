@@ -70,6 +70,9 @@ test('restaurant only publishes approved menu content and keeps the booklet usab
   await expect(status).toHaveText('1 dish found');
   await expect(dishRows.filter({ visible: true })).toContainText('Dal Fry');
   await expect(dishRows.filter({ visible: true })).toContainText('₹250');
+  await search.fill('vegetarian');
+  expect(await dishRows.filter({ visible: true }).count()).toBeGreaterThan(0);
+  await expect(booklet.locator('[data-menu-diet="Non-vegetarian"]:visible')).toHaveCount(0);
   await search.fill('no-such-dish');
   await expect(status).toHaveText('No dishes found');
   await expect(dishRows.filter({ visible: true })).toHaveCount(0);
@@ -119,6 +122,8 @@ test('restaurant only publishes approved menu content and keeps the booklet usab
   await expect(booklet.locator('.restaurant-dish .is-non-vegetarian').first()).toBeAttached();
   await expect(status).toHaveText('Page 2 of 4 · Drinks & Light Bites');
   await expect(dishRows.filter({ visible: true })).toHaveCount(49);
+  await search.fill('Dal Fry');
+  await expect(dishRows.filter({ visible: true })).toHaveCount(1);
   await page.emulateMedia({ media: 'print' });
   await expect(booklet.locator('[data-menu-page]:visible')).toHaveCount(categories.length);
   await expect(dishRows.filter({ visible: true })).toHaveCount(142);

@@ -74,8 +74,10 @@ if ($method === 'POST') {
     }
 
     $submittedToken = is_string($_POST['csrf'] ?? null) ? $_POST['csrf'] : '';
+    $submittedPayloadHash = hash('sha256', serialize($old));
     if (!hash_equals($_SESSION['gjk_csrf'], $submittedToken)) {
-        if (is_array($receipt) && hash_equals($receipt['submitted_token'], $submittedToken)) {
+        if (!$errors && is_array($receipt) && hash_equals($receipt['submitted_token'], $submittedToken)
+            && hash_equals((string) ($receipt['payload_hash'] ?? ''), $submittedPayloadHash)) {
             header('Location: ' . $receiptUrl, true, 303);
             exit;
         }
@@ -173,6 +175,7 @@ if ($method === 'POST') {
                     'reference' => $reservationReference,
                     'email_notified' => !empty($leadResult['email_notified']),
                     'submitted_token' => $submittedToken,
+                    'payload_hash' => $submittedPayloadHash,
                 ];
                 $_SESSION['gjk_csrf'] = bin2hex(random_bytes(16));
                 header('Location: ' . $receiptUrl, true, 303);
@@ -230,6 +233,7 @@ if ($method === 'POST') {
                 'reference' => $reservationReference,
                 'email_notified' => $reservationEmailNotified,
                 'submitted_token' => $submittedToken,
+                    'payload_hash' => $submittedPayloadHash,
             ];
             $_SESSION['gjk_csrf'] = bin2hex(random_bytes(16));
             header('Location: ' . $receiptUrl, true, 303);
