@@ -203,7 +203,7 @@ $page = [
           <h2 id="custom-itinerary-draft-title">Review before opening WhatsApp.</h2>
           <p>The message updates as you fill in the form. Check the details below before you open WhatsApp.</p>
           <label for="custom-itinerary-draft">Message preview</label>
-          <textarea id="custom-itinerary-draft" rows="14" readonly aria-live="polite" aria-describedby="custom-itinerary-status"></textarea>
+          <textarea id="custom-itinerary-draft" rows="14" readonly aria-describedby="custom-itinerary-status"></textarea>
           <p id="custom-itinerary-status" class="custom-itinerary-status" role="status" aria-live="polite"><?= $isRajasthan ? 'Add at least one trip detail to prepare the message link.' : 'Select an interest or add a place/idea to prepare the message link.' ?></p>
           <a id="custom-itinerary-whatsapp" data-cta-id="<?= $isRajasthan ? 'whatsapp-rajasthan-itinerary' : 'whatsapp-jaisalmer-itinerary' ?>" data-cta-location="custom-itinerary-builder" class="button button-primary custom-itinerary-whatsapp" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true" tabindex="-1">Open WhatsApp with this enquiry</a>
           <button type="button" id="custom-itinerary-copy" class="button button-secondary" hidden disabled>Copy enquiry draft</button>
@@ -226,7 +226,7 @@ $page = [
   </section>
 </main>
 <?php include __DIR__ . '/include/footer-v2.php'; ?>
-<script src="js/garh-v2.js"></script>
-<script src="js/custom-itinerary.js"></script>
+<script src="<?= $htmlEscape($versionedAssetUrl('js/garh-v2.js')) ?>"></script>
+<script src="<?= $htmlEscape($versionedAssetUrl('js/custom-itinerary.js')) ?>"></script>
 </body>
 </html>
