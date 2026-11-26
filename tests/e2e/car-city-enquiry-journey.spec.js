@@ -116,3 +116,16 @@ test('Rajasthan enquiry clearly distinguishes car-only and car-with-hotels arran
   await page.goto('/custom-itinerary.php?idea=golden-city');
   await expect(page.locator('#custom-itinerary-whatsapp')).toHaveAttribute('data-cta-id', 'whatsapp-jaisalmer-itinerary');
 });
+
+
+test('travel agents can request a rate sheet or tailored quotation from Contact', async ({ page }, testInfo) => {
+  test.skip(!['mobile-320', 'desktop-1280'].includes(testInfo.project.name), 'Verify narrow mobile and desktop.');
+  await page.goto('/contact.php');
+  await page.locator('[data-cta-id="enquiry-travel-trade"]').click();
+  await expect(page.locator('.contact-topic-context')).toContainText('Travel trade enquiry');
+  const message = page.locator('#message');
+  await expect(message).toHaveValue(/FIT \/ group \/ seasonal rate sheet \/ multi-service quotation/);
+  await expect(message).toHaveValue(/Meal plan:/);
+  await expect(message).toHaveValue(/payment and cancellation terms/);
+  await expect(page.locator('[data-cta-id="enquiry-travel-trade"]')).toHaveCount(0);
+});
