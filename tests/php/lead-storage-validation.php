@@ -48,6 +48,29 @@ $limited = gj_store_lead(
 );
 lead_test_assert(empty($limited['ok']) && ($limited['error'] ?? '') === 'rate_limited', 'IP/phone daily limit blocks repeat requests');
 
+// Neither request nor event writer may follow a log alias outside private storage.
+$aliasTarget = $public . DIRECTORY_SEPARATOR . 'alias-target.txt';
+file_put_contents($aliasTarget, 'unchanged');
+$originalLog = $logPath . '.original';
+lead_test_assert(rename($logPath, $originalLog), 'move test log temporarily');
+lead_test_assert(symlink($aliasTarget, $logPath), 'create synthetic symlink');
+$aliased = gj_store_lead('contact', ['message' => 'must not be written']);
+lead_test_assert(($aliased['error'] ?? '') === 'storage_unavailable', 'symlink request is rejected');
+lead_test_assert(!gj_record_lead_event($first['reference'], 'owner_notification_sent'), 'symlink event is rejected');
+lead_test_assert(file_get_contents($aliasTarget) === 'unchanged', 'public alias target remains untouched');
+unlink($logPath);
+lead_test_assert(link($aliasTarget, $logPath), 'create synthetic hard link');
+$aliased = gj_store_lead('contact', ['message' => 'must not be written']);
+lead_test_assert(($aliased['error'] ?? '') === 'storage_unavailable', 'hard-linked request is rejected');
+lead_test_assert(!gj_record_lead_event($first['reference'], 'owner_notification_sent'), 'hard-linked event is rejected');
+lead_test_assert(file_get_contents($aliasTarget) === 'unchanged', 'hard link target remains untouched');
+unlink($logPath);
+unlink($aliasTarget);
+lead_test_assert(rename($originalLog, $logPath), 'restore original test log');
+lead_test_assert(gj_record_lead_event($first['reference'], 'owner_notification_sent'), 'normal event still appends');
+$records = file($logPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+lead_test_assert(count($records) === 2 && (json_decode($records[1], true)['status'] ?? '') === 'owner_notification_sent', 'event is valid JSONL');
+
 putenv('GJ_LEAD_STORAGE_DIR=' . ($public . DIRECTORY_SEPARATOR . 'private'));
 $unsafe = gj_store_lead('contact', ['message' => 'must not be written'], '192.0.2.30', '1234567890');
 lead_test_assert(empty($unsafe['ok']) && ($unsafe['error'] ?? '') === 'storage_unavailable', 'path inside document root is rejected');
