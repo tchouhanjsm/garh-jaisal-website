@@ -48,6 +48,16 @@ PR #178 exact head `7d95c92ab7f57b622995020d7702f80f5acfcfe9` passed Site checks
 - Travel trade, trip shortlist, room shortlist and validated planning contexts receive distinct privacy-safe intent categories; actual analytics delivery remains unverified.
 - Continue operational validation of tours, prices and terms; production redirects/external availability, real mailbox and CAPTCHA, visual accessibility and field performance are still release gates. No new confirmed services or production release claimed.
 
+## PR #179 — consolidated commercial discovery and quality follow-up
+
+- PR #178 is now merged. The successor remains PR #179; no additional competing PR.
+- Make the six existing tailor-made holiday ideas directly discoverable in the Packages planning section with responsive links, enquiry-only language and no new product promises. Room planning links now lead to the same Packages journey.
+- Align Packages metadata and the shared visible FAQ/schema with approved car-only/car-with-hotels enquiries and flexible stay/tour combinations.
+- Track itinerary discovery using an explicit allowlist of idea identifiers, mode and existing CTA metadata; no guest text, dates, contact details or booking claim.
+- Improve itinerary action wrapping and touch sizes, remove redundant live-region behaviour on the draft textarea, and use existing content-hash script URLs for cache-safe itinerary updates.
+- Browser regression coverage targets 320px and desktop, visible holiday choices, 44px minimum link targets, no horizontal overflow, selected-idea handoff and contextual cross-selling. Exact-head validation is required; source changes are not visual approval or field performance evidence.
+- Outstanding: supplier/owner-approved operational details, separate review of additional tour variants before selling as fixed offers, actual staging CAPTCHA and mailbox delivery, authorised recovery and retention, real Google Analytics/Search Console, external availability, field Core Web Vitals, and human visual/keyboard/accessibility review. Do not invent business terms or infer ranking gains.
+
 ## Previous release evidence
 
 - Checked the 39 public sitemap URLs for HTTP errors and canonical mismatches against cPanel release `863f47f`. All passed. The release candidate also passed an internal-link and anchor check across 106 destinations.
