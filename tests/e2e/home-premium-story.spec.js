@@ -29,12 +29,14 @@ test.describe('Premium homepage storytelling', () => {
     const confidence = page.locator('#planning-confidence');
     await expect(confidence.getByRole('heading', { level: 2, name: 'Know what to expect before you book.' })).toBeVisible();
     await expect(confidence.locator('.guest-decision__columns')).toHaveCount(1);
-    await expect(confidence.getByText('Published on this site', { exact: true })).toBeVisible();
-    await expect(confidence.getByText('Confirm with the hotel', { exact: true })).toBeVisible();
+    await expect(confidence.getByRole('heading', { name: 'Explore', exact: true })).toBeVisible();
+    await expect(confidence.getByRole('heading', { name: 'Ask us', exact: true })).toBeVisible();
     await expect(confidence).toContainText('Vehicles cannot enter');
-    await expect(confidence).toContainText('Facilities vary by room');
-    await expect(confidence).toContainText('Confirm check-in and check-out times');
-    await expect(confidence).toContainText('current menu items, prices');
+    await expect(confidence).toContainText('Individually styled rooms on two floors');
+    await expect(confidence).toContainText('Ask about room suitability and check-in times');
+    await expect(confidence).toContainText('Ask about table availability and dietary needs');
+    await expect(confidence.getByRole('link', { name: 'Ask about your dates' }))
+      .toHaveAttribute('href', 'contact.php?topic=visit-planning');
 
     const sectionOrder = await page.locator('main > section').evaluateAll(sections =>
       sections.map(section => section.id || section.classList[0])

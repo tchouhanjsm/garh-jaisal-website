@@ -64,6 +64,15 @@ PR #178 exact head `7d95c92ab7f57b622995020d7702f80f5acfcfe9` passed Site checks
 - Owner requested removing unnecessary explanatory guest-facing copy, including the booking-engine category paragraph above the room directory. Remove the paragraph; retain all seven room cards, existing booking links and selected-room enquiry actions. Shorten shared guest guides across Home, Rooms, Restaurant, Directions and Contact, and simplify Packages, Car & City and itinerary helper text. Preserve actual arrival/access guidance, explicit enquiry-only notices, consent and policies.
 - Retain registry-backed room count/floors and safe destination checks, and assert the unwanted room paragraph does not return. New exact-head CI and visual review remain required.
 
+- The copy-refinement head failed four browser regressions. Align the Car & City disclaimer, separate room-booking action and homepage guide assertions with the approved copy, and include the fourth Packages question and answer in the strict JSON-LD snapshot.
+
+### Next release sequence
+
+1. Verify the exact release candidate on cPanel staging. Exercise CAPTCHA, delivery to the hotel inbox and authorised lead recovery with synthetic enquiries. Check legacy redirects and external destinations.
+2. Review the real guest journeys on mobile and with a keyboard. Start with Rooms, Directions, Dining and Rajasthan quotes. Record accessibility, performance and recovery evidence before release.
+3. Approve a first set of fixed tours and combined holidays. Record route, pickup, duration, access, guide, inclusions and price before changing enquiry ideas into offers. Confirm kitchen hours and dietary classifications with the hotel.
+4. Baseline Search Console and both GA4 properties after release. Check that booking-engine clicks, WhatsApp handoffs and recorded enquiries are measured as separate events.
+
 ## Previous release evidence
 
 - Checked the 39 public sitemap URLs for HTTP errors and canonical mismatches against cPanel release `863f47f`. All passed. The release candidate also passed an internal-link and anchor check across 106 destinations.

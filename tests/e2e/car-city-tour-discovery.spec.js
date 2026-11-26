@@ -64,7 +64,9 @@ test('Rooms, Rooftop Dining and Car & City preserve the booking/FAQ experience',
   await expect(page.locator('main nav[aria-label="Breadcrumb"]')).toHaveCount(1);
   await expect(page.getByRole('heading', { level: 2, name: 'More ways to discover Jaisalmer.' })).toBeVisible();
   await expect(page.locator('.tour-ideas')).toContainText('not a complete list');
-  await expect(page.locator('p.tour-ideas-disclaimer')).toContainText('Sending an enquiry does not reserve a tour.');
+  const disclaimer = page.locator('p.tour-ideas-disclaimer');
+  await expect(disclaimer).toContainText('not bookable products');
+  await expect(disclaimer).toContainText('An enquiry does not reserve a tour.');
 });
 
 test('Car & City tour card media stays at 16:10 and the page has no horizontal overflow', async ({ page }) => {
