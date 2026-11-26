@@ -149,7 +149,7 @@ test('itinerary draft can be copied without WhatsApp or persisting guest text', 
 
 
 test('holiday discovery offers six visible enquiry choices with accessible touch targets', async ({ page }, testInfo) => {
-  test.skip(!['mobile-320', 'desktop-1280'].includes(testInfo.project.name), 'Test compact mobile and desktop.');
+  test.skip(!['mobile-320', 'mobile-390', 'desktop-1280'].includes(testInfo.project.name), 'Test compact mobile and desktop.');
   await page.goto('/pack.php');
   const section = page.locator('#holiday-ideas');
   await expect(section.getByRole('heading', { name: 'Tailor-made holiday ideas' })).toBeVisible();
@@ -159,6 +159,20 @@ test('holiday discovery offers six visible enquiry choices with accessible touch
   const sizes = await cards.evaluateAll(links => links.map(link => ({ width: link.getBoundingClientRect().width, height: link.getBoundingClientRect().height })));
   expect(sizes.every(size => size.width >= 44 && size.height >= 44)).toBeTruthy();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBeTruthy();
+  if (testInfo.project.name.startsWith('mobile-')) {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const contactBar = page.locator('.mobile-cta');
+    await expect(contactBar).toBeVisible();
+    await cards.first().scrollIntoViewIfNeeded();
+    await cards.first().focus();
+    for (const [index, card] of (await cards.all()).entries()) {
+      if (index > 0) await page.keyboard.press('Tab');
+      await expect(card).toBeFocused();
+      await expect(contactBar).toBeHidden();
+    }
+    await page.keyboard.press('Tab');
+    await expect(contactBar).toBeVisible();
+  }
   await cards.filter({ hasText: 'Romantic Jaisalmer' }).click();
   await expect(page.locator('#custom-places')).toHaveValue(/Romantic Jaisalmer/);
   await page.goto('/pack.php');

@@ -788,5 +788,8 @@ main.thar-sunset-story--experiences .experience-card > a > img {
 .holiday-ideas-grid a strong{text-decoration:underline;text-underline-offset:3px}
 .holiday-ideas-grid a span{font-size:.9rem;line-height:1.45}
 .holiday-ideas-grid a:focus-visible{outline:3px solid var(--focus,#b28c56);outline-offset:3px}
+@media (max-width: 1080px) {
+  body:has(.holiday-ideas-grid a:focus-visible) .mobile-cta { visibility: hidden; }
+}
 @media(max-width:850px){.holiday-ideas-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.holiday-ideas-grid{grid-template-columns:minmax(0,1fr)}}

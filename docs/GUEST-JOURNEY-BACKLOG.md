@@ -64,7 +64,7 @@ PR #178 exact head `7d95c92ab7f57b622995020d7702f80f5acfcfe9` passed Site checks
 - Owner requested removing unnecessary explanatory guest-facing copy, including the booking-engine category paragraph above the room directory. Remove the paragraph; retain all seven room cards, existing booking links and selected-room enquiry actions. Shorten shared guest guides across Home, Rooms, Restaurant, Directions and Contact, and simplify Packages, Car & City and itinerary helper text. Preserve actual arrival/access guidance, explicit enquiry-only notices, consent and policies.
 - Retain registry-backed room count/floors and safe destination checks, and assert the unwanted room paragraph does not return. New exact-head CI and visual review remain required.
 
-- The copy-refinement head failed four browser regressions. Align the Car & City disclaimer, separate room-booking action and homepage guide assertions with the approved copy, and include the fourth Packages question and answer in the strict JSON-LD snapshot.
+- The copy-refinement head failed four browser regressions. Align the Car & City disclaimer, separate room-booking action and homepage guide assertions with the approved copy, and include the fourth Packages question and answer in the strict JSON-LD snapshot. Keep keyboard-focused holiday cards above the mobile contact bar.
 
 ### Next release sequence
 
