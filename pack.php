@@ -67,11 +67,12 @@ $breadcrumbSchema = gj_schema_breadcrumb_list($siteUrl, '/pack.php', $breadcrumb
 $faqItems = [
     ['question' => "How should I choose an experience?", 'answer' => "Start with how much time you have and whether you want to return to Jaisalmer the same evening or stay overnight."],
     ['question' => "How do I confirm current prices and availability?", 'answer' => "Contact the hotel for the current price, availability, route, pickup arrangement, guide availability and exact inclusions for your travel date."],
-    ['question' => "Can I combine a city tour with a desert safari?", 'answer' => "The page lists city and desert options separately. Contact the hotel to check the timing and arrangements for your dates before planning both."],
+    ['question' => "Can I combine a city tour with a desert safari?", 'answer' => "Yes, you can request a tailor-made quote combining a Fort stay, guided sightseeing and a desert safari. The hotel must confirm dates, timing, availability and inclusions before booking."],
+    ['question' => "Can I request a private car for a Rajasthan holiday?", 'answer' => "Yes. Ask about car-only travel or a car with hotel stays arranged. Share your route, pickup, drop-off, dates and group size for a tailored quote."],
 ];
 $pageTitle = 'Jaisalmer Tours & Desert Safaris | Garh Jaisal Haveli';
-$pageDescription = 'Compare Jaisalmer city tours, sunset camel safaris and overnight desert stays. Ask Garh Jaisal Haveli about a trip to Tanot Mata Temple.';
-$socialDescription = 'Plan a guided city tour or desert safari from Jaisalmer, or enquire about a trip to Tanot Mata Temple.';
+$pageDescription = 'Compare Jaisalmer guided tours, desert safaris and tailor-made Fort stays. Enquire about holiday combinations, private cars or Tanot Mata Temple trips.';
+$socialDescription = 'Compare guided tours, desert safaris and tailor-made Jaisalmer holidays; ask about private cars and Tanot Mata Temple trips.';
 $page = [
     'title' => $pageTitle,
     'description' => $pageDescription,
