@@ -17,6 +17,16 @@ PR #177 merged at `97d794201b42989d687d3905c15057d3880f33c7`; final head `6c207d
 
 Do not mark a task complete solely because a commit exists. Separate repository implementation, exact-head CI, staging validation and production release. No automatic merge or deployment.
 
+## Post-177 development batch (PR #178; exact-head checks pending)
+
+- P0: Reject array-shaped contact POST values before casting or external CAPTCHA verification. Restore the missing Car & City Tours hero contact topic. Extend the existing route audit to query-dependent anchors on published pages and persist a redacted external destination inventory in CI.
+- P1: Custom itinerary drafts now respect browser validity, including positive traveller counts and India-local travel dates. The Rajasthan enquiry exposes a clear service-choice field.
+- P2: Car-only and car-with-accommodation requests use the existing enquiry builder. No new tour operating facts, routes, prices or confirmed bookings are implied.
+- P3: Distinct stable CTA IDs for the two itinerary WhatsApp handoffs reuse existing privacy-safe intent tracking and both configured properties. Actual GA4 event receipt and commercial demand remain unverified.
+- P4: Stream the lead log instead of loading the complete file into memory; reject symlink/hard-link log targets and attempt rollback on partial append failure. Tests cover both request/event aliases and normal storage, malformed contact POSTs, itinerary validation, service choice and CTA metadata.
+
+The log scan remains linear in record count; measure real retention and workload before introducing an index or database. Host permissions, storage fault recovery, actual mailbox delivery, CAPTCHA, staff lead retrieval, mobile visual review and production performance still require validation. External destinations are inventoried, not checked for uptime. No production deployment.
+
 ## Previous release evidence
 
 - Checked the 39 public sitemap URLs for HTTP errors and canonical mismatches against cPanel release `863f47f`. All passed. The release candidate also passed an internal-link and anchor check across 106 destinations.
