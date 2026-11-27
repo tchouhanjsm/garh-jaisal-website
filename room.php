@@ -132,8 +132,12 @@ require __DIR__ . '/include/page-head.php';
           <a class="button button-primary" href="<?= htmlspecialchars($bookingUrl, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" data-cta-id="booking-rooms-hero" data-cta-location="rooms-hero">Check availability</a>
           <a class="button button-light" href="#room-directory">Explore the rooms</a>
         </div>
-        <p class="rooms-hero-note">Inside Jaisalmer Fort · <a href="booking-policy.php#cancellation-policy">Cancellation policy</a></p>
-        <p class="rooms-hero-guide"><a href="book-rooms-in-jaisalmer.php">How direct booking works <span aria-hidden="true">→</span></a></p>
+        <p class="rooms-hero-note">Inside Jaisalmer Fort · Ground and first-floor rooms</p>
+        <p class="rooms-hero-guide">
+          <a href="book-rooms-in-jaisalmer.php">How direct booking works <span aria-hidden="true">→</span></a>
+          <span aria-hidden="true"> · </span>
+          <a href="booking-policy.php#cancellation-policy">Cancellation policy</a>
+        </p>
       </div>
 
       <aside class="rooms-hero-summary" aria-label="Stay at a glance">
