@@ -111,7 +111,7 @@ require __DIR__ . '/include/page-head.php';
             </li>
           <?php endforeach; ?>
         </ul>
-        <p>Share your own stops and dates or <a href="rajasthan-tours.php#experience-itinerary">compare sample itineraries and drive times</a>.</p>
+        <p>These are sample city combinations. Share your own stops and dates or <a href="rajasthan-tours.php#experience-itinerary">compare sample itineraries and drive times</a>.</p>
       </div>
     </div>
   </section>

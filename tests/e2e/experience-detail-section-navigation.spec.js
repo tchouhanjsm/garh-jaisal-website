@@ -72,3 +72,37 @@ test('experience section navigation wraps without overflow across mobile, tablet
     }
   }
 });
+
+test('Rajasthan sample itineraries reveal daily plans and carry the chosen route to a quote', async ({ browser, baseURL }, testInfo) => {
+  test.skip(!['mobile-390', 'desktop-1280'].includes(testInfo.project.name), 'Check the mobile and desktop journey.');
+  const context = await browser.newContext({
+    baseURL,
+    viewport: testInfo.project.use.viewport,
+    javaScriptEnabled: false,
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto('/rajasthan-tours.php#experience-itinerary', { waitUntil: 'domcontentloaded' });
+    const cards = page.locator('.sample-route');
+    await expect(cards).toHaveCount(3);
+    const route = cards.filter({ has: page.getByRole('heading', { name: 'Jaipur to the Thar', exact: true }) });
+    await expect(route).toContainText('Sample itinerary · 7 days');
+    await expect(route.getByRole('heading', { name: 'Jodhpur to Jaisalmer' })).toBeHidden();
+    await route.locator('summary').focus();
+    await page.keyboard.press('Enter');
+    await expect(route.getByRole('heading', { name: 'Jodhpur to Jaisalmer' })).toBeVisible();
+    await expect(route.locator('.sample-route-drive').last()).toHaveText('About 5–6 hours driving');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+      await page.evaluate(() => document.documentElement.clientWidth + 1)
+    );
+
+    await route.getByRole('link', { name: 'Request a quote for Jaipur to the Thar' }).click();
+    await expect(page).toHaveURL(/\?mode=rajasthan&idea=jaipur-to-the-thar#custom-itinerary-form$/);
+    await expect(page.getByLabel('Duration')).toHaveValue('7 days');
+    await expect(page.getByLabel('Preferred route or places to visit')).toHaveValue(
+      'Jaipur to the Thar · Jaipur → Pushkar → Jodhpur → Jaisalmer'
+    );
+  } finally {
+    await context.close();
+  }
+});
