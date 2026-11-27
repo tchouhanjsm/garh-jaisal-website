@@ -1,3 +1,4 @@
+<?php $heritageRoomTerms = (require dirname(__DIR__) . '/guest-booking-facts.php')['heritage_room']; ?>
 <section>
   <h2>RATES</h2>
   <p>Rates relative to the reservation are indicated during the reservation process. GST will be applied to the rates according to the India hotel tax regulations. Rates are only valid for the period indicated. All rates are displayed and charged in the local currency INR. The Hotel reserves the right to amend these rates without prior notice. In case of any changes in number of rooms/days of stay, Hotel reserves the right to amend the rates given above. Price lists for additional items, such as food or beverage are on display at relevant locations within the Hotel and are available on request. All outstanding charges must be paid for in full on check-out from the Hotel. We reserve the right to refuse reservation at any time for any reason.</p>
@@ -8,9 +9,9 @@
   <p>The booking shall be treated as confirmed when the full (100%) payment in advance has been provided. Hotel Garh Jaisal Haveli reserves the right to release any service and space, which is not paid in advance in accordance with the agreed payment schedule.</p>
 </section>
 <section>
-  <h2>CANCELLATION POLICY &amp; CHANGES</h2>
-  <p>If cancellations are made 30 days before the start date of the check in, 50% of total booking cost is refundable</p>
-  <p>If cancellations are made within 30 days or “No Show” before the day of check in, 100% of booking cost is nonrefundable. In addition, should you check-out early, 100% retention will be charged for those nights booked, and the cottage will be released due to the early check-out</p>
+  <h2 id="cancellation-policy">CANCELLATION POLICY &amp; CHANGES</h2>
+  <p>Cancel more than <?= (int) $heritageRoomTerms['refund_notice_days'] ?> days before your scheduled check-in date for a full refund. Cancellations made <?= (int) $heritageRoomTerms['refund_notice_days'] ?> days or fewer before check-in and no-shows are non-refundable.</p>
+  <p>If you check out early, the full cost of the nights originally booked remains payable.</p>
   <p>All changes in the reservations shall be made in writing by e-mail. The receipt must be acknowledged by the Hotel</p>
 </section>
 <section>
@@ -21,11 +22,11 @@
 </section>
 <section>
   <h2>Heritage Rooms</h2>
-  <p>The guest does not acquire any claim for the availability of a particular room, unless the Hotel confirmed the availability of a particular room in writing. The booking is for a class of room in the Hotel and does not guarantee that you will be able to stay in a specific room seen on in promotional pictures. The maximum number of guests per Heritage room is either 2 adults + 2 children (below 12 years old), or 3 adults.</p>
+  <p>The guest does not acquire any claim for the availability of a particular room, unless the Hotel confirmed the availability of a particular room in writing. The booking is for a class of room in the Hotel and does not guarantee that you will be able to stay in a specific room seen on in promotional pictures. Each Heritage Room has one king-size bed and accommodates up to <?= (int) $heritageRoomTerms['max_guests'] ?> guests in total.</p>
 </section>
 <section>
   <h2>CHILD FRIENDLY</h2>
-  <p>Children under 5 years old, when no additional bed is required, are free of charge. The child rate is offered for 5 – 11 years at 50% of extra adult rate. Any Children above 11 years adult rate would be applicable.</p>
+  <p>The two-guest room limit includes children. Children under 5 years old, when no additional bed is required, are free of charge. The child rate is offered for 5 – 11 years at 50% of extra adult rate. Any Children above 11 years adult rate would be applicable.</p>
 </section>
 <section>
   <h2>MOBILE &amp; WIFI</h2>
@@ -40,7 +41,7 @@
   <p>Meals will be provided at the restaurant as per meal plan while making the booking with Hotel Garh Jaisal Haveli and will be served during stipulated operational time.</p>
   <p>Breakfast: 7:30 AM to 10:30 AM</p>
   <p>Lunch: 12:30 PM to 03:30 PM</p>
-  <p>Dinner: 7:30 PM to 10:30 PM</p>
+  <p>See <a href="restaurant.php">Garh Jaisal’s Kitchen</a> for rooftop dinner hours and last seating.</p>
   <p>All meals are on fixed menu basis and not a buffet and made based n seasonal available ingredients.On a full board plan the meals will served only at the restaurant, no room service will be provided, but if room service is required the same meal plan will be charged as per the menu. No refund is issued if the guest does not attend the meals during its operational time. In case of full board meal plan,the meal commences with lunch on check-in day and ends with breakfast on check-out day.</p>
   <p>The Hotel undertakes no liability for the shelf life of the food which is taken away/ Room service.</p>
 </section>

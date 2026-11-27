@@ -98,6 +98,8 @@ test.describe('Sprint 29 structured-data fidelity', () => {
       expect(node, card.name + ': schema entity exists').toBeTruthy();
       expect(node.name).toBe(card.name);
       expect(node.description).toBe(card.description);
+      expect(node.bed).toMatchObject({ '@type': 'BedDetails', numberOfBeds: 1, typeOfBed: 'King-size bed' });
+      expect(node.occupancy).toMatchObject({ '@type': 'QuantitativeValue', maxValue: 2 });
       expect(new URL(node.image).pathname).toBe('/' + card.image.replace(/^\/+/, ''));
       expect(node.containedInPlace['@id']).toBe('https://www.hotelgarhjaisal.com/#hotel');
       expect((node.amenityFeature || []).map(item => item.name)).toEqual(card.features);

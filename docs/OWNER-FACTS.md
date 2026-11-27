@@ -17,6 +17,9 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | Jaisalmer Fort walk | Planned walk focuses on Jain temples inside Jaisalmer Fort, the Palace Museum and a heritage street walk. Current price and guide-language availability are confirmed on WhatsApp for the requested date. | 2026-10-14 |
 | Haveli history | Owner describes the haveli inside Jaisalmer Fort as approximately 750 years old, renovated into a hotel run by the Chouhan family. | 2026-11-24 |
 | Delhi Airport and Rajasthan travel | Offer Delhi Airport pickup and return, car-only Rajasthan travel, and Rajasthan tours with a car and hotels arranged by enquiry. | 2026-11-24 |
+| Heritage Room capacity and cancellation | One king-size bed and a maximum of two guests per room. Full refund for cancellations more than 30 days before scheduled check-in. Cancellations 30 days or fewer before check-in are non-refundable. | 2026-11-27 |
+| Scheduled desert safari departures | 2:30 PM in summer and 1:30 PM in winter. Confirm seasonal changeover dates and pickup arrangements. | 2026-11-27 |
+| Half-day and full-day Jaisalmer tours | Half day covers the Fort’s Jain temples, a local temple, the street walk and Patwon Ki Haveli. Full day adds Nathmal Ki Haveli, Salim Singh Ki Haveli and a Gadisar Lake walk. | 2026-11-27 |
 | Tanot Mata Temple | Offer a car trip by enquiry. Confirm travel-date availability, route, access and price with the guest. | 2026-11-24 |
 
 ## Needed to unblock pages
@@ -30,7 +33,7 @@ Fill in what you know. AI assistants read this file and must not guess anything 
 | 6 | Guest privacy policy | Owner supplied the guest-facing Privacy Policy on 2026-11-24. | `privacy.php` |
 | 7 | Check-in and check-out times, early-arrival access and luggage storage | NEEDS OWNER INPUT: confirm official times and whether early check-in or luggage storage can be arranged. Do not publish a specific time or promise before approval. | Rooms, Directions, schema |
 | 8 | Real guest reviews you may quote (text, first name, source, date) | | Home, Rooms |
-| 9 | Rooftop kitchen: opening hours, closed days, last seating and same-day cut-off | NEEDS OWNER INPUT: the site is being changed to accept unconfirmed table enquiries. Supply actual service hours, closed days, last seating and cut-off values; the code must not infer a schedule. | Dining and server-only configuration |
+| 9 | Rooftop kitchen: opening hours, closed days, last seating and same-day cut-off | Rooftop dinner hours are 5:00–10:30 PM, with last seating at 10:00 PM. Closed days and special same-day cut-offs still need confirmation. | Dining and server-only configuration |
 | 10 | Reception hours and late-arrival process (the site previously showed 7:00 AM to 10:30 PM: confirm) | NEEDS OWNER INPUT: confirm current reception hours and whether meet-and-assist or luggage help can be arranged outside those hours. Do not state a fixed advance-notice rule unless approved. | Directions |
 | 11 | Hosting: cPanel PHP version, can the repo be deployed through cPanel Git? | | Sprint 3 |
 | 12 | Photos missing for any page (list pages where you want new images) | Owner-provided Desert Camp photos are available in `img/Desert_Camp/`; continue to request page-specific images where the current library is insufficient. | Design |

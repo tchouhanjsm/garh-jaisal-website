@@ -305,6 +305,16 @@ require __DIR__ . '/page-head.php';
             <div>
               <h3><?= htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8') ?></h3>
               <p><?= htmlspecialchars($item['text'], ENT_QUOTES, 'UTF-8') ?></p>
+              <?php if (!empty($item['days'])): ?>
+                <ul class="timeline-days">
+                  <?php foreach ($item['days'] as $day): ?>
+                    <li><?= htmlspecialchars($day, ENT_QUOTES, 'UTF-8') ?></li>
+                  <?php endforeach; ?>
+                </ul>
+                <?php if (strtolower((string) parse_url($item['source_url'] ?? '', PHP_URL_SCHEME)) === 'https'): ?>
+                  <p><a href="<?= htmlspecialchars($item['source_url'], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($item['source_label'], ENT_QUOTES, 'UTF-8') ?></a></p>
+                <?php endif; ?>
+              <?php endif; ?>
             </div>
           </li>
         <?php endforeach; ?>

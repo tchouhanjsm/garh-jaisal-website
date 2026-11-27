@@ -12,16 +12,16 @@ test.describe('restaurant reservation enquiry readiness', () => {
     for (const selector of ['#name', '#whatsapp', '#email', '#date', '#time', '#guests', '#note', '#consent']) {
       await expect(form.locator(selector), selector + ' is part of the enquiry form').toBeVisible();
     }
-    await expect(form.locator('#time')).toHaveAttribute('step', '1800');
-    await expect(form.locator('#time')).toHaveAttribute('max', '23:30');
+    await expect(form.locator('#time option').nth(1)).toHaveAttribute('value', '17:00');
+    await expect(form.locator('#time option').last()).toHaveAttribute('value', '22:00');
     await expect(form.locator('#guests')).toHaveAttribute('max', '20');
     await expect(form.locator('#note')).toHaveAttribute('maxlength', '500');
     await expect(form.locator('#consent')).toHaveAttribute('required', '');
     await expect(reservation).toContainText('not a confirmed booking');
     await expect(reservation.getByRole('heading', { name: 'Request a table.' })).toBeVisible();
 
-    await expect(page.locator('.restaurant-hours')).toContainText('Confirm current hours with the hotel');
-    await expect(page.locator('.restaurant-hours')).not.toContainText(/7:30 am|10:30 am|12:30 pm|3:30 pm|7:00 pm|11:00 pm/i);
+    await expect(page.locator('.restaurant-hours')).toContainText('5:00 PM–10:30 PM');
+    await expect(page.locator('.restaurant-hours')).toContainText('Last seating 10:00 PM');
 
     await expect(reservation.locator('a[href^="tel:"]').first()).toHaveAttribute('href', /^tel:/);
     const whatsappLink = reservation.locator('a[href^="https://wa.me/"]').first();

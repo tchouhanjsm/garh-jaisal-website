@@ -214,7 +214,7 @@ function gj_schema_breadcrumb_list($siteUrl, $pagePath, $breadcrumbs)
  * Describe room cards as HotelRoom entities using only the visible room
  * registry. Do not synthesize rates, offers, availability or reviews.
  */
-function gj_schema_hotel_rooms($rooms, $siteUrl, $pageUrl)
+function gj_schema_hotel_rooms($rooms, $siteUrl, $pageUrl, array $heritageRoom)
 {
     if (!is_array($rooms)) {
         return [];
@@ -267,6 +267,8 @@ function gj_schema_hotel_rooms($rooms, $siteUrl, $pageUrl)
             'name' => $name,
             'description' => $description,
             'image' => $baseUrl . '/' . ltrim($image, '/'),
+            'bed' => ['@type' => 'BedDetails', 'numberOfBeds' => 1, 'typeOfBed' => $heritageRoom['bed']],
+            'occupancy' => ['@type' => 'QuantitativeValue', 'maxValue' => $heritageRoom['max_guests'], 'unitText' => 'guests'],
             'containedInPlace' => ['@id' => $baseUrl . '/#hotel'],
         ];
         if ($features) {

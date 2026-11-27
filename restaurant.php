@@ -51,6 +51,12 @@ $restaurantEntity = [
     'hasMap' => $googleMapsUrl,
     'parentOrganization' => ['@id' => $siteUrl . '/#hotel'],
     'acceptsReservations' => true,
+    'openingHoursSpecification' => [
+        '@type' => 'OpeningHoursSpecification',
+        'description' => 'Dinner service',
+        'opens' => $dinnerHours['opens'],
+        'closes' => $dinnerHours['closes'],
+    ],
 ];
 if ($menuOwnerConfirmed) {
     $restaurantEntity['hasMenu'] = $pageUrl . '#menu';
@@ -68,7 +74,7 @@ $faqItems = [
     ['question' => "Where can I see the menu and prices?", 'answer' => $menuOwnerConfirmed
         ? "Open our menu to see breakfast, drinks, Rajasthani dishes and prices in Indian rupees. Select View all dishes to read the full menu at once."
         : "Contact the hotel for the current menu and prices."],
-    ['question' => "How do I request a table?", 'answer' => "Use the table enquiry form when online requests are available, or contact the hotel by phone or WhatsApp. A request is not confirmed until the hotel replies. Availability can vary, especially for larger groups."],
+    ['question' => "How do I request a table?", 'answer' => "Dinner is served {$dinnerHoursLabel}, with last seating at {$lastSeatingLabel}. Use the table enquiry form or contact the hotel by phone or WhatsApp. A request is not confirmed until the hotel replies. Availability can vary, especially for larger groups."],
     ['question' => "Can I ask about dietary requirements?", 'answer' => "Ask the hotel about current vegetarian, vegan, Jain and allergy options before confirming your meal."],
 ];
 $page = [
@@ -117,7 +123,7 @@ require __DIR__ . '/include/page-head.php';
       <div class="restaurant-hero-copy">
         <p class="eyebrow">Garh Jaisal's Kitchen</p>
         <h1>Rooftop dining in the heart of Jaisalmer Fort.</h1>
-        <p>Settle in above the sandstone rooftops at Garh Jaisal's Kitchen. <?= $menuOwnerConfirmed ? 'Browse the menu and ask us' : 'Ask us' ?> to confirm current dishes, dietary options, service hours and a table for your date.</p>
+        <p>Settle in above the sandstone rooftops at Garh Jaisal's Kitchen. <?= $menuOwnerConfirmed ? 'Browse the menu and ask us' : 'Ask us' ?> about dietary options and table availability.</p>
         <div class="actions">
           <a class="button button-primary" href="#reserve" data-cta-id="enquiry-restaurant-table" data-cta-location="restaurant-hero">Enquire about a table</a>
           <a class="button button-light" href="<?= e($waLink) ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-restaurant-hero" data-cta-location="restaurant-hero">WhatsApp</a>
@@ -136,7 +142,7 @@ require __DIR__ . '/include/page-head.php';
     </div>
 
     <div class="site-shell restaurant-hours" aria-label="Dining information">
-      <div><span>Service hours</span><strong>Confirm current hours with the hotel</strong></div>
+      <div><span>Dinner hours · Last seating <?= e($lastSeatingLabel) ?></span><strong><?= e($dinnerHoursLabel) ?></strong></div>
       <div><span>Menu</span><strong>Ask about current dishes and prices</strong></div>
       <div><span>Table availability</span><strong>Confirm for your preferred date and time</strong></div>
     </div>
@@ -159,7 +165,7 @@ require __DIR__ . '/include/page-head.php';
         <p class="eyebrow">The kitchen</p>
         <h2>Rajasthani favourites, served above the Golden City.</h2>
       </div>
-      <p>Garh Jaisal's Kitchen is the rooftop restaurant at Garh Jaisal Haveli, inside Jaisalmer Fort. Come for the rooftop setting and ask about the food available when you visit. Current dishes, preparation details, dietary options, service hours and prices are confirmed directly with the hotel for your date.</p>
+      <p>Garh Jaisal's Kitchen is the rooftop restaurant at Garh Jaisal Haveli, inside Jaisalmer Fort. Come for the rooftop setting and ask about the food available when you visit. Current dishes, preparation details, dietary options and prices are confirmed directly with the hotel for your date.</p>
     </div>
 
     <div class="site-shell restaurant-gallery-social">

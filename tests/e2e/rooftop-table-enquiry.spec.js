@@ -32,9 +32,9 @@ test('Rooftop hero prioritises the existing table enquiry journey', async ({ pag
     .toContainText('not a confirmed booking');
   await expect(page.locator('#reserve button[type="submit"]')).toHaveText('Request a table');
   const time = page.locator('#reserve select[name="time"]');
-  await expect(time.locator('option')).toHaveCount(49);
-  await expect(time.locator('option').nth(2)).toHaveAttribute('value', '00:30');
-  await expect(time.locator('option').last()).toHaveAttribute('value', '23:30');
+  await expect(time.locator('option')).toHaveCount(12);
+  await expect(time.locator('option').nth(2)).toHaveAttribute('value', '17:30');
+  await expect(time.locator('option').last()).toHaveAttribute('value', '22:00');
 
   const reserveTab = page.getByRole('tab', { name: 'Book a Table' });
   await expect(reserveTab).toHaveAttribute('aria-selected', 'true');

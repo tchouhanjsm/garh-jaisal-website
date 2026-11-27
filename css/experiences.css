@@ -148,7 +148,7 @@
   max-width:860px;
 }
 
-.experience-timeline li{
+.experience-timeline > li{
   position:relative;
   display:grid;
   grid-template-columns:62px minmax(0,1fr);
@@ -156,7 +156,7 @@
   padding:0 0 30px;
 }
 
-.experience-timeline li:not(:last-child)::after{
+.experience-timeline > li:not(:last-child)::after{
   content:"";
   position:absolute;
   left:30px;
@@ -534,7 +534,7 @@
     border-bottom:0;
   }
 
-  .experience-timeline li{
+  .experience-timeline > li{
     grid-template-columns:48px minmax(0,1fr);
     gap:15px;
   }
@@ -545,7 +545,7 @@
     font-size:1rem;
   }
 
-  .experience-timeline li:not(:last-child)::after{
+  .experience-timeline > li:not(:last-child)::after{
     left:23px;
     top:31px;
   }
@@ -755,7 +755,7 @@
 .experience-hero-content,
 .experience-hero-content > *,
 .experience-details-grid > *,
-.experience-timeline li > div,
+.experience-timeline > li > div,
 .related-card,
 .experience-card,
 .planner-grid > *,
@@ -794,7 +794,7 @@
     white-space:normal;
     text-align:center;
   }
-  .experience-timeline li > div {
+  .experience-timeline > li > div {
     overflow-wrap: anywhere;
   }
   .experience-map {
@@ -1152,3 +1152,6 @@ main .experience-card > a > .experience-card-media img{
 @media (prefers-reduced-motion: reduce) {
   .experience-hero-caption { transition: none; }
 }
+
+.experience-timeline .timeline-days { margin: .75rem 0; padding-inline-start: 1.25rem; }
+.experience-timeline .timeline-days li + li { margin-block-start: .4rem; }
