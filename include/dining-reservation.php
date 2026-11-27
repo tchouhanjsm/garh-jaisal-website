@@ -2,6 +2,19 @@
 
 require_once __DIR__ . '/lead-storage.php';
 
+$dinnerHours = (require __DIR__ . '/guest-booking-facts.php')['dinner'];
+$formatDinnerTime = static function (string $time): string {
+    return DateTimeImmutable::createFromFormat('!H:i', $time)->format('g:i A');
+};
+$dinnerHoursLabel = $formatDinnerTime($dinnerHours['opens']) . '–' . $formatDinnerTime($dinnerHours['closes']);
+$lastSeatingLabel = $formatDinnerTime($dinnerHours['last_seating']);
+$dinnerSlots = [];
+$slot = DateTimeImmutable::createFromFormat('!H:i', $dinnerHours['opens']);
+while ($slot->format('H:i') <= $dinnerHours['last_seating']) {
+    $dinnerSlots[] = $slot->format('H:i');
+    $slot = $slot->modify('+30 minutes');
+}
+
 $showReservationForm = true; // Keep enquiry capture visible independently of email availability.
 
 function e($value): string {
@@ -20,7 +33,7 @@ function gj_dining_send_email(string $recipient, string $subject, string $body, 
 $waLink = $whatsappUrl . '?text=' . rawurlencode(
     'Hello, I would like to enquire about a table at ' . $restaurant['name']
     . '. Preferred date: [add date]. Preferred time: [add time]. Number of guests: [add number].'
-    . ' Please confirm current service hours, table availability, menu options and prices,'
+    . ' Please confirm table availability, menu options and prices,'
     . ' and available dietary options for my preferred date.'
 );
 
@@ -106,8 +119,9 @@ if ($method === 'POST') {
     if (!$validDate || $old['date'] < $today) {
         $errors['date'] = 'Choose today or a future date.';
     }
-    if (!preg_match('/^(?:[01][0-9]|2[0-3]):(?:00|30)$/D', $old['time'])) {
-        $errors['time'] = 'Choose a preferred time on the hour or half-hour.';
+    $validDinnerSlot = in_array($old['time'], $dinnerSlots, true);
+    if (!$validDinnerSlot) {
+        $errors['time'] = 'Choose a dinner time from ' . $formatDinnerTime($dinnerHours['opens']) . ' to ' . $lastSeatingLabel . '.';
     }
     if (!preg_match('/^(?:[1-9]|1[0-9]|20)$/D', $old['guests'])) {
         $errors['guests'] = 'Guests must be between 1 and 20.';
@@ -119,7 +133,7 @@ if ($method === 'POST') {
         $errors['consent'] = 'Please agree that the hotel may use these details to respond to your request.';
     }
 
-    // Enforce only schedule values explicitly supplied by the owner in private config.
+    // Apply any configured closed days and same-day cut-off.
     if ($validDate && $old['date'] >= $today) {
         $requestedWeekday = (int) $requestedDate->format('w');
         $requestedWeekdayName = strtolower($requestedDate->format('l'));
@@ -140,7 +154,7 @@ if ($method === 'POST') {
         }
         $sameDayCutoff = max(0, (int) ($siteConfig['restaurant_same_day_cutoff_minutes'] ?? 0));
         if ($old['date'] === $today
-            && preg_match('/^(?:[01][0-9]|2[0-3]):(?:00|30)$/D', $old['time'])
+            && $validDinnerSlot
             && (new DateTimeImmutable($old['date'] . ' ' . $old['time'], $timezone))->getTimestamp() <= $now->getTimestamp() + ($sameDayCutoff * 60)) {
             $errors['time'] = 'That time is inside the same-day request cut-off. Please call or message the hotel.';
         }

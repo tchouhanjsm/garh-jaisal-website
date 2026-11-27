@@ -116,7 +116,7 @@
     "Find Garh Jaisal Haveli inside Jaisalmer Fort. Check the walking route from Fort Parking, travel notes, and hotel contact details.",
     "Place",
     "Full-Day Guided Jaisalmer Tour | Garh Jaisal Haveli",
-    "A full-day guided Jaisalmer tour arranged from Garh Jaisal Haveli, combining Jaisalmer Fort, historic havelis, markets and a broader heritage route.",
+    "Take a full-day guided Jaisalmer tour covering the Fort temples, heritage lanes, three historic havelis and a walk beside Gadisar Lake.",
     "https://www.hotelgarhjaisal.com/full-day-jaisalmer-tour.php",
     "https://www.hotelgarhjaisal.com/img/v2/courtyard.jpg",
     "Historic courtyard architecture in Jaisalmer",
@@ -130,7 +130,7 @@
     "Explore Jaisalmer with guided half-day and full-day routes from Garh Jaisal Haveli inside the Fort. Compare options and confirm guide availability, language, itinerary and current price for your dates.",
     "https://www.hotelgarhjaisal.com/guided-jaisalmer-tour.php",
     "Half-Day Guided Jaisalmer Tour | Garh Jaisal Haveli",
-    "A half-day guided tour of Jaisalmer arranged from Garh Jaisal Haveli, focused on the fort, heritage lanes, havelis and local markets.",
+    "Explore Jaisalmer Fort on a half-day guided tour with Jain temples, a local temple, heritage lanes and Patwon Ki Haveli. Enquire for your dates.",
     "https://www.hotelgarhjaisal.com/half-day-jaisalmer-tour.php",
     "Historic architecture inside Jaisalmer Fort",
     "Jaisalmer 2-Day Itinerary | Fort, City & Desert",
@@ -213,7 +213,8 @@
     "Restaurant Menu | Garh Jaisal's Kitchen, Jaisalmer",
     "Browse breakfast, Rajasthani dishes, drinks and prices at Garh Jaisal's Kitchen inside Jaisalmer Fort. Ask about dietary options or request a table.",
     "Candlelight Rooftop Dining | Jaisalmer Fort",
-    "Request a candlelight dinner or rooftop table at Garh Jaisal's Kitchen inside Jaisalmer Fort. Ask about availability for your preferred date."
+    "Request a candlelight dinner or rooftop table at Garh Jaisal's Kitchen inside Jaisalmer Fort. Ask about availability for your preferred date.",
+    "OpeningHoursSpecification"
   ],
   "sitemapRoutes": [
     0,
@@ -1570,6 +1571,7 @@
         56,
         57,
         57,
+        213,
         44,
         44,
         71,

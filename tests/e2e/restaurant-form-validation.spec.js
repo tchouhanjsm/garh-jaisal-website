@@ -35,7 +35,7 @@ test('server-rejected restaurant requests link each validation error to its fiel
   await form.locator('#name').fill('');
   await form.locator('#whatsapp').fill('not-a-phone');
   await form.locator('#date').fill('2020-01-01');
-  await form.locator('#time').fill('');
+  await form.locator('#time').selectOption('');
   await form.locator('#guests').fill('0');
   // Bypass the browser's maxlength constraint only for this synthetic request so
   // the PHP validator receives 501 characters and its server-side guard is exercised.
@@ -47,7 +47,7 @@ test('server-rejected restaurant requests link each validation error to its fiel
     ['name', 'Enter your name.'],
     ['whatsapp', 'Enter a valid WhatsApp number.'],
     ['date', 'Choose today or a future date.'],
-    ['time', 'Choose a preferred time on the hour or half-hour.'],
+    ['time', 'Choose a dinner time from 5:00 PM to 10:00 PM.'],
     ['guests', 'Guests must be between 1 and 20.'],
     ['note', 'Keep the special note to 500 characters or fewer.'],
     ['consent', 'Please agree that the hotel may use these details to respond to your request.']
@@ -65,7 +65,8 @@ test('server-rejected restaurant requests link each validation error to its fiel
   await expect(form.locator('#name')).toHaveAttribute('autocomplete', 'name');
   await expect(form.locator('#whatsapp')).toHaveAttribute('autocomplete', 'tel');
   await expect(form.locator('#email')).toHaveAttribute('autocomplete', 'email');
-  await expect(form.locator('#time')).toHaveAttribute('step', '1800');
+  await expect(form.locator('#time option').nth(1)).toHaveAttribute('value', '17:00');
+  await expect(form.locator('#time option').last()).toHaveAttribute('value', '22:00');
   await expect(form.locator('#note')).toHaveAttribute('maxlength', '500');
 });
 
@@ -104,11 +105,12 @@ test('restaurant rejects malformed dates and fractional guests without PHP error
   await page.goto('/restaurant.php');
   const token = await page.locator('input[name=csrf]').inputValue();
   for (const date of ['2099-02-30', '2099-01-01\u0000bad', 'tomorrow']) {
-    const response = await page.request.post('/restaurant.php', { form: { csrf: token, name: 'Synthetic validation only', whatsapp: 'invalid', date, time: '12:00', guests: '1.5', consent: '1' } });
+    const response = await page.request.post('/restaurant.php', { form: { csrf: token, name: 'Synthetic validation only', whatsapp: 'invalid', date, time: '22:30', guests: '1.5', consent: '1' } });
     expect(response.status()).toBe(200);
     const body = await response.text();
     expect(body).toContain('restaurant-error-date');
     expect(body).toContain('restaurant-error-guests');
+    expect(body).toContain('restaurant-error-time');
     expect(body).not.toContain('Request recorded.');
   }
 });

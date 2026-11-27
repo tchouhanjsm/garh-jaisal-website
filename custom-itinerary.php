@@ -23,6 +23,10 @@ $journeyIdeas = [
 $rajasthanIdeas = ['western-rajasthan' => 'Rajasthan Heritage Journey: Jaisalmer, Jodhpur and Bikaner, or suggest another multi-city route.'];
 $ideaKey = is_string($_GET['idea'] ?? null) ? $_GET['idea'] : '';
 $selectedIdea = ($isRajasthan ? $rajasthanIdeas : $journeyIdeas)[$ideaKey] ?? '';
+$selectedRoute = $isRajasthan ? (require __DIR__ . '/include/rajasthan-route-ideas.php')[$ideaKey] ?? null : null;
+if ($selectedRoute) {
+    $selectedIdea = $selectedRoute['title'] . ' · ' . $selectedRoute['route'];
+}
 $builderTitle = $isRajasthan
     ? 'Rajasthan Tour Enquiry | Garh Jaisal Haveli'
     : 'Build a Custom Jaisalmer Itinerary | Garh Jaisal Haveli';
@@ -113,7 +117,7 @@ $page = [
               </div>
               <div class="custom-itinerary-field">
                 <label for="rajasthan-duration">Duration</label>
-                <input id="rajasthan-duration" name="duration" type="text" maxlength="80" placeholder="e.g. 5 days or flexible">
+                <input id="rajasthan-duration" name="duration" type="text" maxlength="80" value="<?= $selectedRoute ? (int) $selectedRoute['duration'] . ' days' : '' ?>" placeholder="e.g. 5 days or flexible">
               </div>
               <div class="custom-itinerary-field">
                 <label for="rajasthan-pickup">Pickup city or location</label>

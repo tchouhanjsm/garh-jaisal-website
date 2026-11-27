@@ -52,9 +52,9 @@ return [
             ['label' => 'Live rates and availability', 'detail' => 'Check availability for your dates.'],
         ],
         'confirm' => [
-            ['label' => 'Occupancy, beds and room dimensions', 'detail' => 'Ask about maximum occupancy, bed configuration and room dimensions.'],
+            ['label' => 'Room dimensions', 'detail' => 'Ask about dimensions for your stay.'],
             ['label' => 'Bathroom and access requirements', 'detail' => 'Discuss stair access, bathroom or mobility needs.'],
-            ['label' => 'Check-in and cancellation terms', 'detail' => 'Ask about check-in, cancellation terms and luggage assistance.'],
+            ['label' => 'Check-in and luggage', 'detail' => 'Ask about early arrival or luggage assistance.'],
         ],
         'cta_href' => 'contact.php?topic=stay',
         'cta_label' => 'Ask about room details',
@@ -70,7 +70,6 @@ return [
         ],
         'confirm' => [
             ['label' => 'Dish availability', 'detail' => 'Ask about a particular dish.'],
-            ['label' => 'Service hours and last seating', 'detail' => 'Ask about service hours for your date.'],
             ['label' => 'Dietary needs and table availability', 'detail' => 'Tell us about dietary needs and group size.'],
         ],
         'cta_href' => 'contact.php?topic=dining',

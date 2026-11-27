@@ -169,8 +169,8 @@ require __DIR__ . '/include/page-head.php';
         <p>Starting from Garh Jaisal Haveli puts you inside the Fort's lanes already. Ask the hotel to confirm where your guide will meet you, how the route works on foot and whether transport is needed for any stops beyond the Fort.</p>
       </div>
       <div class="planner-grid planner-grid--two">
-        <article><strong>Limited time</strong><p>The half-day option keeps the route focused on the fort, heritage areas, havelis and markets.</p></article>
-        <article><strong>More time to explore</strong><p>The full-day option gives the guide more time for context, additional heritage stops and the areas that matter to you.</p></article>
+        <article><strong>Limited time</strong><p>The half-day tour covers the Fort’s Jain temples, a local temple, the heritage lanes and Patwon Ki Haveli.</p></article>
+        <article><strong>More time to explore</strong><p>The full-day tour adds Nathmal Ki Haveli, Salim Singh Ki Haveli and a walk beside Gadisar Lake.</p></article>
       </div>
       <div class="actions guided-tour-planning-actions">
         <a class="button button-secondary" href="catalogue.php">Build your trip shortlist</a>

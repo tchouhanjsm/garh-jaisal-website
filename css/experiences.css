@@ -148,7 +148,7 @@
   max-width:860px;
 }
 
-.experience-timeline li{
+.experience-timeline > li{
   position:relative;
   display:grid;
   grid-template-columns:62px minmax(0,1fr);
@@ -156,7 +156,7 @@
   padding:0 0 30px;
 }
 
-.experience-timeline li:not(:last-child)::after{
+.experience-timeline > li:not(:last-child)::after{
   content:"";
   position:absolute;
   left:30px;
@@ -534,7 +534,7 @@
     border-bottom:0;
   }
 
-  .experience-timeline li{
+  .experience-timeline > li{
     grid-template-columns:48px minmax(0,1fr);
     gap:15px;
   }
@@ -545,7 +545,7 @@
     font-size:1rem;
   }
 
-  .experience-timeline li:not(:last-child)::after{
+  .experience-timeline > li:not(:last-child)::after{
     left:23px;
     top:31px;
   }
@@ -755,7 +755,7 @@
 .experience-hero-content,
 .experience-hero-content > *,
 .experience-details-grid > *,
-.experience-timeline li > div,
+.experience-timeline > li > div,
 .related-card,
 .experience-card,
 .planner-grid > *,
@@ -794,7 +794,7 @@
     white-space:normal;
     text-align:center;
   }
-  .experience-timeline li > div {
+  .experience-timeline > li > div {
     overflow-wrap: anywhere;
   }
   .experience-map {
@@ -1151,4 +1151,87 @@ main .experience-card > a > .experience-card-media img{
 }
 @media (prefers-reduced-motion: reduce) {
   .experience-hero-caption { transition: none; }
+}
+
+main.thar-sunset-story--experience .experience-hero .experience-hero-overlay {
+  background: linear-gradient(90deg, #111c29de, #111c2980 50%, transparent),
+              linear-gradient(0deg, #111c29ea, #111c291a);
+}
+main.thar-sunset-story--experience > .experience-hero-caption {
+  position: relative;
+  inset: auto;
+  max-width: none;
+  padding: .65rem max(16px, calc((100% - 1180px) / 2));
+  border: 0;
+  border-radius: 0;
+  color: var(--text-on-dark-muted);
+  background: var(--night);
+}
+.sample-route-list {
+  display: grid;
+  gap: 1.25rem;
+  max-width: 58rem;
+}
+.sample-route {
+  border: 1px solid var(--line);
+  background: var(--surface-raised, #fffaf0);
+}
+.sample-route-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+.sample-route-head h3 {
+  margin: .2rem 0 .4rem;
+  font-size: clamp(1.5rem, 3vw, 2.15rem);
+}
+.sample-route-head p { margin: .4rem 0 0; }
+.sample-route-head .eyebrow { color: var(--gold-ink); }
+.sample-route-head .button { min-height: 44px; text-align: center; }
+.sample-route-stops { font-weight: 700; }
+.sample-route-details { border-top: 1px solid var(--line); }
+.sample-route-details summary {
+  min-height: 44px;
+  padding: .8rem clamp(1rem, 3vw, 2rem);
+  cursor: pointer;
+  font-weight: 700;
+}
+.sample-route-details summary:focus-visible { outline-offset: -3px; }
+.sample-route-days {
+  margin: 0;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+  list-style: none;
+}
+.sample-route-days > li {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: .75rem;
+  padding-block: .85rem;
+  border-top: 1px solid var(--line);
+}
+.sample-route-day,
+.sample-route-drive {
+  color: var(--muted);
+  font-size: .9rem;
+  font-weight: 650;
+}
+.sample-route-days h4,
+.sample-route-days p { margin: 0 0 .3rem; }
+.sample-route-source {
+  margin: 0;
+  padding: .65rem clamp(1rem, 3vw, 2rem) 1.1rem;
+  font-size: .9rem;
+}
+@media (max-width: 760px) {
+  main.thar-sunset-story--experience .experience-hero .experience-hero-overlay {
+    background: linear-gradient(180deg, #111c2980, #111c29a8 34%, #111c29ef);
+  }
+}
+@media (max-width: 540px) {
+  .sample-route-head,
+  .sample-route-days > li { grid-template-columns: minmax(0, 1fr); }
+  .sample-route-days > li { gap: .25rem; }
+  .sample-route-head .button { justify-self: start; }
 }

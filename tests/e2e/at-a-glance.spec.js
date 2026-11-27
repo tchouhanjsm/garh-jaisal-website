@@ -60,6 +60,12 @@ test('verified quick facts remain accurate, semantic and responsive on high-inte
         expect(response, route.route + ' must respond at ' + viewport.width + 'px').not.toBeNull();
         expect(response.status(), route.route + ' must return success at ' + viewport.width + 'px').toBeLessThan(400);
 
+        if (route.route === '/room.php') {
+          const policy = page.getByRole('link', { name: 'Cancellation policy', exact: true });
+          await expect(policy).toBeVisible();
+          await expect(policy).toHaveAttribute('href', 'booking-policy.php#cancellation-policy');
+        }
+
         const region = page.locator(route.selector);
         await expect(region, route.route + ' quick facts must be rendered').toBeVisible();
         const facts = route.route === '/' ? region : region.locator('dl.at-a-glance');

@@ -89,6 +89,7 @@ $experienceGalleryTitle = (string) ($experience['gallery_title'] ?? $experienceP
 $experienceGalleryIntro = (string) ($experience['gallery_intro'] ?? $experiencePhotoCollection['intro'] ?? 'Explore photos from the existing experience collection. Confirm the exact route and arrangements for your date.');
 
 $enquiryOnly = !empty($experience['enquiry_only']);
+$sampleRoutes = $experience['sample_routes'] ?? [];
 $experienceContactUrl = 'contact.php';
 $experienceContactLabel = 'Ask about availability';
 $experienceBottomContactLabel = 'Contact us';
@@ -178,7 +179,6 @@ require __DIR__ . '/page-head.php';
         decoding="async"
         aria-describedby="experience-hero-caption">
       <div class="experience-hero-overlay"></div>
-      <p id="experience-hero-caption" class="experience-hero-caption"><?= htmlspecialchars($experienceHeroCaption, ENT_QUOTES, 'UTF-8') ?></p>
     </div>
 
     <div class="site-shell experience-hero-content">
@@ -215,13 +215,15 @@ require __DIR__ . '/page-head.php';
     </div>
   </section>
 
+  <p id="experience-hero-caption" class="experience-hero-caption"><?= htmlspecialchars($experienceHeroCaption, ENT_QUOTES, 'UTF-8') ?></p>
+
   <nav class="experience-section-nav" aria-label="Experience page sections">
     <div class="site-shell experience-section-nav-inner">
       <a href="#experience-overview">At a glance</a>
+      <a href="#experience-itinerary"><?= $sampleRoutes ? 'Sample itineraries' : ($enquiryOnly ? 'Ideas' : 'Itinerary') ?></a>
       <?php if (count($experienceGallerySlides) > 1): ?>
         <a href="#experience-photo-gallery">Photo gallery</a>
       <?php endif; ?>
-      <a href="#experience-itinerary"><?= $enquiryOnly ? 'Ideas' : 'Itinerary' ?></a>
       <a href="#experience-details"><?= $enquiryOnly ? 'What to discuss' : "What's included" ?></a>
       <?php if (!empty($experience['faq'])): ?>
         <a href="#experience-faq">Questions</a>
@@ -247,6 +249,69 @@ require __DIR__ . '/page-head.php';
           </div>
         <?php endforeach; ?>
       </div>
+    </div>
+  </section>
+
+  <section class="section experience-itinerary" data-story-reveal id="experience-itinerary" aria-labelledby="experience-itinerary-title">
+    <div class="site-shell">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow"><?= htmlspecialchars($experience['timeline_label'], ENT_QUOTES, 'UTF-8') ?></p>
+          <h2 id="experience-itinerary-title"><?= $sampleRoutes ? 'Compare sample routes.' : ($enquiryOnly ? 'Shape your journey.' : 'Follow the experience.') ?></h2>
+        </div>
+        <p><?= htmlspecialchars($experience['timeline_note'], ENT_QUOTES, 'UTF-8') ?></p>
+      </div>
+
+      <?php if ($sampleRoutes): ?>
+        <div class="sample-route-list">
+          <?php foreach ($sampleRoutes as $routeKey => $route): ?>
+            <article class="sample-route">
+              <div class="sample-route-head">
+                <div>
+                  <p class="eyebrow">Sample itinerary · <?= (int) $route['duration'] ?> days</p>
+                  <h3><?= htmlspecialchars($route['title'], ENT_QUOTES, 'UTF-8') ?></h3>
+                  <p class="sample-route-stops"><?= htmlspecialchars($route['route'], ENT_QUOTES, 'UTF-8') ?></p>
+                  <p><?= htmlspecialchars($route['text'], ENT_QUOTES, 'UTF-8') ?></p>
+                </div>
+                <a class="button button-primary"
+                   href="custom-itinerary.php?mode=rajasthan&amp;idea=<?= rawurlencode($routeKey) ?>#custom-itinerary-form"
+                   data-cta-id="quote-<?= htmlspecialchars($routeKey, ENT_QUOTES, 'UTF-8') ?>"
+                   data-cta-location="rajasthan-sample-routes">Request a quote<span class="sr-only"> for <?= htmlspecialchars($route['title'], ENT_QUOTES, 'UTF-8') ?></span></a>
+              </div>
+              <details class="sample-route-details">
+                <summary>See the day-by-day itinerary<span class="sr-only"> for <?= htmlspecialchars($route['title'], ENT_QUOTES, 'UTF-8') ?></span></summary>
+                <ol class="sample-route-days">
+                  <?php foreach ($route['days'] as $day): ?>
+                    <li>
+                      <span class="sample-route-day"><?= htmlspecialchars($day['days'], ENT_QUOTES, 'UTF-8') ?></span>
+                      <div>
+                        <h4><?= htmlspecialchars($day['stop'], ENT_QUOTES, 'UTF-8') ?></h4>
+                        <?php if (!empty($day['drive'])): ?>
+                          <p class="sample-route-drive"><?= htmlspecialchars($day['drive'], ENT_QUOTES, 'UTF-8') ?> driving</p>
+                        <?php endif; ?>
+                        <p><?= htmlspecialchars($day['text'], ENT_QUOTES, 'UTF-8') ?></p>
+                      </div>
+                    </li>
+                  <?php endforeach; ?>
+                </ol>
+                <p class="sample-route-source"><a href="<?= htmlspecialchars($route['source_url'], ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars($route['source_label'], ENT_QUOTES, 'UTF-8') ?></a></p>
+              </details>
+            </article>
+          <?php endforeach; ?>
+        </div>
+      <?php else: ?>
+        <ol class="experience-timeline">
+          <?php foreach ($experience['timeline'] as $item): ?>
+            <li>
+              <span class="timeline-step"><?= htmlspecialchars($item['step'], ENT_QUOTES, 'UTF-8') ?></span>
+              <div>
+                <h3><?= htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8') ?></h3>
+                <p><?= htmlspecialchars($item['text'], ENT_QUOTES, 'UTF-8') ?></p>
+              </div>
+            </li>
+          <?php endforeach; ?>
+        </ol>
+      <?php endif; ?>
     </div>
   </section>
 
@@ -287,30 +352,6 @@ require __DIR__ . '/page-head.php';
       </div>
     </section>
   <?php endif; ?>
-
-  <section class="section experience-itinerary" data-story-reveal id="experience-itinerary" aria-labelledby="experience-itinerary-title">
-    <div class="site-shell">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow"><?= htmlspecialchars($experience['timeline_label'], ENT_QUOTES, 'UTF-8') ?></p>
-          <h2 id="experience-itinerary-title"><?= $enquiryOnly ? 'Shape your journey.' : 'Follow the experience.' ?></h2>
-        </div>
-        <p><?= htmlspecialchars($experience['timeline_note'], ENT_QUOTES, 'UTF-8') ?></p>
-      </div>
-
-      <ol class="experience-timeline">
-        <?php foreach ($experience['timeline'] as $item): ?>
-          <li>
-            <span class="timeline-step"><?= htmlspecialchars($item['step'], ENT_QUOTES, 'UTF-8') ?></span>
-            <div>
-              <h3><?= htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8') ?></h3>
-              <p><?= htmlspecialchars($item['text'], ENT_QUOTES, 'UTF-8') ?></p>
-            </div>
-          </li>
-        <?php endforeach; ?>
-      </ol>
-    </div>
-  </section>
 
   <section class="section experience-details" data-story-reveal id="experience-details" aria-labelledby="experience-details-title">
     <div class="site-shell experience-details-grid">

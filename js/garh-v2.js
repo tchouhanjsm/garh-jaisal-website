@@ -385,7 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (destination.origin === window.location.origin && /\/custom-itinerary\.php$/i.test(destination.pathname)) {
       const idea = destination.searchParams.get('idea') || '';
-      const allowedIdeas = ['golden-city', 'fort-desert', 'romantic', 'family', 'festive', 'western-rajasthan', 'custom-desert', 'sunrise-walk', 'food-crafts', 'desert-heritage', 'temples-royal', 'nature'];
+      const allowedIdeas = ['golden-city', 'fort-desert', 'romantic', 'family', 'festive', 'western-rajasthan', 'golden-triangle', 'desert-and-lakes', 'jaipur-to-the-thar', 'custom-desert', 'sunrise-walk', 'food-crafts', 'desert-heritage', 'temples-royal', 'nature'];
       const mode = destination.searchParams.get('mode') === 'rajasthan' ? 'rajasthan' : 'jaisalmer';
       trackIntentEvent('itinerary_builder_click', Object.assign({}, eventContext, ctaMetadataForLink(anchor), {
         itinerary_mode: mode,

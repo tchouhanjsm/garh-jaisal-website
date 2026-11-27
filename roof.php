@@ -7,7 +7,6 @@ $hotelPhoneDisplay = (string) ($siteConfig['hotel_phone_display'] ?? $hotelPhone
 $hotelEmail = $siteConfig['hotel_email'];
 $whatsappUrl = $siteConfig['whatsapp_url'];
 $restaurant = ['name' => "Garh Jaisal's Kitchen"];
-$showReservationTimeSlots = true;
 $reservationPath = 'roof.php';
 require __DIR__ . '/include/dining-reservation.php';
 $menuConfig = require __DIR__ . '/include/menu-data.php';
@@ -28,7 +27,7 @@ $faqItems = [
     ['question' => "Can I check the menu before visiting?", 'answer' => $menuOwnerConfirmed
         ? "See the Menu tab and confirm current dishes and prices with the hotel."
         : "Use the Menu tab to ask the hotel about current dishes, prices and dietary options."],
-    ['question' => "How do I check table availability?", 'answer' => "Use the Book a Table tab to send a request. The hotel must confirm availability. For same-day enquiries, call or WhatsApp the hotel."],
+    ['question' => "How do I check table availability?", 'answer' => "Dinner is served {$dinnerHoursLabel}, with last seating at {$lastSeatingLabel}. Use the Book a Table tab to send a request. The hotel must confirm availability. For same-day enquiries, call or WhatsApp the hotel."],
     ['question' => "Can I request a candlelight dinner inside Jaisalmer Fort?", 'answer' => "Yes. Use the Book a Table tab to ask Garh Jaisal’s Kitchen about a rooftop candlelight dinner. The hotel will confirm availability and dinner details for your date."],
 ];
 $page = [
@@ -83,6 +82,7 @@ require __DIR__ . '/include/page-head.php';
         Candlelight dinners on the terrace, with views across the havelis,
         the royal palace and lake as the light changes over the fort.
       </p>
+      <p>Dinner <?= e($dinnerHoursLabel) ?> · Last seating <?= e($lastSeatingLabel) ?></p>
       <div class="actions">
         <a
           class="button button-primary"

@@ -3,6 +3,7 @@
       <div>
         <p class="eyebrow eyebrow-light">Table enquiry</p>
         <h2>Request a table.</h2>
+        <p>Dinner <?= e($dinnerHoursLabel) ?> · Last seating <?= e($lastSeatingLabel) ?>.</p>
         <p>For same-day enquiries, call <a href="tel:<?= e($hotelPhone) ?>"><?= e($hotelPhoneDisplay) ?></a> or message us on WhatsApp.</p>
         <a class="button button-light" href="<?= e($waLink) ?>" target="_blank" rel="noopener" data-cta-id="whatsapp-restaurant-reserve" data-cta-location="restaurant-reservation">Message on WhatsApp</a>
       </div>
@@ -11,7 +12,7 @@
         <?php if ($sent): ?>
           <div class="restaurant-notice" role="status">
             <h3>Request recorded.</h3>
-            <p>Your table enquiry reference is <strong><?= e($reservationReference) ?></strong>. This is not a confirmed booking; the hotel must confirm service hours and availability.</p>
+            <p>Your table enquiry reference is <strong><?= e($reservationReference) ?></strong>. This is not a confirmed booking; the hotel must confirm table availability.</p>
             <?php if ($reservationEmailNotified): ?>
               <p>The hotel was notified by email. For urgent confirmation, call or message us on WhatsApp.</p>
             <?php else: ?>
@@ -43,7 +44,7 @@
                 ['whatsapp', 'WhatsApp number *', 'tel', 'required autocomplete="tel" inputmode="tel"'],
                 ['email', 'Email', 'email', 'autocomplete="email"'],
                 ['date', 'Date *', 'date', 'required min="' . (new DateTimeImmutable('now', new DateTimeZone('Asia/Kolkata')))->format('Y-m-d') . '" autocomplete="off"'],
-                ['time', 'Preferred time *', 'time', 'required step="1800" min="00:00" max="23:30" autocomplete="off"'],
+                ['time', 'Preferred time *', 'select', 'required'],
                 ['guests', 'Guests *', 'number', 'required min="1" max="20" inputmode="numeric" autocomplete="off"'],
             ];
             foreach ($fields as [$id, $label, $type, $attrs]):
@@ -52,14 +53,12 @@
             ?>
               <div class="restaurant-field <?= $hasFieldError ? 'has-error' : '' ?>">
                 <label for="<?= e($id) ?>"><?= e($label) ?></label>
-                <?php if ($id === 'time' && !empty($showReservationTimeSlots)): ?>
+                <?php if ($type === 'select'): ?>
                 <select id="time" name="time" required <?= $hasFieldError ? 'aria-invalid="true" aria-describedby="' . e($fieldErrorId) . '"' : '' ?>>
                   <option value="">Select a preferred time</option>
-                  <?php for ($minutes = 0; $minutes < 24 * 60; $minutes += 30):
-                      $slot = sprintf('%02d:%02d', intdiv($minutes, 60), $minutes % 60);
-                  ?>
-                    <option value="<?= e($slot) ?>"<?= $old[$id] === $slot ? ' selected' : '' ?>><?= e($slot) ?></option>
-                  <?php endfor; ?>
+                  <?php foreach ($dinnerSlots as $slot): ?>
+                    <option value="<?= e($slot) ?>"<?= $old[$id] === $slot ? ' selected' : '' ?>><?= e($formatDinnerTime($slot)) ?></option>
+                  <?php endforeach; ?>
                 </select>
                 <?php else: ?>
                 <input
@@ -91,7 +90,7 @@
               <?php if (isset($errors['consent'])): ?><small id="restaurant-error-consent"><?= e($errors['consent']) ?></small><?php endif; ?>
             </div>
 
-            <p class="restaurant-policy">Your request is not a confirmed booking. The hotel must confirm current service hours and availability before a table is reserved. If you need an immediate answer, call or message the hotel.</p>
+            <p class="restaurant-policy">Your request is not a confirmed booking. The hotel must confirm availability before a table is reserved. If you need an immediate answer, call or message the hotel.</p>
             <button class="button button-primary" type="submit">Request a table</button>
           </form>
         <?php endif; ?>

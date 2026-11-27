@@ -50,9 +50,10 @@ test('room directory summary follows the maintained room registry and keeps the 
   await expect(panel).toContainText('7 named rooms');
   await expect(panel).toContainText('Ground floor');
   await expect(panel).toContainText('First floor');
-  await expect(panel).toContainText('maximum occupancy');
-  await expect(panel).toContainText('bed configuration');
-  await expect(panel).toContainText('room dimensions');
+  await expect(page.locator('.rooms-hero-lede')).toContainText('king-size bed and sleeps up to 2 guests');
+  await expect(page.getByRole('link', { name: 'Cancellation policy', exact: true }))
+    .toHaveAttribute('href', 'booking-policy.php#cancellation-policy');
+  await expect(panel.getByText('Room dimensions', { exact: true })).toBeVisible();
   await expect(panel.locator('.guest-decision__actions a.guest-decision__secondary'))
     .toHaveAttribute('href', /^https:\/\/asiatech\.in\/booking_engine\/index3\?token=/);
 

@@ -34,9 +34,10 @@ $experienceHubMedia = [
     'alt' => $desertSafariHeroAlt,
     'caption' => $desertSafariHeroCaption,
 ];
+$desertDeparture = (require __DIR__ . '/include/guest-booking-facts.php')['desert_departures'];
 $faqItems = [
     ['question' => "Which desert options are listed here?", 'answer' => "Compare the sunset camel safari, cultural evening, Sleep Under the Stars and Swiss Tent Safari. For a different pace or a camel-free outing, ask about a custom desert day."],
-    ['question' => "Do desert departure times stay the same all year?", 'answer' => "No. Departure and sunset timings change with the season. Confirm the schedule with the hotel for your travel date."],
+    ['question' => "What time do desert safaris depart?", 'answer' => "Scheduled safaris depart at {$desertDeparture}. Confirm your pickup point and timing for your travel date."],
     ['question' => "How do I choose between a same-evening trip and an overnight stay?", 'answer' => "Choose based on whether you want to return to Jaisalmer the same evening or sleep in the desert, then compare the overnight setup and confirmed inclusions."],
     ['question' => "How do I confirm the route and inclusions?", 'answer' => "Ask the hotel to confirm the current price, departure details, route, pickup arrangement, availability and exact inclusions for your date."],
 ];
@@ -103,6 +104,7 @@ require __DIR__ . '/include/page-head.php';
         <div>
           <p class="eyebrow">Choose by the kind of evening you want</p>
           <h2>Choose your desert experience.</h2>
+          <p>Scheduled departures at <?= htmlspecialchars($desertDeparture, ENT_QUOTES, 'UTF-8') ?>.</p>
         </div>
         <p>The route and timing depend on the selected package and season. Confirm the current operating details with the hotel before booking.</p>
       </div>

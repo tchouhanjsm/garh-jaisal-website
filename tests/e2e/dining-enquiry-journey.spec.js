@@ -80,9 +80,9 @@ test('dining guidance, the active reservation form and direct-contact links fit 
 
   const hours = page.locator('.restaurant-hours');
   await expect(hours).toBeVisible();
-  await expect(hours).toContainText('Confirm current hours with the hotel');
+  await expect(hours).toContainText('5:00 PM–10:30 PM');
   await expect(hours).toContainText('Confirm for your preferred date and time');
-  await expect(hours).not.toContainText(/7:30 am|10:30 am|12:30 pm|3:30 pm|7:00 pm|11:00 pm/i);
+  await expect(hours).toContainText('Last seating 10:00 PM');
 
   const reserve = page.locator('#reserve');
   const form = reserve.locator('form.restaurant-form');

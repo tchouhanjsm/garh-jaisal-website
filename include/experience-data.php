@@ -439,19 +439,19 @@ $experiences = [
         'order' => 10,
         'status' => 'live',
         'title' => 'Half-Day Guided Jaisalmer Tour | Garh Jaisal Haveli',
-        'description' => 'A half-day guided tour of Jaisalmer arranged from Garh Jaisal Haveli, focused on the fort, heritage lanes, havelis and local markets.',
+        'description' => 'Explore Jaisalmer Fort on a half-day guided tour with Jain temples, a local temple, heritage lanes and Patwon Ki Haveli. Enquire for your dates.',
         'h1' => 'Half-Day Guided Jaisalmer Tour',
         'eyebrow' => 'Half-day city tour',
         'hero_image' => 'img/j5.jpg',
         'hero_width' => 1366,
         'hero_height' => 768,
         'hero_alt' => 'Carved sandstone balconies on a historic Jaisalmer haveli',
-        'hero_caption' => 'A shorter route can focus on the Fort, carved havelis and heritage lanes within the time you have available.',
-        'summary' => 'A shorter guided introduction to Jaisalmer for guests who have limited time but want more context than a self-guided walk.',
+        'hero_caption' => 'See the living Fort and carved sandstone at Patwon Ki Haveli.',
+        'summary' => 'Walk the lanes of Jaisalmer Fort with a guide, visit the Jain temples and a local temple, then continue to Patwon Ki Haveli.',
         'at_a_glance' => [
             'Duration' => 'Half day',
             'Format' => 'Guided tour',
-            'Focus' => 'Fort, havelis, heritage lanes and markets',
+            'Focus' => 'Fort temples, heritage lanes and Patwon Ki Haveli',
             'Starting point' => 'Garh Jaisal Haveli / Jaisalmer Fort',
             'Best for' => 'First-time visitors with limited time',
             'Guide languages' => 'English, Hindi, Bengali, Italian, French, Spanish and German (confirm availability)',
@@ -460,16 +460,15 @@ $experiences = [
         'timeline_note' => 'The exact route can be adapted to opening hours, weather, guest interests and guide availability.',
         'timeline' => [
             ['step' => '01', 'title' => 'Meet at the haveli', 'text' => 'Begin from Garh Jaisal Haveli inside Jaisalmer Fort.'],
-            ['step' => '02', 'title' => 'Jaisalmer Fort walk', 'text' => 'Explore the fort lanes and understand the living-fort setting, architecture and local life.'],
-            ['step' => '03', 'title' => 'Havelis and heritage', 'text' => 'Continue to selected heritage havelis and architectural highlights according to the agreed route.'],
-            ['step' => '04', 'title' => 'Markets and old-city lanes', 'text' => 'Walk through local markets and heritage streets, with time for questions and photographs.'],
-            ['step' => '05', 'title' => 'Return / continue independently', 'text' => 'Finish the guided portion from the agreed end point inside or around the old city.'],
+            ['step' => '02', 'title' => 'Temples and lanes inside the Fort', 'text' => 'Visit the Jain temples and a local temple, then walk through the historic lanes with your guide.'],
+            ['step' => '03', 'title' => 'Patwon Ki Haveli', 'text' => 'Continue to Patwon Ki Haveli to see the carved sandstone architecture.'],
+            ['step' => '04', 'title' => 'Finish in the old city', 'text' => 'Finish the guided portion from the agreed end point inside or around the old city.'],
         ],
         'included' => [
             'Local guide',
             'Guided walking route through Jaisalmer heritage areas',
             'Fort and heritage context',
-            'Stops at selected havelis and local markets according to the agreed itinerary',
+            'Fort temples, a street walk and Patwon Ki Haveli',
         ],
         'not_included' => [
             'Entry fees where applicable',
@@ -479,7 +478,7 @@ $experiences = [
         'best_for' => 'Guests with half a day available who want a focused introduction to Jaisalmer.',
         'before_book' => 'Message on WhatsApp to confirm the current price, guide-language availability, starting time, route, entry fees and any special interests for your date.',
         'faq' => [
-            ['question' => 'What does the half-day tour cover?', 'answer' => 'The current route focuses on Jaisalmer Fort, heritage lanes, selected havelis and local markets, with the exact route adapted to the day.'],
+            ['question' => 'What does the half-day tour cover?', 'answer' => 'The half-day tour covers the Jain temples and a local temple inside Jaisalmer Fort, a guided street walk and Patwon Ki Haveli. Access depends on opening hours.'],
             ['question' => 'Does it include entry fees?', 'answer' => 'Entry fees are not included unless specifically confirmed in the booking.'],
             ['question' => 'Can the tour start from the hotel?', 'answer' => 'The planned starting point is Garh Jaisal Haveli inside Jaisalmer Fort, subject to the confirmed itinerary. Ask on WhatsApp to confirm guide availability in English, Hindi, Bengali, Italian, French, Spanish or German and the current price for your date.'],
         ],
@@ -496,7 +495,7 @@ $experiences = [
         'order' => 20,
         'status' => 'live',
         'title' => 'Full-Day Guided Jaisalmer Tour | Garh Jaisal Haveli',
-        'description' => 'A full-day guided Jaisalmer tour arranged from Garh Jaisal Haveli, combining Jaisalmer Fort, historic havelis, markets and a broader heritage route.',
+        'description' => 'Take a full-day guided Jaisalmer tour covering the Fort temples, heritage lanes, three historic havelis and a walk beside Gadisar Lake.',
         'h1' => 'Full-Day Guided Jaisalmer Tour',
         'eyebrow' => 'Full-day city tour',
         'hero_image' => 'img/j2.jpg',
@@ -504,11 +503,11 @@ $experiences = [
         'hero_height' => 2000,
         'hero_alt' => 'Carved sandstone architecture in historic Jaisalmer',
         'hero_caption' => 'Plan enough time for each stop included in the route confirmed with your guide.',
-        'summary' => 'A fuller day to explore Jaisalmer with a guide, giving you more time for the fort, havelis, markets and heritage areas.',
+        'summary' => 'Follow the half-day Fort route, then see all three historic havelis and walk beside Gadisar Lake.',
         'at_a_glance' => [
             'Duration' => 'Full day',
             'Format' => 'Guided tour',
-            'Focus' => 'Fort, havelis, markets and heritage areas',
+            'Focus' => 'Fort temples, three havelis and Gadisar Lake',
             'Starting point' => 'Garh Jaisal Haveli / Jaisalmer Fort',
             'Best for' => 'Guests who want a broader city introduction',
             'Guide languages' => 'English, Hindi, Bengali, Italian, French, Spanish and German (confirm availability)',
@@ -517,16 +516,15 @@ $experiences = [
         'timeline_note' => 'The route is planned around current opening hours, weather, traffic and the sights guests want to prioritise.',
         'timeline' => [
             ['step' => '01', 'title' => 'Meet and start inside the Fort', 'text' => 'Begin at Garh Jaisal Haveli and start the guided heritage route through Jaisalmer Fort.'],
-            ['step' => '02', 'title' => 'Fort heritage and architecture', 'text' => 'Spend time understanding the living fort, its lanes, buildings and local life.'],
-            ['step' => '03', 'title' => 'Historic havelis', 'text' => 'Continue through selected havelis and heritage architecture according to the agreed itinerary.'],
-            ['step' => '04', 'title' => 'Markets and local life', 'text' => 'Explore local markets and old-city areas with time for photographs and questions.'],
-            ['step' => '05', 'title' => 'Extended heritage route', 'text' => 'Use the additional time for further heritage stops or places agreed with the guide.'],
-            ['step' => '06', 'title' => 'Tour finish', 'text' => 'Conclude at the agreed end point in Jaisalmer and return independently or continue with your next plan.'],
+            ['step' => '02', 'title' => 'Temples and lanes inside the Fort', 'text' => 'Follow the half-day walk through the Fort lanes, with stops at the Jain temples and a local temple.'],
+            ['step' => '03', 'title' => 'Three historic havelis', 'text' => 'See Patwon Ki Haveli, Nathmal Ki Haveli and Salim Singh Ki Haveli. Ask your guide which interiors are open for your date.'],
+            ['step' => '04', 'title' => 'Gadisar Lake walk', 'text' => 'Walk beside Gadisar Lake and take time to see the lakeside pavilions.'],
+            ['step' => '05', 'title' => 'Tour finish', 'text' => 'Conclude at the agreed end point in Jaisalmer and return independently or continue with your next plan.'],
         ],
         'included' => [
             'Local guide',
             'Guided heritage route through Jaisalmer',
-            'Fort, havelis, markets and heritage areas according to the confirmed itinerary',
+            'Fort temples and lanes, three historic havelis and a walk beside Gadisar Lake',
             'Time for questions and local context',
         ],
         'not_included' => [
@@ -537,7 +535,7 @@ $experiences = [
         'best_for' => 'Guests who want to spend most of a day understanding Jaisalmer rather than seeing only the main highlights.',
         'before_book' => 'Message on WhatsApp to confirm the current price, guide-language availability, starting time, route, entry fees and any specific places you want included.',
         'faq' => [
-            ['question' => 'What does the full-day tour cover?', 'answer' => 'The route combines Jaisalmer Fort, historic havelis, markets and additional heritage areas according to the confirmed itinerary.'],
+            ['question' => 'What does the full-day tour cover?', 'answer' => 'The full-day tour adds Nathmal Ki Haveli, Salim Singh Ki Haveli and a walk beside Gadisar Lake to the half-day route, which already includes the Fort temples, lanes and Patwon Ki Haveli.'],
             ['question' => 'Are meals included?', 'answer' => 'Meals are not included unless specifically confirmed in the booking.'],
             ['question' => 'Can we request specific places?', 'answer' => 'Yes. Tell the hotel what you want to prioritise so the route can be discussed with the guide before the tour. Ask on WhatsApp to confirm guide availability in English, Hindi, Bengali, Italian, French, Spanish or German and the current price for your date.'],
         ],
@@ -641,25 +639,10 @@ $experiences = [
             'Pickup' => 'Rajasthan or Delhi Airport',
             'Price' => 'Quote on request',
         ],
-        'timeline_label' => 'Sample city combinations',
-        'timeline_note' => 'These are ideas, not fixed itineraries or guaranteed travel times.',
-        'timeline' => [
-            [
-                'step' => '01',
-                'title' => 'Western Rajasthan',
-                'text' => 'Jaisalmer, Jodhpur and Bikaner.',
-            ],
-            [
-                'step' => '02',
-                'title' => 'Heritage and lakes',
-                'text' => 'Jaisalmer, Jodhpur and Udaipur.',
-            ],
-            [
-                'step' => '03',
-                'title' => 'Classic Rajasthan',
-                'text' => 'Jaipur, Jodhpur, Jaisalmer and Udaipur, with Delhi pickup or return if requested.',
-            ],
-        ],
+        'timeline_label' => 'Private journeys by road',
+        'timeline_note' => 'Pick a sample route and ask for a private-car quote, with or without hotels. Drive times are planning estimates between cities. Allow extra time for stops, traffic and flights.',
+        'timeline' => [],
+        'sample_routes' => require __DIR__ . '/rajasthan-route-ideas.php',
         'included' => [
             'Private car and driver requirements',
             'Hotel preferences if accommodation is requested',
@@ -668,7 +651,7 @@ $experiences = [
         ],
         'not_included' => [],
         'best_for' => 'Couples, families and groups planning a flexible multi-city journey.',
-        'before_book' => 'Tell us your travel dates, group size, pickup and finish point. We will discuss routing, availability and the quote before any arrangements are confirmed.',
+        'before_book' => 'Share your dates, group size, preferred route and airport or hotel pickup. Ask for a written quote covering the vehicle, hotel stays if requested, tolls, parking, driver costs, guides and entry fees.',
         'faq' => [
             [
                 'question' => 'Can I book only the car?',
@@ -686,6 +669,16 @@ $experiences = [
         ],
     ],
 ];
+
+$scheduledDesertDeparture = (require __DIR__ . '/guest-booking-facts.php')['desert_departures'];
+foreach (['sunset-camel-safari', 'cultural-safari', 'sleep-under-the-stars', 'swiss-tent-safari'] as $scheduledDesertSlug) {
+    $facts = $experiences[$scheduledDesertSlug]['at_a_glance'];
+    $experiences[$scheduledDesertSlug]['at_a_glance'] = array_slice($facts, 0, 1, true)
+        + ['Departure' => $scheduledDesertDeparture] + $facts;
+    $experiences[$scheduledDesertSlug]['timeline'][0]['text'] =
+        'Depart at ' . $scheduledDesertDeparture . '. ' . $experiences[$scheduledDesertSlug]['timeline'][0]['text'];
+}
+unset($scheduledDesertDeparture, $scheduledDesertSlug, $facts);
 
 $studioRoot = dirname(__DIR__) . '/content/experiences';
 $studioFiles = is_dir($studioRoot) ? (glob($studioRoot . '/*.json') ?: []) : [];
